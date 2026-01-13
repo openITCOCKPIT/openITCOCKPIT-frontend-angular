@@ -17,7 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
-import { NgIf } from '@angular/common';
+
 
 
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -45,7 +45,6 @@ import { HttpErrorResponse } from '@angular/common/http';
     FormsModule,
     NavComponent,
     NavItemComponent,
-    NgIf,
     PermissionDirective,
     ReactiveFormsModule,
     TableDirective,

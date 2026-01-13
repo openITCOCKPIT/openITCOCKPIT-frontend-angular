@@ -1,541 +1,531 @@
 <ng-container *transloco="let t">
 
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                {{ t('Prometheus Module') }}
-            </li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['PrometheusModule', 'PrometheusAlertRules', 'index']"
-                   [routerLink]="['/', 'prometheus_module', 'PrometheusAlertRules', 'index']">
-                    <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
-                    {{ t('Alert rules') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                {{ t('Edit Prometheus alert rule') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+          {{ t('Prometheus Module') }}
+        </li>
+        <li class="breadcrumb-item">
+          <a *oitcPermission="['PrometheusModule', 'PrometheusAlertRules', 'index']"
+            [routerLink]="['/', 'prometheus_module', 'PrometheusAlertRules', 'index']">
+            <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
+            {{ t('Alert rules') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+          {{ t('Edit Prometheus alert rule') }}
+        </li>
+      </ol>
     </nav>
 
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
 
-    <c-card class="mb-3" *ngIf="post">
+    @if (post) {
+      <c-card class="mb-3">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Edit Prometheus alert rule') }}</h5>
-
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <oitc-prometheus-help [uuid]="this.index.host.uuid"/>
-                </c-nav-item>
-            </c-nav>
+          <h5 cCardTitle>{{ t('Edit Prometheus alert rule') }}</h5>
+          <c-nav class="card-toolbar card-header-pills">
+            <c-nav-item class="px-1">
+              <oitc-prometheus-help [uuid]="this.index.host.uuid"/>
+            </c-nav-item>
+          </c-nav>
         </c-card-header>
         <c-card-body>
-            <div class="mb-3">
-                <label cLabel for="query">
-                    {{ t('Selected metrics to use') }}
-                    <oitc-required-icon/>
+          <div class="mb-3">
+            <label cLabel for="query">
+              {{ t('Selected metrics to use') }}
+              <oitc-required-icon/>
+            </label>
+            <oitc-multi-select
+              name="selectedMetrics"
+              id="selectedMetrics"
+              optionValue="metric"
+              optionLabel="metric"
+              [(ngModel)]="selectedMetrics"
+              [options]="index.targets.data"
+              (onChange)="onMetricsChange()">
+            </oitc-multi-select>
+          </div>
+          <c-row class="mb-3">
+            <fieldset>
+              <h5>{{ t('Available metrics') }}</h5>
+              @for (metricSelected of selectedMetrics; track metricSelected) {
+                <button
+                  cButton
+                  color="primary"
+                  [size]="'xs'"
+                  class="m-1"
+                  (click)="addMetricString(metricSelected)">
+                  {{ metricSelected }}
+                </button>
+              }
+            </fieldset>
+          </c-row>
+          <c-row class="mb-3">
+            <c-col md="1">
+              <fieldset>
+                <h5>{{ t('Brackets') }}</h5>
+                <button cButton size="xs" color="info" class="m-1" (click)="addToString('(')">
+                  (
+                </button>
+                <button cButton size="xs" color="info" class="m-1" (click)="addToString(')')">
+                  )
+                </button>
+              </fieldset>
+            </c-col>
+            <c-col md="3">
+              <fieldset>
+                <h5>{{ t('Arithmetic binary operators') }}</h5>
+                <button cButton size="xs" color="success" class="m-1" [title]="'addition' | transloco"
+                  (click)="addToString('+')">
+                  +
+                </button>
+                <button cButton size="xs" color="success" class="m-1" [title]="'subtraction'  | transloco"
+                  (click)="addToString('-')">
+                  -
+                </button>
+                <button cButton size="xs" color="success" class="m-1" [title]="'multiplication'  | transloco"
+                  (click)="addToString('*')">
+                  *
+                </button>
+                <button cButton size="xs" color="success" class="m-1" [title]="'division'  | transloco"
+                  (click)="addToString('/')">
+                  /
+                </button>
+                <button cButton size="xs" color="success" class="m-1" [title]="'modulo'  | transloco"
+                  (click)="addToString('%')">
+                  %
+                </button>
+                <button cButton size="xs" color="success" class="m-1"
+                  [title]="'power/exponentiation' | transloco" (click)="addToString('^')">
+                  ^
+                </button>
+              </fieldset>
+            </c-col>
+            <c-col md="8">
+              <fieldset>
+                <h5>{{ t('Aggregation operators') }}</h5>
+                <button cButton size="xs" class="m-1" title="calculate sum over dimensions"
+                  (click)="addAggregationToString('sum')">
+                  sum
+                </button>
+                <button cButton size="xs" class="m-1" title="select minimum over dimensions"
+                  (click)="addAggregationToString('min')">
+                  min
+                </button>
+                <button cButton size="xs" class="m-1" title="select maximum over dimensions"
+                  (click)="addAggregationToString('max')">
+                  max
+                </button>
+                <button cButton size="xs" class="m-1" title="calculate the average over dimensions"
+                  (click)="addAggregationToString('avg')">
+                  avg
+                </button>
+                <button cButton size="xs" class="m-1"
+                  title="calculate population standard deviation over dimensions"
+                  (click)="addAggregationToString('stddev')">
+                  stddev
+                </button>
+                <button cButton size="xs" class="m-1"
+                  title="calculate population standard variance over dimensions"
+                  (click)="addAggregationToString('stdvar')">
+                  stdvar
+                </button>
+                <button cButton size="xs" class="m-1" title="count number of elements in the vector"
+                  (click)="addAggregationToString('count')">
+                  count
+                </button>
+                <button cButton size="xs" class="m-1"
+                  title="count number of elements with the same value"
+                  (click)="addAggregationToString('count_values')">
+                  count_values
+                </button>
+                <button cButton size="xs" class="m-1" title="smallest k elements by sample value"
+                  (click)="addAggregationToString('bottomk')">
+                  bottomk
+                </button>
+                <button cButton size="xs" class="m-1" title="largest k elements by sample value"
+                  (click)="addAggregationToString('topk')">
+                  topk
+                </button>
+                <button cButton size="xs" class="m-1"
+                  title="calculate φ-quantile (0 ≤ φ ≤ 1) over dimensions"
+                  (click)="addAggregationToString('quantile')">
+                  quantile
+                </button>
+              </fieldset>
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <oitc-prometheus-code-mirror>
+              <label cLabel for="query">
+                {{ t('PromQL query') }}
+                <oitc-required-icon/>
+              </label>
+              <textarea cFormControl id="query"
+                name="query"
+                [(ngModel)]="post.Service.prometheus_alert_rule.promql"
+                oitcFormError [errors]="promqlErrors" errorField="promql"
+              ></textarea>
+            </oitc-prometheus-code-mirror>
+            <oitc-form-feedback [errors]="promqlErrors" errorField="promql"></oitc-form-feedback>
+          </c-row>
+          <c-row class="mb-3">
+            <c-col md="10">
+              <h5 class="text-info">
+                {{ t('Query result:') }}
+                @if (executeResult) {
+                  <span class="ng-binding ng-hide">
+                    {{ executeResult }}
+                  </span>
+                }
+                @if (! executeResult) {
+                  <span class="italic">
+                    {{ t('no data') }}
+                  </span>
+                }
+              </h5>
+            </c-col>
+            <c-col md="2" class=" text-end">
+              <button cButton color="success" (click)="execute()">
+                {{ t('Execute') }}
+              </button>
+            </c-col>
+          </c-row>
+          <div class="mb-3">
+            <label cLabel for="thresholdType">
+              {{ t('Threshold type') }}
+              <oitc-required-icon/>
+            </label>
+            <oitc-select
+              name="thresholdType"
+              id="thresholdType"
+              optionValue="key"
+              optionLabel="value"
+              (onChange)="onThresholdTypeChange()"
+              [(ngModel)]="post.Service.prometheus_alert_rule.threshold_type"
+              [options]="thresholdTypes">
+            </oitc-select>
+          </div>
+          <c-row>
+            <c-row>
+              <c-col>
+                <h5 class="text-warning">
+                  <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                  {{ t('Warning') }}
+                </h5>
+              </c-col>
+            </c-row>
+            <c-col>
+              <div class="mb-3">
+                <label cLabel for="ValidateService.warning_operator" class="text-warning">
+                  {{ t('Operator') }}
                 </label>
-                <oitc-multi-select
-                    name="selectedMetrics"
-                    id="selectedMetrics"
-                    optionValue="metric"
-                    optionLabel="metric"
-                    [(ngModel)]="selectedMetrics"
-                    [options]="index.targets.data"
-                    (onChange)="onMetricsChange()">
-                </oitc-multi-select>
-            </div>
-
-            <c-row class="mb-3">
-                <fieldset>
-                    <h5>{{ t('Available metrics') }}</h5>
-                    <button *ngFor="let metricSelected of selectedMetrics"
-                            cButton
-                            color="primary"
-                            [size]="'xs'"
-                            class="m-1"
-                            (click)="addMetricString(metricSelected)">
-                        {{ metricSelected }}
-                    </button>
-                </fieldset>
-            </c-row>
-            <c-row class="mb-3">
-                <c-col md="1">
-                    <fieldset>
-                        <h5>{{ t('Brackets') }}</h5>
-                        <button cButton size="xs" color="info" class="m-1" (click)="addToString('(')">
-                            (
-                        </button>
-                        <button cButton size="xs" color="info" class="m-1" (click)="addToString(')')">
-                            )
-                        </button>
-                    </fieldset>
-                </c-col>
-                <c-col md="3">
-                    <fieldset>
-                        <h5>{{ t('Arithmetic binary operators') }}</h5>
-                        <button cButton size="xs" color="success" class="m-1" [title]="'addition' | transloco"
-                                (click)="addToString('+')">
-                            +
-                        </button>
-                        <button cButton size="xs" color="success" class="m-1" [title]="'subtraction'  | transloco"
-                                (click)="addToString('-')">
-                            -
-                        </button>
-                        <button cButton size="xs" color="success" class="m-1" [title]="'multiplication'  | transloco"
-                                (click)="addToString('*')">
-                            *
-                        </button>
-                        <button cButton size="xs" color="success" class="m-1" [title]="'division'  | transloco"
-                                (click)="addToString('/')">
-                            /
-                        </button>
-                        <button cButton size="xs" color="success" class="m-1" [title]="'modulo'  | transloco"
-                                (click)="addToString('%')">
-                            %
-                        </button>
-                        <button cButton size="xs" color="success" class="m-1"
-                                [title]="'power/exponentiation' | transloco" (click)="addToString('^')">
-                            ^
-                        </button>
-                    </fieldset>
-                </c-col>
-                <c-col md="8">
-                    <fieldset>
-                        <h5>{{ t('Aggregation operators') }}</h5>
-                        <button cButton size="xs" class="m-1" title="calculate sum over dimensions"
-                                (click)="addAggregationToString('sum')">
-                            sum
-                        </button>
-                        <button cButton size="xs" class="m-1" title="select minimum over dimensions"
-                                (click)="addAggregationToString('min')">
-                            min
-                        </button>
-                        <button cButton size="xs" class="m-1" title="select maximum over dimensions"
-                                (click)="addAggregationToString('max')">
-                            max
-                        </button>
-                        <button cButton size="xs" class="m-1" title="calculate the average over dimensions"
-                                (click)="addAggregationToString('avg')">
-                            avg
-                        </button>
-                        <button cButton size="xs" class="m-1"
-                                title="calculate population standard deviation over dimensions"
-                                (click)="addAggregationToString('stddev')">
-                            stddev
-                        </button>
-                        <button cButton size="xs" class="m-1"
-                                title="calculate population standard variance over dimensions"
-                                (click)="addAggregationToString('stdvar')">
-                            stdvar
-                        </button>
-                        <button cButton size="xs" class="m-1" title="count number of elements in the vector"
-                                (click)="addAggregationToString('count')">
-                            count
-                        </button>
-                        <button cButton size="xs" class="m-1"
-                                title="count number of elements with the same value"
-                                (click)="addAggregationToString('count_values')">
-                            count_values
-                        </button>
-                        <button cButton size="xs" class="m-1" title="smallest k elements by sample value"
-                                (click)="addAggregationToString('bottomk')">
-                            bottomk
-                        </button>
-                        <button cButton size="xs" class="m-1" title="largest k elements by sample value"
-                                (click)="addAggregationToString('topk')">
-                            topk
-                        </button>
-                        <button cButton size="xs" class="m-1"
-                                title="calculate φ-quantile (0 ≤ φ ≤ 1) over dimensions"
-                                (click)="addAggregationToString('quantile')">
-                            quantile
-                        </button>
-                    </fieldset>
-                </c-col>
-            </c-row>
-
-            <c-row class="mb-3">
-                <oitc-prometheus-code-mirror>
-                    <label cLabel for="query">
-                        {{ t('PromQL query') }}
-                        <oitc-required-icon/>
-                    </label>
-                    <textarea cFormControl id="query"
-                              name="query"
-                              [(ngModel)]="post.Service.prometheus_alert_rule.promql"
-                              oitcFormError [errors]="promqlErrors" errorField="promql"
-                    ></textarea>
-                </oitc-prometheus-code-mirror>
-                <oitc-form-feedback [errors]="promqlErrors" errorField="promql"></oitc-form-feedback>
-            </c-row>
-
-            <c-row class="mb-3">
-                <c-col md="10">
-
-                    <h5 class="text-info">
-                        {{ t('Query result:') }}
-                        <span *ngIf="executeResult" class="ng-binding ng-hide">
-                            {{ executeResult }}
-                        </span>
-                        <span class="italic" *ngIf="! executeResult">
-                            {{ t('no data') }}
-                        </span>
-                    </h5>
-                </c-col>
-                <c-col md="2" class=" text-end">
-
-                    <button cButton color="success" (click)="execute()">
-                        {{ t('Execute') }}
-                    </button>
-                </c-col>
-            </c-row>
-
-
-            <div class="mb-3">
-                <label cLabel for="thresholdType">
-                    {{ t('Threshold type') }}
-                    <oitc-required-icon/>
-                </label>
-                <oitc-select
-                    name="thresholdType"
-                    id="thresholdType"
+                @if (post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.scalar) {
+                  <oitc-select
+                    name="ValidateService.warning_operator"
+                    id="ValidateService.warning_operator"
                     optionValue="key"
                     optionLabel="value"
-                    (onChange)="onThresholdTypeChange()"
-                    [(ngModel)]="post.Service.prometheus_alert_rule.threshold_type"
-                    [options]="thresholdTypes">
-                </oitc-select>
-            </div>
-
-            <c-row>
-                <c-row>
-                    <c-col>
-                        <h5 class="text-warning">
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                            {{ t('Warning') }}
-                        </h5>
-                    </c-col>
-                </c-row>
-                <c-col>
-                    <div class="mb-3">
-                        <label cLabel for="ValidateService.warning_operator" class="text-warning">
-                            {{ t('Operator') }}
-                        </label>
-                        <ng-container
-                            *ngIf="post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.scalar">
-                            <oitc-select
-                                name="ValidateService.warning_operator"
-                                id="ValidateService.warning_operator"
-                                optionValue="key"
-                                optionLabel="value"
-                                [options]="operators"
-                                [(ngModel)]="post.Service.prometheus_alert_rule.warning_operator"
-                                oitcFormError [errors]="errors" errorField="warning_operator">
-                            </oitc-select>
-                            <oitc-form-feedback [errors]="errors" errorField="warning_operator"></oitc-form-feedback>
-                        </ng-container>
-                        <ng-container
-                            *ngIf="post.Service.prometheus_alert_rule.threshold_type !== PrometheusThresholdType.scalar">
-                            <oitc-select
-                                name="ValidateService.warning_operatorOnlyAuto"
-                                id="ValidateService.warning_operatorOnlyAuto"
-                                [disabled]="true"
-                                optionValue="key"
-                                optionLabel="value"
-                                [options]="onlyAutoOperator"
-                                [(ngModel)]="post.Service.prometheus_alert_rule.warning_operator"
-                                oitcFormError [errors]="errors" errorField="warning_operator">
-                            </oitc-select>
-                            <oitc-form-feedback [errors]="errors" errorField="warning_operator"></oitc-form-feedback>
-                        </ng-container>
-                    </div>
-                </c-col>
-                <c-col>
-                    <div class="mb-3">
-                        <label cLabel for="ValidateService.warning_min" class="text-warning">
-                            {{ t('Warning') }}
-                            <span
-                                [hidden]="post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.scalar">
-                                {{ t('min') }}
-                            </span>
-                            <oitc-required-icon/>
-                        </label>
-                        <input cFormControl
-                               id="ValidateService.warning_min"
-                               type="number"
-                               name="ValidateService.warning_min"
-                               [(ngModel)]="post.Service.prometheus_alert_rule.warning_min"
-                               oitcFormError [errors]="errors" errorField="warning_min"
-                        >
-                        <oitc-form-feedback [errors]="errors" errorField="warning_min"></oitc-form-feedback>
-                    </div>
-                </c-col>
-                <c-col [hidden]="post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.scalar">
-                    <div class="mb-3">
-                        <label cLabel for="ValidateService.warning_max" class="text-warning">
-                            {{ t('Warning max') }}
-                            <oitc-required-icon/>
-                        </label>
-                        <input cFormControl
-                               id="ValidateService.warning_max"
-                               type="number"
-                               name="ValidateService.warning_max"
-                               [(ngModel)]="post.Service.prometheus_alert_rule.warning_max"
-                               oitcFormError [errors]="errors" errorField="warning_max"
-                        >
-                        <oitc-form-feedback [errors]="errors" errorField="warning_max"></oitc-form-feedback>
-                    </div>
-                </c-col>
-                <c-col>
-                    <div class="mb-3">
-                        <label cLabel for="intervalWarn" class="text-warning">
-                            {{ t('Longer than...') }}
-                            <oitc-required-icon/>
-                        </label>
-                        <oitc-select
-                            name="intervalWarn"
-                            id="intervalWarn"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.Service.prometheus_alert_rule.warning_longer_as"
-                            [options]="longerThanValues">
-                        </oitc-select>
-                    </div>
-                </c-col>
-                <c-col>
-                    <oitc-prometheus-thresholds
-                        *ngIf="post.Service.prometheus_alert_rule.threshold_type !== PrometheusThresholdType.scalar"
-                        [inclusive]="(post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.range_inclusive)"
-                        [min]="post.Service.prometheus_alert_rule.warning_min"
-                        [max]="post.Service.prometheus_alert_rule.warning_max"
-                        [type]="'warning'"></oitc-prometheus-thresholds>
-                </c-col>
-            </c-row>
-            <c-row>
-                <c-col>
-                    <h5 class="text-danger">
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                        {{ t('Critical') }}
-                    </h5>
-                </c-col>
-            </c-row>
-            <c-row class="text-critical">
-                <c-col>
-                    <div class="mb-3">
-                        <label cLabel for="ValidateService.critical_operator" class="text-danger">
-                            {{ t('Operator') }}
-                        </label>
-                        <ng-container
-                            *ngIf="post.Service.prometheus_alert_rule.threshold_type == PrometheusThresholdType.scalar">
-                            <oitc-select
-                                name="ValidateService.critical_operator"
-                                id="ValidateService.critical_operator"
-                                optionValue="key"
-                                optionLabel="value"
-                                [options]="operators"
-                                [(ngModel)]="post.Service.prometheus_alert_rule.critical_operator"
-                                oitcFormError [errors]="errors" errorField="critical_operator">
-                            </oitc-select>
-                            <oitc-form-feedback [errors]="errors" errorField="critical_operator"></oitc-form-feedback>
-                        </ng-container>
-                        <ng-container
-                            *ngIf="post.Service.prometheus_alert_rule.threshold_type !== PrometheusThresholdType.scalar">
-                            <oitc-select
-                                name="ValidateService.critical_operatorOnlyAuto"
-                                id="ValidateService.critical_operatorOnlyAuto"
-                                [disabled]="true"
-                                optionValue="key"
-                                optionLabel="value"
-                                [options]="onlyAutoOperator"
-                                [(ngModel)]="post.Service.prometheus_alert_rule.critical_operator"
-                                oitcFormError [errors]="errors" errorField="critical_operator">
-                            </oitc-select>
-                            <oitc-form-feedback [errors]="errors" errorField="critical_operator"></oitc-form-feedback>
-                        </ng-container>
-                    </div>
-                </c-col>
-                <c-col>
-                    <div class="mb-3">
-                        <label cLabel for="ValidateService.critical_min" class="text-danger">
-                            {{ t('Critical') }}
-                            <span
-                                [hidden]="post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.scalar">{{ t('min') }}</span>
-                            <oitc-required-icon/>
-                        </label>
-                        <input cFormControl
-                               id="ValidateService.critical_min"
-                               type="number"
-                               name="ValidateService.critical_min"
-                               [(ngModel)]="post.Service.prometheus_alert_rule.critical_min"
-                               oitcFormError [errors]="errors" errorField="critical_min"
-                        >
-                        <oitc-form-feedback [errors]="errors" errorField="critical_min"></oitc-form-feedback>
-                    </div>
-                </c-col>
-                <c-col [hidden]="post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.scalar">
-                    <div class="mb-3">
-                        <label cLabel for="ValidateService.critical_max" class="text-danger">
-                            {{ t('Critical') }}
-                            {{ t('max') }}
-                        </label>
-                        <input cFormControl
-                               id="ValidateService.critical_max"
-                               type="number"
-                               name="ValidateService.critical_max"
-                               [(ngModel)]="post.Service.prometheus_alert_rule.critical_max"
-                               oitcFormError [errors]="errors" errorField="critical_max"
-                        >
-                        <oitc-form-feedback [errors]="errors" errorField="critical_max"></oitc-form-feedback>
-                    </div>
-                </c-col>
-                <c-col>
-                    <div class="mb-3">
-                        <label cLabel for="intervalCrit" class="text-danger">
-                            {{ t('Longer than...') }}
-                            <oitc-required-icon/>
-                        </label>
-                        <oitc-select
-                            name="intervalCrit"
-                            id="intervalCrit"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.Service.prometheus_alert_rule.critical_longer_as"
-                            [options]="longerThanValues">
-                        </oitc-select>
-                    </div>
-                </c-col>
-                <c-col>
-                    <oitc-prometheus-thresholds
-                        *ngIf="post.Service.prometheus_alert_rule.threshold_type !== PrometheusThresholdType.scalar"
-                        [inclusive]="(post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.range_inclusive)"
-                        [min]="post.Service.prometheus_alert_rule.critical_min"
-                        [max]="post.Service.prometheus_alert_rule.critical_max"
-                        [type]="'critical'"></oitc-prometheus-thresholds>
-                </c-col>
-            </c-row>
-
-
-            <div class="mb-3">
-                <label cLabel for="post.Service.servicetemplate_id">
-                    <a [routerLink]="['/', 'servicetemplates', 'edit', serviceTemplateId]">
-                        {{ t('Service template') }}
-                        <oitc-required-icon/>
-                    </a>
-                </label>
-                <oitc-select
-                    name="post.Service.servicetemplate_id"
-                    id="post.Service.servicetemplate_id"
+                    [options]="operators"
+                    [(ngModel)]="post.Service.prometheus_alert_rule.warning_operator"
+                    oitcFormError [errors]="errors" errorField="warning_operator">
+                  </oitc-select>
+                  <oitc-form-feedback [errors]="errors" errorField="warning_operator"></oitc-form-feedback>
+                }
+                @if (post.Service.prometheus_alert_rule.threshold_type !== PrometheusThresholdType.scalar) {
+                  <oitc-select
+                    name="ValidateService.warning_operatorOnlyAuto"
+                    id="ValidateService.warning_operatorOnlyAuto"
+                    [disabled]="true"
                     optionValue="key"
                     optionLabel="value"
-                    [(ngModel)]="post.Service.servicetemplate_id"
-                    [options]="serviceTemplates"
-                    oitcFormError [errors]="errors" errorField="servicetemplate_id">
+                    [options]="onlyAutoOperator"
+                    [(ngModel)]="post.Service.prometheus_alert_rule.warning_operator"
+                    oitcFormError [errors]="errors" errorField="warning_operator">
+                  </oitc-select>
+                  <oitc-form-feedback [errors]="errors" errorField="warning_operator"></oitc-form-feedback>
+                }
+              </div>
+            </c-col>
+            <c-col>
+              <div class="mb-3">
+                <label cLabel for="ValidateService.warning_min" class="text-warning">
+                  {{ t('Warning') }}
+                  <span
+                    [hidden]="post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.scalar">
+                    {{ t('min') }}
+                  </span>
+                  <oitc-required-icon/>
+                </label>
+                <input cFormControl
+                  id="ValidateService.warning_min"
+                  type="number"
+                  name="ValidateService.warning_min"
+                  [(ngModel)]="post.Service.prometheus_alert_rule.warning_min"
+                  oitcFormError [errors]="errors" errorField="warning_min"
+                  >
+                <oitc-form-feedback [errors]="errors" errorField="warning_min"></oitc-form-feedback>
+              </div>
+            </c-col>
+            <c-col [hidden]="post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.scalar">
+              <div class="mb-3">
+                <label cLabel for="ValidateService.warning_max" class="text-warning">
+                  {{ t('Warning max') }}
+                  <oitc-required-icon/>
+                </label>
+                <input cFormControl
+                  id="ValidateService.warning_max"
+                  type="number"
+                  name="ValidateService.warning_max"
+                  [(ngModel)]="post.Service.prometheus_alert_rule.warning_max"
+                  oitcFormError [errors]="errors" errorField="warning_max"
+                  >
+                <oitc-form-feedback [errors]="errors" errorField="warning_max"></oitc-form-feedback>
+              </div>
+            </c-col>
+            <c-col>
+              <div class="mb-3">
+                <label cLabel for="intervalWarn" class="text-warning">
+                  {{ t('Longer than...') }}
+                  <oitc-required-icon/>
+                </label>
+                <oitc-select
+                  name="intervalWarn"
+                  id="intervalWarn"
+                  optionValue="key"
+                  optionLabel="value"
+                  [(ngModel)]="post.Service.prometheus_alert_rule.warning_longer_as"
+                  [options]="longerThanValues">
                 </oitc-select>
-                <oitc-form-feedback [errors]="errors" errorField="servicetemplate_id"></oitc-form-feedback>
-            </div>
-
-            <div class="mb-3">
-                <label cLabel for="ValidateService.name">
-                    {{ t('Service name') }}
-                    <oitc-required-icon/>
+              </div>
+            </c-col>
+            <c-col>
+              @if (post.Service.prometheus_alert_rule.threshold_type !== PrometheusThresholdType.scalar) {
+                <oitc-prometheus-thresholds
+                  [inclusive]="(post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.range_inclusive)"
+                  [min]="post.Service.prometheus_alert_rule.warning_min"
+                  [max]="post.Service.prometheus_alert_rule.warning_max"
+                [type]="'warning'"></oitc-prometheus-thresholds>
+              }
+            </c-col>
+          </c-row>
+          <c-row>
+            <c-col>
+              <h5 class="text-danger">
+                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                {{ t('Critical') }}
+              </h5>
+            </c-col>
+          </c-row>
+          <c-row class="text-critical">
+            <c-col>
+              <div class="mb-3">
+                <label cLabel for="ValidateService.critical_operator" class="text-danger">
+                  {{ t('Operator') }}
+                </label>
+                @if (post.Service.prometheus_alert_rule.threshold_type == PrometheusThresholdType.scalar) {
+                  <oitc-select
+                    name="ValidateService.critical_operator"
+                    id="ValidateService.critical_operator"
+                    optionValue="key"
+                    optionLabel="value"
+                    [options]="operators"
+                    [(ngModel)]="post.Service.prometheus_alert_rule.critical_operator"
+                    oitcFormError [errors]="errors" errorField="critical_operator">
+                  </oitc-select>
+                  <oitc-form-feedback [errors]="errors" errorField="critical_operator"></oitc-form-feedback>
+                }
+                @if (post.Service.prometheus_alert_rule.threshold_type !== PrometheusThresholdType.scalar) {
+                  <oitc-select
+                    name="ValidateService.critical_operatorOnlyAuto"
+                    id="ValidateService.critical_operatorOnlyAuto"
+                    [disabled]="true"
+                    optionValue="key"
+                    optionLabel="value"
+                    [options]="onlyAutoOperator"
+                    [(ngModel)]="post.Service.prometheus_alert_rule.critical_operator"
+                    oitcFormError [errors]="errors" errorField="critical_operator">
+                  </oitc-select>
+                  <oitc-form-feedback [errors]="errors" errorField="critical_operator"></oitc-form-feedback>
+                }
+              </div>
+            </c-col>
+            <c-col>
+              <div class="mb-3">
+                <label cLabel for="ValidateService.critical_min" class="text-danger">
+                  {{ t('Critical') }}
+                  <span
+                  [hidden]="post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.scalar">{{ t('min') }}</span>
+                  <oitc-required-icon/>
                 </label>
                 <input cFormControl
-                       id="ValidateService.name"
-                       type="text"
-                       name="ValidateService.name"
-                       [(ngModel)]="post.Service.name"
-                       oitcFormError [errors]="errors" errorField="name"
-                >
-                <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
-            </div>
-
-            <div class="mb-3">
-                <label cLabel for="ValidateService.unit">
-                    {{ t('Metric unit') }}
+                  id="ValidateService.critical_min"
+                  type="number"
+                  name="ValidateService.critical_min"
+                  [(ngModel)]="post.Service.prometheus_alert_rule.critical_min"
+                  oitcFormError [errors]="errors" errorField="critical_min"
+                  >
+                <oitc-form-feedback [errors]="errors" errorField="critical_min"></oitc-form-feedback>
+              </div>
+            </c-col>
+            <c-col [hidden]="post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.scalar">
+              <div class="mb-3">
+                <label cLabel for="ValidateService.critical_max" class="text-danger">
+                  {{ t('Critical') }}
+                  {{ t('max') }}
                 </label>
                 <input cFormControl
-                       id="ValidateService.unit"
-                       type="text"
-                       name="ValidateService.unit"
-                       [(ngModel)]="post.Service.prometheus_alert_rule.unit"
-                       oitcFormError [errors]="errors" errorField="unit"
-                >
-                <oitc-form-feedback [errors]="errors" errorField="unit"></oitc-form-feedback>
-                <div class="help-block">
-                    {{ t('Unit of the metric.') }} <br>
-                    {{ t('Examples:') }}
-                    <ul>
-                        <li>{{ t('"b" for bytes.') }}</li>
-                        <li>{{ t('"KB" for kilobytes.') }}</li>
-                        <li>{{ t('"s" for seconds.') }}</li>
-                        <li>{{ t('"Mbps" or "Mbit/s"') }}</li>
-                        <li>{{ t('"MB/s" for megabytes per second') }}</li>
-                    </ul>
-                </div>
+                  id="ValidateService.critical_max"
+                  type="number"
+                  name="ValidateService.critical_max"
+                  [(ngModel)]="post.Service.prometheus_alert_rule.critical_max"
+                  oitcFormError [errors]="errors" errorField="critical_max"
+                  >
+                <oitc-form-feedback [errors]="errors" errorField="critical_max"></oitc-form-feedback>
+              </div>
+            </c-col>
+            <c-col>
+              <div class="mb-3">
+                <label cLabel for="intervalCrit" class="text-danger">
+                  {{ t('Longer than...') }}
+                  <oitc-required-icon/>
+                </label>
+                <oitc-select
+                  name="intervalCrit"
+                  id="intervalCrit"
+                  optionValue="key"
+                  optionLabel="value"
+                  [(ngModel)]="post.Service.prometheus_alert_rule.critical_longer_as"
+                  [options]="longerThanValues">
+                </oitc-select>
+              </div>
+            </c-col>
+            <c-col>
+              @if (post.Service.prometheus_alert_rule.threshold_type !== PrometheusThresholdType.scalar) {
+                <oitc-prometheus-thresholds
+                  [inclusive]="(post.Service.prometheus_alert_rule.threshold_type === PrometheusThresholdType.range_inclusive)"
+                  [min]="post.Service.prometheus_alert_rule.critical_min"
+                  [max]="post.Service.prometheus_alert_rule.critical_max"
+                [type]="'critical'"></oitc-prometheus-thresholds>
+              }
+            </c-col>
+          </c-row>
+          <div class="mb-3">
+            <label cLabel for="post.Service.servicetemplate_id">
+              <a [routerLink]="['/', 'servicetemplates', 'edit', serviceTemplateId]">
+                {{ t('Service template') }}
+                <oitc-required-icon/>
+              </a>
+            </label>
+            <oitc-select
+              name="post.Service.servicetemplate_id"
+              id="post.Service.servicetemplate_id"
+              optionValue="key"
+              optionLabel="value"
+              [(ngModel)]="post.Service.servicetemplate_id"
+              [options]="serviceTemplates"
+              oitcFormError [errors]="errors" errorField="servicetemplate_id">
+            </oitc-select>
+            <oitc-form-feedback [errors]="errors" errorField="servicetemplate_id"></oitc-form-feedback>
+          </div>
+          <div class="mb-3">
+            <label cLabel for="ValidateService.name">
+              {{ t('Service name') }}
+              <oitc-required-icon/>
+            </label>
+            <input cFormControl
+              id="ValidateService.name"
+              type="text"
+              name="ValidateService.name"
+              [(ngModel)]="post.Service.name"
+              oitcFormError [errors]="errors" errorField="name"
+              >
+            <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+          </div>
+          <div class="mb-3">
+            <label cLabel for="ValidateService.unit">
+              {{ t('Metric unit') }}
+            </label>
+            <input cFormControl
+              id="ValidateService.unit"
+              type="text"
+              name="ValidateService.unit"
+              [(ngModel)]="post.Service.prometheus_alert_rule.unit"
+              oitcFormError [errors]="errors" errorField="unit"
+              >
+            <oitc-form-feedback [errors]="errors" errorField="unit"></oitc-form-feedback>
+            <div class="help-block">
+              {{ t('Unit of the metric.') }} <br>
+              {{ t('Examples:') }}
+              <ul>
+                <li>{{ t('"b" for bytes.') }}</li>
+                <li>{{ t('"KB" for kilobytes.') }}</li>
+                <li>{{ t('"s" for seconds.') }}</li>
+                <li>{{ t('"Mbps" or "Mbit/s"') }}</li>
+                <li>{{ t('"MB/s" for megabytes per second') }}</li>
+              </ul>
             </div>
-
-            <c-card>
-                <c-card-body class="text-end">
-
-                    <button cButton class="ripple" color="primary" (click)="updateService()">
-                        {{ t('Update alert rule') }}
-                    </button>
-                    <button [fallbackUrl]="['prometheus_module', 'PrometheusQuery', 'index']" cButton
-                            class="ms-1 ripple" color="default"
-                            oitcBackButton
-                            type="button">
-                        {{ t('Cancel') }}
-                    </button>
-
-                </c-card-body>
-            </c-card>
-
-
-            <hr class="border-dashed my-3"/>
-
-            <h5>{{ t('Current values') }}</h5>
-
-            <table bordered cTable hover>
-                <thead>
-                <tr>
-                    <th>{{ t('Element') }}</th>
-                    <th>{{ t('Value') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <ng-container *ngFor="let metric of selectedMetrics">
-                    <ng-container *ngIf="typeof(metrics[metric]) !== 'undefined'">
-                        <tr *ngFor="let datum of metrics[metric].metricDetails.data.result">
-                            <td>
-                                <span class="no-padding bold ng-binding">{{ datum.metric.__name__ }}</span>
-                                {{ '{' }}
-                                <code class="no-padding ng-binding ng-scope">
-                                    <ng-container *ngFor="let a of datum.metric | keyvalue; let last = last">
-                                        <ng-container *ngIf="a.key !== '__name__'">
-                                            {{ a.key }}="{{ a.value }}"<span *ngIf="!last">, </span>
-                                        </ng-container>
-                                    </ng-container>
-                                </code>
-                                {{ '}' }}
-                            </td>
-                            <td>
-                                {{ datum.value[1] }}
-                            </td>
-                        </tr>
-                    </ng-container>
-                </ng-container>
-                </tbody>
-            </table>
-        </c-card-body>
+          </div>
+          <c-card>
+            <c-card-body class="text-end">
+              <button cButton class="ripple" color="primary" (click)="updateService()">
+                {{ t('Update alert rule') }}
+              </button>
+              <button [fallbackUrl]="['prometheus_module', 'PrometheusQuery', 'index']" cButton
+                class="ms-1 ripple" color="default"
+                oitcBackButton
+                type="button">
+                {{ t('Cancel') }}
+              </button>
+            </c-card-body>
+          </c-card>
+          <hr class="border-dashed my-3"/>
+          <h5>{{ t('Current values') }}</h5>
+          <table bordered cTable hover>
+            <thead>
+              <tr>
+                <th>{{ t('Element') }}</th>
+                <th>{{ t('Value') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (metric of selectedMetrics; track metric) {
+                @if (typeof(metrics[metric]) !== 'undefined') {
+                  @for (datum of metrics[metric].metricDetails.data.result; track datum) {
+                    <tr>
+                      <td>
+                        <span class="no-padding bold ng-binding">{{ datum.metric.__name__ }}</span>
+                        {{ '{' }}
+                        <code class="no-padding ng-binding ng-scope">
+                          @for (a of datum.metric | keyvalue; track a; let last = $last) {
+                            @if (a.key !== '__name__') {
+                              {{ a.key }}="{{ a.value }}"@if (!last) {
+                              <span>, </span>
+                            }
+                          }
+                        }
+                      </code>
+                      {{ '}' }}
+                    </td>
+                    <td>
+                      {{ datum.value[1] }}
+                    </td>
+                  </tr>
+                }
+              }
+            }
+          </tbody>
+        </table>
+      </c-card-body>
     </c-card>
+  }
 
 </ng-container>

@@ -27,7 +27,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { formatDate } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -65,8 +65,6 @@ import { IndexPage } from '../../../pages.interface';
     MatSortHeader,
     NavComponent,
     NavItemComponent,
-    NgForOf,
-    NgIf,
     NoRecordsComponent,
     PaginateOrScrollComponent,
     PermissionDirective,

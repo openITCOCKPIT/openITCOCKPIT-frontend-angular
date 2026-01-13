@@ -19,7 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PermissionsService } from '../../../../permissions/permissions.service';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { DashboardAllocateModalService } from './dashboard-allocate-modal.service';
 import { DashboardTab, DashboardTabAllocation } from '../../dashboards.interface';
@@ -36,30 +36,29 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
 @Component({
     selector: 'oitc-dashboard-allocate-modal',
     imports: [
-        ButtonCloseDirective,
-        FaIconComponent,
-        FormsModule,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        ModalToggleDirective,
-        AsyncPipe,
-        NgIf,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        FormControlDirective,
-        MultiSelectComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective
-    ],
+    ButtonCloseDirective,
+    FaIconComponent,
+    FormsModule,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    ModalToggleDirective,
+    AsyncPipe,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    SelectComponent,
+    FormControlDirective,
+    MultiSelectComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective
+],
     templateUrl: './dashboard-allocate-modal.component.html',
     styleUrl: './dashboard-allocate-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

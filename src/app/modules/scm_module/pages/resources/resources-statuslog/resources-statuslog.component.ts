@@ -10,7 +10,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
     CardBodyComponent,
     CardComponent,
@@ -32,28 +32,26 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 @Component({
     selector: 'oitc-resources-statuslog',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        BlockLoaderComponent,
-        NgIf,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ContainerComponent,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NoRecordsComponent,
-        XsButtonDirective,
-        NgClass,
-        ColComponent,
-        PaginateOrScrollComponent,
-        RowComponent,
-        BackButtonDirective
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    BlockLoaderComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ContainerComponent,
+    NavComponent,
+    NavItemComponent,
+    NoRecordsComponent,
+    XsButtonDirective,
+    NgClass,
+    ColComponent,
+    PaginateOrScrollComponent,
+    RowComponent,
+    BackButtonDirective
+],
     templateUrl: './resources-statuslog.component.html',
     styleUrl: './resources-statuslog.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

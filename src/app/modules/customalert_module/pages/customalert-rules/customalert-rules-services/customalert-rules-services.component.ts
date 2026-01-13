@@ -22,7 +22,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+
 
 import { PaginatorModule } from 'primeng/paginator';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -64,14 +64,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
     InputGroupComponent,
     InputGroupTextDirective,
     MatSort,
-    NgIf,
     PaginatorModule,
     RowComponent,
     TableDirective,
     TableLoaderComponent,
     TranslocoPipe,
     MatSortHeader,
-    NgForOf,
     NoRecordsComponent,
     PaginateOrScrollComponent,
     RouterLink

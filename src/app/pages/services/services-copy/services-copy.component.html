@@ -1,176 +1,176 @@
 <ng-container *transloco="let t">
 
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['services', 'index']" [routerLink]="['/', 'services', 'index']">
-                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                    {{ t('Services') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                {{ t('Copy') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <a *oitcPermission="['services', 'index']" [routerLink]="['/', 'services', 'index']">
+            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+            {{ t('Services') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+          {{ t('Copy') }}
+        </li>
+      </ol>
     </nav>
     <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Service') }}
-                <small class="fw-300">
-                    {{ t('Copy services/s') }}
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <button [fallbackUrl]="['services', 'index']" cButton class="ripple" color="default"
-                        oitcBackButton
-                        size="xs">
-                    <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                    {{ t('Back') }}
-                </button>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
+      <c-card-header>
+        <h5 cCardTitle>{{ t('Service') }}
+          <small class="fw-300">
+            {{ t('Copy services/s') }}
+          </small>
+        </h5>
+        <c-nav class="card-toolbar card-header-pills">
+          <button [fallbackUrl]="['services', 'index']" cButton class="ripple" color="default"
+            oitcBackButton
+            size="xs">
+            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+            {{ t('Back') }}
+          </button>
+        </c-nav>
+      </c-card-header>
+      <c-card-body>
 
-            <c-card class="mb-3">
-                <c-card-header>
-                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                    <span class="ms-1">
-                        {{ t('Target host') }}
-                    </span>
-                </c-card-header>
-                <c-card-body>
-                    <oitc-select
-                        name="host"
-                        id="host"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="host_id"
-                        [options]="hosts"
-                        (onChange)="onHostChange()"
-                        [searchCallback]="loadHosts">
-                    </oitc-select>
-                    <div *ngIf="host_id < 1" class="text-warning-glow pt-1">
-                        {{ t('Please select a host.') }}
+        <c-card class="mb-3">
+          <c-card-header>
+            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+            <span class="ms-1">
+              {{ t('Target host') }}
+            </span>
+          </c-card-header>
+          <c-card-body>
+            <oitc-select
+              name="host"
+              id="host"
+              optionValue="key"
+              optionLabel="value"
+              [(ngModel)]="host_id"
+              [options]="hosts"
+              (onChange)="onHostChange()"
+              [searchCallback]="loadHosts">
+            </oitc-select>
+            @if (host_id < 1) {
+              <div class="text-warning-glow pt-1">
+                {{ t('Please select a host.') }}
+              </div>
+            }
+
+            <div class="mt-3"
+              [hidden]="host_id == 0">
+              <c-alert color="info">
+                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                {{ t('Please notice:') }}
+                {{ t('Services which use a service template that could not be assigned to the selected host due to container permissions, will be removed automatically.') }}
+              </c-alert>
+            </div>
+
+          </c-card-body>
+        </c-card>
+
+        <oitc-form-loader [isVisible]="services.length === 0 && host_id > 0"></oitc-form-loader>
+
+        @for (service of services; track service; let i = $index) {
+          <c-card class="mb-3">
+            <c-card-header>
+              <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+              <span class="ms-1">
+                {{ t('Source service:') }}
+                {{ service.Source.hostname }} / {{ service.Source._name }}
+              </span>
+            </c-card-header>
+            <c-card-body>
+              <div class="mb-3">
+                <label cLabel for="name{{i}}">
+                  {{ t('Service name') }}
+                  <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl required type="text"
+                  name="name{{i}}"
+                  id="name{{i}}"
+                  [(ngModel)]="service.Service.name"
+                  oitcFormError [errors]="service.Error" errorField="name">
+                <oitc-form-feedback [errors]="service.Error" errorField="name"></oitc-form-feedback>
+                <div class="help-block">
+                  {{ t('Name of the new service') }}
+                </div>
+              </div>
+              <div class="mb-3">
+                <label cLabel for="description{{i}}">
+                  {{ t('Description') }}
+                </label>
+                <input cFormControl required type="text"
+                  name="description{{i}}"
+                  id="description{{i}}"
+                  [(ngModel)]="service.Service.description"
+                  oitcFormError [errors]="service.Error" errorField="description">
+                <oitc-form-feedback [errors]="service.Error"
+                errorField="description"></oitc-form-feedback>
+              </div>
+              <div class="mb-3">
+                <label cLabel for="description{{i}}">
+                  {{ t('Check command') }}
+                </label>
+                <oitc-select
+                  name="ServiceCheckCommandSelect{{i}}"
+                  id="ServiceCheckCommandSelect{{i}}"
+                  optionValue="key"
+                  optionLabel="value"
+                  [(ngModel)]="service.Service.command_id"
+                  [options]="commands"
+                  (onChange)="loadCommandArguments(service.Source.id, service.Service.command_id, i)"
+                  oitcFormError [errors]="service.Error" errorField="command_id">
+                </oitc-select>
+                <div class="help-block"
+                  [hidden]="service.Service.active_checks_enabled">
+                  {{ t('Due to active checking is disabled, this command will only be used as freshness check command.') }}
+                </div>
+              </div>
+              <div class="mb-3"
+                [hidden]="!(service.Service.command_id && service.Service.servicecommandargumentvalues.length == 0)">
+                <c-alert color="info">
+                  <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                  {{ t('This command does not have any parameters.') }}
+                </c-alert>
+              </div>
+              @for (servicecommandargumentvalue of service.Service.servicecommandargumentvalues; track servicecommandargumentvalue; let argsIndex = $index) {
+                <div class="mb-3 ms-4"
+                  >
+                  <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
+                    {{ servicecommandargumentvalue.commandargument.human_name }}
+                  </label>
+                  <div class="col-xs-12 col-lg-8">
+                    <input
+                      class="form-control"
+                      type="text"
+                      [name]="'servicecommandargumentvalue_'+argsIndex"
+                      [(ngModel)]="servicecommandargumentvalue.value">
+                    <div class="help-block">
+                      {{ servicecommandargumentvalue.commandargument.name }}
                     </div>
+                  </div>
+                </div>
+              }
+            </c-card-body>
+          </c-card>
+        }
 
-                    <div class="mt-3"
-                         [hidden]="host_id == 0">
-                        <c-alert color="info">
-                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                            {{ t('Please notice:') }}
-                            {{ t('Services which use a service template that could not be assigned to the selected host due to container permissions, will be removed automatically.') }}
-                        </c-alert>
-                    </div>
-
-                </c-card-body>
-            </c-card>
-
-            <oitc-form-loader [isVisible]="services.length === 0 && host_id > 0"></oitc-form-loader>
-
-            <c-card class="mb-3" *ngFor="let service of services; let i = index">
-                <c-card-header>
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    <span class="ms-1">
-                        {{ t('Source service:') }}
-                        {{ service.Source.hostname }} / {{ service.Source._name }}
-                    </span>
-                </c-card-header>
-                <c-card-body>
-
-                    <div class="mb-3">
-                        <label cLabel for="name{{i}}">
-                            {{ t('Service name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl required type="text"
-                               name="name{{i}}"
-                               id="name{{i}}"
-                               [(ngModel)]="service.Service.name"
-                               oitcFormError [errors]="service.Error" errorField="name">
-                        <oitc-form-feedback [errors]="service.Error" errorField="name"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Name of the new service') }}
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="description{{i}}">
-                            {{ t('Description') }}
-                        </label>
-                        <input cFormControl required type="text"
-                               name="description{{i}}"
-                               id="description{{i}}"
-                               [(ngModel)]="service.Service.description"
-                               oitcFormError [errors]="service.Error" errorField="description">
-                        <oitc-form-feedback [errors]="service.Error"
-                                            errorField="description"></oitc-form-feedback>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="description{{i}}">
-                            {{ t('Check command') }}
-                        </label>
-                        <oitc-select
-                            name="ServiceCheckCommandSelect{{i}}"
-                            id="ServiceCheckCommandSelect{{i}}"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="service.Service.command_id"
-                            [options]="commands"
-                            (onChange)="loadCommandArguments(service.Source.id, service.Service.command_id, i)"
-                            oitcFormError [errors]="service.Error" errorField="command_id">
-                        </oitc-select>
-                        <div class="help-block"
-                             [hidden]="service.Service.active_checks_enabled">
-                            {{ t('Due to active checking is disabled, this command will only be used as freshness check command.') }}
-                        </div>
-                    </div>
-
-                    <div class="mb-3"
-                         [hidden]="!(service.Service.command_id && service.Service.servicecommandargumentvalues.length == 0)">
-                        <c-alert color="info">
-                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                            {{ t('This command does not have any parameters.') }}
-                        </c-alert>
-                    </div>
-
-                    <div class="mb-3 ms-4"
-                         *ngFor="let servicecommandargumentvalue of service.Service.servicecommandargumentvalues; index as argsIndex">
-                        <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
-                            {{ servicecommandargumentvalue.commandargument.human_name }}
-                        </label>
-                        <div class="col-xs-12 col-lg-8">
-                            <input
-                                class="form-control"
-                                type="text"
-                                [name]="'servicecommandargumentvalue_'+argsIndex"
-                                [(ngModel)]="servicecommandargumentvalue.value">
-                            <div class="help-block">
-                                {{ servicecommandargumentvalue.commandargument.name }}
-                            </div>
-                        </div>
-                    </div>
-
-                </c-card-body>
-            </c-card>
-
-        </c-card-body>
-        <c-card-footer class="text-end">
-            <button cButton class="ripple" color="primary" type="button" (click)="copy()">
-                {{ t('Copy services') }}
-            </button>
-            <button [fallbackUrl]="['services', 'index']" cButton class="ms-1 ripple" color="default"
-                    oitcBackButton>
-                {{ t('Cancel') }}
-            </button>
-        </c-card-footer>
+      </c-card-body>
+      <c-card-footer class="text-end">
+        <button cButton class="ripple" color="primary" type="button" (click)="copy()">
+          {{ t('Copy services') }}
+        </button>
+        <button [fallbackUrl]="['services', 'index']" cButton class="ms-1 ripple" color="default"
+          oitcBackButton>
+          {{ t('Cancel') }}
+        </button>
+      </c-card-footer>
 
     </c-card>
 
-</ng-container>
+  </ng-container>

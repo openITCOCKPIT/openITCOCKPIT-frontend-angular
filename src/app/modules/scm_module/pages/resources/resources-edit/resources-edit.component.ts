@@ -31,36 +31,35 @@ import { ResourcesPost } from '../resources.interface';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-resources-edit',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        CardFooterComponent,
-        FormLoaderComponent,
-        NgIf
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    SelectComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    CardFooterComponent,
+    FormLoaderComponent
+],
     templateUrl: './resources-edit.component.html',
     styleUrl: './resources-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

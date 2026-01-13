@@ -1,137 +1,141 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['tenants', 'index']" [routerLink]="['/', 'documentations', 'wiki']">
-                    <fa-icon [icon]="['fas', 'book']"></fa-icon>
-                    {{ t('Documentation') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Wiki') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <a *oitcPermission="['tenants', 'index']" [routerLink]="['/', 'documentations', 'wiki']">
+            <fa-icon [icon]="['fas', 'book']"></fa-icon>
+            {{ t('Documentation') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'list']"></fa-icon>
+          {{ t('Wiki') }}
+        </li>
+      </ol>
     </nav>
 
     <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Documentation') }}
-                <small class="fw-300">
-                    {{ t('wiki') }}
-                </small>
-            </h5>
-        </c-card-header>
+      <c-card-header>
+        <h5 cCardTitle>{{ t('Documentation') }}
+          <small class="fw-300">
+            {{ t('wiki') }}
+          </small>
+        </h5>
+      </c-card-header>
 
-        <c-card-body>
+      <c-card-body>
 
-            <c-row>
-                <c-col [xs]="12" [md]="6">
-                    <c-card class="mb-3">
-                        <c-card-body>
-                            <h4 cCardTitle>
-                                {{ t('New to openITCOCKPIT?') }}
-                            </h4>
-                            <p cCardText>
-                                {{ t('We recommend every new user to read our') }}
-                                <a href="https://docs.openitcockpit.io/en/beginners/beginners/" target="_blank">
-                                    {{ t('beginners guide.') }}
-                                </a>
-                                {{ t('This guide provides information about the basic concept of openITCOCKPIT and how to monitor your first host.') }}
-                            </p>
-                            <a cButton color="primary" class="ripple"
-                               href="https://docs.openitcockpit.io/en/beginners/beginners/"
-                               target="_blank">
-                                <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
-                                {{ t('Beginners guide.') }}
-                            </a>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-                <c-col [xs]="12" [md]="6">
-                    <c-card class="mb-3">
-                        <c-card-body>
-                            <h4 cCardTitle>
-                                {{ t('Technical documentation') }}
-                            </h4>
-                            <p cCardText>
-                                {{ t('The technical documentation of openITCOCKPIT containers detailed information about additional Modules, background processes, the usage of the JSON-API and so on.') }}
-                            </p>
-                            <a cButton color="primary" class="ripple"
-                               href="https://openitcockpit.io/documentation/"
-                               target="_blank">
-                                <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
-                                {{ t('Documentation') }}
-                            </a>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-            </c-row>
+        <c-row>
+          <c-col [xs]="12" [md]="6">
+            <c-card class="mb-3">
+              <c-card-body>
+                <h4 cCardTitle>
+                  {{ t('New to openITCOCKPIT?') }}
+                </h4>
+                <p cCardText>
+                  {{ t('We recommend every new user to read our') }}
+                  <a href="https://docs.openitcockpit.io/en/beginners/beginners/" target="_blank">
+                    {{ t('beginners guide.') }}
+                  </a>
+                  {{ t('This guide provides information about the basic concept of openITCOCKPIT and how to monitor your first host.') }}
+                </p>
+                <a cButton color="primary" class="ripple"
+                  href="https://docs.openitcockpit.io/en/beginners/beginners/"
+                  target="_blank">
+                  <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
+                  {{ t('Beginners guide.') }}
+                </a>
+              </c-card-body>
+            </c-card>
+          </c-col>
+          <c-col [xs]="12" [md]="6">
+            <c-card class="mb-3">
+              <c-card-body>
+                <h4 cCardTitle>
+                  {{ t('Technical documentation') }}
+                </h4>
+                <p cCardText>
+                  {{ t('The technical documentation of openITCOCKPIT containers detailed information about additional Modules, background processes, the usage of the JSON-API and so on.') }}
+                </p>
+                <a cButton color="primary" class="ripple"
+                  href="https://openitcockpit.io/documentation/"
+                  target="_blank">
+                  <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
+                  {{ t('Documentation') }}
+                </a>
+              </c-card-body>
+            </c-card>
+          </c-col>
+        </c-row>
 
-            <c-row>
-                <c-col [xs]="12">
-                    <c-col [xs]="12">
-                        <c-card class="mb-3">
-                            <c-card-body>
-                                <h4 cCardTitle>
-                                    {{ t('Additional help') }}
-                                </h4>
+        <c-row>
+          <c-col [xs]="12">
+            <c-col [xs]="12">
+              <c-card class="mb-3">
+                <c-card-body>
+                  <h4 cCardTitle>
+                    {{ t('Additional help') }}
+                  </h4>
 
-                                <div *ngIf="records.length === 0">
-                                    <oitc-block-loader height="10rem"></oitc-block-loader>
-                                </div>
+                  @if (records.length === 0) {
+                    <div>
+                      <oitc-block-loader height="10rem"></oitc-block-loader>
+                    </div>
+                  }
 
-                                <div>
-                                    <c-row>
-                                        @for (record of records; track $index) {
-                                            <c-col [xs]="12">
-                                                <h5
-                                                    class="cursor-pointer text-primary"
-                                                    (click)="showDocumentation('additional_help', record.file)">
-                                                    {{ record.name }}
-                                                </h5>
-                                                <p class="italic">
-                                                    {{ record.description }}
-                                                </p>
-                                            </c-col>
-                                        }
-                                    </c-row>
-                                </div>
+                  <div>
+                    <c-row>
+                      @for (record of records; track $index) {
+                        <c-col [xs]="12">
+                          <h5
+                            class="cursor-pointer text-primary"
+                            (click)="showDocumentation('additional_help', record.file)">
+                            {{ record.name }}
+                          </h5>
+                          <p class="italic">
+                            {{ record.description }}
+                          </p>
+                        </c-col>
+                      }
+                    </c-row>
+                  </div>
 
-                            </c-card-body>
-                        </c-card>
-                    </c-col>
-                </c-col>
-            </c-row>
+                </c-card-body>
+              </c-card>
+            </c-col>
+          </c-col>
+        </c-row>
 
-        </c-card-body>
+      </c-card-body>
 
     </c-card>
 
     <!-- Wiki Record Content Modal -->
     <c-modal
-        #modal='cModal'
-        [keyboard]="true"
-        id="wikiModalRecord"
-        [fullscreen]="false"
-        size="lg">
-        <c-modal-header *ngIf="modalRecord">
-            <h5 cModalTitle>
-                <fa-icon [icon]="modalRecord.documentation.icon"></fa-icon>
-                {{ modalRecord.documentation.name }}
-            </h5>
-            <button cButtonClose [cModalToggle]="modal.id"></button>
+      #modal='cModal'
+      [keyboard]="true"
+      id="wikiModalRecord"
+      [fullscreen]="false"
+      size="lg">
+      @if (modalRecord) {
+        <c-modal-header>
+          <h5 cModalTitle>
+            <fa-icon [icon]="modalRecord.documentation.icon"></fa-icon>
+            {{ modalRecord.documentation.name }}
+          </h5>
+          <button cButtonClose [cModalToggle]="modal.id"></button>
         </c-modal-header>
-        <c-modal-body *ngIf="modalRecord">
-
-            <div class="text-break" [innerHTML]="modalRecord.html | trustAsHtml"></div>
-
+      }
+      @if (modalRecord) {
+        <c-modal-body>
+          <div class="text-break" [innerHTML]="modalRecord.html | trustAsHtml"></div>
         </c-modal-body>
+      }
     </c-modal>
 
-</ng-container>
+  </ng-container>

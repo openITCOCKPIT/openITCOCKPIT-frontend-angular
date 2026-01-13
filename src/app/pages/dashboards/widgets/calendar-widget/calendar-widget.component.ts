@@ -12,7 +12,7 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { CalendarWidgetService } from './calendar-widget.service';
 import { CalendarDateDetails } from './calendar-widget.interface';
@@ -20,19 +20,17 @@ import { CalendarDateDetails } from './calendar-widget.interface';
 @Component({
     selector: 'oitc-calendar-widget',
     imports: [
-        RowComponent,
-        ColComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardBodyComponent,
-        BgColorDirective,
-        NgIf,
-        CardFooterComponent,
-        TableDirective,
-        NgForOf,
-        BadgeComponent,
-        NgClass
-    ],
+    RowComponent,
+    ColComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardBodyComponent,
+    BgColorDirective,
+    CardFooterComponent,
+    TableDirective,
+    BadgeComponent,
+    NgClass
+],
     templateUrl: './calendar-widget.component.html',
     styleUrl: './calendar-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

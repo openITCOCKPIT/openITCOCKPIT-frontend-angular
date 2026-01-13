@@ -1,392 +1,395 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['cronjobs', 'index']" [routerLink]="['/', 'cronjobs', 'index']">
-                    <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                    {{ t('Cron jobs') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Overview') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <a *oitcPermission="['cronjobs', 'index']" [routerLink]="['/', 'cronjobs', 'index']">
+            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+            {{ t('Cron jobs') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'list']"></fa-icon>
+          {{ t('Overview') }}
+        </li>
+      </ol>
     </nav>
 
     <form cForm>
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('Cronjobs') }}
-                    <small class="fw-300">
-                        {{ t('overview') }}
-                    </small>
-                </h5>
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button (click)="loadCronjobs()" cButton class="ripple" color="default" size="xs">
-                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                            {{ t('Refresh') }}
+      <c-card class="mb-3">
+        <c-card-header>
+          <h5 cCardTitle>{{ t('Cronjobs') }}
+            <small class="fw-300">
+              {{ t('overview') }}
+            </small>
+          </h5>
+          <c-nav class="card-toolbar card-header-pills">
+            <c-nav-item class="px-1">
+              <button (click)="loadCronjobs()" cButton class="ripple" color="default" size="xs">
+                <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                {{ t('Refresh') }}
+              </button>
+            </c-nav-item>
+
+            <c-nav-item class="px-1">
+              <button *oitcPermission="['cronjobs', 'add']" (click)="triggerAddModal()" cButton
+                class="ripple" color="success" size="xs">
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                {{ t('New') }}
+              </button>
+            </c-nav-item>
+
+          </c-nav>
+        </c-card-header>
+        <c-card-body>
+          @if (!cronjobs) {
+            <oitc-table-loader></oitc-table-loader>
+          }
+          @if (cronjobs) {
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+              <thead>
+                <tr>
+                  <th scope="col">
+                    {{ t('Task') }}
+                  </th>
+                  <th scope="col">
+                    {{ t('Plugin') }}
+                  </th>
+                  <th scope="col">
+                    {{ t('Interval') }}
+                  </th>
+                  <th scope="col">
+                    {{ t('Last scheduled') }}
+                  </th>
+                  <th scope="col">
+                    {{ t('Last execution time') }}
+                  </th>
+                  <th scope="col">
+                    {{ t('Is currently running') }}
+                  </th>
+                  <th scope="col">
+                    {{ t('Enabled') }}
+                  </th>
+                  <th scope="col">
+                    {{ t('Priority') }}
+                  </th>
+                  <th class="text-center width-50" scope="col">
+                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (cronjob of cronjobs.cronjobs; track cronjob) {
+                  <tr>
+                    <td>{{ cronjob.Cronjob.task }}</td>
+                    <td>{{ cronjob.Cronjob.plugin }}</td>
+                    <td>{{ cronjob.Cronjob.interval }}</td>
+                    <td>{{ cronjob.Cronschedule.last_scheduled_usertime }}</td>
+                    <td>{{ cronjob.Cronschedule.last_execution_time_human }}</td>
+                    <td class="text-center">
+                      @if (!cronjob.Cronschedule.is_running) {
+                        <span class="text-success"
+                        >{{ t('No') }}</span>
+                      }
+                      @if (cronjob.Cronschedule.is_running) {
+                        <span class="text-danger">{{ t('Yes') }}</span>
+                      }
+                    </td>
+                    <td class="text-center">
+                      @if (cronjob.Cronjob.enabled) {
+                        <fa-icon
+                        [icon]="['fas', 'check']" class="text-success"></fa-icon>
+                      }
+                      @if (!cronjob.Cronjob.enabled) {
+                        <fa-icon
+                        [icon]="['fas', 'times']" class="text-danger"></fa-icon>
+                      }
+                    </td>
+                    <td class="text-center">
+                      @if (cronjob.Cronjob.priority === CronjobPriorities.Low) {
+                        <oitc-badge-outline
+                          color="success">
+                          {{ t('Low') }}
+                        </oitc-badge-outline>
+                      }
+                      @if (cronjob.Cronjob.priority === CronjobPriorities.High) {
+                        <oitc-badge-outline
+                          color="danger">
+                          {{ t('High') }}
+                        </oitc-badge-outline>
+                      }
+                    </td>
+                    <td class="width-50">
+                      <div *oitcPermission="['cronjobs', 'edit']">
+                        @if (cronjob.Cronjob.id) {
+                          <button (click)="triggerEditModal(cronjob.Cronjob)" cButton class="ripple"
+                            color="default" size="xs"
+                            >
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                          </button>
+                        }
+                      </div>
+                      <div *oitcPermission="['cronjobs', 'edit']; negate: true">
+                        <button cButton class="ripple" color="default" size="xs" disabled>
+                          <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                         </button>
-                    </c-nav-item>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
 
-                    <c-nav-item class="px-1">
-                        <button *oitcPermission="['cronjobs', 'add']" (click)="triggerAddModal()" cButton
-                                class="ripple" color="success" size="xs">
-                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                            {{ t('New') }}
-                        </button>
-                    </c-nav-item>
-
-                </c-nav>
-            </c-card-header>
-            <c-card-body>
-                <oitc-table-loader *ngIf="!cronjobs"></oitc-table-loader>
-                <table *ngIf="cronjobs" bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
-                    <thead>
-                    <tr>
-
-                        <th scope="col">
-                            {{ t('Task') }}
-                        </th>
-                        <th scope="col">
-                            {{ t('Plugin') }}
-                        </th>
-                        <th scope="col">
-                            {{ t('Interval') }}
-                        </th>
-                        <th scope="col">
-                            {{ t('Last scheduled') }}
-                        </th>
-                        <th scope="col">
-                            {{ t('Last execution time') }}
-                        </th>
-                        <th scope="col">
-                            {{ t('Is currently running') }}
-                        </th>
-                        <th scope="col">
-                            {{ t('Enabled') }}
-                        </th>
-                        <th scope="col">
-                            {{ t('Priority') }}
-                        </th>
-                        <th class="text-center width-50" scope="col">
-                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let cronjob of cronjobs.cronjobs">
-
-                        <td>{{ cronjob.Cronjob.task }}</td>
-                        <td>{{ cronjob.Cronjob.plugin }}</td>
-                        <td>{{ cronjob.Cronjob.interval }}</td>
-                        <td>{{ cronjob.Cronschedule.last_scheduled_usertime }}</td>
-                        <td>{{ cronjob.Cronschedule.last_execution_time_human }}</td>
-                        <td class="text-center">
-                            <span class="text-success"
-                                  *ngIf="!cronjob.Cronschedule.is_running">{{ t('No') }}</span>
-                            <span class="text-danger" *ngIf="cronjob.Cronschedule.is_running">{{ t('Yes') }}</span>
-                        </td>
-                        <td class="text-center">
-                            <fa-icon
-                                *ngIf="cronjob.Cronjob.enabled"
-                                [icon]="['fas', 'check']" class="text-success"></fa-icon>
-                            <fa-icon
-                                *ngIf="!cronjob.Cronjob.enabled"
-                                [icon]="['fas', 'times']" class="text-danger"></fa-icon>
-                        </td>
-
-                        <td class="text-center">
-                            <oitc-badge-outline *ngIf="cronjob.Cronjob.priority === CronjobPriorities.Low"
-                                                color="success">
-                                {{ t('Low') }}
-                            </oitc-badge-outline>
-
-                            <oitc-badge-outline *ngIf="cronjob.Cronjob.priority === CronjobPriorities.High"
-                                                color="danger">
-                                {{ t('High') }}
-                            </oitc-badge-outline>
-                        </td>
-
-                        <td class="width-50">
-                            <div *oitcPermission="['cronjobs', 'edit']">
-                                <button (click)="triggerEditModal(cronjob.Cronjob)" cButton class="ripple"
-                                        color="default" size="xs"
-                                        *ngIf="cronjob.Cronjob.id">
-                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                </button>
-                            </div>
-
-                            <div *oitcPermission="['cronjobs', 'edit']; negate: true">
-                                <button cButton class="ripple" color="default" size="xs" disabled>
-                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                </button>
-                            </div>
-
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <oitc-no-records *ngIf="cronjobs && cronjobs.cronjobs.length === 0"></oitc-no-records>
+          @if (cronjobs && cronjobs.cronjobs.length === 0) {
+            <oitc-no-records></oitc-no-records>
+          }
 
 
-            </c-card-body>
-            <c-card-footer class="text-end">
-                &nbsp;
-            </c-card-footer>
-        </c-card>
+        </c-card-body>
+        <c-card-footer class="text-end">
+          &nbsp;
+        </c-card-footer>
+      </c-card>
     </form>
 
 
     <!-- Add Cronjob Modal -->
     <c-modal #addCronjobModal fullscreen="md" size="lg" id="addCronjobModal">
-        <form cForm (ngSubmit)="createCronjob()">
-            <c-modal-header>
-                <h5 cModalTitle>
-                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                    {{ t('Add Cronjob') }}
-                </h5>
-                <button [cModalToggle]="addCronjobModal.id" cButtonClose></button>
-            </c-modal-header>
-            <c-modal-body *ngIf="CronjobPost">
-
-                <div class="mb-3">
-                    <label cLabel for="addPlugin">
-                        {{ t('Plugin') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <ng-select id="addPlugin"
-                               name="addPlugin"
-                               [items]="plugins"
-                               [clearable]="false"
-                               [(ngModel)]="CronjobPost.plugin"
-                               (change)="loadTasks($event)"
-                               oitcFormError [errors]="errors" errorField="plugin">
-                        <ng-template ng-option-tmp let-plugin="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ plugin }}</div>
-                        </ng-template>
-                    </ng-select>
-                    <oitc-form-feedback [errors]="errors" errorField="plugin"></oitc-form-feedback>
+      <form cForm (ngSubmit)="createCronjob()">
+        <c-modal-header>
+          <h5 cModalTitle>
+            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+            {{ t('Add Cronjob') }}
+          </h5>
+          <button [cModalToggle]="addCronjobModal.id" cButtonClose></button>
+        </c-modal-header>
+        @if (CronjobPost) {
+          <c-modal-body>
+            <div class="mb-3">
+              <label cLabel for="addPlugin">
+                {{ t('Plugin') }}
+                <oitc-required-icon></oitc-required-icon>
+              </label>
+              <ng-select id="addPlugin"
+                name="addPlugin"
+                [items]="plugins"
+                [clearable]="false"
+                [(ngModel)]="CronjobPost.plugin"
+                (change)="loadTasks($event)"
+                oitcFormError [errors]="errors" errorField="plugin">
+                <ng-template ng-option-tmp let-plugin="item" let-search="searchTerm">
+                  <div [ngOptionHighlight]="search">{{ plugin }}</div>
+                </ng-template>
+              </ng-select>
+              <oitc-form-feedback [errors]="errors" errorField="plugin"></oitc-form-feedback>
+            </div>
+            <div class="mb-3">
+              <label cLabel for="addTask">
+                {{ t('Task') }}
+                <oitc-required-icon></oitc-required-icon>
+              </label>
+              <ng-select id="addTask"
+                name="addTask"
+                [items]="tasks"
+                [clearable]="false"
+                [(ngModel)]="CronjobPost.task"
+                oitcFormError [errors]="errors" errorField="task">
+                <ng-template ng-option-tmp let-task="item" let-search="searchTerm">
+                  <div [ngOptionHighlight]="search">{{ task }}</div>
+                </ng-template>
+              </ng-select>
+              <oitc-form-feedback [errors]="errors" errorField="task"></oitc-form-feedback>
+            </div>
+            <div class="mb-3">
+              <label cLabel for="addInterval">
+                {{ t('Interval') }}
+                <oitc-required-icon></oitc-required-icon>
+              </label>
+              <input id="addInterval" cFormControl type="number"
+                name="addInterval"
+                min="0"
+                [(ngModel)]="CronjobPost.interval"
+                oitcFormError [errors]="errors" errorField="interval"/>
+              <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
+              <div class="help-block">
+                {{ t(' Cronjob schedule interval in minutes') }}
+              </div>
+            </div>
+            <div class="mb-3">
+              <label cLabel for="addPriority">
+                {{ t('Priority') }}
+                <oitc-required-icon></oitc-required-icon>
+              </label>
+              <ng-select id="addPriority"
+                name="addPriority"
+                [items]="priorities"
+                [clearable]="false"
+                [(ngModel)]="CronjobPost.priority"
+                oitcFormError [errors]="errors" errorField="priority">
+                <ng-template ng-option-tmp let-priority="item" let-search="searchTerm">
+                  <div [ngOptionHighlight]="search">{{ priority }}</div>
+                </ng-template>
+              </ng-select>
+              <oitc-form-feedback [errors]="errors" errorField="priority"></oitc-form-feedback>
+              <div class="help-block">
+                {{ t('"low" is the default priority and recommended for all cronjobs especially for long running
+                tasks like generating reports.') }}
+                <br>
+                  {{ t('"high" is recommended for cronjobs that should be executed as soon as possible. For
+                  example, sending emails.') }}
                 </div>
-
-                <div class="mb-3">
-                    <label cLabel for="addTask">
-                        {{ t('Task') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <ng-select id="addTask"
-                               name="addTask"
-                               [items]="tasks"
-                               [clearable]="false"
-                               [(ngModel)]="CronjobPost.task"
-                               oitcFormError [errors]="errors" errorField="task">
-                        <ng-template ng-option-tmp let-task="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ task }}</div>
-                        </ng-template>
-                    </ng-select>
-                    <oitc-form-feedback [errors]="errors" errorField="task"></oitc-form-feedback>
+              </div>
+              <div class="mb-3">
+                <c-form-check>
+                  <input
+                    [(ngModel)]="CronjobPost.enabled"
+                    cFormCheckInput
+                    id="addEnabled"
+                    name="addEnabled"
+                    type="checkbox"/>
+                  <label cFormCheckLabel
+                  for="addEnabled">{{ t('Enabled') }}</label>
+                </c-form-check>
+                <div class="help-block">
+                  {{ t('Determine if this cronjob should be executed. ') }}
                 </div>
-
-
-                <div class="mb-3">
-                    <label cLabel for="addInterval">
-                        {{ t('Interval') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input id="addInterval" cFormControl type="number"
-                           name="addInterval"
-                           min="0"
-                           [(ngModel)]="CronjobPost.interval"
-                           oitcFormError [errors]="errors" errorField="interval"/>
-                    <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t(' Cronjob schedule interval in minutes') }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="addPriority">
-                        {{ t('Priority') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <ng-select id="addPriority"
-                               name="addPriority"
-                               [items]="priorities"
-                               [clearable]="false"
-                               [(ngModel)]="CronjobPost.priority"
-                               oitcFormError [errors]="errors" errorField="priority">
-                        <ng-template ng-option-tmp let-priority="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ priority }}</div>
-                        </ng-template>
-                    </ng-select>
-                    <oitc-form-feedback [errors]="errors" errorField="priority"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('"low" is the default priority and recommended for all cronjobs especially for long running
-                        tasks like generating reports.') }}
-                        <br>
-                        {{ t('"high" is recommended for cronjobs that should be executed as soon as possible. For
-                        example, sending emails.') }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <c-form-check>
-                        <input
-                            [(ngModel)]="CronjobPost.enabled"
-                            cFormCheckInput
-                            id="addEnabled"
-                            name="addEnabled"
-                            type="checkbox"/>
-                        <label cFormCheckLabel
-                               for="addEnabled">{{ t('Enabled') }}</label>
-                    </c-form-check>
-                    <div class="help-block">
-                        {{ t('Determine if this cronjob should be executed. ') }}
-                    </div>
-                </div>
-
+              </div>
             </c-modal-body>
-            <c-modal-footer>
-                <button cButton color="primary" type="submit" class="ripple">
-                    {{ t('Save') }}
-                </button>
-                <button [cModalToggle]="addCronjobModal.id" cButton color="default" class="ripple">
-                    {{ t('Close') }}
-                </button>
-            </c-modal-footer>
+          }
+          <c-modal-footer>
+            <button cButton color="primary" type="submit" class="ripple">
+              {{ t('Save') }}
+            </button>
+            <button [cModalToggle]="addCronjobModal.id" cButton color="default" class="ripple">
+              {{ t('Close') }}
+            </button>
+          </c-modal-footer>
         </form>
-    </c-modal>
+      </c-modal>
 
 
-    <!-- Cronjob Edit Modal -->
-    <c-modal #editCronjobModal fullscreen="md" size="lg" id="editCronjobModal">
+      <!-- Cronjob Edit Modal -->
+      <c-modal #editCronjobModal fullscreen="md" size="lg" id="editCronjobModal">
         <form cForm (ngSubmit)="updateCronjob()">
-            <c-modal-header>
-                <h5 cModalTitle>
-                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                    {{ t('Edit Cronjob') }}
-                </h5>
-                <button [cModalToggle]="editCronjobModal.id" cButtonClose></button>
-            </c-modal-header>
-            <c-modal-body *ngIf="CronjobPost">
-
-                <div class="mb-3">
-                    <label cLabel for="editPlugin">
-                        {{ t('Plugin') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <ng-select id="editPlugin"
-                               name="editPlugin"
-                               [items]="plugins"
-                               [clearable]="false"
-                               [(ngModel)]="CronjobPost.plugin"
-                               (change)="loadTasks($event)"
-                               oitcFormError [errors]="errors" errorField="plugin">
-                        <ng-template ng-option-tmp let-plugin="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ plugin }}</div>
-                        </ng-template>
-                    </ng-select>
-                    <oitc-form-feedback [errors]="errors" errorField="plugin"></oitc-form-feedback>
+          <c-modal-header>
+            <h5 cModalTitle>
+              <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+              {{ t('Edit Cronjob') }}
+            </h5>
+            <button [cModalToggle]="editCronjobModal.id" cButtonClose></button>
+          </c-modal-header>
+          @if (CronjobPost) {
+            <c-modal-body>
+              <div class="mb-3">
+                <label cLabel for="editPlugin">
+                  {{ t('Plugin') }}
+                  <oitc-required-icon></oitc-required-icon>
+                </label>
+                <ng-select id="editPlugin"
+                  name="editPlugin"
+                  [items]="plugins"
+                  [clearable]="false"
+                  [(ngModel)]="CronjobPost.plugin"
+                  (change)="loadTasks($event)"
+                  oitcFormError [errors]="errors" errorField="plugin">
+                  <ng-template ng-option-tmp let-plugin="item" let-search="searchTerm">
+                    <div [ngOptionHighlight]="search">{{ plugin }}</div>
+                  </ng-template>
+                </ng-select>
+                <oitc-form-feedback [errors]="errors" errorField="plugin"></oitc-form-feedback>
+              </div>
+              <div class="mb-3">
+                <label cLabel for="editTask">
+                  {{ t('Task') }}
+                  <oitc-required-icon></oitc-required-icon>
+                </label>
+                <ng-select id="editTask"
+                  name="editTask"
+                  [items]="tasks"
+                  [clearable]="false"
+                  [(ngModel)]="CronjobPost.task"
+                  oitcFormError [errors]="errors" errorField="task">
+                  <ng-template ng-option-tmp let-task="item" let-search="searchTerm">
+                    <div [ngOptionHighlight]="search">{{ task }}</div>
+                  </ng-template>
+                </ng-select>
+                <oitc-form-feedback [errors]="errors" errorField="task"></oitc-form-feedback>
+              </div>
+              <div class="mb-3">
+                <label cLabel for="editInterval">
+                  {{ t('Interval') }}
+                  <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input id="editInterval" cFormControl type="number"
+                  name="editInterval"
+                  min="0"
+                  [(ngModel)]="CronjobPost.interval"
+                  oitcFormError [errors]="errors" errorField="interval"/>
+                <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
+                <div class="help-block">
+                  {{ t(' Cronjob schedule interval in minutes') }}
                 </div>
-
-                <div class="mb-3">
-                    <label cLabel for="editTask">
-                        {{ t('Task') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <ng-select id="editTask"
-                               name="editTask"
-                               [items]="tasks"
-                               [clearable]="false"
-                               [(ngModel)]="CronjobPost.task"
-                               oitcFormError [errors]="errors" errorField="task">
-                        <ng-template ng-option-tmp let-task="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ task }}</div>
-                        </ng-template>
-                    </ng-select>
-                    <oitc-form-feedback [errors]="errors" errorField="task"></oitc-form-feedback>
+              </div>
+              <div class="mb-3">
+                <label cLabel for="editPriority">
+                  {{ t('Priority') }}
+                  <oitc-required-icon></oitc-required-icon>
+                </label>
+                <ng-select id="editPriority"
+                  name="editPriority"
+                  [items]="priorities"
+                  [clearable]="false"
+                  [(ngModel)]="CronjobPost.priority"
+                  oitcFormError [errors]="errors" errorField="priority">
+                  <ng-template ng-option-tmp let-priority="item" let-search="searchTerm">
+                    <div [ngOptionHighlight]="search">{{ priority }}</div>
+                  </ng-template>
+                </ng-select>
+                <oitc-form-feedback [errors]="errors" errorField="priority"></oitc-form-feedback>
+                <div class="help-block">
+                  {{ t('"low" is the default priority and recommended for all cronjobs especially for long running
+                  tasks like generating reports.') }}
+                  <br>
+                    {{ t('"high" is recommended for cronjobs that should be executed as soon as possible. For
+                    example, sending emails.') }}
+                  </div>
                 </div>
-
-
                 <div class="mb-3">
-                    <label cLabel for="editInterval">
-                        {{ t('Interval') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input id="editInterval" cFormControl type="number"
-                           name="editInterval"
-                           min="0"
-                           [(ngModel)]="CronjobPost.interval"
-                           oitcFormError [errors]="errors" errorField="interval"/>
-                    <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t(' Cronjob schedule interval in minutes') }}
-                    </div>
+                  <c-form-check>
+                    <input
+                      [(ngModel)]="CronjobPost.enabled"
+                      cFormCheckInput
+                      id="editEnabled"
+                      name="editEnabled"
+                      type="checkbox"/>
+                    <label cFormCheckLabel
+                    for="editEnabled">{{ t('Enabled') }}</label>
+                  </c-form-check>
+                  <div class="help-block">
+                    {{ t('Determine if this cronjob should be executed. ') }}
+                  </div>
                 </div>
-
-                <div class="mb-3">
-                    <label cLabel for="editPriority">
-                        {{ t('Priority') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <ng-select id="editPriority"
-                               name="editPriority"
-                               [items]="priorities"
-                               [clearable]="false"
-                               [(ngModel)]="CronjobPost.priority"
-                               oitcFormError [errors]="errors" errorField="priority">
-                        <ng-template ng-option-tmp let-priority="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ priority }}</div>
-                        </ng-template>
-                    </ng-select>
-                    <oitc-form-feedback [errors]="errors" errorField="priority"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('"low" is the default priority and recommended for all cronjobs especially for long running
-                        tasks like generating reports.') }}
-                        <br>
-                        {{ t('"high" is recommended for cronjobs that should be executed as soon as possible. For
-                        example, sending emails.') }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <c-form-check>
-                        <input
-                            [(ngModel)]="CronjobPost.enabled"
-                            cFormCheckInput
-                            id="editEnabled"
-                            name="editEnabled"
-                            type="checkbox"/>
-                        <label cFormCheckLabel
-                               for="editEnabled">{{ t('Enabled') }}</label>
-                    </c-form-check>
-                    <div class="help-block">
-                        {{ t('Determine if this cronjob should be executed. ') }}
-                    </div>
-                </div>
-
-            </c-modal-body>
+              </c-modal-body>
+            }
             <c-modal-footer class="justify-content-start">
-                <button cButton color="danger" type="button" class="ripple"
-                        (click)="deleteCronjob()">
-                    {{ t('Delete') }}
-                </button>
+              <button cButton color="danger" type="button" class="ripple"
+                (click)="deleteCronjob()">
+                {{ t('Delete') }}
+              </button>
 
-                <button cButton color="primary" type="submit" class="ripple ms-auto">
-                    {{ t('Save') }}
-                </button>
-                <button [cModalToggle]="editCronjobModal.id" cButton color="default" class="ripple">
-                    {{ t('Close') }}
-                </button>
+              <button cButton color="primary" type="submit" class="ripple ms-auto">
+                {{ t('Save') }}
+              </button>
+              <button [cModalToggle]="editCronjobModal.id" cButton color="default" class="ripple">
+                {{ t('Close') }}
+              </button>
             </c-modal-footer>
-        </form>
-    </c-modal>
+          </form>
+        </c-modal>
 
-</ng-container>
+      </ng-container>

@@ -20,7 +20,7 @@ import {
     TableDirective,
     ModalService
 } from '@coreui/angular';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -36,28 +36,26 @@ import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/de
 @Component({
   selector: 'oitc-autoreport-host-used-by',
   imports: [
-      TranslocoDirective,
-      FaIconComponent,
-      PermissionDirective,
-      RouterLink,
-      CardComponent,
-      CardHeaderComponent,
-      CardTitleDirective,
-      NgIf,
-      NavComponent,
-      BackButtonDirective,
-      NavItemComponent,
-      XsButtonDirective,
-      CardBodyComponent,
-      TableLoaderComponent,
-      MatSort,
-      TableDirective,
-      NgForOf,
-      ActionsButtonComponent,
-      ActionsButtonElementComponent,
-      DropdownDividerDirective,
-      DeleteAllModalComponent
-  ],
+    TranslocoDirective,
+    FaIconComponent,
+    PermissionDirective,
+    RouterLink,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    BackButtonDirective,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    TableLoaderComponent,
+    MatSort,
+    TableDirective,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    DropdownDividerDirective,
+    DeleteAllModalComponent
+],
   templateUrl: './autoreport-host-used-by.component.html',
   styleUrl: './autoreport-host-used-by.component.css',
     providers: [

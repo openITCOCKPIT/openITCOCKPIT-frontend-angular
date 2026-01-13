@@ -13,7 +13,7 @@ import {
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 
 import { UsersService } from '../users.service';
@@ -36,25 +36,23 @@ import { LocalStorageService } from '../../../services/local-storage.service';
 @Component({
     selector: 'oitc-users-login',
     imports: [
-        FaIconComponent,
-        AlertComponent,
-        FormsModule,
-        TranslocoDirective,
-        NgIf,
-        FormControlDirective,
-        FormLabelDirective,
-        FormCheckComponent,
-        RowComponent,
-        ColComponent,
-        NgxParticlesModule,
-        NgForOf,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        XsButtonDirective,
-        TooltipDirective,
-        NgClass,
-        RouterLink
-    ],
+    FaIconComponent,
+    AlertComponent,
+    FormsModule,
+    TranslocoDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    FormCheckComponent,
+    RowComponent,
+    ColComponent,
+    NgxParticlesModule,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    XsButtonDirective,
+    TooltipDirective,
+    NgClass,
+    RouterLink
+],
     templateUrl: './users-login.component.html',
     styleUrl: './users-login.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

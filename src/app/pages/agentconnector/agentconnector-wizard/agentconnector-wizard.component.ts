@@ -19,7 +19,7 @@ import { FormsModule } from '@angular/forms';
 
 
 
-import { NgIf } from '@angular/common';
+
 
 
 import { PaginatorModule } from 'primeng/paginator';
@@ -53,7 +53,6 @@ import { Subscription } from 'rxjs';
     ColComponent,
     FaIconComponent,
     FormsModule,
-    NgIf,
     PaginatorModule,
     PermissionDirective,
     RowComponent,

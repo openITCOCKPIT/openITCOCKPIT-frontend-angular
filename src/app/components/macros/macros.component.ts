@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, O
 import { Customvariable } from '../../pages/contacts/contacts.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -16,7 +16,6 @@ import { ObjectTypesEnum } from '../../pages/changelogs/object-types.enum';
     imports: [
     FaIconComponent,
     FormsModule,
-    NgIf,
     TranslocoDirective,
     NgSelectModule,
     FormFeedbackComponent,

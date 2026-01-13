@@ -55,7 +55,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
-import { NgIf } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ExternalCommandsService, ServiceAcknowledgeItem } from '../../../services/external-commands.service';
@@ -76,7 +76,6 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
     FormControlDirective,
     FormLabelDirective,
     FormTextDirective,
-    NgIf,
     ReactiveFormsModule,
     RowComponent,
     FormsModule,

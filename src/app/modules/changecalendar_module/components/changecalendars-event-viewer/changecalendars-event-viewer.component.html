@@ -1,84 +1,86 @@
 <ng-container *transloco="let t">
 
-    <c-modal #changeCalendarViewerModal fullscreen="md" id="changeCalendarViewerModal" size="lg">
-        <c-modal-header>
-            <h5 cModalTitle>
-                <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
-                {{ t('Change calendar event') }}
-            </h5>
-        </c-modal-header>
-        <c-modal-body>
-            <c-row class="mb-3">
+  <c-modal #changeCalendarViewerModal fullscreen="md" id="changeCalendarViewerModal" size="lg">
+    <c-modal-header>
+      <h5 cModalTitle>
+        <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
+        {{ t('Change calendar event') }}
+      </h5>
+    </c-modal-header>
+    <c-modal-body>
+      <c-row class="mb-3">
 
-                <c-col md="12">
+        <c-col md="12">
 
-                    <label cLabel for="event.title">
-                        {{ t('Title') }}
-                    </label>
-                    <input disabled
-                           cFormControl
-                           required
-                           id="event.title"
-                           type="text"
-                           name="event.title"
-                           [(ngModel)]="event.title"
-                           oitcFormError [errors]="errors" errorField="title">
-                    <oitc-form-feedback [errors]="errors" errorField="title"></oitc-form-feedback>
-                </c-col>
-            </c-row>
-            <c-row class="mb-3">
-                <c-col md="6">
-                    <label cLabel for="event.start">
-                        {{ t('Start') }}
-                    </label>
-                    <c-input-group>
-                        <span cInputGroupText>
-                            <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                        </span>
-                        <input disabled
-                               [(ngModel)]="event.start"
-                               [placeholder]="'Start date' | transloco"
-                               aria-label="event.start"
-                               name="event.start"
-                               id="event.start"
-                               cFormControl
-                               type="datetime-local"
-                        />
-                    </c-input-group>
-                </c-col>
-                <c-col md="6">
-                    <label cLabel for="event.end">
-                        {{ t('End') }}
-                    </label>
-                    <c-input-group>
-                        <span cInputGroupText>
-                            <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                        </span>
-                        <input disabled
-                               [(ngModel)]="event.end"
-                               [placeholder]="'End date' | transloco"
-                               aria-label="event.end"
-                               name="event.end"
-                               id="event.end"
-                               cFormControl
-                               type="datetime-local"
-                        />
-                    </c-input-group>
-                </c-col>
-            </c-row>
-            <c-row class="mb-2" *ngIf="html.length > 0">
-                <c-col md="12">
-                    <label cLabel>
-                        {{ t('Description') }}
-                    </label>
-                    <div class="text-break" [innerHTML]="html | trustAsHtml"></div>
-                </c-col>
-            </c-row>
-        </c-modal-body>
-        <c-modal-footer>
-            <button cButton color="default" (click)="hideModal()">
-                {{ t('Close') }}
-            </button>
-        </c-modal-footer>
-    </c-modal>
+          <label cLabel for="event.title">
+            {{ t('Title') }}
+          </label>
+          <input disabled
+            cFormControl
+            required
+            id="event.title"
+            type="text"
+            name="event.title"
+            [(ngModel)]="event.title"
+            oitcFormError [errors]="errors" errorField="title">
+          <oitc-form-feedback [errors]="errors" errorField="title"></oitc-form-feedback>
+        </c-col>
+      </c-row>
+      <c-row class="mb-3">
+        <c-col md="6">
+          <label cLabel for="event.start">
+            {{ t('Start') }}
+          </label>
+          <c-input-group>
+            <span cInputGroupText>
+              <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+            </span>
+            <input disabled
+              [(ngModel)]="event.start"
+              [placeholder]="'Start date' | transloco"
+              aria-label="event.start"
+              name="event.start"
+              id="event.start"
+              cFormControl
+              type="datetime-local"
+              />
+          </c-input-group>
+        </c-col>
+        <c-col md="6">
+          <label cLabel for="event.end">
+            {{ t('End') }}
+          </label>
+          <c-input-group>
+            <span cInputGroupText>
+              <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+            </span>
+            <input disabled
+              [(ngModel)]="event.end"
+              [placeholder]="'End date' | transloco"
+              aria-label="event.end"
+              name="event.end"
+              id="event.end"
+              cFormControl
+              type="datetime-local"
+              />
+          </c-input-group>
+        </c-col>
+      </c-row>
+      @if (html.length > 0) {
+        <c-row class="mb-2">
+          <c-col md="12">
+            <label cLabel>
+              {{ t('Description') }}
+            </label>
+            <div class="text-break" [innerHTML]="html | trustAsHtml"></div>
+          </c-col>
+        </c-row>
+      }
+    </c-modal-body>
+    <c-modal-footer>
+      <button cButton color="default" (click)="hideModal()">
+        {{ t('Close') }}
+      </button>
+    </c-modal-footer>
+  </c-modal>
 </ng-container>

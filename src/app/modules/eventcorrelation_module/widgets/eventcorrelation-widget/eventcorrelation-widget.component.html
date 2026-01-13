@@ -1,148 +1,150 @@
 <ng-container *transloco="let t">
-    <div class="d-flex h-100 flex-column" #boxContainer>
-        <div>
-            <div>
-                <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-                        *ngIf="!isReadonly()">
-                    @if (flipped()) {
-                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                    } @else {
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    }
-                </button>
-            </div>
-        </div>
-
-        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
-             class="box-container">
-            <div class="box-x">
-                <ng-container *ngIf="animationStateShowContent">
-                    <!-- Widget Content -->
-                    <div class="ps-2 text-info" *ngIf="!host_id">
-                        {{ t('No element selected') }}
-                    </div>
-
-                    <div class="d-flex" [style.height.px]="widgetHeight"
-                         *ngIf="host_id && config.type==='tree' && show">
-                        <!--<c-row><c-col class="mb-2 text-end"><button cButton [size]="'xs'" color="default" (click)="reload()">Reload</button></c-col></c-row>-->
-                        <oitc-evc-tree
-                            class="w-100 h-100"
-                            [evcId]="host_id"
-                            [evcTree]="evcTree"
-                            [downtimedServices]="downtimedServices"
-                            [stateForDowntimedService]="stateForDowntimedService"
-                            [stateForDisabledService]="stateForDisabledService"
-                            [animated]="animated"
-                            [connectionLine]="connectionLine"
-                            [evcDirection]="direction"
-                            (resetEvent)="resetHandler($event)"
-                            [isWidget]="true"></oitc-evc-tree>
-
-                    </div>
-                    <div class="d-flex" [style.height.px]="widgetHeight"
-                         *ngIf="host_id && config.type==='table' && show">
-                        <oitc-evc-table
-                            [evcSummaryTree]="evcSummaryTree"
-                            [stateForDowntimedService]="stateForDowntimedService"
-                            [stateForDisabledService]="stateForDisabledService"></oitc-evc-table>
-                    </div>
-
-                    <!-- End Widget Content -->
-                </ng-container>
-            </div>
-
-            <div class="box-x">
-                <ng-container *ngIf="animationStateShowConfig">
-                    <!-- Config area -->
-                    @if (widget) {
-
-                        <div class="mb-3">
-                            <label cLabel [for]="'event_correlation_id_'+widget.id">
-                                {{ t('Event Correlation') }}
-                                <oitc-required-icon></oitc-required-icon>
-                            </label>
-
-                            <oitc-select
-                                [id]="'event_correlation_id_'+widget.id"
-                                [name]="'event_correlation_id_'+widget.id"
-                                [attr.id]="'event_correlation_id_'+widget.id"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="host_id"
-                                [options]="eventCorrelations"
-                                [searchCallback]="loadEventCorrelations"
-                                [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
-                                [appendTo]="''">
-                            </oitc-select>
-                        </div>
-
-                        <c-row class="mb-2" *ngIf="config && widget">
-                            <c-col>
-                                <fieldset>
-                                    <legend class="fs-5">
-                                        {{ t('Eventcorrelation view type') }}
-                                    </legend>
-                                    @for (EvcViewType of EvcViewTypes; track $index) {
-                                        <c-form-check class="mb-1" inline>
-                                            <input cFormCheckInput
-                                                   class="radio-lg radio-primary border-primary"
-                                                   type="radio"
-                                                   [id]="EvcViewType.label+widget.id"
-                                                   [name]="EvcViewType.label+widget.id"
-                                                   [value]="EvcViewType.value"
-                                                   [(ngModel)]="config.type"
-                                            />
-                                            <label cFormCheckLabel class="ms-1 me-2 mt-1"
-                                                   [for]="EvcViewType.label+widget.id">
-                                                <fa-icon [icon]="EvcViewType.icon"></fa-icon>
-                                                {{ EvcViewType.label }}
-                                            </label>
-                                        </c-form-check>
-                                    }
-
-                                </fieldset>
-                                <fieldset class="mt-2" *ngIf="config.type === 'tree'">
-                                    <legend class="fs-5">
-                                        {{ t('Direction (For tree view only)') }}
-                                    </legend>
-                                    @for (direction of EvcTreeDirections; track $index) {
-                                        <c-form-check class="mb-1" inline>
-                                            <input cFormCheckInput
-                                                   class="radio-lg radio-primary border-primary"
-                                                   type="radio"
-                                                   [id]="direction.key+widget.id"
-                                                   [name]="direction.key+widget.id"
-                                                   [value]="direction.key"
-                                                   [(ngModel)]="config.direction"
-                                            />
-                                            <label cFormCheckLabel class="ms-1 me-2 mt-1"
-                                                   [for]="direction.key+widget.id">
-                                                @if (direction.rotate) {
-                                                    <fa-icon [icon]="['fas', 'sitemap']"
-                                                             [rotate]="direction.rotate"></fa-icon>
-                                                } @else {
-                                                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
-                                                }
-                                                {{ direction.label }}
-                                            </label>
-                                        </c-form-check>
-                                    }
-                                </fieldset>
-                            </c-col>
-                        </c-row>
-
-
-                        <div class="mt-1 text-end">
-                            <button cButton type="button" class="ripple" (click)="saveConfig()">
-                                {{ t('Save') }}
-                            </button>
-                        </div>
-
-                    }
-                    <!-- End Config area -->
-                </ng-container>
-            </div>
-        </div>
+  <div class="d-flex h-100 flex-column" #boxContainer>
+    <div>
+      <div>
+        @if (!isReadonly()) {
+          <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
+            >
+            @if (flipped()) {
+              <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+            } @else {
+              <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+            }
+          </button>
+        }
+      </div>
     </div>
+
+    <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+      class="box-container">
+      <div class="box-x">
+        @if (animationStateShowContent) {
+          <!-- Widget Content -->
+          @if (!host_id) {
+            <div class="ps-2 text-info">
+              {{ t('No element selected') }}
+            </div>
+          }
+          @if (host_id && config.type==='tree' && show) {
+            <div class="d-flex" [style.height.px]="widgetHeight"
+              >
+              <!--<c-row><c-col class="mb-2 text-end"><button cButton [size]="'xs'" color="default" (click)="reload()">Reload</button></c-col></c-row>-->
+              <oitc-evc-tree
+                class="w-100 h-100"
+                [evcId]="host_id"
+                [evcTree]="evcTree"
+                [downtimedServices]="downtimedServices"
+                [stateForDowntimedService]="stateForDowntimedService"
+                [stateForDisabledService]="stateForDisabledService"
+                [animated]="animated"
+                [connectionLine]="connectionLine"
+                [evcDirection]="direction"
+                (resetEvent)="resetHandler($event)"
+              [isWidget]="true"></oitc-evc-tree>
+            </div>
+          }
+          @if (host_id && config.type==='table' && show) {
+            <div class="d-flex" [style.height.px]="widgetHeight"
+              >
+              <oitc-evc-table
+                [evcSummaryTree]="evcSummaryTree"
+                [stateForDowntimedService]="stateForDowntimedService"
+              [stateForDisabledService]="stateForDisabledService"></oitc-evc-table>
+            </div>
+          }
+          <!-- End Widget Content -->
+        }
+      </div>
+
+      <div class="box-x">
+        @if (animationStateShowConfig) {
+          <!-- Config area -->
+          @if (widget) {
+            <div class="mb-3">
+              <label cLabel [for]="'event_correlation_id_'+widget.id">
+                {{ t('Event Correlation') }}
+                <oitc-required-icon></oitc-required-icon>
+              </label>
+              <oitc-select
+                [id]="'event_correlation_id_'+widget.id"
+                [name]="'event_correlation_id_'+widget.id"
+                [attr.id]="'event_correlation_id_'+widget.id"
+                optionValue="key"
+                optionLabel="value"
+                [(ngModel)]="host_id"
+                [options]="eventCorrelations"
+                [searchCallback]="loadEventCorrelations"
+                [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
+                [appendTo]="''">
+              </oitc-select>
+            </div>
+            @if (config && widget) {
+              <c-row class="mb-2">
+                <c-col>
+                  <fieldset>
+                    <legend class="fs-5">
+                      {{ t('Eventcorrelation view type') }}
+                    </legend>
+                    @for (EvcViewType of EvcViewTypes; track $index) {
+                      <c-form-check class="mb-1" inline>
+                        <input cFormCheckInput
+                          class="radio-lg radio-primary border-primary"
+                          type="radio"
+                          [id]="EvcViewType.label+widget.id"
+                          [name]="EvcViewType.label+widget.id"
+                          [value]="EvcViewType.value"
+                          [(ngModel)]="config.type"
+                          />
+                        <label cFormCheckLabel class="ms-1 me-2 mt-1"
+                          [for]="EvcViewType.label+widget.id">
+                          <fa-icon [icon]="EvcViewType.icon"></fa-icon>
+                          {{ EvcViewType.label }}
+                        </label>
+                      </c-form-check>
+                    }
+                  </fieldset>
+                  @if (config.type === 'tree') {
+                    <fieldset class="mt-2">
+                      <legend class="fs-5">
+                        {{ t('Direction (For tree view only)') }}
+                      </legend>
+                      @for (direction of EvcTreeDirections; track $index) {
+                        <c-form-check class="mb-1" inline>
+                          <input cFormCheckInput
+                            class="radio-lg radio-primary border-primary"
+                            type="radio"
+                            [id]="direction.key+widget.id"
+                            [name]="direction.key+widget.id"
+                            [value]="direction.key"
+                            [(ngModel)]="config.direction"
+                            />
+                          <label cFormCheckLabel class="ms-1 me-2 mt-1"
+                            [for]="direction.key+widget.id">
+                            @if (direction.rotate) {
+                              <fa-icon [icon]="['fas', 'sitemap']"
+                              [rotate]="direction.rotate"></fa-icon>
+                            } @else {
+                              <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                            }
+                            {{ direction.label }}
+                          </label>
+                        </c-form-check>
+                      }
+                    </fieldset>
+                  }
+                </c-col>
+              </c-row>
+            }
+            <div class="mt-1 text-end">
+              <button cButton type="button" class="ripple" (click)="saveConfig()">
+                {{ t('Save') }}
+              </button>
+            </div>
+          }
+          <!-- End Config area -->
+        }
+      </div>
+    </div>
+  </div>
 
 </ng-container>

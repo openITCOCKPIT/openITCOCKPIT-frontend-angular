@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -39,31 +39,30 @@ import { LoadContainersRoot } from '../../../../../pages/containers/containers.i
 @Component({
     selector: 'oitc-maps-add',
     imports: [
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        FaIconComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        BackButtonDirective,
-        CardBodyComponent,
-        RequiredIconComponent,
-        FormErrorDirective,
-        NgIf,
-        FormFeedbackComponent,
-        FormsModule,
-        FormDirective,
-        FormLabelDirective,
-        FormControlDirective,
-        FormCheckInputDirective,
-        MultiSelectComponent,
-        CardFooterComponent,
-        PermissionDirective,
-        AsyncPipe
-    ],
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FaIconComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    BackButtonDirective,
+    CardBodyComponent,
+    RequiredIconComponent,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormsModule,
+    FormDirective,
+    FormLabelDirective,
+    FormControlDirective,
+    FormCheckInputDirective,
+    MultiSelectComponent,
+    CardFooterComponent,
+    PermissionDirective,
+    AsyncPipe
+],
     templateUrl: './maps-add.component.html',
     styleUrl: './maps-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

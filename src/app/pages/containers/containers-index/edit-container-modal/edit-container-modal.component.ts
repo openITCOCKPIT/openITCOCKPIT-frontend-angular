@@ -25,7 +25,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -53,7 +53,6 @@ import { ContainersService } from '../../containers.service';
     ModalFooterComponent,
     ModalHeaderComponent,
     ModalTitleDirective,
-    NgIf,
     ReactiveFormsModule,
     RequiredIconComponent,
     TranslocoDirective,

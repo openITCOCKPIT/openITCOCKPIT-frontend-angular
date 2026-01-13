@@ -27,7 +27,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
@@ -38,32 +38,31 @@ import { ColorPicker } from 'primeng/colorpicker';
 @Component({
     selector: 'oitc-changecalendars-add',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormCheckInputDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        ColorPicker
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    SelectComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    ColorPicker
+],
     templateUrl: './changecalendars-add.component.html',
     styleUrl: './changecalendars-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

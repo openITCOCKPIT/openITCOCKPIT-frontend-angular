@@ -12,7 +12,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import { Subscription } from 'rxjs';
 import { CustomAlertHistory } from '../customalerts.interface';
@@ -24,23 +24,22 @@ import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/blo
 @Component({
     selector: 'oitc-customalerts-history',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        ContainerComponent,
-        NgIf,
-        NoRecordsComponent,
-        PermissionDirective,
-        RouterLink,
-        NgClass,
-        BlockLoaderComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    ContainerComponent,
+    NoRecordsComponent,
+    PermissionDirective,
+    RouterLink,
+    NgClass,
+    BlockLoaderComponent
+],
     templateUrl: './customalerts-history.component.html',
     styleUrl: './customalerts-history.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -18,7 +18,7 @@ import {
 } from '@coreui/angular';
 import { GrafanaUserdashboardViewResponse } from '../grafana-userdashboards.interface';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { NgIf } from '@angular/common';
+
 import { Error404Component } from '../../../../../layouts/coreui/errors/error404/error404.component';
 import { IframeComponent } from '../../../../../components/iframe/iframe.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
@@ -27,25 +27,24 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 @Component({
     selector: 'oitc-grafana-userdashboards-view',
     imports: [
-        GrafanaTimepickerComponent,
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        CardFooterComponent,
-        BlockLoaderComponent,
-        NgIf,
-        Error404Component,
-        IframeComponent,
-        NavItemComponent,
-        BackButtonDirective,
-        XsButtonDirective
-    ],
+    GrafanaTimepickerComponent,
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    CardFooterComponent,
+    BlockLoaderComponent,
+    Error404Component,
+    IframeComponent,
+    NavItemComponent,
+    BackButtonDirective,
+    XsButtonDirective
+],
     templateUrl: './grafana-userdashboards-view.component.html',
     styleUrl: './grafana-userdashboards-view.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

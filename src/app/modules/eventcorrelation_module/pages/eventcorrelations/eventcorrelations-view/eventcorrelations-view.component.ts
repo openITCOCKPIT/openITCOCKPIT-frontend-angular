@@ -15,7 +15,7 @@ import {
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -42,7 +42,6 @@ import { EvcTreeDirection } from './evc-tree/evc-tree.enum';
     FormsModule,
     NavComponent,
     NavItemComponent,
-    NgIf,
     PermissionDirective,
     ReactiveFormsModule,
     RowComponent,

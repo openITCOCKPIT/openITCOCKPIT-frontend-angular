@@ -31,7 +31,7 @@ import {
 } from '@coreui/angular';
 import { DashboardTab } from '../../dashboards.interface';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { Skeleton } from 'primeng/skeleton';
@@ -47,37 +47,36 @@ import { DashboardAllocateModalService } from '../dashboard-allocate-modal/dashb
 @Component({
     selector: 'oitc-dashboard-tabs',
     imports: [
-        NavComponent,
-        NavItemComponent,
-        TranslocoDirective,
-        NgClass,
-        CdkDropList,
-        CdkDrag,
-        FaIconComponent,
-        NgIf,
-        Skeleton,
-        DropdownComponent,
-        DropdownMenuDirective,
-        DropdownItemDirective,
-        DropdownToggleDirective,
-        AsyncPipe,
-        DropdownDividerDirective,
-        ButtonCloseDirective,
-        FormControlDirective,
-        FormLabelDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        RequiredIconComponent,
-        TranslocoPipe,
-        XsButtonDirective,
-        ModalToggleDirective
-    ],
+    NavComponent,
+    NavItemComponent,
+    TranslocoDirective,
+    NgClass,
+    CdkDropList,
+    CdkDrag,
+    FaIconComponent,
+    Skeleton,
+    DropdownComponent,
+    DropdownMenuDirective,
+    DropdownItemDirective,
+    DropdownToggleDirective,
+    AsyncPipe,
+    DropdownDividerDirective,
+    ButtonCloseDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    RequiredIconComponent,
+    TranslocoPipe,
+    XsButtonDirective,
+    ModalToggleDirective
+],
     templateUrl: './dashboard-tabs.component.html',
     styleUrl: './dashboard-tabs.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

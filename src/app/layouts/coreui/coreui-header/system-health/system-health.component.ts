@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { Subscription, timer, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { AsyncPipe, NgForOf, NgIf, NgStyle } from '@angular/common';
+import { AsyncPipe, NgStyle } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
     DropdownComponent, DropdownMenuDirective,
@@ -96,20 +96,17 @@ export interface SystemHealth {
 @Component({
     selector: 'oitc-system-health',
     imports: [
-        TranslocoDirective,
-        NgIf,
-        FaIconComponent,
-        DropdownComponent,
-        DropdownToggleDirective,
-        DropdownMenuDirective,
-        RouterLink,
-        ProgressComponent,
-        NgForOf,
-        TooltipDirective,
-        AsyncPipe,
-        XsButtonDirective,
-
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    DropdownComponent,
+    DropdownToggleDirective,
+    DropdownMenuDirective,
+    RouterLink,
+    ProgressComponent,
+    TooltipDirective,
+    AsyncPipe,
+    XsButtonDirective
+],
     templateUrl: './system-health.component.html',
     styleUrl: './system-health.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

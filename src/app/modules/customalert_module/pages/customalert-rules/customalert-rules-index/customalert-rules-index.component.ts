@@ -37,7 +37,7 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
@@ -76,7 +76,6 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
     FormDirective,
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     TableLoaderComponent,
     MatSort,
     MatSortHeader,
@@ -86,7 +85,6 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
     ActionsButtonComponent,
     ActionsButtonElementComponent,
     DropdownDividerDirective,
-    NgForOf,
     DebounceDirective,
     FormControlDirective,
     InputGroupComponent,

@@ -13,7 +13,7 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 import { Router } from '@angular/router';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { UUID } from '../../../classes/UUID';
@@ -24,23 +24,22 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'oitc-top-search',
     imports: [
-        TranslocoDirective,
-        InputGroupComponent,
-        FormControlDirective,
-        FormDirective,
-        DropdownComponent,
-        DropdownToggleDirective,
-        DropdownMenuDirective,
-        DropdownItemDirective,
-        XsButtonDirective,
-        TranslocoPipe,
-        PermissionDirective,
-        NgClass,
-        FaIconComponent,
-        NgIf,
-        FormsModule,
-        AsyncPipe
-    ],
+    TranslocoDirective,
+    InputGroupComponent,
+    FormControlDirective,
+    FormDirective,
+    DropdownComponent,
+    DropdownToggleDirective,
+    DropdownMenuDirective,
+    DropdownItemDirective,
+    XsButtonDirective,
+    TranslocoPipe,
+    PermissionDirective,
+    NgClass,
+    FaIconComponent,
+    FormsModule,
+    AsyncPipe
+],
     templateUrl: './top-search.component.html',
     styleUrl: './top-search.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

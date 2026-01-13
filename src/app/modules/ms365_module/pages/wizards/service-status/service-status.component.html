@@ -1,222 +1,224 @@
 <ng-container *transloco="let t">
 
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li aria-current="page" class="breadcrumb-item">
-                <a [routerLink]="['/', 'wizards', 'index']">
-                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                    {{ t('Wizards') }}
-                </a></li>
-            <li aria-current="page" class="breadcrumb-item">
-                <a [routerLink]="['/', 'wizards', 'index']">
-                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                    {{ t('Microsoft 365') }}
-                </a></li>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li aria-current="page" class="breadcrumb-item">
+          <a [routerLink]="['/', 'wizards', 'index']">
+            <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+            {{ t('Wizards') }}
+          </a></li>
+          <li aria-current="page" class="breadcrumb-item">
+            <a [routerLink]="['/', 'wizards', 'index']">
+              <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+              {{ t('Microsoft 365') }}
+            </a></li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                {{ t('Service Status') }}
+              <fa-icon [icon]="['fas', 'server']"></fa-icon>
+              {{ t('Service Status') }}
             </li>
-        </ol>
-    </nav>
+          </ol>
+        </nav>
 
-    <c-card>
-        <c-card-header>
+        <c-card>
+          <c-card-header>
             <h5 cCardTitle>
-                {{ t('Configuration Wizard: Microsoft 365 (Service Status)') }}
+              {{ t('Configuration Wizard: Microsoft 365 (Service Status)') }}
             </h5>
-        </c-card-header>
-        <c-card-body class="p-0">
+          </c-card-header>
+          <c-card-body class="p-0">
 
             <div class="row m-0 text-center mb-3" style="min-height: 22px;">
-                <div
-                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
-                    <span>
-                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Host Information') }}
-                    </span>
-                </div>
-                <div
-                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
-                    <span>
-                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Configure services per Service') }}
-                    </span>
-                </div>
-                <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
-                </div>
-                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
-                    <div class="btn-group btn-group-xs w-100 h-100">
-                        <button type="button" class="btn btn-primary"
-                                [title]="'Back' | transloco"
-                                style="border-radius: 0;"
-                                [fallbackUrl]="['wizards', 'index']"
-                                oitcBackButton>
-                            <i class="fa fa-arrow-left"></i>
-                        </button>
+              <div
+                class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                <span>
+                  <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                  {{ t('Host Information') }}
+                </span>
+              </div>
+              <div
+                class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                <span>
+                  <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                  {{ t('Configure services per Service') }}
+                </span>
+              </div>
+              <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
+              </div>
+              <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+                <div class="btn-group btn-group-xs w-100 h-100">
+                  <button type="button" class="btn btn-primary"
+                    [title]="'Back' | transloco"
+                    style="border-radius: 0;"
+                    [fallbackUrl]="['wizards', 'index']"
+                    oitcBackButton>
+                    <i class="fa fa-arrow-left"></i>
+                  </button>
 
-                        <button type="button" class="btn btn-success"
-                                style="border-radius: 0;"
-                                [title]="'Next' | transloco"
-                                (click)="submit()">
-                            {{ t('Next') }}
-                            <i class="fa fa-arrow-right"></i>
-                        </button>
-                    </div>
+                  <button type="button" class="btn btn-success"
+                    style="border-radius: 0;"
+                    [title]="'Next' | transloco"
+                    (click)="submit()">
+                    {{ t('Next') }}
+                    <i class="fa fa-arrow-right"></i>
+                  </button>
                 </div>
+              </div>
             </div>
-        </c-card-body>
-        <c-card-body>
+          </c-card-body>
+          <c-card-body>
             <fieldset class="padding-bottom-20">
-                <c-accordion class="mb-3">
-                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
-                        <ng-template cTemplateId="accordionHeaderTemplate">
-                            <button class="wizard-accordion bg-info-subtle" (click)="item0.toggleItem()"
-                                    [collapsed]="!item0.visible" cAccordionButton>
-                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
-                                {{ t('How to set up') }}
-                            </button>
-                        </ng-template>
-                        <ng-template cTemplateId="accordionBodyTemplate">
-                            <div class="accordion-body">
-                                <ol>
-                                    <li>
-                                        {{ t('Log in at') }}
-                                        (<a href="https://entra.microsoft.com/"
-                                            target="_blank">Microsoft Entra</a>)
-                                    </li>
+              <c-accordion class="mb-3">
+                <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                  <ng-template cTemplateId="accordionHeaderTemplate">
+                    <button class="wizard-accordion bg-info-subtle" (click)="item0.toggleItem()"
+                      [collapsed]="!item0.visible" cAccordionButton>
+                      <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                      {{ t('How to set up') }}
+                    </button>
+                  </ng-template>
+                  <ng-template cTemplateId="accordionBodyTemplate">
+                    <div class="accordion-body">
+                      <ol>
+                        <li>
+                          {{ t('Log in at') }}
+                          (<a href="https://entra.microsoft.com/"
+                        target="_blank">Microsoft Entra</a>)
+                      </li>
 
-                                    <li>
-                                        {{ t('Go to App Registration and create a new one') }}
-                                    </li>
-                                    <li>
-                                        {{ t('Just enter a Name, for example "openITCOCKPIT Monitoring" and click register') }}
-                                    </li>
-                                    <li>
-                                        {{ t('On the following Page, copy and store Application (Client) ID and Directory (tenant) ID') }}
-                                    </li>
-                                    <li>
-                                        {{ t('Go to Certificate & Secrets, add a client secret key and copy / save it.') }}
-                                    </li>
-                                    <li>
-                                        {{ t('Go to API Permission and add a permission to Microsoft Graph:') }}
-                                        <ol type="a">
-                                            <li>
-                                                {{ t('Application Permission') }}
-                                            </li>
-                                            <li>
-                                                <code>ServiceHealth.Read.All</code>
-                                            </li>
-                                        </ol>
-                                    </li>
-                                    <li>
-                                        {{ t('Finally, click on Grant Admin consent for ….') }}
-                                    </li>
+                      <li>
+                        {{ t('Go to App Registration and create a new one') }}
+                      </li>
+                      <li>
+                        {{ t('Just enter a Name, for example "openITCOCKPIT Monitoring" and click register') }}
+                      </li>
+                      <li>
+                        {{ t('On the following Page, copy and store Application (Client) ID and Directory (tenant) ID') }}
+                      </li>
+                      <li>
+                        {{ t('Go to Certificate & Secrets, add a client secret key and copy / save it.') }}
+                      </li>
+                      <li>
+                        {{ t('Go to API Permission and add a permission to Microsoft Graph:') }}
+                        <ol type="a">
+                          <li>
+                            {{ t('Application Permission') }}
+                          </li>
+                          <li>
+                            <code>ServiceHealth.Read.All</code>
+                          </li>
+                        </ol>
+                      </li>
+                      <li>
+                        {{ t('Finally, click on Grant Admin consent for ….') }}
+                      </li>
 
-                                </ol>
-                            </div>
-                        </ng-template>
-                    </c-accordion-item>
-                </c-accordion>
-                <legend class="fs-md fieldset-legend-border-bottom">
-                    <h4>
-                        {{ t('Microsoft 365 Authentication Settings') }}
-                    </h4>
-                </legend>
-
-                <div class="mb-3">
-                    <label cLabel for="post.tenantId">
-                        {{ t('Tenant ID') }}
-                    </label>
-                    <input cFormControl
-                           id="post.tenantId"
-                           type="text"
-                           name="post.tenantId"
-                           oitcFormError [errors]="errors" errorField="tenantId"
-                           [(ngModel)]="post.tenantId">
-                    <oitc-form-feedback [errors]="errors" errorField="tenantId"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="post.clientId">
-                        {{ t('Client ID') }}
-                    </label>
-                    <input cFormControl
-                           id="post.clientId"
-                           type="text"
-                           name="post.clientId"
-                           oitcFormError [errors]="errors" errorField="clientId"
-                           [(ngModel)]="post.clientId">
-                    <oitc-form-feedback [errors]="errors" errorField="clientId"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="post.clientSecret">
-                        {{ t('Client Secret') }}
-                    </label>
-                    <input cFormControl
-                           id="post.clientSecret"
-                           type="password"
-                           name="post.clientSecret"
-                           oitcFormError [errors]="errors" errorField="clientSecret"
-                           [(ngModel)]="post.clientSecret">
-                    <oitc-form-feedback [errors]="errors" errorField="clientSecret"></oitc-form-feedback>
-                </div>
-
-            </fieldset>
-
-
-            <div>
-                <ng-template #contentTemplate let-data>
-                    <span class="h5 text-info" *ngIf="data">
-                        {{ t('Discovering Services for Services') }}
-                    </span>
-                    <br>
-                    {{ t('Scan Services. Only possible with valid Microsoft 365 credentials.') }}
+                    </ol>
+                  </div>
                 </ng-template>
+              </c-accordion-item>
+            </c-accordion>
+            <legend class="fs-md fieldset-legend-border-bottom">
+              <h4>
+                {{ t('Microsoft 365 Authentication Settings') }}
+              </h4>
+            </legend>
 
-                <ng-template #buttonTemplate let-data>
-                    <div class="ms-2">
-                        <button
-                            cButton
-                            class="ripple"
-                            color="primary"
-                            type="button"
-                            [disabled]="DiscoveryIsRunning"
-                            (click)="runServiceDiscovery()">
-                            @if (DiscoveryIsRunning) {
-                                <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-                            } @else {
-                                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                            }
-                            {{ t('Start Service discovery') }}
-                        </button>
-                    </div>
+            <div class="mb-3">
+              <label cLabel for="post.tenantId">
+                {{ t('Tenant ID') }}
+              </label>
+              <input cFormControl
+                id="post.tenantId"
+                type="text"
+                name="post.tenantId"
+                oitcFormError [errors]="errors" errorField="tenantId"
+                [(ngModel)]="post.tenantId">
+              <oitc-form-feedback [errors]="errors" errorField="tenantId"></oitc-form-feedback>
+            </div>
 
-                </ng-template>
+            <div class="mb-3">
+              <label cLabel for="post.clientId">
+                {{ t('Client ID') }}
+              </label>
+              <input cFormControl
+                id="post.clientId"
+                type="text"
+                name="post.clientId"
+                oitcFormError [errors]="errors" errorField="clientId"
+                [(ngModel)]="post.clientId">
+              <oitc-form-feedback [errors]="errors" errorField="clientId"></oitc-form-feedback>
+            </div>
 
-                <oitc-alert
-                    baseIcon="circle"
-                    color="info"
-                    [icon]="['fas', 'info']"
-                    [contentTemplate]="contentTemplate"
-                    [buttonTemplate]="buttonTemplate"></oitc-alert>
+            <div class="mb-3">
+              <label cLabel for="post.clientSecret">
+                {{ t('Client Secret') }}
+              </label>
+              <input cFormControl
+                id="post.clientSecret"
+                type="password"
+                name="post.clientSecret"
+                oitcFormError [errors]="errors" errorField="clientSecret"
+                [(ngModel)]="post.clientSecret">
+              <oitc-form-feedback [errors]="errors" errorField="clientSecret"></oitc-form-feedback>
+            </div>
+
+          </fieldset>
+
+
+          <div>
+            <ng-template #contentTemplate let-data>
+              @if (data) {
+                <span class="h5 text-info">
+                  {{ t('Discovering Services for Services') }}
+                </span>
+              }
+              <br>
+                {{ t('Scan Services. Only possible with valid Microsoft 365 credentials.') }}
+              </ng-template>
+
+              <ng-template #buttonTemplate let-data>
+                <div class="ms-2">
+                  <button
+                    cButton
+                    class="ripple"
+                    color="primary"
+                    type="button"
+                    [disabled]="DiscoveryIsRunning"
+                    (click)="runServiceDiscovery()">
+                    @if (DiscoveryIsRunning) {
+                      <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                    } @else {
+                      <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    }
+                    {{ t('Start Service discovery') }}
+                  </button>
+                </div>
+
+              </ng-template>
+
+              <oitc-alert
+                baseIcon="circle"
+                color="info"
+                [icon]="['fas', 'info']"
+                [contentTemplate]="contentTemplate"
+              [buttonTemplate]="buttonTemplate"></oitc-alert>
 
             </div>
 
             <oitc-wizards-dynamicfields
-                [(post)]="post.services"
-                [errors]="errors"
-                [titleErrorField]="'services'"
-                [title]="'Office 365 Services'|transloco"
-            />
+              [(post)]="post.services"
+              [errors]="errors"
+              [titleErrorField]="'services'"
+              [title]="'Office 365 Services'|transloco"
+              />
 
 
-        </c-card-body>
-    </c-card>
+          </c-card-body>
+        </c-card>
 
-</ng-container>
+      </ng-container>

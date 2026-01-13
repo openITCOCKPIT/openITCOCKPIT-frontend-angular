@@ -31,7 +31,7 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import {HostsService} from '../../../../../pages/hosts/hosts.service';
 import _ from 'lodash';
@@ -39,36 +39,34 @@ import _ from 'lodash';
 @Component({
     selector: 'oitc-autoreport-add-step-two',
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        ReactiveFormsModule,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        CardBodyComponent,
-        BadgeComponent,
-        RowComponent,
-        TranslocoPipe,
-        FormLabelDirective,
-        MultiSelectComponent,
-        RequiredIconComponent,
-        ColComponent,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        DebounceDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormControlDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TrueFalseDirective,
-        NgIf,
-        NgForOf
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    PermissionDirective,
+    RouterLink,
+    FormDirective,
+    FormsModule,
+    ReactiveFormsModule,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    CardBodyComponent,
+    BadgeComponent,
+    RowComponent,
+    TranslocoPipe,
+    FormLabelDirective,
+    MultiSelectComponent,
+    RequiredIconComponent,
+    ColComponent,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    DebounceDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    TrueFalseDirective
+],
     templateUrl: './autoreport-add-step-two.component.html',
     styleUrl: './../../../assets/autoreport.css', //'./autoreport-add-step-two.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

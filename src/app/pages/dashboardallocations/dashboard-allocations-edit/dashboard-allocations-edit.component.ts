@@ -21,7 +21,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
@@ -44,36 +44,35 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 @Component({
     selector: 'oitc-dashboard-allocations-edit',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        DebounceDirective,
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        MultiSelectComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        FormLoaderComponent
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    DebounceDirective,
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    MultiSelectComponent,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    SelectComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FormLoaderComponent
+],
     templateUrl: './dashboard-allocations-edit.component.html',
     styleUrl: './dashboard-allocations-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

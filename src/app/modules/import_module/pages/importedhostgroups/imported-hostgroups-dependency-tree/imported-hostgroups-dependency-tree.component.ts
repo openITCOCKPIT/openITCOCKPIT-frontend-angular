@@ -11,7 +11,7 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { NgIf } from '@angular/common';
+
 
 
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
@@ -36,7 +36,6 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
     TranslocoDirective,
     CardComponent,
     CardHeaderComponent,
-    NgIf,
     BlockLoaderComponent,
     CardBodyComponent,
     DependencyTreeComponent,

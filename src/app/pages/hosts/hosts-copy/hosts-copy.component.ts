@@ -15,7 +15,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 
@@ -47,13 +47,11 @@ import { HistoryService } from '../../../history.service';
     FormLabelDirective,
     FormsModule,
     NavComponent,
-    NgForOf,
     PermissionDirective,
     RequiredIconComponent,
     TranslocoDirective,
     XsButtonDirective,
     RouterLink,
-    NgIf,
     FormLoaderComponent
 ],
     templateUrl: './hosts-copy.component.html',

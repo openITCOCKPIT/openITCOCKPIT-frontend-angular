@@ -14,7 +14,7 @@ import {
 } from '../../pages/PrometheusQuery/prometheus-query.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ChartLoaderComponent } from '../../../../components/popover-graph/chart-loader/chart-loader.component';
 import * as _uPlot from 'uplot';
 import { PerformanceData } from '../../../../components/popover-graph/popover-graph.interface';
@@ -31,14 +31,13 @@ const uPlot: any = (_uPlot as any)?.default;
     selector: 'oitc-prometheus-popover-graph',
     standalone: true,
     imports: [
-        NgClass,
-        ChartLoaderComponent,
-        FaIconComponent,
-        TranslocoDirective,
-        NgIf,
-        Popover,
-        PrimeTemplate
-    ],
+    NgClass,
+    ChartLoaderComponent,
+    FaIconComponent,
+    TranslocoDirective,
+    Popover,
+    PrimeTemplate
+],
     templateUrl: './prometheus-popover-graph.component.html',
     styleUrl: './prometheus-popover-graph.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

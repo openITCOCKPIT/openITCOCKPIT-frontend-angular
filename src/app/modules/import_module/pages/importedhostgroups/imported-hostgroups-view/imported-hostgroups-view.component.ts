@@ -24,7 +24,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -38,33 +38,32 @@ import { NgSelectModule } from '@ng-select/ng-select';
 @Component({
     selector: 'oitc-imported-hostgroups-view',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormLabelDirective,
-        FormsModule,
-        MultiSelectComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        XsButtonDirective,
-        FormSelectDirective,
-        InputGroupComponent,
-        NgSelectModule,
-        TranslocoPipe
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormLabelDirective,
+    FormsModule,
+    MultiSelectComponent,
+    NavComponent,
+    NavItemComponent,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    XsButtonDirective,
+    FormSelectDirective,
+    InputGroupComponent,
+    NgSelectModule,
+    TranslocoPipe
+],
     templateUrl: './imported-hostgroups-view.component.html',
     styleUrl: './imported-hostgroups-view.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

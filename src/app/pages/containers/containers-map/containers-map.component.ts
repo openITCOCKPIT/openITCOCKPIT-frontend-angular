@@ -25,7 +25,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { DecimalPipe, NgIf } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -43,29 +43,28 @@ import { DataSet } from 'vis-data/peer';
 @Component({
     selector: 'oitc-containers-map',
     imports: [
-        BackButtonDirective,
-        BlockLoaderComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        FaIconComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PermissionDirective,
-        RowComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        DecimalPipe,
-        ProgressComponent,
-        TranslocoPipe
-    ],
+    BackButtonDirective,
+    BlockLoaderComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FaIconComponent,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    RowComponent,
+    SelectComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    DecimalPipe,
+    ProgressComponent,
+    TranslocoPipe
+],
     templateUrl: './containers-map.component.html',
     styleUrl: './containers-map.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

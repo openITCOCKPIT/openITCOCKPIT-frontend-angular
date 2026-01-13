@@ -25,7 +25,7 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
@@ -100,7 +100,6 @@ import {
     MultiSelectOptgroupComponent,
     NavComponent,
     NavItemComponent,
-    NgIf,
     PaginatorModule,
     PermissionDirective,
     RequiredIconComponent,

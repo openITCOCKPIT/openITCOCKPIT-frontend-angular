@@ -20,7 +20,7 @@ import { Subscription } from 'rxjs';
 import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
+
 import { MattermostSettings} from '../../../mattermost.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { MattermostService} from '../../../mattermost.service';
@@ -29,31 +29,30 @@ import { MattermostService} from '../../../mattermost.service';
 @Component({
   selector: 'oitc-mattermost-settings-index',
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        FormLoaderComponent,
-        NgIf,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        CardBodyComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        ApikeyDocModalComponent,
-        CardFooterComponent,
-        XsButtonDirective
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    PermissionDirective,
+    RouterLink,
+    FormDirective,
+    FormsModule,
+    FormLoaderComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    CardBodyComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TrueFalseDirective,
+    ApikeyDocModalComponent,
+    CardFooterComponent,
+    XsButtonDirective
+],
   templateUrl: './mattermost-settings-index.component.html',
   styleUrl: './mattermost-settings-index.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

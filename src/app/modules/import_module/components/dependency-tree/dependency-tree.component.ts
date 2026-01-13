@@ -25,7 +25,7 @@ import {
 } from '@coreui/angular';
 import { OnlineOfflineComponent } from '../additional-host-information/online-offline/online-offline.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { DecimalPipe, NgIf } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ExternalSystemsService } from '../../pages/externalsystems/external-systems.service';
 import {
@@ -77,7 +77,6 @@ export interface NodeExtended extends Node {
     OnlineOfflineComponent,
     RowComponent,
     TranslocoDirective,
-    NgIf,
     XsButtonDirective,
     FaIconComponent,
     TranslocoPipe,

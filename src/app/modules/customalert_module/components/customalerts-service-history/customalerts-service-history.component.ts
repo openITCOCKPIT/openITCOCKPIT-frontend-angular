@@ -20,7 +20,7 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 
 
 
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { RouterLink } from '@angular/router';
@@ -37,8 +37,6 @@ import { RouterLink } from '@angular/router';
     NavItemComponent,
     XsButtonDirective,
     CardBodyComponent,
-    NgForOf,
-    NgIf,
     PermissionDirective,
     TableDirective,
     TextColorDirective,

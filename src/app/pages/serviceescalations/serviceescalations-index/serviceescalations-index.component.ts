@@ -47,7 +47,7 @@ import {
 } from '../../../components/actions-button-element/actions-button-element.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -88,8 +88,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
     ActionsButtonElementComponent,
     DropdownDividerDirective,
     ItemSelectComponent,
-    NgForOf,
-    NgIf,
     NoRecordsComponent,
     PaginateOrScrollComponent,
     SelectAllComponent,

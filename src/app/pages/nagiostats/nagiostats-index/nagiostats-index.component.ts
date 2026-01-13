@@ -19,7 +19,7 @@ import { RouterLink } from '@angular/router';
 import { interval, startWith, Subscription, switchMap } from 'rxjs';
 import { NagiostatsService } from '../nagiostats.service';
 import { Nagiostats } from '../nagiostats.interface';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { SparklineStatsComponent } from '../../../components/sparkline-stats/sparkline-stats.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
@@ -38,7 +38,6 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
     ColComponent,
     TableDirective,
     NgClass,
-    NgIf,
     SparklineStatsComponent,
     NavComponent,
     NavItemComponent,

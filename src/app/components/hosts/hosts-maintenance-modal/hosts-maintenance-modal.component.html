@@ -1,100 +1,110 @@
 <ng-container *transloco="let t">
-    <c-modal
-        #modal='cModal'
-        [keyboard]="true"
-        id="hostMaintenanceModal"
-        size="lg"
+  <c-modal
+    #modal='cModal'
+    [keyboard]="true"
+    id="hostMaintenanceModal"
+    size="lg"
     >
-        <c-modal-header class="text-bg-gray">
-            <h5 cModalTitle>
-                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                {{ t('Set planned maintenance times') }}
-            </h5>
-            <button (click)="hideModal()" cButtonClose></button>
-        </c-modal-header>
-        <c-modal-body>
-            <c-row>
-                <c-col>
-                    <div class="mb-3">
-                        <label for="resetType">
-                            {{ t('Select method') }}
-                            <oitc-required-icon/>
-                        </label>
-                        <select
-                            cSelect
-                            name="resetType"
-                            id="resetType"
-                            [(ngModel)]="downtimeModal.downtimetype_id"
-                        >
-                            <option [value]="0">{{ t('Individual hosts') }}</option>
-                            <option [value]="1">{{ t('Hosts including services') }}</option>
-                            <option [value]="2">{{ t('Hosts and dependent Hosts (triggered)') }}</option>
-                            <option [value]="3">{{ t('Hosts and dependent Hosts (non-triggered)') }}</option>
-                        </select>
-                    </div>
+    <c-modal-header class="text-bg-gray">
+      <h5 cModalTitle>
+        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+        {{ t('Set planned maintenance times') }}
+      </h5>
+      <button (click)="hideModal()" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
+      <c-row>
+        <c-col>
+          <div class="mb-3">
+            <label for="resetType">
+              {{ t('Select method') }}
+              <oitc-required-icon/>
+            </label>
+            <select
+              cSelect
+              name="resetType"
+              id="resetType"
+              [(ngModel)]="downtimeModal.downtimetype_id"
+              >
+              <option [value]="0">{{ t('Individual hosts') }}</option>
+              <option [value]="1">{{ t('Hosts including services') }}</option>
+              <option [value]="2">{{ t('Hosts and dependent Hosts (triggered)') }}</option>
+              <option [value]="3">{{ t('Hosts and dependent Hosts (non-triggered)') }}</option>
+            </select>
+          </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="inputcomment">{{ t('Comment') }}</label>
-                        <input cFormControl id="inputcomment"
-                               [(ngModel)]="downtimeModal.comment">
-                        <div *ngIf="errors && errors.comment" cFormText>
-                            <ng-container *ngFor="let error of errors.comment">
-                                <div class="text-danger">{{ t(error) }}</div>
-                            </ng-container>
-                        </div>
-                    </div>
-                </c-col>
-            </c-row>
-            <c-row>
-                <c-col>
-                    <label>{{ t('From') }}:</label>
-                    <input id="downtimeModal.from_date" [(ngModel)]="downtimeModal.from_date" type="date"
-                           class="form-control">
-                    <input id="downtimeModal.from_time" class="form-control mt-1"
-                           [(ngModel)]="downtimeModal.from_time"
-                           type="time">
-                    <div *ngIf="errors && errors.from_date" cFormText>
-                        <ng-container *ngFor="let error of errors.from_date">
-                            <div class="text-danger">{{ t(error) }}</div>
-                        </ng-container>
-                    </div>
-                    <div *ngIf="errors && errors.from_time" cFormText>
-                        <ng-container *ngFor="let error of errors.from_time">
-                            <div class="text-danger">{{ t(error) }}</div>
-                        </ng-container>
-                    </div>
-                </c-col>
-                <c-col>
-                    <label>{{ t('To') }}:</label>
-                    <input id="downtimeModal.to_date" [(ngModel)]="downtimeModal.to_date" type="date"
-                           class="form-control">
-                    <input id="downtimeModal.to_time" class="form-control mt-1"
-                           [(ngModel)]="downtimeModal.to_time"
-                           type="time">
-                    <div *ngIf="errors && errors.to_date" cFormText>
-                        <ng-container *ngFor="let error of errors.to_date">
-                            <div class="text-danger">{{ t(error) }}</div>
-                        </ng-container>
-                    </div>
-                    <div *ngIf="errors && errors.to_time" cFormText>
-                        <ng-container *ngFor="let error of errors.to_time">
-                            <div class="text-danger">{{ t(error) }}</div>
-                        </ng-container>
-                    </div>
-                </c-col>
-            </c-row>
+          <div class="mb-3">
+            <label cLabel for="inputcomment">{{ t('Comment') }}</label>
+            <input cFormControl id="inputcomment"
+              [(ngModel)]="downtimeModal.comment">
+            @if (errors && errors.comment) {
+              <div cFormText>
+                @for (error of errors.comment; track error) {
+                  <div class="text-danger">{{ t(error) }}</div>
+                }
+              </div>
+            }
+          </div>
+        </c-col>
+      </c-row>
+      <c-row>
+        <c-col>
+          <label>{{ t('From') }}:</label>
+          <input id="downtimeModal.from_date" [(ngModel)]="downtimeModal.from_date" type="date"
+            class="form-control">
+          <input id="downtimeModal.from_time" class="form-control mt-1"
+            [(ngModel)]="downtimeModal.from_time"
+            type="time">
+          @if (errors && errors.from_date) {
+            <div cFormText>
+              @for (error of errors.from_date; track error) {
+                <div class="text-danger">{{ t(error) }}</div>
+              }
+            </div>
+          }
+          @if (errors && errors.from_time) {
+            <div cFormText>
+              @for (error of errors.from_time; track error) {
+                <div class="text-danger">{{ t(error) }}</div>
+              }
+            </div>
+          }
+        </c-col>
+        <c-col>
+          <label>{{ t('To') }}:</label>
+          <input id="downtimeModal.to_date" [(ngModel)]="downtimeModal.to_date" type="date"
+            class="form-control">
+          <input id="downtimeModal.to_time" class="form-control mt-1"
+            [(ngModel)]="downtimeModal.to_time"
+            type="time">
+          @if (errors && errors.to_date) {
+            <div cFormText>
+              @for (error of errors.to_date; track error) {
+                <div class="text-danger">{{ t(error) }}</div>
+              }
+            </div>
+          }
+          @if (errors && errors.to_time) {
+            <div cFormText>
+              @for (error of errors.to_time; track error) {
+                <div class="text-danger">{{ t(error) }}</div>
+              }
+            </div>
+          }
+        </c-col>
+      </c-row>
 
-        </c-modal-body>
-        <c-modal-footer>
-            <button (click)="setExternalCommands()" [disabled]="isSend" cButton class="ripple" color="success">
-                <fa-icon [hidden]="!isSend" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-                {{ t('Save') }}
-            </button>
-            <button (click)="hideModal()" cButton class="ripple" color="default">
-                {{ t('Cancel') }}
-            </button>
-        </c-modal-footer>
-    </c-modal>
+    </c-modal-body>
+    <c-modal-footer>
+      <button (click)="setExternalCommands()" [disabled]="isSend" cButton class="ripple" color="success">
+        <fa-icon [hidden]="!isSend" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+        {{ t('Save') }}
+      </button>
+      <button (click)="hideModal()" cButton class="ripple" color="default">
+        {{ t('Cancel') }}
+      </button>
+    </c-modal-footer>
+  </c-modal>
 </ng-container>
 
 

@@ -1,103 +1,108 @@
 <ng-container *transloco="let t">
-    @if (panelLocal) {
-        <div class="w-100 h-100 grafana-panel p-1">
-            <c-row class="mb-1">
-                <c-col xs="12">
-                    {{ panelLocal.title }}
-                    <span class="text-muted italic" *ngIf="humanUnit">
-                        {{ t('in') }}
-                        {{ humanUnit }}
-                    </span>
+  @if (panelLocal) {
+    <div class="w-100 h-100 grafana-panel p-1">
+      <c-row class="mb-1">
+        <c-col xs="12">
+          {{ panelLocal.title }}
+          @if (humanUnit) {
+            <span class="text-muted italic">
+              {{ t('in') }}
+              {{ humanUnit }}
+            </span>
+          }
 
-                    <c-button-group role="group" class="float-end">
-                        <button cButton color="default" class="ripple text-success" size="xs"
-                                (click)="openAddMetric()">
-                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                            {{ t('Add Metric') }}
-                        </button>
-                        <button cButton color="default" class="ripple" size="xs"
-                                (click)="openPanelOptions()">
-                            <fa-icon [icon]="['fas', 'wrench']" flip="horizontal"></fa-icon>
-                            {{ t('Panel options') }}
-                        </button>
-                        <button cButton color="default" class="ripple text-danger" size="xs"
-                                (click)="removePanel()">
-                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                            {{ t('Remove Panel') }}
-                        </button>
-                    </c-button-group>
-                </c-col>
-            </c-row>
+          <c-button-group role="group" class="float-end">
+            <button cButton color="default" class="ripple text-success" size="xs"
+              (click)="openAddMetric()">
+              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+              {{ t('Add Metric') }}
+            </button>
+            <button cButton color="default" class="ripple" size="xs"
+              (click)="openPanelOptions()">
+              <fa-icon [icon]="['fas', 'wrench']" flip="horizontal"></fa-icon>
+              {{ t('Panel options') }}
+            </button>
+            <button cButton color="default" class="ripple text-danger" size="xs"
+              (click)="removePanel()">
+              <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+              {{ t('Remove Panel') }}
+            </button>
+          </c-button-group>
+        </c-col>
+      </c-row>
 
-            @for (metric of panelLocal.metrics; track $index) {
-                <c-row class="metric-row m-0 mb-1">
-                    <c-col class="word-break" [xs]="12" [sm]="12" [md]="12" [lg]="8">
-                        <c-breadcrumb [style]="'--cui-breadcrumb-divider:\'»\''">
-                            <c-breadcrumb-item [active]="true">
-                                <oitc-label-link
-                                    [objectId]="metric.Host.id"
-                                    [route]="'/hosts/browser'"
-                                    [permissions]="'hosts.browser'"
-                                >
-                                    {{ metric.Host.hostname }}
-                                </oitc-label-link>
-                            </c-breadcrumb-item>
+      @for (metric of panelLocal.metrics; track $index) {
+        <c-row class="metric-row m-0 mb-1">
+          <c-col class="word-break" [xs]="12" [sm]="12" [md]="12" [lg]="8">
+            <c-breadcrumb [style]="'--cui-breadcrumb-divider:\'»\''">
+              <c-breadcrumb-item [active]="true">
+                <oitc-label-link
+                  [objectId]="metric.Host.id"
+                  [route]="'/hosts/browser'"
+                  [permissions]="'hosts.browser'"
+                  >
+                  {{ metric.Host.hostname }}
+                </oitc-label-link>
+              </c-breadcrumb-item>
 
-                            <c-breadcrumb-item [active]="true">
-                                <oitc-label-link
-                                    [objectId]="metric.Service.id"
-                                    [route]="'/services/browser'"
-                                    [permissions]="'services.browser'"
-                                >
-                                    {{ metric.Service.servicename }}
-                                </oitc-label-link>
-                            </c-breadcrumb-item>
+              <c-breadcrumb-item [active]="true">
+                <oitc-label-link
+                  [objectId]="metric.Service.id"
+                  [route]="'/services/browser'"
+                  [permissions]="'services.browser'"
+                  >
+                  {{ metric.Service.servicename }}
+                </oitc-label-link>
+              </c-breadcrumb-item>
 
-                            <c-breadcrumb-item [active]="true">
-                                {{ metric.metric }}
-                            </c-breadcrumb-item>
-                        </c-breadcrumb>
-                    </c-col>
+              <c-breadcrumb-item [active]="true">
+                {{ metric.metric }}
+              </c-breadcrumb-item>
+            </c-breadcrumb>
+          </c-col>
 
-                    <c-col class="text-end p-0">
-                        <div class="input-group input-group-sm justify-content-end">
-                            <span class="input-group-text py-0 border-end-0 border-start-0"
-                                  *ngIf="metric.color"
-                                  [style.background-color]="metric.color">
-                                <fa-icon [icon]="['fas', 'palette']" class="text-white"></fa-icon>
-                            </span>
+          <c-col class="text-end p-0">
+            <div class="input-group input-group-sm justify-content-end">
+              @if (metric.color) {
+                <span class="input-group-text py-0 border-end-0 border-start-0"
+                  [style.background-color]="metric.color">
+                  <fa-icon [icon]="['fas', 'palette']" class="text-white"></fa-icon>
+                </span>
+              }
 
-                            <span class="input-group-text py-0 chart-type-bg border-start-0">
-                                <oitc-chart-type-icon
-                                    [chartType]="panelLocal.visualization_type"
-                                ></oitc-chart-type-icon>
-                            </span>
+              <span class="input-group-text py-0 chart-type-bg border-start-0">
+                <oitc-chart-type-icon
+                  [chartType]="panelLocal.visualization_type"
+                ></oitc-chart-type-icon>
+              </span>
 
-                            <c-button-group role="group">
-                                <button cButton color="default" class="ripple text-primary" size="xs"
-                                        (click)="openEditMetric(metric)"
-                                        [title]="'Edit Metric' | transloco">
-                                    <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
-                                </button>
-                                <button cButton color="default" class="ripple text-danger" size="xs"
-                                        (click)="removeMetric(metric)"
-                                        [title]="'Remove Metric' | transloco">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                </button>
-                            </c-button-group>
-                        </div>
-                    </c-col>
+              <c-button-group role="group">
+                <button cButton color="default" class="ripple text-primary" size="xs"
+                  (click)="openEditMetric(metric)"
+                  [title]="'Edit Metric' | transloco">
+                  <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                </button>
+                <button cButton color="default" class="ripple text-danger" size="xs"
+                  (click)="removeMetric(metric)"
+                  [title]="'Remove Metric' | transloco">
+                  <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                </button>
+              </c-button-group>
+            </div>
+          </c-col>
 
-                </c-row>
-            }
+        </c-row>
+      }
 
-            <c-row *ngIf="panelLocal.metrics.length === 0">
-                <c-col xs="12" class="text-info text-center p-2">
-                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                    {{ t('This panel is empty. Start by adding metrics.') }}
-                </c-col>
-            </c-row>
+      @if (panelLocal.metrics.length === 0) {
+        <c-row>
+          <c-col xs="12" class="text-info text-center p-2">
+            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+            {{ t('This panel is empty. Start by adding metrics.') }}
+          </c-col>
+        </c-row>
+      }
 
-        </div>
-    }
+    </div>
+  }
 </ng-container>

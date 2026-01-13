@@ -1,87 +1,92 @@
 <table class="evc-summary-table">
-    <tbody>
-        @for (row of evcSummaryTree(); track $index) {
-            <tr>
-                @for (column of row; track layerIndex; let layerIndex = $index) {
-                    @if (layerIndex === 0 && column.current_state !== null && Number(column.current_state) >= 0) {
-                        <!-- First layer service that is monitored -->
-                        <td class="evc-summary-td-container"
-                            [rowSpan]="column.serviceCounter"
-                            [ngClass]="{'evc-border-right-ok':column.current_state === 0, 'evc-border-right-warning': column.current_state === 1, 'evc-border-right-critical': column.current_state === 2,'evc-border-right-unknown': column.current_state === 3}"
-                            (mouseenter)="toggleToaster(column.serviceId)"
-                            (mouseleave)="cancelToaster()">
+  <tbody>
+    @for (row of evcSummaryTree(); track $index) {
+      <tr>
+        @for (column of row; track layerIndex; let layerIndex = $index) {
+          @if (layerIndex === 0 && column.current_state !== null && Number(column.current_state) >= 0) {
+            <!-- First layer service that is monitored -->
+            <td class="evc-summary-td-container"
+              [rowSpan]="column.serviceCounter"
+              [ngClass]="{'evc-border-right-ok':column.current_state === 0, 'evc-border-right-warning': column.current_state === 1, 'evc-border-right-critical': column.current_state === 2,'evc-border-right-unknown': column.current_state === 3}"
+              (mouseenter)="toggleToaster(column.serviceId)"
+              (mouseleave)="cancelToaster()">
 
-                            @if (Number(column.scheduledDowntimeDepth) > 0 && stateForDowntimedService() !== column.current_state) {
-                                <span
-                                    class="position-absolute top-0 start-0 translate-middle badge rounded-circle"
-                                    [ngClass]="{'bg-ok':stateForDowntimedService() == 0,'bg-warning':stateForDowntimedService() == 1,'bg-critical':stateForDowntimedService() == 2,'bg-unknown':stateForDowntimedService() == 3}"
-                                    [cTooltip]="downtimeStateTitle"
-                                    cTooltipPlacement="top">
-                                    &nbsp; <!-- important be not empty -->
-                                </span>
-                            }
+              @if (Number(column.scheduledDowntimeDepth) > 0 && stateForDowntimedService() !== column.current_state) {
+                <span
+                  class="position-absolute top-0 start-0 translate-middle badge rounded-circle"
+                  [ngClass]="{'bg-ok':stateForDowntimedService() == 0,'bg-warning':stateForDowntimedService() == 1,'bg-critical':stateForDowntimedService() == 2,'bg-unknown':stateForDowntimedService() == 3}"
+                  [cTooltip]="downtimeStateTitle"
+                  cTooltipPlacement="top">
+                  &nbsp; <!-- important be not empty -->
+                </span>
+              }
 
-                            <span *ngIf="Number(column.scheduledDowntimeDepth) > 0 || column.problemHasBeenAcknowledged"
-                                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                                <fa-icon [icon]="['fas', 'power-off']" size="lg" class="me-1"
-                                         *ngIf="Number(column.scheduledDowntimeDepth) > 0"></fa-icon>
+              @if (Number(column.scheduledDowntimeDepth) > 0 || column.problemHasBeenAcknowledged) {
+                <span
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                  @if (Number(column.scheduledDowntimeDepth) > 0) {
+                    <fa-icon [icon]="['fas', 'power-off']" size="lg" class="me-1"
+                    ></fa-icon>
+                  }
+                  @if (column.problemHasBeenAcknowledged) {
+                    <fa-icon [icon]="['far', 'user']"
+                    ></fa-icon>
+                  }
+                </span>
+              }
 
-                                <fa-icon [icon]="['far', 'user']"
-                                         *ngIf="column.problemHasBeenAcknowledged"></fa-icon>
-                            </span>
+              <div class="evc-summary-first-layser-service code-font">
+                {{ column.hostName }}/{{ column.serviceName }}
+              </div>
+            </td>
+          } @else if (layerIndex === 0 && ( Number(column.current_state) === -1 || column.current_state === null )) {
+            <!-- First layer service that is not in monitoring -->
+            <td class="evc-summary-td-container evc-border-right-not-monitored"
+              [rowSpan]="column.serviceCounter"
+              (mouseenter)="toggleToaster(column.serviceId)"
+              (mouseleave)="cancelToaster()">
+              <div class="evc-summary-first-layser-service code-font">
+                {{ column.hostName }}/{{ column.serviceName }}
+              </div>
+            </td>
+          } @else if (layerIndex === 0 && Number(column.current_state) === -2) {
+            <!-- First layer service that is disabled -->
+            <td class="evc-summary-td-container evc-summary-disabled-service"
+              [ngClass]="{'evc-border-right-ok':stateForDisabledService() === 0, 'evc-border-right-warning': stateForDisabledService() === 1, 'evc-border-right-critical':stateForDisabledService()=== 2,'evc-border-right-unknown': stateForDisabledService() === 3}"
+              [rowSpan]="column.serviceCounter"
+              (mouseenter)="toggleToaster(column.serviceId)"
+              (mouseleave)="cancelToaster()">
 
-                            <div class="evc-summary-first-layser-service code-font">
-                                {{ column.hostName }}/{{ column.serviceName }}
-                            </div>
-                        </td>
-                    } @else if (layerIndex === 0 && ( Number(column.current_state) === -1 || column.current_state === null )) {
-                        <!-- First layer service that is not in monitoring -->
-                        <td class="evc-summary-td-container evc-border-right-not-monitored"
-                            [rowSpan]="column.serviceCounter"
-                            (mouseenter)="toggleToaster(column.serviceId)"
-                            (mouseleave)="cancelToaster()">
-                            <div class="evc-summary-first-layser-service code-font">
-                                {{ column.hostName }}/{{ column.serviceName }}
-                            </div>
-                        </td>
-                    } @else if (layerIndex === 0 && Number(column.current_state) === -2) {
-                        <!-- First layer service that is disabled -->
-                        <td class="evc-summary-td-container evc-summary-disabled-service"
-                            [ngClass]="{'evc-border-right-ok':stateForDisabledService() === 0, 'evc-border-right-warning': stateForDisabledService() === 1, 'evc-border-right-critical':stateForDisabledService()=== 2,'evc-border-right-unknown': stateForDisabledService() === 3}"
-                            [rowSpan]="column.serviceCounter"
-                            (mouseenter)="toggleToaster(column.serviceId)"
-                            (mouseleave)="cancelToaster()">
+              <span
+                class="position-absolute top-0 start-0 translate-middle badge rounded-pill"
+                [ngClass]="{'bg-ok':stateForDisabledService() == 0,'bg-warning':stateForDisabledService() == 1,'bg-critical':stateForDisabledService() == 2,'bg-unknown':stateForDisabledService() == 3}">
+                <fa-icon [icon]="['fas', 'plug']" size="lg"
+                  [cTooltip]="disabledStateTitle"
+                cTooltipPlacement="top"></fa-icon>
+              </span>
 
-                            <span
-                                class="position-absolute top-0 start-0 translate-middle badge rounded-pill"
-                                [ngClass]="{'bg-ok':stateForDisabledService() == 0,'bg-warning':stateForDisabledService() == 1,'bg-critical':stateForDisabledService() == 2,'bg-unknown':stateForDisabledService() == 3}">
-                                <fa-icon [icon]="['fas', 'plug']" size="lg"
-                                         [cTooltip]="disabledStateTitle"
-                                         cTooltipPlacement="top"></fa-icon>
-                            </span>
+              <div class="evc-summary-first-layser-service code-font">
+                {{ column.hostName }}/{{ column.serviceName }}
+              </div>
+            </td>
+          } @else {
+            <!-- vService -->
+            <td [rowSpan]="column.serviceCounter"
+              [ngClass]="{'evc-summary-ok':column.current_state === 0, 'evc-summary-warning': column.current_state === 1, 'evc-summary-critical': column.current_state === 2,'evc-summary-unknown': column.current_state === 3,'evc-summary-not-monitored': (!column.current_state && column.current_state !== 0)}"
+              (mouseenter)="toggleToaster(column.serviceId)"
+              (mouseleave)="cancelToaster()">
+              <div class="evc-summary-operator">
+                {{ column.operator }}
+              </div>
+              <span class="evc-summary-vservice">{{ column.serviceName }}</span>
+            </td>
+          }
 
-                            <div class="evc-summary-first-layser-service code-font">
-                                {{ column.hostName }}/{{ column.serviceName }}
-                            </div>
-                        </td>
-                    } @else {
-                        <!-- vService -->
-                        <td [rowSpan]="column.serviceCounter"
-                            [ngClass]="{'evc-summary-ok':column.current_state === 0, 'evc-summary-warning': column.current_state === 1, 'evc-summary-critical': column.current_state === 2,'evc-summary-unknown': column.current_state === 3,'evc-summary-not-monitored': (!column.current_state && column.current_state !== 0)}"
-                            (mouseenter)="toggleToaster(column.serviceId)"
-                            (mouseleave)="cancelToaster()">
-                            <div class="evc-summary-operator">
-                                {{ column.operator }}
-                            </div>
-                            <span class="evc-summary-vservice">{{ column.serviceName }}</span>
-                        </td>
-                    }
-
-                }
-            </tr>
         }
+      </tr>
+    }
 
-    </tbody>
+  </tbody>
 </table>
 
 <oitc-evc-servicestatus-toaster></oitc-evc-servicestatus-toaster>

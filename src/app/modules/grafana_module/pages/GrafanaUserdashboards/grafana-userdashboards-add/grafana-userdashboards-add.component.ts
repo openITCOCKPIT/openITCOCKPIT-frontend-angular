@@ -22,7 +22,7 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { FormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { NgIf } from '@angular/common';
+
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -38,33 +38,32 @@ import { GrafanaTimepickerChange } from '../../../components/grafana-timepicker/
 @Component({
     selector: 'oitc-grafana-userdashboards-add',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FormCheckInputDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        RequiredIconComponent,
-        XsButtonDirective,
-        NgIf,
-        SelectComponent,
-        TranslocoPipe,
-        GrafanaTimepickerComponent,
-        OitcAlertComponent
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    RequiredIconComponent,
+    XsButtonDirective,
+    SelectComponent,
+    TranslocoPipe,
+    GrafanaTimepickerComponent,
+    OitcAlertComponent
+],
     templateUrl: './grafana-userdashboards-add.component.html',
     styleUrl: './grafana-userdashboards-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

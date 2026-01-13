@@ -29,7 +29,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
@@ -79,7 +79,6 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
     MultiSelectComponent,
     NavComponent,
     NavItemComponent,
-    NgIf,
     PermissionDirective,
     RequiredIconComponent,
     RowComponent,

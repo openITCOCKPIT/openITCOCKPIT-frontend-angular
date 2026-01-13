@@ -22,7 +22,7 @@ import { ConnectionOperator, EvcTreeValidationErrors } from '../../eventcorrelat
 import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
 import { generateGuid } from '@foblex/utils';
 import { IPoint, PointExtensions } from '@foblex/2d';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ButtonGroupComponent, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -117,18 +117,17 @@ const GROUP_HEIGHT = 50;
 @Component({
     selector: 'oitc-evc-tree-edit',
     imports: [
-        FFlowModule,
-        NgClass,
-        RowComponent,
-        ColComponent,
-        NgIf,
-        TooltipDirective,
-        FaIconComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        ButtonGroupComponent
-    ],
+    FFlowModule,
+    NgClass,
+    RowComponent,
+    ColComponent,
+    TooltipDirective,
+    FaIconComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    ButtonGroupComponent
+],
     templateUrl: './evc-tree-edit.component.html',
     styleUrl: './evc-tree-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

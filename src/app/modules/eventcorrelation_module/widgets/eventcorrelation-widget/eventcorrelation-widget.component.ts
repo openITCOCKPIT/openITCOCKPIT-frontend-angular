@@ -18,7 +18,7 @@ import {
     FormLabelDirective,
     RowComponent
 } from '@coreui/angular';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -43,23 +43,22 @@ import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
 @Component({
     selector: 'oitc-eventcorrelation-widget',
     imports: [
-        FaIconComponent,
-        FormLabelDirective,
-        NgIf,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        EvcTreeComponent,
-        EvcTableComponent,
-        ColComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        ReactiveFormsModule,
-        RowComponent,
-        FormsModule
-    ],
+    FaIconComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    SelectComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    EvcTreeComponent,
+    EvcTableComponent,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    ReactiveFormsModule,
+    RowComponent,
+    FormsModule
+],
     templateUrl: './eventcorrelation-widget.component.html',
     styleUrl: './eventcorrelation-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,31 +1,33 @@
 <ng-container *transloco="let t">
 
-    <c-dropdown variant="btn-group">
-        <button [color]="'default'" cButton cDropdownToggle [size]="'xs'">
-            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-            {{ selectedDurationHuman }}
-        </button>
-        <div cDropdownMenu class="isarflow-datepicker-container">
-            <div class="w-100 p-2">
-                <c-row>
-                    <c-col [xs]="12">
-                        <fieldset>
-                            <h4>{{ t('Time ranges') }}</h4>
-                            <hr class="border-dashed">
-                            <div *ngFor="let interval of timeranges"
-                                 class="no-padding cursor-pointer"
-                                 style="line-height: 25px;"
-                                 [ngClass]="{'text-primary': interval.duration === selectedDuration}"
-                                 (click)="changeDuration(interval.duration, interval.name)">
-                                {{ interval.name }}
-                            </div>
-                        </fieldset>
-                    </c-col>
+  <c-dropdown variant="btn-group">
+    <button [color]="'default'" cButton cDropdownToggle [size]="'xs'">
+      <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+      {{ selectedDurationHuman }}
+    </button>
+    <div cDropdownMenu class="isarflow-datepicker-container">
+      <div class="w-100 p-2">
+        <c-row>
+          <c-col [xs]="12">
+            <fieldset>
+              <h4>{{ t('Time ranges') }}</h4>
+              <hr class="border-dashed">
+              @for (interval of timeranges; track interval) {
+                <div
+                  class="no-padding cursor-pointer"
+                  style="line-height: 25px;"
+                  [ngClass]="{'text-primary': interval.duration === selectedDuration}"
+                  (click)="changeDuration(interval.duration, interval.name)">
+                  {{ interval.name }}
+                </div>
+              }
+            </fieldset>
+          </c-col>
 
-                </c-row>
-            </div>
+        </c-row>
+      </div>
 
-        </div>
-    </c-dropdown>
+    </div>
+  </c-dropdown>
 
 </ng-container>

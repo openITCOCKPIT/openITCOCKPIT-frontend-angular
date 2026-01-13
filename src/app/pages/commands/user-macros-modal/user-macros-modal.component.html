@@ -1,73 +1,79 @@
 <ng-container *transloco="let t">
-    <button cButton class="ripple me-1" color="primary" size="xs" [cModalToggle]="userDefinedMacrosModal.id"
-            (click)="loadMacros()">
-        {{ t('$USERn$ overview') }}
-    </button>
+  <button cButton class="ripple me-1" color="primary" size="xs" [cModalToggle]="userDefinedMacrosModal.id"
+    (click)="loadMacros()">
+    {{ t('$USERn$ overview') }}
+  </button>
 
-    <c-modal #userDefinedMacrosModal fullscreen="md" id="userDefinedMacros" size="lg">
-        <c-modal-header>
-            <h5 cModalTitle>
-                {{ t('User defined macros') }}
-            </h5>
-            <button [cModalToggle]="userDefinedMacrosModal.id" cButtonClose></button>
-        </c-modal-header>
-        <c-modal-body>
-            <div class="row">
-                <div class="col-12">
-                    <table bordered cTable class="mt-2 mb-0" hover striped>
-                        <thead>
-                        <tr>
-                            <th scope="col">
-                                {{ t('Name') }}
-                            </th>
-                            <th scope="col">
-                                {{ t('Value') }}
-                            </th>
-                            <th scope="col">
-                                {{ t('Description') }}
-                            </th>
-                            <th scope="col" class="text-center">
-                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr *ngFor="let macro of macros">
-                            <td class="text-primary  code-font">
-                                {{ macro.name }}
-                            </td>
-                            <td>
-                                <code [ngClass]="{'text-blur': macro.password > 0}">
-                                    {{ macro.value }}
-                                </code>
-                            </td>
-                            <td>
-                                {{ macro.description }}
-                            </td>
-                            <td class="text-center">
-                                <button (click)="macro.password = 0" *ngIf="macro.password == 1"
-                                        [title]="'Show value' | transloco"
-                                        class="btn btn-primary btn-xs ripple"
-                                        type="button">
-                                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                                </button>
-                                <button (click)="macro.password = 1" *ngIf="macro.password == 0"
-                                        [title]="'Hide value' | transloco"
-                                        class="btn btn-danger btn-xs ripple"
-                                        type="button">
-                                    <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </c-modal-body>
-        <c-modal-footer>
-            <button [cModalToggle]="userDefinedMacrosModal.id" cButton color="default">
-                {{ t('Close') }}
-            </button>
-        </c-modal-footer>
-    </c-modal>
+  <c-modal #userDefinedMacrosModal fullscreen="md" id="userDefinedMacros" size="lg">
+    <c-modal-header>
+      <h5 cModalTitle>
+        {{ t('User defined macros') }}
+      </h5>
+      <button [cModalToggle]="userDefinedMacrosModal.id" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
+      <div class="row">
+        <div class="col-12">
+          <table bordered cTable class="mt-2 mb-0" hover striped>
+            <thead>
+              <tr>
+                <th scope="col">
+                  {{ t('Name') }}
+                </th>
+                <th scope="col">
+                  {{ t('Value') }}
+                </th>
+                <th scope="col">
+                  {{ t('Description') }}
+                </th>
+                <th scope="col" class="text-center">
+                  <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (macro of macros; track macro) {
+                <tr>
+                  <td class="text-primary  code-font">
+                    {{ macro.name }}
+                  </td>
+                  <td>
+                    <code [ngClass]="{'text-blur': macro.password > 0}">
+                      {{ macro.value }}
+                    </code>
+                  </td>
+                  <td>
+                    {{ macro.description }}
+                  </td>
+                  <td class="text-center">
+                    @if (macro.password == 1) {
+                      <button (click)="macro.password = 0"
+                        [title]="'Show value' | transloco"
+                        class="btn btn-primary btn-xs ripple"
+                        type="button">
+                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                      </button>
+                    }
+                    @if (macro.password == 0) {
+                      <button (click)="macro.password = 1"
+                        [title]="'Hide value' | transloco"
+                        class="btn btn-danger btn-xs ripple"
+                        type="button">
+                        <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
+                      </button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </c-modal-body>
+    <c-modal-footer>
+      <button [cModalToggle]="userDefinedMacrosModal.id" cButton color="default">
+        {{ t('Close') }}
+      </button>
+    </c-modal-footer>
+  </c-modal>
 </ng-container>

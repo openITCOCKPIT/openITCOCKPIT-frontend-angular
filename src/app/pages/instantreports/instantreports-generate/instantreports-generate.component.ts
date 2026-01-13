@@ -17,7 +17,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -49,32 +49,31 @@ import { InstantreportViewerComponent } from './instantreport-viewer/instantrepo
 @Component({
     selector: 'oitc-instantreports-generate',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PermissionDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        CardFooterComponent,
-        RouterLink,
-        NgClass,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        InputGroupComponent,
-        RequiredIconComponent,
-        SelectComponent,
-        RowComponent,
-        ColComponent,
-        InstantreportViewerComponent
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    CardFooterComponent,
+    RouterLink,
+    NgClass,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    InputGroupComponent,
+    RequiredIconComponent,
+    SelectComponent,
+    RowComponent,
+    ColComponent,
+    InstantreportViewerComponent
+],
     templateUrl: './instantreports-generate.component.html',
     styleUrl: './instantreports-generate.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

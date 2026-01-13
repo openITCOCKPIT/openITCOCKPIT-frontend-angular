@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { HostPieChartComponent } from '../../../../components/charts/host-pie-chart/host-pie-chart.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -12,14 +12,13 @@ import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-
 @Component({
     selector: 'oitc-hosts-piechart-widget180',
     imports: [
-        AsyncPipe,
-        FaIconComponent,
-        HostPieChartComponent,
-        NgIf,
-        TranslocoDirective,
-        RouterLink,
-        BlockLoaderComponent
-    ],
+    AsyncPipe,
+    FaIconComponent,
+    HostPieChartComponent,
+    TranslocoDirective,
+    RouterLink,
+    BlockLoaderComponent
+],
     templateUrl: './hosts-piechart-widget180.component.html',
     styleUrl: './hosts-piechart-widget180.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

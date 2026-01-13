@@ -46,7 +46,7 @@ import {
 } from '@coreui/angular';
 
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
@@ -60,7 +60,6 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
     ModalFooterComponent,
     ModalBodyComponent,
     FormsModule,
-    NgIf,
     FormControlDirective,
     XsButtonDirective
 ],

@@ -27,7 +27,7 @@ import {
   RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { AgentConfig } from '../agentconfig.interface';
@@ -58,7 +58,6 @@ import { HttpErrorResponse } from '@angular/common/http';
     CardTitleDirective,
     ColComponent,
     FaIconComponent,
-    NgIf,
     PermissionDirective,
     RowComponent,
     TranslocoDirective,

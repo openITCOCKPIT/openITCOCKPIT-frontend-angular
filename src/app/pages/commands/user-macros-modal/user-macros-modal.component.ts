@@ -16,7 +16,7 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 
 import { Subscription } from 'rxjs';
 import { MacroIndex } from '../../macros/macros.interface';
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MacrosService } from '../../macros/macros.service';
 
 @Component({
@@ -32,9 +32,7 @@ import { MacrosService } from '../../macros/macros.service';
     ButtonCloseDirective,
     TranslocoDirective,
     TableDirective,
-    NgIf,
     TranslocoPipe,
-    NgFor,
     NgClass,
     ModalFooterComponent
 ],

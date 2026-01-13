@@ -24,7 +24,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 import { DisableResponse } from '../disable-modal/disable.interface';
@@ -37,21 +37,19 @@ import { DeleteAcknowledgementItem } from '../../../pages/acknowledgements/ackno
 @Component({
     selector: 'oitc-delete-acknowledgements-modal',
     imports: [
-        ButtonCloseDirective,
-        ColComponent,
-        FaIconComponent,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgForOf,
-        NgIf,
-        ProgressComponent,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective
-    ],
+    ButtonCloseDirective,
+    ColComponent,
+    FaIconComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ProgressComponent,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective
+],
     templateUrl: './delete-acknowledgements-modal.component.html',
     styleUrl: './delete-acknowledgements-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

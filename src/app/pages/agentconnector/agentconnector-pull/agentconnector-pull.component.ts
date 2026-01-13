@@ -45,7 +45,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -85,8 +85,6 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
     MatSortHeader,
     NavComponent,
     NavItemComponent,
-    NgForOf,
-    NgIf,
     NoRecordsComponent,
     PaginateOrScrollComponent,
     PermissionDirective,

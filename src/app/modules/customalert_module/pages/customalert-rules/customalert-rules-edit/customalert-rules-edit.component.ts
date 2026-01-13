@@ -21,7 +21,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import {
@@ -48,38 +48,37 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
 @Component({
     selector: 'oitc-customalert-rules-edit',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        NgSelectComponent,
-        PermissionDirective,
-        RegexHelperTooltipComponent,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        TrueFalseDirective,
-        XsButtonDirective,
-        FormLoaderComponent,
-        RouterLink
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    NgSelectComponent,
+    PermissionDirective,
+    RegexHelperTooltipComponent,
+    RequiredIconComponent,
+    SelectComponent,
+    TranslocoDirective,
+    TrueFalseDirective,
+    XsButtonDirective,
+    FormLoaderComponent,
+    RouterLink
+],
     templateUrl: './customalert-rules-edit.component.html',
     styleUrl: './customalert-rules-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

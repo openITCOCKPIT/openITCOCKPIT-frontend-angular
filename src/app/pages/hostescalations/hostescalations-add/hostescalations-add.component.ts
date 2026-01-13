@@ -34,7 +34,7 @@ import { Subscription } from 'rxjs';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
@@ -46,38 +46,37 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-hostescalations-add',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FormDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        PaginatorModule,
-        XsButtonDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        NgIf,
-        RequiredIconComponent,
-        SelectComponent,
-        MultiSelectComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        FormControlDirective,
-        FormCheckLabelDirective,
-        IntervalInputComponent,
-        LabelLinkComponent,
-        FormCheckInputDirective,
-        TrueFalseDirective,
-        CardFooterComponent
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    PaginatorModule,
+    XsButtonDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    SelectComponent,
+    MultiSelectComponent,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    FormControlDirective,
+    FormCheckLabelDirective,
+    IntervalInputComponent,
+    LabelLinkComponent,
+    FormCheckInputDirective,
+    TrueFalseDirective,
+    CardFooterComponent
+],
     templateUrl: './hostescalations-add.component.html',
     styleUrl: './hostescalations-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

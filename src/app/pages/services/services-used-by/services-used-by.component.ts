@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -26,26 +26,24 @@ import { ServiceEntity, ServiceUsedByObjects } from '../services.interface';
 @Component({
     selector: 'oitc-services-used-by',
     imports: [
-        AsyncPipe,
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ContainerComponent,
-        FaIconComponent,
-        FormLoaderComponent,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NgIf,
-        NotUsedByObjectComponent,
-        PermissionDirective,
-        TableDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink
-    ],
+    AsyncPipe,
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ContainerComponent,
+    FaIconComponent,
+    FormLoaderComponent,
+    NavComponent,
+    NavItemComponent,
+    NotUsedByObjectComponent,
+    PermissionDirective,
+    TableDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink
+],
     templateUrl: './services-used-by.component.html',
     styleUrl: './services-used-by.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,28 +1,29 @@
 <c-row>
-    <c-col [xs]="12" [lg]="6">
-        <c-button-group role="group" class="flex-wrap">
-            <button
-                cButton
-                class="rounded-0"
-                color="primary"
-                *ngFor="let attempt of attempts"
-                [ngClass]="{'active show': selectedAttempts == attempt}"
-                (click)="changeAttempts(attempt)">
-                {{ attempt }}
-            </button>
-        </c-button-group>
-    </c-col>
-    <c-col [xs]="12" [lg]="3">
-        <c-input-group>
-            <input cFormControl type="number"
-                   min="0"
-                   [id]="id"
-                   [name]="name"
-                   [placeholder]="'Interval in seconds' | transloco"
-                   [(ngModel)]="selectedAttempts"
-                   (ngModelChange)="updateAttempts()">
-            <ng-content></ng-content>
-        </c-input-group>
-    </c-col>
+  <c-col [xs]="12" [lg]="6">
+    <c-button-group role="group" class="flex-wrap">
+      @for (attempt of attempts; track attempt) {
+        <button
+          cButton
+          class="rounded-0"
+          color="primary"
+          [ngClass]="{'active show': selectedAttempts == attempt}"
+          (click)="changeAttempts(attempt)">
+          {{ attempt }}
+        </button>
+      }
+    </c-button-group>
+  </c-col>
+  <c-col [xs]="12" [lg]="3">
+    <c-input-group>
+      <input cFormControl type="number"
+        min="0"
+        [id]="id"
+        [name]="name"
+        [placeholder]="'Interval in seconds' | transloco"
+        [(ngModel)]="selectedAttempts"
+        (ngModelChange)="updateAttempts()">
+      <ng-content></ng-content>
+    </c-input-group>
+  </c-col>
 </c-row>
 

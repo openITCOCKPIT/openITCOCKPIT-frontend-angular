@@ -24,7 +24,7 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { ConfigurationEditorConfig, ConfigurationEditorField } from '../../../configuration-files.interface';
-import { NgIf } from '@angular/common';
+
 
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
@@ -47,7 +47,6 @@ import { FormsModule } from '@angular/forms';
     FormLabelDirective,
     PaginatorModule,
     RequiredIconComponent,
-    NgIf,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,

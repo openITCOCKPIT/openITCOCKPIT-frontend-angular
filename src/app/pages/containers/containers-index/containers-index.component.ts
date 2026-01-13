@@ -20,7 +20,7 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ContainerTypesEnum, ROOT_CONTAINER } from '../../changelogs/object-types.enum';
 
 
-import { CommonModule, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { ContainersIndexContainer, ContainersIndexNested, DataForCreateContainerModal } from '../containers.interface';
@@ -46,16 +46,13 @@ import { EditContainerModalComponent } from './edit-container-modal/edit-contain
     RouterLink,
     CardBodyComponent,
     FormLabelDirective,
-    NgIf,
     SelectComponent,
     RowComponent,
     ColComponent,
     NestLoaderComponent,
     ContainerNestComponent,
     LabelLinkComponent,
-    NgSwitchCase,
     TranslocoPipe,
-    NgSwitch,
     CommonModule,
     DeleteAllModalComponent,
     CreateContainerModalComponent,

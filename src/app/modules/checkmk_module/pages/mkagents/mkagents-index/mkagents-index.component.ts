@@ -27,7 +27,7 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import { FormsModule } from '@angular/forms';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
 import {
@@ -77,8 +77,6 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
     TableLoaderComponent,
     TableDirective,
     MatSort,
-    NgForOf,
-    NgIf,
     ItemSelectComponent,
     ActionsButtonComponent,
     ActionsButtonElementComponent,

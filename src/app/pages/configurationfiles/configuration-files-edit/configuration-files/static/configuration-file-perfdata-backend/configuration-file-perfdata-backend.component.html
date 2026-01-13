@@ -1,26 +1,30 @@
 <ng-container *transloco="let t">
 
-    <!-- This config file only contains a single field, the database backend -->
+  <!-- This config file only contains a single field, the database backend -->
 
-    <div class="mb-3" *ngIf="fields.length > 0">
-        <label [for]="fields[0].field">
-            {{ t('Database backend') }}
-            <oitc-required-icon/>
-        </label>
-        <select
-            cSelect
-            [attr.id]="fields[0].field"
-            [name]="fields[0].field"
-            oitcFormError [errors]="errors" errorField="Configfile.{{fields[0].field}}"
-            [(ngModel)]="fields[0].value"
+  @if (fields.length > 0) {
+    <div class="mb-3">
+      <label [for]="fields[0].field">
+        {{ t('Database backend') }}
+        <oitc-required-icon/>
+      </label>
+      <select
+        cSelect
+        [attr.id]="fields[0].field"
+        [name]="fields[0].field"
+        oitcFormError [errors]="errors" errorField="Configfile.{{fields[0].field}}"
+        [(ngModel)]="fields[0].value"
         >
-            <option [ngValue]="'Whisper'">{{ t('Whisper (Statusengine 3 / Statusengine 2)') }}</option>
-            <option [ngValue]="'Crate'">{{ t('Crate (Statusengine 3)') }}</option>
-            <option [ngValue]="'Rrdtool'">{{ t('Rrdtool (Statusengine 2 / NPCD)') }}</option>
-        </select>
-        <oitc-form-feedback [errors]="errors" errorField="Configfile.{{fields[0].field}}"></oitc-form-feedback>
-        <div class="help-block" *ngIf="fields[0].help">
-            {{ fields[0].help }}
+        <option [ngValue]="'Whisper'">{{ t('Whisper (Statusengine 3 / Statusengine 2)') }}</option>
+        <option [ngValue]="'Crate'">{{ t('Crate (Statusengine 3)') }}</option>
+        <option [ngValue]="'Rrdtool'">{{ t('Rrdtool (Statusengine 2 / NPCD)') }}</option>
+      </select>
+      <oitc-form-feedback [errors]="errors" errorField="Configfile.{{fields[0].field}}"></oitc-form-feedback>
+      @if (fields[0].help) {
+        <div class="help-block">
+          {{ fields[0].help }}
         </div>
+      }
     </div>
+  }
 </ng-container>

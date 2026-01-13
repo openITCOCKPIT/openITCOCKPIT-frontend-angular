@@ -1,21 +1,23 @@
 @if (!isViewMode()) {
-    <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
-         (cdkDragEnded)="onDragEnd($event)"
-         (cdkDragMoved)="onDragMove($event)"
-         (resizeStop)="onResizeStop($event, type)"
-         cdkDragBoundary=".map-canvas">
-        <div cdkDragHandle [id]="'map-cylinder-' + item()!.id"
-             [ngStyle]="{'width.px': width + 10, 'height.px': height + 10}">
-            <svg #cylinderSvg [attr.width]="width" [attr.height]="height"></svg>
-        </div>
+  <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
+    (cdkDragEnded)="onDragEnd($event)"
+    (cdkDragMoved)="onDragMove($event)"
+    (resizeStop)="onResizeStop($event, type)"
+    cdkDragBoundary=".map-canvas">
+    <div cdkDragHandle [id]="'map-cylinder-' + item()!.id"
+      [ngStyle]="{'width.px': width + 10, 'height.px': height + 10}">
+      <svg #cylinderSvg [attr.width]="width" [attr.height]="height"></svg>
     </div>
-    <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
-                   appendTo="body"></p-contextMenu>
+  </div>
+  @if (!isViewMode()) {
+    <p-contextMenu [target]="container" [model]="contextMenuItems"
+    appendTo="body"></p-contextMenu>
+  }
 } @else {
-    <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
-        <div [id]="'map-cylinder-' + item()!.id"
-             [ngStyle]="{'width.px': width + 10, 'height.px': height + 10}">
-            <svg #cylinderSvg [attr.width]="width" [attr.height]="height"></svg>
-        </div>
+  <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
+    <div [id]="'map-cylinder-' + item()!.id"
+      [ngStyle]="{'width.px': width + 10, 'height.px': height + 10}">
+      <svg #cylinderSvg [attr.width]="width" [attr.height]="height"></svg>
     </div>
+  </div>
 }

@@ -23,30 +23,29 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-cisco-network',
     imports: [
-        RouterLink,
-        FaIconComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardBodyComponent,
-        BackButtonDirective,
-        TranslocoPipe,
-        RequiredIconComponent,
-        FormLabelDirective,
-        SelectComponent,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormsModule,
-        FormControlDirective,
-        WizardsDynamicfieldsComponent,
-        TranslocoDirective,
-        CardTitleDirective,
-        NgIf
-    ],
+    RouterLink,
+    FaIconComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardBodyComponent,
+    BackButtonDirective,
+    TranslocoPipe,
+    RequiredIconComponent,
+    FormLabelDirective,
+    SelectComponent,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormsModule,
+    FormControlDirective,
+    WizardsDynamicfieldsComponent,
+    TranslocoDirective,
+    CardTitleDirective
+],
     templateUrl: './cisco-network.component.html',
     styleUrl: './cisco-network.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

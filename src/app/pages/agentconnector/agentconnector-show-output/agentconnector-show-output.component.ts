@@ -30,7 +30,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 
 
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -55,27 +55,26 @@ import {
 @Component({
     selector: 'oitc-agentconnector-show-output',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        FaIconComponent,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        BackButtonDirective,
-        BlockLoaderComponent,
-        AsyncPipe,
-        NgClass
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FaIconComponent,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    BackButtonDirective,
+    BlockLoaderComponent,
+    AsyncPipe,
+    NgClass
+],
     templateUrl: './agentconnector-show-output.component.html',
     styleUrl: './agentconnector-show-output.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

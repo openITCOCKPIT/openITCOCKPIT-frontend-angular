@@ -28,7 +28,7 @@ import {
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
@@ -47,32 +47,30 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'oitc-customalerts-annotate-modal',
     imports: [
-        ModalComponent,
-        TranslocoDirective,
-        ButtonCloseDirective,
-        FaIconComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        AlertComponent,
-        ColComponent,
-        FormControlDirective,
-        ModalBodyComponent,
-        ModalFooterComponent,
-        NgForOf,
-        ReactiveFormsModule,
-        RowComponent,
-        XsButtonDirective,
-        FormsModule,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        TextColorDirective,
-        DebounceDirective,
-        ProgressComponent,
-        FormFeedbackComponent,
-        NgIf,
-        FormCheckLabelDirective,
-        NgClass
-    ],
+    ModalComponent,
+    TranslocoDirective,
+    ButtonCloseDirective,
+    FaIconComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    AlertComponent,
+    ColComponent,
+    FormControlDirective,
+    ModalBodyComponent,
+    ModalFooterComponent,
+    ReactiveFormsModule,
+    RowComponent,
+    XsButtonDirective,
+    FormsModule,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    TextColorDirective,
+    DebounceDirective,
+    ProgressComponent,
+    FormFeedbackComponent,
+    FormCheckLabelDirective,
+    NgClass
+],
     templateUrl: './customalerts-annotate-modal.component.html',
     styleUrl: './customalerts-annotate-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

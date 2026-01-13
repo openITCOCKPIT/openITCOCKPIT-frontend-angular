@@ -27,37 +27,36 @@ import {NotyService} from '../../../../../layouts/coreui/noty.service';
 import {MsteamssettingsService} from '../msteamssettings.service';
 import {RouterLink} from '@angular/router';
 import {GenericValidationError} from '../../../../../generic-responses';
-import {NgIf} from '@angular/common';
+
 import {FormLoaderComponent} from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import {TrueFalseDirective} from "../../../../../directives/true-false.directive";
 
 @Component({
     selector: 'oitc-msteamssettings-index',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        NgIf,
-        FormLoaderComponent,
-        TrueFalseDirective
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FormLoaderComponent,
+    TrueFalseDirective
+],
     templateUrl: './msteamssettings-index.component.html',
     styleUrl: './msteamssettings-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

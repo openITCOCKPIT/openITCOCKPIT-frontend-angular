@@ -17,7 +17,7 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { GrafanaTimepickerComponent } from '../../../components/grafana-timepicker/grafana-timepicker.component';
-import { NgIf } from '@angular/common';
+
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -38,33 +38,32 @@ import { HistoryService } from '../../../../../history.service';
 @Component({
     selector: 'oitc-grafana-userdashboards-edit',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        GrafanaTimepickerComponent,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        OitcAlertComponent,
-        PermissionDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        FormLoaderComponent
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    GrafanaTimepickerComponent,
+    NavComponent,
+    NavItemComponent,
+    OitcAlertComponent,
+    PermissionDirective,
+    RequiredIconComponent,
+    SelectComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    RouterLink,
+    FormLoaderComponent
+],
     templateUrl: './grafana-userdashboards-edit.component.html',
     styleUrl: './grafana-userdashboards-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

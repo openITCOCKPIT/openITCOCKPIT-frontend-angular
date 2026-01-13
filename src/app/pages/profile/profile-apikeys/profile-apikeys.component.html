@@ -1,305 +1,302 @@
 <ng-container *transloco="let t">
 
-    <!-- API Keys -->
-    <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('API keys') }}
-                <small class="fw-300">
-                </small>
-            </h5>
+  <!-- API Keys -->
+  <c-card class="mb-3">
+    <c-card-header>
+      <h5 cCardTitle>{{ t('API keys') }}
+        <small class="fw-300">
+        </small>
+      </h5>
 
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button cButton class="ripple" color="default"
-                            (click)="loadApiKeys()"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
+      <c-nav class="card-toolbar card-header-pills">
+        <c-nav-item class="px-1">
+          <button cButton class="ripple" color="default"
+            (click)="loadApiKeys()"
+            size="xs">
+            <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+            {{ t('Refresh') }}
+          </button>
+        </c-nav-item>
 
-                <c-nav-item class="px-1">
-                    <button cButton class="ripple" color="success"
-                            [cModalToggle]="createNewApiKeyModal.id"
-                            (click)="loadNewApiKey()"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'key']"></fa-icon>
-                        {{ t('Create new API key') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
+        <c-nav-item class="px-1">
+          <button cButton class="ripple" color="success"
+            [cModalToggle]="createNewApiKeyModal.id"
+            (click)="loadNewApiKey()"
+            size="xs">
+            <fa-icon [icon]="['fas', 'key']"></fa-icon>
+            {{ t('Create new API key') }}
+          </button>
+        </c-nav-item>
+      </c-nav>
 
-        </c-card-header>
-        <c-card-body>
+    </c-card-header>
+    <c-card-body>
 
-            <c-row [hidden]="Apikeys.length > 0">
-                <c-col class="text-center text-info p-2">
-                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                    {{ t('No API keys created yet. You can still use the api using your username and password.') }}
-                    <br>
-                    {{ ( 'It\'s recommended to create a own API key for every external application.' ) }}
-                </c-col>
-            </c-row>
+      <c-row [hidden]="Apikeys.length > 0">
+        <c-col class="text-center text-info p-2">
+          <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+          {{ t('No API keys created yet. You can still use the api using your username and password.') }}
+          <br>
+            {{ ( 'It\'s recommended to create a own API key for every external application.' ) }}
+          </c-col>
+        </c-row>
 
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped *ngIf="Apikeys.length > 0">
-                <thead>
+        @if (Apikeys.length > 0) {
+          <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+            <thead>
+              <tr>
+                <th class="width-50 text-center" scope="col">
+                  <fa-icon [icon]="['fas', 'hashtag']"></fa-icon>
+                  {{ t('ID') }}
+                </th>
+                <th scope="col">
+                  {{ t('Description') }}
+                </th>
+                <th scope="col">
+                  {{ t('Last used') }}
+                </th>
+                <th scope="col" class="width-130">
+                  {{ t('Show') }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (apikey of Apikeys; track apikey) {
                 <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'hashtag']"></fa-icon>
-                        {{ t('ID') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Last used') }}
-                    </th>
-                    <th scope="col" class="width-130">
+                  <td>{{ apikey.id }}</td>
+                  <td>{{ apikey.description }}</td>
+                  <td>{{ apikey.last_use }}</td>
+                  <td>
+                    <div class="d-grid">
+                      <button cButton size="xs" class="ripple"
+                        (click)="editApiKey(apikey.id)">
+                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                         {{ t('Show') }}
-                    </th>
+                      </button>
+                    </div>
+                  </td>
                 </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let apikey of Apikeys">
-                    <td>{{ apikey.id }}</td>
-                    <td>{{ apikey.description }}</td>
-                    <td>{{ apikey.last_use }}</td>
-                    <td>
-                        <div class="d-grid">
-                            <button cButton size="xs" class="ripple"
-                                    (click)="editApiKey(apikey.id)">
-                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                                {{ t('Show') }}
-                            </button>
-                        </div>
+              }
+            </tbody>
+          </table>
+        }
 
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-        </c-card-body>
+      </c-card-body>
     </c-card>
 
     <!-- Create new API Key Modal -->
     <c-modal #createNewApiKeyModal fullscreen="sm" id="createNewApiKeyModal" size="lg">
-        <c-modal-header>
-            <h5 cModalTitle>
-                <fa-icon [icon]="['fas', 'key']"></fa-icon>
-                {{ t('Create API key') }}
-            </h5>
-            <button [cModalToggle]="createNewApiKeyModal.id" cButtonClose></button>
-        </c-modal-header>
-        <c-modal-body>
-            <c-row>
-                <c-col>
-                    <div class="mb-3">
-                        <label cLabel for="ApiKeyCreateDesc">
-                            {{ t('Description') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl
-                               id="ApiKeyCreateDesc" required type="text"
-                               name="ApiKeyCreateDesc"
-                               oitcFormError [errors]="ApikeyErrors" errorField="description"
-                               [(ngModel)]="ApikeyCreatePost.description">
-                        <oitc-form-feedback [errors]="ApikeyErrors" errorField="description"></oitc-form-feedback>
+      <c-modal-header>
+        <h5 cModalTitle>
+          <fa-icon [icon]="['fas', 'key']"></fa-icon>
+          {{ t('Create API key') }}
+        </h5>
+        <button [cModalToggle]="createNewApiKeyModal.id" cButtonClose></button>
+      </c-modal-header>
+      <c-modal-body>
+        <c-row>
+          <c-col>
+            <div class="mb-3">
+              <label cLabel for="ApiKeyCreateDesc">
+                {{ t('Description') }}
+                <oitc-required-icon></oitc-required-icon>
+              </label>
+              <input cFormControl
+                id="ApiKeyCreateDesc" required type="text"
+                name="ApiKeyCreateDesc"
+                oitcFormError [errors]="ApikeyErrors" errorField="description"
+                [(ngModel)]="ApikeyCreatePost.description">
+              <oitc-form-feedback [errors]="ApikeyErrors" errorField="description"></oitc-form-feedback>
 
-                    </div>
+            </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="ApiKeyCreateKey">
-                            {{ t('API key (read-only)') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
+            <div class="mb-3">
+              <label cLabel for="ApiKeyCreateKey">
+                {{ t('API key (read-only)') }}
+                <oitc-required-icon></oitc-required-icon>
+              </label>
 
 
-                        <c-input-group>
-                            <input cFormControl
-                                   id="ApiKeyCreateKey" required type="text"
-                                   name="ApiKeyCreateKey"
-                                   readonly
-                                   oitcFormError [errors]="ApikeyErrors" errorField="apikey"
-                                   [(ngModel)]="ApikeyCreatePost.apikey">
-                            <oitc-form-feedback [errors]="ApikeyErrors" errorField="apikey"></oitc-form-feedback>
-                            <oitc-input-copy [copyText]="ApikeyCreatePost.apikey"></oitc-input-copy>
-                        </c-input-group>
+              <c-input-group>
+                <input cFormControl
+                  id="ApiKeyCreateKey" required type="text"
+                  name="ApiKeyCreateKey"
+                  readonly
+                  oitcFormError [errors]="ApikeyErrors" errorField="apikey"
+                  [(ngModel)]="ApikeyCreatePost.apikey">
+                <oitc-form-feedback [errors]="ApikeyErrors" errorField="apikey"></oitc-form-feedback>
+                <oitc-input-copy [copyText]="ApikeyCreatePost.apikey"></oitc-input-copy>
+              </c-input-group>
 
-                    </div>
+            </div>
 
-                    <div class="mb-3">
-                        <c-row>
-                            <c-col xs="12">
-                                <span class="fw-bold">
-                                    <code>curl</code> {{ t('example') }}:
-                                </span>
-                            </c-col>
-                            <c-col xs="12">
-                                    <pre>curl -H \
-"Authorization: X-OITC-API {{ ApikeyCreatePost.apikey }}" \
-"https://{{ hostname }}/hosts/index.json?angular=true"</pre>
-                            </c-col>
-                            <c-col xs="12">
-                                {{ t('For self-signed certificates, add') }}<code>-k</code>.
-                            </c-col>
-                        </c-row>
-                    </div>
-
-                    <div class="mb-3">
-                        <c-row>
-                            <c-col xs="12">
-                                <span class="fw-bold">
-                                    <code>curl</code> {{ t('example with JSON processor') }}:
-                                </span>
-                            </c-col>
-                            <c-col xs="12">
-                                    <pre>curl -k -s -H \
-"Authorization: X-OITC-API {{ ApikeyCreatePost.apikey }}" \
-"https://{{ hostname }}/hosts/index.json?angular=true" |jq .</pre>
-                            </c-col>
-                        </c-row>
-                    </div>
-
-                    <div class="mb-3">
-                        <c-row>
-                            <c-col xs="12">
-                                {{ t('To transfer the API key to your mobile device, scan the QR code.') }}
-                            </c-col>
-                            <c-col xs="12" class="text-center">
-                                <img [src]="ApikeyCreatePost.qrcode" alt="qrcode">
-                            </c-col>
-                        </c-row>
-                    </div>
-
+            <div class="mb-3">
+              <c-row>
+                <c-col xs="12">
+                  <span class="fw-bold">
+                    <code>curl</code> {{ t('example') }}:
+                  </span>
                 </c-col>
-            </c-row>
-        </c-modal-body>
-        <c-modal-footer class="justify-content-start">
-            <button cButton color="primary" class="ripple" (click)="loadNewApiKey()">
-                <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                {{ t('Generate new key') }}
-            </button>
+                <c-col xs="12">
+                  <pre>curl -H \
+                    "Authorization: X-OITC-API {{ ApikeyCreatePost.apikey }}" \
+                  "https://{{ hostname }}/hosts/index.json?angular=true"</pre>
+                </c-col>
+                <c-col xs="12">
+                  {{ t('For self-signed certificates, add') }}<code>-k</code>.
+                </c-col>
+              </c-row>
+            </div>
 
-            <button cButton color="primary" class="ripple ms-auto" (click)="submitNewApiKey()">
-                {{ t('Save') }}
-            </button>
-            <button cButton color="secondary" class="ripple" [cModalToggle]="createNewApiKeyModal.id">
-                {{ t('Cancel') }}
-            </button>
-        </c-modal-footer>
+            <div class="mb-3">
+              <c-row>
+                <c-col xs="12">
+                  <span class="fw-bold">
+                    <code>curl</code> {{ t('example with JSON processor') }}:
+                  </span>
+                </c-col>
+                <c-col xs="12">
+                  <pre>curl -k -s -H \
+                    "Authorization: X-OITC-API {{ ApikeyCreatePost.apikey }}" \
+                  "https://{{ hostname }}/hosts/index.json?angular=true" |jq .</pre>
+                </c-col>
+              </c-row>
+            </div>
+
+            <div class="mb-3">
+              <c-row>
+                <c-col xs="12">
+                  {{ t('To transfer the API key to your mobile device, scan the QR code.') }}
+                </c-col>
+                <c-col xs="12" class="text-center">
+                  <img [src]="ApikeyCreatePost.qrcode" alt="qrcode">
+                </c-col>
+              </c-row>
+            </div>
+
+          </c-col>
+        </c-row>
+      </c-modal-body>
+      <c-modal-footer class="justify-content-start">
+        <button cButton color="primary" class="ripple" (click)="loadNewApiKey()">
+          <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+          {{ t('Generate new key') }}
+        </button>
+
+        <button cButton color="primary" class="ripple ms-auto" (click)="submitNewApiKey()">
+          {{ t('Save') }}
+        </button>
+        <button cButton color="secondary" class="ripple" [cModalToggle]="createNewApiKeyModal.id">
+          {{ t('Cancel') }}
+        </button>
+      </c-modal-footer>
     </c-modal>
 
 
     <!-- Edit API Key Modal -->
     <c-modal #editApiKeyModal fullscreen="sm" id="editApiKeyModal" size="lg">
-        <c-modal-header>
-            <h5 cModalTitle>
-                <fa-icon [icon]="['fas', 'key']"></fa-icon>
-                {{ t('Edit API key') }}
-            </h5>
-            <button [cModalToggle]="editApiKeyModal.id" cButtonClose></button>
-        </c-modal-header>
-        <c-modal-body *ngIf="ApiKeyEditPost">
-            <c-row>
-                <c-col>
-                    <div class="mb-3">
-                        <label cLabel for="ApiKeyEditDesc">
-                            {{ t('Description') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl
-                               id="ApiKeyEditDesc" required type="text"
-                               name="ApiKeyEditDesc"
-                               oitcFormError [errors]="ApikeyEditErrors" errorField="description"
-                               [(ngModel)]="ApiKeyEditPost.description">
-                        <oitc-form-feedback [errors]="ApikeyEditErrors"
-                                            errorField="description"></oitc-form-feedback>
-
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="ApiKeyEditKey">
-                            {{ t('API key (read-only)') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-
-
-                        <c-input-group>
-                            <input cFormControl
-                                   id="ApiKeyEditKey" required type="text"
-                                   name="ApiKeyEditKey"
-                                   readonly
-                                   oitcFormError [errors]="ApikeyEditErrors" errorField="apikey"
-                                   [(ngModel)]="ApiKeyEditPost.apikey">
-                            <oitc-form-feedback [errors]="ApikeyEditErrors"
-                                                errorField="apikey"></oitc-form-feedback>
-                            <oitc-input-copy [copyText]="ApiKeyEditPost.apikey"></oitc-input-copy>
-                        </c-input-group>
-
-                    </div>
-
-                    <div class="mb-3">
-                        <c-row>
-                            <c-col xs="12">
-                                <span class="fw-bold">
-                                    <code>curl</code> {{ t('example') }}:
-                                </span>
-                            </c-col>
-                            <c-col xs="12">
-                                    <pre>curl -H \
-"Authorization: X-OITC-API {{ ApiKeyEditPost.apikey }}" \
-"https://{{ hostname }}/hosts/index.json?angular=true"</pre>
-                            </c-col>
-                            <c-col xs="12">
-                                {{ t('For self-signed certificates, add') }}<code>-k</code>.
-                            </c-col>
-                        </c-row>
-                    </div>
-
-                    <div class="mb-3">
-                        <c-row>
-                            <c-col xs="12">
-                                <span class="fw-bold">
-                                    <code>curl</code> {{ t('example with JSON processor') }}:
-                                </span>
-                            </c-col>
-                            <c-col xs="12">
-                                    <pre>curl -k -s -H \
-"Authorization: X-OITC-API {{ ApiKeyEditPost.apikey }}" \
-"https://{{ hostname }}/hosts/index.json?angular=true" |jq .</pre>
-                            </c-col>
-                        </c-row>
-                    </div>
-
-                    <div class="mb-3">
-                        <c-row>
-                            <c-col xs="12">
-                                {{ t('To transfer the API key to your mobile device, scan the QR code.') }}
-                            </c-col>
-                            <c-col xs="12" class="text-center">
-                                <img [src]="ApiKeyEditQrCode" alt="qrcode">
-                            </c-col>
-                        </c-row>
-                    </div>
-
-                </c-col>
-            </c-row>
+      <c-modal-header>
+        <h5 cModalTitle>
+          <fa-icon [icon]="['fas', 'key']"></fa-icon>
+          {{ t('Edit API key') }}
+        </h5>
+        <button [cModalToggle]="editApiKeyModal.id" cButtonClose></button>
+      </c-modal-header>
+      @if (ApiKeyEditPost) {
+        <c-modal-body>
+          <c-row>
+            <c-col>
+              <div class="mb-3">
+                <label cLabel for="ApiKeyEditDesc">
+                  {{ t('Description') }}
+                  <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                  id="ApiKeyEditDesc" required type="text"
+                  name="ApiKeyEditDesc"
+                  oitcFormError [errors]="ApikeyEditErrors" errorField="description"
+                  [(ngModel)]="ApiKeyEditPost.description">
+                <oitc-form-feedback [errors]="ApikeyEditErrors"
+                errorField="description"></oitc-form-feedback>
+              </div>
+              <div class="mb-3">
+                <label cLabel for="ApiKeyEditKey">
+                  {{ t('API key (read-only)') }}
+                  <oitc-required-icon></oitc-required-icon>
+                </label>
+                <c-input-group>
+                  <input cFormControl
+                    id="ApiKeyEditKey" required type="text"
+                    name="ApiKeyEditKey"
+                    readonly
+                    oitcFormError [errors]="ApikeyEditErrors" errorField="apikey"
+                    [(ngModel)]="ApiKeyEditPost.apikey">
+                  <oitc-form-feedback [errors]="ApikeyEditErrors"
+                  errorField="apikey"></oitc-form-feedback>
+                  <oitc-input-copy [copyText]="ApiKeyEditPost.apikey"></oitc-input-copy>
+                </c-input-group>
+              </div>
+              <div class="mb-3">
+                <c-row>
+                  <c-col xs="12">
+                    <span class="fw-bold">
+                      <code>curl</code> {{ t('example') }}:
+                    </span>
+                  </c-col>
+                  <c-col xs="12">
+                    <pre>curl -H \
+                      "Authorization: X-OITC-API {{ ApiKeyEditPost.apikey }}" \
+                    "https://{{ hostname }}/hosts/index.json?angular=true"</pre>
+                  </c-col>
+                  <c-col xs="12">
+                    {{ t('For self-signed certificates, add') }}<code>-k</code>.
+                  </c-col>
+                </c-row>
+              </div>
+              <div class="mb-3">
+                <c-row>
+                  <c-col xs="12">
+                    <span class="fw-bold">
+                      <code>curl</code> {{ t('example with JSON processor') }}:
+                    </span>
+                  </c-col>
+                  <c-col xs="12">
+                    <pre>curl -k -s -H \
+                      "Authorization: X-OITC-API {{ ApiKeyEditPost.apikey }}" \
+                    "https://{{ hostname }}/hosts/index.json?angular=true" |jq .</pre>
+                  </c-col>
+                </c-row>
+              </div>
+              <div class="mb-3">
+                <c-row>
+                  <c-col xs="12">
+                    {{ t('To transfer the API key to your mobile device, scan the QR code.') }}
+                  </c-col>
+                  <c-col xs="12" class="text-center">
+                    <img [src]="ApiKeyEditQrCode" alt="qrcode">
+                  </c-col>
+                </c-row>
+              </div>
+            </c-col>
+          </c-row>
         </c-modal-body>
-        <c-modal-footer class="justify-content-start" *ngIf="ApiKeyEditPost">
-            <button cButton color="danger" class="ripple" (click)="deleteApiKey(ApiKeyEditPost.id)">
-                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                {{ t('Delete') }}
-            </button>
-
-            <button cButton color="primary" class="ripple ms-auto" (click)="submitEditApiKey()">
-                {{ t('Save') }}
-            </button>
-            <button cButton color="secondary" class="ripple" [cModalToggle]="editApiKeyModal.id">
-                {{ t('Cancel') }}
-            </button>
+      }
+      @if (ApiKeyEditPost) {
+        <c-modal-footer class="justify-content-start">
+          <button cButton color="danger" class="ripple" (click)="deleteApiKey(ApiKeyEditPost.id)">
+            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+            {{ t('Delete') }}
+          </button>
+          <button cButton color="primary" class="ripple ms-auto" (click)="submitEditApiKey()">
+            {{ t('Save') }}
+          </button>
+          <button cButton color="secondary" class="ripple" [cModalToggle]="editApiKeyModal.id">
+            {{ t('Cancel') }}
+          </button>
         </c-modal-footer>
+      }
     </c-modal>
 
-</ng-container>
+  </ng-container>
 
 

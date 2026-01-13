@@ -37,7 +37,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { SatellitesService } from '../satellites.service';
 import { SystemdowntimesService } from '../../../../../pages/systemdowntimes/systemdowntimes.service';
-import { NgIf } from '@angular/common';
+
 import { ObjectTypesEnum } from '../../../../../pages/changelogs/object-types.enum';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import _ from 'lodash';
@@ -74,7 +74,6 @@ import { HistoryService } from '../../../../../history.service';
     FormControlDirective,
     TrueFalseDirective,
     CardFooterComponent,
-    NgIf,
     DurationInputComponent
 ],
     templateUrl: './add-satellite-downtime.component.html',

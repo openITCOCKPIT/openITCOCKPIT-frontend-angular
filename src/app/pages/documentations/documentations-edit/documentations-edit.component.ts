@@ -12,7 +12,7 @@ import {
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -38,15 +38,11 @@ import { BbCodeEditorComponent } from '../bb-code-editor/bb-code-editor.componen
     FaIconComponent,
     NavComponent,
     NavItemComponent,
-    NgIf,
-    NgSwitchCase,
     RowComponent,
     TranslocoDirective,
     XsButtonDirective,
-    NgSwitch,
     RouterLink,
-    BbCodeEditorComponent,
-    NgSwitchDefault
+    BbCodeEditorComponent
 ],
     templateUrl: './documentations-edit.component.html',
     styleUrl: './documentations-edit.component.css',

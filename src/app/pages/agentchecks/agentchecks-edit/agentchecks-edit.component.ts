@@ -31,7 +31,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-agentchecks-edit',
@@ -59,8 +59,7 @@ import { NgIf } from '@angular/common';
     TranslocoDirective,
     XsButtonDirective,
     RouterLink,
-    FormLoaderComponent,
-    NgIf
+    FormLoaderComponent
 ],
     templateUrl: './agentchecks-edit.component.html',
     styleUrl: './agentchecks-edit.component.css',

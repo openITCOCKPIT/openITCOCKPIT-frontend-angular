@@ -34,7 +34,7 @@ import {
     ResourcegroupsSummaryMap,
     ResourceMap
 } from './resourcegroups-summary.interface';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import Sunburst from 'sunburst-chart';
@@ -46,31 +46,30 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
 @Component({
     selector: 'oitc-resourcegroups-summary',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        BackButtonDirective,
-        RowComponent,
-        ColComponent,
-        AsyncPipe,
-        NgIf,
-        BlockLoaderComponent,
-        ButtonGroupComponent,
-        NgClass,
-        LabelLinkComponent,
-        TranslocoPipe,
-        NoRecordsComponent,
-        FaLayersComponent,
-        TextColorDirective
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    BackButtonDirective,
+    RowComponent,
+    ColComponent,
+    AsyncPipe,
+    BlockLoaderComponent,
+    ButtonGroupComponent,
+    NgClass,
+    LabelLinkComponent,
+    TranslocoPipe,
+    NoRecordsComponent,
+    FaLayersComponent,
+    TextColorDirective
+],
     templateUrl: './resourcegroups-summary.component.html',
     styleUrl: './resourcegroups-summary.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

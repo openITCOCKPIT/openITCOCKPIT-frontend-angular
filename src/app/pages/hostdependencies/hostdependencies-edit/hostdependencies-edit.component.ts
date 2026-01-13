@@ -26,7 +26,7 @@ import { FormsModule } from '@angular/forms';
 
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
@@ -73,7 +73,6 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
     MultiSelectComponent,
     NavComponent,
     NavItemComponent,
-    NgIf,
     RequiredIconComponent,
     SelectComponent,
     TrueFalseDirective,

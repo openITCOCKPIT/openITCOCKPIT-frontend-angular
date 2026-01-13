@@ -12,7 +12,7 @@ import {
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -35,8 +35,6 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
     ContainerComponent,
     FaIconComponent,
     NavComponent,
-    NgForOf,
-    NgIf,
     PermissionDirective,
     TableDirective,
     TranslocoDirective,

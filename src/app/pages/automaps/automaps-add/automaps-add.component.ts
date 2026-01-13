@@ -32,7 +32,7 @@ import { AutomapsService } from '../automaps.service';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
+
 
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { AutomapEntity, AutomapsMatchingHostAndServiceCounts } from '../automaps.interface';
@@ -66,7 +66,6 @@ import { HistoryService } from '../../../history.service';
     FormErrorDirective,
     FormFeedbackComponent,
     FormLabelDirective,
-    NgIf,
     RequiredIconComponent,
     SelectComponent,
     FormControlDirective,

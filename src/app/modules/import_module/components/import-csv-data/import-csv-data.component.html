@@ -1,206 +1,256 @@
 <ng-container *transloco="let t">
-    <c-modal
-        #modal='cModal'
-        [keyboard]="true"
-        id="importCsvDataModal"
-        size="xl">
-        <c-modal-header *ngIf="importer">
-            <h5 cModalTitle>
-                <fa-stack [size]="'2xl'" class="me-2">
-                    <fa-icon [icon]="['fas', 'file-csv']"
-                             stackItemSize="1x" class="text-info"></fa-icon>
-                    <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                             stackItemSize="1x"
-                             transform="shrink-8 right-10 down-7"></fa-icon>
-                </fa-stack>
-                <span *ngIf="importer.data_source==='csv_with_header'">
-                    {{ t('Import CSV File with header') }}
-                </span>
-                <span *ngIf="importer.data_source==='csv_without_header'">
-                    {{ t('Import CSV File without header') }}
-                </span>
-            </h5>
-            <button (click)="hideModal()" cButtonClose></button>
-        </c-modal-header>
-        <c-modal-body>
+  <c-modal
+    #modal='cModal'
+    [keyboard]="true"
+    id="importCsvDataModal"
+    size="xl">
+    @if (importer) {
+      <c-modal-header>
+        <h5 cModalTitle>
+          <fa-stack [size]="'2xl'" class="me-2">
+            <fa-icon [icon]="['fas', 'file-csv']"
+            stackItemSize="1x" class="text-info"></fa-icon>
+            <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+              stackItemSize="1x"
+            transform="shrink-8 right-10 down-7"></fa-icon>
+          </fa-stack>
+          @if (importer.data_source==='csv_with_header') {
+            <span>
+              {{ t('Import CSV File with header') }}
+            </span>
+          }
+          @if (importer.data_source==='csv_without_header') {
+            <span>
+              {{ t('Import CSV File without header') }}
+            </span>
+          }
+        </h5>
+        <button (click)="hideModal()" cButtonClose></button>
+      </c-modal-header>
+    }
+    <c-modal-body>
 
-            <c-row class="fieldset-legend-border-bottom">
-                <c-col>
-                    <fieldset>
-                        <legend>
-                            <h5>
-                                {{ t('Overview importer configuration') }}
-                                <span *ngIf="importer">
-                                    <a *oitcPermission="['ImportModule','Importers', 'edit']"
-                                       [routerLink]="['/', 'import_module', 'importers', 'edit', importer.id]">
-                                        {{ importer.name }}
-                                    </a>
-                                    <span *oitcPermission="['ImportModule','Importers', 'edit']; negate: true">
-                                        {{ importer.name }}
-                                    </span>
-                                </span>
-                                <span *ngIf="importer" class="float-end">
-                                    <a *oitcPermission="['ImportModule','Importers', 'edit']"
-                                       class="btn btn-outline-primary btn-sm ripple"
-                                       [routerLink]="['/', 'import_module', 'importers', 'edit', importer.id]">
-                                        {{ t('Go to "Importer configuration"') }}
-                                    </a>
-                                </span>
-                            </h5>
-                            <hr class="border-primary border-dashed">
-                        </legend>
-                        @if (dynamicFieldsNameValue.length > 0) {
-                            <div class="pb-3">
-                                <div *ngFor="let formField of dynamicFieldsNameValue" class="bold">
-                                    {{ formField.label }}:
-                                    @if (formField.type !== 'checkbox') {
-                                        <span class="text-info">
-                                            {{ formField.value }}
-                                        </span>
-                                    } @else {
-                                        <fa-icon [icon]="['fas', 'times']" class="text-danger"
-                                                 *ngIf="formField.value == 0"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'check']" class="text-success"
-                                                 *ngIf="formField.value == 1"></fa-icon>
-                                    }
-                                </div>
-                            </div>
+      <c-row class="fieldset-legend-border-bottom">
+        <c-col>
+          <fieldset>
+            <legend>
+              <h5>
+                {{ t('Overview importer configuration') }}
+                @if (importer) {
+                  <span>
+                    <a *oitcPermission="['ImportModule','Importers', 'edit']"
+                      [routerLink]="['/', 'import_module', 'importers', 'edit', importer.id]">
+                      {{ importer.name }}
+                    </a>
+                    <span *oitcPermission="['ImportModule','Importers', 'edit']; negate: true">
+                      {{ importer.name }}
+                    </span>
+                  </span>
+                }
+                @if (importer) {
+                  <span class="float-end">
+                    <a *oitcPermission="['ImportModule','Importers', 'edit']"
+                      class="btn btn-outline-primary btn-sm ripple"
+                      [routerLink]="['/', 'import_module', 'importers', 'edit', importer.id]">
+                      {{ t('Go to "Importer configuration"') }}
+                    </a>
+                  </span>
+                }
+              </h5>
+              <hr class="border-primary border-dashed">
+            </legend>
+            @if (dynamicFieldsNameValue.length > 0) {
+              <div class="pb-3">
+                @for (formField of dynamicFieldsNameValue; track formField) {
+                  <div class="bold">
+                    {{ formField.label }}:
+                    @if (formField.type !== 'checkbox') {
+                      <span class="text-info">
+                        {{ formField.value }}
+                      </span>
+                    } @else {
+                      @if (formField.value == 0) {
+                        <fa-icon [icon]="['fas', 'times']" class="text-danger"
+                        ></fa-icon>
+                      }
+                      @if (formField.value == 1) {
+                        <fa-icon [icon]="['fas', 'check']" class="text-success"
+                        ></fa-icon>
+                      }
+                    }
+                  </div>
+                }
+              </div>
 
+            }
+          </fieldset>
+        </c-col>
+      </c-row>
+      <c-row>
+        <!-- Dropzone -->
+        <c-row class="mb-3">
+          <c-col [xs]="12" class="text-info py-2">
+            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+            {{ t('Max allowed file size: ') }}
+            {{ maxUploadLimit?.string }}
+          </c-col>
+          <c-col [xs]="12">
+            <div id="csvDropzone" class="dropzone dropzoneStyle">
+              <div class="dz-message">
+                <fa-icon [icon]="['fas', 'cloud-upload-alt']" size="5x"
+                class="mb-3 text-muted"></fa-icon>
+                <br>
+                  <span class="text-uppercase"> {{ t('Drop CSV file here or click to upload.') }} </span>
+                </div>
+              </div>
+            </c-col>
+          </c-row>
+          <!-- Dropzone end -->
+        </c-row>
+        @if (previewData && previewData.headers) {
+          <c-row class="mt-3">
+            <h4>
+              {{ t('CSV Data preview') }}
+            </h4>
+            @if (csvErrors && csvErrors.notValidRawData) {
+              <figure class="text-danger">
+                @if (csvErrors.notValidRawData.error) {
+                  <blockquote class="blockquote">
+                    <p>
+                      <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                      {{ csvErrors.notValidRawData.error }}
+                    </p>
+                  </blockquote>
+                }
+                @if (csvErrors.notValidRawData.description) {
+                  <figcaption class="blockquote-footer mb-1">
+                    {{ csvErrors.notValidRawData.description }}
+                  </figcaption>
+                }
+              </figure>
+            }
+            @if (csvErrors && csvErrors.missingHeaderFields) {
+              <figure class="text-danger">
+                @if (csvErrors.missingHeaderFields.error) {
+                  <blockquote class="blockquote">
+                    <p>
+                      <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                      {{ csvErrors.missingHeaderFields.error }}
+                    </p>
+                  </blockquote>
+                }
+                @if (csvErrors.missingHeaderFields.description) {
+                  <figcaption class="blockquote-footer mb-1">
+                    {{ csvErrors.missingHeaderFields.description }}
+                  </figcaption>
+                }
+              </figure>
+            }
+            @if (csvErrors && !csvErrors.notValidRawData && !csvErrors.missingHeaderFields) {
+              <figure
+                class="text-danger">
+                <blockquote class="blockquote">
+                  <p>
+                    <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                    {{ csvErrors }}
+                  </p>
+                </blockquote>
+              </figure>
+            }
+            <c-col class="help-block text-info pb-2">
+              {{ t('This preview shows maximal 10 first valid records from csv file.') }}
+              <span>
+                {{ t('Furthermore are all hosts displayed and no filter rules get applied.') }}
+              </span>
+              <span class="italic text-warning">
+                {{ t('Lines with duplicate identifiers are automatically ignored') }}
+              </span>
+            </c-col>
+          </c-row>
+          <c-row>
+            <c-col>
+              <table class="mt-2 mb-0 table table-fit" bordered cTable hover striped small>
+                <thead>
+                  <tr>
+                    @for (fieldToMap of headersForTemplate; track fieldToMap) {
+                      <th>
+                        <b>{{ fieldToMap.key }}</b>
+                        <fa-icon [icon]="['fas', 'long-arrow-alt-right']" class="mx-1"></fa-icon>
+                        <span class="text-info italic" [ngClass]="{'text-danger': !fieldToMap.exists}">
+                          {{ fieldToMap.name }}
+                        </span>
+                        @if (!fieldToMap.exists) {
+                          <span class="badge bg-danger">
+                            {{ t('Is missing') }}
+                          </span>
                         }
-                    </fieldset>
-                </c-col>
-            </c-row>
-            <c-row>
-                <!-- Dropzone -->
-                <c-row class="mb-3">
-                    <c-col [xs]="12" class="text-info py-2">
-                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Max allowed file size: ') }}
-                        {{ maxUploadLimit?.string }}
-                    </c-col>
-                    <c-col [xs]="12">
-                        <div id="csvDropzone" class="dropzone dropzoneStyle">
-                            <div class="dz-message">
-                                <fa-icon [icon]="['fas', 'cloud-upload-alt']" size="5x"
-                                         class="mb-3 text-muted"></fa-icon>
-                                <br>
-                                <span class="text-uppercase"> {{ t('Drop CSV file here or click to upload.') }} </span>
-                            </div>
-                        </div>
-                    </c-col>
-                </c-row>
-                <!-- Dropzone end -->
-            </c-row>
-            <ng-container *ngIf="previewData && previewData.headers">
-                <c-row class="mt-3">
-                    <h4>
-                        {{ t('CSV Data preview') }}
-                    </h4>
-                    <figure *ngIf="csvErrors && csvErrors.notValidRawData" class="text-danger">
-                        <blockquote class="blockquote" *ngIf="csvErrors.notValidRawData.error">
-                            <p>
-                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                {{ csvErrors.notValidRawData.error }}
-                            </p>
-                        </blockquote>
-                        <figcaption class="blockquote-footer mb-1" *ngIf="csvErrors.notValidRawData.description">
-                            {{ csvErrors.notValidRawData.description }}
-                        </figcaption>
-                    </figure>
-
-                    <figure *ngIf="csvErrors && csvErrors.missingHeaderFields" class="text-danger">
-                        <blockquote class="blockquote" *ngIf="csvErrors.missingHeaderFields.error">
-                            <p>
-                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                {{ csvErrors.missingHeaderFields.error }}
-                            </p>
-                        </blockquote>
-                        <figcaption class="blockquote-footer mb-1" *ngIf="csvErrors.missingHeaderFields.description">
-                            {{ csvErrors.missingHeaderFields.description }}
-                        </figcaption>
-                    </figure>
-
-                    <figure *ngIf="csvErrors && !csvErrors.notValidRawData && !csvErrors.missingHeaderFields"
-                            class="text-danger">
-                        <blockquote class="blockquote">
-                            <p>
-                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                {{ csvErrors }}
-                            </p>
-                        </blockquote>
-                    </figure>
-
-                    <c-col class="help-block text-info pb-2">
-                        {{ t('This preview shows maximal 10 first valid records from csv file.') }}
-                        <span>
-                            {{ t('Furthermore are all hosts displayed and no filter rules get applied.') }}
-                        </span>
-                        <span class="italic text-warning">
-                            {{ t('Lines with duplicate identifiers are automatically ignored') }}
-
-                        </span>
-                    </c-col>
-                </c-row>
-                <c-row>
-                    <c-col>
-                        <table class="mt-2 mb-0 table table-fit" bordered cTable hover striped small>
-                            <thead>
-                            <tr>
-                                <th *ngFor="let fieldToMap of headersForTemplate">
-                                    <b>{{ fieldToMap.key }}</b>
-                                    <fa-icon [icon]="['fas', 'long-arrow-alt-right']" class="mx-1"></fa-icon>
-                                    <span class="text-info italic" [ngClass]="{'text-danger': !fieldToMap.exists}">
-                                        {{ fieldToMap.name }}
-                                    </span>
-                                    <span class="badge bg-danger" *ngIf="!fieldToMap.exists">
-                                        {{ t('Is missing') }}
-                                    </span>
-                                    <span class="badge bg-success" *ngIf="fieldToMap.exists">
-                                        <fa-icon [icon]="['fas', 'check']"></fa-icon>
-                                    </span>
-                                </th>
-                            </tr>
-                            <tr *ngFor="let previewDataRaw of rawDataForTemplate">
-                                <td *ngFor="let fieldValue of previewDataRaw">
-                                    {{ fieldValue.value }}
-                                </td>
-                            </tr>
-                            <tr *ngIf="rawInvalidDataForTemplate.length> 0"
-                                class="bg-border-bottom-import-error word-break">
-                                <th [colSpan]="numberOfHeaders"
-                                    class="text-danger text-center bg-color-danger-with-opacity font-sm">
-                                    <fa-icon [icon]="['fas', 'angle-double-down']"></fa-icon>
-                                    {{ t('Invalid rows (show maximal 5 rows for preview)') }}
-                                    <fa-icon [icon]="['fas', 'angle-double-down']"></fa-icon>
-                                </th>
-                            </tr>
-                            <tr *ngFor="let previewDataRaw of rawInvalidDataForTemplate">
-                                <td *ngFor="let fieldValue of previewDataRaw">
-                                    <span *ngIf="fieldValue.value === false">
-                                        <fa-icon [icon]="['fas', 'times']" class="text-danger"></fa-icon>
-                                    </span>
-                                    <span *ngIf="fieldValue.value">
-                                        {{ fieldValue.value }}
-                                        <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
-                                    </span>
-                                </td>
-                            </tr>
-                            </thead>
-                        </table>
-                    </c-col>
-                </c-row>
-            </ng-container>
-        </c-modal-body>
-        <c-modal-footer>
-            <button cButton class="ripple" color="primary" *ngIf="previewData && previewData.headers"
-                    [disabled]="showSynchronizingSpinner || showSpinner || errors !== null"
-                    (click)="startDataImport()">
-                <fa-icon [icon]="['fas', 'spinner']" animation="spin" *ngIf="showSpinner"></fa-icon>
-                {{ t('Start data import') }}
-            </button>
-            <button (click)="hideModal()" cButton class="ripple" color="default">
-                {{ t('Close') }}
-            </button>
-        </c-modal-footer>
+                        @if (fieldToMap.exists) {
+                          <span class="badge bg-success">
+                            <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                          </span>
+                        }
+                      </th>
+                    }
+                  </tr>
+                  @for (previewDataRaw of rawDataForTemplate; track previewDataRaw) {
+                    <tr>
+                      @for (fieldValue of previewDataRaw; track fieldValue) {
+                        <td>
+                          {{ fieldValue.value }}
+                        </td>
+                      }
+                    </tr>
+                  }
+                  @if (rawInvalidDataForTemplate.length> 0) {
+                    <tr
+                      class="bg-border-bottom-import-error word-break">
+                      <th [colSpan]="numberOfHeaders"
+                        class="text-danger text-center bg-color-danger-with-opacity font-sm">
+                        <fa-icon [icon]="['fas', 'angle-double-down']"></fa-icon>
+                        {{ t('Invalid rows (show maximal 5 rows for preview)') }}
+                        <fa-icon [icon]="['fas', 'angle-double-down']"></fa-icon>
+                      </th>
+                    </tr>
+                  }
+                  @for (previewDataRaw of rawInvalidDataForTemplate; track previewDataRaw) {
+                    <tr>
+                      @for (fieldValue of previewDataRaw; track fieldValue) {
+                        <td>
+                          @if (fieldValue.value === false) {
+                            <span>
+                              <fa-icon [icon]="['fas', 'times']" class="text-danger"></fa-icon>
+                            </span>
+                          }
+                          @if (fieldValue.value) {
+                            <span>
+                              {{ fieldValue.value }}
+                              <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
+                            </span>
+                          }
+                        </td>
+                      }
+                    </tr>
+                  }
+                </thead>
+              </table>
+            </c-col>
+          </c-row>
+        }
+      </c-modal-body>
+      <c-modal-footer>
+        @if (previewData && previewData.headers) {
+          <button cButton class="ripple" color="primary"
+            [disabled]="showSynchronizingSpinner || showSpinner || errors !== null"
+            (click)="startDataImport()">
+            @if (showSpinner) {
+              <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+            }
+            {{ t('Start data import') }}
+          </button>
+        }
+        <button (click)="hideModal()" cButton class="ripple" color="default">
+          {{ t('Close') }}
+        </button>
+      </c-modal-footer>
     </c-modal>
-</ng-container>
+  </ng-container>

@@ -27,7 +27,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Service } from '../../../pages/wizards/wizards.interface';
@@ -38,28 +38,26 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 @Component({
     selector: 'oitc-wizards-dynamicfields',
     imports: [
-        ColComponent,
-        FaIconComponent,
-        FormCheckInputDirective,
-        FormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        NgForOf,
-        NgIf,
-        NgSelectComponent,
-        RowComponent,
-        TranslocoPipe,
-        TranslocoDirective,
-        FormFeedbackComponent,
-        NgClass,
-        FormCheckLabelDirective,
-        FormCheckComponent,
-        AccordionComponent,
-        AccordionItemComponent,
-        TemplateIdDirective,
-        AccordionButtonDirective,
-        XsButtonDirective
-    ],
+    ColComponent,
+    FaIconComponent,
+    FormCheckInputDirective,
+    FormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NgSelectComponent,
+    RowComponent,
+    TranslocoPipe,
+    TranslocoDirective,
+    FormFeedbackComponent,
+    NgClass,
+    FormCheckLabelDirective,
+    FormCheckComponent,
+    AccordionComponent,
+    AccordionItemComponent,
+    TemplateIdDirective,
+    AccordionButtonDirective,
+    XsButtonDirective
+],
     templateUrl: './wizards-dynamicfields.component.html',
     styleUrl: './wizards-dynamicfields.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

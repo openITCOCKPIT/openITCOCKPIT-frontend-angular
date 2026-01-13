@@ -1,90 +1,102 @@
 <!--
-  ~ Copyright (C) <2015>  <it-novum GmbH>
-  ~
-  ~ This file is dual licensed
-  ~
-  ~ 1.
-  ~     This program is free software: you can redistribute it and/or modify
-  ~     it under the terms of the GNU General Public License as published by
-  ~     the Free Software Foundation, version 3 of the License.
-  ~
-  ~     This program is distributed in the hope that it will be useful,
-  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~     GNU General Public License for more details.
-  ~
-  ~     You should have received a copy of the GNU General Public License
-  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  ~
-  ~ 2.
-  ~     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
-  ~     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
-  ~     License agreement and license key will be shipped with the order
-  ~     confirmation.
-  -->
+~ Copyright (C) <2015>  <it-novum GmbH>
+~
+~ This file is dual licensed
+~
+~ 1.
+~     This program is free software: you can redistribute it and/or modify
+~     it under the terms of the GNU General Public License as published by
+~     the Free Software Foundation, version 3 of the License.
+~
+~     This program is distributed in the hope that it will be useful,
+~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+~     GNU General Public License for more details.
+~
+~     You should have received a copy of the GNU General Public License
+~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+~
+~ 2.
+~     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+~     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+~     License agreement and license key will be shipped with the order
+~     confirmation.
+-->
 
 <ng-container *transloco="let t">
-    <c-modal
-        #modal='cModal'
-        [keyboard]="true"
-        id="deleteBookmarkModal"
-        size="lg"
+  <c-modal
+    #modal='cModal'
+    [keyboard]="true"
+    id="deleteBookmarkModal"
+    size="lg"
     >
-        <c-modal-header class="bg-danger">
-            <h5 cModalTitle class="text-white">
-                {{ t('Attention!') }}
-            </h5>
-            <button (click)="hideModal()" cButtonClose></button>
-        </c-modal-header>
-        <c-modal-body>
-            <c-row>
-                <c-col *ngIf="!deleteMessage" xs="12">
-                    <strong>{{ t('Do you really want delete the selected object?') }}</strong>
-                </c-col>
-                <c-col *ngIf="deleteMessage" xs="12">
-                    <strong>{{ deleteMessage }}</strong>
-                </c-col>
-                <c-col *ngIf="helpMessage" class="help-block" xs="12">
-                    {{ helpMessage }}
-                </c-col>
-            </c-row>
+    <c-modal-header class="bg-danger">
+      <h5 cModalTitle class="text-white">
+        {{ t('Attention!') }}
+      </h5>
+      <button (click)="hideModal()" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
+      <c-row>
+        @if (!deleteMessage) {
+          <c-col xs="12">
+            <strong>{{ t('Do you really want delete the selected object?') }}</strong>
+          </c-col>
+        }
+        @if (deleteMessage) {
+          <c-col xs="12">
+            <strong>{{ deleteMessage }}</strong>
+          </c-col>
+        }
+        @if (helpMessage) {
+          <c-col class="help-block" xs="12">
+            {{ helpMessage }}
+          </c-col>
+        }
+      </c-row>
 
-            <c-row class="pt-2">
-                <c-col *ngFor="let item of items" sm="12">
-                    <ul class="mb-0">
-                        <li>
-                            {{ item.displayName }}
-                            <div *ngIf="hasErrors && currentItemHasErrors(item)">
-                                <div *ngFor="let error of getErrorsForItem(item)" class="text-danger">
-                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                    {{ error.message }}
-                                    <!-- todo implement usedby link -->
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </c-col>
-            </c-row>
+      <c-row class="pt-2">
+        @for (item of items; track item) {
+          <c-col sm="12">
+            <ul class="mb-0">
+              <li>
+                {{ item.displayName }}
+                @if (hasErrors && currentItemHasErrors(item)) {
+                  <div>
+                    @for (error of getErrorsForItem(item); track error) {
+                      <div class="text-danger">
+                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                        {{ error.message }}
+                        <!-- todo implement usedby link -->
+                      </div>
+                    }
+                  </div>
+                }
+              </li>
+            </ul>
+          </c-col>
+        }
+      </c-row>
 
-            <c-row [hidden]="!isDeleting" class="pt-4 pb-2">
-                <c-col sm="12">
-                    <h4>{{ t('Deleting...') }}</h4>
-                </c-col>
-                <c-col sm="12">
-                    <c-progress [animated]="true" [value]="percentage" color="danger" variant="striped"/>
-                </c-col>
-            </c-row>
+      <c-row [hidden]="!isDeleting" class="pt-4 pb-2">
+        <c-col sm="12">
+          <h4>{{ t('Deleting...') }}</h4>
+        </c-col>
+        <c-col sm="12">
+          <c-progress [animated]="true" [value]="percentage" color="danger" variant="striped"/>
+        </c-col>
+      </c-row>
 
 
-        </c-modal-body>
-        <c-modal-footer>
-            <button (click)="delete()" [disabled]="isDeleting" cButton class="ripple" color="danger">
-                <fa-icon [hidden]="!isDeleting" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-                {{ t('Delete') }}
-            </button>
-            <button (click)="hideModal()" cButton class="ripple" color="default">
-                {{ t('Cancel') }}
-            </button>
-        </c-modal-footer>
-    </c-modal>
+    </c-modal-body>
+    <c-modal-footer>
+      <button (click)="delete()" [disabled]="isDeleting" cButton class="ripple" color="danger">
+        <fa-icon [hidden]="!isDeleting" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+        {{ t('Delete') }}
+      </button>
+      <button (click)="hideModal()" cButton class="ripple" color="default">
+        {{ t('Cancel') }}
+      </button>
+    </c-modal-footer>
+  </c-modal>
 </ng-container>

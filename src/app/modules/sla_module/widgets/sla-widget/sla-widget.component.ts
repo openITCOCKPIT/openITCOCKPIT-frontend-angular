@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, effect, inject, OnDe
 import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
 import { SlaWidgetService } from './sla-widget.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SlasService } from '../../pages/slas/slas.service';
 import { AlertComponent, AlertHeadingDirective, ColComponent, FormLabelDirective, RowComponent } from '@coreui/angular';
@@ -17,23 +17,22 @@ import { SlaConfig, SlaHostsAndServices, SlaWidgetResponse } from '../sla-widget
 @Component({
     selector: 'oitc-sla-widget',
     imports: [
-        FaIconComponent,
-        NgIf,
-        TranslocoDirective,
-        RowComponent,
-        ColComponent,
-        LabelLinkComponent,
-        AsyncPipe,
-        AlertComponent,
-        AlertHeadingDirective,
-        FormLabelDirective,
-        SelectComponent,
-        XsButtonDirective,
-        FormsModule,
-        TranslocoPipe,
-        NgClass,
-        RouterLink
-    ],
+    FaIconComponent,
+    TranslocoDirective,
+    RowComponent,
+    ColComponent,
+    LabelLinkComponent,
+    AsyncPipe,
+    AlertComponent,
+    AlertHeadingDirective,
+    FormLabelDirective,
+    SelectComponent,
+    XsButtonDirective,
+    FormsModule,
+    TranslocoPipe,
+    NgClass,
+    RouterLink
+],
     templateUrl: './sla-widget.component.html',
     styleUrl: './sla-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

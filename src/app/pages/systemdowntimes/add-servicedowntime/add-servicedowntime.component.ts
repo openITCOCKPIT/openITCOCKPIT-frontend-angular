@@ -34,7 +34,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { ServicesService } from '../../services/services.service';
 import { SystemdowntimesService } from '../systemdowntimes.service';
-import { NgIf } from '@angular/common';
+
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import _ from 'lodash';
@@ -73,7 +73,6 @@ import { HistoryService } from '../../../history.service';
     FormControlDirective,
     TrueFalseDirective,
     CardFooterComponent,
-    NgIf,
     DurationInputComponent,
     MultiSelectOptgroupComponent
 ],

@@ -21,7 +21,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgForOf } from '@angular/common';
+
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
@@ -44,7 +44,6 @@ import { HistoryService } from '../../../history.service';
     BackButtonDirective,
     RouterLink,
     TranslocoDirective,
-    NgForOf,
     FormControlDirective,
     FormErrorDirective,
     FormFeedbackComponent,

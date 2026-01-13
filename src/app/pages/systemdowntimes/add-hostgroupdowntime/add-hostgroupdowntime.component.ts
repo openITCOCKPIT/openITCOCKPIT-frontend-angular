@@ -35,7 +35,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { HostgroupsService } from '../../hostgroups/hostgroups.service';
 import { SystemdowntimesService } from '../systemdowntimes.service';
-import { NgIf } from '@angular/common';
+
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import _ from 'lodash';
@@ -71,7 +71,6 @@ import { HistoryService } from '../../../history.service';
     FormControlDirective,
     TrueFalseDirective,
     CardFooterComponent,
-    NgIf,
     DurationInputComponent
 ],
     templateUrl: './add-hostgroupdowntime.component.html',

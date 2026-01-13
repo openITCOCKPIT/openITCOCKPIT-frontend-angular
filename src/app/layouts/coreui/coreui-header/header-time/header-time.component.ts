@@ -4,19 +4,18 @@ import { takeUntil } from 'rxjs/operators';
 import { TimezoneService } from '../../../../services/timezone.service';
 import {TimezoneConfiguration } from '../../../../services/timezone.service';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgIf } from '@angular/common';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ButtonDirective, ButtonGroupComponent, TooltipDirective } from '@coreui/angular';
 
 @Component({
   selector: 'oitc-header-time',
     imports: [
-        TranslocoDirective,
-        NgIf,
-        FaIconComponent,
-        ButtonDirective,
-        TooltipDirective
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    ButtonDirective,
+    TooltipDirective
+],
   templateUrl: './header-time.component.html',
   styleUrl: './header-time.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

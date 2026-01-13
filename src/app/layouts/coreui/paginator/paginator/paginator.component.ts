@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { ColComponent, PageItemDirective, PageLinkDirective, PaginationComponent, RowComponent } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgFor, NgIf } from '@angular/common';
+
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Paging } from '../paginator.interface';
 import { faAngleLeft, faAngleRight, faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
@@ -10,18 +10,16 @@ import { LocalNumberPipe } from '../../../../pipes/local-number.pipe';
 @Component({
     selector: 'oitc-paginator',
     imports: [
-        ColComponent,
-        FaIconComponent,
-        NgIf,
-        PageItemDirective,
-        PageLinkDirective,
-        PaginationComponent,
-        RowComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        NgFor,
-        LocalNumberPipe
-    ],
+    ColComponent,
+    FaIconComponent,
+    PageItemDirective,
+    PageLinkDirective,
+    PaginationComponent,
+    RowComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    LocalNumberPipe
+],
     templateUrl: './paginator.component.html',
     styleUrl: './paginator.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

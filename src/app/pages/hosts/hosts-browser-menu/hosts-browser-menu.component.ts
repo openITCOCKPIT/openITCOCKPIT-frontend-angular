@@ -24,7 +24,7 @@ import { Subscription } from 'rxjs';
 import { HostsService } from '../hosts.service';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { HostBrowserMenu } from '../hosts.interface';
-import { AsyncPipe, NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -47,29 +47,28 @@ export interface HostBrowserMenuConfig {
 @Component({
     selector: 'oitc-hosts-browser-menu',
     imports: [
-        ColComponent,
-        RowComponent,
-        FaIconComponent,
-        NgIf,
-        NgClass,
-        CopyToClipboardComponent,
-        TranslocoDirective,
-        SkeletonModule,
-        XsButtonDirective,
-        RouterLink,
-        TooltipDirective,
-        TranslocoPipe,
-        BadgeComponent,
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        PermissionDirective,
-        TitleCasePipe,
-        HoststatusIconComponent,
-        BrowserMenuLoaderComponent,
-        AsyncPipe
-    ],
+    ColComponent,
+    RowComponent,
+    FaIconComponent,
+    NgClass,
+    CopyToClipboardComponent,
+    TranslocoDirective,
+    SkeletonModule,
+    XsButtonDirective,
+    RouterLink,
+    TooltipDirective,
+    TranslocoPipe,
+    BadgeComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    PermissionDirective,
+    TitleCasePipe,
+    HoststatusIconComponent,
+    BrowserMenuLoaderComponent,
+    AsyncPipe
+],
     templateUrl: './hosts-browser-menu.component.html',
     styleUrl: './hosts-browser-menu.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

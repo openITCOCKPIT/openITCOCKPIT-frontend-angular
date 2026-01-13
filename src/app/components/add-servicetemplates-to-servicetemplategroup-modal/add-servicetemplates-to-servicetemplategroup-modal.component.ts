@@ -19,7 +19,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
@@ -30,20 +30,19 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'oitc-add-servicetemplates-to-servicetemplategroup-modal',
     imports: [
-        ButtonCloseDirective,
-        ColComponent,
-        FaIconComponent,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgForOf,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink
-    ],
+    ButtonCloseDirective,
+    ColComponent,
+    FaIconComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink
+],
     templateUrl: './add-servicetemplates-to-servicetemplategroup-modal.component.html',
     styleUrl: './add-servicetemplates-to-servicetemplategroup-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

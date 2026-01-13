@@ -49,7 +49,7 @@ import {
 } from '@coreui/angular';
 
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BookmarksService } from '../filter-bookmark/bookmarks.service';
 import { ServiceIndexFilter } from '../../pages/services/services.interface';
@@ -81,7 +81,6 @@ type NewBookmark = {
     ModalFooterComponent,
     ModalBodyComponent,
     FormsModule,
-    NgIf,
     FormControlDirective,
     NgClass
 ],

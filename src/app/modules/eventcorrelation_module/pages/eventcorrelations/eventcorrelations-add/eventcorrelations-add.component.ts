@@ -26,7 +26,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
@@ -82,8 +82,6 @@ import { EventcorrelationsService } from '../eventcorrelations.service';
     MultiSelectComponent,
     NavComponent,
     NavItemComponent,
-    NgForOf,
-    NgIf,
     NgSelectModule,
     PermissionDirective,
     PriorityComponent,

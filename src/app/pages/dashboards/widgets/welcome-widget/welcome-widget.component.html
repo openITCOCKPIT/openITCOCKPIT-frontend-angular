@@ -1,71 +1,83 @@
 <ng-container *transloco="let t">
-    <div class="d-flex flex-row">
-        <div>
-            @if (welcome && welcome.userImage) {
-                <!-- User with Image -->
-                <p-avatar
-                    class="d-flex"
-                    [image]="welcome.userImage"
-                    size="xlarge"
-                    [styleClass]="'avatar-size'"
-                    shape="circle"
-                ></p-avatar>
-            } @else {
-                <!-- User without Image -->
-                <p-avatar
-                    class="d-flex"
-                    size="xlarge"
-                    [label]="nameInitials"
-                    [styleClass]="'avatar-size'"
-                    [style]="{ 'background-color': 'var(--cui-primary)', color: 'var(--cui-white)' }"
-                    shape="circle"></p-avatar>
-            }
-        </div>
+  <div class="d-flex flex-row">
+    <div>
+      @if (welcome && welcome.userImage) {
+        <!-- User with Image -->
+        <p-avatar
+          class="d-flex"
+          [image]="welcome.userImage"
+          size="xlarge"
+          [styleClass]="'avatar-size'"
+          shape="circle"
+        ></p-avatar>
+      } @else {
+        <!-- User without Image -->
+        <p-avatar
+          class="d-flex"
+          size="xlarge"
+          [label]="nameInitials"
+          [styleClass]="'avatar-size'"
+          [style]="{ 'background-color': 'var(--cui-primary)', color: 'var(--cui-white)' }"
+        shape="circle"></p-avatar>
+      }
+    </div>
 
-        <div class="flex-grow-1 ms-2">
-            <oitc-word-loader *ngIf="!statuscount"></oitc-word-loader>
-            <strong>{{ statuscount?.hoststatusSum | localNumber }}</strong> {{ t('hosts are monitored') }}
+    <div class="flex-grow-1 ms-2">
+      @if (!statuscount) {
+        <oitc-word-loader></oitc-word-loader>
+      }
+      <strong>{{ statuscount?.hoststatusSum | localNumber }}</strong> {{ t('hosts are monitored') }}
 
-            <br>
-            <oitc-word-loader *ngIf="!statuscount"></oitc-word-loader>
-            <strong>{{ statuscount?.servicestatusSum  |localNumber }}</strong> {{ t('services are monitored') }}
-            <br>
-            <br>
+      <br>
+        @if (!statuscount) {
+          <oitc-word-loader></oitc-word-loader>
+        }
+        <strong>{{ statuscount?.servicestatusSum  |localNumber }}</strong> {{ t('services are monitored') }}
+        <br>
+          <br>
             {{ t('Your selected Timezone is ') }}
-            <oitc-word-loader *ngIf="!statuscount" [width]="'3rem'"></oitc-word-loader>
+            @if (!statuscount) {
+              <oitc-word-loader [width]="'3rem'"></oitc-word-loader>
+            }
             {{ welcome?.user_timezone }}
             @if (welcome?.user_timezone !== welcome?.server_timezone) {
-                <br>
+              <br>
                 {{ t('Server timezone is:') }}
-                <oitc-word-loader *ngIf="!statuscount" [width]="'3rem'"></oitc-word-loader>
+                @if (!statuscount) {
+                  <oitc-word-loader [width]="'3rem'"></oitc-word-loader>
+                }
                 {{ welcome?.server_timezone }}
-            }
-            <br>
-            <oitc-word-loader *ngIf="!statuscount" [width]="'3rem'"></oitc-word-loader>
-            {{
+              }
+              <br>
+                @if (!statuscount) {
+                  <oitc-word-loader [width]="'3rem'"></oitc-word-loader>
+                }
+                {{
                 t('{0} version is {1},', {
-                    '0': SystemnameService.systemName$ | async,
-                    '1': welcome?.OPENITCOCKPIT_VERSION
+                '0': SystemnameService.systemName$ | async,
+                '1': welcome?.OPENITCOCKPIT_VERSION
                 })
-            }}
-            <oitc-word-loader *ngIf="!statuscount" [width]="'3rem'"></oitc-word-loader>
+                }}
+                @if (!statuscount) {
+                  <oitc-word-loader [width]="'3rem'"></oitc-word-loader>
+                }
 
-            @if (welcome) {
-                @if (!welcome.hasSubscription) {
+                @if (welcome) {
+                  @if (!welcome.hasSubscription) {
                     {{ t('No active subscription') }}
                     🥺
-                } @else if (welcome.hasSubscription && welcome.isCommunityEdition) {
+                  } @else if (welcome.hasSubscription && welcome.isCommunityEdition) {
                     <span class="text-community">
-                        {{ t('Community Edition') }}
+                      {{ t('Community Edition') }}
                     </span>
-                } @else {
+                  } @else {
                     <span class="text-enterprise">
-                        {{ t('Enterprise Edition') }}
+                      {{ t('Enterprise Edition') }}
                     </span>
+                  }
                 }
-            }
 
-        </div>
+              </div>
 
-    </div>
-</ng-container>
+            </div>
+          </ng-container>

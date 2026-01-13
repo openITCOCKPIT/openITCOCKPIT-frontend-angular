@@ -1,248 +1,257 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                {{ t('Import Module') }}
-            </li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['importmodule','ImportedFiles', 'index']"
-                   [routerLink]="['/', 'import_module', 'ImportedFiles', 'index']">
-                    <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
-                    {{ t('Imported Files') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Overview') }}
-            </li>
-        </ol>
-    </nav>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a>
+      </li>
+      <li class="breadcrumb-item">
+        <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+        {{ t('Import Module') }}
+      </li>
+      <li class="breadcrumb-item">
+        <a *oitcPermission="['importmodule','ImportedFiles', 'index']"
+          [routerLink]="['/', 'import_module', 'ImportedFiles', 'index']">
+          <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+          {{ t('Imported Files') }}
+        </a>
+      </li>
+      <li aria-current="page" class="breadcrumb-item active">
+        <fa-icon [icon]="['fas', 'list']"></fa-icon>
+        {{ t('Overview') }}
+      </li>
+    </ol>
+  </nav>
 
-    <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Imported Files') }}
-                <small class="fw-300">
-                    {{ t('overview') }}
-                </small>
-            </h5>
+  <c-card class="mb-3">
+    <c-card-header>
+      <h5 cCardTitle>{{ t('Imported Files') }}
+        <small class="fw-300">
+          {{ t('overview') }}
+        </small>
+      </h5>
 
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="loadImportedFiles()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                        {{ t('Filter') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
+      <c-nav class="card-toolbar card-header-pills">
+        <c-nav-item class="px-1">
+          <button (click)="loadImportedFiles()" cButton class="ripple" color="default" size="xs">
+            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+            {{ t('Refresh') }}
+          </button>
+        </c-nav-item>
+        <c-nav-item class="px-1">
+          <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+            {{ t('Filter') }}
+          </button>
+        </c-nav-item>
+      </c-nav>
+    </c-card-header>
 
-        <c-card-body>
+    <c-card-body>
 
-            <!-- Filter -->
-            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-                <c-row>
-                    <c-col>
-                        <h6 class="pb-2 mb-3 border-bottom">
-                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                            {{ t('Filter') }}
-                        </h6>
-                    </c-col>
-                </c-row>
-                <form cForm>
-                    <c-row>
-                        <c-col [xs]="12" [md]="6">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[ImportedFiles.filename]']"
-                                       [placeholder]="'Filter by file name' | transloco"
-                                       aria-label="File name"
-                                       cFormControl
-                                       name="File.name"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                    </c-row>
-                    <c-row class="mt-2">
-                        <c-col class="text-end">
-                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                {{ t('Reset filter') }}
-                            </button>
-                        </c-col>
-                    </c-row>
-                </form>
-            </c-container>
-            <!-- End Filter -->
+      <!-- Filter -->
+      <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+        <c-row>
+          <c-col>
+            <h6 class="pb-2 mb-3 border-bottom">
+              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+              {{ t('Filter') }}
+            </h6>
+          </c-col>
+        </c-row>
+        <form cForm>
+          <c-row>
+            <c-col [xs]="12" [md]="6">
+              <c-input-group>
+                <span cInputGroupText>
+                  <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="params['filter[ImportedFiles.filename]']"
+                  [placeholder]="'Filter by file name' | transloco"
+                  aria-label="File name"
+                  cFormControl
+                  name="File.name"
+                  oitcDebounce
+                  type="text"
+                  />
+              </c-input-group>
+            </c-col>
+          </c-row>
+          <c-row class="mt-2">
+            <c-col class="text-end">
+              <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                {{ t('Reset filter') }}
+              </button>
+            </c-col>
+          </c-row>
+        </form>
+      </c-container>
+      <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!importedFiles"></oitc-table-loader>
-            <table *ngIf="importedFiles" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="ImportedFiles.filename">
-                        {{ t('File name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Importers.name">
-                        {{ t('Importer') }}
-                    </th>
-                    <th>
-                        {{ t('User') }}
-                    </th>
-                    <th>
-                        {{ t('Container') }}
-                    </th>
-                    <th scope="col" mat-sort-header="ImportedFiles.file_size">
-                        {{ t('File size') }}
-                    </th>
-                    <th scope="col" mat-sort-header="ImportedFiles.created">
-                        {{ t('Created') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
+      @if (!importedFiles) {
+        <oitc-table-loader></oitc-table-loader>
+      }
+      @if (importedFiles) {
+        <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+          (matSortChange)="onSortChange($event)"
+          [matSortActive]="params.sort" [matSortDirection]="params.direction">
+          <thead>
+            <tr>
+              <th class="width-50 text-center" scope="col">
+                <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+              </th>
+              <th scope="col" mat-sort-header="ImportedFiles.filename">
+                {{ t('File name') }}
+              </th>
+              <th scope="col" mat-sort-header="Importers.name">
+                {{ t('Importer') }}
+              </th>
+              <th>
+                {{ t('User') }}
+              </th>
+              <th>
+                {{ t('Container') }}
+              </th>
+              <th scope="col" mat-sort-header="ImportedFiles.file_size">
+                {{ t('File size') }}
+              </th>
+              <th scope="col" mat-sort-header="ImportedFiles.created">
+                {{ t('Created') }}
+              </th>
+              <th class="text-center width-50" scope="col">
+                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (importedFile of importedFiles.importedfiles; track importedFile) {
+              <tr>
+                <td class="text-center">
+                  <oitc-item-select
+                    *oitcPermission="['importmodule','ImportedFiles', 'delete']"
+                    [disabled]="!importedFile.allowEdit"
+                  [item]="importedFile"></oitc-item-select>
+                </td>
+                <td>
+                  <oitc-label-link [objectId]="importedFile.id"
+                    [route]="'/import_module/ImportedFiles/view'"
+                    [permissions]="'importmodule.ImportedFiles.view'">
+                    {{ importedFile.filename }}
+                  </oitc-label-link>
+                </td>
+                <td>
+                  @if (!importedFile.importer.name) {
+                    <fa-icon [icon]="['fas', 'times']" class="text-danger"
+                    ></fa-icon>
+                  }
+                  {{ importedFile.importer.name }}
+                </td>
+                <td>
+                  @if (!importedFile.full_name) {
+                    <fa-icon [icon]="['fas', 'times']" class="text-danger"
+                    ></fa-icon>
+                  }
+                  {{ importedFile.full_name }}
+                </td>
+                <td>
+                  @if (!importedFile.container) {
+                    <fa-icon [icon]="['fas', 'times']" class="text-danger"
+                    ></fa-icon>
+                  }
+                  {{ importedFile.container }}
+                </td>
+                <td>
+                  {{ importedFile.humanFilesize }}
+                </td>
+                <td>
+                  {{ importedFile.created }}
+                </td>
+                <td class="width-50">
+                  <oitc-actions-button [permission]="'ImportModule.ImportedFiles.view'"
+                    [url]="'/import_module/ImportedFiles/view/' + importedFile.id"
+                    [allowEdit]="importedFile.allowEdit"
+                    [icon]="['fas', 'eye']">
+                    <oitc-actions-button-element [permission]="'ImportModule.ImportedFiles.view'"
+                      [url]="'/import_module/ImportedFiles/view/' + importedFile.id">
+                      <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                      {{ t('View') }}
+                    </oitc-actions-button-element>
+                    <li *oitcPermission="['importmodule','ImportedFiles', 'download']">
+                      <a cDropdownItem [href]="'/import_module/ImportedFiles/download/'+importedFile.id">
+                        <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                        {{ t('Download') }}
+                      </a></li>
+                      @if (importedFile.allowEdit) {
+                        <li cDropdownDivider></li>
+                      }
+                      @if (importedFile.allowEdit) {
+                        <oitc-actions-button-element (click)="toggleDeleteAllModal(importedFile)"
+                          [permission]="'ImportModule.ImportedFiles.delete'"
+                          >
+                          <span class="text-danger">
+                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                            {{ t('Delete') }}
+                          </span>
+                        </oitc-actions-button-element>
+                      }
+                    </oitc-actions-button>
+                  </td>
                 </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let importedFile of importedFiles.importedfiles">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['importmodule','ImportedFiles', 'delete']"
-                            [disabled]="!importedFile.allowEdit"
-                            [item]="importedFile"></oitc-item-select>
-                    </td>
-
-                    <td>
-                        <oitc-label-link [objectId]="importedFile.id"
-                                         [route]="'/import_module/ImportedFiles/view'"
-                                         [permissions]="'importmodule.ImportedFiles.view'">
-                            {{ importedFile.filename }}
-                        </oitc-label-link>
-                    </td>
-
-                    <td>
-                        <fa-icon [icon]="['fas', 'times']" class="text-danger"
-                                 *ngIf="!importedFile.importer.name"></fa-icon>
-                        {{ importedFile.importer.name }}
-                    </td>
-
-                    <td>
-                        <fa-icon [icon]="['fas', 'times']" class="text-danger"
-                                 *ngIf="!importedFile.full_name"></fa-icon>
-                        {{ importedFile.full_name }}
-                    </td>
-
-                    <td>
-                        <fa-icon [icon]="['fas', 'times']" class="text-danger"
-                                 *ngIf="!importedFile.container"></fa-icon>
-                        {{ importedFile.container }}
-                    </td>
-
-                    <td>
-                        {{ importedFile.humanFilesize }}
-                    </td>
-
-                    <td>
-                        {{ importedFile.created }}
-                    </td>
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'ImportModule.ImportedFiles.view'"
-                                             [url]="'/import_module/ImportedFiles/view/' + importedFile.id"
-                                             [allowEdit]="importedFile.allowEdit"
-                                             [icon]="['fas', 'eye']">
-                            <oitc-actions-button-element [permission]="'ImportModule.ImportedFiles.view'"
-                                                         [url]="'/import_module/ImportedFiles/view/' + importedFile.id">
-                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                                {{ t('View') }}
-                            </oitc-actions-button-element>
-
-                            <li *oitcPermission="['importmodule','ImportedFiles', 'download']">
-                                <a cDropdownItem [href]="'/import_module/ImportedFiles/download/'+importedFile.id">
-                                    <fa-icon [icon]="['fas', 'download']"></fa-icon>
-                                    {{ t('Download') }}
-                                </a></li>
-
-                            <li cDropdownDivider *ngIf="importedFile.allowEdit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(importedFile)"
-                                                         [permission]="'ImportModule.ImportedFiles.delete'"
-                                                         *ngIf="importedFile.allowEdit">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+              }
+            </tbody>
+          </table>
+        }
 
 
-            <oitc-no-records
-                *ngIf="importedFiles && importedFiles.importedfiles.length === 0"></oitc-no-records>
-            <ng-container *ngIf="importedFiles && importedFiles.importedfiles">
-                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                             [fluid]="true">
-                    <c-row>
-                        <c-col>
-                            <oitc-select-all
-                                [itemsCount]="importedFiles.importedfiles.length"></oitc-select-all>
-                        </c-col>
-                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                            <div class="btn-group d-flex flex-row" role="group">
-                                <button (click)="toggleDeleteAllModal()"
-                                        class="btn btn-outline-danger col-3 border-0"
-                                        type="button">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete selected') }}
-                                </button>
-                            </div>
-                        </c-col>
-                    </c-row>
-                </c-container>
+        @if (importedFiles && importedFiles.importedfiles.length === 0) {
+          <oitc-no-records
+          ></oitc-no-records>
+        }
+        @if (importedFiles && importedFiles.importedfiles) {
+          <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+            [fluid]="true">
+            <c-row>
+              <c-col>
+                <oitc-select-all
+                [itemsCount]="importedFiles.importedfiles.length"></oitc-select-all>
+              </c-col>
+              <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                <div class="btn-group d-flex flex-row" role="group">
+                  <button (click)="toggleDeleteAllModal()"
+                    class="btn btn-outline-danger col-3 border-0"
+                    type="button">
+                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    {{ t('Delete selected') }}
+                  </button>
+                </div>
+              </c-col>
+            </c-row>
+          </c-container>
+          <c-container
+            [fluid]="true">
+            <c-row>
+              <c-col>
+                @if (importedFiles) {
+                  <oitc-paginate-or-scroll
+                    (paginatorChange)="onPaginatorChange($event)"
+                  [paginateOrScroll]="importedFiles"></oitc-paginate-or-scroll>
+                }
+              </c-col>
+            </c-row>
+          </c-container>
+        }
 
-                <c-container
-                    [fluid]="true">
-                    <c-row>
-                        <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="importedFiles"
-                                [paginateOrScroll]="importedFiles"></oitc-paginate-or-scroll>
-                        </c-col>
-                    </c-row>
-                </c-container>
-            </ng-container>
+      </c-card-body>
 
-        </c-card-body>
-
-        <c-card-footer>
-            &nbsp;
-        </c-card-footer>
+      <c-card-footer>
+        &nbsp;
+      </c-card-footer>
 
     </c-card>
-</ng-container>
+  </ng-container>
 
 
-<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+  <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

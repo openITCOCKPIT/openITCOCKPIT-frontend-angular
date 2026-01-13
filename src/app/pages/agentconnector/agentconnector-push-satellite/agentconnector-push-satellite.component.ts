@@ -3,7 +3,7 @@ import { ActionsButtonComponent } from '../../../components/actions-button/actio
 import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   CardBodyComponent,
   CardComponent,
@@ -90,8 +90,6 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     MatSortHeader,
     NavComponent,
     NavItemComponent,
-    NgForOf,
-    NgIf,
     NoRecordsComponent,
     PaginateOrScrollComponent,
     PermissionDirective,

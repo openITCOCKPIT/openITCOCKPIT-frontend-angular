@@ -20,23 +20,22 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-isar-flow-timepicker',
     imports: [
-        ColComponent,
-        DropdownComponent,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        FaIconComponent,
-        NgForOf,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        NgClass
-    ],
+    ColComponent,
+    DropdownComponent,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FaIconComponent,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    NgClass
+],
     templateUrl: './isar-flow-timepicker.component.html',
     styleUrl: './isar-flow-timepicker.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

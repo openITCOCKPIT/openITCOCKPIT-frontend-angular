@@ -14,7 +14,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgForOf } from '@angular/common';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -32,28 +32,27 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-usergroups-copy',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormLoaderComponent,
-        NavComponent,
-        NgForOf,
-        PaginatorModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        FormsModule
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormLoaderComponent,
+    NavComponent,
+    PaginatorModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FormsModule
+],
     templateUrl: './usergroups-copy.component.html',
     styleUrl: './usergroups-copy.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

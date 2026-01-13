@@ -37,7 +37,7 @@ import {
     SystemdowntimeHostIndexRoot
 } from '../../systemdowntimes/systemdowntimes.interface';
 import { Subscription } from 'rxjs';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { SystemdowntimesService } from '../systemdowntimes.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -83,8 +83,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
     TranslocoPipe,
     MatSort,
     MatSortHeader,
-    NgForOf,
-    NgIf,
     TableDirective,
     ItemSelectComponent,
     NoRecordsComponent,
