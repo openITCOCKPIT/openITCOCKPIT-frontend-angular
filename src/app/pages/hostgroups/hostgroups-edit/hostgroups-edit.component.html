@@ -1,179 +1,179 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['hostgroups', 'index']" [routerLink]="['/', 'hostgroups', 'index']">
-            <fa-icon [icon]="['fas', 'server']"></fa-icon>
-            {{ t('Host groups') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-          {{ t('Edit') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['hostgroups', 'index']" [routerLink]="['/', 'hostgroups', 'index']">
+                    <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                    {{ t('Host groups') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
     </nav>
 
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
 
     @if (post) {
-      <form cForm (ngSubmit)="submit()">
-        <c-card class="mb-3">
-          <c-card-header>
-            <h5 cCardTitle>
-              {{ t('Edit host group:') }}
-              <small class="fw-300">
-                {{ post.container.name }}
-              </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-              <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
-            </c-nav>
-            <c-nav class="card-toolbar card-header-pills">
-              <c-nav-item class="px-1">
-                <button [fallbackUrl]="['hostgroups', 'index']" cButton class="ripple" color="default"
-                  oitcBackButton
-                  size="xs">
-                  <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                  {{ t('Back') }}
-                </button>
-              </c-nav-item>
-            </c-nav>
-          </c-card-header>
-          <c-card-body>
-            <div class="mb-3">
-              <label cLabel for="post.container.parent_id">
-                {{ t('Container') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <oitc-select
-                name="post.container.parent_id"
-                id="post.container.parent_id"
-                [(ngModel)]="post.container.parent_id"
-                optionValue="key"
-                optionLabel="value"
-                [options]="containers"
-                (onChange)="onContainerChange()"
-                oitcFormError [errors]="errors" errorField="parent_id">
-              </oitc-select>
-              <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
-              @if (post.container.parent_id === null) {
-                <div class="text-warning-glow pt-1">
-                  {{ t('Please select a container.') }}
-                </div>
-              }
-            </div>
-            <div class="mb-3">
-              <label cLabel for="post.container.name">
-                {{ t('Name') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <input cFormControl
-                id="post.container.name"
-                required
-                type="text"
-                name="post.container.name"
-                oitcFormError [errors]="errors" errorField="container.name"
-                [(ngModel)]="post.container.name">
-              <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="description">
-                {{ t('Description') }}
-              </label>
-              <input cFormControl
-                id="description"
-                type="text"
-                name="description"
-                oitcFormError [errors]="errors" errorField="description"
-                [(ngModel)]="post.description">
-              <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="hostgroup_url">
-                {{ t('Host group URL') }}
-              </label>
-              <input cFormControl
-                id="hostgroup_url"
-                type="text"
-                name="hostgroup_url"
-                oitcFormError [errors]="errors" errorField="hostgroup_url"
-                [(ngModel)]="post.hostgroup_url">
-              <oitc-form-feedback [errors]="errors" errorField="hostgroup_url"></oitc-form-feedback>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="HostgroupTags">
-                {{ t('Tags') }}
-              </label>
-              <c-input-group>
-                <ng-select
-                  id="HostgroupTags"
-                  name="HostgroupTags"
-                  [items]="[]"
-                  [(ngModel)]="tagsForSelect"
-                  [addTag]="true"
-                  [multiple]="true"
-                  [selectOnTab]="true"
-                  [placeholder]="'Add tags'|transloco"
-                  [isOpen]="false"
-                  oitcFormError [errors]="errors" errorField="tags">
-                </ng-select>
-              </c-input-group>
-              <oitc-form-feedback [errors]="errors"
-              errorField="tags"></oitc-form-feedback>
-              <div class="help-block">
-                {{ t('Press return to separate tags') }}
-              </div>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="post.hosts._ids">
-                {{ t('Hosts') }}
-              </label>
-              <oitc-multi-select
-                name="post.hosts._ids"
-                id="post.hosts._ids"
-                [(ngModel)]="post.hosts._ids"
-                optionValue="key"
-                optionLabel="value"
-                [searchCallback]="loadHosts"
-                [options]="hosts"
-                oitcFormError [errors]="errors" errorField="hosts">
-              </oitc-multi-select>
-              <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="post.hosttemplates._ids">
-                {{ t('Host templates') }}
-              </label>
-              <oitc-multi-select
-                name="post.hosttemplates._ids"
-                id="post.hosttemplates._ids"
-                [(ngModel)]="post.hosttemplates._ids"
-                optionValue="key"
-                optionLabel="value"
-                [searchCallback]="loadHosttemplates"
-                [options]="hosttemplates"
-                oitcFormError [errors]="errors" errorField="hosttemplates">
-              </oitc-multi-select>
-              <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
-            </div>
-          </c-card-body>
-          <c-card-footer class="text-end">
-            <button cButton class="ripple" color="primary" type="submit">
-              {{ t('Update host group') }}
-            </button>
-            <button [fallbackUrl]="['hostgroups', 'index']" cButton class="ms-1 ripple" color="default"
-              oitcBackButton
-              type="button">
-              {{ t('Cancel') }}
-            </button>
-          </c-card-footer>
-        </c-card>
-      </form>
+        <form cForm (ngSubmit)="submit()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Edit host group:') }}
+                        <small class="fw-300">
+                            {{ post.container.name }}
+                        </small>
+                    </h5>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
+                    </c-nav>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['hostgroups', 'index']" cButton class="ripple" color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
+                    <div class="mb-3">
+                        <label cLabel for="post.container.parent_id">
+                            {{ t('Container') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-select
+                            name="post.container.parent_id"
+                            id="post.container.parent_id"
+                            [(ngModel)]="post.container.parent_id"
+                            optionValue="key"
+                            optionLabel="value"
+                            [options]="containers"
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="parent_id">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
+                        @if (post.container.parent_id === null) {
+                            <div class="text-warning-glow pt-1">
+                                {{ t('Please select a container.') }}
+                            </div>
+                        }
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="post.container.name">
+                            {{ t('Name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               id="post.container.name"
+                               required
+                               type="text"
+                               name="post.container.name"
+                               oitcFormError [errors]="errors" errorField="container.name"
+                               [(ngModel)]="post.container.name">
+                        <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="description">
+                            {{ t('Description') }}
+                        </label>
+                        <input cFormControl
+                               id="description"
+                               type="text"
+                               name="description"
+                               oitcFormError [errors]="errors" errorField="description"
+                               [(ngModel)]="post.description">
+                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="hostgroup_url">
+                            {{ t('Host group URL') }}
+                        </label>
+                        <input cFormControl
+                               id="hostgroup_url"
+                               type="text"
+                               name="hostgroup_url"
+                               oitcFormError [errors]="errors" errorField="hostgroup_url"
+                               [(ngModel)]="post.hostgroup_url">
+                        <oitc-form-feedback [errors]="errors" errorField="hostgroup_url"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="HostgroupTags">
+                            {{ t('Tags') }}
+                        </label>
+                        <c-input-group>
+                            <ng-select
+                                id="HostgroupTags"
+                                name="HostgroupTags"
+                                [items]="[]"
+                                [(ngModel)]="tagsForSelect"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                [placeholder]="'Add tags'|transloco"
+                                [isOpen]="false"
+                                oitcFormError [errors]="errors" errorField="tags">
+                            </ng-select>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="tags"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Press return to separate tags') }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="post.hosts._ids">
+                            {{ t('Hosts') }}
+                        </label>
+                        <oitc-multi-select
+                            name="post.hosts._ids"
+                            id="post.hosts._ids"
+                            [(ngModel)]="post.hosts._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadHosts"
+                            [options]="hosts"
+                            oitcFormError [errors]="errors" errorField="hosts">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="post.hosttemplates._ids">
+                            {{ t('Host templates') }}
+                        </label>
+                        <oitc-multi-select
+                            name="post.hosttemplates._ids"
+                            id="post.hosttemplates._ids"
+                            [(ngModel)]="post.hosttemplates._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadHosttemplates"
+                            [options]="hosttemplates"
+                            oitcFormError [errors]="errors" errorField="hosttemplates">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors" errorField="parent_id"></oitc-form-feedback>
+                    </div>
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Update host group') }}
+                    </button>
+                    <button [fallbackUrl]="['hostgroups', 'index']" cButton class="ms-1 ripple" color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        </form>
     }
-  </ng-container>
+</ng-container>

@@ -1,51 +1,51 @@
 <ng-container *transloco="let t">
-  <c-modal
-    #modal='cModal'
-    [keyboard]="true"
-    id="synchronizeGrafanaModal"
-    size="lg"
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="synchronizeGrafanaModal"
+        size="lg"
     >
-    <c-modal-header class="text-bg-primary">
-      <h5 cModalTitle class="text-white">
-        {{ t('Synchronize with Grafana') }}
-      </h5>
-      <button (click)="hideModal()" cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body>
+        <c-modal-header class="text-bg-primary">
+            <h5 cModalTitle class="text-white">
+                {{ t('Synchronize with Grafana') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
 
-      <c-row class="pt-2">
-        @for (item of items; track item; let i = $index) {
-          <c-col sm="12">
-            <ul class="mb-0">
-              <li>
-                {{ item.displayName }}
-                @if (hasErrors && errors[i]) {
-                  <div class="text-danger">
-                    <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                    {{ errors[i].message }}
-                  </div>
+            <c-row class="pt-2">
+                @for (item of items; track item; let i = $index) {
+                    <c-col sm="12">
+                        <ul class="mb-0">
+                            <li>
+                                {{ item.displayName }}
+                                @if (hasErrors && errors[i]) {
+                                    <div class="text-danger">
+                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                        {{ errors[i].message }}
+                                    </div>
+                                }
+                            </li>
+                        </ul>
+                    </c-col>
                 }
-              </li>
-            </ul>
-          </c-col>
-        }
-      </c-row>
+            </c-row>
 
-      <c-row [hidden]="!isSynchronizing" class="pt-4 pb-2">
-        <c-col sm="12">
-          <h4>{{ t('Synchronizing...') }}</h4>
-        </c-col>
-        <c-col sm="12">
-          <c-progress [animated]="true" [value]="percentage" color="primary" variant="striped"/>
-        </c-col>
-      </c-row>
+            <c-row [hidden]="!isSynchronizing" class="pt-4 pb-2">
+                <c-col sm="12">
+                    <h4>{{ t('Synchronizing...') }}</h4>
+                </c-col>
+                <c-col sm="12">
+                    <c-progress [animated]="true" [value]="percentage" color="primary" variant="striped"/>
+                </c-col>
+            </c-row>
 
 
-    </c-modal-body>
-    <c-modal-footer>
-      <button (click)="hideModal()" cButton class="ripple" color="default">
-        {{ t('Close') }}
-      </button>
-    </c-modal-footer>
-  </c-modal>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
 </ng-container>

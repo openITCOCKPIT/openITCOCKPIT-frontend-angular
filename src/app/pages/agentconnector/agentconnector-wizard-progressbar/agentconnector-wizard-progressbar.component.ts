@@ -8,11 +8,11 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 @Component({
     selector: 'oitc-agentconnector-wizard-progressbar',
     imports: [
-    TranslocoDirective,
-    NgClass,
-    FaIconComponent,
-    TranslocoPipe
-],
+        TranslocoDirective,
+        NgClass,
+        FaIconComponent,
+        TranslocoPipe
+    ],
     templateUrl: './agentconnector-wizard-progressbar.component.html',
     styleUrl: './agentconnector-wizard-progressbar.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

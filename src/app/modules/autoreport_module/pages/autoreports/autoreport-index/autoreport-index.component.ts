@@ -53,49 +53,49 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 
 @Component({
-  selector: 'oitc-autoreport-index',
+    selector: 'oitc-autoreport-index',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    ContainerComponent,
-    ColComponent,
-    RowComponent,
-    FormDirective,
-    FormsModule,
-    DebounceDirective,
-    FormControlDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    TranslocoPipe,
-    TableLoaderComponent,
-    MatSort,
-    TableDirective,
-    MatSortHeader,
-    ItemSelectComponent,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    SelectAllComponent,
-    DeleteAllModalComponent,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    DropdownDividerDirective,
-    DecimalPipe
-],
-  templateUrl: './autoreport-index.component.html',
-  styleUrl: './autoreport-index.component.css',
-    providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: AutoreportsService } // Inject the CommandsService into the DeleteAllModalComponent
+        TranslocoDirective,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        ContainerComponent,
+        ColComponent,
+        RowComponent,
+        FormDirective,
+        FormsModule,
+        DebounceDirective,
+        FormControlDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TranslocoPipe,
+        TableLoaderComponent,
+        MatSort,
+        TableDirective,
+        MatSortHeader,
+        ItemSelectComponent,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        SelectAllComponent,
+        DeleteAllModalComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        DropdownDividerDirective,
+        DecimalPipe
     ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './autoreport-index.component.html',
+    styleUrl: './autoreport-index.component.css',
+    providers: [
+        {provide: DELETE_SERVICE_TOKEN, useClass: AutoreportsService} // Inject the CommandsService into the DeleteAllModalComponent
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutoreportIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -118,6 +118,7 @@ export class AutoreportIndexComponent implements OnInit, OnDestroy, IndexPage {
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
+
     public toggleFilter(): void {
         this.hideFilter = !this.hideFilter;
     }

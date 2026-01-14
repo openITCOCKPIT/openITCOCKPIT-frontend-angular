@@ -19,17 +19,17 @@ import { SupportsService } from '../supports.service';
 @Component({
     selector: 'oitc-supports-issue',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    RowComponent,
-    ColComponent
-],
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        RowComponent,
+        ColComponent
+    ],
     templateUrl: './supports-issue.component.html',
     styleUrl: './supports-issue.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

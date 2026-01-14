@@ -1,6 +1,6 @@
 // INDEX PARAMS
-import {PaginateOrScroll} from '../../../../layouts/coreui/paginator/paginator.interface';
-import {CalendarEvent} from '../../../../pages/calendars/calendars.interface';
+import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
 
 export interface ChangeCalendarsIndexParams {
 // &filter%5BChangecalendars.description%5D=b&filter%5BChangecalendars.name%5D=a&page=1&scroll=true&sort=Changecalendars.name

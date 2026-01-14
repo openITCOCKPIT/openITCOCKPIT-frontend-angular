@@ -30,19 +30,19 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'oitc-add-servicetemplates-to-servicetemplategroup-modal',
     imports: [
-    ButtonCloseDirective,
-    ColComponent,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink
-],
+        ButtonCloseDirective,
+        ColComponent,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink
+    ],
     templateUrl: './add-servicetemplates-to-servicetemplategroup-modal.component.html',
     styleUrl: './add-servicetemplates-to-servicetemplategroup-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

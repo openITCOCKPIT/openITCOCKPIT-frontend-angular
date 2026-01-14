@@ -1,60 +1,61 @@
 @if (widget) {
-  <div class="d-flex h-100 flex-column" #calendarContainer>
-    <c-row class="h-100">
-      <c-col [xs]="4" [md]="4" [lg]="4" class="flex-1">
-        @if (widget) {
-          <c-card class="h-100">
-            <c-card-header cBgColor="primary"
-              class="text-white h-25 flex-align-items-center d-flex justify-content-center">
-              {{ dateDetails?.monthName }}
-            </c-card-header>
-            <c-card-body [id]="'day-'+widget.id" class="flex-align-items-center justify-content-center d-flex p-0"
-              [style.font-size.px]="fontSize">
-              {{ dateDetails?.dayNumber }}
-            </c-card-body>
-            <c-card-footer cBgColor="primary"
-              class="text-white text-center flex-align-items-center justify-content-center d-flex">
-              <small>{{ dateDetails?.weekday }}</small>
-            </c-card-footer>
-          </c-card>
-        }
-      </c-col>
-      <c-col [xs]="8" [md]="8" [lg]="8">
-        <table cTable bordered hover small [striped]="true" class="small pt-1 h-100">
-          <thead>
-            @if (dateDetails?.weekdayNames) {
-              <tr>
-                <th></th>
-                @for (weekName of Object.values(dateDetails?.weekdayNames ?? {}); track weekName) {
-                  <th>
-                    {{ weekName }}
-                  </th>
+    <div class="d-flex h-100 flex-column" #calendarContainer>
+        <c-row class="h-100">
+            <c-col [xs]="4" [md]="4" [lg]="4" class="flex-1">
+                @if (widget) {
+                    <c-card class="h-100">
+                        <c-card-header cBgColor="primary"
+                                       class="text-white h-25 flex-align-items-center d-flex justify-content-center">
+                            {{ dateDetails?.monthName }}
+                        </c-card-header>
+                        <c-card-body [id]="'day-'+widget.id"
+                                     class="flex-align-items-center justify-content-center d-flex p-0"
+                                     [style.font-size.px]="fontSize">
+                            {{ dateDetails?.dayNumber }}
+                        </c-card-body>
+                        <c-card-footer cBgColor="primary"
+                                       class="text-white text-center flex-align-items-center justify-content-center d-flex">
+                            <small>{{ dateDetails?.weekday }}</small>
+                        </c-card-footer>
+                    </c-card>
                 }
-              </tr>
-            }
-          </thead>
-          <tbody>
-            @for (week of dateDetails?.days; track week) {
-              <tr>
-                <th class="text-center">{{ week.cw }}</th>
-                @for (dayDetail of week.days; track dayDetail) {
-                  <td
-                        [ngClass]="{'bg-primary':  dayDetail.weekday === 6 || dayDetail.weekday === 7,
+            </c-col>
+            <c-col [xs]="8" [md]="8" [lg]="8">
+                <table cTable bordered hover small [striped]="true" class="small pt-1 h-100">
+                    <thead>
+                        @if (dateDetails?.weekdayNames) {
+                            <tr>
+                                <th></th>
+                                @for (weekName of Object.values(dateDetails?.weekdayNames ?? {}); track weekName) {
+                                    <th>
+                                        {{ weekName }}
+                                    </th>
+                                }
+                            </tr>
+                        }
+                    </thead>
+                    <tbody>
+                        @for (week of dateDetails?.days; track week) {
+                            <tr>
+                                <th class="text-center">{{ week.cw }}</th>
+                                @for (dayDetail of week.days; track dayDetail) {
+                                    <td
+                                        [ngClass]="{'bg-primary':  dayDetail.weekday === 6 || dayDetail.weekday === 7,
                         'bg-opacity-25': dayDetail.weekday === 6, 'bg-opacity-50': dayDetail.weekday === 7}">
-                    @if (dayDetail.day === dateDetails?.dayNumber) {
-                      <c-badge cBgColor="primary">
-                        {{ dayDetail.day }}
-                      </c-badge>
-                    } @else {
-                      {{ dayDetail.day }}
-                    }
-                  </td>
-                }
-              </tr>
-            }
-          </tbody>
-        </table>
-      </c-col>
-    </c-row>
-  </div>
+                                        @if (dayDetail.day === dateDetails?.dayNumber) {
+                                            <c-badge cBgColor="primary">
+                                                {{ dayDetail.day }}
+                                            </c-badge>
+                                        } @else {
+                                            {{ dayDetail.day }}
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </c-col>
+        </c-row>
+    </div>
 }

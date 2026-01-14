@@ -11,11 +11,11 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'oitc-header-export',
     imports: [
-    TranslocoDirective,
-    TooltipDirective,
-    RouterLink,
-    FaIconComponent
-],
+        TranslocoDirective,
+        TooltipDirective,
+        RouterLink,
+        FaIconComponent
+    ],
     templateUrl: './header-export.component.html',
     styleUrl: './header-export.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

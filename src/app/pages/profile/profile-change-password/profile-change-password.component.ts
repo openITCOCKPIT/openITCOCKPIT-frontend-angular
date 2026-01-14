@@ -26,29 +26,28 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 
 
-
 @Component({
     selector: 'oitc-profile-change-password',
     imports: [
-    TranslocoDirective,
-    FormsModule,
-    CardComponent,
-    CardHeaderComponent,
-    CardBodyComponent,
-    RowComponent,
-    ColComponent,
-    CardTitleDirective,
-    FormDirective,
-    FaIconComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    CardFooterComponent,
-    XsButtonDirective,
-    BackButtonDirective
-],
+        TranslocoDirective,
+        FormsModule,
+        CardComponent,
+        CardHeaderComponent,
+        CardBodyComponent,
+        RowComponent,
+        ColComponent,
+        CardTitleDirective,
+        FormDirective,
+        FaIconComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        CardFooterComponent,
+        XsButtonDirective,
+        BackButtonDirective
+    ],
     templateUrl: './profile-change-password.component.html',
     styleUrl: './profile-change-password.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,129 +1,129 @@
 @if (map) {
-  <oitc-map-canvas [map]="map.Map"
-    [isViewMode]="true">
-    @for (item of map.Mapitems; track item) {
-      <oitc-map-item [item]="item" [refreshInterval]="refreshInterval"
-        [isViewMode]="true"
-        (mouseenter)="showSummaryStateDelayed(item, false)"
-        (mouseleave)="cancelTimer()"
-        (click)="navigate(item)"
-        [enablePointerCursor]="true">
-      </oitc-map-item>
-    }
-    @for (textItem of map.Maptexts; track textItem) {
-      <oitc-map-text [item]="textItem"
-        [isViewMode]="true">
-      </oitc-map-text>
-    }
-    @for (lineItem of map.Maplines; track lineItem) {
-      <oitc-map-line [item]="lineItem"
-        [hidden]="lineItem.type === 'stateless'"
-        [refreshInterval]="refreshInterval"
-        [isViewMode]="true"
-        (mouseenter)="showSummaryStateDelayed(lineItem, false)"
-        (mouseleave)="cancelTimer()"
-        (click)="navigate(lineItem)"
-        [enablePointerCursor]="true">
-      </oitc-map-line>
-    }
-    @for (lineItem of map.Maplines; track lineItem) {
-      <oitc-map-line [item]="lineItem"
-        [hidden]="lineItem.type !== 'stateless'"
-        [refreshInterval]="0"
-        [isViewMode]="true">
-      </oitc-map-line>
-    }
-    @for (iconItem of map.Mapicons; track iconItem) {
-      <oitc-map-icon [item]="iconItem"
-        [isViewMode]="true">
-      </oitc-map-icon>
-    }
-    @for (gadgetItem of map.Mapgadgets; track gadgetItem) {
-      @if (gadgetItem.gadget === 'RRDGraph') {
-        <oitc-graph-item [item]="gadgetItem"
-          [refreshInterval]="refreshInterval"
-          [isViewMode]="true"
-          (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
-          (mouseleave)="cancelTimer()"
-          (click)="navigate(gadgetItem)"
-          [enablePointerCursor]="true">
-        </oitc-graph-item>
-      }
-      @if (gadgetItem.gadget === 'Text') {
-        <oitc-perfdata-text-item [item]="gadgetItem"
-          [refreshInterval]="refreshInterval"
-          [isViewMode]="true"
-          (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
-          (mouseleave)="cancelTimer()"
-          (click)="navigate(gadgetItem)"
-          [enablePointerCursor]="true">
-        </oitc-perfdata-text-item>
-      }
-      @if (gadgetItem.gadget === 'Tacho') {
-        <oitc-tacho-item [item]="gadgetItem"
-          [refreshInterval]="refreshInterval"
-          [isViewMode]="true"
-          (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
-          (mouseleave)="cancelTimer()"
-          (click)="navigate(gadgetItem)"
-          [enablePointerCursor]="true">
-        </oitc-tacho-item>
-      }
-      @if (gadgetItem.gadget === 'Cylinder') {
-        <oitc-cylinder-item [item]="gadgetItem"
-          [refreshInterval]="refreshInterval"
-          [isViewMode]="true"
-          (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
-          (mouseleave)="cancelTimer()"
-          (click)="navigate(gadgetItem)"
-          [enablePointerCursor]="true">
-        </oitc-cylinder-item>
-      }
-      @if (gadgetItem.gadget === 'TrafficLight') {
-        <oitc-trafficlight-item
-          [item]="gadgetItem"
-          [refreshInterval]="refreshInterval"
-          [isViewMode]="true"
-          (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
-          (mouseleave)="cancelTimer()"
-          (click)="navigate(gadgetItem)"
-          [enablePointerCursor]="true">
-        </oitc-trafficlight-item>
-      }
-      @if (gadgetItem.gadget === 'Temperature') {
-        <oitc-temperature-item
-          [item]="gadgetItem"
-          [refreshInterval]="refreshInterval"
-          [isViewMode]="true"
-          (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
-          (mouseleave)="cancelTimer()"
-          (click)="navigate(gadgetItem)"
-          [enablePointerCursor]="true">
-        </oitc-temperature-item>
-      }
-      @if (gadgetItem.gadget === 'ServiceOutput') {
-        <oitc-service-output-item
-          [item]="gadgetItem"
-          [refreshInterval]="refreshInterval"
-          [isViewMode]="true"
-          (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
-          (mouseleave)="cancelTimer()"
-          (click)="navigate(gadgetItem)"
-          [enablePointerCursor]="true">
-        </oitc-service-output-item>
-      }
-    }
-    @for (summaryItem of map.Mapsummaryitems; track summaryItem) {
-      <oitc-map-summary-item [item]="summaryItem"
-        [refreshInterval]="refreshInterval"
-        [isViewMode]="true"
-        (mouseenter)="showSummaryStateDelayed(summaryItem, true)"
-        (mouseleave)="cancelTimer()"
-        (click)="navigate(summaryItem)"
-        [enablePointerCursor]="true">
-      </oitc-map-summary-item>
-    }
-  </oitc-map-canvas>
+    <oitc-map-canvas [map]="map.Map"
+                     [isViewMode]="true">
+        @for (item of map.Mapitems; track item) {
+            <oitc-map-item [item]="item" [refreshInterval]="refreshInterval"
+                           [isViewMode]="true"
+                           (mouseenter)="showSummaryStateDelayed(item, false)"
+                           (mouseleave)="cancelTimer()"
+                           (click)="navigate(item)"
+                           [enablePointerCursor]="true">
+            </oitc-map-item>
+        }
+        @for (textItem of map.Maptexts; track textItem) {
+            <oitc-map-text [item]="textItem"
+                           [isViewMode]="true">
+            </oitc-map-text>
+        }
+        @for (lineItem of map.Maplines; track lineItem) {
+            <oitc-map-line [item]="lineItem"
+                           [hidden]="lineItem.type === 'stateless'"
+                           [refreshInterval]="refreshInterval"
+                           [isViewMode]="true"
+                           (mouseenter)="showSummaryStateDelayed(lineItem, false)"
+                           (mouseleave)="cancelTimer()"
+                           (click)="navigate(lineItem)"
+                           [enablePointerCursor]="true">
+            </oitc-map-line>
+        }
+        @for (lineItem of map.Maplines; track lineItem) {
+            <oitc-map-line [item]="lineItem"
+                           [hidden]="lineItem.type !== 'stateless'"
+                           [refreshInterval]="0"
+                           [isViewMode]="true">
+            </oitc-map-line>
+        }
+        @for (iconItem of map.Mapicons; track iconItem) {
+            <oitc-map-icon [item]="iconItem"
+                           [isViewMode]="true">
+            </oitc-map-icon>
+        }
+        @for (gadgetItem of map.Mapgadgets; track gadgetItem) {
+            @if (gadgetItem.gadget === 'RRDGraph') {
+                <oitc-graph-item [item]="gadgetItem"
+                                 [refreshInterval]="refreshInterval"
+                                 [isViewMode]="true"
+                                 (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                                 (mouseleave)="cancelTimer()"
+                                 (click)="navigate(gadgetItem)"
+                                 [enablePointerCursor]="true">
+                </oitc-graph-item>
+            }
+            @if (gadgetItem.gadget === 'Text') {
+                <oitc-perfdata-text-item [item]="gadgetItem"
+                                         [refreshInterval]="refreshInterval"
+                                         [isViewMode]="true"
+                                         (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                                         (mouseleave)="cancelTimer()"
+                                         (click)="navigate(gadgetItem)"
+                                         [enablePointerCursor]="true">
+                </oitc-perfdata-text-item>
+            }
+            @if (gadgetItem.gadget === 'Tacho') {
+                <oitc-tacho-item [item]="gadgetItem"
+                                 [refreshInterval]="refreshInterval"
+                                 [isViewMode]="true"
+                                 (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                                 (mouseleave)="cancelTimer()"
+                                 (click)="navigate(gadgetItem)"
+                                 [enablePointerCursor]="true">
+                </oitc-tacho-item>
+            }
+            @if (gadgetItem.gadget === 'Cylinder') {
+                <oitc-cylinder-item [item]="gadgetItem"
+                                    [refreshInterval]="refreshInterval"
+                                    [isViewMode]="true"
+                                    (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                                    (mouseleave)="cancelTimer()"
+                                    (click)="navigate(gadgetItem)"
+                                    [enablePointerCursor]="true">
+                </oitc-cylinder-item>
+            }
+            @if (gadgetItem.gadget === 'TrafficLight') {
+                <oitc-trafficlight-item
+                    [item]="gadgetItem"
+                    [refreshInterval]="refreshInterval"
+                    [isViewMode]="true"
+                    (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                    (mouseleave)="cancelTimer()"
+                    (click)="navigate(gadgetItem)"
+                    [enablePointerCursor]="true">
+                </oitc-trafficlight-item>
+            }
+            @if (gadgetItem.gadget === 'Temperature') {
+                <oitc-temperature-item
+                    [item]="gadgetItem"
+                    [refreshInterval]="refreshInterval"
+                    [isViewMode]="true"
+                    (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                    (mouseleave)="cancelTimer()"
+                    (click)="navigate(gadgetItem)"
+                    [enablePointerCursor]="true">
+                </oitc-temperature-item>
+            }
+            @if (gadgetItem.gadget === 'ServiceOutput') {
+                <oitc-service-output-item
+                    [item]="gadgetItem"
+                    [refreshInterval]="refreshInterval"
+                    [isViewMode]="true"
+                    (mouseenter)="showSummaryStateDelayed(gadgetItem, false)"
+                    (mouseleave)="cancelTimer()"
+                    (click)="navigate(gadgetItem)"
+                    [enablePointerCursor]="true">
+                </oitc-service-output-item>
+            }
+        }
+        @for (summaryItem of map.Mapsummaryitems; track summaryItem) {
+            <oitc-map-summary-item [item]="summaryItem"
+                                   [refreshInterval]="refreshInterval"
+                                   [isViewMode]="true"
+                                   (mouseenter)="showSummaryStateDelayed(summaryItem, true)"
+                                   (mouseleave)="cancelTimer()"
+                                   (click)="navigate(summaryItem)"
+                                   [enablePointerCursor]="true">
+            </oitc-map-summary-item>
+        }
+    </oitc-map-canvas>
 }
 
 <oitc-map-summary-toaster></oitc-map-summary-toaster>

@@ -36,29 +36,29 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
 @Component({
     selector: 'oitc-dashboard-allocate-modal',
     imports: [
-    ButtonCloseDirective,
-    FaIconComponent,
-    FormsModule,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    TranslocoDirective,
-    XsButtonDirective,
-    ModalToggleDirective,
-    AsyncPipe,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    SelectComponent,
-    FormControlDirective,
-    MultiSelectComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective
-],
+        ButtonCloseDirective,
+        FaIconComponent,
+        FormsModule,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        ModalToggleDirective,
+        AsyncPipe,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        FormControlDirective,
+        MultiSelectComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective
+    ],
     templateUrl: './dashboard-allocate-modal.component.html',
     styleUrl: './dashboard-allocate-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -96,7 +96,7 @@ export class DashboardAllocateModalComponent implements OnDestroy {
             this.tab = tab;
 
             this.mode = 'add';
-            
+
             if (tab.dashboard_tab_allocation?.id) {
                 // Edit
                 this.mode = 'edit';

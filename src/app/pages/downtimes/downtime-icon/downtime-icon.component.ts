@@ -12,16 +12,16 @@ import { DowntimesService } from '../downtimes.service';
 @Component({
     selector: 'oitc-downtime-icon',
     imports: [
-    FaIconComponent,
-    PopoverDirective,
-    RowComponent,
-    ColComponent,
-    SkeletonModule,
-    TooltipDirective,
-    TranslocoPipe,
-    TranslocoDirective,
-    AsyncPipe
-],
+        FaIconComponent,
+        PopoverDirective,
+        RowComponent,
+        ColComponent,
+        SkeletonModule,
+        TooltipDirective,
+        TranslocoPipe,
+        TranslocoDirective,
+        AsyncPipe
+    ],
     templateUrl: './downtime-icon.component.html',
     styleUrl: './downtime-icon.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

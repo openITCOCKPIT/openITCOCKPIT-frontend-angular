@@ -10,13 +10,13 @@ import {
     ViewChild
 } from '@angular/core';
 import {
-  ButtonCloseDirective,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective
+    ButtonCloseDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -32,19 +32,19 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'oitc-service-add-to-servicegroup-modal',
     imports: [
-    ButtonCloseDirective,
-    XsButtonDirective,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    TranslocoDirective,
-    FormsModule,
-    NgSelectModule,
-    RouterLink
-],
+        ButtonCloseDirective,
+        XsButtonDirective,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        TranslocoDirective,
+        FormsModule,
+        NgSelectModule,
+        RouterLink
+    ],
     templateUrl: './service-add-to-servicegroup-modal.component.html',
     styleUrl: './service-add-to-servicegroup-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

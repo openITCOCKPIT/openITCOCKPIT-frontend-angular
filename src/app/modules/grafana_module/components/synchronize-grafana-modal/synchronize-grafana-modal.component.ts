@@ -35,19 +35,19 @@ import { SynchronizeGrafanaResponse } from './synchronize.interface';
 @Component({
     selector: 'oitc-synchronize-grafana-modal',
     imports: [
-    ButtonCloseDirective,
-    ColComponent,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ProgressComponent,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective
-],
+        ButtonCloseDirective,
+        ColComponent,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ProgressComponent,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective
+    ],
     templateUrl: './synchronize-grafana-modal.component.html',
     styleUrl: './synchronize-grafana-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

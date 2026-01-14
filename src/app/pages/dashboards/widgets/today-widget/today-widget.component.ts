@@ -16,14 +16,14 @@ import { TodayWidgetResponse } from '../widgets.interface';
 @Component({
     selector: 'oitc-today-widget',
     imports: [
-    BgColorDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    ColComponent,
-    RowComponent
-],
+        BgColorDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        ColComponent,
+        RowComponent
+    ],
     templateUrl: './today-widget.component.html',
     styleUrl: './today-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

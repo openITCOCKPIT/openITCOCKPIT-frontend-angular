@@ -4,19 +4,19 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { TableDirective } from '@coreui/angular';
 
 import {
-  FaIconComponent,
-  FaLayersComponent
+    FaIconComponent,
+    FaLayersComponent
 } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-default',
     imports: [
-    TranslocoDirective,
-    TableDirective,
-    FaIconComponent,
-    FaLayersComponent,
-    TranslocoPipe
-],
+        TranslocoDirective,
+        TableDirective,
+        FaIconComponent,
+        FaLayersComponent,
+        TranslocoPipe
+    ],
     templateUrl: './default.component.html',
     styleUrl: './default.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

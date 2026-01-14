@@ -618,8 +618,7 @@
                                                         <tr>
                                                             <td>{{ t('Contacts') }}</td>
                                                             <td>
-                                                                @for (
-                                                                    contact of result.mergedHost.contacts; track contact) {
+                                                                @for (contact of result.mergedHost.contacts; track contact) {
                                                                     <div>
                                                                         @if (( PermissionsService.hasPermissionObservable(['contacts', 'edit'])|async ) && contact.allowEdit) {
                                                                             <a [routerLink]="['/', 'contacts', 'edit', contact.id]">
@@ -637,8 +636,7 @@
                                                         <tr>
                                                             <td>{{ t('Contact groups') }}</td>
                                                             <td>
-                                                                @for (
-                                                                    contactgroup of result.mergedHost.contactgroups; track contactgroup) {
+                                                                @for (contactgroup of result.mergedHost.contactgroups; track contactgroup) {
                                                                     <div
                                                                     >
                                                                         @if (( PermissionsService.hasPermissionObservable(['contactgroups', 'edit'])|async ) && contactgroup.allowEdit) {

@@ -35,19 +35,19 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 @Component({
     selector: 'oitc-disable-modal',
     imports: [
-    ButtonCloseDirective,
-    ColComponent,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ProgressComponent,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective
-],
+        ButtonCloseDirective,
+        ColComponent,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ProgressComponent,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective
+    ],
     templateUrl: './disable-modal.component.html',
     styleUrl: './disable-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

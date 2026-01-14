@@ -1,49 +1,49 @@
 <ng-container *transloco="let t">
-  <table cTable bordered hover>
-    <tbody>
-      <tr>
-        <td colspan="6">
-          <div class="d-flex flex-align-items-center">
-            <div>
-              <fa-layers [fixedWidth]="true" size="4x">
-                <fa-icon [icon]="['fas', 'square']" class="text-primary"></fa-icon>
-                <fa-icon [icon]="['fas', 'object-group']" [inverse]="true"
-                [transform]="'shrink-10'"></fa-icon>
-              </fa-layers>
-            </div>
-            <div class="iTop-class-label flex-1">
-              {{ result.response.general_information?.finalclass }}
+    <table cTable bordered hover>
+        <tbody>
+        <tr>
+            <td colspan="6">
+                <div class="d-flex flex-align-items-center">
+                    <div>
+                        <fa-layers [fixedWidth]="true" size="4x">
+                            <fa-icon [icon]="['fas', 'square']" class="text-primary"></fa-icon>
+                            <fa-icon [icon]="['fas', 'object-group']" [inverse]="true"
+                                     [transform]="'shrink-10'"></fa-icon>
+                        </fa-layers>
+                    </div>
+                    <div class="iTop-class-label flex-1">
+                        {{ result.response.general_information?.finalclass }}
 
-            </div>
-          </div>
-        </td>
-      </tr>
-      <tr class="border-primary-bottom">
-        <th colspan="3">
-          {{ t('External link') }}
-        </th>
-        <td class="text-primary" colspan="3">
-          @if (result.response.externalLink) {
-            <span class="ng-scope">
-              <a target="_blank" [href]="result.response.externalLink">
-                <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
-              </a>
-            </span>
-          }
-        </td>
-      </tr>
-      @if (result.response.general_information) {
-        @for (item of result.response.general_information| keyvalue: keepOrder; track item) {
-          <tr>
-            <th colspan="3">
-              {{ item.key }}
-            </th>
-            <td colspan="3">
-              <oitc-custom-class-information [customInfo]="item.value"></oitc-custom-class-information>
+                    </div>
+                </div>
             </td>
-          </tr>
-        }
-      }
-    </tbody>
-  </table>
+        </tr>
+        <tr class="border-primary-bottom">
+            <th colspan="3">
+                {{ t('External link') }}
+            </th>
+            <td class="text-primary" colspan="3">
+                @if (result.response.externalLink) {
+                    <span class="ng-scope">
+                        <a target="_blank" [href]="result.response.externalLink">
+                            <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
+                        </a>
+                    </span>
+                }
+            </td>
+        </tr>
+            @if (result.response.general_information) {
+                @for (item of result.response.general_information| keyvalue: keepOrder; track item) {
+                    <tr>
+                        <th colspan="3">
+                            {{ item.key }}
+                        </th>
+                        <td colspan="3">
+                            <oitc-custom-class-information [customInfo]="item.value"></oitc-custom-class-information>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
 </ng-container>

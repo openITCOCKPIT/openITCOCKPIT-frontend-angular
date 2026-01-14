@@ -1,33 +1,33 @@
 @if (!isViewMode()) {
-  <div cdkDrag #container oitcResizable [aspectRatio]="false" class="map-element-container"
-    (cdkDragEnded)="onDragEnd($event)"
-    (cdkDragMoved)="onDragMove($event)"
-    (resizeStop)="onResizeStop($event, type)"
-    cdkDragBoundary=".map-canvas">
-    @if (allowView) {
-      <div cdkDragHandle
-        [ngStyle]="{'width.px': width, 'height.px': height, 'font-size.px': item()!.font_size}">
-        <span [hidden]="!item()!.show_label" class="bold">
-          {{ Service.hostname }} / {{ Service.servicename }}:
-        </span>
-        <span [ngClass]="color" [innerHTML]="output | trustAsHtml"></span>
-      </div>
+    <div cdkDrag #container oitcResizable [aspectRatio]="false" class="map-element-container"
+         (cdkDragEnded)="onDragEnd($event)"
+         (cdkDragMoved)="onDragMove($event)"
+         (resizeStop)="onResizeStop($event, type)"
+         cdkDragBoundary=".map-canvas">
+        @if (allowView) {
+            <div cdkDragHandle
+                 [ngStyle]="{'width.px': width, 'height.px': height, 'font-size.px': item()!.font_size}">
+                <span [hidden]="!item()!.show_label" class="bold">
+                    {{ Service.hostname }} / {{ Service.servicename }}:
+                </span>
+                <span [ngClass]="color" [innerHTML]="output | trustAsHtml"></span>
+            </div>
+        }
+    </div>
+    @if (!isViewMode()) {
+        <p-contextMenu [target]="container" [model]="contextMenuItems"
+                       appendTo="body"></p-contextMenu>
     }
-  </div>
-  @if (!isViewMode()) {
-    <p-contextMenu [target]="container" [model]="contextMenuItems"
-    appendTo="body"></p-contextMenu>
-  }
 } @else {
-  <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
-    @if (allowView) {
-      <div
-        [ngStyle]="{'width.px': width, 'height.px': height, 'font-size.px': item()!.font_size}">
-        <span [hidden]="!item()!.show_label" class="bold">
-          {{ Service.hostname }} / {{ Service.servicename }}:
-        </span>
-        <span [ngClass]="color" [innerHTML]="output | trustAsHtml"></span>
-      </div>
-    }
-  </div>
+    <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
+        @if (allowView) {
+            <div
+                [ngStyle]="{'width.px': width, 'height.px': height, 'font-size.px': item()!.font_size}">
+                <span [hidden]="!item()!.show_label" class="bold">
+                    {{ Service.hostname }} / {{ Service.servicename }}:
+                </span>
+                <span [ngClass]="color" [innerHTML]="output | trustAsHtml"></span>
+            </div>
+        }
+    </div>
 }

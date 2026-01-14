@@ -1,102 +1,102 @@
 <ng-container *transloco="let t">
 
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['usergroups', 'index']"
-            [routerLink]="['/', 'usergroups', 'index']">
-            <fa-icon [icon]="['fas', 'users']"></fa-icon>
-            {{ t('User roles') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-          {{ t('Copy') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['usergroups', 'index']"
+                   [routerLink]="['/', 'usergroups', 'index']">
+                    <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                    {{ t('User roles') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                {{ t('Copy') }}
+            </li>
+        </ol>
     </nav>
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>{{ t('User roles') }}
-          <small class="fw-300">
-            {{ t('Copy user role/s') }}
-          </small>
-        </h5>
-        <c-nav class="card-toolbar card-header-pills">
-          <button [fallbackUrl]="['usergroups', 'index']" cButton class="ripple" color="default"
-            oitcBackButton
-            size="xs">
-            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-            {{ t('Back') }}
-          </button>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
+        <c-card-header>
+            <h5 cCardTitle>{{ t('User roles') }}
+                <small class="fw-300">
+                    {{ t('Copy user role/s') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <button [fallbackUrl]="['usergroups', 'index']" cButton class="ripple" color="default"
+                        oitcBackButton
+                        size="xs">
+                    <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                    {{ t('Back') }}
+                </button>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
 
-        <oitc-form-loader [isVisible]="! usergroups.data" />
+            <oitc-form-loader [isVisible]="! usergroups.data"/>
 
-        @for (usergroup of usergroups.data; track usergroup; let i = $index) {
-          <c-card class="mb-3">
-            <c-card-header>
-              <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-              <span class="ms-1">
-                {{ t('Source user role:') }}
-                {{ usergroup.Usergroup.name }}
-              </span>
-            </c-card-header>
-            <c-card-body>
-              <div class="mb-3">
-                <label cLabel for="name{{i}}">
-                  {{ t('User role name') }}
-                  <oitc-required-icon></oitc-required-icon>
-                </label>
-                <input cFormControl
-                  required
-                  type="text"
-                  name="name{{i}}"
-                  id="name{{i}}"
-                  [(ngModel)]="usergroup.Usergroup.name"
-                  oitcFormError [errors]="usergroup.Error" errorField="name">
-                <oitc-form-feedback [errors]="usergroup.Error"
-                errorField="name"></oitc-form-feedback>
-                <div class="help-block">
-                  {{ t('Name of the new user role') }}
-                </div>
-              </div>
-              <div class="mb-3">
-                <label cLabel for="description{{i}}">
-                  {{ t('Description') }}
-                </label>
-                <input cFormControl
-                  type="text"
-                  name="description{{i}}"
-                  id="description{{i}}"
-                  [(ngModel)]="usergroup.Usergroup.description"
-                  oitcFormError [errors]="usergroup.Error" errorField="description">
-                <oitc-form-feedback [errors]="usergroup.Error"
-                errorField="description"></oitc-form-feedback>
-              </div>
-            </c-card-body>
-          </c-card>
-        }
+            @for (usergroup of usergroups.data; track usergroup; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source user role:') }}
+                            {{ usergroup.Usergroup.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('User role name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   required
+                                   type="text"
+                                   name="name{{i}}"
+                                   id="name{{i}}"
+                                   [(ngModel)]="usergroup.Usergroup.name"
+                                   oitcFormError [errors]="usergroup.Error" errorField="name">
+                            <oitc-form-feedback [errors]="usergroup.Error"
+                                                errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new user role') }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="description{{i}}">
+                                {{ t('Description') }}
+                            </label>
+                            <input cFormControl
+                                   type="text"
+                                   name="description{{i}}"
+                                   id="description{{i}}"
+                                   [(ngModel)]="usergroup.Usergroup.description"
+                                   oitcFormError [errors]="usergroup.Error" errorField="description">
+                            <oitc-form-feedback [errors]="usergroup.Error"
+                                                errorField="description"></oitc-form-feedback>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            }
 
-      </c-card-body>
-      <c-card-footer class="text-end">
-        <button cButton class="ripple" color="primary" type="button" (click)="copyUsergroups()">
-          {{ t('Copy') }}
-        </button>
-        <button [fallbackUrl]="['usergroups', 'index']" cButton class="ms-1 ripple" color="default"
-          oitcBackButton
-          type="submit">
-          {{ t('Cancel') }}
-        </button>
-      </c-card-footer>
+        </c-card-body>
+        <c-card-footer class="text-end">
+            <button cButton class="ripple" color="primary" type="button" (click)="copyUsergroups()">
+                {{ t('Copy') }}
+            </button>
+            <button [fallbackUrl]="['usergroups', 'index']" cButton class="ms-1 ripple" color="default"
+                    oitcBackButton
+                    type="submit">
+                {{ t('Cancel') }}
+            </button>
+        </c-card-footer>
 
     </c-card>
 
-  </ng-container>
+</ng-container>

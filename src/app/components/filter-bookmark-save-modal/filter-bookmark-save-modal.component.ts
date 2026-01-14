@@ -38,14 +38,14 @@ import {
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { NotyService } from '../../layouts/coreui/noty.service';
 import {
-  ButtonCloseDirective,
-  FormControlDirective,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective
+    ButtonCloseDirective,
+    FormControlDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective
 } from '@coreui/angular';
 
 import { FormsModule } from '@angular/forms';
@@ -72,18 +72,18 @@ type NewBookmark = {
 @Component({
     selector: 'oitc-filter-bookmark-save-modal',
     imports: [
-    TranslocoDirective,
-    ModalComponent,
-    ButtonCloseDirective,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    XsButtonDirective,
-    ModalFooterComponent,
-    ModalBodyComponent,
-    FormsModule,
-    FormControlDirective,
-    NgClass
-],
+        TranslocoDirective,
+        ModalComponent,
+        ButtonCloseDirective,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        XsButtonDirective,
+        ModalFooterComponent,
+        ModalBodyComponent,
+        FormsModule,
+        FormControlDirective,
+        NgClass
+    ],
     templateUrl: './filter-bookmark-save-modal.component.html',
     styleUrl: './filter-bookmark-save-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

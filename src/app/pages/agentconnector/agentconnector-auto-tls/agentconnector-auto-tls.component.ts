@@ -37,19 +37,19 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
     selector: 'oitc-agentconnector-auto-tls',
     imports: [
-    AgentconnectorWizardProgressbarComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    ColComponent,
-    RowComponent,
-    ProgressBarModule
-],
+        AgentconnectorWizardProgressbarComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        ColComponent,
+        RowComponent,
+        ProgressBarModule
+    ],
     templateUrl: './agentconnector-auto-tls.component.html',
     styleUrl: './agentconnector-auto-tls.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

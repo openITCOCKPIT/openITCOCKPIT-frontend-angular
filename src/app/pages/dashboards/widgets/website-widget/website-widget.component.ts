@@ -22,17 +22,17 @@ import { TranslocoDirective } from '@jsverse/transloco';
 @Component({
     selector: 'oitc-website-widget',
     imports: [
-    IframeComponent,
-    FaIconComponent,
-    FormLabelDirective,
-    FormControlDirective,
-    FormsModule,
-    XsButtonDirective,
-    ColComponent,
-    RowComponent,
-    AlertComponent,
-    TranslocoDirective
-],
+        IframeComponent,
+        FaIconComponent,
+        FormLabelDirective,
+        FormControlDirective,
+        FormsModule,
+        XsButtonDirective,
+        ColComponent,
+        RowComponent,
+        AlertComponent,
+        TranslocoDirective
+    ],
     templateUrl: './website-widget.component.html',
     styleUrl: './website-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

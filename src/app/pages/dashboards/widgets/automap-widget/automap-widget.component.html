@@ -1,128 +1,129 @@
 <ng-container *transloco="let t">
-  <div class="d-flex h-100 flex-column" #boxContainer>
-    <c-row>
-      <c-col [xs]="12" [md]="1">
-        @if (!isReadonly()) {
-          <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-            >
-            @if (flipped()) {
-              <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-            } @else {
-              <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-            }
-          </button>
-        }
-      </c-col>
-
-      <c-col [xs]="12" [md]="11">
+    <div class="d-flex h-100 flex-column" #boxContainer>
         <c-row>
-          <c-col [xs]="1" [offset]="{lg: 8}">
-            @if (config && config.useScroll) {
-              <button type="button" cButton class="ripple" color="primary" size="xs"
-                (click)="stopScroll()"
-                [cTooltip]="'Pause scrolling'|transloco" cTooltipPlacement="bottom">
-                <fa-icon [icon]="['fas', 'pause']"></fa-icon>
-              </button>
-            }
-            @if (config && !config.useScroll) {
-              <button type="button" cButton class="ripple" color="primary" size="xs"
-                (click)="startScroll()"
-                [cTooltip]="'Start scrolling'|transloco" cTooltipPlacement="bottom">
-                <fa-icon [icon]="['fas', 'play']"></fa-icon>
-              </button>
-            }
-          </c-col>
-          @if (widget && config) {
-            <c-col [xs]="11" [lg]="3">
-              <oitc-slider-time
-                [name]="'scroll_interval_slider_'+widget.id"
-                [attr.id]="'filter.scroll_interval_slider_'+widget.id"
-                [unit]="'milliseconds'"
-                [size]="'xs'"
-                [label]="'Scroll interval:' | transloco"
-                [disabled]="isReadonly()"
-                [min]="0"
-                [max]="300*1000"
-                [step]="5*1000"
-                [(ngModel)]="config.scroll_interval"
-              (change)="onIntervalSliderChanged()"></oitc-slider-time>
+            <c-col [xs]="12" [md]="1">
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())"
+                    >
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        }
+                    </button>
+                }
             </c-col>
-          }
+
+            <c-col [xs]="12" [md]="11">
+                <c-row>
+                    <c-col [xs]="1" [offset]="{lg: 8}">
+                        @if (config && config.useScroll) {
+                            <button type="button" cButton class="ripple" color="primary" size="xs"
+                                    (click)="stopScroll()"
+                                    [cTooltip]="'Pause scrolling'|transloco" cTooltipPlacement="bottom">
+                                <fa-icon [icon]="['fas', 'pause']"></fa-icon>
+                            </button>
+                        }
+                        @if (config && !config.useScroll) {
+                            <button type="button" cButton class="ripple" color="primary" size="xs"
+                                    (click)="startScroll()"
+                                    [cTooltip]="'Start scrolling'|transloco" cTooltipPlacement="bottom">
+                                <fa-icon [icon]="['fas', 'play']"></fa-icon>
+                            </button>
+                        }
+                    </c-col>
+                    @if (widget && config) {
+                        <c-col [xs]="11" [lg]="3">
+                            <oitc-slider-time
+                                [name]="'scroll_interval_slider_'+widget.id"
+                                [attr.id]="'filter.scroll_interval_slider_'+widget.id"
+                                [unit]="'milliseconds'"
+                                [size]="'xs'"
+                                [label]="'Scroll interval:' | transloco"
+                                [disabled]="isReadonly()"
+                                [min]="0"
+                                [max]="300*1000"
+                                [step]="5*1000"
+                                [(ngModel)]="config.scroll_interval"
+                                (change)="onIntervalSliderChanged()"></oitc-slider-time>
+                        </c-col>
+                    }
+                </c-row>
+            </c-col>
         </c-row>
-      </c-col>
-    </c-row>
 
-    <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
-      class="box-container">
-      <div class="box-x">
-        @if (animationStateShowContent) {
-          <!-- Widget Content -->
-          @if (!config || !config.automap_id) {
-            <div class="ps-2 text-info">
-              {{ t('No element selected') }}
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container">
+            <div class="box-x">
+                @if (animationStateShowContent) {
+                    <!-- Widget Content -->
+                    @if (!config || !config.automap_id) {
+                        <div class="ps-2 text-info">
+                            {{ t('No element selected') }}
+                        </div>
+                    }
+                    @if (config && config.automap_id && result) {
+                        <oitc-automap-viewer
+                            [includeServicesBrowserModal]="false"
+                            (reload)="loadAutomap()"
+                            [automapResult]="result"
+                            (paginatorChange)="onPaginatorChange($event)"
+                        ></oitc-automap-viewer>
+                    }
+                    <!-- End Widget Content -->
+                }
             </div>
-          }
-          @if (config && config.automap_id && result) {
-            <oitc-automap-viewer
-              [includeServicesBrowserModal]="false"
-              (reload)="loadAutomap()"
-              [automapResult]="result"
-              (paginatorChange)="onPaginatorChange($event)"
-            ></oitc-automap-viewer>
-          }
-          <!-- End Widget Content -->
-        }
-      </div>
 
-      <div class="box-x">
-        @if (animationStateShowConfig) {
-          <!-- Config area -->
-          @if (widget && config) {
-            <div class="mb-3">
-              <label cLabel [for]="'automap_id_widget_'+widget.id">
-                {{ t('Automap') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <oitc-select
-                [id]="'automap_id_widget_'+widget.id"
-                [name]="'automap_id_widget_'+widget.id"
-                [attr.id]="'automap_id_widget_'+widget.id"
-                optionValue="key"
-                optionLabel="value"
-                [(ngModel)]="config.automap_id"
-                [options]="automaps"
-                [searchCallback]="loadAutomaps"
-                [appendTo]="''">
-              </oitc-select>
+            <div class="box-x">
+                @if (animationStateShowConfig) {
+                    <!-- Config area -->
+                    @if (widget && config) {
+                        <div class="mb-3">
+                            <label cLabel [for]="'automap_id_widget_'+widget.id">
+                                {{ t('Automap') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <oitc-select
+                                [id]="'automap_id_widget_'+widget.id"
+                                [name]="'automap_id_widget_'+widget.id"
+                                [attr.id]="'automap_id_widget_'+widget.id"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="config.automap_id"
+                                [options]="automaps"
+                                [searchCallback]="loadAutomaps"
+                                [appendTo]="''">
+                            </oitc-select>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel [for]="'automap_limit_widget_'+widget.id">
+                                {{ t('Limit per page') }}
+                            </label>
+                            <input cFormControl
+                                   [id]="'automap_limit_widget_'+widget.id"
+                                   [name]="'automap_limit_widget_'+widget.id"
+                                   [attr.id]="'automap_limit_widget_'+widget.id"
+                                   type="number"
+                                   min="1"
+                                   max="9999"
+                                   [placeholder]="150"
+                                   [(ngModel)]="config.limit">
+                            <div class="help-block">
+                                {{ t('This option has only an effect if "Use pagination" is enabled.') }}
+                            </div>
+                        </div>
+                        <div class="mt-1 text-end">
+                            <button cButton type="button" class="ripple" (click)="saveConfig()">
+                                {{ t('Save') }}
+                            </button>
+                        </div>
+                    }
+                    <!-- End Config area -->
+                }
             </div>
-            <div class="mb-3">
-              <label cLabel [for]="'automap_limit_widget_'+widget.id">
-                {{ t('Limit per page') }}
-              </label>
-              <input cFormControl
-                [id]="'automap_limit_widget_'+widget.id"
-                [name]="'automap_limit_widget_'+widget.id"
-                [attr.id]="'automap_limit_widget_'+widget.id"
-                type="number"
-                min="1"
-                max="9999"
-                [placeholder]="150"
-                [(ngModel)]="config.limit">
-              <div class="help-block">
-                {{ t('This option has only an effect if "Use pagination" is enabled.') }}
-              </div>
-            </div>
-            <div class="mt-1 text-end">
-              <button cButton type="button" class="ripple" (click)="saveConfig()">
-                {{ t('Save') }}
-              </button>
-            </div>
-          }
-          <!-- End Config area -->
-        }
-      </div>
+        </div>
     </div>
-  </div>
 
 </ng-container>
 

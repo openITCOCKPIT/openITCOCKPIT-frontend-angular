@@ -10,10 +10,10 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 @Component({
     selector: 'oitc-satellite-name',
     imports: [
-    SkeletonModule,
-    TranslocoDirective,
-    FaIconComponent
-],
+        SkeletonModule,
+        TranslocoDirective,
+        FaIconComponent
+    ],
     templateUrl: './satellite-name.component.html',
     styleUrl: './satellite-name.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

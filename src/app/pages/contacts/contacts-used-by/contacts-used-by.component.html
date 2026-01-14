@@ -1,287 +1,299 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['contacts', 'index']" [routerLink]="['/', 'contacts', 'index']">
-            <fa-icon [icon]="['fas', 'user']"></fa-icon>
-            {{ t('Contacts') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
-          {{ t('Used by') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['contacts', 'index']" [routerLink]="['/', 'contacts', 'index']">
+                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                    {{ t('Contacts') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+                {{ t('Used by') }}
+            </li>
+        </ol>
     </nav>
 
     <oitc-form-loader [isVisible]="!contact"></oitc-form-loader>
     @if (contact) {
-      <c-card class="mb-3">
-        <c-card-header>
-          <h5 cCardTitle>{{ t('Contact') }}
-            <small class="fw-300">
-              <i>
-                <strong>
-                  »{{ contact.name }}«
-                </strong>
-                {{ t('is used by') }}
-                {{ total }}
-                {{ t('objects.') }}
-              </i>
-            </small>
-          </h5>
-          <c-nav class="card-toolbar card-header-pills">
-            <c-nav-item class="px-1">
-              <button (click)="load()" cButton class="ripple" color="default" size="xs">
-                <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                {{ t('Refresh') }}
-              </button>
-            </c-nav-item>
-            <c-nav-item class="px-1">
-              <button [fallbackUrl]="['contacts', 'index']" cButton class="ripple" color="default"
-                oitcBackButton
-                size="xs">
-                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                {{ t('Back') }}
-              </button>
-            </c-nav-item>
-          </c-nav>
-        </c-card-header>
-        <c-card-body>
-          <c-container
-            [fluid]="true">
-            @if (objects) {
-              <table bordered cTable class="mt-2 mb-0" hover striped>
-                <tbody>
-                  <!-- Contacts -->
-                  @if (objects.Contactgroups.length > 0) {
-                    <tr>
-                      <th colspan="2" class="bg-secondary bg-opacity-10">
-                        <fa-icon [icon]="['fas', 'users']"></fa-icon>
-                        {{ t('Contactgroups') }} ({{ objects.Contactgroups.length }})
-                      </th>
-                    </tr>
-                  }
-                  @for (contactgroup of objects.Contactgroups; track contactgroup) {
-                    <tr>
-                      <td colspan="2">
-                        <a *oitcPermission="['contactgroups', 'edit']"
-                          [routerLink]="['/', 'contactgroups', 'edit', contactgroup.id]">
-                          {{ contactgroup.container.name }}
-                        </a>
-                        <span *oitcPermission="['contactgroups', 'edit']; negate: true">
-                          {{ contactgroup.container.name }}
-                        </span>
-                        @if (containerIds.length > 0 && containerIds.indexOf(contactgroup.container.parent_id) !== -1) {
-                          <fa-stack
-                            >
-                            <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient"
-                            stackItemSize="1x" pull="right"></fa-icon>
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
-                              stackItemSize="1x"
-                            transform="shrink-8 right-6 down-6"></fa-icon>
-                          </fa-stack>
-                        }
-                      </td>
-                    </tr>
-                  }
-                  <!-- Host templates -->
-                  @if (objects.Hosttemplates.length > 0) {
-                    <tr>
-                      <th colspan="2" class="bg-secondary bg-opacity-10">
-                        <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                        {{ t('Host templates') }} ({{ objects.Hosttemplates.length }})
-                      </th>
-                    </tr>
-                  }
-                  @for (hosttemplate of objects.Hosttemplates; track hosttemplate) {
-                    <tr>
-                      <td colspan="2">
-                        <a *oitcPermission="['hosttemplates', 'edit']"
-                          [routerLink]="['/', 'hosttemplates', 'edit', hosttemplate.id]">
-                          {{ hosttemplate.name }}
-                        </a>
-                        <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
-                          {{ hosttemplate.name }}
-                        </span>
-                        @if (containerIds.length > 0 && containerIds.indexOf(hosttemplate.container_id) !== -1) {
-                          <fa-stack
-                            >
-                            <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient"
-                            stackItemSize="1x" pull="right"></fa-icon>
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
-                              stackItemSize="1x"
-                            transform="shrink-8 right-6 down-6"></fa-icon>
-                          </fa-stack>
-                        }
-                      </td>
-                    </tr>
-                  }
-                  <!-- Service templates -->
-                  @if (objects.Servicetemplates.length > 0) {
-                    <tr>
-                      <th colspan="2" class="bg-secondary bg-opacity-10">
-                        <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                        {{ t('Service templates') }} ({{ objects.Servicetemplates.length }})
-                      </th>
-                    </tr>
-                  }
-                  @for (servicetemplate of objects.Servicetemplates; track servicetemplate) {
-                    <tr>
-                      <td colspan="2">
-                        <a *oitcPermission="['servicetemplates', 'edit']"
-                          [routerLink]="['/', 'servicetemplates', 'edit', servicetemplate.id]">
-                          {{ servicetemplate.name }}
-                        </a>
-                        <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
-                          {{ servicetemplate.name }}
-                        </span>
-                        @if (containerIds.length > 0 && containerIds.indexOf(servicetemplate.container_id) !== -1) {
-                          <fa-stack
-                            >
-                            <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient"
-                            stackItemSize="1x" pull="right"></fa-icon>
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
-                              stackItemSize="1x"
-                            transform="shrink-8 right-6 down-6"></fa-icon>
-                          </fa-stack>
-                        }
-                      </td>
-                    </tr>
-                  }
-                  <!-- Hosts -->
-                  @if (objects.Hosts.length > 0) {
-                    <tr>
-                      <th colspan="2" class="bg-secondary bg-opacity-10">
-                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                        {{ t('Hosts') }} ({{ objects.Hosts.length }})
-                      </th>
-                    </tr>
-                  }
-                  @for (host of objects.Hosts; track host) {
-                    <tr>
-                      <td colspan="2">
-                        <a *oitcPermission="['hosts', 'edit']"
-                          [routerLink]="['/', 'hosts', 'edit', host.id]">
-                          {{ host.name }}
-                        </a>
-                        <span *oitcPermission="['hosts', 'edit']; negate: true">
-                          {{ host.name }}
-                        </span>
-                        @if (containerIds.length > 0 && containerIds.indexOf(host.container_id) !== -1) {
-                          <fa-stack
-                            >
-                            <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient"
-                            stackItemSize="1x" pull="right"></fa-icon>
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
-                              stackItemSize="1x"
-                            transform="shrink-8 right-6 down-6"></fa-icon>
-                          </fa-stack>
-                        }
-                      </td>
-                    </tr>
-                  }
-                  <!-- Services -->
-                  @if (objects.Services.length > 0) {
-                    <tr>
-                      <th colspan="2" class="bg-secondary bg-opacity-10">
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                        {{ t('Services') }} ({{ objects.Services.length }})
-                      </th>
-                    </tr>
-                  }
-                  @for (service of objects.Services; track service) {
-                    <tr>
-                      <td colspan="2">
-                        <a *oitcPermission="['services', 'edit']"
-                          [routerLink]="['/', 'services', 'edit', service.id]">
-                          {{ service._matchingData.Hosts.name }} / {{ service.name }}
-                        </a>
-                        <span *oitcPermission="['services', 'edit']; negate: true">
-                          {{ service._matchingData.Hosts.name }} / {{ service.name }}
-                        </span>
-                      </td>
-                    </tr>
-                  }
-                  <!-- Hostescalations -->
-                  @if (objects.Hostescalations.length > 0) {
-                    <tr>
-                      <th colspan="2" class="bg-secondary bg-opacity-10">
-                        <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
-                        {{ t('Host escalations') }} ({{ objects.Hostescalations.length }})
-                      </th>
-                    </tr>
-                  }
-                  @for (hostescalation of objects.Hostescalations; track hostescalation) {
-                    <tr>
-                      <td colspan="2">
-                        <a *oitcPermission="['hostescalations', 'edit']"
-                          [routerLink]="['/', 'hostescalations', 'edit', hostescalation.id]">
-                          {{ t('Host escalation') }} #{{ hostescalation.id }}
-                        </a>
-                        <span *oitcPermission="['hostescalations', 'edit']; negate: true">
-                          {{ t('Host escalation') }} #{{ hostescalation.id }}
-                        </span>
-                        @if (containerIds.length > 0 && containerIds.indexOf(hostescalation.container_id) !== -1) {
-                          <fa-stack
-                            >
-                            <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient"
-                            stackItemSize="1x" pull="right"></fa-icon>
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
-                              stackItemSize="1x"
-                            transform="shrink-8 right-6 down-6"></fa-icon>
-                          </fa-stack>
-                        }
-                      </td>
-                    </tr>
-                  }
-                  <!-- Serviceescalations -->
-                  @if (objects.Serviceescalations.length > 0) {
-                    <tr>
-                      <th colspan="2" class="bg-secondary bg-opacity-10">
-                        <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
-                        {{ t('Service escalations') }} ({{ objects.Serviceescalations.length }})
-                      </th>
-                    </tr>
-                  }
-                  @for (serviceescalation of objects.Serviceescalations; track serviceescalation) {
-                    <tr>
-                      <td colspan="2">
-                        <a *oitcPermission="['serviceescalations', 'edit']"
-                          [routerLink]="['/', 'serviceescalations', 'edit', serviceescalation.id]">
-                          {{ t('Service escalation') }} #{{ serviceescalation.id }}
-                        </a>
-                        <span *oitcPermission="['serviceescalations', 'edit']; negate: true">
-                          {{ t('Service escalation') }} #{{ serviceescalation.id }}
-                        </span>
-                        @if (containerIds.length > 0 && containerIds.indexOf(serviceescalation.container_id) !== -1) {
-                          <fa-stack
-                            >
-                            <fa-icon [icon]="['fas', 'lock']" class="text-warning lock-icon-gradient"
-                            stackItemSize="1x" pull="right"></fa-icon>
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
-                              stackItemSize="1x"
-                            transform="shrink-8 right-6 down-6"></fa-icon>
-                          </fa-stack>
-                        }
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            }
-            @if (total === 0) {
-              <oitc-not-used-by-object>
-                {{ t('This contact is not used by any object') }}
-              </oitc-not-used-by-object>
-            }
-          </c-container>
-        </c-card-body>
-      </c-card>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Contact') }}
+                    <small class="fw-300">
+                        <i>
+                            <strong>
+                                »{{ contact.name }}«
+                            </strong>
+                            {{ t('is used by') }}
+                            {{ total }}
+                            {{ t('objects.') }}
+                        </i>
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['contacts', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <c-container
+                    [fluid]="true">
+                    @if (objects) {
+                        <table bordered cTable class="mt-2 mb-0" hover striped>
+                            <tbody>
+                            <!-- Contacts -->
+                                @if (objects.Contactgroups.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                                            {{ t('Contactgroups') }} ({{ objects.Contactgroups.length }})
+                                        </th>
+                                    </tr>
+                                }
+                                @for (contactgroup of objects.Contactgroups; track contactgroup) {
+                                    <tr>
+                                        <td colspan="2">
+                                            <a *oitcPermission="['contactgroups', 'edit']"
+                                               [routerLink]="['/', 'contactgroups', 'edit', contactgroup.id]">
+                                                {{ contactgroup.container.name }}
+                                            </a>
+                                            <span *oitcPermission="['contactgroups', 'edit']; negate: true">
+                                                {{ contactgroup.container.name }}
+                                            </span>
+                                            @if (containerIds.length > 0 && containerIds.indexOf(contactgroup.container.parent_id) !== -1) {
+                                                <fa-stack
+                                                >
+                                                    <fa-icon [icon]="['fas', 'lock']"
+                                                             class="text-warning lock-icon-gradient"
+                                                             stackItemSize="1x" pull="right"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                                             class="text-danger"
+                                                             stackItemSize="1x"
+                                                             transform="shrink-8 right-6 down-6"></fa-icon>
+                                                </fa-stack>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            <!-- Host templates -->
+                                @if (objects.Hosttemplates.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                                            {{ t('Host templates') }} ({{ objects.Hosttemplates.length }})
+                                        </th>
+                                    </tr>
+                                }
+                                @for (hosttemplate of objects.Hosttemplates; track hosttemplate) {
+                                    <tr>
+                                        <td colspan="2">
+                                            <a *oitcPermission="['hosttemplates', 'edit']"
+                                               [routerLink]="['/', 'hosttemplates', 'edit', hosttemplate.id]">
+                                                {{ hosttemplate.name }}
+                                            </a>
+                                            <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
+                                                {{ hosttemplate.name }}
+                                            </span>
+                                            @if (containerIds.length > 0 && containerIds.indexOf(hosttemplate.container_id) !== -1) {
+                                                <fa-stack
+                                                >
+                                                    <fa-icon [icon]="['fas', 'lock']"
+                                                             class="text-warning lock-icon-gradient"
+                                                             stackItemSize="1x" pull="right"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                                             class="text-danger"
+                                                             stackItemSize="1x"
+                                                             transform="shrink-8 right-6 down-6"></fa-icon>
+                                                </fa-stack>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            <!-- Service templates -->
+                                @if (objects.Servicetemplates.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                                            {{ t('Service templates') }} ({{ objects.Servicetemplates.length }})
+                                        </th>
+                                    </tr>
+                                }
+                                @for (servicetemplate of objects.Servicetemplates; track servicetemplate) {
+                                    <tr>
+                                        <td colspan="2">
+                                            <a *oitcPermission="['servicetemplates', 'edit']"
+                                               [routerLink]="['/', 'servicetemplates', 'edit', servicetemplate.id]">
+                                                {{ servicetemplate.name }}
+                                            </a>
+                                            <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
+                                                {{ servicetemplate.name }}
+                                            </span>
+                                            @if (containerIds.length > 0 && containerIds.indexOf(servicetemplate.container_id) !== -1) {
+                                                <fa-stack
+                                                >
+                                                    <fa-icon [icon]="['fas', 'lock']"
+                                                             class="text-warning lock-icon-gradient"
+                                                             stackItemSize="1x" pull="right"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                                             class="text-danger"
+                                                             stackItemSize="1x"
+                                                             transform="shrink-8 right-6 down-6"></fa-icon>
+                                                </fa-stack>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            <!-- Hosts -->
+                                @if (objects.Hosts.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            {{ t('Hosts') }} ({{ objects.Hosts.length }})
+                                        </th>
+                                    </tr>
+                                }
+                                @for (host of objects.Hosts; track host) {
+                                    <tr>
+                                        <td colspan="2">
+                                            <a *oitcPermission="['hosts', 'edit']"
+                                               [routerLink]="['/', 'hosts', 'edit', host.id]">
+                                                {{ host.name }}
+                                            </a>
+                                            <span *oitcPermission="['hosts', 'edit']; negate: true">
+                                                {{ host.name }}
+                                            </span>
+                                            @if (containerIds.length > 0 && containerIds.indexOf(host.container_id) !== -1) {
+                                                <fa-stack
+                                                >
+                                                    <fa-icon [icon]="['fas', 'lock']"
+                                                             class="text-warning lock-icon-gradient"
+                                                             stackItemSize="1x" pull="right"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                                             class="text-danger"
+                                                             stackItemSize="1x"
+                                                             transform="shrink-8 right-6 down-6"></fa-icon>
+                                                </fa-stack>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            <!-- Services -->
+                                @if (objects.Services.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                            {{ t('Services') }} ({{ objects.Services.length }})
+                                        </th>
+                                    </tr>
+                                }
+                                @for (service of objects.Services; track service) {
+                                    <tr>
+                                        <td colspan="2">
+                                            <a *oitcPermission="['services', 'edit']"
+                                               [routerLink]="['/', 'services', 'edit', service.id]">
+                                                {{ service._matchingData.Hosts.name }} / {{ service.name }}
+                                            </a>
+                                            <span *oitcPermission="['services', 'edit']; negate: true">
+                                                {{ service._matchingData.Hosts.name }} / {{ service.name }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            <!-- Hostescalations -->
+                                @if (objects.Hostescalations.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
+                                            {{ t('Host escalations') }} ({{ objects.Hostescalations.length }})
+                                        </th>
+                                    </tr>
+                                }
+                                @for (hostescalation of objects.Hostescalations; track hostescalation) {
+                                    <tr>
+                                        <td colspan="2">
+                                            <a *oitcPermission="['hostescalations', 'edit']"
+                                               [routerLink]="['/', 'hostescalations', 'edit', hostescalation.id]">
+                                                {{ t('Host escalation') }} #{{ hostescalation.id }}
+                                            </a>
+                                            <span *oitcPermission="['hostescalations', 'edit']; negate: true">
+                                                {{ t('Host escalation') }} #{{ hostescalation.id }}
+                                            </span>
+                                            @if (containerIds.length > 0 && containerIds.indexOf(hostescalation.container_id) !== -1) {
+                                                <fa-stack
+                                                >
+                                                    <fa-icon [icon]="['fas', 'lock']"
+                                                             class="text-warning lock-icon-gradient"
+                                                             stackItemSize="1x" pull="right"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                                             class="text-danger"
+                                                             stackItemSize="1x"
+                                                             transform="shrink-8 right-6 down-6"></fa-icon>
+                                                </fa-stack>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            <!-- Serviceescalations -->
+                                @if (objects.Serviceescalations.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
+                                            {{ t('Service escalations') }} ({{ objects.Serviceescalations.length }})
+                                        </th>
+                                    </tr>
+                                }
+                                @for (serviceescalation of objects.Serviceescalations; track serviceescalation) {
+                                    <tr>
+                                        <td colspan="2">
+                                            <a *oitcPermission="['serviceescalations', 'edit']"
+                                               [routerLink]="['/', 'serviceescalations', 'edit', serviceescalation.id]">
+                                                {{ t('Service escalation') }} #{{ serviceescalation.id }}
+                                            </a>
+                                            <span *oitcPermission="['serviceescalations', 'edit']; negate: true">
+                                                {{ t('Service escalation') }} #{{ serviceescalation.id }}
+                                            </span>
+                                            @if (containerIds.length > 0 && containerIds.indexOf(serviceescalation.container_id) !== -1) {
+                                                <fa-stack
+                                                >
+                                                    <fa-icon [icon]="['fas', 'lock']"
+                                                             class="text-warning lock-icon-gradient"
+                                                             stackItemSize="1x" pull="right"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                                             class="text-danger"
+                                                             stackItemSize="1x"
+                                                             transform="shrink-8 right-6 down-6"></fa-icon>
+                                                </fa-stack>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    @if (total === 0) {
+                        <oitc-not-used-by-object>
+                            {{ t('This contact is not used by any object') }}
+                        </oitc-not-used-by-object>
+                    }
+                </c-container>
+            </c-card-body>
+        </c-card>
     }
-  </ng-container>
+</ng-container>

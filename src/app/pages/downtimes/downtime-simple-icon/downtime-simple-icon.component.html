@@ -1,18 +1,18 @@
 <ng-container *transloco="let t">
-  @if (downtime.isRunning) {
-    <fa-icon [icon]="['fas', 'power-off']"
-    class="text-success" title="{{ t('Downtime currently running') }}"></fa-icon>
-  }
-  @if (downtime.isExpired) {
-    <fa-icon [icon]="['fas', 'power-off']"
-    class="text-danger" title="{{ t('Downtime is expired') }}"></fa-icon>
-  }
-  @if (downtime.wasCancelled) {
-    <fa-icon [icon]="['fas', 'power-off']"
-    class="text-danger" title="{{ t('Downtime was cancelled') }}"></fa-icon>
-  }
-  @if (!downtime.wasCancelled && !downtime.wasStarted && !downtime.isExpired) {
-    <fa-icon [icon]="['fas', 'power-off']"
-    class="text-primary" title="{{ t('Downtime not started yet') }}"></fa-icon>
-  }
+    @if (downtime.isRunning) {
+        <fa-icon [icon]="['fas', 'power-off']"
+                 class="text-success" title="{{ t('Downtime currently running') }}"></fa-icon>
+    }
+    @if (downtime.isExpired) {
+        <fa-icon [icon]="['fas', 'power-off']"
+                 class="text-danger" title="{{ t('Downtime is expired') }}"></fa-icon>
+    }
+    @if (downtime.wasCancelled) {
+        <fa-icon [icon]="['fas', 'power-off']"
+                 class="text-danger" title="{{ t('Downtime was cancelled') }}"></fa-icon>
+    }
+    @if (!downtime.wasCancelled && !downtime.wasStarted && !downtime.isExpired) {
+        <fa-icon [icon]="['fas', 'power-off']"
+                 class="text-primary" title="{{ t('Downtime not started yet') }}"></fa-icon>
+    }
 </ng-container>

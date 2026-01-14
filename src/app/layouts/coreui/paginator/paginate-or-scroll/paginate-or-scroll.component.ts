@@ -10,13 +10,13 @@ import { TranslocoDirective } from '@jsverse/transloco';
 @Component({
     selector: 'oitc-paginate-or-scroll',
     imports: [
-    PaginatorComponent,
-    ScrollIndexComponent,
-    RowComponent,
-    ColComponent,
-    XsButtonDirective,
-    TranslocoDirective
-],
+        PaginatorComponent,
+        ScrollIndexComponent,
+        RowComponent,
+        ColComponent,
+        XsButtonDirective,
+        TranslocoDirective
+    ],
     templateUrl: './paginate-or-scroll.component.html',
     styleUrl: './paginate-or-scroll.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

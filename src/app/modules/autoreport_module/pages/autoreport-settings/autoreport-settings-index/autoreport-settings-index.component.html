@@ -1,139 +1,143 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a>
-            <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-            {{ t('Autoreport Module') }}
-          </a>
-        </li>
-        <li class="breadcrumb-item">
-          <a [routerLink]="['/', 'autoreport_module', 'autoreport_settings', 'index']"
-            *oitcPermission="['AutoreportModule', 'autoreportsettings', 'index']">
-            <fa-icon [icon]="['fas', 'gears']"></fa-icon>
-            {{ t('Configuration') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-          {{ t('Edit') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Autoreport Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'autoreport_module', 'autoreport_settings', 'index']"
+                   *oitcPermission="['AutoreportModule', 'autoreportsettings', 'index']">
+                    <fa-icon [icon]="['fas', 'gears']"></fa-icon>
+                    {{ t('Configuration') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
     </nav>
 
     <c-alert color="warning" role="alert">
-      <div class="d-flex align-items-center">
-        <div class="alert-icon me-2">
-          <div class='icon-stack  icon-stack-sm'>
-            <i class="base base-9 icon-stack-3x opacity-100 text-primary"></i>
-            <i class="fas fa-exclamation-circle icon-stack-1x opacity-100 text-white"></i>
-          </div>
+        <div class="d-flex align-items-center">
+            <div class="alert-icon me-2">
+                <div class='icon-stack  icon-stack-sm'>
+                    <i class="base base-9 icon-stack-3x opacity-100 text-primary"></i>
+                    <i class="fas fa-exclamation-circle icon-stack-1x opacity-100 text-white"></i>
+                </div>
+            </div>
+            <div class="flex-1">
+                <span class="h5"> {{ t('Attention!') }}</span>
+                {{ t('This changes affects all reports') }}
+            </div>
         </div>
-        <div class="flex-1">
-          <span class="h5"> {{ t('Attention!') }}</span>
-          {{ t('This changes affects all reports') }}
-        </div>
-      </div>
     </c-alert>
 
     <form cForm (ngSubmit)="submitAutoreportSettings()">
 
-      <c-card>
+        <c-card>
 
-        <c-card-header>
-          <h5 cCardTitle>
-            {{ t('Autoreport Settings') }}
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Autoreport Settings') }}
 
-          </h5>
-        </c-card-header>
-        <c-card-body>
+                </h5>
+            </c-card-header>
+            <c-card-body>
 
-          @if (init) {
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
-              <thead>
-                <tr>
-                  <th>
-                    {{ t('Key') }}
-                  </th>
-                  <th class="text-left col-6">
-                    {{ t('Value') }}
-                  </th>
-                  <th class="text-center col-1">
-                    {{ t('Info') }}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (setting of defaultAutoreportSettings; track setting; let i = $index) {
-                  <tr>
-                    <td>
-                      {{ setting.key }}
-                    </td>
-                    <td>
-                      @if (setting.key !== 'AUTOREPORTS_ERROR_NOTIFICATION' && setting.key !== 'AUTOREPORTS_STORE_PATH') {
-                        <div>
-                          <c-form-check>
-                            <input
-                              cFormCheckInput
-                              class="checkbox-lg checkbox-primary"
-                              name="{{setting.key}}"
-                              id="{{setting.key}}"
-                              type="checkbox"
-                              (debouncedValue)="setBitValueForOption($event, setting.value.value)"
-                              oitcDebounce
-                              trueFalseValue
-                              [trueValue]=true
-                              [falseValue]=false
-                              [(ngModel)]="selected[i]"/>
-                          </c-form-check>
-                        </div>
-                      }
-                      @if (setting.key === 'AUTOREPORTS_ERROR_NOTIFICATION') {
-                        <div>
-                          <input cFormControl
-                            name="{{setting.key}}"
-                            id="{{setting.key}}"
-                            type="text"
-                            [(ngModel)]="post.notification_emails"
-                            oitcFormError [errors]="errors" errorField="notification_emails"/>
-                          <oitc-form-feedback [errors]="errors" errorField="notification_emails"></oitc-form-feedback>
-                        </div>
-                      }
-                      @if (setting.key === 'AUTOREPORTS_STORE_PATH') {
-                        <div >
-                          <input cFormControl
-                            name="{{setting.key}}"
-                            id="{{setting.key}}"
-                            type="text"
-                            [(ngModel)]="post.store_path"
-                            oitcFormError [errors]="errors" errorField="store_path"/>
-                          <oitc-form-feedback [errors]="errors" errorField="store_path"></oitc-form-feedback>
-                        </div>
-                      }
-                    </td>
-                    <td class="text-center">
-                      <a href="javascript:void(0);"
-                        [cTooltip]="setting.value.info" cTooltipPlacement="left">
-                        <fa-icon class="text-info" [icon]="['fas', 'info-circle']" size="2x"></fa-icon>
-                      </a>
-                    </td>
-                  </tr>
+                @if (init) {
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                        <thead>
+                        <tr>
+                            <th>
+                                {{ t('Key') }}
+                            </th>
+                            <th class="text-left col-6">
+                                {{ t('Value') }}
+                            </th>
+                            <th class="text-center col-1">
+                                {{ t('Info') }}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @for (setting of defaultAutoreportSettings; track setting; let i = $index) {
+                                <tr>
+                                    <td>
+                                        {{ setting.key }}
+                                    </td>
+                                    <td>
+                                        @if (setting.key !== 'AUTOREPORTS_ERROR_NOTIFICATION' && setting.key !== 'AUTOREPORTS_STORE_PATH') {
+                                            <div>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-primary"
+                                                        name="{{setting.key}}"
+                                                        id="{{setting.key}}"
+                                                        type="checkbox"
+                                                        (debouncedValue)="setBitValueForOption($event, setting.value.value)"
+                                                        oitcDebounce
+                                                        trueFalseValue
+                                                        [trueValue]=true
+                                                        [falseValue]=false
+                                                        [(ngModel)]="selected[i]"/>
+                                                </c-form-check>
+                                            </div>
+                                        }
+                                        @if (setting.key === 'AUTOREPORTS_ERROR_NOTIFICATION') {
+                                            <div>
+                                                <input cFormControl
+                                                       name="{{setting.key}}"
+                                                       id="{{setting.key}}"
+                                                       type="text"
+                                                       [(ngModel)]="post.notification_emails"
+                                                       oitcFormError [errors]="errors"
+                                                       errorField="notification_emails"/>
+                                                <oitc-form-feedback [errors]="errors"
+                                                                    errorField="notification_emails"></oitc-form-feedback>
+                                            </div>
+                                        }
+                                        @if (setting.key === 'AUTOREPORTS_STORE_PATH') {
+                                            <div>
+                                                <input cFormControl
+                                                       name="{{setting.key}}"
+                                                       id="{{setting.key}}"
+                                                       type="text"
+                                                       [(ngModel)]="post.store_path"
+                                                       oitcFormError [errors]="errors" errorField="store_path"/>
+                                                <oitc-form-feedback [errors]="errors"
+                                                                    errorField="store_path"></oitc-form-feedback>
+                                            </div>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="javascript:void(0);"
+                                           [cTooltip]="setting.value.info" cTooltipPlacement="left">
+                                            <fa-icon class="text-info" [icon]="['fas', 'info-circle']"
+                                                     size="2x"></fa-icon>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 }
-              </tbody>
-            </table>
-          }
 
-        </c-card-body>
-        <c-card-footer class="text-end">
-          <button cButton class="ripple" color="primary" type="submit">
-            {{ t('Save') }}
-          </button>
-        </c-card-footer>
-      </c-card>
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Save') }}
+                </button>
+            </c-card-footer>
+        </c-card>
     </form>
-  </ng-container>
+</ng-container>

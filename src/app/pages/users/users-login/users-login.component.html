@@ -1,207 +1,207 @@
 <ng-container *transloco="let t">
-  <!-- FORM -->
-  <c-row class="w-100 h-100 peer scrollable pos-r login-side-bg login-form-bg">
-    <c-col xs="12" md="6" lg="7" xl="8"
-      [ngClass]="{'position-absolute w-100 z-index-1': !enableColumnLayout, 'd-none d-lg-block d-md-block': enableColumnLayout}">
-      <!-- IMAGES -->
-      @if (!isCustomLoginBackground && loginAnimation) {
-        <!-- Show default openITCOCKPIT background images and fade between them -->
-        <div class="login-screen">
-          @for (image of images; track image) {
-            <figure
-              [style.background-image]="'url(/img/login/' + image.image + ')'">
-              <figcaption>
-                {{ image.credit }}
-                @if (description) {
-                  - {{ description }}
+    <!-- FORM -->
+    <c-row class="w-100 h-100 peer scrollable pos-r login-side-bg login-form-bg">
+        <c-col xs="12" md="6" lg="7" xl="8"
+               [ngClass]="{'position-absolute w-100 z-index-1': !enableColumnLayout, 'd-none d-lg-block d-md-block': enableColumnLayout}">
+            <!-- IMAGES -->
+            @if (!isCustomLoginBackground && loginAnimation) {
+                <!-- Show default openITCOCKPIT background images and fade between them -->
+                <div class="login-screen">
+                    @for (image of images; track image) {
+                        <figure
+                            [style.background-image]="'url(/img/login/' + image.image + ')'">
+                            <figcaption>
+                                {{ image.credit }}
+                                @if (description) {
+                                    - {{ description }}
+                                }
+                            </figcaption>
+                        </figure>
+                    }
+                </div>
+            }
+            @if (!isCustomLoginBackground && !loginAnimation) {
+                <!-- Show the first openITCOCKPIT background - no animation as they are disabled -->
+                @for (image of images; track $index) {
+                    @if ($index === 0) {
+                        <div class="login-screen-vnc"
+                             [style.background-image]="'url(/img/login/' + image.image + ')'">
+                            <figcaption>
+                                {{ image.credit }}
+                                @if (description) {
+                                    - {{ description }}
+                                }
+                            </figcaption>
+                        </div>
+                    }
                 }
-              </figcaption>
-            </figure>
-          }
-        </div>
-      }
-      @if (!isCustomLoginBackground && !loginAnimation) {
-        <!-- Show the first openITCOCKPIT background - no animation as they are disabled -->
-        @for (image of images; track $index) {
-          @if ($index === 0) {
-            <div class="login-screen-vnc"
-              [style.background-image]="'url(/img/login/' + image.image + ')'">
-              <figcaption>
-                {{ image.credit }}
-                @if (description) {
-                  - {{ description }}
-                }
-              </figcaption>
+            }
+
+            @if (isCustomLoginBackground) {
+                <!-- Show custom background image uploaded through DesignModule -->
+                <div class="login-screen login-screen-custom"
+                     [style.background-image]="'url(' + customLoginBackgroundHtml + ')'">
+                </div>
+            }
+            <!-- PRTCLS -->
+            @if (loginAnimation) {
+                <ngx-particles
+                    id="prtcls"
+                    [options]="particlesOptions"
+                    (particlesLoaded)="particlesLoaded($event)"
+                ></ngx-particles>
+            }
+        </c-col>
+        <c-col xs="12" md="6" lg="5" xl="4" class="p-5 login-side-right">
+            @if (!disableLogin) {
+                <div class="col-12 text-end">
+                    @if (!enforceDisableAnimation) {
+                        <div>
+                            <input cFormCheckInput
+                                   id="animation" type="checkbox"
+                                   class="checkbox-lg checkbox-primary"
+                                   name="animation"
+                                   [(ngModel)]="loginAnimation"
+                            />
+                            <label cFormCheckLabel class="ms-1 mt-1 text-white"
+                                   for="animation">
+                                {{ t('Animation') }}
+                            </label>
+                        </div>
+                    }
+                </div>
+            }
+            <div class="col-12 text-center">
+                <img class="img-fluid" src="{{logoUrl}}" style="max-height: 230px;"/>
             </div>
-          }
-        }
-      }
 
-      @if (isCustomLoginBackground) {
-        <!-- Show custom background image uploaded through DesignModule -->
-        <div class="login-screen login-screen-custom"
-          [style.background-image]="'url(' + customLoginBackgroundHtml + ')'">
-        </div>
-      }
-      <!-- PRTCLS -->
-      @if (loginAnimation) {
-        <ngx-particles
-          id="prtcls"
-          [options]="particlesOptions"
-          (particlesLoaded)="particlesLoaded($event)"
-        ></ngx-particles>
-      }
-    </c-col>
-    <c-col xs="12" md="6" lg="5" xl="4" class="p-5 login-side-right">
-      @if (!disableLogin) {
-        <div class="col-12 text-end">
-          @if (!enforceDisableAnimation) {
-            <div>
-              <input cFormCheckInput
-                id="animation" type="checkbox"
-                class="checkbox-lg checkbox-primary"
-                name="animation"
-                [(ngModel)]="loginAnimation"
-                />
-              <label cFormCheckLabel class="ms-1 mt-1 text-white"
-                for="animation">
-                {{ t('Animation') }}
-              </label>
-            </div>
-          }
-        </div>
-      }
-      <div class="col-12 text-center">
-        <img class="img-fluid" src="{{logoUrl}}" style="max-height: 230px;"/>
-      </div>
+            <h4 class="fw-300 mb-5 text-white">{{ t('Login') }}</h4>
 
-      <h4 class="fw-300 mb-5 text-white">{{ t('Login') }}</h4>
+            @if (isSsoEnabled) {
+                <div class="form-group mb-5">
+                    <a id="sso-redirect-href"
+                       href="/users/login?redirect_sso=true"
+                       class="btn btn-primary btn-lg w-100 ripple">
+                        <i class="fas fa-sign-in-alt"></i>
+                        {{ t('Login through Single sign-on') }}
+                    </a>
+                </div>
+            }
 
-      @if (isSsoEnabled) {
-        <div class="form-group mb-5">
-          <a id="sso-redirect-href"
-            href="/users/login?redirect_sso=true"
-            class="btn btn-primary btn-lg w-100 ripple">
-            <i class="fas fa-sign-in-alt"></i>
-            {{ t('Login through Single sign-on') }}
-          </a>
-        </div>
-      }
+            <!-- Start login form for username and password (Session and LDAP) -->
+            @if (!hasValidSslCertificate && !forceRedirectSsousersToLoginScreen) {
+                <form (ngSubmit)="submit()">
+                    <!-- username -->
+                    <div class="mb-3">
+                        <label cLabel for="post.email" class="text-white">
+                            {{ t('Username') }}
+                        </label>
+                        <input cFormControl
+                               id="post.email"
+                               required
+                               placeholder="John Doe"
+                               type="text"
+                               sizing="lg"
+                               name="post.email"
+                               [disabled]="disableLogin"
+                               [(ngModel)]="post.email">
+                    </div>
+                    <!-- username -->
+                    <div class="mb-3">
+                        <label cLabel for="post.password" class="text-white">
+                            {{ t('Password') }}
+                        </label>
+                        <input cFormControl
+                               id="post.password"
+                               required
+                               type="password"
+                               sizing="lg"
+                               placeholder="Password"
+                               name="post.password"
+                               [disabled]="disableLogin"
+                               [(ngModel)]="post.password">
+                    </div>
+                    <c-row class="mb-3">
+                        <c-col md="6" lg="8">
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput
+                                       id="remember_me" type="checkbox"
+                                       class="checkbox-lg checkbox-primary"
+                                       name="remember_me"
+                                       [(ngModel)]="post.remember_me"
+                                />
+                                <label cFormCheckLabel class="ms-1 mt-1 text-white"
+                                       for="remember_me">
+                                    {{ t('Remember me') }}
+                                </label>
+                            </c-form-check>
+                        </c-col>
+                        <c-col md="6" lg="4" class="text-end">
+                            <button
+                                type="submit"
+                                class="btn btn-primary text-end ripple"
+                                [disabled]="disableLogin">
+                                <span>
+                                    @if (disableLogin) {
+                                        <i class="fa fa-spinner fa-spin"></i>
+                                    }
+                                </span>
+                                {{ t('Login') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            }
 
-      <!-- Start login form for username and password (Session and LDAP) -->
-      @if (!hasValidSslCertificate && !forceRedirectSsousersToLoginScreen) {
-        <form (ngSubmit)="submit()">
-          <!-- username -->
-          <div class="mb-3">
-            <label cLabel for="post.email" class="text-white">
-              {{ t('Username') }}
-            </label>
-            <input cFormControl
-              id="post.email"
-              required
-              placeholder="John Doe"
-              type="text"
-              sizing="lg"
-              name="post.email"
-              [disabled]="disableLogin"
-              [(ngModel)]="post.email">
-          </div>
-          <!-- username -->
-          <div class="mb-3">
-            <label cLabel for="post.password" class="text-white">
-              {{ t('Password') }}
-            </label>
-            <input cFormControl
-              id="post.password"
-              required
-              type="password"
-              sizing="lg"
-              placeholder="Password"
-              name="post.password"
-              [disabled]="disableLogin"
-              [(ngModel)]="post.password">
-          </div>
-          <c-row class="mb-3">
-            <c-col md="6" lg="8">
-              <c-form-check class="mb-2">
-                <input cFormCheckInput
-                  id="remember_me" type="checkbox"
-                  class="checkbox-lg checkbox-primary"
-                  name="remember_me"
-                  [(ngModel)]="post.remember_me"
-                  />
-                <label cFormCheckLabel class="ms-1 mt-1 text-white"
-                  for="remember_me">
-                  {{ t('Remember me') }}
-                </label>
-              </c-form-check>
-            </c-col>
-            <c-col md="6" lg="4" class="text-end">
-              <button
-                type="submit"
-                class="btn btn-primary text-end ripple"
-                [disabled]="disableLogin">
-                <span>
-                  @if (disableLogin) {
-                    <i class="fa fa-spinner fa-spin"></i>
-                  }
-                </span>
-                {{ t('Login') }}
-              </button>
-            </c-col>
-          </c-row>
-        </form>
-      }
-
-      <!-- Users with valid SSL certificates are always logged in -->
-      @if (hasValidSslCertificate) {
-        <div>
-          <c-alert color="success">
-            {{ t('Authorization through SSL certificate successful.') }}
-          </c-alert>
-          <div class="form-group">
-            <div class="peers ai-c jc-sb fxw-nw">
-              <div class="peer">
-              </div>
-              <div class="peer">
-                <a
-                  [routerLink]="['/']"
-                  class="btn btn-primary">
-                  {{ t('Start') }}
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      }
-      <!-- End certificates login -->
+            <!-- Users with valid SSL certificates are always logged in -->
+            @if (hasValidSslCertificate) {
+                <div>
+                    <c-alert color="success">
+                        {{ t('Authorization through SSL certificate successful.') }}
+                    </c-alert>
+                    <div class="form-group">
+                        <div class="peers ai-c jc-sb fxw-nw">
+                            <div class="peer">
+                            </div>
+                            <div class="peer">
+                                <a
+                                    [routerLink]="['/']"
+                                    class="btn btn-primary">
+                                    {{ t('Start') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <!-- End certificates login -->
 
 
-      @if (!disableSocialButtons) {
-        <div class="text-end" style="padding-top: 100px;">
-          <a href="https://openitcockpit.io/" target="_blank"
-            cButton [color]="'default'" class="ripple"
-            [cTooltip]="'openITCOCKPIT Website'" cTooltipPlacement="top">
-            <fa-icon [icon]="['fas', 'globe']" [size]="'lg'"></fa-icon>
-          </a>
-          <a href="https://github.com/openITCOCKPIT/openITCOCKPIT" target="_blank"
-            cButton [color]="'default'" class="ripple"
-            [cTooltip]="'GitHub - Source Code'" cTooltipPlacement="top">
-            <fa-icon [icon]="['fab', 'github']" [size]="'lg'"></fa-icon>
-          </a>
-          <a href="https://www.reddit.com/r/openitcockpit" target="_blank"
-            cButton [color]="'default'" class="ripple"
-            [cTooltip]="'Reddit Community'" cTooltipPlacement="top">
-            <fa-icon [icon]="['fab', 'reddit']" [size]="'lg'"></fa-icon>
-          </a>
-          <a href="https://discord.gg/G8KhxKuQ9G" target="_blank"
-            cButton [color]="'default'" class="ripple"
-            [cTooltip]="'Discord Community'" cTooltipPlacement="top">
-            <fa-icon [icon]="['fab', 'discord']" [size]="'lg'"></fa-icon>
-          </a>
-        </div>
-      }
+            @if (!disableSocialButtons) {
+                <div class="text-end" style="padding-top: 100px;">
+                    <a href="https://openitcockpit.io/" target="_blank"
+                       cButton [color]="'default'" class="ripple"
+                       [cTooltip]="'openITCOCKPIT Website'" cTooltipPlacement="top">
+                        <fa-icon [icon]="['fas', 'globe']" [size]="'lg'"></fa-icon>
+                    </a>
+                    <a href="https://github.com/openITCOCKPIT/openITCOCKPIT" target="_blank"
+                       cButton [color]="'default'" class="ripple"
+                       [cTooltip]="'GitHub - Source Code'" cTooltipPlacement="top">
+                        <fa-icon [icon]="['fab', 'github']" [size]="'lg'"></fa-icon>
+                    </a>
+                    <a href="https://www.reddit.com/r/openitcockpit" target="_blank"
+                       cButton [color]="'default'" class="ripple"
+                       [cTooltip]="'Reddit Community'" cTooltipPlacement="top">
+                        <fa-icon [icon]="['fab', 'reddit']" [size]="'lg'"></fa-icon>
+                    </a>
+                    <a href="https://discord.gg/G8KhxKuQ9G" target="_blank"
+                       cButton [color]="'default'" class="ripple"
+                       [cTooltip]="'Discord Community'" cTooltipPlacement="top">
+                        <fa-icon [icon]="['fab', 'discord']" [size]="'lg'"></fa-icon>
+                    </a>
+                </div>
+            }
 
-    </c-col>
-  </c-row>
+        </c-col>
+    </c-row>
 </ng-container>

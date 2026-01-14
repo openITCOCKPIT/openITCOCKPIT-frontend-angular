@@ -1,27 +1,27 @@
 <ng-container *transloco="let t">
-  <c-row>
-    <c-col>
-      @if (paginateOrScroll?.paging) {
-        <oitc-paginator
-          (pageChange)="onPageChange($event)"
-          [paging]="paginateOrScroll?.paging"
-        ></oitc-paginator>
-      }
+    <c-row>
+        <c-col>
+            @if (paginateOrScroll?.paging) {
+                <oitc-paginator
+                    (pageChange)="onPageChange($event)"
+                    [paging]="paginateOrScroll?.paging"
+                ></oitc-paginator>
+            }
 
-      @if (paginateOrScroll?.scroll) {
-        <oitc-scroll-index
-          (pageChange)="onPageChange($event)"
-          [scroll]="paginateOrScroll?.scroll">
-        </oitc-scroll-index>
-      }
-    </c-col>
-  </c-row>
-  <c-row>
-    <c-col>
-      <button type="button" (click)="changeMode()" cButton class="ripple" color="primary" size="xs">
-        <span [hidden]="!isScrollMode">{{ t('Switch to Paginator Mode') }}</span>
-        <span [hidden]="isScrollMode">{{ t('Switch to Scroll Mode') }}</span>
-      </button>
-    </c-col>
-  </c-row>
+            @if (paginateOrScroll?.scroll) {
+                <oitc-scroll-index
+                    (pageChange)="onPageChange($event)"
+                    [scroll]="paginateOrScroll?.scroll">
+                </oitc-scroll-index>
+            }
+        </c-col>
+    </c-row>
+    <c-row>
+        <c-col>
+            <button type="button" (click)="changeMode()" cButton class="ripple" color="primary" size="xs">
+                <span [hidden]="!isScrollMode">{{ t('Switch to Paginator Mode') }}</span>
+                <span [hidden]="isScrollMode">{{ t('Switch to Scroll Mode') }}</span>
+            </button>
+        </c-col>
+    </c-row>
 </ng-container>

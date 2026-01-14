@@ -14,13 +14,13 @@ import { ObjectTypesEnum } from '../../pages/changelogs/object-types.enum';
 @Component({
     selector: 'oitc-macros',
     imports: [
-    FaIconComponent,
-    FormsModule,
-    TranslocoDirective,
-    NgSelectModule,
-    FormFeedbackComponent,
-    RequiredIconComponent
-],
+        FaIconComponent,
+        FormsModule,
+        TranslocoDirective,
+        NgSelectModule,
+        FormFeedbackComponent,
+        RequiredIconComponent
+    ],
     templateUrl: './macros.component.html',
     styleUrl: './macros.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

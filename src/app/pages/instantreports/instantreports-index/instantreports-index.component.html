@@ -1,415 +1,415 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['instantreports', 'index']" [routerLink]="['/', 'instantreports', 'index']">
-            <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-            {{ t('Instant reports') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'list']"></fa-icon>
-          {{ t('Overview') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['instantreports', 'index']" [routerLink]="['/', 'instantreports', 'index']">
+                    <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                    {{ t('Instant reports') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
     </nav>
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>{{ t('Instant reports') }}
-          <small class="fw-300">
-            {{ t('overview') }}
-          </small>
-        </h5>
-        <c-nav class="card-toolbar card-header-pills">
-          <c-nav-item class="px-1">
-            <button (click)="loadInstantreports()" cButton class="ripple" color="default" size="xs">
-              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-              {{ t('Refresh') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button *oitcPermission="['instantreports', 'add']"
-              [routerLink]="['/', 'instantreports', 'add']" cButton
-              class="ripple"
-              color="success"
-              size="xs">
-              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-              {{ t('New') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-              {{ t('Filter') }}
-            </button>
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
-        <!-- Filter -->
-        <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-          <c-row>
-            <c-col>
-              <h6 class="pb-2 mb-3 border-bottom">
-                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                {{ t('Filter') }}
-              </h6>
-            </c-col>
-          </c-row>
-          <form cForm>
-            <c-row>
-              <c-col md="6">
-                <c-input-group>
-                  <span cInputGroupText>
-                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="params['filter[Instantreports.name]']"
-                    [placeholder]="'Filter by instant report name' | transloco"
-                    aria-label="name"
-                    cFormControl
-                    name="name"
-                    oitcDebounce
-                    type="text"
-                    />
-                </c-input-group>
-              </c-col>
-            </c-row>
-            <c-row class="mt-2">
-              <c-col [xs]="12" lg="3">
-                <h5>{{ t('Type') }}</h5>
-                <c-form-check class="mb-2">
-                  <input cFormCheckInput id="objectHostgroup" type="checkbox"
-                    class="checkbox-lg checkbox-primary"
-                    name="objectHostgroup"
-                    [(ngModel)]="objectTypesFilter[InstantreportObjectTypes.Hostgroups]"
-                    />
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="objectHostgroup">{{ t('Host group') }}</label>
-                </c-form-check>
-
-                <c-form-check class="mb-2">
-                  <input cFormCheckInput id="objectHost" type="checkbox"
-                    class="checkbox-lg checkbox-primary"
-                    name="objectHost"
-                    [(ngModel)]="objectTypesFilter[InstantreportObjectTypes.Hosts]"
-                    />
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="objectHost">{{ t('Hosts') }}</label>
-                </c-form-check>
-
-                <c-form-check class="mb-2">
-                  <input cFormCheckInput id="objectServicegroups" type="checkbox"
-                    class="checkbox-lg checkbox-primary"
-                    name="objectServicegroups"
-                    [(ngModel)]="objectTypesFilter[InstantreportObjectTypes.Servicegroups]"
-                    />
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="objectServicegroups">{{ t('Service groups') }}</label>
-                </c-form-check>
-
-                <c-form-check class="mb-2">
-                  <input cFormCheckInput id="objectServices" type="checkbox"
-                    class="checkbox-lg checkbox-primary"
-                    name="objectServices"
-                    [(ngModel)]="objectTypesFilter[InstantreportObjectTypes.Services]"
-                    />
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="objectServices">{{ t('Services') }}</label>
-                </c-form-check>
-              </c-col>
-
-              <c-col [xs]="12" lg="3">
-                <h5>{{ t('Type') }}</h5>
-                <c-form-check class="mb-2">
-                  <input cFormCheckInput id="evaluationHosts" type="checkbox"
-                    class="checkbox-lg checkbox-primary"
-                    name="evaluationHosts"
-                    [(ngModel)]="evaluationTypesFilter[InstantreportEvaluationTypes.Hosts]"
-                    />
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="evaluationHosts">{{ t('Hosts') }}</label>
-                </c-form-check>
-
-
-                <c-form-check class="mb-2">
-                  <input cFormCheckInput id="evaluationHostsAndServices" type="checkbox"
-                    class="checkbox-lg checkbox-primary"
-                    name="evaluationHostsAndServices"
-                    [(ngModel)]="evaluationTypesFilter[InstantreportEvaluationTypes.HostAndServices]"
-                    />
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="evaluationHostsAndServices">{{ t('Hosts and Services') }}</label>
-                </c-form-check>
-
-                <c-form-check class="mb-2">
-                  <input cFormCheckInput id="evaluationServices" type="checkbox"
-                    class="checkbox-lg checkbox-primary"
-                    name="evaluationServices"
-                    [(ngModel)]="evaluationTypesFilter[InstantreportEvaluationTypes.Services]"
-                    />
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="evaluationServices">{{ t('Services') }}</label>
-                </c-form-check>
-              </c-col>
-
-            </c-row>
-            <c-row class="mt-2">
-              <c-col class="text-end">
-                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                  {{ t('Reset filter') }}
-                </button>
-              </c-col>
-            </c-row>
-          </form>
-        </c-container>
-        <!-- End Filter -->
-
-        @if (!instantreports) {
-          <oitc-table-loader></oitc-table-loader>
-        }
-        @if (instantreports) {
-          <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-            (matSortChange)="onSortChange($event)"
-            [matSortActive]="params.sort" [matSortDirection]="params.direction">
-            <thead>
-              <tr>
-                <th class="width-50 text-center" scope="col">
-                  <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                </th>
-                <th scope="col" mat-sort-header="Instantreports.name">
-                  {{ t('Name') }}
-                </th>
-                <th scope="col" mat-sort-header="Instantreports.type">
-                  {{ t('Type') }}
-                </th>
-                <th scope="col" mat-sort-header="Instantreports.evaluation">
-                  {{ t('Evaluation') }}
-                </th>
-                <th scope="col" mat-sort-header="Timeperiods.name">
-                  {{ t('Time period') }}
-                </th>
-                <th scope="col" mat-sort-header="Instantreports.summary">
-                  {{ t('Summary display') }}
-                </th>
-                <th scope="col" mat-sort-header="Instantreports.downtimes">
-                  {{ t('Consider downtimes') }}
-                </th>
-                <th scope="col">
-                  {{ t('Send interval') }}
-                </th>
-                <th scope="col">
-                  {{ t('Send to') }}
-                </th>
-                <th class="text-center width-50" scope="col">
-                  <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (instantreport of instantreports.instantreports; track instantreport) {
-                <tr>
-                  <td class="text-center">
-                    <oitc-item-select
-                      *oitcPermission="['instantreports', 'delete']"
-                      [disabled]="!instantreport.allowEdit"
-                    [item]="instantreport"></oitc-item-select>
-                  </td>
-                  <td>
-                    {{ instantreport.Instantreport.name }}
-                  </td>
-                  <td>
-                    @if (instantreport.Instantreport.type === InstantreportObjectTypes.Hostgroups) {
-                      <span>
-                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                        {{ t('Host groups') }}
-                      </span>
-                    }
-                    @if (instantreport.Instantreport.type === InstantreportObjectTypes.Hosts) {
-                      <span>
-                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                        {{ t('Hosts') }}
-                      </span>
-                    }
-                    @if (instantreport.Instantreport.type === InstantreportObjectTypes.Servicegroups) {
-                      <span>
-                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                        {{ t('Service groups') }}
-                      </span>
-                    }
-                    @if (instantreport.Instantreport.type === InstantreportObjectTypes.Services) {
-                      <span>
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                        {{ t('Services') }}
-                      </span>
-                    }
-                  </td>
-                  <td>
-                    @if (instantreport.Instantreport.evaluation === InstantreportEvaluationTypes.Hosts) {
-                      <span>
-                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                        {{ t('Hosts') }}
-                      </span>
-                    }
-                    @if (instantreport.Instantreport.evaluation === InstantreportEvaluationTypes.HostAndServices) {
-                      <span
-                        >
-                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                        {{ t('Hosts and services') }}
-                      </span>
-                    }
-                    @if (instantreport.Instantreport.evaluation === InstantreportEvaluationTypes.Services) {
-                      <span
-                        >
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                        {{ t('Services') }}
-                      </span>
-                    }
-                  </td>
-                  <td>
-                    {{ instantreport.Timeperiod.name }}
-                  </td>
-                  <td class="text-center">
-                    @if (instantreport.Instantreport.summary === 1) {
-                      <oitc-badge-outline color="success">
-                        {{ t('Yes') }}
-                      </oitc-badge-outline>
-                    }
-                    @if (instantreport.Instantreport.summary === 0) {
-                      <oitc-badge-outline color="danger">
-                        {{ t('No') }}
-                      </oitc-badge-outline>
-                    }
-                  </td>
-                  <td class="text-center">
-                    @if (instantreport.Instantreport.downtimes === 1) {
-                      <oitc-badge-outline color="success">
-                        {{ t('Yes') }}
-                      </oitc-badge-outline>
-                    }
-                    @if (instantreport.Instantreport.downtimes === 0) {
-                      <oitc-badge-outline color="danger">
-                        {{ t('No') }}
-                      </oitc-badge-outline>
-                    }
-                  </td>
-                  <td>
-                    @switch (instantreport.Instantreport.send_interval) {
-                      @case (0) {
-                        {{ t('NEVER') }}
-                      }
-                      @case (1) {
-                        {{ t('DAY') }}
-                      }
-                      @case (2) {
-                        {{ t('WEEK') }}
-                      }
-                      @case (3) {
-                        {{ t('MONTH') }}
-                      }
-                      @case (4) {
-                        {{ t('YEAR') }}
-                      }
-                    }
-                  </td>
-                  <td>
-                    <ul class="p-0 ps-3">
-                      @for (user of instantreport.User; track user) {
-                        <li>
-                          {{ user.firstname }} {{ user.lastname }}
-                        </li>
-                      }
-                    </ul>
-                  </td>
-                  <td class="width-50">
-                    <oitc-actions-button [permission]="'instantreports.edit'"
-                      [url]="'/instantreports/edit/' + instantreport.Instantreport.id"
-                      [allowEdit]="instantreport.allowEdit">
-                      @if (instantreport.allowEdit) {
-                        <oitc-actions-button-element [permission]="'instantreports.edit'"
-                          [url]="'/instantreports/edit/' + instantreport.Instantreport.id">
-                          <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                          {{ t('Edit') }}
-                        </oitc-actions-button-element>
-                      }
-                      <oitc-actions-button-element [permission]="'instantreports.generate'"
-                        [url]="'/instantreports/generate/' + instantreport.Instantreport.id">
-                        <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-                        {{ t('Generate') }}
-                      </oitc-actions-button-element>
-                      @if (instantreport.allowEdit) {
-                        <li cDropdownDivider></li>
-                      }
-                      @if (instantreport.allowEdit) {
-                        <oitc-actions-button-element (click)="toggleDeleteAllModal(instantreport)"
-                          [permission]="'instantreports.delete'"
-                          >
-                          <span class="text-danger">
-                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                            {{ t('Delete') }}
-                          </span>
-                        </oitc-actions-button-element>
-                      }
-                    </oitc-actions-button>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          }
-
-          @if (instantreports && instantreports.instantreports.length === 0) {
-            <oitc-no-records></oitc-no-records>
-          }
-          @if (instantreports && instantreports.instantreports) {
-            <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-              [fluid]="true">
-              <c-row>
-                <c-col>
-                  <oitc-select-all
-                  [itemsCount]="instantreports.instantreports.length"></oitc-select-all>
-                </c-col>
-                <c-col>
-                  <div class="btn-group d-flex flex-row" role="group">
-                    <button (click)="toggleDeleteAllModal()"
-                      *oitcPermission="['instantreports', 'delete']"
-                      class="btn btn-outline-danger col-3 border-0"
-                      type="button">
-                      <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                      {{ t('Delete selected') }}
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Instant reports') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadInstantreports()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
                     </button>
-                  </div>
-                </c-col>
-              </c-row>
-            </c-container>
-          }
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['instantreports', 'add']"
+                            [routerLink]="['/', 'instantreports', 'add']" cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Instantreports.name]']"
+                                       [placeholder]="'Filter by instant report name' | transloco"
+                                       aria-label="name"
+                                       cFormControl
+                                       name="name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col [xs]="12" lg="3">
+                            <h5>{{ t('Type') }}</h5>
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="objectHostgroup" type="checkbox"
+                                       class="checkbox-lg checkbox-primary"
+                                       name="objectHostgroup"
+                                       [(ngModel)]="objectTypesFilter[InstantreportObjectTypes.Hostgroups]"
+                                />
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="objectHostgroup">{{ t('Host group') }}</label>
+                            </c-form-check>
 
-          <c-container
-            [fluid]="true">
-            <c-row>
-              <c-col>
-                @if (instantreports) {
-                  <oitc-paginate-or-scroll
-                    (paginatorChange)="onPaginatorChange($event)"
-                  [paginateOrScroll]="instantreports"></oitc-paginate-or-scroll>
-                }
-              </c-col>
-            </c-row>
-          </c-container>
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="objectHost" type="checkbox"
+                                       class="checkbox-lg checkbox-primary"
+                                       name="objectHost"
+                                       [(ngModel)]="objectTypesFilter[InstantreportObjectTypes.Hosts]"
+                                />
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="objectHost">{{ t('Hosts') }}</label>
+                            </c-form-check>
+
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="objectServicegroups" type="checkbox"
+                                       class="checkbox-lg checkbox-primary"
+                                       name="objectServicegroups"
+                                       [(ngModel)]="objectTypesFilter[InstantreportObjectTypes.Servicegroups]"
+                                />
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="objectServicegroups">{{ t('Service groups') }}</label>
+                            </c-form-check>
+
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="objectServices" type="checkbox"
+                                       class="checkbox-lg checkbox-primary"
+                                       name="objectServices"
+                                       [(ngModel)]="objectTypesFilter[InstantreportObjectTypes.Services]"
+                                />
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="objectServices">{{ t('Services') }}</label>
+                            </c-form-check>
+                        </c-col>
+
+                        <c-col [xs]="12" lg="3">
+                            <h5>{{ t('Type') }}</h5>
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="evaluationHosts" type="checkbox"
+                                       class="checkbox-lg checkbox-primary"
+                                       name="evaluationHosts"
+                                       [(ngModel)]="evaluationTypesFilter[InstantreportEvaluationTypes.Hosts]"
+                                />
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="evaluationHosts">{{ t('Hosts') }}</label>
+                            </c-form-check>
+
+
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="evaluationHostsAndServices" type="checkbox"
+                                       class="checkbox-lg checkbox-primary"
+                                       name="evaluationHostsAndServices"
+                                       [(ngModel)]="evaluationTypesFilter[InstantreportEvaluationTypes.HostAndServices]"
+                                />
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="evaluationHostsAndServices">{{ t('Hosts and Services') }}</label>
+                            </c-form-check>
+
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="evaluationServices" type="checkbox"
+                                       class="checkbox-lg checkbox-primary"
+                                       name="evaluationServices"
+                                       [(ngModel)]="evaluationTypesFilter[InstantreportEvaluationTypes.Services]"
+                                />
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="evaluationServices">{{ t('Services') }}</label>
+                            </c-form-check>
+                        </c-col>
+
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            @if (!instantreports) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (instantreports) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Instantreports.name">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Instantreports.type">
+                            {{ t('Type') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Instantreports.evaluation">
+                            {{ t('Evaluation') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Timeperiods.name">
+                            {{ t('Time period') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Instantreports.summary">
+                            {{ t('Summary display') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Instantreports.downtimes">
+                            {{ t('Consider downtimes') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Send interval') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Send to') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (instantreport of instantreports.instantreports; track instantreport) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['instantreports', 'delete']"
+                                        [disabled]="!instantreport.allowEdit"
+                                        [item]="instantreport"></oitc-item-select>
+                                </td>
+                                <td>
+                                    {{ instantreport.Instantreport.name }}
+                                </td>
+                                <td>
+                                    @if (instantreport.Instantreport.type === InstantreportObjectTypes.Hostgroups) {
+                                        <span>
+                                            <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                            {{ t('Host groups') }}
+                                        </span>
+                                    }
+                                    @if (instantreport.Instantreport.type === InstantreportObjectTypes.Hosts) {
+                                        <span>
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            {{ t('Hosts') }}
+                                        </span>
+                                    }
+                                    @if (instantreport.Instantreport.type === InstantreportObjectTypes.Servicegroups) {
+                                        <span>
+                                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                            {{ t('Service groups') }}
+                                        </span>
+                                    }
+                                    @if (instantreport.Instantreport.type === InstantreportObjectTypes.Services) {
+                                        <span>
+                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                            {{ t('Services') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (instantreport.Instantreport.evaluation === InstantreportEvaluationTypes.Hosts) {
+                                        <span>
+                                            <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                            {{ t('Hosts') }}
+                                        </span>
+                                    }
+                                    @if (instantreport.Instantreport.evaluation === InstantreportEvaluationTypes.HostAndServices) {
+                                        <span
+                                        >
+                                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                            {{ t('Hosts and services') }}
+                                        </span>
+                                    }
+                                    @if (instantreport.Instantreport.evaluation === InstantreportEvaluationTypes.Services) {
+                                        <span
+                                        >
+                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                            {{ t('Services') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    {{ instantreport.Timeperiod.name }}
+                                </td>
+                                <td class="text-center">
+                                    @if (instantreport.Instantreport.summary === 1) {
+                                        <oitc-badge-outline color="success">
+                                            {{ t('Yes') }}
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (instantreport.Instantreport.summary === 0) {
+                                        <oitc-badge-outline color="danger">
+                                            {{ t('No') }}
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (instantreport.Instantreport.downtimes === 1) {
+                                        <oitc-badge-outline color="success">
+                                            {{ t('Yes') }}
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (instantreport.Instantreport.downtimes === 0) {
+                                        <oitc-badge-outline color="danger">
+                                            {{ t('No') }}
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+                                <td>
+                                    @switch (instantreport.Instantreport.send_interval) {
+                                        @case (0) {
+                                            {{ t('NEVER') }}
+                                        }
+                                        @case (1) {
+                                            {{ t('DAY') }}
+                                        }
+                                        @case (2) {
+                                            {{ t('WEEK') }}
+                                        }
+                                        @case (3) {
+                                            {{ t('MONTH') }}
+                                        }
+                                        @case (4) {
+                                            {{ t('YEAR') }}
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    <ul class="p-0 ps-3">
+                                        @for (user of instantreport.User; track user) {
+                                            <li>
+                                                {{ user.firstname }} {{ user.lastname }}
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'instantreports.edit'"
+                                                         [url]="'/instantreports/edit/' + instantreport.Instantreport.id"
+                                                         [allowEdit]="instantreport.allowEdit">
+                                        @if (instantreport.allowEdit) {
+                                            <oitc-actions-button-element [permission]="'instantreports.edit'"
+                                                                         [url]="'/instantreports/edit/' + instantreport.Instantreport.id">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element [permission]="'instantreports.generate'"
+                                                                     [url]="'/instantreports/generate/' + instantreport.Instantreport.id">
+                                            <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                                            {{ t('Generate') }}
+                                        </oitc-actions-button-element>
+                                        @if (instantreport.allowEdit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        @if (instantreport.allowEdit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(instantreport)"
+                                                                         [permission]="'instantreports.delete'"
+                                            >
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @if (instantreports && instantreports.instantreports.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (instantreports && instantreports.instantreports) {
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="instantreports.instantreports.length"></oitc-select-all>
+                        </c-col>
+                        <c-col>
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['instantreports', 'delete']"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
+
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        @if (instantreports) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="instantreports"></oitc-paginate-or-scroll>
+                        }
+                    </c-col>
+                </c-row>
+            </c-container>
 
         </c-card-body>
         <c-card-footer>
-          <c-alert color="info">
-            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-            {{ t('Instant Reports provide a percentage-based analysis of the availability of individual hosts and services. These reports are available in HTML or PDF format and can be automatically sent via email.') }}
-          </c-alert>
+            <c-alert color="info">
+                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                {{ t('Instant Reports provide a percentage-based analysis of the availability of individual hosts and services. These reports are available in HTML or PDF format and can be automatically sent via email.') }}
+            </c-alert>
         </c-card-footer>
 
-      </c-card>
-    </ng-container>
+    </c-card>
+</ng-container>
 
-    <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

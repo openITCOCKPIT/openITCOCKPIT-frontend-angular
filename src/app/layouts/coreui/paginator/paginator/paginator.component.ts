@@ -10,16 +10,16 @@ import { LocalNumberPipe } from '../../../../pipes/local-number.pipe';
 @Component({
     selector: 'oitc-paginator',
     imports: [
-    ColComponent,
-    FaIconComponent,
-    PageItemDirective,
-    PageLinkDirective,
-    PaginationComponent,
-    RowComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    LocalNumberPipe
-],
+        ColComponent,
+        FaIconComponent,
+        PageItemDirective,
+        PageLinkDirective,
+        PaginationComponent,
+        RowComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        LocalNumberPipe
+    ],
     templateUrl: './paginator.component.html',
     styleUrl: './paginator.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

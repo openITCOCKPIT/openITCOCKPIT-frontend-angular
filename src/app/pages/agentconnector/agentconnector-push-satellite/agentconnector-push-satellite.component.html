@@ -1,359 +1,359 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['agentconnector', 'wizard']" [routerLink]="['/', 'agentconnector', 'wizard']">
-            <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-            {{ t('openITCOCKPIT Agent') }}
-          </a>
-        </li>
-        <li class="breadcrumb-item">
-          <!-- Yes PULL permission check ash push_satellite has no own route -->
-          <a *oitcPermission="['agentconnector', 'pull']"
-            [routerLink]="['/', 'agentconnector', 'push_satellite']">
-            <div class="icon-stack">
-              <i class="fas fa-satellite opacity-100"></i>
-              <i class="fas fa-upload opacity-100 fa-xs text-info cornered cornered-lr"></i>
-            </div>
-            {{ t('Push via Satellite (Import Module)') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'list']"></fa-icon>
-          {{ t('Overview') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['agentconnector', 'wizard']" [routerLink]="['/', 'agentconnector', 'wizard']">
+                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                    {{ t('openITCOCKPIT Agent') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <!-- Yes PULL permission check ash push_satellite has no own route -->
+                <a *oitcPermission="['agentconnector', 'pull']"
+                   [routerLink]="['/', 'agentconnector', 'push_satellite']">
+                    <div class="icon-stack">
+                        <i class="fas fa-satellite opacity-100"></i>
+                        <i class="fas fa-upload opacity-100 fa-xs text-info cornered cornered-lr"></i>
+                    </div>
+                    {{ t('Push via Satellite (Import Module)') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
     </nav>
 
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>{{ t('Agents overview') }}
-          <small class="fw-300">
-            {{ t('Push mode') }}
-          </small>
-        </h5>
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Agents overview') }}
+                <small class="fw-300">
+                    {{ t('Push mode') }}
+                </small>
+            </h5>
 
-        <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
-          <c-nav-item>
-            <a [routerLink]="['/', 'agentconnector', 'pull']"
-              *oitcPermission="['agentconnector', 'pull']" class="nav-link">
-              <fa-icon [icon]="['fas', 'download']"></fa-icon>
-              {{ t('Pull') }}
-            </a>
-          </c-nav-item>
-          <c-nav-item>
-            <a [routerLink]="['/', 'agentconnector', 'push']"
-              *oitcPermission="['agentconnector', 'pull']" class="nav-link">
-              <fa-icon [icon]="['fas', 'upload']"></fa-icon>
-              {{ t('Push') }}
-            </a>
-          </c-nav-item>
-          @if (( PermissionsService.hasModuleObservable('DistributeModule') | async ) && ( PermissionsService.hasModuleObservable('ImportModule') | async )) {
-            <c-nav-item>
-              <a [routerLink]="['/', 'agentconnector', 'push_satellite']"
-                *oitcPermission="['agentconnector', 'pull']" class="nav-link active">
-                <div class="icon-stack">
-                  <i class="fas fa-satellite opacity-100"></i>
-                  <i class="fas fa-upload opacity-100 fa-xs text-info cornered cornered-lr"></i>
-                </div>
-                {{ t('Push via Satellite (Import Module)') }}
-              </a>
-            </c-nav-item>
-          }
-        </c-nav>
-
-        <c-nav class="card-toolbar card-header-pills">
-          <c-nav-item class="px-1">
-            <button (click)="loadAgents()" cButton class="ripple" color="default" size="xs">
-              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-              {{ t('Refresh') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-              {{ t('Filter') }}
-            </button>
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
-
-      <c-card-body>
-
-        <!-- Filter -->
-        <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-          <c-row>
-            <c-col>
-              <h6 class="pb-2 mb-3 border-bottom">
-                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                {{ t('Filter') }}
-              </h6>
-            </c-col>
-          </c-row>
-          <form cForm>
-            <c-row>
-              <c-col [xs]="12" [md]="6">
-                <c-input-group>
-                  <span cInputGroupText>
-                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="params['filter[Hosts.name]']"
-                    [placeholder]="'Filter by agent host name' | transloco"
-                    aria-label="Hosts name"
-                    cFormControl
-                    name="Hosts.name"
-                    oitcDebounce
-                    type="text"
-                    />
-                </c-input-group>
-              </c-col>
-            </c-row>
-            <c-row>
-              <c-col [xs]="12" [lg]="4" class="mt-2">
-                <fieldset>
-                  <h5>
-                    {{ t('Host assignments') }}
-                  </h5>
-                  <c-form-check>
-                    <input
-                      (debouncedValue)="onFilterChange($event)"
-                      cFormCheckInput
-                      class="checkbox-lg checkbox-primary"
-                      name="Host.assigned"
-                      id="Host.assigned"
-                      type="checkbox"
-                      oitcDebounce
-                      [(ngModel)]="hasHostAssignment"/>
-
-                    <label cFormCheckLabel class="ms-1 mt-1"
-                    for="Host.assigned">{{ t('Host assigned') }}</label>
-                  </c-form-check>
-                  <c-form-check>
-                    <input
-                      (debouncedValue)="onFilterChange($event)"
-                      cFormCheckInput
-                      class="checkbox-lg checkbox-primary"
-                      name="Agent.not_assigned"
-                      id="Agent.not_assigned"
-                      type="checkbox"
-                      oitcDebounce
-                      [(ngModel)]="hostHasNoAssignment"/>
-                    <label cFormCheckLabel class="ms-1 mt-1"
-                    for="Agent.not_assigned">{{ t('Agents without host assignment') }}</label>
-                  </c-form-check>
-                </fieldset>
-              </c-col>
-            </c-row>
-            <c-row class="mt-2">
-              <c-col class="text-end">
-                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                  {{ t('Reset filter') }}
-                </button>
-              </c-col>
-            </c-row>
-          </form>
-        </c-container>
-        <!-- End Filter -->
-
-        <div class="alert border-faded bg-transparent text-secondary mt-2">
-          <div class="d-flex align-items-center">
-            <div class="alert-icon me-2">
-              <span class="icon-stack icon-stack-md">
-                <i class="base-circle icon-stack-3x text-cyan-500"></i>
-                <i class="fas fa-info icon-stack-1x text-white"></i>
-              </span>
-            </div>
-            <div class="flex-1">
-              <span class="h5 text-cyan-500">
-                {{ t('Information may be not complete') }}
-              </span>
-              <br>
-                {{ t('This list will only show openITCOCKPIT Monitoring Agents, which are running in push mode and are related to the Import Module.') }}
-                {{ t('In case the Import Module is not in use, this list is probably empty.') }}
-              </div>
-            </div>
-          </div>
-
-          @if (!agents) {
-            <oitc-table-loader></oitc-table-loader>
-          }
-          @if (agents) {
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-              (matSortChange)="onSortChange($event)"
-              [matSortActive]="params.sort" [matSortDirection]="params.direction">
-              <thead>
-                <tr>
-                  <th class="width-50 text-center" scope="col">
-                    <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                  </th>
-                  <th scope="col" mat-sort-header="Hosts.name">
-                    {{ t('Assigned host') }}
-                  </th>
-                  <th scope="col" mat-sort-header="SatellitePushAgents.uuid">
-                    {{ t('Agent UUID') }}
-                  </th>
-                  <th scope="col" mat-sort-header="SatellitePushAgents.hostname">
-                    {{ t('Agent Hostname') }}
-                  </th>
-                  <th scope="col" mat-sort-header="SatellitePushAgents.ipaddress">
-                    {{ t('Agent IP address') }}
-                  </th>
-                  <th scope="col" mat-sort-header="SatellitePushAgents.remote_address">
-                    {{ t('Remote address') }}
-                  </th>
-                  <th scope="col" mat-sort-header="SatellitePushAgents.last_update">
-                    {{ t('Last update') }}
-                  </th>
-                  <th scope="col" mat-sort-header="SatellitePushAgents.satellite_id">
-                    {{ t('Satellite') }}
-                  </th>
-                  <th class="text-center width-50" scope="col">
-                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (agent of agents.agents; track agent) {
-                  <tr>
-                    <td class="text-center">
-                      <oitc-item-select
-                        *oitcPermission="['agentconnector', 'delete']"
-                        [disabled]="!agent.allow_edit"
-                      [item]="agent"></oitc-item-select>
-                    </td>
-                    <td>
-                      @if (agent.Hosts && agent.Hosts.id) {
-                        <oitc-label-link
-                          [objectId]="agent.Hosts.id"
-                          [route]="'/hosts/browser'"
-                          [permissions]="'hosts.browser'">
-                          {{ agent.Hosts.name }}
-                        </oitc-label-link>
-                      } @else {
-                        <span class="italic text-secondary">
-                          {{ t('No host assignment defined') }}
-                        </span>
-                      }
-                    </td>
-                    <td>
-                      {{ agent.uuid }}
-                    </td>
-                    <td>
-                      {{ agent.hostname }}
-                    </td>
-                    <td>
-                      {{ agent.ipaddress }}
-                    </td>
-                    <td>
-                      {{ agent.http_x_forwarded_for ? agent.http_x_forwarded_for : agent.remote_address }}
-                    </td>
-                    <td>
-                      {{ agent.last_update }}
-                    </td>
-                    <td>
-                      <oitc-label-link
-                        [objectId]="agent.Satellites.id"
-                        [route]="'/distribute_module/satellites/edit'"
-                        [permissions]="'DistributeModule.satellites.edit'">
-                        {{ agent.Satellites.name }}
-                      </oitc-label-link>
-                    </td>
-                    <td class="width-50">
-                      <!-- Agent is assigend to a host -->
-                      <oitc-actions-button [permission]="'agentconnector.config'"
-                        [url]="'/agentconnector/config/'+agent.Hosts?.id"
-                        [allowEdit]="agent.allow_edit && agent.Hosts?.id">
-                        @if (agent.allow_edit && agent.Hosts?.id) {
-                          <oitc-actions-button-element
-                            [permission]="'agentconnector.config'"
-                            [url]="'/agentconnector/config/'+agent.Hosts?.id">
-                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                            {{ t('Edit') }}
-                          </oitc-actions-button-element>
-                        }
-                        <oitc-actions-button-element [permission]="'agentconnector.showOutput'"
-                          [url]="'/agentconnector/showOutput/' + agent.id+'/push_satellite'">
-                          <fa-icon [icon]="['fab', 'js']"></fa-icon>
-                          {{ t('Show received data') }}
-                        </oitc-actions-button-element>
-                        @if (agent.allow_edit) {
-                          <li cDropdownDivider></li>
-                        }
-                        @if (agent.allow_edit) {
-                          <oitc-actions-button-element (click)="toggleDeleteAllModal(agent)"
-                            [permission]="'agentconnector.delete'"
-                            >
-                            <span class="text-danger">
-                              <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                              {{ t('Delete') }}
-                            </span>
-                          </oitc-actions-button-element>
-                        }
-                      </oitc-actions-button>
-                    </td>
-                  </tr>
+            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                <c-nav-item>
+                    <a [routerLink]="['/', 'agentconnector', 'pull']"
+                       *oitcPermission="['agentconnector', 'pull']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                        {{ t('Pull') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'agentconnector', 'push']"
+                       *oitcPermission="['agentconnector', 'pull']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'upload']"></fa-icon>
+                        {{ t('Push') }}
+                    </a>
+                </c-nav-item>
+                @if (( PermissionsService.hasModuleObservable('DistributeModule') | async ) && ( PermissionsService.hasModuleObservable('ImportModule') | async )) {
+                    <c-nav-item>
+                        <a [routerLink]="['/', 'agentconnector', 'push_satellite']"
+                           *oitcPermission="['agentconnector', 'pull']" class="nav-link active">
+                            <div class="icon-stack">
+                                <i class="fas fa-satellite opacity-100"></i>
+                                <i class="fas fa-upload opacity-100 fa-xs text-info cornered cornered-lr"></i>
+                            </div>
+                            {{ t('Push via Satellite (Import Module)') }}
+                        </a>
+                    </c-nav-item>
                 }
-              </tbody>
-            </table>
-          }
+            </c-nav>
 
-
-          @if (agents && agents.agents.length === 0) {
-            <oitc-no-records
-            ></oitc-no-records>
-          }
-          @if (agents && agents.agents) {
-            <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-              [fluid]="true">
-              <c-row>
-                <c-col>
-                  <oitc-select-all
-                  [itemsCount]="agents.agents.length"></oitc-select-all>
-                </c-col>
-                <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                  <div class="btn-group d-flex flex-row" role="group">
-                    <button (click)="toggleDeleteAllModal()"
-                      class="btn btn-outline-danger col-3 border-0"
-                      type="button">
-                      <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                      {{ t('Delete selected') }}
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadAgents()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
                     </button>
-                  </div>
-                </c-col>
-              </c-row>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+
+        <c-card-body>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Hosts.name]']"
+                                       [placeholder]="'Filter by agent host name' | transloco"
+                                       aria-label="Hosts name"
+                                       cFormControl
+                                       name="Hosts.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col [xs]="12" [lg]="4" class="mt-2">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Host assignments') }}
+                                </h5>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="Host.assigned"
+                                        id="Host.assigned"
+                                        type="checkbox"
+                                        oitcDebounce
+                                        [(ngModel)]="hasHostAssignment"/>
+
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="Host.assigned">{{ t('Host assigned') }}</label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="Agent.not_assigned"
+                                        id="Agent.not_assigned"
+                                        type="checkbox"
+                                        oitcDebounce
+                                        [(ngModel)]="hostHasNoAssignment"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="Agent.not_assigned">{{ t('Agents without host assignment') }}</label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
             </c-container>
-            <c-container
-              [fluid]="true">
-              <c-row>
-                <c-col>
-                  @if (agents) {
-                    <oitc-paginate-or-scroll
-                      (paginatorChange)="onPaginatorChange($event)"
-                    [paginateOrScroll]="agents"></oitc-paginate-or-scroll>
-                  }
-                </c-col>
-              </c-row>
-            </c-container>
-          }
+            <!-- End Filter -->
+
+            <div class="alert border-faded bg-transparent text-secondary mt-2">
+                <div class="d-flex align-items-center">
+                    <div class="alert-icon me-2">
+                        <span class="icon-stack icon-stack-md">
+                            <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                            <i class="fas fa-info icon-stack-1x text-white"></i>
+                        </span>
+                    </div>
+                    <div class="flex-1">
+                        <span class="h5 text-cyan-500">
+                            {{ t('Information may be not complete') }}
+                        </span>
+                        <br>
+                        {{ t('This list will only show openITCOCKPIT Monitoring Agents, which are running in push mode and are related to the Import Module.') }}
+                        {{ t('In case the Import Module is not in use, this list is probably empty.') }}
+                    </div>
+                </div>
+            </div>
+
+            @if (!agents) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (agents) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Assigned host') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatellitePushAgents.uuid">
+                            {{ t('Agent UUID') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatellitePushAgents.hostname">
+                            {{ t('Agent Hostname') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatellitePushAgents.ipaddress">
+                            {{ t('Agent IP address') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatellitePushAgents.remote_address">
+                            {{ t('Remote address') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatellitePushAgents.last_update">
+                            {{ t('Last update') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatellitePushAgents.satellite_id">
+                            {{ t('Satellite') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (agent of agents.agents; track agent) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['agentconnector', 'delete']"
+                                        [disabled]="!agent.allow_edit"
+                                        [item]="agent"></oitc-item-select>
+                                </td>
+                                <td>
+                                    @if (agent.Hosts && agent.Hosts.id) {
+                                        <oitc-label-link
+                                            [objectId]="agent.Hosts.id"
+                                            [route]="'/hosts/browser'"
+                                            [permissions]="'hosts.browser'">
+                                            {{ agent.Hosts.name }}
+                                        </oitc-label-link>
+                                    } @else {
+                                        <span class="italic text-secondary">
+                                            {{ t('No host assignment defined') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    {{ agent.uuid }}
+                                </td>
+                                <td>
+                                    {{ agent.hostname }}
+                                </td>
+                                <td>
+                                    {{ agent.ipaddress }}
+                                </td>
+                                <td>
+                                    {{ agent.http_x_forwarded_for ? agent.http_x_forwarded_for : agent.remote_address }}
+                                </td>
+                                <td>
+                                    {{ agent.last_update }}
+                                </td>
+                                <td>
+                                    <oitc-label-link
+                                        [objectId]="agent.Satellites.id"
+                                        [route]="'/distribute_module/satellites/edit'"
+                                        [permissions]="'DistributeModule.satellites.edit'">
+                                        {{ agent.Satellites.name }}
+                                    </oitc-label-link>
+                                </td>
+                                <td class="width-50">
+                                    <!-- Agent is assigend to a host -->
+                                    <oitc-actions-button [permission]="'agentconnector.config'"
+                                                         [url]="'/agentconnector/config/'+agent.Hosts?.id"
+                                                         [allowEdit]="agent.allow_edit && agent.Hosts?.id">
+                                        @if (agent.allow_edit && agent.Hosts?.id) {
+                                            <oitc-actions-button-element
+                                                [permission]="'agentconnector.config'"
+                                                [url]="'/agentconnector/config/'+agent.Hosts?.id">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element [permission]="'agentconnector.showOutput'"
+                                                                     [url]="'/agentconnector/showOutput/' + agent.id+'/push_satellite'">
+                                            <fa-icon [icon]="['fab', 'js']"></fa-icon>
+                                            {{ t('Show received data') }}
+                                        </oitc-actions-button-element>
+                                        @if (agent.allow_edit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        @if (agent.allow_edit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(agent)"
+                                                                         [permission]="'agentconnector.delete'"
+                                            >
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+
+            @if (agents && agents.agents.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (agents && agents.agents) {
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="agents.agents.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+                <c-container
+                    [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            @if (agents) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="agents"></oitc-paginate-or-scroll>
+                            }
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
 
         </c-card-body>
 
         <c-card-footer>
-          &nbsp;
+            &nbsp;
         </c-card-footer>
 
-      </c-card>
-    </ng-container>
+    </c-card>
+</ng-container>
 
 
-    <oitc-delete-all-modal
-      (completed)="onMassActionComplete($event)"
-      [helpMessage]="'Warning! You also need to delete the corresponding record on the Satellite System!' | transloco"
+<oitc-delete-all-modal
+    (completed)="onMassActionComplete($event)"
+    [helpMessage]="'Warning! You also need to delete the corresponding record on the Satellite System!' | transloco"
     [items]="selectedItems"></oitc-delete-all-modal>
 

@@ -117,17 +117,17 @@ const GROUP_HEIGHT = 50;
 @Component({
     selector: 'oitc-evc-tree-edit',
     imports: [
-    FFlowModule,
-    NgClass,
-    RowComponent,
-    ColComponent,
-    TooltipDirective,
-    FaIconComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    ButtonGroupComponent
-],
+        FFlowModule,
+        NgClass,
+        RowComponent,
+        ColComponent,
+        TooltipDirective,
+        FaIconComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        ButtonGroupComponent
+    ],
     templateUrl: './evc-tree-edit.component.html',
     styleUrl: './evc-tree-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

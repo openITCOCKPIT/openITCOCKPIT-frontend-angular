@@ -1,88 +1,88 @@
 <ng-container *transloco="let t">
-  @if (data !== null) {
-    @if (data.result.data.isDebianBased && (data.result.data.isOldRepositoryInUse || data.result.data.hasError)) {
-      <div
-        >
-        <c-alert color="danger">
-          <h5 class="alert-heading">
-            <fa-icon [icon]="['fas', 'warning']"></fa-icon>
-            {{ t('APT Repository - Manually action required!') }}
-          </h5>
-          <p>
-            {{ t('Please contact your system administrator.') }}
-          </p>
-          @if (!data.result.data.repositoryCheckerExists) {
-            <p>
-              <strong>{{ t('Error code') }}:</strong>
-              <br/>
-              <code>{{ data.result.data.RepositoryCheckerExistsError }}</code>
-            </p>
-          }
-          @if (!data.result.data.repositoryCheckerIsReadable) {
-            <p>
-              <strong>{{ t('Error code') }}:</strong>
-              <br/>
-              <code>{{ data.result.data.repositoryCheckerIsReadableError }}</code>
-              <br/>
-              {{ t('Try') }}
-              <br/>
-              <code>chmod 644 {{ data.result.data.RepositoryCheckerIsReadableSourcesList }}</code>
-            </p>
-          }
-          @if (data.result.data.isOldRepositoryInUse) {
-            <p>
-              {{ t('Your system is using the old openITCOCKPIT APT repository, which will be shut down soon.') }}
-              <br/>
-              {{ t('Please update your sources.list to use our new repository') }}
-              <br/>
-              <code>apt-get update</code>
-              <br/>
-              <code>apt-get install openitcockpit-release</code>
-              <br/>
-              <code>dpkg-reconfigure openitcockpit-release</code>
-            </p>
-          }
-          @if (data.result.data.isOldRepositoryInUseError) {
-            <p>
-              <strong>{{ t('Error code') }}:</strong>
-              <br/>
-              <code>{{ data.result.data.isOldRepositoryInUseError }}</code>
-            </p>
-          }
-        </c-alert>
-      </div>
+    @if (data !== null) {
+        @if (data.result.data.isDebianBased && ( data.result.data.isOldRepositoryInUse || data.result.data.hasError )) {
+            <div
+            >
+                <c-alert color="danger">
+                    <h5 class="alert-heading">
+                        <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+                        {{ t('APT Repository - Manually action required!') }}
+                    </h5>
+                    <p>
+                        {{ t('Please contact your system administrator.') }}
+                    </p>
+                    @if (!data.result.data.repositoryCheckerExists) {
+                        <p>
+                            <strong>{{ t('Error code') }}:</strong>
+                            <br/>
+                            <code>{{ data.result.data.RepositoryCheckerExistsError }}</code>
+                        </p>
+                    }
+                    @if (!data.result.data.repositoryCheckerIsReadable) {
+                        <p>
+                            <strong>{{ t('Error code') }}:</strong>
+                            <br/>
+                            <code>{{ data.result.data.repositoryCheckerIsReadableError }}</code>
+                            <br/>
+                            {{ t('Try') }}
+                            <br/>
+                            <code>chmod 644 {{ data.result.data.RepositoryCheckerIsReadableSourcesList }}</code>
+                        </p>
+                    }
+                    @if (data.result.data.isOldRepositoryInUse) {
+                        <p>
+                            {{ t('Your system is using the old openITCOCKPIT APT repository, which will be shut down soon.') }}
+                            <br/>
+                            {{ t('Please update your sources.list to use our new repository') }}
+                            <br/>
+                            <code>apt-get update</code>
+                            <br/>
+                            <code>apt-get install openitcockpit-release</code>
+                            <br/>
+                            <code>dpkg-reconfigure openitcockpit-release</code>
+                        </p>
+                    }
+                    @if (data.result.data.isOldRepositoryInUseError) {
+                        <p>
+                            <strong>{{ t('Error code') }}:</strong>
+                            <br/>
+                            <code>{{ data.result.data.isOldRepositoryInUseError }}</code>
+                        </p>
+                    }
+                </c-alert>
+            </div>
+        }
+        @if (data.result.data.isRhelBased && data.result.data.hasError) {
+            <div>
+                <c-alert color="danger">
+                    <h5 class="alert-heading">
+                        <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+                        {{ t('DNF Repository - Manually action required!') }}
+                    </h5>
+                    <p>
+                        {{ t('Please contact your system administrator.') }}
+                    </p>
+                    @if (!data.result.data.dnfRepositoryCheckerExists) {
+                        <p>
+                            <strong>{{ t('Error code') }}:</strong>
+                            <br/>
+                            <code>{{ data.result.data.dnfRepositoryCheckerExistsError }}</code>
+                        </p>
+                    }
+                    @if (!data.result.data.dnfRepositoryIsReadable) {
+                        <p>
+                            <strong>{{ t('Error code') }}:</strong>
+                            <br/>
+                            <code>{{ data.result.data.dnfRepositoryIsReadableError }}</code>
+                            <br/>
+                            {{ t('Try') }}
+                            <br/>
+                            <code>chmod 644 {{ data.result.data.dnfRepositoryRepoConfig }}</code>
+                        </p>
+                    }
+                </c-alert>
+            </div>
+        }
     }
-    @if (data.result.data.isRhelBased && data.result.data.hasError) {
-      <div>
-        <c-alert color="danger">
-          <h5 class="alert-heading">
-            <fa-icon [icon]="['fas', 'warning']"></fa-icon>
-            {{ t('DNF Repository - Manually action required!') }}
-          </h5>
-          <p>
-            {{ t('Please contact your system administrator.') }}
-          </p>
-          @if (!data.result.data.dnfRepositoryCheckerExists) {
-            <p>
-              <strong>{{ t('Error code') }}:</strong>
-              <br/>
-              <code>{{ data.result.data.dnfRepositoryCheckerExistsError }}</code>
-            </p>
-          }
-          @if (!data.result.data.dnfRepositoryIsReadable) {
-            <p>
-              <strong>{{ t('Error code') }}:</strong>
-              <br/>
-              <code>{{ data.result.data.dnfRepositoryIsReadableError }}</code>
-              <br/>
-              {{ t('Try') }}
-              <br/>
-              <code>chmod 644 {{ data.result.data.dnfRepositoryRepoConfig }}</code>
-            </p>
-          }
-        </c-alert>
-      </div>
-    }
-  }
 
 </ng-container>

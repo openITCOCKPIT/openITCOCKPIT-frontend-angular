@@ -24,79 +24,79 @@
 -->
 
 <ng-container *transloco="let t">
-  <c-modal
-    #modal='cModal'
-    [keyboard]="true"
-    id="deleteBookmarkModal"
-    size="lg"
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="deleteBookmarkModal"
+        size="lg"
     >
-    <c-modal-header class="bg-danger">
-      <h5 cModalTitle class="text-white">
-        {{ t('Attention!') }}
-      </h5>
-      <button (click)="hideModal()" cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body>
-      <c-row>
-        @if (!deleteMessage) {
-          <c-col xs="12">
-            <strong>{{ t('Do you really want delete the selected object?') }}</strong>
-          </c-col>
-        }
-        @if (deleteMessage) {
-          <c-col xs="12">
-            <strong>{{ deleteMessage }}</strong>
-          </c-col>
-        }
-        @if (helpMessage) {
-          <c-col class="help-block" xs="12">
-            {{ helpMessage }}
-          </c-col>
-        }
-      </c-row>
-
-      <c-row class="pt-2">
-        @for (item of items; track item) {
-          <c-col sm="12">
-            <ul class="mb-0">
-              <li>
-                {{ item.displayName }}
-                @if (hasErrors && currentItemHasErrors(item)) {
-                  <div>
-                    @for (error of getErrorsForItem(item); track error) {
-                      <div class="text-danger">
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                        {{ error.message }}
-                        <!-- todo implement usedby link -->
-                      </div>
-                    }
-                  </div>
+        <c-modal-header class="bg-danger">
+            <h5 cModalTitle class="text-white">
+                {{ t('Attention!') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                @if (!deleteMessage) {
+                    <c-col xs="12">
+                        <strong>{{ t('Do you really want delete the selected object?') }}</strong>
+                    </c-col>
                 }
-              </li>
-            </ul>
-          </c-col>
-        }
-      </c-row>
+                @if (deleteMessage) {
+                    <c-col xs="12">
+                        <strong>{{ deleteMessage }}</strong>
+                    </c-col>
+                }
+                @if (helpMessage) {
+                    <c-col class="help-block" xs="12">
+                        {{ helpMessage }}
+                    </c-col>
+                }
+            </c-row>
 
-      <c-row [hidden]="!isDeleting" class="pt-4 pb-2">
-        <c-col sm="12">
-          <h4>{{ t('Deleting...') }}</h4>
-        </c-col>
-        <c-col sm="12">
-          <c-progress [animated]="true" [value]="percentage" color="danger" variant="striped"/>
-        </c-col>
-      </c-row>
+            <c-row class="pt-2">
+                @for (item of items; track item) {
+                    <c-col sm="12">
+                        <ul class="mb-0">
+                            <li>
+                                {{ item.displayName }}
+                                @if (hasErrors && currentItemHasErrors(item)) {
+                                    <div>
+                                        @for (error of getErrorsForItem(item); track error) {
+                                            <div class="text-danger">
+                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                {{ error.message }}
+                                                <!-- todo implement usedby link -->
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </li>
+                        </ul>
+                    </c-col>
+                }
+            </c-row>
+
+            <c-row [hidden]="!isDeleting" class="pt-4 pb-2">
+                <c-col sm="12">
+                    <h4>{{ t('Deleting...') }}</h4>
+                </c-col>
+                <c-col sm="12">
+                    <c-progress [animated]="true" [value]="percentage" color="danger" variant="striped"/>
+                </c-col>
+            </c-row>
 
 
-    </c-modal-body>
-    <c-modal-footer>
-      <button (click)="delete()" [disabled]="isDeleting" cButton class="ripple" color="danger">
-        <fa-icon [hidden]="!isDeleting" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-        {{ t('Delete') }}
-      </button>
-      <button (click)="hideModal()" cButton class="ripple" color="default">
-        {{ t('Cancel') }}
-      </button>
-    </c-modal-footer>
-  </c-modal>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="delete()" [disabled]="isDeleting" cButton class="ripple" color="danger">
+                <fa-icon [hidden]="!isDeleting" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Delete') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
 </ng-container>

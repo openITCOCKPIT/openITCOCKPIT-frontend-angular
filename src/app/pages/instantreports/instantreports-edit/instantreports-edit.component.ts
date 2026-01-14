@@ -53,37 +53,37 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 @Component({
     selector: 'oitc-instantreports-edit',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    LabelLinkComponent,
-    MultiSelectComponent,
-    MultiSelectOptgroupComponent,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    RequiredIconComponent,
-    SelectComponent,
-    TranslocoDirective,
-    TrueFalseDirective,
-    XsButtonDirective,
-    RouterLink,
-    FormLoaderComponent,
-    DebounceDirective
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        LabelLinkComponent,
+        MultiSelectComponent,
+        MultiSelectOptgroupComponent,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        TranslocoDirective,
+        TrueFalseDirective,
+        XsButtonDirective,
+        RouterLink,
+        FormLoaderComponent,
+        DebounceDirective
+    ],
     templateUrl: './instantreports-edit.component.html',
     styleUrl: './instantreports-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -311,8 +311,8 @@ export class InstantreportsEditComponent {
         }
     }
 
-    public onSendCheckboxChange(event:any) {
-        if(event === 1 && this.post.send_interval === 0) {
+    public onSendCheckboxChange(event: any) {
+        if (event === 1 && this.post.send_interval === 0) {
             this.post.send_interval = 1; // Day
             this.cdr.markForCheck();
         }

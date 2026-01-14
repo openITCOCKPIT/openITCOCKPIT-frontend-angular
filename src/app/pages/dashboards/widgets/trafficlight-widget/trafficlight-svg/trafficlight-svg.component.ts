@@ -1,15 +1,15 @@
 import {
-  afterRenderEffect,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  inject,
-  input,
-  OnDestroy,
-  Renderer2,
-  ViewChild,
-  DOCUMENT
+    afterRenderEffect,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    inject,
+    input,
+    OnDestroy,
+    Renderer2,
+    ViewChild,
+    DOCUMENT
 } from '@angular/core';
 
 

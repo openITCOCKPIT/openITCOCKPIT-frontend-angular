@@ -26,18 +26,18 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-interval-input',
     imports: [
-    TranslocoPipe,
-    RowComponent,
-    ColComponent,
-    ButtonGroupComponent,
-    XsButtonDirective,
-    NgClass,
-    FormControlDirective,
-    PaginatorModule,
-    HumanTimeComponent,
-    InputGroupComponent,
-    FormsModule
-],
+        TranslocoPipe,
+        RowComponent,
+        ColComponent,
+        ButtonGroupComponent,
+        XsButtonDirective,
+        NgClass,
+        FormControlDirective,
+        PaginatorModule,
+        HumanTimeComponent,
+        InputGroupComponent,
+        FormsModule
+    ],
     templateUrl: './interval-input.component.html',
     styleUrl: './interval-input.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

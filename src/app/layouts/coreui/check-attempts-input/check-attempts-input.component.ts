@@ -22,16 +22,16 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 @Component({
     selector: 'oitc-check-attempts-input',
     imports: [
-    FormsModule,
-    RowComponent,
-    ColComponent,
-    ButtonGroupComponent,
-    NgClass,
-    FormControlDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    InputGroupComponent
-],
+        FormsModule,
+        RowComponent,
+        ColComponent,
+        ButtonGroupComponent,
+        NgClass,
+        FormControlDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        InputGroupComponent
+    ],
     templateUrl: './check-attempts-input.component.html',
     styleUrl: './check-attempts-input.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

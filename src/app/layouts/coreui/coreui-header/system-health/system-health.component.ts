@@ -96,17 +96,17 @@ export interface SystemHealth {
 @Component({
     selector: 'oitc-system-health',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    DropdownComponent,
-    DropdownToggleDirective,
-    DropdownMenuDirective,
-    RouterLink,
-    ProgressComponent,
-    TooltipDirective,
-    AsyncPipe,
-    XsButtonDirective
-],
+        TranslocoDirective,
+        FaIconComponent,
+        DropdownComponent,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        RouterLink,
+        ProgressComponent,
+        TooltipDirective,
+        AsyncPipe,
+        XsButtonDirective
+    ],
     templateUrl: './system-health.component.html',
     styleUrl: './system-health.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

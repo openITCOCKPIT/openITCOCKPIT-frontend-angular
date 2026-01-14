@@ -12,14 +12,14 @@ import { PermissionsService } from '../../../../permissions/permissions.service'
 @Component({
     selector: 'oitc-header-stats',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    ButtonDirective,
-    TooltipDirective,
-    RouterLink,
-    HeaderNavComponent,
-    AsyncPipe
-],
+        TranslocoDirective,
+        FaIconComponent,
+        ButtonDirective,
+        TooltipDirective,
+        RouterLink,
+        HeaderNavComponent,
+        AsyncPipe
+    ],
     templateUrl: './header-stats.component.html',
     styleUrl: './header-stats.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -34,6 +34,7 @@ export class HeaderStatsComponent implements OnInit, OnDestroy {
     protected hoststatusCount: { [key: number]: number } = {};
     protected servicestatusCount: { [key: number]: number } = {};
     public readonly PermissionsService = inject(PermissionsService);
+
     public ngOnInit() {
         timer(0, 30000).pipe(takeUntil(this.destroy$)).subscribe({
             next: () => {

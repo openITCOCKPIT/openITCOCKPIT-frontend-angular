@@ -17,10 +17,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 
-
-
-
-
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { RouterLink } from '@angular/router';
@@ -28,21 +24,21 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'oitc-customalerts-service-history',
     imports: [
-    TranslocoDirective,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    PermissionDirective,
-    TableDirective,
-    TextColorDirective,
-    TableLoaderComponent,
-    RouterLink
-],
+        TranslocoDirective,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        PermissionDirective,
+        TableDirective,
+        TextColorDirective,
+        TableLoaderComponent,
+        RouterLink
+    ],
     templateUrl: './customalerts-service-history.component.html',
     styleUrl: './customalerts-service-history.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

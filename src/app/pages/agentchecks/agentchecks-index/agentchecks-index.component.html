@@ -1,256 +1,256 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['agentconnector', 'wizard']" [routerLink]="['/', 'agentconnector', 'wizard']">
-            <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-            {{ t('openITCOCKPIT Agent') }}
-          </a>
-        </li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['agentchecks', 'index']" [routerLink]="['/', 'agentchecks', 'index']">
-            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-            {{ t('Checks') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'list']"></fa-icon>
-          {{ t('Overview') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['agentconnector', 'wizard']" [routerLink]="['/', 'agentconnector', 'wizard']">
+                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                    {{ t('openITCOCKPIT Agent') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['agentchecks', 'index']" [routerLink]="['/', 'agentchecks', 'index']">
+                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                    {{ t('Checks') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
     </nav>
 
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>{{ t('Agent checks') }}
-          <small class="fw-300">
-            {{ t('overview') }}
-          </small>
-        </h5>
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Agent checks') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
 
-        <c-nav class="card-toolbar card-header-pills">
-          <c-nav-item class="px-1">
-            <a *oitcPermission="['servicetemplates', 'index']"
-              [routerLink]="['/', 'servicetemplates', 'index']"
-              [queryParams]="{servicetemplatetype_id: ServicetemplateTypesEnum.OITC_AGENT_SERVICE}"
-              cButton class="ripple" color="primary" size="xs">
-              <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-              {{ t('Go to Service templates') }}
-            </a>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button (click)="loadAgentchecks()" cButton class="ripple" color="default" size="xs">
-              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-              {{ t('Refresh') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button *oitcPermission="['agentchecks', 'add']" [routerLink]="['/', 'agentchecks', 'add']"
-              cButton
-              class="ripple"
-              color="success"
-              size="xs">
-              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-              {{ t('New') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-              {{ t('Filter') }}
-            </button>
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <a *oitcPermission="['servicetemplates', 'index']"
+                       [routerLink]="['/', 'servicetemplates', 'index']"
+                       [queryParams]="{servicetemplatetype_id: ServicetemplateTypesEnum.OITC_AGENT_SERVICE}"
+                       cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                        {{ t('Go to Service templates') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="loadAgentchecks()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['agentchecks', 'add']" [routerLink]="['/', 'agentchecks', 'add']"
+                            cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
 
-      <c-card-body>
+        <c-card-body>
 
-        <!-- Filter -->
-        <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-          <c-row>
-            <c-col>
-              <h6 class="pb-2 mb-3 border-bottom">
-                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                {{ t('Filter') }}
-              </h6>
-            </c-col>
-          </c-row>
-          <form cForm>
-            <c-row>
-              <c-col [xs]="12" [md]="6">
-                <c-input-group>
-                  <span cInputGroupText>
-                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="params['filter[Agentchecks.name]']"
-                    [placeholder]="'Filter by agent check name' | transloco"
-                    aria-label="Agentchecks name"
-                    cFormControl
-                    name="Agentchecks.name"
-                    oitcDebounce
-                    type="text"
-                    />
-                </c-input-group>
-              </c-col>
-              <c-col [xs]="12" [md]="6">
-                <c-input-group>
-                  <span cInputGroupText>
-                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="params['filter[Servicetemplates.template_name]']"
-                    [placeholder]="'Filter by service template name' | transloco"
-                    aria-label="Servicetemplates template_name"
-                    cFormControl
-                    name="Servicetemplates.template_name"
-                    oitcDebounce
-                    type="text"
-                    />
-                </c-input-group>
-              </c-col>
-            </c-row>
-            <c-row class="mt-2">
-              <c-col class="text-end">
-                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                  {{ t('Reset filter') }}
-                </button>
-              </c-col>
-            </c-row>
-          </form>
-        </c-container>
-        <!-- End Filter -->
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Agentchecks.name]']"
+                                       [placeholder]="'Filter by agent check name' | transloco"
+                                       aria-label="Agentchecks name"
+                                       cFormControl
+                                       name="Agentchecks.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Servicetemplates.template_name]']"
+                                       [placeholder]="'Filter by service template name' | transloco"
+                                       aria-label="Servicetemplates template_name"
+                                       cFormControl
+                                       name="Servicetemplates.template_name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
 
-        @if (!agentchecks) {
-          <oitc-table-loader></oitc-table-loader>
-        }
-        @if (agentchecks) {
-          <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-            (matSortChange)="onSortChange($event)"
-            [matSortActive]="params.sort" [matSortDirection]="params.direction">
-            <thead>
-              <tr>
-                <th class="width-50 text-center" scope="col">
-                  <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                </th>
-                <th scope="col" mat-sort-header="Agentchecks.name">
-                  {{ t('Agent check name') }}
-                </th>
-                <th scope="col" mat-sort-header="Agentchecks.plugin_name">
-                  {{ t('Plugin name') }}
-                </th>
-                <th scope="col" mat-sort-header="Servicetemplates.template_name">
-                  {{ t('Service template name') }}
-                </th>
-                <th class="text-center width-50" scope="col">
-                  <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (agentcheck of agentchecks.all_agentchecks; track agentcheck) {
-                <tr>
-                  <td class="text-center">
-                    <oitc-item-select
-                      *oitcPermission="['agentchecks', 'delete']"
-                      [disabled]="!agentcheck.allow_edit"
-                    [item]="agentcheck"></oitc-item-select>
-                  </td>
-                  <td>{{ agentcheck.name }}</td>
-                  <td>{{ agentcheck.plugin_name }}</td>
-                  <td>
-                    <oitc-label-link
-                      [objectId]="agentcheck.servicetemplate.id"
-                      [route]="'/servicetemplates/edit'"
-                      [permissions]="'servicetemplates.edit'"
-                      >
-                      {{ agentcheck.servicetemplate.template_name }}
-                    </oitc-label-link>
-                  </td>
-                  <td class="width-50">
-                    <oitc-actions-button [permission]="'agentchecks.edit'"
-                      [url]="'/agentchecks/edit/' + agentcheck.id"
-                      [allowEdit]="agentcheck.allow_edit">
-                      <oitc-actions-button-element [permission]="'agentchecks.edit'"
-                        [url]="'/agentchecks/edit/' + agentcheck.id">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                        {{ t('Edit') }}
-                      </oitc-actions-button-element>
-                      @if (agentcheck.allow_edit) {
-                        <li cDropdownDivider></li>
-                      }
-                      @if (agentcheck.allow_edit) {
-                        <oitc-actions-button-element (click)="toggleDeleteAllModal(agentcheck)"
-                          [permission]="'agentchecks.delete'"
-                          >
-                          <span class="text-danger">
-                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                            {{ t('Delete') }}
-                          </span>
-                        </oitc-actions-button-element>
-                      }
-                    </oitc-actions-button>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        }
+            @if (!agentchecks) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (agentchecks) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Agentchecks.name">
+                            {{ t('Agent check name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Agentchecks.plugin_name">
+                            {{ t('Plugin name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicetemplates.template_name">
+                            {{ t('Service template name') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (agentcheck of agentchecks.all_agentchecks; track agentcheck) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['agentchecks', 'delete']"
+                                        [disabled]="!agentcheck.allow_edit"
+                                        [item]="agentcheck"></oitc-item-select>
+                                </td>
+                                <td>{{ agentcheck.name }}</td>
+                                <td>{{ agentcheck.plugin_name }}</td>
+                                <td>
+                                    <oitc-label-link
+                                        [objectId]="agentcheck.servicetemplate.id"
+                                        [route]="'/servicetemplates/edit'"
+                                        [permissions]="'servicetemplates.edit'"
+                                    >
+                                        {{ agentcheck.servicetemplate.template_name }}
+                                    </oitc-label-link>
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'agentchecks.edit'"
+                                                         [url]="'/agentchecks/edit/' + agentcheck.id"
+                                                         [allowEdit]="agentcheck.allow_edit">
+                                        <oitc-actions-button-element [permission]="'agentchecks.edit'"
+                                                                     [url]="'/agentchecks/edit/' + agentcheck.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        @if (agentcheck.allow_edit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        @if (agentcheck.allow_edit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(agentcheck)"
+                                                                         [permission]="'agentchecks.delete'"
+                                            >
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
 
-        @if (agentchecks && agentchecks.all_agentchecks.length === 0) {
-          <oitc-no-records
-          ></oitc-no-records>
-        }
-        @if (agentchecks && agentchecks.all_agentchecks) {
-          <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-            [fluid]="true">
-            <c-row>
-              <c-col>
-                <oitc-select-all
-                [itemsCount]="agentchecks.all_agentchecks.length"></oitc-select-all>
-              </c-col>
-              <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                <div class="btn-group d-flex flex-row" role="group">
-                  <button (click)="toggleDeleteAllModal()"
-                    *oitcPermission="['agentchecks', 'delete']"
-                    class="btn btn-outline-danger col-3 border-0"
-                    type="button">
-                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                    {{ t('Delete selected') }}
-                  </button>
-                </div>
-              </c-col>
-            </c-row>
-          </c-container>
-          <c-container
-            [fluid]="true">
-            <c-row>
-              <c-col>
-                @if (agentchecks) {
-                  <oitc-paginate-or-scroll
-                    (paginatorChange)="onPaginatorChange($event)"
-                  [paginateOrScroll]="agentchecks"></oitc-paginate-or-scroll>
-                }
-              </c-col>
-            </c-row>
-          </c-container>
-        }
+            @if (agentchecks && agentchecks.all_agentchecks.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (agentchecks && agentchecks.all_agentchecks) {
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="agentchecks.all_agentchecks.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['agentchecks', 'delete']"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+                <c-container
+                    [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            @if (agentchecks) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="agentchecks"></oitc-paginate-or-scroll>
+                            }
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
 
-      </c-card-body>
+        </c-card-body>
 
-      <c-card-footer>
-        &nbsp;
-      </c-card-footer>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
 
     </c-card>
-  </ng-container>
+</ng-container>
 
 
-  <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
 

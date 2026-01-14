@@ -1,48 +1,48 @@
 <ng-container *transloco="let t">
-  @if (showNoOuttagesText) {
-    <h5 class="text-center pt-5 text-success">
-      <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
-      {{ t('Currently are no network segment issues') }}
-    </h5>
-  }
-  @if (!showNoOuttagesText && widget) {
-    <c-row>
-      <c-col>
-        <c-input-group>
-          <span cInputGroupText>
-            <fa-icon [icon]="['fas', 'desktop']" class="text-secondary"></fa-icon>
-          </span>
-          <input [(ngModel)]="hostname"
-            [placeholder]="'Filter by host name' | transloco"
-            aria-label="Hosts.name"
-            [name]="'Hosts.name-'+widget.id"
-            cFormControl
-            oitcDebounce
-            (debouncedValue)="onFilterChange($event)"
-            type="text"
-            />
-        </c-input-group>
-      </c-col>
-    </c-row>
-  }
-
-  <ul class="mt-2 list-unstyled" cListGroup>
-    @for (hostOutage of parentOutages; track $index) {
-      <li cListGroupItem>
-        <oitc-hoststatus-icon [hoststatus]="hostOutage.Hoststatus" class="me-2"></oitc-hoststatus-icon>
-        <oitc-label-link
-          [objectId]="hostOutage.id"
-          [route]="'/hosts/browser'"
-          [permissions]="'hosts.browser'">
-          {{ hostOutage.name }}
-        </oitc-label-link>
-      </li>
+    @if (showNoOuttagesText) {
+        <h5 class="text-center pt-5 text-success">
+            <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
+            {{ t('Currently are no network segment issues') }}
+        </h5>
     }
-  </ul>
+    @if (!showNoOuttagesText && widget) {
+        <c-row>
+            <c-col>
+                <c-input-group>
+                    <span cInputGroupText>
+                        <fa-icon [icon]="['fas', 'desktop']" class="text-secondary"></fa-icon>
+                    </span>
+                    <input [(ngModel)]="hostname"
+                           [placeholder]="'Filter by host name' | transloco"
+                           aria-label="Hosts.name"
+                           [name]="'Hosts.name-'+widget.id"
+                           cFormControl
+                           oitcDebounce
+                           (debouncedValue)="onFilterChange($event)"
+                           type="text"
+                    />
+                </c-input-group>
+            </c-col>
+        </c-row>
+    }
 
-  @if (!showNoOuttagesText && parentOutages.length === 0) {
-    <oitc-no-records
-    ></oitc-no-records>
-  }
+    <ul class="mt-2 list-unstyled" cListGroup>
+        @for (hostOutage of parentOutages; track $index) {
+            <li cListGroupItem>
+                <oitc-hoststatus-icon [hoststatus]="hostOutage.Hoststatus" class="me-2"></oitc-hoststatus-icon>
+                <oitc-label-link
+                    [objectId]="hostOutage.id"
+                    [route]="'/hosts/browser'"
+                    [permissions]="'hosts.browser'">
+                    {{ hostOutage.name }}
+                </oitc-label-link>
+            </li>
+        }
+    </ul>
+
+    @if (!showNoOuttagesText && parentOutages.length === 0) {
+        <oitc-no-records
+        ></oitc-no-records>
+    }
 
 </ng-container>

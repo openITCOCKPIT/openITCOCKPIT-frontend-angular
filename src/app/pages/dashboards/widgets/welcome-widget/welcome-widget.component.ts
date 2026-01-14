@@ -15,12 +15,12 @@ import { WordLoaderComponent } from '../../../../layouts/primeng/loading/word-lo
 @Component({
     selector: 'oitc-welcome-widget',
     imports: [
-    TranslocoDirective,
-    AsyncPipe,
-    Avatar,
-    LocalNumberPipe,
-    WordLoaderComponent
-],
+        TranslocoDirective,
+        AsyncPipe,
+        Avatar,
+        LocalNumberPipe,
+        WordLoaderComponent
+    ],
     templateUrl: './welcome-widget.component.html',
     styleUrl: './welcome-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

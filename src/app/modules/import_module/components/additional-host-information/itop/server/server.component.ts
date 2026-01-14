@@ -8,12 +8,12 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 @Component({
     selector: 'oitc-server',
     imports: [
-    FaIconComponent,
-    FaLayersComponent,
-    TableDirective,
-    TranslocoDirective,
-    TranslocoPipe
-],
+        FaIconComponent,
+        FaLayersComponent,
+        TableDirective,
+        TranslocoDirective,
+        TranslocoPipe
+    ],
     templateUrl: './server.component.html',
     styleUrl: './server.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

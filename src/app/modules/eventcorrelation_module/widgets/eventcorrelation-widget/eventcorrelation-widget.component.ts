@@ -43,22 +43,22 @@ import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
 @Component({
     selector: 'oitc-eventcorrelation-widget',
     imports: [
-    FaIconComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    SelectComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    EvcTreeComponent,
-    EvcTableComponent,
-    ColComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    ReactiveFormsModule,
-    RowComponent,
-    FormsModule
-],
+        FaIconComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        EvcTreeComponent,
+        EvcTableComponent,
+        ColComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        FormsModule
+    ],
     templateUrl: './eventcorrelation-widget.component.html',
     styleUrl: './eventcorrelation-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -144,7 +144,7 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
             this.EventcorrelationWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {
                 this.host_id = response.host_id;
                 this.config = response.config;
-                this.direction= EvcTreeDirection[this.config.direction];
+                this.direction = EvcTreeDirection[this.config.direction];
 
                 if (this.host_id) {
                     this.loadEventcorrelation();
@@ -209,7 +209,10 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
         this.show = false;
         this.cdr.markForCheck();
         this.direction = $event;
-        setTimeout(() =>{this.show = true; this.cdr.markForCheck();}, 100);
+        setTimeout(() => {
+            this.show = true;
+            this.cdr.markForCheck();
+        }, 100);
     }
 
     public saveConfig() {

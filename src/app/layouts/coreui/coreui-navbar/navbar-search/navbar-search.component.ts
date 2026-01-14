@@ -14,13 +14,13 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'oitc-navbar-search',
     imports: [
-    FaIconComponent,
-    TranslocoPipe,
-    RouterLink,
-    FormsModule,
-    DebounceDirective,
-    NgClass
-],
+        FaIconComponent,
+        TranslocoPipe,
+        RouterLink,
+        FormsModule,
+        DebounceDirective,
+        NgClass
+    ],
     templateUrl: './navbar-search.component.html',
     styleUrl: './navbar-search.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

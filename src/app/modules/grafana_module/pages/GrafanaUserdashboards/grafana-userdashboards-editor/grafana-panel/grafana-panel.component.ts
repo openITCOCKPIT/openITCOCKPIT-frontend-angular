@@ -65,18 +65,18 @@ export interface MetricUpdatedEvent {
 @Component({
     selector: 'oitc-grafana-panel',
     imports: [
-    RowComponent,
-    ColComponent,
-    TranslocoDirective,
-    ButtonGroupComponent,
-    XsButtonDirective,
-    FaIconComponent,
-    TranslocoPipe,
-    ChartTypeIconComponent,
-    LabelLinkComponent,
-    BreadcrumbComponent,
-    BreadcrumbItemComponent
-],
+        RowComponent,
+        ColComponent,
+        TranslocoDirective,
+        ButtonGroupComponent,
+        XsButtonDirective,
+        FaIconComponent,
+        TranslocoPipe,
+        ChartTypeIconComponent,
+        LabelLinkComponent,
+        BreadcrumbComponent,
+        BreadcrumbItemComponent
+    ],
     templateUrl: './grafana-panel.component.html',
     styleUrl: './grafana-panel.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

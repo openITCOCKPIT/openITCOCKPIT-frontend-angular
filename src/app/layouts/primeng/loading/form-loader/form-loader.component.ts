@@ -6,8 +6,8 @@ import { TitleService } from '../../../../services/title.service';
 @Component({
     selector: 'oitc-form-loader',
     imports: [
-    SkeletonModule
-],
+        SkeletonModule
+    ],
     templateUrl: './form-loader.component.html',
     styleUrl: './form-loader.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,73 +1,73 @@
 <ng-container *transloco="let t">
-  <c-modal
-    #modal='cModal'
-    [keyboard]="true"
-    id="cancelHostAllModal"
-    size="lg"
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="cancelHostAllModal"
+        size="lg"
     >
-    <c-modal-header class="bg-danger">
-      <h5 cModalTitle class="text-white">
-        {{ t('Attention!') }}
-      </h5>
-      <button (click)="hideModal()" cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body>
-      <c-row>
-        @if (!deleteMessage) {
-          <c-col xs="12">
-            <strong>{{ t('Do you really want to cancel the selected host downtimes?') }}</strong>
-          </c-col>
-        }
-        <c-col class="mt-1">
-          <c-form-check>
-            <input
-              cFormCheckInput
-              class="checkbox-primary"
-              name="includeServices"
-              id="includeServices"
-              type="checkbox"
-              trueFalseValue
-              oitcDebounce
-              [trueValue]="true"
-              [falseValue]="false"
-              [(ngModel)]="includeServices"/>
-            <label cFormCheckLabel
-              for="includeServices">{{ t('Also cancel corresponding service downtimes.') }}
-            </label>
-          </c-form-check>
-        </c-col>
-        @if (deleteMessage) {
-          <c-col xs="12">
-            <strong>{{ deleteMessage }}</strong>
-          </c-col>
-        }
-        @if (helpMessage) {
-          <c-col class="help-block" xs="12">
-            {{ helpMessage }}
-          </c-col>
-        }
-      </c-row>
+        <c-modal-header class="bg-danger">
+            <h5 cModalTitle class="text-white">
+                {{ t('Attention!') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                @if (!deleteMessage) {
+                    <c-col xs="12">
+                        <strong>{{ t('Do you really want to cancel the selected host downtimes?') }}</strong>
+                    </c-col>
+                }
+                <c-col class="mt-1">
+                    <c-form-check>
+                        <input
+                            cFormCheckInput
+                            class="checkbox-primary"
+                            name="includeServices"
+                            id="includeServices"
+                            type="checkbox"
+                            trueFalseValue
+                            oitcDebounce
+                            [trueValue]="true"
+                            [falseValue]="false"
+                            [(ngModel)]="includeServices"/>
+                        <label cFormCheckLabel
+                               for="includeServices">{{ t('Also cancel corresponding service downtimes.') }}
+                        </label>
+                    </c-form-check>
+                </c-col>
+                @if (deleteMessage) {
+                    <c-col xs="12">
+                        <strong>{{ deleteMessage }}</strong>
+                    </c-col>
+                }
+                @if (helpMessage) {
+                    <c-col class="help-block" xs="12">
+                        {{ helpMessage }}
+                    </c-col>
+                }
+            </c-row>
 
 
-      <c-row [hidden]="!isDeleting" class="pt-4 pb-2">
-        <c-col sm="12">
-          <h4>{{ t('Canceling...') }}</h4>
-        </c-col>
-        <c-col sm="12">
-          <c-progress [animated]="true" [value]="percentage" color="danger" variant="striped"/>
-        </c-col>
-      </c-row>
+            <c-row [hidden]="!isDeleting" class="pt-4 pb-2">
+                <c-col sm="12">
+                    <h4>{{ t('Canceling...') }}</h4>
+                </c-col>
+                <c-col sm="12">
+                    <c-progress [animated]="true" [value]="percentage" color="danger" variant="striped"/>
+                </c-col>
+            </c-row>
 
 
-    </c-modal-body>
-    <c-modal-footer>
-      <button (click)="delete()" [disabled]="isDeleting" cButton class="ripple" color="danger">
-        <fa-icon [hidden]="!isDeleting" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-        {{ t('Cancel downtime') }}
-      </button>
-      <button (click)="hideModal()" cButton class="ripple" color="default">
-        {{ t('Close') }}
-      </button>
-    </c-modal-footer>
-  </c-modal>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="delete()" [disabled]="isDeleting" cButton class="ripple" color="danger">
+                <fa-icon [hidden]="!isDeleting" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Cancel downtime') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
 </ng-container>

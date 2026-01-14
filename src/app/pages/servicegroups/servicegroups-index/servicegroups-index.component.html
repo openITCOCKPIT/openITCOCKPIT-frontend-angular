@@ -1,327 +1,327 @@
 <ng-container *transloco="let t">
 
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['servicegroups', 'index']" [routerLink]="['/', 'servicegroups', 'index']">
-            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-            {{ t('Service groups') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'list']"></fa-icon>
-          {{ t('Overview') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['servicegroups', 'index']" [routerLink]="['/', 'servicegroups', 'index']">
+                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                    {{ t('Service groups') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
     </nav>
 
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>{{ t('Service groups') }}
-          <small class="fw-300">
-            {{ t('overview') }}
-          </small>
-        </h5>
-        <c-nav class="card-toolbar card-header-pills">
-          <c-nav-item class="px-1">
-            <button (click)="loadServicegroups()" cButton class="ripple" color="default" size="xs">
-              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-              {{ t('Refresh') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button *oitcPermission="['servicegroups', 'add']" [routerLink]="['/', 'servicegroups', 'add']"
-              cButton
-              class="ripple"
-              color="success"
-              size="xs">
-              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-              {{ t('New') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-              {{ t('Filter') }}
-            </button>
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
-
-        <!-- Filter -->
-        <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-          <c-row>
-            <c-col>
-              <h6 class="pb-2 mb-3 border-bottom">
-                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                {{ t('Filter') }}
-              </h6>
-            </c-col>
-          </c-row>
-          <form cForm>
-            <c-row class="mb-2">
-              <c-col md="6">
-                <c-input-group>
-                  <span cInputGroupText>
-                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="filter['Containers.name']"
-                    [placeholder]="'Filter by service group name' | transloco"
-                    aria-label="service group name"
-                    cFormControl
-                    name="filter[Containers.name]"
-                    oitcDebounce
-                    type="text"
-                    />
-                </c-input-group>
-              </c-col>
-              <c-col md="6">
-                <c-input-group>
-                  <span cInputGroupText>
-                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="filter['Servicegroups.description']"
-                    [placeholder]="'Filter by description' | transloco"
-                    aria-label="Service group description"
-                    cFormControl
-                    name="filter[Servicegroups.description]"
-                    oitcDebounce
-                    type="text"
-                    />
-                </c-input-group>
-              </c-col>
-            </c-row>
-            <c-row class="mb-2">
-              <c-col [xs]="12" [lg]="6">
-                <c-input-group>
-                  <span cInputGroupText class="pe-0 ps-2">
-                    <fa-stack>
-                      <fa-icon [icon]="['fas', 'cogs']"
-                      stackItemSize="1x" pull="right"></fa-icon>
-                      <fa-icon [icon]="['fas', 'tags']" class="text-success"
-                        stackItemSize="1x"
-                      transform="shrink-5 right-10 down-7"></fa-icon>
-                    </fa-stack>
-                  </span>
-                  <ng-select
-                    id="ServicegroupKeywordsInput"
-                    name="HostgroupKeywordsInput"
-                    [items]="[]"
-                    [(ngModel)]="filter['Servicegroups.keywords']"
-                    [addTag]="true"
-                    [multiple]="true"
-                    [selectOnTab]="true"
-                    [placeholder]="'Filter by tags'|transloco"
-                    oitcDebounce
-                    (debouncedValue)="onFilterChange($event)"
-                    [isOpen]="false">
-                  </ng-select>
-                </c-input-group>
-              </c-col>
-
-              <c-col [xs]="12" [lg]="6">
-                <c-input-group>
-                  <span cInputGroupText class="pe-0 ps-2">
-                    <fa-stack>
-                      <fa-icon [icon]="['fas', 'cogs']"
-                      stackItemSize="1x" pull="right"></fa-icon>
-                      <fa-icon [icon]="['fas', 'tags']" class="text-danger"
-                        stackItemSize="1x"
-                      transform="shrink-5 right-10 down-7"></fa-icon>
-                    </fa-stack>
-                  </span>
-                  <ng-select
-                    id="ServicegroupNotKeywordsInput"
-                    name="ServicegroupNotKeywordsInput"
-                    [items]="[]"
-                    [(ngModel)]="filter['Servicegroups.not_keywords']"
-                    [addTag]="true"
-                    [multiple]="true"
-                    [selectOnTab]="true"
-                    [placeholder]="'Filter by excluded tags'|transloco"
-                    oitcDebounce
-                    (debouncedValue)="onFilterChange($event)"
-                    [isOpen]="false">
-                  </ng-select>
-                </c-input-group>
-              </c-col>
-            </c-row>
-            <c-row class="mt-2">
-              <c-col class="text-end">
-                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                  {{ t('Reset Filter') }}
-                </button>
-              </c-col>
-            </c-row>
-          </form>
-        </c-container>
-        <!-- End Filter -->
-
-        @if (! servicegroups.all_servicegroups) {
-          <oitc-table-loader></oitc-table-loader>
-        }
-
-        @if (servicegroups) {
-          <table bordered cTable class="mt-2 mb-0" hover striped matSort
-            (matSortChange)="onSortChange($event)"
-            [matSortActive]="params.sort" [matSortDirection]="params.direction">
-            <thead>
-              <tr>
-                <th class="text-center col-1" scope="col" style="width: 5px;">
-                  <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                </th>
-                <th scope="col" mat-sort-header="Containers.name">
-                  {{ t('Service group name') }}
-                </th>
-                <th scope="col" mat-sort-header="Servicegroups.description">
-                  {{ t('Description') }}
-                </th>
-                <th class="text-center col-1 width-50" scope="col">
-                  <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (servicegroup of servicegroups.all_servicegroups; track servicegroup) {
-                <tr>
-                  <td class="text-center">
-                    @if (( PermissionsService.hasPermissionObservable(['servicegroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['servicegroups', 'copy'])|async )) {
-                      <oitc-item-select
-                        [disabled]="!servicegroup.allow_edit"
-                      [item]="servicegroup"></oitc-item-select>
-                    }
-                  </td>
-                  <td class="word-break">
-                    <span *oitcPermission="['servicegroups', 'extended']">
-                      <a [routerLink]="['/', 'servicegroups', 'extended', servicegroup.id]">
-                        {{ servicegroup.container.name }}
-                      </a>
-                    </span>
-                    <span *oitcPermission="['servicegroups', 'extended']; negate: true">
-                      {{ servicegroup.container.name }}
-                    </span>
-                  </td>
-                  <td>{{ servicegroup.description }}</td>
-                  <td class="width-50">
-                    <oitc-actions-button [allowEdit]="servicegroup.allow_edit"
-                      [permission]="'servicegroups.edit'"
-                      [url]="'/servicegroups/edit/' + servicegroup.id">
-                      <oitc-actions-button-element [permission]="'servicegroups.edit'"
-                        [url]="'/servicegroups/edit/' + servicegroup.id">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                        {{ t('Edit') }}
-                      </oitc-actions-button-element>
-                      <oitc-actions-button-element [permission]="'changelogs.index'"
-                        [url]="'/changelogs/entity/servicegroup/' + servicegroup.id">
-                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                        {{ t('Changelog') }}
-                      </oitc-actions-button-element>
-                      <oitc-actions-button-element [permission]="'servicegroups.extended'"
-                        [url]="'/servicegroups/extended/' + servicegroup.id">
-                        <fa-icon [icon]="['fas', 'plus-square']" [rotate]="90"></fa-icon>
-                        {{ t('Extended view') }}
-                      </oitc-actions-button-element>
-                      <oitc-actions-button-element [permission]="'servicegroups.usedBy'"
-                        [url]="'/servicegroups/usedBy/' + servicegroup.id">
-                        <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                        {{ t('Used By') }}
-                      </oitc-actions-button-element>
-                      <li cDropdownDivider *oitcPermission="['servicegroups', 'copy']"></li>
-                      <oitc-actions-button-element [permission]="'servicegroups.copy'"
-                        [url]="'/servicegroups/copy/' + servicegroup.id">
-                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                        {{ t('Copy') }}
-                      </oitc-actions-button-element>
-                      <li cDropdownDivider *oitcPermission="['servicegroups', 'delete']"></li>
-                      <oitc-actions-button-element (click)="toggleDeleteAllModal(servicegroup)"
-                        [permission]="'servicegroups.delete'">
-                        <span class="text-danger">
-                          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                          {{ t('Delete') }}
-                        </span>
-                      </oitc-actions-button-element>
-                    </oitc-actions-button>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        }
-
-        @if (servicegroups && servicegroups.all_servicegroups && servicegroups.all_servicegroups.length === 0) {
-          <oitc-no-records
-          ></oitc-no-records>
-        }
-
-
-        @if (servicegroups && servicegroups.all_servicegroups) {
-          <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-            [fluid]="true">
-            <c-row>
-              <c-col>
-                <oitc-select-all
-                [itemsCount]="servicegroups.all_servicegroups.length"></oitc-select-all>
-              </c-col>
-              <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                <div class="btn-group d-flex flex-row" role="group">
-                  <button class="btn btn-outline-primary col-3 border-0" type="button"
-                    *oitcPermission="['servicegroups', 'copy']"
-                    (click)="navigateCopy()">
-                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                    {{ t('Copy') }}
-                  </button>
-                  <button (click)="toggleDeleteAllModal()"
-                    *oitcPermission="['servicegroups', 'delete']"
-                    class="btn btn-outline-danger col-3 border-0"
-                    type="button">
-                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                    {{ t('Delete selected') }}
-                  </button>
-                  <c-dropdown>
-                    <button cButton cDropdownToggle color="default">
-                      {{ t('More actions') }}
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Service groups') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadServicegroups()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
                     </button>
-                    <ul cDropdownMenu>
-                      <li><a href="{{linkFor('pdf')}}" cDropdownItem>
-                        <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
-                      {{ t('List as pdf') }}</a></li>
-                      <li><a href="{{linkFor('csv')}}" cDropdownItem>
-                        <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
-                      {{ t('List as csv') }}</a></li>
-                    </ul>
-                  </c-dropdown>
-                </div>
-              </c-col>
-            </c-row>
-          </c-container>
-        }
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['servicegroups', 'add']" [routerLink]="['/', 'servicegroups', 'add']"
+                            cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
 
-        <c-container
-          [fluid]="true">
-          <c-row>
-            <c-col>
-              @if (servicegroups) {
-                <oitc-paginate-or-scroll
-                  (paginatorChange)="onPaginatorChange($event)"
-                [paginateOrScroll]="servicegroups"></oitc-paginate-or-scroll>
-              }
-            </c-col>
-          </c-row>
-        </c-container>
-      </c-card-body>
-      <c-card-footer>
-        &nbsp;
-      </c-card-footer>
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row class="mb-2">
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="filter['Containers.name']"
+                                       [placeholder]="'Filter by service group name' | transloco"
+                                       aria-label="service group name"
+                                       cFormControl
+                                       name="filter[Containers.name]"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="filter['Servicegroups.description']"
+                                       [placeholder]="'Filter by description' | transloco"
+                                       aria-label="Service group description"
+                                       cFormControl
+                                       name="filter[Servicegroups.description]"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [lg]="6">
+                            <c-input-group>
+                                <span cInputGroupText class="pe-0 ps-2">
+                                    <fa-stack>
+                                        <fa-icon [icon]="['fas', 'cogs']"
+                                                 stackItemSize="1x" pull="right"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']" class="text-success"
+                                                 stackItemSize="1x"
+                                                 transform="shrink-5 right-10 down-7"></fa-icon>
+                                    </fa-stack>
+                                </span>
+                                <ng-select
+                                    id="ServicegroupKeywordsInput"
+                                    name="HostgroupKeywordsInput"
+                                    [items]="[]"
+                                    [(ngModel)]="filter['Servicegroups.keywords']"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by tags'|transloco"
+                                    oitcDebounce
+                                    (debouncedValue)="onFilterChange($event)"
+                                    [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+
+                        <c-col [xs]="12" [lg]="6">
+                            <c-input-group>
+                                <span cInputGroupText class="pe-0 ps-2">
+                                    <fa-stack>
+                                        <fa-icon [icon]="['fas', 'cogs']"
+                                                 stackItemSize="1x" pull="right"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']" class="text-danger"
+                                                 stackItemSize="1x"
+                                                 transform="shrink-5 right-10 down-7"></fa-icon>
+                                    </fa-stack>
+                                </span>
+                                <ng-select
+                                    id="ServicegroupNotKeywordsInput"
+                                    name="ServicegroupNotKeywordsInput"
+                                    [items]="[]"
+                                    [(ngModel)]="filter['Servicegroups.not_keywords']"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by excluded tags'|transloco"
+                                    oitcDebounce
+                                    (debouncedValue)="onFilterChange($event)"
+                                    [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset Filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            @if (!servicegroups.all_servicegroups) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+
+            @if (servicegroups) {
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="text-center col-1" scope="col" style="width: 5px;">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Containers.name">
+                            {{ t('Service group name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicegroups.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th class="text-center col-1 width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (servicegroup of servicegroups.all_servicegroups; track servicegroup) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (( PermissionsService.hasPermissionObservable(['servicegroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['servicegroups', 'copy'])|async )) {
+                                        <oitc-item-select
+                                            [disabled]="!servicegroup.allow_edit"
+                                            [item]="servicegroup"></oitc-item-select>
+                                    }
+                                </td>
+                                <td class="word-break">
+                                    <span *oitcPermission="['servicegroups', 'extended']">
+                                        <a [routerLink]="['/', 'servicegroups', 'extended', servicegroup.id]">
+                                            {{ servicegroup.container.name }}
+                                        </a>
+                                    </span>
+                                    <span *oitcPermission="['servicegroups', 'extended']; negate: true">
+                                        {{ servicegroup.container.name }}
+                                    </span>
+                                </td>
+                                <td>{{ servicegroup.description }}</td>
+                                <td class="width-50">
+                                    <oitc-actions-button [allowEdit]="servicegroup.allow_edit"
+                                                         [permission]="'servicegroups.edit'"
+                                                         [url]="'/servicegroups/edit/' + servicegroup.id">
+                                        <oitc-actions-button-element [permission]="'servicegroups.edit'"
+                                                                     [url]="'/servicegroups/edit/' + servicegroup.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/servicegroup/' + servicegroup.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'servicegroups.extended'"
+                                                                     [url]="'/servicegroups/extended/' + servicegroup.id">
+                                            <fa-icon [icon]="['fas', 'plus-square']" [rotate]="90"></fa-icon>
+                                            {{ t('Extended view') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'servicegroups.usedBy'"
+                                                                     [url]="'/servicegroups/usedBy/' + servicegroup.id">
+                                            <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                            {{ t('Used By') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *oitcPermission="['servicegroups', 'copy']"></li>
+                                        <oitc-actions-button-element [permission]="'servicegroups.copy'"
+                                                                     [url]="'/servicegroups/copy/' + servicegroup.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *oitcPermission="['servicegroups', 'delete']"></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(servicegroup)"
+                                                                     [permission]="'servicegroups.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @if (servicegroups && servicegroups.all_servicegroups && servicegroups.all_servicegroups.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+
+
+            @if (servicegroups && servicegroups.all_servicegroups) {
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="servicegroups.all_servicegroups.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        *oitcPermission="['servicegroups', 'copy']"
+                                        (click)="navigateCopy()">
+                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                    {{ t('Copy') }}
+                                </button>
+                                <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['servicegroups', 'delete']"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                                <c-dropdown>
+                                    <button cButton cDropdownToggle color="default">
+                                        {{ t('More actions') }}
+                                    </button>
+                                    <ul cDropdownMenu>
+                                        <li><a href="{{linkFor('pdf')}}" cDropdownItem>
+                                            <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
+                                            {{ t('List as pdf') }}</a></li>
+                                        <li><a href="{{linkFor('csv')}}" cDropdownItem>
+                                            <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                            {{ t('List as csv') }}</a></li>
+                                    </ul>
+                                </c-dropdown>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
+
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        @if (servicegroups) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="servicegroups"></oitc-paginate-or-scroll>
+                        }
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
     </c-card>
-  </ng-container>
+</ng-container>
 
 
-  <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

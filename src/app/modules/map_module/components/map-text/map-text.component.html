@@ -1,18 +1,18 @@
 @if (!isViewMode()) {
-  <div cdkDrag #container class="map-element-container"
-    (cdkDragEnded)="onDragEnd($event)"
-    (cdkDragMoved)="onDragMove($event)"
-    cdkDragBoundary=".map-canvas">
-    <span class="textElement" [ngStyle]="{'font-size.px': item()?.font_size}"
-    [innerHTML]="bbhtml | trustAsHtml"></span>
-  </div>
-  @if (!isViewMode()) {
-    <p-contextMenu [target]="container" [model]="contextMenuItems"
-    appendTo="body"></p-contextMenu>
-  }
+    <div cdkDrag #container class="map-element-container"
+         (cdkDragEnded)="onDragEnd($event)"
+         (cdkDragMoved)="onDragMove($event)"
+         cdkDragBoundary=".map-canvas">
+        <span class="textElement" [ngStyle]="{'font-size.px': item()?.font_size}"
+              [innerHTML]="bbhtml | trustAsHtml"></span>
+    </div>
+    @if (!isViewMode()) {
+        <p-contextMenu [target]="container" [model]="contextMenuItems"
+                       appendTo="body"></p-contextMenu>
+    }
 } @else {
-  <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
-    <span class="textElement" [ngStyle]="{'font-size.px': item()?.font_size}"
-    [innerHTML]="bbhtml | trustAsHtml"></span>
-  </div>
+    <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
+        <span class="textElement" [ngStyle]="{'font-size.px': item()?.font_size}"
+              [innerHTML]="bbhtml | trustAsHtml"></span>
+    </div>
 }

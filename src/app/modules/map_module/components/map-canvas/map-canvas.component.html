@@ -1,13 +1,13 @@
 <div #mapCanvasContainer class="map-canvas">
-  @if (this.helplines().enabled && !this.isViewMode()) {
-    <div id="mapContent" [ngClass]="getHelplinesClass()"></div>
-  }
-  <div #backgroundImageContainer class="background-image-container">
-    @if (map() && map()?.background && !isBackgroundEditMode()) {
-      <img [src]="'/map_module/img/backgrounds/' + map()?.background" class="invalid-image-src"
-        [ngStyle]="{'width.px': backgroundWidth, 'height.px': backgroundHeight}"
-        [alt]="invalidBackgroundMessage"/>
+    @if (this.helplines().enabled && !this.isViewMode()) {
+        <div id="mapContent" [ngClass]="getHelplinesClass()"></div>
     }
-  </div>
-  <ng-content></ng-content>
+    <div #backgroundImageContainer class="background-image-container">
+        @if (map() && map()?.background && !isBackgroundEditMode()) {
+            <img [src]="'/map_module/img/backgrounds/' + map()?.background" class="invalid-image-src"
+                 [ngStyle]="{'width.px': backgroundWidth, 'height.px': backgroundHeight}"
+                 [alt]="invalidBackgroundMessage"/>
+        }
+    </div>
+    <ng-content></ng-content>
 </div>

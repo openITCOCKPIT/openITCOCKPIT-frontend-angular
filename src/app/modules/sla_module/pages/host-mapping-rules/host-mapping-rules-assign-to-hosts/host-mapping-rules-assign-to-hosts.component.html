@@ -1,537 +1,540 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-          {{ t('Service Level Agreement Module') }}
-        </li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['slamodule', 'slas', 'index']"
-            [routerLink]="['/', 'sla_module', 'slas', 'index']">
-            <fa-icon [icon]="['fas', 'award']"></fa-icon>
-            {{ t('Service Level Agreements') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
-          {{ t('Manage mapping rules') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Service Level Agreement Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['slamodule', 'slas', 'index']"
+                   [routerLink]="['/', 'sla_module', 'slas', 'index']">
+                    <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                    {{ t('Service Level Agreements') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                {{ t('Manage mapping rules') }}
+            </li>
+        </ol>
     </nav>
 
     <form cForm (ngSubmit)="submit()">
-      <c-card class="mb-3">
-        <c-card-header>
-          <h5 cCardTitle>{{ t('Host mapping rules') }}</h5>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Host mapping rules') }}</h5>
 
-          <c-nav class="card-toolbar card-header-pills">
-            <c-nav-item class="px-1">
-              <button [fallbackUrl]="['sla_module', 'slas', 'index']" cButton class="ripple"
-                color="default"
-                oitcBackButton
-                size="xs">
-                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                {{ t('Back') }}
-              </button>
-            </c-nav-item>
-          </c-nav>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['sla_module', 'slas', 'index']" cButton class="ripple"
+                                color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
 
-        </c-card-header>
-        <c-card-body>
+            </c-card-header>
+            <c-card-body>
 
-          <c-alert class="bg-transparent fade show w-100 margin-10 border-primary text-default" role="alert">
-            <div class="d-flex align-items-center">
-              <div class="alert-icon">
-                <span class="icon-stack fa-3x">
-                  <i class="base-2 icon-stack-3x text-primary-600"></i>
-                  <i class="base-circle icon-stack-2x text-primary-700"></i>
-                  <i class="fas fa-award icon-stack-1x text-white"></i>
-                </span>
-              </div>
-              <div class="flex-1">
-                <span class="h4 text-primary">
-                  {{ t('Service level Agreement: ') }}
-                  @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'edit'])|async) {
-                    @if (sla.allowEdit) {
-                      <a [routerLink]="['/', 'sla_module', 'slas', 'edit', sla.id]"
-                        >
-                        "{{ sla.name }}"
-                      </a>
-                    }
-                  } @else {
-                    "{{ sla.name }}"
-                  }
-                </span>
-                <br>
-                  {{ t('Please note: This in an one-time assignment. Hosts that will be created later on, are not automatically assigned to the given SLA. You would need to execute the rule manually to add new hosts.') }}
-                  <br>
-                    {{ t('It is recommended to assign the SLA via the host templates.') }}
-                  </div>
-                </div>
-              </c-alert>
+                <c-alert class="bg-transparent fade show w-100 margin-10 border-primary text-default" role="alert">
+                    <div class="d-flex align-items-center">
+                        <div class="alert-icon">
+                            <span class="icon-stack fa-3x">
+                                <i class="base-2 icon-stack-3x text-primary-600"></i>
+                                <i class="base-circle icon-stack-2x text-primary-700"></i>
+                                <i class="fas fa-award icon-stack-1x text-white"></i>
+                            </span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="h4 text-primary">
+                                {{ t('Service level Agreement: ') }}
+                                @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'edit'])|async) {
+                                    @if (sla.allowEdit) {
+                                        <a [routerLink]="['/', 'sla_module', 'slas', 'edit', sla.id]"
+                                        >
+                                            "{{ sla.name }}"
+                                        </a>
+                                    }
+                                } @else {
+                                    "{{ sla.name }}"
+                                }
+                            </span>
+                            <br>
+                            {{ t('Please note: This in an one-time assignment. Hosts that will be created later on, are not automatically assigned to the given SLA. You would need to execute the rule manually to add new hosts.') }}
+                            <br>
+                            {{ t('It is recommended to assign the SLA via the host templates.') }}
+                        </div>
+                    </div>
+                </c-alert>
 
-              <hr>
+                <hr>
 
                 <fieldset class="mt-10">
-                  <legend class="fieldset-legend-border-bottom">
-                    <h5>
-                      <fa-icon [icon]="['fas', 'display']"></fa-icon>
-                      {{ t('Host') }}
-                    </h5>
-                  </legend>
+                    <legend class="fieldset-legend-border-bottom">
+                        <h5>
+                            <fa-icon [icon]="['fas', 'display']"></fa-icon>
+                            {{ t('Host') }}
+                        </h5>
+                    </legend>
 
-                  <div class="mb-3">
-                    <label cLabel for="HostTagsInput">
-                      {{ t('Included host tags') }}
-                    </label>
-                    <c-input-group>
-                      <span cInputGroupText>
-                        <fa-icon [icon]="['fas', 'tags']"
-                        class="opacity-100 text-success cornered cornered-lr"></fa-icon>
-                      </span>
-                      <ng-select
-                        id="HostTagsInput"
-                        name="HostTagsInput"
-                        [items]="[]"
-                        [(ngModel)]="post.host_keywords"
-                        [addTag]="true"
-                        [multiple]="true"
-                        [selectOnTab]="true"
-                        placeholder=""
-                        (ngModelChange)="onPostChange()"
-                        [isOpen]="false"
-                        oitcFormError [errors]="errors" errorField="host_keywords">
-                      </ng-select>
-                    </c-input-group>
-                    <oitc-form-feedback [errors]="errors" errorField="host_keywords"></oitc-form-feedback>
-                    <div class="help-block">
-                      {{ t('Press return to separate tags') }}
+                    <div class="mb-3">
+                        <label cLabel for="HostTagsInput">
+                            {{ t('Included host tags') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'tags']"
+                                         class="opacity-100 text-success cornered cornered-lr"></fa-icon>
+                            </span>
+                            <ng-select
+                                id="HostTagsInput"
+                                name="HostTagsInput"
+                                [items]="[]"
+                                [(ngModel)]="post.host_keywords"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                placeholder=""
+                                (ngModelChange)="onPostChange()"
+                                [isOpen]="false"
+                                oitcFormError [errors]="errors" errorField="host_keywords">
+                            </ng-select>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="host_keywords"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Press return to separate tags') }}
+                        </div>
                     </div>
-                  </div>
 
-                  <div class="mb-3">
-                    <label cLabel for="HostExcludedTagsInput">
-                      {{ t('Excluded host tags') }}
-                    </label>
-                    <c-input-group>
-                      <span cInputGroupText>
-                        <fa-icon [icon]="['fas', 'tags']"
-                        class="opacity-100 text-danger cornered cornered-lr"></fa-icon>
-                      </span>
-                      <ng-select
-                        id="HostExcludedTagsInput"
-                        name="HostExcludedTagsInput"
-                        [items]="[]"
-                        [(ngModel)]="post.host_not_keywords"
-                        [addTag]="true"
-                        [multiple]="true"
-                        [selectOnTab]="true"
-                        placeholder=""
-                        (ngModelChange)="onPostChange()"
-                        [isOpen]="false"
-                        oitcFormError [errors]="errors" errorField="host_not_keywords">
-                      </ng-select>
-                    </c-input-group>
-                    <oitc-form-feedback [errors]="errors" errorField="host_not_keywords"></oitc-form-feedback>
-                    <div class="help-block">
-                      {{ t('Press return to separate tags') }}
+                    <div class="mb-3">
+                        <label cLabel for="HostExcludedTagsInput">
+                            {{ t('Excluded host tags') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'tags']"
+                                         class="opacity-100 text-danger cornered cornered-lr"></fa-icon>
+                            </span>
+                            <ng-select
+                                id="HostExcludedTagsInput"
+                                name="HostExcludedTagsInput"
+                                [items]="[]"
+                                [(ngModel)]="post.host_not_keywords"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                placeholder=""
+                                (ngModelChange)="onPostChange()"
+                                [isOpen]="false"
+                                oitcFormError [errors]="errors" errorField="host_not_keywords">
+                            </ng-select>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="host_not_keywords"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Press return to separate tags') }}
+                        </div>
                     </div>
-                  </div>
 
-                  <div class="mb-3">
-                    <label cLabel for="HostnameRegex">
-                      {{ t('Host RegEx') }}
-                    </label>
-                    <c-input-group>
-                      <span cInputGroupText>
-                        <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
-                      </span>
-                      <input cFormControl
-                        id="HostnameRegex"
-                        type="text"
-                        name="HostnameRegex"
-                        (debouncedValue)="onPostChange()"
-                        oitcDebounce
-                        oitcFormError [errors]="errors" errorField="hostname_regex"
-                        [(ngModel)]="post.hostname_regex">
-                    </c-input-group>
-                    <oitc-form-feedback [errors]="errors" errorField="hostname_regex"></oitc-form-feedback>
-                  </div>
+                    <div class="mb-3">
+                        <label cLabel for="HostnameRegex">
+                            {{ t('Host RegEx') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
+                            </span>
+                            <input cFormControl
+                                   id="HostnameRegex"
+                                   type="text"
+                                   name="HostnameRegex"
+                                   (debouncedValue)="onPostChange()"
+                                   oitcDebounce
+                                   oitcFormError [errors]="errors" errorField="hostname_regex"
+                                   [(ngModel)]="post.hostname_regex">
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="hostname_regex"></oitc-form-feedback>
+                    </div>
 
-                  <div class="mb-3">
-                    <label cLabel for="HostnameRegex">
-                      {{ t('Host description') }}
-                    </label>
-                    <c-input-group>
-                      <span cInputGroupText>
-                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                      </span>
-                      <input cFormControl
-                        id="Description"
-                        type="text"
-                        name="Description"
-                        (debouncedValue)="onPostChange()"
-                        oitcDebounce
-                        [(ngModel)]="post.description">
-                    </c-input-group>
-                  </div>
+                    <div class="mb-3">
+                        <label cLabel for="HostnameRegex">
+                            {{ t('Host description') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            </span>
+                            <input cFormControl
+                                   id="Description"
+                                   type="text"
+                                   name="Description"
+                                   (debouncedValue)="onPostChange()"
+                                   oitcDebounce
+                                   [(ngModel)]="post.description">
+                        </c-input-group>
+                    </div>
 
-                  <div class="mb-3">
-                    <label cLabel for="HostMappingRulesHostgroups">
-                      {{ t('Host groups') }}
-                    </label>
+                    <div class="mb-3">
+                        <label cLabel for="HostMappingRulesHostgroups">
+                            {{ t('Host groups') }}
+                        </label>
 
-                    <oitc-multi-select
-                      name="HostMappingRulesHostgroups"
-                      id="HostMappingRulesHostgroups"
-                      optionValue="key"
-                      optionLabel="value"
-                      [(ngModel)]="post.hostgroups._ids"
-                      [options]="hostgroups"
-                      (onChange)="onPostChange()"
-                      [debounce]="true">
-                    </oitc-multi-select>
-                  </div>
+                        <oitc-multi-select
+                            name="HostMappingRulesHostgroups"
+                            id="HostMappingRulesHostgroups"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.hostgroups._ids"
+                            [options]="hostgroups"
+                            (onChange)="onPostChange()"
+                            [debounce]="true">
+                        </oitc-multi-select>
+                    </div>
 
                 </fieldset>
 
                 <fieldset class="mt-10">
-                  <legend class="fieldset-legend-border-bottom">
-                    <h5>
-                      <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                      {{ t('Service') }}
-                    </h5>
-                  </legend>
+                    <legend class="fieldset-legend-border-bottom">
+                        <h5>
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                            {{ t('Service') }}
+                        </h5>
+                    </legend>
 
-                  <div class="mb-3">
-                    <label cLabel for="ServiceTagsInput">
-                      {{ t('Included service tags') }}
-                    </label>
-                    <c-input-group>
-                      <span cInputGroupText>
-                        <fa-icon [icon]="['fas', 'tags']"
-                        class="opacity-100 text-success cornered cornered-lr"></fa-icon>
-                      </span>
-                      <ng-select
-                        id="ServiceTagsInput"
-                        name="ServiceTagsInput"
-                        [items]="[]"
-                        [(ngModel)]="post.service_keywords"
-                        [addTag]="true"
-                        [multiple]="true"
-                        [selectOnTab]="true"
-                        placeholder=""
-                        (ngModelChange)="onPostChange()"
-                        [isOpen]="false"
-                        oitcFormError [errors]="errors" errorField="service_keywords">
-                      </ng-select>
-                    </c-input-group>
-                    <oitc-form-feedback [errors]="errors" errorField="service_keywords"></oitc-form-feedback>
-                    <div class="help-block">
-                      {{ t('Press return to separate tags') }}
+                    <div class="mb-3">
+                        <label cLabel for="ServiceTagsInput">
+                            {{ t('Included service tags') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'tags']"
+                                         class="opacity-100 text-success cornered cornered-lr"></fa-icon>
+                            </span>
+                            <ng-select
+                                id="ServiceTagsInput"
+                                name="ServiceTagsInput"
+                                [items]="[]"
+                                [(ngModel)]="post.service_keywords"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                placeholder=""
+                                (ngModelChange)="onPostChange()"
+                                [isOpen]="false"
+                                oitcFormError [errors]="errors" errorField="service_keywords">
+                            </ng-select>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="service_keywords"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Press return to separate tags') }}
+                        </div>
                     </div>
-                  </div>
 
-                  <div class="mb-3">
-                    <label cLabel for="ServiceExcludedTagsInput">
-                      {{ t('Excluded service tags') }}
-                    </label>
-                    <c-input-group>
-                      <span cInputGroupText>
-                        <fa-icon [icon]="['fas', 'tags']"
-                        class="opacity-100 text-danger cornered cornered-lr"></fa-icon>
-                      </span>
-                      <ng-select
-                        id="ServiceExcludedTagsInput"
-                        name="ServiceExcludedTagsInput"
-                        [items]="[]"
-                        [(ngModel)]="post.service_not_keywords"
-                        [addTag]="true"
-                        [multiple]="true"
-                        [selectOnTab]="true"
-                        placeholder=""
-                        (ngModelChange)="onPostChange()"
-                        [isOpen]="false"
-                        oitcFormError [errors]="errors" errorField="service_not_keywords">
-                      </ng-select>
-                    </c-input-group>
-                    <oitc-form-feedback [errors]="errors"
-                    errorField="service_not_keywords"></oitc-form-feedback>
-                    <div class="help-block">
-                      {{ t('Press return to separate tags') }}
+                    <div class="mb-3">
+                        <label cLabel for="ServiceExcludedTagsInput">
+                            {{ t('Excluded service tags') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'tags']"
+                                         class="opacity-100 text-danger cornered cornered-lr"></fa-icon>
+                            </span>
+                            <ng-select
+                                id="ServiceExcludedTagsInput"
+                                name="ServiceExcludedTagsInput"
+                                [items]="[]"
+                                [(ngModel)]="post.service_not_keywords"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                placeholder=""
+                                (ngModelChange)="onPostChange()"
+                                [isOpen]="false"
+                                oitcFormError [errors]="errors" errorField="service_not_keywords">
+                            </ng-select>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="service_not_keywords"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Press return to separate tags') }}
+                        </div>
                     </div>
-                  </div>
 
-                  <div class="mb-3">
-                    <label cLabel for="ServicenameRegex">
-                      {{ t('Service RegEx') }}
-                    </label>
-                    <c-input-group>
-                      <span cInputGroupText>
-                        <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
-                      </span>
-                      <input cFormControl
-                        id="ServicenameRegex"
-                        type="text"
-                        name="ServicenameRegex"
-                        (debouncedValue)="onPostChange()"
-                        oitcDebounce
-                        oitcFormError [errors]="errors" errorField="servicename_regex"
-                        [(ngModel)]="post.servicename_regex">
-                    </c-input-group>
-                    <oitc-form-feedback [errors]="errors" errorField="servicename_regex"></oitc-form-feedback>
-                  </div>
+                    <div class="mb-3">
+                        <label cLabel for="ServicenameRegex">
+                            {{ t('Service RegEx') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
+                            </span>
+                            <input cFormControl
+                                   id="ServicenameRegex"
+                                   type="text"
+                                   name="ServicenameRegex"
+                                   (debouncedValue)="onPostChange()"
+                                   oitcDebounce
+                                   oitcFormError [errors]="errors" errorField="servicename_regex"
+                                   [(ngModel)]="post.servicename_regex">
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="servicename_regex"></oitc-form-feedback>
+                    </div>
 
-                  <div class="mb-3">
-                    <label cLabel for="HostMappingRulesServicegroups">
-                      {{ t('Service groups') }}
-                    </label>
+                    <div class="mb-3">
+                        <label cLabel for="HostMappingRulesServicegroups">
+                            {{ t('Service groups') }}
+                        </label>
 
-                    <oitc-multi-select
-                      name="HostMappingRulesServicegroups"
-                      id="HostMappingRulesServicegroups"
-                      optionValue="key"
-                      optionLabel="value"
-                      [(ngModel)]="post.servicegroups._ids"
-                      [options]="servicegroups"
-                      (onChange)="onPostChange()"
-                      [debounce]="true">
-                    </oitc-multi-select>
-                  </div>
+                        <oitc-multi-select
+                            name="HostMappingRulesServicegroups"
+                            id="HostMappingRulesServicegroups"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.servicegroups._ids"
+                            [options]="servicegroups"
+                            (onChange)="onPostChange()"
+                            [debounce]="true">
+                        </oitc-multi-select>
+                    </div>
 
                 </fieldset>
 
                 <div class="mb-3 mt-20">
-                  <c-form-check>
-                    <input
-                      cFormCheckInput
-                      id="OnlyUnassigned"
-                      name="OnlyUnassigned"
-                      type="checkbox"
-                      (debouncedValue)="onPostChange()"
-                      trueFalseValue
-                      [trueValue]="true"
-                      [falseValue]="false"
-                      oitcDebounce
-                      [(ngModel)]="post.only_unassigned"/>
-                    <label cFormCheckLabel
-                    for="OnlyUnassigned">{{ t('Only unassigned hosts') }}</label>
-                  </c-form-check>
+                    <c-form-check>
+                        <input
+                            cFormCheckInput
+                            id="OnlyUnassigned"
+                            name="OnlyUnassigned"
+                            type="checkbox"
+                            (debouncedValue)="onPostChange()"
+                            trueFalseValue
+                            [trueValue]="true"
+                            [falseValue]="false"
+                            oitcDebounce
+                            [(ngModel)]="post.only_unassigned"/>
+                        <label cFormCheckLabel
+                               for="OnlyUnassigned">{{ t('Only unassigned hosts') }}</label>
+                    </c-form-check>
                 </div>
 
                 <c-row>
-                  <c-col md="12">
+                    <c-col md="12">
 
-                    <c-alert color="primary" class="border-faded bg-primary-600 mt-20 p-2">
-                      <div class="d-flex align-items-center">
-                        <div class="alert-icon">
-                          <span class="icon-stack icon-stack-md">
-                            <i class="base-6 icon-stack-3x text-white"></i>
-                            <i class="fas fa-info-circle icon-stack-2x text-primary-600"></i>
-                          </span>
-                        </div>
-                        <div class="flex-1 text-white">
-                          <span class="h4">
-                            {{ t('Show affected hosts') }}
-                          </span>
-                          <br>
-                            {{ t('This host list is ONLY for previewing which hosts will be updated.') }}
-                            {{ t('Please note this list is paginated! Verify the hosts before running "Assign to hosts".') }}
-                          </div>
-                        </div>
-                        <div class="w-100 text-center">
-                          <i class="fa-solid fa-angles-down text-white"></i>
-                        </div>
-                      </c-alert>
-
-                      @if (hosts.hosts) {
-                        <table bordered cTable class="mt-2 mb-2 table-sm" hover striped
-                          matSort
-                          (matSortChange)="onSortChange($event)"
-                          [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                          <thead>
-                            <tr>
-                              <th scope="col" mat-sort-header="Hosts.name">
-                                {{ t('Name') }}
-                              </th>
-                              <th scope="col" mat-sort-header="Hosts.address">
-                                {{ t('Address') }}
-                              </th>
-                              <th scope="col" mat-sort-header="hostdescription">
-                                {{ t('Description') }}
-                              </th>
-                              <th scope="col">
-                                {{ t('Host tags') }}
-                              </th>
-                              <th scope="col">
-                                {{ t('Container') }}
-                              </th>
-                              <th scope="col" colspan="2">
-                                {{ t('SLA') }}
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            @for (host of hosts.hosts; track host; let i = $index) {
-                              <tr [ngClass]="{'table-header-bg-primary-light': i % 2 === 0, 'table-header-bg-primary-dark': i % 2 !== 0}">
-                                <td>
-                                  <fa-icon [icon]="['fas', 'desktop']" class="text-white"></fa-icon>
-                                  @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                                    <a [routerLink]="['/', 'hosts', 'browser', host.id]" class="text-white">
-                                      {{ host.name }}
-                                    </a>
-                                  } @else {
-                                    {{ host.name }}
-                                  }
-                                </td>
-                                <td>
-                                  {{ host.address }}
-                                </td>
-                                <td>
-                                  {{ host.hostdescription }}
-                                </td>
-                                <td>
-                                  @for (tag of host.hosttags.split(','); track tag) {
-                                    <c-badge color="primary" [hidden]="!host.hosttags" class="me-1"
-                                      >
-                                      {{ tag }}
-                                    </c-badge>
-                                  }
-                                </td>
-                                <td>
-                                  {{ host.primary_container }}
-                                </td>
-                                <td class="text-white">
-                                  <div [hidden]="host.sla !== null" class="text-center">
-                                    <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
-                                  </div>
-                                  @if (( this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'edit'])|async ) && host.sla !== null) {
-                                    @if (sla.allowEdit) {
-                                      <a [routerLink]="['/', 'sla_module', 'slas', 'edit', host.sla.id]"
-                                        class="text-white">
-                                        {{ host.sla.name }}
-                                      </a>
-                                    }
-                                    <span [hidden]="sla.allowEdit">
-                                      {{ host.sla.name }}
+                        <c-alert color="primary" class="border-faded bg-primary-600 mt-20 p-2">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon">
+                                    <span class="icon-stack icon-stack-md">
+                                        <i class="base-6 icon-stack-3x text-white"></i>
+                                        <i class="fas fa-info-circle icon-stack-2x text-primary-600"></i>
                                     </span>
-                                  }
-                                </td>
-                              </tr>
-                              @if (host.services.length > 0) {
-                                <tr>
-                                  <th colspan="2">
-                                    {{ t('Service') }}
-                                  </th>
-                                  <th>
-                                    {{ t('Description') }}
-                                  </th>
-                                  <th>
-                                    {{ t('Service tags') }}
-                                  </th>
-                                  <th class="no-sort">
-                                    {{ t('Container') }}
-                                  </th>
-                                  <th class="no-sort">
-                                    {{ t('SLA relevant') }}
-                                  </th>
-                                </tr>
-                                @for (service of host.services; track service) {
-                                  <tr>
-                                    <td colspan="2">
-                                      <fa-icon [icon]="['fas', 'gear']" class="text-primary"></fa-icon>
-                                      @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
-                                        <a [routerLink]="['/', 'services', 'browser', service.id]">
-                                          {{ service.servicename }}
-                                        </a>
-                                      } @else {
-                                        {{ service.servicename }}
-                                      }
-                                    </td>
-                                    <td>
-                                      {{ service.description }}
-                                    </td>
-                                    <td>
-                                      @for (tag of service.servicetags.split(','); track tag) {
-                                        <c-badge color="primary" [hidden]="!service.servicetags" class="me-1"
-                                          >
-                                          {{ tag }}
-                                        </c-badge>
-                                      }
-                                    </td>
-                                    <th class="italic text-muted font-weight-light">
-                                      [{{ t('Inherit from host') }}]
-                                    </th>
-                                    <td class="text-center">
-                                      <fa-icon [icon]="['fas', 'minus']" [hidden]="host.sla !== null"
-                                      class="text-danger text-grayscale-50 opacity-30"></fa-icon>
-                                      <span [hidden]="host.sla === null">
-                                        <fa-icon [icon]="['fas', 'check']"
-                                          [hidden]="service.is_sla_relevant != 1"
-                                        class="text-success"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'xmark']"
-                                          [hidden]="service.is_sla_relevant == 1"
-                                        class="text-danger"></fa-icon>
-                                      </span>
-                                    </td>
-                                  </tr>
-                                }
-                              }
-                            }
-                          </tbody>
-                        </table>
-                      }
-                    </c-col>
-                  </c-row>
+                                </div>
+                                <div class="flex-1 text-white">
+                                    <span class="h4">
+                                        {{ t('Show affected hosts') }}
+                                    </span>
+                                    <br>
+                                    {{ t('This host list is ONLY for previewing which hosts will be updated.') }}
+                                    {{ t('Please note this list is paginated! Verify the hosts before running "Assign to hosts".') }}
+                                </div>
+                            </div>
+                            <div class="w-100 text-center">
+                                <i class="fa-solid fa-angles-down text-white"></i>
+                            </div>
+                        </c-alert>
 
-                  <c-container
+                        @if (hosts.hosts) {
+                            <table bordered cTable class="mt-2 mb-2 table-sm" hover striped
+                                   matSort
+                                   (matSortChange)="onSortChange($event)"
+                                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                                <thead>
+                                <tr>
+                                    <th scope="col" mat-sort-header="Hosts.name">
+                                        {{ t('Name') }}
+                                    </th>
+                                    <th scope="col" mat-sort-header="Hosts.address">
+                                        {{ t('Address') }}
+                                    </th>
+                                    <th scope="col" mat-sort-header="hostdescription">
+                                        {{ t('Description') }}
+                                    </th>
+                                    <th scope="col">
+                                        {{ t('Host tags') }}
+                                    </th>
+                                    <th scope="col">
+                                        {{ t('Container') }}
+                                    </th>
+                                    <th scope="col" colspan="2">
+                                        {{ t('SLA') }}
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @for (host of hosts.hosts; track host; let i = $index) {
+                                        <tr [ngClass]="{'table-header-bg-primary-light': i % 2 === 0, 'table-header-bg-primary-dark': i % 2 !== 0}">
+                                            <td>
+                                                <fa-icon [icon]="['fas', 'desktop']" class="text-white"></fa-icon>
+                                                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                                    <a [routerLink]="['/', 'hosts', 'browser', host.id]"
+                                                       class="text-white">
+                                                        {{ host.name }}
+                                                    </a>
+                                                } @else {
+                                                    {{ host.name }}
+                                                }
+                                            </td>
+                                            <td>
+                                                {{ host.address }}
+                                            </td>
+                                            <td>
+                                                {{ host.hostdescription }}
+                                            </td>
+                                            <td>
+                                                @for (tag of host.hosttags.split(','); track tag) {
+                                                    <c-badge color="primary" [hidden]="!host.hosttags" class="me-1"
+                                                    >
+                                                        {{ tag }}
+                                                    </c-badge>
+                                                }
+                                            </td>
+                                            <td>
+                                                {{ host.primary_container }}
+                                            </td>
+                                            <td class="text-white">
+                                                <div [hidden]="host.sla !== null" class="text-center">
+                                                    <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
+                                                </div>
+                                                @if (( this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'edit'])|async ) && host.sla !== null) {
+                                                    @if (sla.allowEdit) {
+                                                        <a [routerLink]="['/', 'sla_module', 'slas', 'edit', host.sla.id]"
+                                                           class="text-white">
+                                                            {{ host.sla.name }}
+                                                        </a>
+                                                    }
+                                                    <span [hidden]="sla.allowEdit">
+                                                        {{ host.sla.name }}
+                                                    </span>
+                                                }
+                                            </td>
+                                        </tr>
+                                        @if (host.services.length > 0) {
+                                            <tr>
+                                                <th colspan="2">
+                                                    {{ t('Service') }}
+                                                </th>
+                                                <th>
+                                                    {{ t('Description') }}
+                                                </th>
+                                                <th>
+                                                    {{ t('Service tags') }}
+                                                </th>
+                                                <th class="no-sort">
+                                                    {{ t('Container') }}
+                                                </th>
+                                                <th class="no-sort">
+                                                    {{ t('SLA relevant') }}
+                                                </th>
+                                            </tr>
+                                            @for (service of host.services; track service) {
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <fa-icon [icon]="['fas', 'gear']"
+                                                                 class="text-primary"></fa-icon>
+                                                        @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                                            <a [routerLink]="['/', 'services', 'browser', service.id]">
+                                                                {{ service.servicename }}
+                                                            </a>
+                                                        } @else {
+                                                            {{ service.servicename }}
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        {{ service.description }}
+                                                    </td>
+                                                    <td>
+                                                        @for (tag of service.servicetags.split(','); track tag) {
+                                                            <c-badge color="primary" [hidden]="!service.servicetags"
+                                                                     class="me-1"
+                                                            >
+                                                                {{ tag }}
+                                                            </c-badge>
+                                                        }
+                                                    </td>
+                                                    <th class="italic text-muted font-weight-light">
+                                                        [{{ t('Inherit from host') }}]
+                                                    </th>
+                                                    <td class="text-center">
+                                                        <fa-icon [icon]="['fas', 'minus']" [hidden]="host.sla !== null"
+                                                                 class="text-danger text-grayscale-50 opacity-30"></fa-icon>
+                                                        <span [hidden]="host.sla === null">
+                                                            <fa-icon [icon]="['fas', 'check']"
+                                                                     [hidden]="service.is_sla_relevant != 1"
+                                                                     class="text-success"></fa-icon>
+                                                            <fa-icon [icon]="['fas', 'xmark']"
+                                                                     [hidden]="service.is_sla_relevant == 1"
+                                                                     class="text-danger"></fa-icon>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </c-col>
+                </c-row>
+
+                <c-container
                     [fluid]="true">
                     <c-row>
-                      <c-col>
-                        @if (hosts) {
-                          <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                          [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
-                        }
-                      </c-col>
+                        <c-col>
+                            @if (hosts) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
+                            }
+                        </c-col>
                     </c-row>
-                  </c-container>
+                </c-container>
 
-                </c-card-body>
-                <c-card-footer class="text-end">
+            </c-card-body>
+            <c-card-footer class="text-end">
 
-                  @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'hostmappingrules', 'assignToHosts'])|async) {
+                @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'hostmappingrules', 'assignToHosts'])|async) {
                     <c-dropdown direction="center" variant="btn-group" class="ms-1">
-                      <button cButton color="primary" type="submit" class="ripple">
-                        {{ t('Assign to hosts') }}
-                      </button>
-                      <button [split]="true" cButton cDropdownToggle color="primary">
-                        <span class="visually-hidden">Toggle Dropdown</span>
-                      </button>
-                      <ul cDropdownMenu>
-                        <li>
-                          <button cDropdownItem type="button"
-                            (click)="submit(true)">
-                            {{ t('Save mapping rule and assign to hosts') }}
-                          </button>
-                        </li>
-                      </ul>
+                        <button cButton color="primary" type="submit" class="ripple">
+                            {{ t('Assign to hosts') }}
+                        </button>
+                        <button [split]="true" cButton cDropdownToggle color="primary">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul cDropdownMenu>
+                            <li>
+                                <button cDropdownItem type="button"
+                                        (click)="submit(true)">
+                                    {{ t('Save mapping rule and assign to hosts') }}
+                                </button>
+                            </li>
+                        </ul>
                     </c-dropdown>
-                  }
+                }
 
-                  <button [fallbackUrl]="['sla_module', 'slas', 'index']" cButton class="ms-1 ripple" color="default"
-                    oitcBackButton
-                    type="button">
+                <button [fallbackUrl]="['sla_module', 'slas', 'index']" cButton class="ms-1 ripple" color="default"
+                        oitcBackButton
+                        type="button">
                     {{ t('Cancel') }}
-                  </button>
+                </button>
 
 
-                </c-card-footer>
-              </c-card>
-            </form>
-          </ng-container>
+            </c-card-footer>
+        </c-card>
+    </form>
+</ng-container>

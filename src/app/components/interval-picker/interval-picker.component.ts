@@ -27,16 +27,16 @@ import { LocalStorageService } from '../../services/local-storage.service';
 @Component({
     selector: 'oitc-interval-picker',
     imports: [
-    DropdownComponent,
-    FaIconComponent,
-    XsButtonDirective,
-    DropdownToggleDirective,
-    RowComponent,
-    ColComponent,
-    DropdownMenuDirective,
-    NgClass,
-    TranslocoDirective
-],
+        DropdownComponent,
+        FaIconComponent,
+        XsButtonDirective,
+        DropdownToggleDirective,
+        RowComponent,
+        ColComponent,
+        DropdownMenuDirective,
+        NgClass,
+        TranslocoDirective
+    ],
     templateUrl: './interval-picker.component.html',
     styleUrl: './interval-picker.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

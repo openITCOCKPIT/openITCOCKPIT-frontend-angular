@@ -22,14 +22,14 @@ import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
 @Component({
     selector: 'oitc-notice-widget',
     imports: [
-    FaIconComponent,
-    TranslocoDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    FormsModule,
-    XsButtonDirective,
-    TrustAsHtmlPipe
-],
+        FaIconComponent,
+        TranslocoDirective,
+        FormControlDirective,
+        FormLabelDirective,
+        FormsModule,
+        XsButtonDirective,
+        TrustAsHtmlPipe
+    ],
     templateUrl: './notice-widget.component.html',
     styleUrl: './notice-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

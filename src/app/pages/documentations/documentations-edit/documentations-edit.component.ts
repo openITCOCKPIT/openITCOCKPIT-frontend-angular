@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  NavComponent,
-  NavItemComponent,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -29,21 +29,21 @@ import { BbCodeEditorComponent } from '../bb-code-editor/bb-code-editor.componen
 @Component({
     selector: 'oitc-documentations-edit',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FaIconComponent,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    BbCodeEditorComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        BbCodeEditorComponent
+    ],
     templateUrl: './documentations-edit.component.html',
     styleUrl: './documentations-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

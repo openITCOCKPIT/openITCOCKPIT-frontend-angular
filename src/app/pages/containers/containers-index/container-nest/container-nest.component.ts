@@ -7,18 +7,14 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { PermissionsService } from '../../../../permissions/permissions.service';
 
 
-
-
-
-
 import { ContainersService } from '../../containers.service';
 
 @Component({
     selector: 'oitc-container-nest',
     imports: [
-    TranslocoDirective,
-    CommonModule
-],
+        TranslocoDirective,
+        CommonModule
+    ],
     templateUrl: './container-nest.component.html',
     styleUrl: './container-nest.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

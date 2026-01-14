@@ -1,47 +1,47 @@
 <ng-container *transloco="let t">
-  <c-row>
-    <c-col md="6">
-      {{ t('Paginator disabled for better performance. Running in scroll mode.') }}
-    </c-col>
-    <c-col md="6">
-      @if (scroll) {
-        <c-pagination class="float-end">
-          @if (scroll.current > 1) {
-            <li
-              cPageItem> <!-- ngIf in this case so that the CSS makes round borders -->
-              <button type="button" (click)="firstPage()"
-                [title]="'First page' | transloco"
-                cPageLink
-                class="ripple">
-                <fa-icon [icon]="faAnglesLeft"></fa-icon>
-              </button>
-            </li>
-          }
-          <li [disabled]="!scroll.hasPrevPage" cPageItem>
-            <button type="button" (click)="prevPage()"
-              [title]="'Previous page' | transloco"
-              cPageLink
-              class="ripple"
-              >
-              <fa-icon [icon]="faAngleLeft"></fa-icon>
-            </button>
-          </li>
-          <li [active]="true" cPageItem>
-            <button type="button" [title]="'Current page' | transloco"
-              cPageLink>
-              {{ scroll.current }}
-            </button>
-          </li>
-          <li [disabled]="!scroll.hasNextPage" cPageItem>
-            <button type="button" (click)="nextPage()"
-              [title]="'Next page' | transloco"
-              cPageLink
-              class="ripple">
-              <fa-icon [icon]="faAngleRight"></fa-icon>
-            </button>
-          </li>
-        </c-pagination>
-      }
-    </c-col>
-  </c-row>
+    <c-row>
+        <c-col md="6">
+            {{ t('Paginator disabled for better performance. Running in scroll mode.') }}
+        </c-col>
+        <c-col md="6">
+            @if (scroll) {
+                <c-pagination class="float-end">
+                    @if (scroll.current > 1) {
+                        <li
+                            cPageItem> <!-- ngIf in this case so that the CSS makes round borders -->
+                            <button type="button" (click)="firstPage()"
+                                    [title]="'First page' | transloco"
+                                    cPageLink
+                                    class="ripple">
+                                <fa-icon [icon]="faAnglesLeft"></fa-icon>
+                            </button>
+                        </li>
+                    }
+                    <li [disabled]="!scroll.hasPrevPage" cPageItem>
+                        <button type="button" (click)="prevPage()"
+                                [title]="'Previous page' | transloco"
+                                cPageLink
+                                class="ripple"
+                        >
+                            <fa-icon [icon]="faAngleLeft"></fa-icon>
+                        </button>
+                    </li>
+                    <li [active]="true" cPageItem>
+                        <button type="button" [title]="'Current page' | transloco"
+                                cPageLink>
+                            {{ scroll.current }}
+                        </button>
+                    </li>
+                    <li [disabled]="!scroll.hasNextPage" cPageItem>
+                        <button type="button" (click)="nextPage()"
+                                [title]="'Next page' | transloco"
+                                cPageLink
+                                class="ripple">
+                            <fa-icon [icon]="faAngleRight"></fa-icon>
+                        </button>
+                    </li>
+                </c-pagination>
+            }
+        </c-col>
+    </c-row>
 </ng-container>

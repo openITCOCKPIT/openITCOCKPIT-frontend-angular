@@ -24,79 +24,79 @@
 -->
 
 <ng-container *transloco="let t">
-  <c-modal
-    #modal='cModal'
-    [keyboard]="true"
-    id="enableModal"
-    size="lg"
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="enableModal"
+        size="lg"
     >
-    <c-modal-header class="text-bg-primary">
-      <h5 cModalTitle>
-        {{ t('Attention!') }}
-      </h5>
-      <button (click)="hideModal()" cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body>
-      <c-row>
-        @if (!enableMessage) {
-          <c-col xs="12">
-            <strong>{{ t('Do you really want activate the selected objects? ') }}</strong>
-          </c-col>
-        }
-        @if (enableMessage) {
-          <c-col xs="12">
-            <strong>{{ enableMessage }}</strong>
-          </c-col>
-        }
-        @if (helpMessage) {
-          <c-col class="help-block" xs="12">
-            {{ helpMessage }}
-          </c-col>
-        }
-      </c-row>
-
-      <c-row class="pt-2">
-        @for (item of items; track item) {
-          <c-col sm="12">
-            <ul class="mb-0">
-              <li>
-                {{ item.displayName }}
-                @if (hasErrors && currentItemHasErrors(item)) {
-                  <div>
-                    @for (error of getErrorsForItem(item); track error) {
-                      <div class="text-danger">
-                        <fa-icon [icon]="['fas', 'times']"></fa-icon>
-                        {{ error.message }}
-                      </div>
-                    }
-                  </div>
+        <c-modal-header class="text-bg-primary">
+            <h5 cModalTitle>
+                {{ t('Attention!') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                @if (!enableMessage) {
+                    <c-col xs="12">
+                        <strong>{{ t('Do you really want activate the selected objects? ') }}</strong>
+                    </c-col>
                 }
-              </li>
-            </ul>
-          </c-col>
-        }
-      </c-row>
+                @if (enableMessage) {
+                    <c-col xs="12">
+                        <strong>{{ enableMessage }}</strong>
+                    </c-col>
+                }
+                @if (helpMessage) {
+                    <c-col class="help-block" xs="12">
+                        {{ helpMessage }}
+                    </c-col>
+                }
+            </c-row>
 
-      <c-row [hidden]="!isEnable" class="pt-4 pb-2">
-        <c-col sm="12">
-          <h4>{{ t('Enabling...') }}</h4>
-        </c-col>
-        <c-col sm="12">
-          <c-progress [animated]="true" [value]="percentage" color="primary" variant="striped"/>
-        </c-col>
-      </c-row>
+            <c-row class="pt-2">
+                @for (item of items; track item) {
+                    <c-col sm="12">
+                        <ul class="mb-0">
+                            <li>
+                                {{ item.displayName }}
+                                @if (hasErrors && currentItemHasErrors(item)) {
+                                    <div>
+                                        @for (error of getErrorsForItem(item); track error) {
+                                            <div class="text-danger">
+                                                <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                                                {{ error.message }}
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </li>
+                        </ul>
+                    </c-col>
+                }
+            </c-row>
+
+            <c-row [hidden]="!isEnable" class="pt-4 pb-2">
+                <c-col sm="12">
+                    <h4>{{ t('Enabling...') }}</h4>
+                </c-col>
+                <c-col sm="12">
+                    <c-progress [animated]="true" [value]="percentage" color="primary" variant="striped"/>
+                </c-col>
+            </c-row>
 
 
-    </c-modal-body>
-    <c-modal-footer>
-      <button (click)="enable()" [disabled]="isEnable" cButton class="ripple" color="primary">
-        <fa-icon [hidden]="!isEnable" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-        {{ t('Enable') }}
-      </button>
-      <button (click)="hideModal()" cButton class="ripple" color="default">
-        {{ t('Cancel') }}
-      </button>
-    </c-modal-footer>
-  </c-modal>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="enable()" [disabled]="isEnable" cButton class="ripple" color="primary">
+                <fa-icon [hidden]="!isEnable" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Enable') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
 </ng-container>
 

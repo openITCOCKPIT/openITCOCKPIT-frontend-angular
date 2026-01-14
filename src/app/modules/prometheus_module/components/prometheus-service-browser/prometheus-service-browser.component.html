@@ -1,62 +1,62 @@
 <ng-container *transloco="let t">
-  <c-row>
-    <c-col [xs]="12" class="mt-1">
-      <h4>{{ t('Prometheus state overview') }}</h4>
-    </c-col>
-  </c-row>
+    <c-row>
+        <c-col [xs]="12" class="mt-1">
+            <h4>{{ t('Prometheus state overview') }}</h4>
+        </c-col>
+    </c-row>
 
-  <c-row>
-    <c-col [xs]="12" class="mt-1">
-      <table cTable bordered>
-        <tbody>
-          <tr>
-            <td>{{ t('PromQL') }}</td>
-            <td><code>{{ alertRule?.promql }}</code></td>
-          </tr>
-          <tr>
-            <td>{{ t('Metric count') }}</td>
-            <td><code>{{ metrics.length }}</code></td>
-          </tr>
-        </tbody>
-      </table>
-    </c-col>
-  </c-row>
+    <c-row>
+        <c-col [xs]="12" class="mt-1">
+            <table cTable bordered>
+                <tbody>
+                <tr>
+                    <td>{{ t('PromQL') }}</td>
+                    <td><code>{{ alertRule?.promql }}</code></td>
+                </tr>
+                <tr>
+                    <td>{{ t('Metric count') }}</td>
+                    <td><code>{{ metrics.length }}</code></td>
+                </tr>
+                </tbody>
+            </table>
+        </c-col>
+    </c-row>
 
-  <c-row>
-    <c-col [xs]="12" class="mt-1">
-      <table cTable bordered striped hover>
-        <thead>
-          <tr>
-            <th>{{ t('Metric') }}</th>
-            <th>{{ t('Value') }}</th>
-            <th>{{ t('Unit') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (metric of metrics; track metric; let index = $index) {
-            @if (showAll || index < displayLimit) {
-              <tr>
-                <td>
-                  <span class="bold">{{ metric.__name__ }}</span>
-                  &lbrace;<code class="no-padding">
-                  {{ metric.label.join(', ') }}
-                </code>&rbrace;
-              </td>
-              <td>{{ metric.value }}</td>
-              <td>{{ metric.unit }}</td>
-            </tr>
-          }
-        }
-        @if (metrics.length > displayLimit) {
-          <tr>
-            <td colspan="3" class="text-center cursor-pointer" (click)="toggleShowAll()">
-              <fa-icon [icon]="['fas', (showAll ? 'caret-up' : 'caret-down')]"></fa-icon>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </c-col>
-</c-row>
+    <c-row>
+        <c-col [xs]="12" class="mt-1">
+            <table cTable bordered striped hover>
+                <thead>
+                <tr>
+                    <th>{{ t('Metric') }}</th>
+                    <th>{{ t('Value') }}</th>
+                    <th>{{ t('Unit') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @for (metric of metrics; track metric; let index = $index) {
+                        @if (showAll || index < displayLimit) {
+                            <tr>
+                                <td>
+                                    <span class="bold">{{ metric.__name__ }}</span>
+                                    &lbrace;<code class="no-padding">
+                                    {{ metric.label.join(', ') }}
+                                </code>&rbrace;
+                                </td>
+                                <td>{{ metric.value }}</td>
+                                <td>{{ metric.unit }}</td>
+                            </tr>
+                        }
+                    }
+                    @if (metrics.length > displayLimit) {
+                        <tr>
+                            <td colspan="3" class="text-center cursor-pointer" (click)="toggleShowAll()">
+                                <fa-icon [icon]="['fas', (showAll ? 'caret-up' : 'caret-down')]"></fa-icon>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </c-col>
+    </c-row>
 
 </ng-container>

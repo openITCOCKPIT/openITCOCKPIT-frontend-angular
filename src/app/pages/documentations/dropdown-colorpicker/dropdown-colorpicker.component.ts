@@ -20,14 +20,14 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 @Component({
     selector: 'oitc-dropdown-colorpicker',
     imports: [
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    XsButtonDirective,
-    NgStyle,
-    FaIconComponent
-],
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        XsButtonDirective,
+        NgStyle,
+        FaIconComponent
+    ],
     templateUrl: './dropdown-colorpicker.component.html',
     styleUrl: './dropdown-colorpicker.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -27,14 +27,14 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-configuration-file-db-backend',
     imports: [
-    FormErrorDirective,
-    FormFeedbackComponent,
-    PaginatorModule,
-    RequiredIconComponent,
-    FormSelectDirective,
-    TranslocoDirective,
-    FormsModule
-],
+        FormErrorDirective,
+        FormFeedbackComponent,
+        PaginatorModule,
+        RequiredIconComponent,
+        FormSelectDirective,
+        TranslocoDirective,
+        FormsModule
+    ],
     templateUrl: './configuration-file-db-backend.component.html',
     styleUrl: './configuration-file-db-backend.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -6,9 +6,9 @@ import { TranslocoDirective } from '@jsverse/transloco';
 @Component({
     selector: 'oitc-online-offline',
     imports: [
-    BadgeComponent,
-    TranslocoDirective
-],
+        BadgeComponent,
+        TranslocoDirective
+    ],
     templateUrl: './online-offline.component.html',
     styleUrl: './online-offline.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

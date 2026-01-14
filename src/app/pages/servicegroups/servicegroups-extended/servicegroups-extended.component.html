@@ -1,413 +1,413 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['servicegroups', 'index']" [routerLink]="['/', 'servicegroups', 'index']">
-            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-            {{ t('Service groups') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-          {{ t('Extended overview') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['servicegroups', 'index']" [routerLink]="['/', 'servicegroups', 'index']">
+                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                    {{ t('Service groups') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                {{ t('Extended overview') }}
+            </li>
+        </ol>
     </nav>
 
 
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>
-          {{ servicegroupExtended.servicegroup.Servicegroup.container.name }}
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ servicegroupExtended.servicegroup.Servicegroup.container.name }}
 
-          <small class="fw-300">
-            {{ t('extended overview') }}
-          </small>
-        </h5>
+                <small class="fw-300">
+                    {{ t('extended overview') }}
+                </small>
+            </h5>
 
-        <c-nav class="card-toolbar card-header-pills">
-          <oitc-object-uuid [uuid]="servicegroupExtended.servicegroup.Servicegroup.uuid"></oitc-object-uuid>
-        </c-nav>
+            <c-nav class="card-toolbar card-header-pills">
+                <oitc-object-uuid [uuid]="servicegroupExtended.servicegroup.Servicegroup.uuid"></oitc-object-uuid>
+            </c-nav>
 
 
-        <c-nav class="card-toolbar card-header-pills">
-          <c-nav-item class="px-1">
-            <button cButton class="ripple" color="default" size="xs" (click)="ngOnInit()">
-              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-              {{ t('Refresh') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button *oitcPermission="['servicegroups', 'add']" [routerLink]="['/', 'servicegroups', 'add']"
-              cButton
-              class="ripple"
-              color="success"
-              size="xs">
-              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-              {{ t('New') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button [fallbackUrl]="['servicegroups', 'index']" cButton class="ripple" color="default"
-              oitcBackButton
-              size="xs">
-              <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-              {{ t('Back') }}
-            </button>
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
-        <c-row>
-          <c-col xs="12" lg="8" class="mb-1 mt-1">
-            <c-input-group>
-              <span cInputGroupText class="bg-primary text-white">
-                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                &nbsp;
-                {{ t('Service group') }}
-              </span>
-
-              <oitc-select
-                class="flex-fill"
-                name="servicegroupId"
-                id="servicegroupId"
-                [(ngModel)]="servicegroupId"
-                optionValue="key"
-                optionLabel="value"
-                [options]="servicegroups"
-                [searchCallback]="loadServicegroups"
-                (onChange)="onServicegroupChange()">
-              </oitc-select>
-              <c-dropdown>
-                <button cButton cDropdownToggle color="default">
-                  {{ t('Actions') }}
-                </button>
-                <ul cDropdownMenu>
-                  <li>
-                    <oitc-actions-button-element [permission]="'servicegroups.edit'"
-                      [url]="'/servicegroups/edit/' + this.servicegroupExtended.servicegroup.Servicegroup.id">
-                      <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                      {{ t('Edit') }}
-                    </oitc-actions-button-element>
-                  </li>
-                  <li>
-                    <oitc-actions-button-element [permission]="'changelogs.index'"
-                      [url]="'/changelogs/entity/servicegroup/' + this.servicegroupExtended.servicegroup.Servicegroup.id">
-                      <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                      {{ t('Changelog') }}
-                    </oitc-actions-button-element>
-                  </li>
-                  <li cDropdownDivider></li>
-                  <li>
-                    <oitc-actions-button-element [permission]="'servicegroups.copy'"
-                      [url]="'/servicegroups/copy/' + this.servicegroupExtended.servicegroup.Servicegroup.id">
-                      <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                      {{ t('Copy') }}
-                    </oitc-actions-button-element>
-                  </li>
-                  <li cDropdownDivider></li>
-                  <li>
-                    <oitc-actions-button-element [permission]="'servicegroups.copy'"
-                      (click)="resetChecktime()">
-                      <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                      {{ t('Reset check time') }}
-                    </oitc-actions-button-element>
-                  </li>
-                  <li>
-                    <oitc-actions-button-element [permission]="'servicegroups.copy'"
-                      (click)="toggleDowntimeModal()">
-                      <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                      {{ t('Set planned maintenance times') }}
-                    </oitc-actions-button-element>
-                  </li>
-
-                  <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
-
-                    <a
-                      href="javascript:void(0);" cDropdownItem
-                      (click)="acknowledgeStatus()">
-                      <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                      {{ t('Acknowledge service status') }}
-                    </a>
-                  </li>
-                  <li>
-                    <oitc-actions-button-element [permission]="'servicegroups.copy'"
-                      (click)="disableNotifications()">
-                      <fa-icon [icon]="['far', 'envelope']"></fa-icon>
-                      {{ t('Disable notifications') }}
-                    </oitc-actions-button-element>
-                  </li>
-                  <li>
-                    <oitc-actions-button-element [permission]="'servicegroups.copy'"
-                      (click)="enableNotifications()">
-                      <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                      {{ t('Enable notifications') }}
-                    </oitc-actions-button-element>
-                  </li>
-                </ul>
-              </c-dropdown>
-            </c-input-group>
-          </c-col>
-        </c-row>
-
-        @if (servicegroupExtended.servicegroup.Servicegroup.uuid === '') {
-          <oitc-table-loader
-          ></oitc-table-loader>
-        }
-
-        @if (servicegroupExtended.servicegroup.Servicegroup.uuid !== '') {
-          <table bordered cTable
-            class="mt-2 mb-0" hover striped>
-            <thead>
-              <tr class="border-bottom">
-                <td colspan="8" class="p-1 col-8">
-                  <c-input-group>
-                    <span cInputGroupText class="bg-primary text-white col-1">
-                      <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                      &nbsp;
-                      {{ t('Service') }}
-                    </span>
-                    <input
-                      [(ngModel)]="serviceParams['filter[servicename]']"
-                      aria-label="service group name"
-                      cFormControl
-                      [placeholder]="'Filter by service name' | transloco"
-                      name="filter.Service.name"
-                      id="filter.Service.name"
-                      oitcDebounce
-                      (debouncedValue)="onServiceFilterChange($event)"
-                      type="text"
-                      />
-                  </c-input-group>
-                </td>
-                <td colspan="4" class="p-1">
-                  <div>
-                    <c-row class="mx-0 row">
-                      <c-col class="col-3 bg-ok py-2 rounded-start text-white">
-                        <input cFormCheckInput
-                          type="checkbox"
-                          name="statusFilterup"
-                          oitcDebounce
-                          (debouncedValue)="onServiceFilterChange($event)"
-                          [(ngModel)]="filter.Servicestatus.current_state.ok"
-                          id="statusFilterup">
-                        <label cFormCheckLabel for="statusFilterup" class="ps-1">
-                          {{ servicegroupExtended.servicegroup.StatusSummary.ok }}
-                        </label>
-                      </c-col>
-                      <c-col class="col-3 bg-warning py-2  text-white">
-                        <input cFormCheckInput
-                          type="checkbox"
-                          name="statusFilterdown"
-                          oitcDebounce
-                          (debouncedValue)="onServiceFilterChange($event)"
-                          [(ngModel)]="filter.Servicestatus.current_state.warning"
-                          id="statusFilterdown">
-                        <label cFormCheckLabel for="statusFilterdown" class="ps-1">
-                          {{ servicegroupExtended.servicegroup.StatusSummary.warning }}
-                        </label>
-                      </c-col>
-                      <c-col class="col-3 bg-critical py-2  text-white">
-                        <input cFormCheckInput
-                          type="checkbox"
-                          name="statusFiltercritical"
-                          oitcDebounce
-                          (debouncedValue)="onServiceFilterChange($event)"
-                          [(ngModel)]="filter.Servicestatus.current_state.critical"
-                          id="statusFiltercritical">
-                        <label cFormCheckLabel for="statusFiltercritical" class="ps-1">
-                          {{ servicegroupExtended.servicegroup.StatusSummary.critical }}
-                        </label>
-                      </c-col>
-                      <c-col class="col-3 bg-unknown py-2 rounded-end  text-white">
-                        <input cFormCheckInput
-                          type="checkbox"
-                          name="statusFilterunknown"
-                          oitcDebounce
-                          (debouncedValue)="onServiceFilterChange($event)"
-                          [(ngModel)]="filter.Servicestatus.current_state.unknown"
-                          id="statusFilterunknown">
-                        <label cFormCheckLabel for="statusFilterunknown" class="ps-1">
-                          {{ servicegroupExtended.servicegroup.StatusSummary.unknown }}
-                        </label>
-                      </c-col>
-                    </c-row>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <th>
-                  {{ t('Status') }}
-                </th>
-                <th class="text-center">
-                  <fa-icon [icon]="['fas', 'user']" [title]="'is acknowledged' | transloco"></fa-icon>
-                </th>
-                <th class="text-center">
-                  <fa-icon [icon]="['fas', 'power-off']" [title]="'is in downtime' | transloco"></fa-icon>
-                </th>
-                <th class="text-center">
-                  <fa-icon [icon]="['fas', 'chart-area']" [title]="'Grapher' | transloco"></fa-icon>
-                </th>
-                <th class="text-center">
-                  <span [title]="'Passively transferred service' | transloco">
-                    P
-                  </span>
-                </th>
-                <th>{{ t('Host name') }}</th>
-                <th class="col-4">{{ t('Service name') }}</th>
-                <th>{{ t('State since') }}</th>
-                <th>{{ t('Last check') }}</th>
-                <th>{{ t('Next check') }}</th>
-                <th>{{ t('Output') }}</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (service of servicegroupExtended.servicegroup.Services; track service) {
-                <tr>
-                  <td class="text-center">
-                    <oitc-servicestatus-simple-icon
-                    [servicestatus]="service.Servicestatus.currentState"></oitc-servicestatus-simple-icon>
-                  </td>
-                  <td class="text-center">
-                    @if (service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Normal) {
-                      <fa-icon
-                        [icon]="['far', 'user']"
-                        [title]="'Acknowledgement' | transloco"
-                      ></fa-icon>
-                    }
-                    @if (service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Sticky) {
-                      <fa-icon
-                        [icon]="['fas', 'user']"
-                        [title]="'Sticky Acknowledgement' | transloco"
-                      ></fa-icon>
-                    }
-                  </td>
-                  <td class="text-center">
-                    @if (service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0) {
-                      <fa-icon
-                        [icon]="['fas', 'power-off']"
-                      ></fa-icon>
-                    }
-                  </td>
-                  <td class="text-center">
-                    @if (service.Service.has_graph) {
-                      <oitc-popover-graph
-                        [service]="service.Service.uuid"
-                        [host]="service.Host.uuid"
-                      [timezone]="timezone"></oitc-popover-graph>
-                    }
-                  </td>
-                  <td class="text-center">
-                    @if (service.Service.active_checks_enabled === false || service.Host.is_satellite_host === true) {
-                      <span
-                        [title]="'Passively transferred service' | transloco"
-                      >P</span>
-                    }
-                  </td>
-                  <td [ngClass]="{'bg-success': service.Hoststatus.currentState == 0, 'bg-down': service.Hoststatus.currentState == 1, 'bg-unknown': service.Hoststatus.currentState == 2}">
-                    <span *oitcPermission="['hosts', 'browser']">
-                      <a [routerLink]="['/', 'hosts', 'browser', service.Host.id]" class="text-white">
-                        {{ service.Host.name }}
-                      </a>
-                    </span>
-                    <span *oitcPermission="['hosts', 'browser']; negate: true">
-                      {{ service.Host.name }}
-                    </span>
-                  </td>
-                  <td class="word-break">
-                    <span *oitcPermission="['services', 'browser']">
-                      <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
-                        {{ service.Service.servicename }}
-                      </a>
-                    </span>
-                    <span *oitcPermission="['services', 'browser']; negate: true">
-                      {{ service.Service.servicename }}
-                    </span>
-                  </td>
-                  <td>{{ service.Servicestatus.lastHardStateChange }}</td>
-                  <td>{{ service.Servicestatus.lastCheck }}</td>
-                  <td>{{ service.Servicestatus.nextCheck }}</td>
-                  <td>
-                    {{ service.Servicestatus.output }}
-                  </td>
-                  <td class="text-center">
-                    <oitc-actions-button [permission]="'services.edit'"
-                      [url]="'/services/edit/' + service.Service.id"
-                      [allowEdit]="service.Service.allow_edit">
-                      @if (service.Service.allow_edit) {
-                        <oitc-actions-button-element [permission]="'services.edit'"
-                          [url]="'/services/edit/' + service.Service.id">
-                          <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                          {{ t('Edit') }}
-                        </oitc-actions-button-element>
-                      }
-                      <oitc-actions-button-element (click)="toggleDisableModal(service.Service)"
-                        [permission]="'services.deactivate'">
-                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                        {{ t('Disable') }}
-                      </oitc-actions-button-element>
-                      <oitc-actions-button-element [permission]="'changelogs.index'"
-                        [url]="'/changelogs/entity/service/' + service.Service.id">
-                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                        {{ t('Changelog') }}
-                      </oitc-actions-button-element>
-                      <li cDropdownDivider></li>
-                      <oitc-actions-button-element [permission]="'services.copy'"
-                        [url]="'/services/copy/' + service.Service.id">
-                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                        {{ t('Copy') }}
-                      </oitc-actions-button-element>
-                      @if (service.Service.allow_edit) {
-                        <li cDropdownDivider></li>
-                      }
-                      <oitc-actions-button-element (click)="toggleDeleteAllModal(service.Service)"
-                        [permission]="'services.delete'">
-                        <span class="text-danger">
-                          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                          {{ t('Delete') }}
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="default" size="xs" (click)="ngOnInit()">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['servicegroups', 'add']" [routerLink]="['/', 'servicegroups', 'add']"
+                            cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="['servicegroups', 'index']" cButton class="ripple" color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <c-row>
+                <c-col xs="12" lg="8" class="mb-1 mt-1">
+                    <c-input-group>
+                        <span cInputGroupText class="bg-primary text-white">
+                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                            &nbsp;
+                            {{ t('Service group') }}
                         </span>
-                      </oitc-actions-button-element>
-                    </oitc-actions-button>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        }
-        @if (servicegroupExtended.servicegroup.Services && servicegroupExtended.servicegroup.Services.length === 0) {
-          <oitc-no-records
-          ></oitc-no-records>
-        }
-        <c-container
-          [fluid]="true" class="mb-3 py-3">
-          <c-row>
-            <c-col>
-              @if (servicegroups) {
-                <oitc-paginate-or-scroll
-                  (paginatorChange)="onServicePaginatorChange($event)"
-                [paginateOrScroll]="servicegroupExtended"></oitc-paginate-or-scroll>
-              }
-            </c-col>
-          </c-row>
-        </c-container>
-      </c-card-body>
+
+                        <oitc-select
+                            class="flex-fill"
+                            name="servicegroupId"
+                            id="servicegroupId"
+                            [(ngModel)]="servicegroupId"
+                            optionValue="key"
+                            optionLabel="value"
+                            [options]="servicegroups"
+                            [searchCallback]="loadServicegroups"
+                            (onChange)="onServicegroupChange()">
+                        </oitc-select>
+                        <c-dropdown>
+                            <button cButton cDropdownToggle color="default">
+                                {{ t('Actions') }}
+                            </button>
+                            <ul cDropdownMenu>
+                                <li>
+                                    <oitc-actions-button-element [permission]="'servicegroups.edit'"
+                                                                 [url]="'/servicegroups/edit/' + this.servicegroupExtended.servicegroup.Servicegroup.id">
+                                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                        {{ t('Edit') }}
+                                    </oitc-actions-button-element>
+                                </li>
+                                <li>
+                                    <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                 [url]="'/changelogs/entity/servicegroup/' + this.servicegroupExtended.servicegroup.Servicegroup.id">
+                                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                        {{ t('Changelog') }}
+                                    </oitc-actions-button-element>
+                                </li>
+                                <li cDropdownDivider></li>
+                                <li>
+                                    <oitc-actions-button-element [permission]="'servicegroups.copy'"
+                                                                 [url]="'/servicegroups/copy/' + this.servicegroupExtended.servicegroup.Servicegroup.id">
+                                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                        {{ t('Copy') }}
+                                    </oitc-actions-button-element>
+                                </li>
+                                <li cDropdownDivider></li>
+                                <li>
+                                    <oitc-actions-button-element [permission]="'servicegroups.copy'"
+                                                                 (click)="resetChecktime()">
+                                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                        {{ t('Reset check time') }}
+                                    </oitc-actions-button-element>
+                                </li>
+                                <li>
+                                    <oitc-actions-button-element [permission]="'servicegroups.copy'"
+                                                                 (click)="toggleDowntimeModal()">
+                                        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                        {{ t('Set planned maintenance times') }}
+                                    </oitc-actions-button-element>
+                                </li>
+
+                                <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+
+                                    <a
+                                        href="javascript:void(0);" cDropdownItem
+                                        (click)="acknowledgeStatus()">
+                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                        {{ t('Acknowledge service status') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <oitc-actions-button-element [permission]="'servicegroups.copy'"
+                                                                 (click)="disableNotifications()">
+                                        <fa-icon [icon]="['far', 'envelope']"></fa-icon>
+                                        {{ t('Disable notifications') }}
+                                    </oitc-actions-button-element>
+                                </li>
+                                <li>
+                                    <oitc-actions-button-element [permission]="'servicegroups.copy'"
+                                                                 (click)="enableNotifications()">
+                                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                        {{ t('Enable notifications') }}
+                                    </oitc-actions-button-element>
+                                </li>
+                            </ul>
+                        </c-dropdown>
+                    </c-input-group>
+                </c-col>
+            </c-row>
+
+            @if (servicegroupExtended.servicegroup.Servicegroup.uuid === '') {
+                <oitc-table-loader
+                ></oitc-table-loader>
+            }
+
+            @if (servicegroupExtended.servicegroup.Servicegroup.uuid !== '') {
+                <table bordered cTable
+                       class="mt-2 mb-0" hover striped>
+                    <thead>
+                    <tr class="border-bottom">
+                        <td colspan="8" class="p-1 col-8">
+                            <c-input-group>
+                                <span cInputGroupText class="bg-primary text-white col-1">
+                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    &nbsp;
+                                    {{ t('Service') }}
+                                </span>
+                                <input
+                                    [(ngModel)]="serviceParams['filter[servicename]']"
+                                    aria-label="service group name"
+                                    cFormControl
+                                    [placeholder]="'Filter by service name' | transloco"
+                                    name="filter.Service.name"
+                                    id="filter.Service.name"
+                                    oitcDebounce
+                                    (debouncedValue)="onServiceFilterChange($event)"
+                                    type="text"
+                                />
+                            </c-input-group>
+                        </td>
+                        <td colspan="4" class="p-1">
+                            <div>
+                                <c-row class="mx-0 row">
+                                    <c-col class="col-3 bg-ok py-2 rounded-start text-white">
+                                        <input cFormCheckInput
+                                               type="checkbox"
+                                               name="statusFilterup"
+                                               oitcDebounce
+                                               (debouncedValue)="onServiceFilterChange($event)"
+                                               [(ngModel)]="filter.Servicestatus.current_state.ok"
+                                               id="statusFilterup">
+                                        <label cFormCheckLabel for="statusFilterup" class="ps-1">
+                                            {{ servicegroupExtended.servicegroup.StatusSummary.ok }}
+                                        </label>
+                                    </c-col>
+                                    <c-col class="col-3 bg-warning py-2  text-white">
+                                        <input cFormCheckInput
+                                               type="checkbox"
+                                               name="statusFilterdown"
+                                               oitcDebounce
+                                               (debouncedValue)="onServiceFilterChange($event)"
+                                               [(ngModel)]="filter.Servicestatus.current_state.warning"
+                                               id="statusFilterdown">
+                                        <label cFormCheckLabel for="statusFilterdown" class="ps-1">
+                                            {{ servicegroupExtended.servicegroup.StatusSummary.warning }}
+                                        </label>
+                                    </c-col>
+                                    <c-col class="col-3 bg-critical py-2  text-white">
+                                        <input cFormCheckInput
+                                               type="checkbox"
+                                               name="statusFiltercritical"
+                                               oitcDebounce
+                                               (debouncedValue)="onServiceFilterChange($event)"
+                                               [(ngModel)]="filter.Servicestatus.current_state.critical"
+                                               id="statusFiltercritical">
+                                        <label cFormCheckLabel for="statusFiltercritical" class="ps-1">
+                                            {{ servicegroupExtended.servicegroup.StatusSummary.critical }}
+                                        </label>
+                                    </c-col>
+                                    <c-col class="col-3 bg-unknown py-2 rounded-end  text-white">
+                                        <input cFormCheckInput
+                                               type="checkbox"
+                                               name="statusFilterunknown"
+                                               oitcDebounce
+                                               (debouncedValue)="onServiceFilterChange($event)"
+                                               [(ngModel)]="filter.Servicestatus.current_state.unknown"
+                                               id="statusFilterunknown">
+                                        <label cFormCheckLabel for="statusFilterunknown" class="ps-1">
+                                            {{ servicegroupExtended.servicegroup.StatusSummary.unknown }}
+                                        </label>
+                                    </c-col>
+                                </c-row>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ t('Status') }}
+                        </th>
+                        <th class="text-center">
+                            <fa-icon [icon]="['fas', 'user']" [title]="'is acknowledged' | transloco"></fa-icon>
+                        </th>
+                        <th class="text-center">
+                            <fa-icon [icon]="['fas', 'power-off']" [title]="'is in downtime' | transloco"></fa-icon>
+                        </th>
+                        <th class="text-center">
+                            <fa-icon [icon]="['fas', 'chart-area']" [title]="'Grapher' | transloco"></fa-icon>
+                        </th>
+                        <th class="text-center">
+                            <span [title]="'Passively transferred service' | transloco">
+                                P
+                            </span>
+                        </th>
+                        <th>{{ t('Host name') }}</th>
+                        <th class="col-4">{{ t('Service name') }}</th>
+                        <th>{{ t('State since') }}</th>
+                        <th>{{ t('Last check') }}</th>
+                        <th>{{ t('Next check') }}</th>
+                        <th>{{ t('Output') }}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (service of servicegroupExtended.servicegroup.Services; track service) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-servicestatus-simple-icon
+                                        [servicestatus]="service.Servicestatus.currentState"></oitc-servicestatus-simple-icon>
+                                </td>
+                                <td class="text-center">
+                                    @if (service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Normal) {
+                                        <fa-icon
+                                            [icon]="['far', 'user']"
+                                            [title]="'Acknowledgement' | transloco"
+                                        ></fa-icon>
+                                    }
+                                    @if (service.Servicestatus.acknowledgement_type === AcknowledgementTypes.Sticky) {
+                                        <fa-icon
+                                            [icon]="['fas', 'user']"
+                                            [title]="'Sticky Acknowledgement' | transloco"
+                                        ></fa-icon>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0) {
+                                        <fa-icon
+                                            [icon]="['fas', 'power-off']"
+                                        ></fa-icon>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (service.Service.has_graph) {
+                                        <oitc-popover-graph
+                                            [service]="service.Service.uuid"
+                                            [host]="service.Host.uuid"
+                                            [timezone]="timezone"></oitc-popover-graph>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (service.Service.active_checks_enabled === false || service.Host.is_satellite_host === true) {
+                                        <span
+                                            [title]="'Passively transferred service' | transloco"
+                                        >P</span>
+                                    }
+                                </td>
+                                <td [ngClass]="{'bg-success': service.Hoststatus.currentState == 0, 'bg-down': service.Hoststatus.currentState == 1, 'bg-unknown': service.Hoststatus.currentState == 2}">
+                                    <span *oitcPermission="['hosts', 'browser']">
+                                        <a [routerLink]="['/', 'hosts', 'browser', service.Host.id]" class="text-white">
+                                            {{ service.Host.name }}
+                                        </a>
+                                    </span>
+                                    <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                        {{ service.Host.name }}
+                                    </span>
+                                </td>
+                                <td class="word-break">
+                                    <span *oitcPermission="['services', 'browser']">
+                                        <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
+                                            {{ service.Service.servicename }}
+                                        </a>
+                                    </span>
+                                    <span *oitcPermission="['services', 'browser']; negate: true">
+                                        {{ service.Service.servicename }}
+                                    </span>
+                                </td>
+                                <td>{{ service.Servicestatus.lastHardStateChange }}</td>
+                                <td>{{ service.Servicestatus.lastCheck }}</td>
+                                <td>{{ service.Servicestatus.nextCheck }}</td>
+                                <td>
+                                    {{ service.Servicestatus.output }}
+                                </td>
+                                <td class="text-center">
+                                    <oitc-actions-button [permission]="'services.edit'"
+                                                         [url]="'/services/edit/' + service.Service.id"
+                                                         [allowEdit]="service.Service.allow_edit">
+                                        @if (service.Service.allow_edit) {
+                                            <oitc-actions-button-element [permission]="'services.edit'"
+                                                                         [url]="'/services/edit/' + service.Service.id">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element (click)="toggleDisableModal(service.Service)"
+                                                                     [permission]="'services.deactivate'">
+                                            <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                            {{ t('Disable') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/service/' + service.Service.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        <oitc-actions-button-element [permission]="'services.copy'"
+                                                                     [url]="'/services/copy/' + service.Service.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                        @if (service.Service.allow_edit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(service.Service)"
+                                                                     [permission]="'services.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @if (servicegroupExtended.servicegroup.Services && servicegroupExtended.servicegroup.Services.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            <c-container
+                [fluid]="true" class="mb-3 py-3">
+                <c-row>
+                    <c-col>
+                        @if (servicegroups) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onServicePaginatorChange($event)"
+                                [paginateOrScroll]="servicegroupExtended"></oitc-paginate-or-scroll>
+                        }
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
     </c-card>
 
-  </ng-container>
+</ng-container>
 
-  <oitc-service-reset-checktime-modal (completed)="onResetChecktime($event)"
-  [items]="selectedItems"></oitc-service-reset-checktime-modal>
+<oitc-service-reset-checktime-modal (completed)="onResetChecktime($event)"
+                                    [items]="selectedItems"></oitc-service-reset-checktime-modal>
 
 
-  <oitc-service-maintenance-modal (completed)="onMassActionComplete($event)"
-  [items]="selectedItems"></oitc-service-maintenance-modal>
-  <oitc-service-acknowledge-modal (completed)="onMassActionComplete($event)"
-  [items]="selectedItems"></oitc-service-acknowledge-modal>
-  <oitc-disable-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-disable-modal>
-  <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+<oitc-service-maintenance-modal (completed)="onMassActionComplete($event)"
+                                [items]="selectedItems"></oitc-service-maintenance-modal>
+<oitc-service-acknowledge-modal (completed)="onMassActionComplete($event)"
+                                [items]="selectedItems"></oitc-service-acknowledge-modal>
+<oitc-disable-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-disable-modal>
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

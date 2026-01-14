@@ -1,972 +1,976 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a>
-      </li>
-      <li class="breadcrumb-item active">
-        <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'index']"
-          *oitcPermission="['AutoreportModule', 'autoreports', 'index']">
-          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-          {{ t('Autoreport Module') }}
-        </a>
-      </li>
-      <li aria-current="page" class="breadcrumb-item">
-        <fa-icon [icon]="['fas', 'list']"></fa-icon>
-        {{ t('Generate auto report') }}
-      </li>
-    </ol>
-  </nav>
-  <form cForm (ngSubmit)="submitReport()">
-    <c-card class="mb-3">
-      <c-card-header>
-        @if (!reportWasGenerated) {
-          <h5 cCardTitle>
-            {{ t('Generate auto report') }}
-          </h5>
-        }
-        @if (reportWasGenerated) {
-          <h5 cCardTitle>
-            {{ report.autoreport.name }}
-            <span class="fw-300">
-              <i>{{ report.autoreport_data.evaluation_time.start_human }}</i>
-              -
-              <i>{{ report.autoreport_data.evaluation_time.end_human }}</i>
-            </span>
-          </h5>
-        }
-        <c-nav class="card-toolbar card-header-pills">
-          <c-nav-item class="px-1">
-            <button [fallbackUrl]="['autoreport_module', 'autoreports', 'index']" cButton class="ripple"
-              color="default"
-              oitcBackButton
-              size="xs">
-              <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-              {{ t('Back') }}
-            </button>
-          </c-nav-item>
-        </c-nav>
-        <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
-          <c-nav-item>
-            <a class="nav-link text-center active" data-toggle="tab"
-              [ngClass]="{'active': tabName==='reportConfig'}"
-              (click)="tabName='reportConfig'"
-              role="tab">
-              <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-              {{ t('Configuration') }}
-            </a>
-          </c-nav-item>
-          <c-nav-item>
-            @if (reportWasGenerated) {
-              <a class="nav-link" data-toggle="tab"
-                [ngClass]="{'active': tabName ==='showReport'}"
-                (click)="tabName='showReport'"
-                role="tab">
-                <fa-icon [icon]="['fas', 'pie-chart']"></fa-icon>
-                {{ t('Report') }}
-              </a>
-            }
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
-        @if (tabName === 'reportConfig') {
-          <div>
-            <c-alert color="danger" role="alert" [hidden]="!report_error">
-              @if (report_error) {
-                {{ report_error.message }}
-                @if (report_error.objects.length > 0) {
-                  <ul>
-                    @for ( errorObject of report_error.objects; track  errorObject) {
-                      <li>
-                        {{ errorObject.name }}
-                        @if (errorObject.services) {
-                          <ul>
-                            @for ( servicename of errorObject.services; track  servicename) {
-                              <li>
-                                {{ servicename }}
-                              </li>
-                            }
-                          </ul>
-                        }
-                      </li>
-                    }
-                  </ul>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'index']"
+                   *oitcPermission="['AutoreportModule', 'autoreports', 'index']">
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Autoreport Module') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Generate auto report') }}
+            </li>
+        </ol>
+    </nav>
+    <form cForm (ngSubmit)="submitReport()">
+        <c-card class="mb-3">
+            <c-card-header>
+                @if (!reportWasGenerated) {
+                    <h5 cCardTitle>
+                        {{ t('Generate auto report') }}
+                    </h5>
                 }
-              }
-            </c-alert>
-            <div class="mb-3">
-              <label cLabel for="report">
-                {{ t('Auto report') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <oitc-select
-                name="report"
-                id="report"
-                optionValue="id"
-                optionLabel="name"
-                [(ngModel)]="post.Autoreport.id"
-                [options]="autoreports">
-              </oitc-select>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="format">
-                {{ t('Report format') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <oitc-select
-                name="format"
-                id="format"
-                optionValue="key"
-                optionLabel="value"
-                [(ngModel)]="post.Autoreport.format"
-                [options]="formatOptions">
-              </oitc-select>
-            </div>
-            <div class="mb-3">
-              <c-col>
-                <label cLabel for="from_date">
-                  {{ t('From') }}
-                </label>
-                <input cFormControl type="date"
-                  id="from_date"
-                  name="from_date"
-                  placeholder="{{ t('DD.MM.YYYY') }}"
-                  [(ngModel)]="from"
-                  oitcFormError [errors]="errors" errorField="from_date">
-                <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
-              </c-col>
-            </div>
-            <div class="mb-3">
-              <c-col>
-                <label cLabel for="to_date">
-                  {{ t('To') }}
-                </label>
-                <input cFormControl type="date"
-                  id="to_date"
-                  name="to_date"
-                  placeholder="{{ t('DD.MM.YYYY') }}"
-                  [(ngModel)]="to"
-                  oitcFormError [errors]="errors" errorField="to_date">
-                <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
-              </c-col>
-            </div>
-          </div>
-        }
-
-        @if (tabName === 'showReport') {
-          <div>
-            <c-row class="mb-3">
-              <c-col xs="12" md="12" lg="6">
-                <c-row>
-                  <c-col xs="12" md="6" lg="4">
-                    <h4>
-                      {{ t('Evaluated time period') }}
-                    </h4>
-                  </c-col>
-                  <c-col xs="12" md="6" lg="8">
-                    <c-row>
-                      <c-col>
-                        @if (this.PermissionsService.hasPermissionObservable(['timeperiods', 'edit'])|async) {
-                          <a [routerLink]="['/', 'timeperiods', 'edit', report.autoreport.timeperiod_id]">
-                            {{ report.autoreport.timeperiod.name }}
-                          </a>
-                        } @else {
-                          {{ report.autoreport.timeperiod.name }}
-                        }
-                      </c-col>
-                    </c-row>
-                    @for (timerange of report.autoreport.timeperiod.timeperiod_timeranges; track timerange) {
-                      <c-row>
-                        <c-col xs="12" md="6" lg="3">
-                          {{ timerange.weekday }}
-                        </c-col>
-                        <c-col xs="12" md="6" lg="4">
-                          {{ timerange.start }}
-                          -
-                          {{ timerange.end }}
-                        </c-col>
-                      </c-row>
-                    }
-                  </c-col>
-                </c-row>
-              </c-col>
-              <c-col xs="12" md="6" lg="6" class="text-end">
-                <img alt="logo" [src]="logoUrl" width="200">
-              </c-col>
-            </c-row>
-            @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_SUMMARY_STATISTICS.value) && report.autoreport.min_availability) {
-              <c-row class="mb-3"
-                >
-                <c-col lg="12">
-                  <h4>
-                    {{ t('Availability overview') }}
-                  </h4>
-                </c-col>
-                <c-col class="col-12">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th style="border-top:none;" class="col-3"></th>
-                        <th style="border-top:none;"
-                          class="col-4">{{ t('Maximum allowed outage duration') }}
-                        </th>
-                        <th style="border-top:none;"
-                          class="col-4">{{ t('Measured outage duration ') }}
-                        </th>
-                        <th style="border-top:none;" class="col-1"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{{ t('Percentage') }}</td>
-                        <td>
-                          {{ report.autoreport_data.max_outages_time_in_percent | number: '1.3-3' }} %
-                        </td>
-                        <td>
-                          {{ report.autoreport_data.total_outage_time_percentage | number: '1.3-3' }} %
-                        </td>
-                        <td>
-                          @if (report.autoreport_data.total_outage_time_percentage <= report.autoreport_data.max_outages_time_in_percent) {
-                            <span class="badge border border-success text-success"
-                              >
-                              {{ t('PASSED') }}
-                            </span>
-                          }
-                          @if (report.autoreport_data.total_outage_time_percentage > report.autoreport_data.max_outages_time_in_percent) {
-                            <span class="badge border border-danger text-danger"
-                              >
-                              {{ t('FAILED') }}
-                            </span>
-                          }
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ t('Minutes') }}</td>
-                        <td>
-                          {{ report.autoreport_data.max_outages_time_in_seconds_human }}
-                        </td>
-                        <td>
-                          {{ report.autoreport_data.total_outage_time_human }}
-                        </td>
-                        <td>
-                          @if (report.autoreport_data.total_outage_time_percentage <= report.autoreport_data.max_outages_time_in_percent) {
-                            <span class="badge border border-success text-success"
-                              >
-                              {{ t('PASSED') }}
-                            </span>
-                          }
-                          @if (report.autoreport_data.total_outage_time_percentage > report.autoreport_data.max_outages_time_in_percent) {
-                            <span class="badge border border-danger text-danger"
-                              >
-                              {{ t('FAILED') }}
-                            </span>
-                          }
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </c-col>
-              </c-row>
-            }
-            @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_SUMMARY_STATISTICS.value) && report.autoreport.max_number_of_outages) {
-              <c-row class="mb-3"
-                >
-                <c-col class="col-12">
-                  <h4>
-                    {{ t('Outages overview') }}
-                  </h4>
-                </c-col>
-                <c-col class="col-12">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th class="col-3"></th>
-                        <th class="col-4">
-                          {{ t('Maximum allowed number of outages') }}
-                        </th>
-                        <th class="col-4">
-                          {{ t('Measured number of outages') }}
-                        </th>
-                        <th class="col-1"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td></td>
-                        <td>
-                          {{ report.autoreport.max_number_of_outages }}
-                        </td>
-                        <td>
-                          {{ report.autoreport_data.total_outage_count }}
-                        </td>
-                        <td>
-                          @if (report.autoreport_data.total_outage_count <= report.autoreport.max_number_of_outages) {
-                            <span class="badge border border-success text-success"
-                              >
-                              {{ t('PASSED') }}
-                            </span>
-                          }
-                          @if (report.autoreport_data.total_outage_count > report.autoreport.max_number_of_outages) {
-                            <span class="badge border border-danger text-danger"
-                              >
-                              {{ t('FAILED') }}
-                            </span>
-                          }
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </c-col>
-              </c-row>
-            }
-            <c-row class="mb-3">
-              <c-col class="col-12">
-                <h4>
-                  {{ t('Evaluated host and services') }}
-                </h4>
-              </c-col>
-              <c-col lg="12">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th class="col-3"></th>
-                      <th class="col-4">
-                        {{ t('Name') }}
-                      </th>
-                      <th class="col-4">
-                        @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value) ||hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value)) {
-                          <span
-                            >
-                            {{ t('Availability ') }}
-                          </span>
-                        }
-                      </th>
-                      <th class="col-1">
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (host of report.autoreport_data.hosts | keyvalue: keepOrder; track host) {
-                      <tr>
-                        <td class="html-report-host-row"></td>
-                        <td class="html-report-host-row">
-                          <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                          @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                            <a [routerLink]="['/', 'hosts', 'browser', host.value.Host.id]">
-                              {{ host.value.Host.name }}
+                @if (reportWasGenerated) {
+                    <h5 cCardTitle>
+                        {{ report.autoreport.name }}
+                        <span class="fw-300">
+                            <i>{{ report.autoreport_data.evaluation_time.start_human }}</i>
+                            -
+                            <i>{{ report.autoreport_data.evaluation_time.end_human }}</i>
+                        </span>
+                    </h5>
+                }
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['autoreport_module', 'autoreports', 'index']" cButton class="ripple"
+                                color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+                <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
+                    <c-nav-item>
+                        <a class="nav-link text-center active" data-toggle="tab"
+                           [ngClass]="{'active': tabName==='reportConfig'}"
+                           (click)="tabName='reportConfig'"
+                           role="tab">
+                            <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                            {{ t('Configuration') }}
+                        </a>
+                    </c-nav-item>
+                    <c-nav-item>
+                        @if (reportWasGenerated) {
+                            <a class="nav-link" data-toggle="tab"
+                               [ngClass]="{'active': tabName ==='showReport'}"
+                               (click)="tabName='showReport'"
+                               role="tab">
+                                <fa-icon [icon]="['fas', 'pie-chart']"></fa-icon>
+                                {{ t('Report') }}
                             </a>
-                          } @else {
-                            {{ host.value.Host.name }}
-                          }
-                        </td>
-                        <td class="html-report-host-row">
-                          @if (host.value.Host.state_overview) {
-                            <div>
-                              @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value)) {
-                                <span
-                                  >
-                                  {{ host.value.Host.state_overview.percent_availability | number: '1.3-3' }}
-                                  %
-                                </span>
-                              }
-                            </div>
-                          }
-                          @if (!host.value.Host.state_overview && checkIfHostInReport(host.value.Host.id)) {
-                            <span
-                              class="text-primary">
-                              <i>
-                                {{ t('No historical data available ') }}
-                              </i>
-                            </span>
-                          }
-                        </td>
-                        <td class="html-report-host-row">
-                          @if ((host.value.Host.state_overview && hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value)) &&
-                            (100-report.autoreport_data.max_outages_time_in_percent) <= host.value.Host.state_overview.percent_availability) {
-                            <span class="badge border border-success text-success"
-                              >
-                              {{ t('PASSED') }}
-                            </span>
-                          }
-                          @if ((host.value.Host.state_overview && hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value)) &&
-                            (100-report.autoreport_data.max_outages_time_in_percent) > host.value.Host.state_overview.percent_availability) {
-                            <span class="badge border border-danger text-danger"
-                              >
-                              {{ t('FAILED') }}
-                            </span>
-                          }
-                        </td>
-                      </tr>
-                      @if (host.value.Services) {
-                        @for (service of host.value.Services | keyvalue: keepOrder ; track service) {
-                          <tr>
-                            <td></td>
-                            <td class="word-break">
-                              <span>
-                                <fa-icon [icon]="['fas', 'cog']" class="ms-3"></fa-icon>
-                                @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
-                                  <a [routerLink]="['/', 'services', 'browser', service.value.Service.id]">
-                                    {{ service.value.Service.name }}
-                                  </a>
-                                } @else {
-                                  {{ service.value.Service.name }}
-                                }
-                              </span>
-                            </td>
-                            <td>
-                              @if (service.value.Service.state_overview) {
-                                <div
-                                  >
-                                  @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value)) {
-                                    <span
-                                      >
-                                      {{
-                                      service.value.Service.state_overview.percent_availability | number: '1.3-3'
-                                      }} %
-                                    </span>
-                                  }
-                                </div>
-                              }
-                              @if (!service.value.Service.state_overview) {
-                                <span
-                                  class="text-primary">
-                                  <i>
-                                    {{ t('No historical data available ') }}
-                                  </i>
-                                </span>
-                              }
-                            </td>
-                            <td>
-                              @if (service.value.Service.state_overview) {
-                                <div
-                                  >
-                                  @if ((hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value)) &&
-                                    (100 - report.autoreport_data.max_outages_time_in_percent) <= service.value.Service.state_overview.percent_availability) {
-                                    <span class="badge border border-success text-success"
-                                      >
-                                      {{ t('PASSED') }}
-                                    </span>
-                                  }
-                                  @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value) &&
-                                    (100 - report.autoreport_data.max_outages_time_in_percent) > service.value.Service.state_overview.percent_availability) {
-                                    <span class="badge border border-danger text-danger"
-                                      >
-                                      {{ t('FAILED') }}
-                                    </span>
-                                  }
-                                </div>
-                              }
-                            </td>
-                          </tr>
                         }
-                      }
-                    }
-                  </tbody>
-                </table>
-              </c-col>
-            </c-row>
-            @if (report.autoreport_data.sla_graph_path) {
-              <c-row class="mb-3">
-                <c-col class="col-12">
-                  <h4>
-                    {{ t('SLA overview') }}
-                  </h4>
-                </c-col>
-                <c-col class="col-12 text-center">
-                  <img [src]="report.autoreport_data.sla_graph_path" class="img-fluid">
-                </c-col>
-              </c-row>
-            }
-            <c-row class="mb-3">
-              <c-col class="col-12">
-                <h4>
-                  {{ t('Host and service details') }}
-                </h4>
-              </c-col>
-            </c-row>
-            @for (host of report.autoreport_data.hosts | keyvalue: keepOrder; track host) {
-              <c-row class="html-report-host-row border-top pt-3 pb-3">
-                <c-col class="col-3 d-sm-flex text-start align-items-center">
-                  <fa-icon [icon]="['fas', 'desktop']" class="pe-1"></fa-icon>
-                  @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                    <a [routerLink]="['/', 'hosts', 'browser', host.value.Host.id]">
-                      {{ host.value.Host.name }}
-                    </a>
-                  } @else {
-                    {{ host.value.Host.name }}
-                  }
-                  @if (hasBitValue(host.value.Host.configuration_option, 4) && host.value.Host.description !== null) {
-                    <span
-                      >
-                      <!-- 4 == alias -->
-                      &nbsp;
-                      - {{ host.value.Host.description }}
-                    </span>
-                  }
-                </c-col>
-                <c-col md="2">
-                  @if (host.value.Host.state_overview) {
-                    <c-row class="report-border-sucess"
-                      >
-                      @if (hasBitValue(host.value.Host.configuration_option, 1)) {
-                        <c-col class="col-12"
-                          >
-                          <!-- 1 == percent -->
-                          {{ host.value.Host.state_overview.percent_up | number: '1.3-3' }}
-                          %
-                        </c-col>
-                      }
-                      @if (hasBitValue(host.value.Host.configuration_option, 2)) {
-                        <c-col class="col-12"
-                          >
-                          <!-- 2 == minute -->
-                          {{ host.value.Host.state_overview.human_up }}
-                        </c-col>
-                      }
-                    </c-row>
-                  }
-                </c-col>
-                <c-col md="2">
-                  @if (host.value.Host.state_overview) {
-                    <c-row class="report-border-danger"
-                      >
-                      @if (hasBitValue(host.value.Host.configuration_option, 1)) {
-                        <c-col class="col-12"
-                          >
-                          <!-- 1 == percent -->
-                          {{ host.value.Host.state_overview.percent_down | number: '1.3-3' }}
-                          %
-                        </c-col>
-                      }
-                      @if (hasBitValue(host.value.Host.configuration_option, 2)) {
-                        <c-col class="col-12"
-                          >
-                          <!-- 2 == minute -->
-                          {{ host.value.Host.state_overview.human_down }}
-                        </c-col>
-                      }
-                    </c-row>
-                  }
-                </c-col>
-                <c-col md="2">
-                  @if (host.value.Host.state_overview) {
-                    <c-row class="report-border-default"
-                      >
-                      @if (hasBitValue(host.value.Host.configuration_option, 1)) {
-                        <c-col class="col-12"
-                          >
-                          <!-- 1 == percent -->
-                          {{ host.value.Host.state_overview.percent_unreachable | number: '1.3-3' }}
-                          %
-                        </c-col>
-                      }
-                      @if (hasBitValue(host.value.Host.configuration_option, 2)) {
-                        <c-col class="col-12"
-                          >
-                          <!-- 2 == minute -->
-                          {{ host.value.Host.state_overview.human_unreachable }}
-                        </c-col>
-                      }
-                    </c-row>
-                  }
-                </c-col>
-              </c-row>
-              <c-row class="html-report-host-row">
-                @if (host.value.Host.frontend && host.value.Host.frontend.show_outages) {
-                  <c-col class="col-12"
-                    >
-                    <c-row class="mt-3">
-                      <c-col xs="12" md="9" class="offset-md-3">
-                        <c-row>
-                          <c-col xs="12" md="4" class="report-font-weight-500">
-                            {{
-                            t('Outages of at least {0} min', {
-                            '0': host.value.Host.outage_duration
-                            })
-                            }}
-                          </c-col>
-                          <c-col xs="12" md="4" class="report-font-weight-500">
-                            @if (host.value.Host.outage_duration !== null) {
-                              <span
-                                >
-                                {{
-                                t('Outage time exceeding the permitted limit ({0} min)', {
-                                '0': host.value.Host.outage_duration
-                                })
-                                }}
-                              </span>
-                            }
-                          </c-col>
-                        </c-row>
-                      </c-col>
-                      <c-col xs="12" md="9" class="offset-md-3">
-                        @for (outage of host.value.Host.frontend.outages; track outage) {
-                          <c-row
-                            [ngClass]="{'service_option': outage.duration === host.value.Host.frontend.maximum_outage_duration}">
-                            <c-col xs="12" md="4">
-                              {{ outage.start }} - {{ outage.end }}
-                            </c-col>
-                            <c-col xs="12" md="4">
-                              {{ outage.duration_str }}
-                            </c-col>
-                          </c-row>
-                        }
-                      </c-col>
-                    </c-row>
-                  </c-col>
-                }
-                <!-- end of outages -->
-                @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_OUTAGES_IN_DOWNTIME.value) &&
-                  host.value.Host.frontend.outages_summarized_in_downtime.length > 0) {
-                  <c-col lg="12"
-                    >
-                    <c-row class="pt-3">
-                      <c-col md="9" class="offset-md-3">
-                        <c-row>
-                          <c-col xs="12" md="8" class="report-font-weight-500">
-                            <fa-icon [icon]="['far', 'clock']"></fa-icon>
-                            @if (host.value.Host.outage_duration !== null) {
-                              <span
-                                >
-                                {{
-                                t('Outage time exceeding the permitted limit ({0} min)', {
-                                '0': host.value.Host.outage_duration
-                                })
-                                }}
-                              </span>
-                            }
-                            @if (host.value.Host.outage_duration === null) {
-                              <span
-                                >
-                              {{ t('Host outage in downtime') }}</span>
-                            }
-                          </c-col>
-                        </c-row>
-                      </c-col>
-                      <c-col md="9" class="offset-md-3">
-                        @for (outage of host.value.Host.frontend.outages_summarized_in_downtime; track outage) {
-                          <c-row
-                            >
-                            <c-col xs="12" md="4">
-                              {{ outage.start }} - {{ outage.end }}
-                            </c-col>
-                            <c-col xs="12" md="4">
-                              {{ outage.duration_str }}
-                            </c-col>
-                          </c-row>
-                        }
-                      </c-col>
-                    </c-row>
-                  </c-col>
-                  } <!-- end of outages in downtimes -->
-                  @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_DOWNTIMES.value) &&
-                    host.value.Host.frontend.downtimes &&
-                    host.value.Host.frontend.downtimes.length > 0) {
-                    <c-col lg="12"
-                      >
-                      <c-row class="pt-3 pb-3">
-                        <c-col xs="12" md="9" class="offset-md-3">
-                          <c-row>
-                            <c-col xs="12" md="8" class="report-font-weight-500">
-                              <i class="fas fa-power-off"></i>
-                              {{ t('Host downtimes') }}
-                            </c-col>
-                          </c-row>
-                        </c-col>
-                        <c-col xs="12" md="9" class="offset-md-3">
-                          @for (downtime of host.value.Host.frontend.downtimes; track downtime) {
-                            <c-row
-                              >
-                              <c-col xs="12" md="3">
-                                {{ downtime.start }} - {{ downtime.end }}
-                              </c-col>
-                              <c-col xs="12" md="2">
-                                {{ downtime.duration_str }}
-                              </c-col>
-                              <c-col xs="12" md="4">
-                                {{ downtime.comment_data }}
-                              </c-col>
-                            </c-row>
-                          }
-                        </c-col>
-                      </c-row>
-                    </c-col>
-                    } <!-- end of downtimes -->
-                  </c-row>
-                  <!-- show services -->
-                  @if (host.value.Services) {
-                    @for (service of host.value.Services | keyvalue: keepOrder; track service) {
-                      <c-row>
-                        @if (service.value.Service.state_overview) {
-                          <c-col class="col-12 border-top pt-3 pb-3"
-                            >
-                            <c-row>
-                              <c-col class="col-md-3 d-sm-flex word-break">
-                                <span class="ps-10">
-                                  <fa-icon [icon]="['fas', 'cog']" class="ps-3"></fa-icon>
-                                  @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
-                                    <a [routerLink]="['/', 'services', 'browser', service.value.Service.id]">
-                                      {{
-                                      service.value.Service.name
-                                      }}
-                                    </a>
-                                  } @else {
-                                    {{ service.value.Service.name }}
-                                  }
-                                </span>
-                              </c-col>
-                              <c-col md="2">
-                                <c-row class="report-border-sucess">
-                                  @if (hasBitValue(service.value.Service.configuration_option, 1)) {
-                                    <c-col class="col-12"
-                                      >
-                                      <!-- 1 == percent -->
-                                      {{
-                                      service.value.Service.state_overview.percent_ok
-                                      | number: '1.3-3'
-                                      }} %
-                                    </c-col>
-                                  }
-                                  @if (hasBitValue(service.value.Service.configuration_option, 2)) {
-                                    <c-col class="col-12"
-                                      >
-                                      <!-- 2 == minute -->
-                                      {{ service.value.Service.state_overview.human_ok }}
-                                    </c-col>
-                                  }
-                                </c-row>
-                              </c-col>
-                              <c-col md="2">
-                                <c-row class="report-border-warning">
-                                  @if (hasBitValue(service.value.Service.configuration_option, 1)) {
-                                    <c-col lg="12"
-                                      >
-                                      <!-- 1 == percent -->
-                                      {{
-                                      service.value.Service.state_overview.percent_warning
-                                      | number: '1.3-3'
-                                      }} %
-                                    </c-col>
-                                  }
-                                  @if (hasBitValue(service.value.Service.configuration_option, 2)) {
-                                    <c-col lg="12"
-                                      >
-                                      <!-- 2 == minute -->
-                                      {{ service.value.Service.state_overview.human_warning }}
-                                    </c-col>
-                                  }
-                                </c-row>
-                              </c-col>
-                              <c-col md="2">
-                                <c-row class="report-border-danger">
-                                  @if (hasBitValue(service.value.Service.configuration_option, 1)) {
-                                    <c-col lg="12"
-                                      >
-                                      <!-- 1 == percent -->
-                                      {{
-                                      service.value.Service.state_overview.percent_critical
-                                      | number: '1.3-3'
-                                      }} %
-                                    </c-col>
-                                  }
-                                  @if (hasBitValue(service.value.Service.configuration_option, 2)) {
-                                    <c-col lg="12"
-                                      >
-                                      <!-- 2 == minute -->
-                                      {{ service.value.Service.state_overview.human_critical }}
-                                    </c-col>
-                                  }
-                                </c-row>
-                              </c-col>
-                              <c-col md="2">
-                                <c-row class="report-border-default">
-                                  @if (hasBitValue(service.value.Service.configuration_option, 1)) {
-                                    <c-col lg="12"
-                                      >
-                                      <!-- 1 == percent -->
-                                      {{
-                                      service.value.Service.state_overview.percent_unknown
-                                      | number: '1.3-3'
-                                      }} %
-                                    </c-col>
-                                  }
-                                  @if (hasBitValue(service.value.Service.configuration_option, 2)) {
-                                    <c-col lg="12"
-                                      >
-                                      <!-- 2 == minute -->
-                                      {{ service.value.Service.state_overview.human_unknown }}
-                                    </c-col>
-                                  }
-                                </c-row>
-                              </c-col>
-                            </c-row>
-                          </c-col>
-                        }
-                        @if (hasGraph(host.value.Host.uuid, service.value.Service.uuid) && service.value.Service.state_overview) {
-                          <c-col lg="12"
-                            >
-                            @for (graphBlobs of report.GraphImageBlobs[host.value.Host.uuid] | keyvalue; track graphBlobs) {
-                              <c-col xs="12" md="9" class="offset-md-3"
-                                >
-                                @if (graphBlobs.key === service.value.Service.uuid) {
-                                  <div>
-                                    @for (graph of graphBlobs.value; track graph) {
-                                      <div>
-                                        <img
-                                          class="img-fluid"
-                                          [src]="'data:image/png;base64,' + graph"
-                                          alt="Missing chart image">
-                                      </div>
-                                    }
-                                  </div>
-                                }
-                              </c-col>
-                            }
-                          </c-col>
-                        }
-                        @if (service.value.Service.frontend && service.value.Service.frontend.outages && service.value.Service.frontend.outages.length > 0) {
-                          <c-col lg="12"
-                            >
-                            <c-row class="mb-3">
-                              @if (service.value.Service.frontend.show_outages) {
-                                <c-col xs="12" md="9" [offset]="3"
-                                  >
-                                  <c-row>
-                                    <c-col xs="12" md="4" class="report-font-weight-500">
-                                      {{
-                                      t('Outages of at least {0} min', {
-                                      '0': service.value.Service.outage_duration
-                                      })
-                                      }}
-                                    </c-col>
-                                    @if (service.value.Service.outage_duration !== null) {
-                                      <c-col xs="12" md="4" class="report-font-weight-500"
-                                        >
-                                        {{
-                                        t('Outage time exceeding the permitted limit ({0} min)', {
-                                        '0': service.value.Service.outage_duration
-                                        })
-                                        }}
-                                      </c-col>
-                                    }
-                                  </c-row>
-                                </c-col>
-                              }
-                              @if (service.value.Service.frontend && service.value.Service.frontend.show_outages) {
-                                <c-col xs="12" md="9" [offset]="3"
-                                  >
-                                  @for (outage of service.value.Service.frontend.outages; track outage) {
-                                    <c-row
-                                      [ngClass]="{'service_option': outage.duration === service.value.Service.frontend.maximum_outage_duration}">
-                                      <c-col xs="12" md="4">
-                                        {{ outage.start }} - {{ outage.end }}
-                                      </c-col>
-                                      <c-col xs="12" md="4">
-                                        {{ outage.duration_str }}
-                                      </c-col>
-                                    </c-row>
-                                  }
-                                </c-col>
-                              }
-                            </c-row>
-                          </c-col>
-                          } <!-- end of outages -->
-                          @if (service.value.Service.frontend && service.value.Service.frontend.outages_summarized_in_downtime && service.value.Service.frontend.outages_summarized_in_downtime.length > 0 &&
-                            hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_OUTAGES_IN_DOWNTIME.value) &&
-                            service.value.Service.frontend.outages_summarized_in_downtime) {
-                            <c-col lg="12"
-                              >
-                              <c-row class="mb-3">
-                                <c-col xs="12" md="9" [offset]="3">
-                                  <c-row>
-                                    <c-col xs="12" md="8" class="report-font-weight-500">
-                                      <fa-icon [icon]="['far', 'clock']"></fa-icon>
-                                      @if (service.value.Service.outage_duration !== null) {
-                                        <span
-                                          >
-                                          {{ t('Service outage in downtime exceeding the permitted limit') }}
-                                          {{ service.value.Service.outage_duration }}
-                                        {{ t('min') }}</span>
-                                      }
-                                      @if (service.value.Service.outage_duration === null) {
-                                        <span
-                                          >
-                                        {{ t('Service outage in downtime') }}</span>
-                                      }
-                                    </c-col>
-                                  </c-row>
-                                </c-col>
-                                <div class="col-xs-12 col-md-9 offset-md-3">
-                                  @for (outage of service.value.Service.frontend.outages_summarized_in_downtime; track outage) {
-                                    <div class="row"
-                                      >
-                                      <div class="col-xs-12 col-md-4">
-                                        {{ outage.start }} - {{ outage.end }}
-                                      </div>
-                                      <div class="col-xs-12 col-md-4">
-                                        {{ outage.duration_str }}
-                                      </div>
-                                    </div>
-                                  }
-                                </div>
-                              </c-row>
-                            </c-col>
-                            } <!-- end of outages in downtimes -->
-                            @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_DOWNTIMES.value) &&
-                              service.value.Service.frontend &&
-                              service.value.Service.frontend.downtimes &&
-                              service.value.Service.frontend.downtimes.length > 0) {
-                              <c-col class="col-12"
-                                >
-                                <c-row>
-                                  <c-col xs="12" md="9" [offset]="3">
-                                    <c-row>
-                                      <c-col xs="12" md="9" class="report-font-weight-500">
-                                        <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                        {{ t('Service downtimes') }}
-                                      </c-col>
-                                    </c-row>
-                                  </c-col>
-                                  <c-col xs="12" md="9" class="offset-md-3">
-                                    @for (downtime of service.value.Service.frontend.downtimes; track downtime) {
-                                      <c-row
-                                        >
-                                        <c-col xs="12" md="3">
-                                          {{ downtime.start }} - {{ downtime.end }}
-                                        </c-col>
-                                        <c-col xs="12" md="2">
-                                          {{ downtime.duration_str }}
-                                        </c-col>
-                                        <c-col xs="12" md="4">
-                                          {{ downtime.comment_data }}
-                                        </c-col>
-                                      </c-row>
-                                    }
-                                  </c-col>
-                                </c-row>
-                              </c-col>
-                              } <!-- end of downtimes -->
-                            </c-row>
-                          }
-                        }
-                      }
-                    </div>
-                  }
-                </c-card-body>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
                 @if (tabName === 'reportConfig') {
-                  <c-card-footer class="text-end">
-                    <c-col>
-                      <button cButton class="ripple" color="primary" type="submit">
-                        <fa-icon [icon]="['fas', 'spinner']" [hidden]="!isGenerating" animation="spin"></fa-icon>
-                        {{ t('Generate report') }}
-                      </button>
-                    </c-col>
-                  </c-card-footer>
+                    <div>
+                        <c-alert color="danger" role="alert" [hidden]="!report_error">
+                            @if (report_error) {
+                                {{ report_error.message }}
+                                @if (report_error.objects.length > 0) {
+                                    <ul>
+                                        @for (errorObject of report_error.objects; track errorObject) {
+                                            <li>
+                                                {{ errorObject.name }}
+                                                @if (errorObject.services) {
+                                                    <ul>
+                                                        @for (servicename of errorObject.services; track servicename) {
+                                                            <li>
+                                                                {{ servicename }}
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            }
+                        </c-alert>
+                        <div class="mb-3">
+                            <label cLabel for="report">
+                                {{ t('Auto report') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <oitc-select
+                                name="report"
+                                id="report"
+                                optionValue="id"
+                                optionLabel="name"
+                                [(ngModel)]="post.Autoreport.id"
+                                [options]="autoreports">
+                            </oitc-select>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="format">
+                                {{ t('Report format') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <oitc-select
+                                name="format"
+                                id="format"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="post.Autoreport.format"
+                                [options]="formatOptions">
+                            </oitc-select>
+                        </div>
+                        <div class="mb-3">
+                            <c-col>
+                                <label cLabel for="from_date">
+                                    {{ t('From') }}
+                                </label>
+                                <input cFormControl type="date"
+                                       id="from_date"
+                                       name="from_date"
+                                       placeholder="{{ t('DD.MM.YYYY') }}"
+                                       [(ngModel)]="from"
+                                       oitcFormError [errors]="errors" errorField="from_date">
+                                <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
+                            </c-col>
+                        </div>
+                        <div class="mb-3">
+                            <c-col>
+                                <label cLabel for="to_date">
+                                    {{ t('To') }}
+                                </label>
+                                <input cFormControl type="date"
+                                       id="to_date"
+                                       name="to_date"
+                                       placeholder="{{ t('DD.MM.YYYY') }}"
+                                       [(ngModel)]="to"
+                                       oitcFormError [errors]="errors" errorField="to_date">
+                                <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
+                            </c-col>
+                        </div>
+                    </div>
                 }
-              </c-card>
-            </form>
-          </ng-container>
+
+                @if (tabName === 'showReport') {
+                    <div>
+                        <c-row class="mb-3">
+                            <c-col xs="12" md="12" lg="6">
+                                <c-row>
+                                    <c-col xs="12" md="6" lg="4">
+                                        <h4>
+                                            {{ t('Evaluated time period') }}
+                                        </h4>
+                                    </c-col>
+                                    <c-col xs="12" md="6" lg="8">
+                                        <c-row>
+                                            <c-col>
+                                                @if (this.PermissionsService.hasPermissionObservable(['timeperiods', 'edit'])|async) {
+                                                    <a [routerLink]="['/', 'timeperiods', 'edit', report.autoreport.timeperiod_id]">
+                                                        {{ report.autoreport.timeperiod.name }}
+                                                    </a>
+                                                } @else {
+                                                    {{ report.autoreport.timeperiod.name }}
+                                                }
+                                            </c-col>
+                                        </c-row>
+                                        @for (timerange of report.autoreport.timeperiod.timeperiod_timeranges; track timerange) {
+                                            <c-row>
+                                                <c-col xs="12" md="6" lg="3">
+                                                    {{ timerange.weekday }}
+                                                </c-col>
+                                                <c-col xs="12" md="6" lg="4">
+                                                    {{ timerange.start }}
+                                                    -
+                                                    {{ timerange.end }}
+                                                </c-col>
+                                            </c-row>
+                                        }
+                                    </c-col>
+                                </c-row>
+                            </c-col>
+                            <c-col xs="12" md="6" lg="6" class="text-end">
+                                <img alt="logo" [src]="logoUrl" width="200">
+                            </c-col>
+                        </c-row>
+                        @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_SUMMARY_STATISTICS.value) && report.autoreport.min_availability) {
+                            <c-row class="mb-3"
+                            >
+                                <c-col lg="12">
+                                    <h4>
+                                        {{ t('Availability overview') }}
+                                    </h4>
+                                </c-col>
+                                <c-col class="col-12">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th style="border-top:none;" class="col-3"></th>
+                                            <th style="border-top:none;"
+                                                class="col-4">{{ t('Maximum allowed outage duration') }}
+                                            </th>
+                                            <th style="border-top:none;"
+                                                class="col-4">{{ t('Measured outage duration ') }}
+                                            </th>
+                                            <th style="border-top:none;" class="col-1"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>{{ t('Percentage') }}</td>
+                                            <td>
+                                                {{ report.autoreport_data.max_outages_time_in_percent | number: '1.3-3' }}
+                                                %
+                                            </td>
+                                            <td>
+                                                {{ report.autoreport_data.total_outage_time_percentage | number: '1.3-3' }}
+                                                %
+                                            </td>
+                                            <td>
+                                                @if (report.autoreport_data.total_outage_time_percentage <= report.autoreport_data.max_outages_time_in_percent) {
+                                                    <span class="badge border border-success text-success"
+                                                    >
+                                                        {{ t('PASSED') }}
+                                                    </span>
+                                                }
+                                                @if (report.autoreport_data.total_outage_time_percentage > report.autoreport_data.max_outages_time_in_percent) {
+                                                    <span class="badge border border-danger text-danger"
+                                                    >
+                                                        {{ t('FAILED') }}
+                                                    </span>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ t('Minutes') }}</td>
+                                            <td>
+                                                {{ report.autoreport_data.max_outages_time_in_seconds_human }}
+                                            </td>
+                                            <td>
+                                                {{ report.autoreport_data.total_outage_time_human }}
+                                            </td>
+                                            <td>
+                                                @if (report.autoreport_data.total_outage_time_percentage <= report.autoreport_data.max_outages_time_in_percent) {
+                                                    <span class="badge border border-success text-success"
+                                                    >
+                                                        {{ t('PASSED') }}
+                                                    </span>
+                                                }
+                                                @if (report.autoreport_data.total_outage_time_percentage > report.autoreport_data.max_outages_time_in_percent) {
+                                                    <span class="badge border border-danger text-danger"
+                                                    >
+                                                        {{ t('FAILED') }}
+                                                    </span>
+                                                }
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </c-col>
+                            </c-row>
+                        }
+                        @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_SUMMARY_STATISTICS.value) && report.autoreport.max_number_of_outages) {
+                            <c-row class="mb-3"
+                            >
+                                <c-col class="col-12">
+                                    <h4>
+                                        {{ t('Outages overview') }}
+                                    </h4>
+                                </c-col>
+                                <c-col class="col-12">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th class="col-3"></th>
+                                            <th class="col-4">
+                                                {{ t('Maximum allowed number of outages') }}
+                                            </th>
+                                            <th class="col-4">
+                                                {{ t('Measured number of outages') }}
+                                            </th>
+                                            <th class="col-1"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                {{ report.autoreport.max_number_of_outages }}
+                                            </td>
+                                            <td>
+                                                {{ report.autoreport_data.total_outage_count }}
+                                            </td>
+                                            <td>
+                                                @if (report.autoreport_data.total_outage_count <= report.autoreport.max_number_of_outages) {
+                                                    <span class="badge border border-success text-success"
+                                                    >
+                                                        {{ t('PASSED') }}
+                                                    </span>
+                                                }
+                                                @if (report.autoreport_data.total_outage_count > report.autoreport.max_number_of_outages) {
+                                                    <span class="badge border border-danger text-danger"
+                                                    >
+                                                        {{ t('FAILED') }}
+                                                    </span>
+                                                }
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </c-col>
+                            </c-row>
+                        }
+                        <c-row class="mb-3">
+                            <c-col class="col-12">
+                                <h4>
+                                    {{ t('Evaluated host and services') }}
+                                </h4>
+                            </c-col>
+                            <c-col lg="12">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th class="col-3"></th>
+                                        <th class="col-4">
+                                            {{ t('Name') }}
+                                        </th>
+                                        <th class="col-4">
+                                            @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value) || hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value)) {
+                                                <span
+                                                >
+                                                    {{ t('Availability ') }}
+                                                </span>
+                                            }
+                                        </th>
+                                        <th class="col-1">
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (host of report.autoreport_data.hosts | keyvalue: keepOrder; track host) {
+                                            <tr>
+                                                <td class="html-report-host-row"></td>
+                                                <td class="html-report-host-row">
+                                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                                        <a [routerLink]="['/', 'hosts', 'browser', host.value.Host.id]">
+                                                            {{ host.value.Host.name }}
+                                                        </a>
+                                                    } @else {
+                                                        {{ host.value.Host.name }}
+                                                    }
+                                                </td>
+                                                <td class="html-report-host-row">
+                                                    @if (host.value.Host.state_overview) {
+                                                        <div>
+                                                            @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value)) {
+                                                                <span
+                                                                >
+                                                                    {{ host.value.Host.state_overview.percent_availability | number: '1.3-3' }}
+                                                                    %
+                                                                </span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    @if (!host.value.Host.state_overview && checkIfHostInReport(host.value.Host.id)) {
+                                                        <span
+                                                            class="text-primary">
+                                                            <i>
+                                                                {{ t('No historical data available ') }}
+                                                            </i>
+                                                        </span>
+                                                    }
+                                                </td>
+                                                <td class="html-report-host-row">
+                                                    @if (( host.value.Host.state_overview && hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value) ) &&
+                                                    ( 100 - report.autoreport_data.max_outages_time_in_percent ) <= host.value.Host.state_overview.percent_availability) {
+                                                        <span class="badge border border-success text-success"
+                                                        >
+                                                            {{ t('PASSED') }}
+                                                        </span>
+                                                    }
+                                                    @if (( host.value.Host.state_overview && hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_HOST_DESC.value) ) &&
+                                                    ( 100 - report.autoreport_data.max_outages_time_in_percent ) > host.value.Host.state_overview.percent_availability) {
+                                                        <span class="badge border border-danger text-danger"
+                                                        >
+                                                            {{ t('FAILED') }}
+                                                        </span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            @if (host.value.Services) {
+                                                @for (service of host.value.Services | keyvalue: keepOrder; track service) {
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="word-break">
+                                                            <span>
+                                                                <fa-icon [icon]="['fas', 'cog']" class="ms-3"></fa-icon>
+                                                                @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                                                    <a [routerLink]="['/', 'services', 'browser', service.value.Service.id]">
+                                                                        {{ service.value.Service.name }}
+                                                                    </a>
+                                                                } @else {
+                                                                    {{ service.value.Service.name }}
+                                                                }
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            @if (service.value.Service.state_overview) {
+                                                                <div
+                                                                >
+                                                                    @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value)) {
+                                                                        <span
+                                                                        >
+                                                                            {{
+                                                                                service.value.Service.state_overview.percent_availability | number: '1.3-3'
+                                                                            }} %
+                                                                        </span>
+                                                                    }
+                                                                </div>
+                                                            }
+                                                            @if (!service.value.Service.state_overview) {
+                                                                <span
+                                                                    class="text-primary">
+                                                                    <i>
+                                                                        {{ t('No historical data available ') }}
+                                                                    </i>
+                                                                </span>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (service.value.Service.state_overview) {
+                                                                <div
+                                                                >
+                                                                    @if (( hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value) ) &&
+                                                                    ( 100 - report.autoreport_data.max_outages_time_in_percent ) <= service.value.Service.state_overview.percent_availability) {
+                                                                        <span
+                                                                            class="badge border border-success text-success"
+                                                                        >
+                                                                            {{ t('PASSED') }}
+                                                                        </span>
+                                                                    }
+                                                                    @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value) &&
+                                                                    ( 100 - report.autoreport_data.max_outages_time_in_percent ) > service.value.Service.state_overview.percent_availability) {
+                                                                        <span
+                                                                            class="badge border border-danger text-danger"
+                                                                        >
+                                                                            {{ t('FAILED') }}
+                                                                        </span>
+                                                                    }
+                                                                </div>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </c-col>
+                        </c-row>
+                        @if (report.autoreport_data.sla_graph_path) {
+                            <c-row class="mb-3">
+                                <c-col class="col-12">
+                                    <h4>
+                                        {{ t('SLA overview') }}
+                                    </h4>
+                                </c-col>
+                                <c-col class="col-12 text-center">
+                                    <img [src]="report.autoreport_data.sla_graph_path" class="img-fluid">
+                                </c-col>
+                            </c-row>
+                        }
+                        <c-row class="mb-3">
+                            <c-col class="col-12">
+                                <h4>
+                                    {{ t('Host and service details') }}
+                                </h4>
+                            </c-col>
+                        </c-row>
+                        @for (host of report.autoreport_data.hosts | keyvalue: keepOrder; track host) {
+                            <c-row class="html-report-host-row border-top pt-3 pb-3">
+                                <c-col class="col-3 d-sm-flex text-start align-items-center">
+                                    <fa-icon [icon]="['fas', 'desktop']" class="pe-1"></fa-icon>
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                        <a [routerLink]="['/', 'hosts', 'browser', host.value.Host.id]">
+                                            {{ host.value.Host.name }}
+                                        </a>
+                                    } @else {
+                                        {{ host.value.Host.name }}
+                                    }
+                                    @if (hasBitValue(host.value.Host.configuration_option, 4) && host.value.Host.description !== null) {
+                                        <span
+                                        >
+                                            <!-- 4 == alias -->
+                                            &nbsp;
+                                            - {{ host.value.Host.description }}
+                                        </span>
+                                    }
+                                </c-col>
+                                <c-col md="2">
+                                    @if (host.value.Host.state_overview) {
+                                        <c-row class="report-border-sucess"
+                                        >
+                                            @if (hasBitValue(host.value.Host.configuration_option, 1)) {
+                                                <c-col class="col-12"
+                                                >
+                                                    <!-- 1 == percent -->
+                                                    {{ host.value.Host.state_overview.percent_up | number: '1.3-3' }}
+                                                    %
+                                                </c-col>
+                                            }
+                                            @if (hasBitValue(host.value.Host.configuration_option, 2)) {
+                                                <c-col class="col-12"
+                                                >
+                                                    <!-- 2 == minute -->
+                                                    {{ host.value.Host.state_overview.human_up }}
+                                                </c-col>
+                                            }
+                                        </c-row>
+                                    }
+                                </c-col>
+                                <c-col md="2">
+                                    @if (host.value.Host.state_overview) {
+                                        <c-row class="report-border-danger"
+                                        >
+                                            @if (hasBitValue(host.value.Host.configuration_option, 1)) {
+                                                <c-col class="col-12"
+                                                >
+                                                    <!-- 1 == percent -->
+                                                    {{ host.value.Host.state_overview.percent_down | number: '1.3-3' }}
+                                                    %
+                                                </c-col>
+                                            }
+                                            @if (hasBitValue(host.value.Host.configuration_option, 2)) {
+                                                <c-col class="col-12"
+                                                >
+                                                    <!-- 2 == minute -->
+                                                    {{ host.value.Host.state_overview.human_down }}
+                                                </c-col>
+                                            }
+                                        </c-row>
+                                    }
+                                </c-col>
+                                <c-col md="2">
+                                    @if (host.value.Host.state_overview) {
+                                        <c-row class="report-border-default"
+                                        >
+                                            @if (hasBitValue(host.value.Host.configuration_option, 1)) {
+                                                <c-col class="col-12"
+                                                >
+                                                    <!-- 1 == percent -->
+                                                    {{ host.value.Host.state_overview.percent_unreachable | number: '1.3-3' }}
+                                                    %
+                                                </c-col>
+                                            }
+                                            @if (hasBitValue(host.value.Host.configuration_option, 2)) {
+                                                <c-col class="col-12"
+                                                >
+                                                    <!-- 2 == minute -->
+                                                    {{ host.value.Host.state_overview.human_unreachable }}
+                                                </c-col>
+                                            }
+                                        </c-row>
+                                    }
+                                </c-col>
+                            </c-row>
+                            <c-row class="html-report-host-row">
+                                @if (host.value.Host.frontend && host.value.Host.frontend.show_outages) {
+                                    <c-col class="col-12"
+                                    >
+                                        <c-row class="mt-3">
+                                            <c-col xs="12" md="9" class="offset-md-3">
+                                                <c-row>
+                                                    <c-col xs="12" md="4" class="report-font-weight-500">
+                                                        {{
+                                                            t('Outages of at least {0} min', {
+                                                                '0': host.value.Host.outage_duration
+                                                            })
+                                                        }}
+                                                    </c-col>
+                                                    <c-col xs="12" md="4" class="report-font-weight-500">
+                                                        @if (host.value.Host.outage_duration !== null) {
+                                                            <span
+                                                            >
+                                                                {{
+                                                                    t('Outage time exceeding the permitted limit ({0} min)', {
+                                                                        '0': host.value.Host.outage_duration
+                                                                    })
+                                                                }}
+                                                            </span>
+                                                        }
+                                                    </c-col>
+                                                </c-row>
+                                            </c-col>
+                                            <c-col xs="12" md="9" class="offset-md-3">
+                                                @for (outage of host.value.Host.frontend.outages; track outage) {
+                                                    <c-row
+                                                        [ngClass]="{'service_option': outage.duration === host.value.Host.frontend.maximum_outage_duration}">
+                                                        <c-col xs="12" md="4">
+                                                            {{ outage.start }} - {{ outage.end }}
+                                                        </c-col>
+                                                        <c-col xs="12" md="4">
+                                                            {{ outage.duration_str }}
+                                                        </c-col>
+                                                    </c-row>
+                                                }
+                                            </c-col>
+                                        </c-row>
+                                    </c-col>
+                                }
+                                <!-- end of outages -->
+                                @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_OUTAGES_IN_DOWNTIME.value) &&
+                                host.value.Host.frontend.outages_summarized_in_downtime.length > 0) {
+                                    <c-col lg="12"
+                                    >
+                                        <c-row class="pt-3">
+                                            <c-col md="9" class="offset-md-3">
+                                                <c-row>
+                                                    <c-col xs="12" md="8" class="report-font-weight-500">
+                                                        <fa-icon [icon]="['far', 'clock']"></fa-icon>
+                                                        @if (host.value.Host.outage_duration !== null) {
+                                                            <span
+                                                            >
+                                                                {{
+                                                                    t('Outage time exceeding the permitted limit ({0} min)', {
+                                                                        '0': host.value.Host.outage_duration
+                                                                    })
+                                                                }}
+                                                            </span>
+                                                        }
+                                                        @if (host.value.Host.outage_duration === null) {
+                                                            <span
+                                                            >
+                                                                {{ t('Host outage in downtime') }}</span>
+                                                        }
+                                                    </c-col>
+                                                </c-row>
+                                            </c-col>
+                                            <c-col md="9" class="offset-md-3">
+                                                @for (outage of host.value.Host.frontend.outages_summarized_in_downtime; track outage) {
+                                                    <c-row
+                                                    >
+                                                        <c-col xs="12" md="4">
+                                                            {{ outage.start }} - {{ outage.end }}
+                                                        </c-col>
+                                                        <c-col xs="12" md="4">
+                                                            {{ outage.duration_str }}
+                                                        </c-col>
+                                                    </c-row>
+                                                }
+                                            </c-col>
+                                        </c-row>
+                                    </c-col>
+                                } <!-- end of outages in downtimes -->
+                                @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_DOWNTIMES.value) &&
+                                host.value.Host.frontend.downtimes &&
+                                host.value.Host.frontend.downtimes.length > 0) {
+                                    <c-col lg="12"
+                                    >
+                                        <c-row class="pt-3 pb-3">
+                                            <c-col xs="12" md="9" class="offset-md-3">
+                                                <c-row>
+                                                    <c-col xs="12" md="8" class="report-font-weight-500">
+                                                        <i class="fas fa-power-off"></i>
+                                                        {{ t('Host downtimes') }}
+                                                    </c-col>
+                                                </c-row>
+                                            </c-col>
+                                            <c-col xs="12" md="9" class="offset-md-3">
+                                                @for (downtime of host.value.Host.frontend.downtimes; track downtime) {
+                                                    <c-row
+                                                    >
+                                                        <c-col xs="12" md="3">
+                                                            {{ downtime.start }} - {{ downtime.end }}
+                                                        </c-col>
+                                                        <c-col xs="12" md="2">
+                                                            {{ downtime.duration_str }}
+                                                        </c-col>
+                                                        <c-col xs="12" md="4">
+                                                            {{ downtime.comment_data }}
+                                                        </c-col>
+                                                    </c-row>
+                                                }
+                                            </c-col>
+                                        </c-row>
+                                    </c-col>
+                                } <!-- end of downtimes -->
+                            </c-row>
+                            <!-- show services -->
+                            @if (host.value.Services) {
+                                @for (service of host.value.Services | keyvalue: keepOrder; track service) {
+                                    <c-row>
+                                        @if (service.value.Service.state_overview) {
+                                            <c-col class="col-12 border-top pt-3 pb-3"
+                                            >
+                                                <c-row>
+                                                    <c-col class="col-md-3 d-sm-flex word-break">
+                                                        <span class="ps-10">
+                                                            <fa-icon [icon]="['fas', 'cog']" class="ps-3"></fa-icon>
+                                                            @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                                                <a [routerLink]="['/', 'services', 'browser', service.value.Service.id]">
+                                                                    {{
+                                                                        service.value.Service.name
+                                                                    }}
+                                                                </a>
+                                                            } @else {
+                                                                {{ service.value.Service.name }}
+                                                            }
+                                                        </span>
+                                                    </c-col>
+                                                    <c-col md="2">
+                                                        <c-row class="report-border-sucess">
+                                                            @if (hasBitValue(service.value.Service.configuration_option, 1)) {
+                                                                <c-col class="col-12"
+                                                                >
+                                                                    <!-- 1 == percent -->
+                                                                    {{
+                                                                        service.value.Service.state_overview.percent_ok
+                                                                            | number: '1.3-3'
+                                                                    }} %
+                                                                </c-col>
+                                                            }
+                                                            @if (hasBitValue(service.value.Service.configuration_option, 2)) {
+                                                                <c-col class="col-12"
+                                                                >
+                                                                    <!-- 2 == minute -->
+                                                                    {{ service.value.Service.state_overview.human_ok }}
+                                                                </c-col>
+                                                            }
+                                                        </c-row>
+                                                    </c-col>
+                                                    <c-col md="2">
+                                                        <c-row class="report-border-warning">
+                                                            @if (hasBitValue(service.value.Service.configuration_option, 1)) {
+                                                                <c-col lg="12"
+                                                                >
+                                                                    <!-- 1 == percent -->
+                                                                    {{
+                                                                        service.value.Service.state_overview.percent_warning
+                                                                            | number: '1.3-3'
+                                                                    }} %
+                                                                </c-col>
+                                                            }
+                                                            @if (hasBitValue(service.value.Service.configuration_option, 2)) {
+                                                                <c-col lg="12"
+                                                                >
+                                                                    <!-- 2 == minute -->
+                                                                    {{ service.value.Service.state_overview.human_warning }}
+                                                                </c-col>
+                                                            }
+                                                        </c-row>
+                                                    </c-col>
+                                                    <c-col md="2">
+                                                        <c-row class="report-border-danger">
+                                                            @if (hasBitValue(service.value.Service.configuration_option, 1)) {
+                                                                <c-col lg="12"
+                                                                >
+                                                                    <!-- 1 == percent -->
+                                                                    {{
+                                                                        service.value.Service.state_overview.percent_critical
+                                                                            | number: '1.3-3'
+                                                                    }} %
+                                                                </c-col>
+                                                            }
+                                                            @if (hasBitValue(service.value.Service.configuration_option, 2)) {
+                                                                <c-col lg="12"
+                                                                >
+                                                                    <!-- 2 == minute -->
+                                                                    {{ service.value.Service.state_overview.human_critical }}
+                                                                </c-col>
+                                                            }
+                                                        </c-row>
+                                                    </c-col>
+                                                    <c-col md="2">
+                                                        <c-row class="report-border-default">
+                                                            @if (hasBitValue(service.value.Service.configuration_option, 1)) {
+                                                                <c-col lg="12"
+                                                                >
+                                                                    <!-- 1 == percent -->
+                                                                    {{
+                                                                        service.value.Service.state_overview.percent_unknown
+                                                                            | number: '1.3-3'
+                                                                    }} %
+                                                                </c-col>
+                                                            }
+                                                            @if (hasBitValue(service.value.Service.configuration_option, 2)) {
+                                                                <c-col lg="12"
+                                                                >
+                                                                    <!-- 2 == minute -->
+                                                                    {{ service.value.Service.state_overview.human_unknown }}
+                                                                </c-col>
+                                                            }
+                                                        </c-row>
+                                                    </c-col>
+                                                </c-row>
+                                            </c-col>
+                                        }
+                                        @if (hasGraph(host.value.Host.uuid, service.value.Service.uuid) && service.value.Service.state_overview) {
+                                            <c-col lg="12"
+                                            >
+                                                @for (graphBlobs of report.GraphImageBlobs[host.value.Host.uuid] | keyvalue; track graphBlobs) {
+                                                    <c-col xs="12" md="9" class="offset-md-3"
+                                                    >
+                                                        @if (graphBlobs.key === service.value.Service.uuid) {
+                                                            <div>
+                                                                @for (graph of graphBlobs.value; track graph) {
+                                                                    <div>
+                                                                        <img
+                                                                            class="img-fluid"
+                                                                            [src]="'data:image/png;base64,' + graph"
+                                                                            alt="Missing chart image">
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                            </c-col>
+                                        }
+                                        @if (service.value.Service.frontend && service.value.Service.frontend.outages && service.value.Service.frontend.outages.length > 0) {
+                                            <c-col lg="12"
+                                            >
+                                                <c-row class="mb-3">
+                                                    @if (service.value.Service.frontend.show_outages) {
+                                                        <c-col xs="12" md="9" [offset]="3"
+                                                        >
+                                                            <c-row>
+                                                                <c-col xs="12" md="4" class="report-font-weight-500">
+                                                                    {{
+                                                                        t('Outages of at least {0} min', {
+                                                                            '0': service.value.Service.outage_duration
+                                                                        })
+                                                                    }}
+                                                                </c-col>
+                                                                @if (service.value.Service.outage_duration !== null) {
+                                                                    <c-col xs="12" md="4" class="report-font-weight-500"
+                                                                    >
+                                                                        {{
+                                                                            t('Outage time exceeding the permitted limit ({0} min)', {
+                                                                                '0': service.value.Service.outage_duration
+                                                                            })
+                                                                        }}
+                                                                    </c-col>
+                                                                }
+                                                            </c-row>
+                                                        </c-col>
+                                                    }
+                                                    @if (service.value.Service.frontend && service.value.Service.frontend.show_outages) {
+                                                        <c-col xs="12" md="9" [offset]="3"
+                                                        >
+                                                            @for (outage of service.value.Service.frontend.outages; track outage) {
+                                                                <c-row
+                                                                    [ngClass]="{'service_option': outage.duration === service.value.Service.frontend.maximum_outage_duration}">
+                                                                    <c-col xs="12" md="4">
+                                                                        {{ outage.start }} - {{ outage.end }}
+                                                                    </c-col>
+                                                                    <c-col xs="12" md="4">
+                                                                        {{ outage.duration_str }}
+                                                                    </c-col>
+                                                                </c-row>
+                                                            }
+                                                        </c-col>
+                                                    }
+                                                </c-row>
+                                            </c-col>
+                                        } <!-- end of outages -->
+                                        @if (service.value.Service.frontend && service.value.Service.frontend.outages_summarized_in_downtime && service.value.Service.frontend.outages_summarized_in_downtime.length > 0 &&
+                                        hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_OUTAGES_IN_DOWNTIME.value) &&
+                                        service.value.Service.frontend.outages_summarized_in_downtime) {
+                                            <c-col lg="12"
+                                            >
+                                                <c-row class="mb-3">
+                                                    <c-col xs="12" md="9" [offset]="3">
+                                                        <c-row>
+                                                            <c-col xs="12" md="8" class="report-font-weight-500">
+                                                                <fa-icon [icon]="['far', 'clock']"></fa-icon>
+                                                                @if (service.value.Service.outage_duration !== null) {
+                                                                    <span
+                                                                    >
+                                                                        {{ t('Service outage in downtime exceeding the permitted limit') }}
+                                                                        {{ service.value.Service.outage_duration }}
+                                                                        {{ t('min') }}</span>
+                                                                }
+                                                                @if (service.value.Service.outage_duration === null) {
+                                                                    <span
+                                                                    >
+                                                                        {{ t('Service outage in downtime') }}</span>
+                                                                }
+                                                            </c-col>
+                                                        </c-row>
+                                                    </c-col>
+                                                    <div class="col-xs-12 col-md-9 offset-md-3">
+                                                        @for (outage of service.value.Service.frontend.outages_summarized_in_downtime; track outage) {
+                                                            <div class="row"
+                                                            >
+                                                                <div class="col-xs-12 col-md-4">
+                                                                    {{ outage.start }} - {{ outage.end }}
+                                                                </div>
+                                                                <div class="col-xs-12 col-md-4">
+                                                                    {{ outage.duration_str }}
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </c-row>
+                                            </c-col>
+                                        } <!-- end of outages in downtimes -->
+                                        @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_SHOW_DOWNTIMES.value) &&
+                                        service.value.Service.frontend &&
+                                        service.value.Service.frontend.downtimes &&
+                                        service.value.Service.frontend.downtimes.length > 0) {
+                                            <c-col class="col-12"
+                                            >
+                                                <c-row>
+                                                    <c-col xs="12" md="9" [offset]="3">
+                                                        <c-row>
+                                                            <c-col xs="12" md="9" class="report-font-weight-500">
+                                                                <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                                                {{ t('Service downtimes') }}
+                                                            </c-col>
+                                                        </c-row>
+                                                    </c-col>
+                                                    <c-col xs="12" md="9" class="offset-md-3">
+                                                        @for (downtime of service.value.Service.frontend.downtimes; track downtime) {
+                                                            <c-row
+                                                            >
+                                                                <c-col xs="12" md="3">
+                                                                    {{ downtime.start }} - {{ downtime.end }}
+                                                                </c-col>
+                                                                <c-col xs="12" md="2">
+                                                                    {{ downtime.duration_str }}
+                                                                </c-col>
+                                                                <c-col xs="12" md="4">
+                                                                    {{ downtime.comment_data }}
+                                                                </c-col>
+                                                            </c-row>
+                                                        }
+                                                    </c-col>
+                                                </c-row>
+                                            </c-col>
+                                        } <!-- end of downtimes -->
+                                    </c-row>
+                                }
+                            }
+                        }
+                    </div>
+                }
+            </c-card-body>
+            @if (tabName === 'reportConfig') {
+                <c-card-footer class="text-end">
+                    <c-col>
+                        <button cButton class="ripple" color="primary" type="submit">
+                            <fa-icon [icon]="['fas', 'spinner']" [hidden]="!isGenerating" animation="spin"></fa-icon>
+                            {{ t('Generate report') }}
+                        </button>
+                    </c-col>
+                </c-card-footer>
+            }
+        </c-card>
+    </form>
+</ng-container>

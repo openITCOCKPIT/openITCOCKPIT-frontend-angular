@@ -10,10 +10,10 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'oitc-repository-checker',
     imports: [
-    TranslocoDirective,
-    AlertComponent,
-    FaIconComponent
-],
+        TranslocoDirective,
+        AlertComponent,
+        FaIconComponent
+    ],
     templateUrl: './repository-checker.component.html',
     styleUrl: './repository-checker.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

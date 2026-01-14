@@ -1,5 +1,5 @@
- .html-report-host-row {
-    background-color: rgba(80, 80, 80, 0.2)!important;
+.html-report-host-row {
+    background-color: rgba(80, 80, 80, 0.2) !important;
 }
 
 .report-border-sucess {
@@ -18,17 +18,18 @@
     border-left: 3px solid #DEE2E6;
 }
 
- .host_option {
-     background: #92A2A842;
- }
+.host_option {
+    background: #92A2A842;
+}
 
- .service_option {
-     background: #DEE3E542;
- }
+.service_option {
+    background: #DEE3E542;
+}
 
- .report-font-weight-500 {
-     font-weight: 500;
- }
+.report-font-weight-500 {
+    font-weight: 500;
+}
 
- .border-top {
-     border-top: 1px solid #dee2e6 !important; }
+.border-top {
+    border-top: 1px solid #dee2e6 !important;
+}

@@ -34,29 +34,29 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 @Component({
     selector: 'oitc-wizards-edit',
     imports: [
-    TranslocoDirective,
-    RouterLink,
-    FaIconComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    CardBodyComponent,
-    RequiredIconComponent,
-    FormLabelDirective,
-    MultiSelectComponent,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    RowComponent,
-    ColComponent,
-    BackButtonDirective,
-    CardFooterComponent,
-    XsButtonDirective,
-    FormDirective,
-    FormsModule,
-    ReactiveFormsModule,
-    FormLoaderComponent,
-    PermissionDirective
-],
+        TranslocoDirective,
+        RouterLink,
+        FaIconComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CardBodyComponent,
+        RequiredIconComponent,
+        FormLabelDirective,
+        MultiSelectComponent,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        RowComponent,
+        ColComponent,
+        BackButtonDirective,
+        CardFooterComponent,
+        XsButtonDirective,
+        FormDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        FormLoaderComponent,
+        PermissionDirective
+    ],
     templateUrl: './wizards-edit.component.html',
     styleUrl: './wizards-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -71,7 +71,7 @@ export class WizardsEditComponent implements OnDestroy, OnInit {
     private readonly cdr = inject(ChangeDetectorRef);
 
     protected post: WizardAssignments = {
-        uuid : '',
+        uuid: '',
         servicetemplates: {
             _ids: [] as number[]
         }

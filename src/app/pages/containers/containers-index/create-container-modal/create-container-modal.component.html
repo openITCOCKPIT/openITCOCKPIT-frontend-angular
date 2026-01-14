@@ -1,302 +1,302 @@
 <ng-container *transloco="let t">
-  <c-modal
-    #modal='cModal'
-    [keyboard]="true"
-    id="createContainerModal"
-    size="lg"
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="createContainerModal"
+        size="lg"
     >
-    <c-modal-header>
-      <h5 cModalTitle>
-        {{ t('Add new container') }}
-      </h5>
-      <button (click)="hideModal()" cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body>
+        <c-modal-header>
+            <h5 cModalTitle>
+                {{ t('Add new container') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
 
-      <div class="mb-3">
-        <label cLabel for="container_type">
-          {{ t('Select container type') }}
-          <oitc-required-icon></oitc-required-icon>
-        </label>
-        <!-- I used ng-select because our oitc-select killed my browser performance for some reason -->
-        <ng-select id="container_type"
-          name="container_type"
-          bindValue="key"
-          bindLabel="value"
-          [items]="availableContainerTypes"
-          [clearable]="false"
-          [(ngModel)]="currentContainerTypeId">
-          <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-            <div [ngOptionHighlight]="search">{{ item.value }}</div>
-          </ng-template>
-        </ng-select>
-      </div>
+            <div class="mb-3">
+                <label cLabel for="container_type">
+                    {{ t('Select container type') }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <!-- I used ng-select because our oitc-select killed my browser performance for some reason -->
+                <ng-select id="container_type"
+                           name="container_type"
+                           bindValue="key"
+                           bindLabel="value"
+                           [items]="availableContainerTypes"
+                           [clearable]="false"
+                           [(ngModel)]="currentContainerTypeId">
+                    <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                        <div [ngOptionHighlight]="search">{{ item.value }}</div>
+                    </ng-template>
+                </ng-select>
+            </div>
 
-      <!-- Tenants form -->
-      @if (currentContainerTypeId === ContainerTypesEnum.CT_TENANT) {
-        <form id="tenantForm" (submit)="submitTenant()" name="tenant"
-          >
-          <label cLabel for="Name" class="mt-3">
-            {{ t('Name') }}
-            <oitc-required-icon></oitc-required-icon>
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
-            </span>
-            <input cFormControl id="Name" type="text"
-              name="Name"
-              [placeholder]="'Tenant name' | transloco"
-              oitcFormError [errors]="errors" errorField="container.name"
-              [(ngModel)]="tenantPost.container.name">
-          </c-input-group>
-          <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
-          <label cLabel for="description" class="mt-3">
-            {{ t('Description') }}
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'info']"></fa-icon>
-            </span>
-            <input cFormControl id="description" type="text"
-              name="description"
-              [placeholder]="'Description' | transloco"
-              oitcFormError [errors]="errors" errorField="description"
-              [(ngModel)]="tenantPost.description">
-          </c-input-group>
-          <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-          <label cLabel for="firstname" class="mt-3">
-            {{ t('First name') }}
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'user']"></fa-icon>
-            </span>
-            <input cFormControl id="firstname" type="text"
-              name="firstname"
-              [placeholder]="'John' | transloco"
-              oitcFormError [errors]="errors" errorField="firstname"
-              [(ngModel)]="tenantPost.firstname">
-          </c-input-group>
-          <oitc-form-feedback [errors]="errors" errorField="firstname"></oitc-form-feedback>
-          <label cLabel for="lastname" class="mt-3">
-            {{ t('Last name') }}
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'user']"></fa-icon>
-            </span>
-            <input cFormControl id="lastname" type="text"
-              name="lastname"
-              [placeholder]="'Doe' | transloco"
-              oitcFormError [errors]="errors" errorField="lastname"
-              [(ngModel)]="tenantPost.lastname">
-          </c-input-group>
-          <oitc-form-feedback [errors]="errors" errorField="lastname"></oitc-form-feedback>
-          <label cLabel for="Street" class="mt-3">
-            {{ t('Street') }}
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
-            </span>
-            <input cFormControl id="Street" type="text"
-              name="Street"
-              [placeholder]="'Any street' | transloco"
-              oitcFormError [errors]="errors" errorField="street"
-              [(ngModel)]="tenantPost.street">
-          </c-input-group>
-          <oitc-form-feedback [errors]="errors" errorField="street"></oitc-form-feedback>
-          <label cLabel for="zipcode" class="mt-3">
-            {{ t('Zip code') }}
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'building']"></fa-icon>
-            </span>
-            <input cFormControl id="zipcode" type="text"
-              name="zipcode"
-              [placeholder]="'12345'"
-              oitcFormError [errors]="errors" errorField="zipcode"
-              [(ngModel)]="tenantPost.zipcode">
-          </c-input-group>
-          <oitc-form-feedback [errors]="errors" errorField="zipcode"></oitc-form-feedback>
-          <label cLabel for="city" class="mt-3">
-            {{ t('City') }}
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'tree-city']"></fa-icon>
-            </span>
-            <input cFormControl id="city" type="text"
-              name="city"
-              [placeholder]="'Any city' | transloco"
-              oitcFormError [errors]="errors" errorField="city"
-              [(ngModel)]="tenantPost.city">
-          </c-input-group>
-          <oitc-form-feedback [errors]="errors" errorField="city"></oitc-form-feedback>
-        </form>
-      }
-      <!-- End of tenants form -->
+            <!-- Tenants form -->
+            @if (currentContainerTypeId === ContainerTypesEnum.CT_TENANT) {
+                <form id="tenantForm" (submit)="submitTenant()" name="tenant"
+                >
+                    <label cLabel for="Name" class="mt-3">
+                        {{ t('Name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
+                        </span>
+                        <input cFormControl id="Name" type="text"
+                               name="Name"
+                               [placeholder]="'Tenant name' | transloco"
+                               oitcFormError [errors]="errors" errorField="container.name"
+                               [(ngModel)]="tenantPost.container.name">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
+                    <label cLabel for="description" class="mt-3">
+                        {{ t('Description') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                        </span>
+                        <input cFormControl id="description" type="text"
+                               name="description"
+                               [placeholder]="'Description' | transloco"
+                               oitcFormError [errors]="errors" errorField="description"
+                               [(ngModel)]="tenantPost.description">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                    <label cLabel for="firstname" class="mt-3">
+                        {{ t('First name') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                        </span>
+                        <input cFormControl id="firstname" type="text"
+                               name="firstname"
+                               [placeholder]="'John' | transloco"
+                               oitcFormError [errors]="errors" errorField="firstname"
+                               [(ngModel)]="tenantPost.firstname">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="firstname"></oitc-form-feedback>
+                    <label cLabel for="lastname" class="mt-3">
+                        {{ t('Last name') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                        </span>
+                        <input cFormControl id="lastname" type="text"
+                               name="lastname"
+                               [placeholder]="'Doe' | transloco"
+                               oitcFormError [errors]="errors" errorField="lastname"
+                               [(ngModel)]="tenantPost.lastname">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="lastname"></oitc-form-feedback>
+                    <label cLabel for="Street" class="mt-3">
+                        {{ t('Street') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
+                        </span>
+                        <input cFormControl id="Street" type="text"
+                               name="Street"
+                               [placeholder]="'Any street' | transloco"
+                               oitcFormError [errors]="errors" errorField="street"
+                               [(ngModel)]="tenantPost.street">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="street"></oitc-form-feedback>
+                    <label cLabel for="zipcode" class="mt-3">
+                        {{ t('Zip code') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'building']"></fa-icon>
+                        </span>
+                        <input cFormControl id="zipcode" type="text"
+                               name="zipcode"
+                               [placeholder]="'12345'"
+                               oitcFormError [errors]="errors" errorField="zipcode"
+                               [(ngModel)]="tenantPost.zipcode">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="zipcode"></oitc-form-feedback>
+                    <label cLabel for="city" class="mt-3">
+                        {{ t('City') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'tree-city']"></fa-icon>
+                        </span>
+                        <input cFormControl id="city" type="text"
+                               name="city"
+                               [placeholder]="'Any city' | transloco"
+                               oitcFormError [errors]="errors" errorField="city"
+                               [(ngModel)]="tenantPost.city">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="city"></oitc-form-feedback>
+                </form>
+            }
+            <!-- End of tenants form -->
 
-      <!-- Nodes form -->
-      @if (currentContainerTypeId === ContainerTypesEnum.CT_NODE) {
-        <form id="nodesFrom" (submit)="submitNode()" name="node"
-          >
-          <label cLabel for="NodeName" class="mt-3">
-            {{ t('Name') }}
-            <oitc-required-icon></oitc-required-icon>
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'link']"></fa-icon>
-            </span>
-            <input cFormControl id="NodeName" type="text"
-              name="NodeName"
-              [placeholder]="'Node name' | transloco"
-              oitcFormError [errors]="errors" errorField="name"
-              [(ngModel)]="nodePost.name">
-          </c-input-group>
-          <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
-        </form>
-      }
-      <!-- End of nodes form -->
+            <!-- Nodes form -->
+            @if (currentContainerTypeId === ContainerTypesEnum.CT_NODE) {
+                <form id="nodesFrom" (submit)="submitNode()" name="node"
+                >
+                    <label cLabel for="NodeName" class="mt-3">
+                        {{ t('Name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                        </span>
+                        <input cFormControl id="NodeName" type="text"
+                               name="NodeName"
+                               [placeholder]="'Node name' | transloco"
+                               oitcFormError [errors]="errors" errorField="name"
+                               [(ngModel)]="nodePost.name">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                </form>
+            }
+            <!-- End of nodes form -->
 
-      <!-- Locations form -->
-      @if (currentContainerTypeId === ContainerTypesEnum.CT_LOCATION) {
-        <form id="locationsForm" (submit)="submitLocation()" name="location"
-          >
-          <label cLabel for="LocationName" class="mt-3">
-            {{ t('Name') }}
-            <oitc-required-icon></oitc-required-icon>
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
-            </span>
-            <input cFormControl id="LocationName" type="text"
-              name="LocationName"
-              [placeholder]="'Location name' | transloco"
-              oitcFormError [errors]="errors" errorField="container.name"
-              [(ngModel)]="locationPost.container.name">
-          </c-input-group>
-          <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
-          <label cLabel for="LocationDescription" class="mt-3">
-            {{ t('Description') }}
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'info']"></fa-icon>
-            </span>
-            <input cFormControl id="LocationDescription" type="text"
-              name="LocationDescription"
-              [placeholder]="'Description' | transloco"
-              oitcFormError [errors]="errors" errorField="description"
-              [(ngModel)]="locationPost.description">
-          </c-input-group>
-          <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-          <label cLabel for="LocationLatitude" class="mt-3">
-            {{ t('Latitude') }}
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
-            </span>
-            <input cFormControl id="LocationLatitude" type="text"
-              name="LocationLatitude"
-              [placeholder]="50.5558095"
-              oitcFormError [errors]="errors" errorField="latitude"
-              [(ngModel)]="locationPost.latitude">
-          </c-input-group>
-          <oitc-form-feedback [errors]="errors" errorField="latitude"></oitc-form-feedback>
-          <div class="help-block">
-            {{ t('Latitude must be a number between -90 and 90 degree inclusive.') }}
-          </div>
-          <label cLabel for="LocationLongitude" class="mt-3">
-            {{ t('Longitude') }}
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
-            </span>
-            <input cFormControl id="LocationLongitude" type="text"
-              name="LocationLongitude"
-              [placeholder]="9.6808449"
-              oitcFormError [errors]="errors" errorField="longitude"
-              [(ngModel)]="locationPost.longitude">
-          </c-input-group>
-          <oitc-form-feedback [errors]="errors" errorField="longitude"></oitc-form-feedback>
-          <div class="help-block">
-            {{ t('Longitude must be a number between -180 and 180 degree inclusive.') }}
-          </div>
-          <label cLabel for="LocationTimezone" class="mt-3">
-            {{ t('Timezone') }}
-            <oitc-required-icon></oitc-required-icon>
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'hourglass-end']"></fa-icon>
-            </span>
-            <ng-select id="LocationTimezone"
-              name="LocationTimezone"
-              [items]="timezones"
-              groupBy="group"
-              bindLabel="name"
-              bindValue="value"
-              [clearable]="false"
-              [(ngModel)]="locationPost.timezone"
-              oitcFormError [errors]="errors" errorField="timezone">
-              <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
-                <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
-              </ng-template>
-            </ng-select>
-          </c-input-group>
-          <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>
-        </form>
-      }
-      <!-- End of locations form -->
+            <!-- Locations form -->
+            @if (currentContainerTypeId === ContainerTypesEnum.CT_LOCATION) {
+                <form id="locationsForm" (submit)="submitLocation()" name="location"
+                >
+                    <label cLabel for="LocationName" class="mt-3">
+                        {{ t('Name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                        </span>
+                        <input cFormControl id="LocationName" type="text"
+                               name="LocationName"
+                               [placeholder]="'Location name' | transloco"
+                               oitcFormError [errors]="errors" errorField="container.name"
+                               [(ngModel)]="locationPost.container.name">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
+                    <label cLabel for="LocationDescription" class="mt-3">
+                        {{ t('Description') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'info']"></fa-icon>
+                        </span>
+                        <input cFormControl id="LocationDescription" type="text"
+                               name="LocationDescription"
+                               [placeholder]="'Description' | transloco"
+                               oitcFormError [errors]="errors" errorField="description"
+                               [(ngModel)]="locationPost.description">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                    <label cLabel for="LocationLatitude" class="mt-3">
+                        {{ t('Latitude') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
+                        </span>
+                        <input cFormControl id="LocationLatitude" type="text"
+                               name="LocationLatitude"
+                               [placeholder]="50.5558095"
+                               oitcFormError [errors]="errors" errorField="latitude"
+                               [(ngModel)]="locationPost.latitude">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="latitude"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Latitude must be a number between -90 and 90 degree inclusive.') }}
+                    </div>
+                    <label cLabel for="LocationLongitude" class="mt-3">
+                        {{ t('Longitude') }}
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
+                        </span>
+                        <input cFormControl id="LocationLongitude" type="text"
+                               name="LocationLongitude"
+                               [placeholder]="9.6808449"
+                               oitcFormError [errors]="errors" errorField="longitude"
+                               [(ngModel)]="locationPost.longitude">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="longitude"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Longitude must be a number between -180 and 180 degree inclusive.') }}
+                    </div>
+                    <label cLabel for="LocationTimezone" class="mt-3">
+                        {{ t('Timezone') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'hourglass-end']"></fa-icon>
+                        </span>
+                        <ng-select id="LocationTimezone"
+                                   name="LocationTimezone"
+                                   [items]="timezones"
+                                   groupBy="group"
+                                   bindLabel="name"
+                                   bindValue="value"
+                                   [clearable]="false"
+                                   [(ngModel)]="locationPost.timezone"
+                                   oitcFormError [errors]="errors" errorField="timezone">
+                            <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
+                                <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
+                            </ng-template>
+                        </ng-select>
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>
+                </form>
+            }
+            <!-- End of locations form -->
 
-    </c-modal-body>
-    <c-modal-footer>
-      @if (currentContainerTypeId === ContainerTypesEnum.CT_TENANT) {
-        <button cButton class="ripple" color="primary"
-          (click)="submitTenant()"
-          [disabled]="isSaving"
-          >
-          @if (isSaving) {
-            <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-          }
-          {{ t('Create new tenant') }}
-        </button>
-      }
+        </c-modal-body>
+        <c-modal-footer>
+            @if (currentContainerTypeId === ContainerTypesEnum.CT_TENANT) {
+                <button cButton class="ripple" color="primary"
+                        (click)="submitTenant()"
+                        [disabled]="isSaving"
+                >
+                    @if (isSaving) {
+                        <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                    }
+                    {{ t('Create new tenant') }}
+                </button>
+            }
 
-      @if (currentContainerTypeId === ContainerTypesEnum.CT_NODE) {
-        <button cButton class="ripple" color="primary"
-          (click)="submitNode();"
-          [disabled]="isSaving"
-          >
-          @if (isSaving) {
-            <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-          }
-          {{ t('Create new node') }}
-        </button>
-      }
+            @if (currentContainerTypeId === ContainerTypesEnum.CT_NODE) {
+                <button cButton class="ripple" color="primary"
+                        (click)="submitNode();"
+                        [disabled]="isSaving"
+                >
+                    @if (isSaving) {
+                        <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                    }
+                    {{ t('Create new node') }}
+                </button>
+            }
 
-      @if (currentContainerTypeId === ContainerTypesEnum.CT_LOCATION) {
-        <button cButton class="ripple" color="primary"
-          (click)="submitLocation()"
-          [disabled]="isSaving"
-          >
-          @if (isSaving) {
-            <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-          }
-          {{ t('Create new location') }}
-        </button>
-      }
+            @if (currentContainerTypeId === ContainerTypesEnum.CT_LOCATION) {
+                <button cButton class="ripple" color="primary"
+                        (click)="submitLocation()"
+                        [disabled]="isSaving"
+                >
+                    @if (isSaving) {
+                        <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                    }
+                    {{ t('Create new location') }}
+                </button>
+            }
 
-      <button (click)="hideModal()" cButton class="ripple" color="default">
-        {{ t('Cancel') }}
-      </button>
-    </c-modal-footer>
-  </c-modal>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
 </ng-container>

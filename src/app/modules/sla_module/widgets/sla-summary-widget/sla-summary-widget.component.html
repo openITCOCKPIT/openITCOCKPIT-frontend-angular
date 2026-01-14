@@ -1,239 +1,246 @@
 <ng-container *transloco="let t">
-  @if (widget) {
-    <div class="d-flex h-100 flex-column" #boxContainer>
-      <div>
-        @if (!isReadonly()) {
-          <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-            >
-            @if (flipped()) {
-              <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-            } @else {
-              <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-            }
-          </button>
-        }
-      </div>
-      <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
-        class="box-container">
-        <div class="box-x">
-          @if (animationStateShowContent) {
-            @if (!slaId) {
-              <div class="text-info">
-                {{ t('No element selected') }}
-              </div>
-            }
-            @if (PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'viewDetails'])|async) {
-              @if (slaId && slaResponse) {
-                <div class="mb-2">
-                  <oitc-label-link
-                    [objectId]="slaId"
-                    [route]="'/sla_module/slas/viewDetails'"
-                    [permissions]="'slamodule.slas.viewDetails'">
-                    {{ slaResponse.sla.name }}
-                  </oitc-label-link>
-                  <span class="fw-300">
-                    <i> {{ slaResponse.sla.description }}</i>
-                  </span>
-                  <c-row class="text-primary bold border-top border-top-primary mt-2">
-                    <c-col [xs]="12" [md]="4" [lg]="4">
-                      {{ t('Container') }}
-                    </c-col>
-                    <c-col [xs]="12" [md]="4" [lg]="4">
-                      {{ t('Number of hosts') }}
-                    </c-col>
-                    <c-col [xs]="12" [md]="4" [lg]="4"
-                      class="border-start border-start-primary border-opacity-50">
-                      {{ t('Number of services') }}
-                    </c-col>
-                  </c-row>
-                  <c-row class="fieldset-legend-border-bottom text-end bold">
-                    <c-col [xs]="12" [md]="4" [lg]="4">
-                      {{ t('Total') }}
-                    </c-col>
-                    <c-col [xs]="12" [md]="4" [lg]="4">
-                      {{ slaResponse.sla.hostsCount }}
-                    </c-col>
-                    <c-col [xs]="12" [md]="4" [lg]="4"
-                      class="border-start border-start-primary border-opacity-50">
-                      {{ slaResponse.sla.servicesCount }}
-                    </c-col>
-                  </c-row>
-                  <c-row class="my-1">
-                    <c-col [xs]="12" [md]="2" [lg]="2" [offset]="4">
-                      <c-badge textColor="success"
-                        class="badge-border w-100">
-                        {{ t('Host UP') }}
-                        <fa-icon [icon]="['fas', 'circle-arrow-up']" class="text-success"></fa-icon>
-                      </c-badge>
-                    </c-col>
-                    <c-col [xs]="12" [md]="2" [lg]="2">
-                      <c-badge textColor="danger"
-                        class="badge-border w-100">
-                        {{ t('Host DOWN') }}
-                        <fa-icon [icon]="['fas', 'circle-arrow-down']" class="text-danger"></fa-icon>
-                      </c-badge>
-                    </c-col>
-                    <c-col [xs]="12" [md]="2" [lg]="2">
-                      <c-badge textColor="success"
-                        class="badge-border w-100">
-                        {{ t('Service UP') }}
-                        <fa-icon [icon]="['fas', 'circle-arrow-up']" class="text-success"></fa-icon>
-                      </c-badge>
-                    </c-col>
-                    <c-col [xs]="12" [md]="2" [lg]="2">
-                      <c-badge textColor="danger"
-                        class="badge-border w-100">
-                        {{ t('Service DOWN') }}
-                        <fa-icon [icon]="['fas', 'circle-arrow-down']" class="text-danger"></fa-icon>
-                      </c-badge>
-                    </c-col>
-                  </c-row>
-                  @for (hostAndServicePerContainer of SlaAvailabilityView; track $index) {
-                    <c-row class="pt-1">
-                      <c-col [xs]="12" [md]="4" [lg]="4">
-                        {{ hostAndServicePerContainer.container.full_path }}
-                      </c-col>
-                      <c-col [xs]="12" [md]="2" [lg]="2">
-                        @if (hostAndServicePerContainer.hosts.passed.count > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                          <a [routerLink]="['/', 'hosts', 'index']"
-                            [queryParams]="{'id': hostAndServicePerContainer.hosts.passed.ids}">
-                            <span class="pointer ms-2">
-                              {{ hostAndServicePerContainer.hosts.passed.count }}
-                              <span class="opacity-50 ms-2">
-                                {{ hostAndServicePerContainer.hosts.passed.percentage }}
-                              </span>
-                            </span>
-                          </a>
+    @if (widget) {
+        <div class="d-flex h-100 flex-column" #boxContainer>
+            <div>
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())"
+                    >
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                         } @else {
-                          <span class="pointer ms-2">
-                            {{ hostAndServicePerContainer.hosts.passed.count }}
-                            <span class="opacity-50 ms-2">
-                              {{ hostAndServicePerContainer.hosts.passed.percentage }}
-                            </span>
-                          </span>
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                         }
-                      </c-col>
-                      <c-col [xs]="12" [md]="2" [lg]="2" class="text-danger">
-                        @if (hostAndServicePerContainer.hosts.failed.count > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                          <a [routerLink]="['/', 'hosts', 'index']" class="text-danger"
-                            [queryParams]="{'id': hostAndServicePerContainer.hosts.failed.ids}">
-                            <span class="pointer ms-2">
-                              {{ hostAndServicePerContainer.hosts.failed.count }}
-                              <span class="opacity-50 ms-2">
-                                {{ hostAndServicePerContainer.hosts.failed.percentage }}
-                              </span>
-                            </span>
-                          </a>
+                    </button>
+                }
+            </div>
+            <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+                 class="box-container">
+                <div class="box-x">
+                    @if (animationStateShowContent) {
+                        @if (!slaId) {
+                            <div class="text-info">
+                                {{ t('No element selected') }}
+                            </div>
+                        }
+                        @if (PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'viewDetails'])|async) {
+                            @if (slaId && slaResponse) {
+                                <div class="mb-2">
+                                    <oitc-label-link
+                                        [objectId]="slaId"
+                                        [route]="'/sla_module/slas/viewDetails'"
+                                        [permissions]="'slamodule.slas.viewDetails'">
+                                        {{ slaResponse.sla.name }}
+                                    </oitc-label-link>
+                                    <span class="fw-300">
+                                        <i> {{ slaResponse.sla.description }}</i>
+                                    </span>
+                                    <c-row class="text-primary bold border-top border-top-primary mt-2">
+                                        <c-col [xs]="12" [md]="4" [lg]="4">
+                                            {{ t('Container') }}
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="4" [lg]="4">
+                                            {{ t('Number of hosts') }}
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="4" [lg]="4"
+                                               class="border-start border-start-primary border-opacity-50">
+                                            {{ t('Number of services') }}
+                                        </c-col>
+                                    </c-row>
+                                    <c-row class="fieldset-legend-border-bottom text-end bold">
+                                        <c-col [xs]="12" [md]="4" [lg]="4">
+                                            {{ t('Total') }}
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="4" [lg]="4">
+                                            {{ slaResponse.sla.hostsCount }}
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="4" [lg]="4"
+                                               class="border-start border-start-primary border-opacity-50">
+                                            {{ slaResponse.sla.servicesCount }}
+                                        </c-col>
+                                    </c-row>
+                                    <c-row class="my-1">
+                                        <c-col [xs]="12" [md]="2" [lg]="2" [offset]="4">
+                                            <c-badge textColor="success"
+                                                     class="badge-border w-100">
+                                                {{ t('Host UP') }}
+                                                <fa-icon [icon]="['fas', 'circle-arrow-up']"
+                                                         class="text-success"></fa-icon>
+                                            </c-badge>
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="2" [lg]="2">
+                                            <c-badge textColor="danger"
+                                                     class="badge-border w-100">
+                                                {{ t('Host DOWN') }}
+                                                <fa-icon [icon]="['fas', 'circle-arrow-down']"
+                                                         class="text-danger"></fa-icon>
+                                            </c-badge>
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="2" [lg]="2">
+                                            <c-badge textColor="success"
+                                                     class="badge-border w-100">
+                                                {{ t('Service UP') }}
+                                                <fa-icon [icon]="['fas', 'circle-arrow-up']"
+                                                         class="text-success"></fa-icon>
+                                            </c-badge>
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="2" [lg]="2">
+                                            <c-badge textColor="danger"
+                                                     class="badge-border w-100">
+                                                {{ t('Service DOWN') }}
+                                                <fa-icon [icon]="['fas', 'circle-arrow-down']"
+                                                         class="text-danger"></fa-icon>
+                                            </c-badge>
+                                        </c-col>
+                                    </c-row>
+                                    @for (hostAndServicePerContainer of SlaAvailabilityView; track $index) {
+                                        <c-row class="pt-1">
+                                            <c-col [xs]="12" [md]="4" [lg]="4">
+                                                {{ hostAndServicePerContainer.container.full_path }}
+                                            </c-col>
+                                            <c-col [xs]="12" [md]="2" [lg]="2">
+                                                @if (hostAndServicePerContainer.hosts.passed.count > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                                    <a [routerLink]="['/', 'hosts', 'index']"
+                                                       [queryParams]="{'id': hostAndServicePerContainer.hosts.passed.ids}">
+                                                        <span class="pointer ms-2">
+                                                            {{ hostAndServicePerContainer.hosts.passed.count }}
+                                                            <span class="opacity-50 ms-2">
+                                                                {{ hostAndServicePerContainer.hosts.passed.percentage }}
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                } @else {
+                                                    <span class="pointer ms-2">
+                                                        {{ hostAndServicePerContainer.hosts.passed.count }}
+                                                        <span class="opacity-50 ms-2">
+                                                            {{ hostAndServicePerContainer.hosts.passed.percentage }}
+                                                        </span>
+                                                    </span>
+                                                }
+                                            </c-col>
+                                            <c-col [xs]="12" [md]="2" [lg]="2" class="text-danger">
+                                                @if (hostAndServicePerContainer.hosts.failed.count > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                                    <a [routerLink]="['/', 'hosts', 'index']" class="text-danger"
+                                                       [queryParams]="{'id': hostAndServicePerContainer.hosts.failed.ids}">
+                                                        <span class="pointer ms-2">
+                                                            {{ hostAndServicePerContainer.hosts.failed.count }}
+                                                            <span class="opacity-50 ms-2">
+                                                                {{ hostAndServicePerContainer.hosts.failed.percentage }}
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                } @else {
+                                                    <span class="pointer ms-2">
+                                                        {{ hostAndServicePerContainer.hosts.failed.count }}
+                                                        <span class="opacity-50 ms-2">
+                                                            {{ hostAndServicePerContainer.hosts.failed.percentage }}
+                                                        </span>
+                                                    </span>
+                                                }
+                                            </c-col>
+                                            <c-col [xs]="12" [md]="2" [lg]="2">
+                                                @if (hostAndServicePerContainer.services.passed.count > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                                    <a [routerLink]="['/', 'services', 'index']"
+                                                       [queryParams]="{'id': hostAndServicePerContainer.services.passed.ids}">
+                                                        <span class="pointer ms-2">
+                                                            {{ hostAndServicePerContainer.services.passed.count }}
+                                                            <span class="opacity-50 ms-2">
+                                                                {{ hostAndServicePerContainer.services.passed.percentage }}
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                } @else {
+                                                    <span class="pointer ms-2">
+                                                        {{ hostAndServicePerContainer.services.passed.count }}
+                                                        <span class="opacity-50 ms-2">
+                                                            {{ hostAndServicePerContainer.services.passed.percentage }}
+                                                        </span>
+                                                    </span>
+                                                }
+                                            </c-col>
+                                            <c-col [xs]="12" [md]="2" [lg]="2" class="text-danger">
+                                                @if (hostAndServicePerContainer.services.failed.count > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                                    <a [routerLink]="['/', 'services', 'index']" class="text-danger"
+                                                       [queryParams]="{'id': hostAndServicePerContainer.services.failed.ids}">
+                                                        <span class="pointer ms-2">
+                                                            {{ hostAndServicePerContainer.services.failed.count }}
+                                                            <span class="opacity-50 ms-2">
+                                                                {{ hostAndServicePerContainer.services.failed.percentage }}
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                } @else {
+                                                    <span class="pointer ms-2">
+                                                        {{ hostAndServicePerContainer.services.failed.count }}
+                                                        <span class="opacity-50 ms-2">
+                                                            {{ hostAndServicePerContainer.services.failed.percentage }}
+                                                        </span>
+                                                    </span>
+                                                }
+                                            </c-col>
+                                        </c-row>
+                                    }
+                                    @if (!SlaAvailabilityView && ( PermissionsService.hasPermissionObservable(['SlaModule', 'slas', 'viewDetails'])|async )) {
+                                        <c-row>
+                                            <c-col>
+                                                <c-alert color="info" class="my-3 p-1 h-100">
+                                                    <h4 cAlertHeading> {{ t('Information') }}</h4>
+                                                    <p>
+                                                        <fa-icon [icon]="['fas', 'info-circle']"
+                                                                 class="text-info"></fa-icon>
+                                                        {{ t('No data available ') }}
+                                                    </p>
+                                                </c-alert>
+                                            </c-col>
+                                        </c-row>
+                                    }
+                                </div>
+                            }
                         } @else {
-                          <span class="pointer ms-2">
-                            {{ hostAndServicePerContainer.hosts.failed.count }}
-                            <span class="opacity-50 ms-2">
-                              {{ hostAndServicePerContainer.hosts.failed.percentage }}
-                            </span>
-                          </span>
+                            <c-row>
+                                <c-col>
+                                    <c-alert color="danger" class="my-3 p-1 h-100">
+                                        <h4 cAlertHeading> {{ t('Attention!') }}</h4>
+                                        <p>
+                                            <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                                     class="text-danger"></fa-icon>
+                                            {{ t('You are not permitted to access this object') }}
+                                        </p>
+                                    </c-alert>
+                                </c-col>
+                            </c-row>
                         }
-                      </c-col>
-                      <c-col [xs]="12" [md]="2" [lg]="2">
-                        @if (hostAndServicePerContainer.services.passed.count > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
-                          <a [routerLink]="['/', 'services', 'index']"
-                            [queryParams]="{'id': hostAndServicePerContainer.services.passed.ids}">
-                            <span class="pointer ms-2">
-                              {{ hostAndServicePerContainer.services.passed.count }}
-                              <span class="opacity-50 ms-2">
-                                {{ hostAndServicePerContainer.services.passed.percentage }}
-                              </span>
-                            </span>
-                          </a>
-                        } @else {
-                          <span class="pointer ms-2">
-                            {{ hostAndServicePerContainer.services.passed.count }}
-                            <span class="opacity-50 ms-2">
-                              {{ hostAndServicePerContainer.services.passed.percentage }}
-                            </span>
-                          </span>
-                        }
-                      </c-col>
-                      <c-col [xs]="12" [md]="2" [lg]="2" class="text-danger">
-                        @if (hostAndServicePerContainer.services.failed.count > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
-                          <a [routerLink]="['/', 'services', 'index']" class="text-danger"
-                            [queryParams]="{'id': hostAndServicePerContainer.services.failed.ids}">
-                            <span class="pointer ms-2">
-                              {{ hostAndServicePerContainer.services.failed.count }}
-                              <span class="opacity-50 ms-2">
-                                {{ hostAndServicePerContainer.services.failed.percentage }}
-                              </span>
-                            </span>
-                          </a>
-                        } @else {
-                          <span class="pointer ms-2">
-                            {{ hostAndServicePerContainer.services.failed.count }}
-                            <span class="opacity-50 ms-2">
-                              {{ hostAndServicePerContainer.services.failed.percentage }}
-                            </span>
-                          </span>
-                        }
-                      </c-col>
-                    </c-row>
-                  }
-                  @if (!SlaAvailabilityView && ( PermissionsService.hasPermissionObservable(['SlaModule', 'slas', 'viewDetails'])|async )) {
-                    <c-row>
-                      <c-col>
-                        <c-alert color="info" class="my-3 p-1 h-100">
-                          <h4 cAlertHeading> {{ t('Information') }}</h4>
-                          <p>
-                            <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
-                            {{ t('No data available ') }}
-                          </p>
-                        </c-alert>
-                      </c-col>
-                    </c-row>
-                  }
+                    }
                 </div>
-              }
-            } @else {
-              <c-row>
-                <c-col>
-                  <c-alert color="danger" class="my-3 p-1 h-100">
-                    <h4 cAlertHeading> {{ t('Attention!') }}</h4>
-                    <p>
-                      <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
-                      {{ t('You are not permitted to access this object') }}
-                    </p>
-                  </c-alert>
-                </c-col>
-              </c-row>
-            }
-          }
+                <div class="box-x">
+                    @if (animationStateShowConfig) {
+                        <!-- Config area -->
+                        @if (widget) {
+                            <div class="mb-3">
+                                <label cLabel [for]="'config_sla_id_'+widget.id">
+                                    {{ t('Sla') }}
+                                </label>
+                                <oitc-select
+                                    [id]="'config_sla_id'+widget.id"
+                                    [name]="'config_sla_id_'+widget.id"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [placeholder]="'Please choose' | transloco"
+                                    [(ngModel)]="slaId"
+                                    [options]="slas"
+                                    [appendTo]="'body'">
+                                </oitc-select>
+                            </div>
+                            <div class="mt-1 text-end">
+                                <button cButton type="button" class="ripple" (click)="saveWidgetConfig()">
+                                    {{ t('Save') }}
+                                </button>
+                            </div>
+                        }
+                        <!-- End Config area -->
+                    }
+                </div>
+            </div>
         </div>
-        <div class="box-x">
-          @if (animationStateShowConfig) {
-            <!-- Config area -->
-            @if (widget) {
-              <div class="mb-3">
-                <label cLabel [for]="'config_sla_id_'+widget.id">
-                  {{ t('Sla') }}
-                </label>
-                <oitc-select
-                  [id]="'config_sla_id'+widget.id"
-                  [name]="'config_sla_id_'+widget.id"
-                  optionValue="key"
-                  optionLabel="value"
-                  [placeholder]="'Please choose' | transloco"
-                  [(ngModel)]="slaId"
-                  [options]="slas"
-                  [appendTo]="'body'">
-                </oitc-select>
-              </div>
-              <div class="mt-1 text-end">
-                <button cButton type="button" class="ripple" (click)="saveWidgetConfig()">
-                  {{ t('Save') }}
-                </button>
-              </div>
-            }
-            <!-- End Config area -->
-          }
-        </div>
-      </div>
-    </div>
-  }
+    }
 </ng-container>

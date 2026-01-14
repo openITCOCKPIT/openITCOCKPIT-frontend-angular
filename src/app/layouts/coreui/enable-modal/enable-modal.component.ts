@@ -34,19 +34,19 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 @Component({
     selector: 'oitc-enable-modal',
     imports: [
-    ButtonCloseDirective,
-    ColComponent,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ProgressComponent,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective
-],
+        ButtonCloseDirective,
+        ColComponent,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ProgressComponent,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective
+    ],
     templateUrl: './enable-modal.component.html',
     styleUrl: './enable-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

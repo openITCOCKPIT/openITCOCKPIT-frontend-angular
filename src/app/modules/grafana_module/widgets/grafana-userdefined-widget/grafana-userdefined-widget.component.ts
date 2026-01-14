@@ -24,14 +24,14 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 @Component({
     selector: 'oitc-grafana-userdefined-widget',
     imports: [
-    FaIconComponent,
-    FormLabelDirective,
-    IframeComponent,
-    RequiredIconComponent,
-    SelectComponent,
-    TranslocoDirective,
-    XsButtonDirective
-],
+        FaIconComponent,
+        FormLabelDirective,
+        IframeComponent,
+        RequiredIconComponent,
+        SelectComponent,
+        TranslocoDirective,
+        XsButtonDirective
+    ],
     templateUrl: './grafana-userdefined-widget.component.html',
     styleUrl: './grafana-userdefined-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -13,16 +13,16 @@ import { SkeletonModule } from 'primeng/skeleton';
 @Component({
     selector: 'oitc-acknowledgement-icon',
     imports: [
-    FaIconComponent,
-    TranslocoDirective,
-    TooltipDirective,
-    TranslocoPipe,
-    PopoverDirective,
-    SkeletonModule,
-    RowComponent,
-    ColComponent,
-    AsyncPipe
-],
+        FaIconComponent,
+        TranslocoDirective,
+        TooltipDirective,
+        TranslocoPipe,
+        PopoverDirective,
+        SkeletonModule,
+        RowComponent,
+        ColComponent,
+        AsyncPipe
+    ],
     templateUrl: './acknowledgement-icon.component.html',
     styleUrl: './acknowledgement-icon.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

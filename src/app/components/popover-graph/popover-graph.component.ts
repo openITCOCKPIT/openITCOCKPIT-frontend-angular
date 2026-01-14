@@ -37,13 +37,13 @@ type PerfParams = {
 @Component({
     selector: 'oitc-popover-graph',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    NgClass,
-    ChartLoaderComponent,
-    Popover,
-    PopoverModule
-],
+        TranslocoDirective,
+        FaIconComponent,
+        NgClass,
+        ChartLoaderComponent,
+        Popover,
+        PopoverModule
+    ],
     templateUrl: './popover-graph.component.html',
     styleUrl: './popover-graph.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,282 +1,284 @@
 <ng-container *transloco="let t">
 
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-          {{ t('Service Level Agreement Module') }}
-        </li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['slamodule', 'slas', 'index']"
-            [routerLink]="['/', 'sla_module', 'slas', 'index']">
-            <fa-icon [icon]="['fas', 'award']"></fa-icon>
-            {{ t('Service Level Agreements') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
-          {{ t('SLA Host Overview') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Service Level Agreement Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['slamodule', 'slas', 'index']"
+                   [routerLink]="['/', 'sla_module', 'slas', 'index']">
+                    <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                    {{ t('Service Level Agreements') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
+                {{ t('SLA Host Overview') }}
+            </li>
+        </ol>
     </nav>
 
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>{{ t('SLA Host Status Log') }}
-          <small class="fw-300">
-            {{ t('overview') }}
-          </small>
-        </h5>
-        <c-nav class="card-toolbar card-header-pills">
-          <c-nav-item class="px-1">
-            <button (click)="load()" cButton class="ripple" color="default" size="xs">
-              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-              {{ t('Refresh') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-              {{ t('Filter') }}
-            </button>
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
+        <c-card-header>
+            <h5 cCardTitle>{{ t('SLA Host Status Log') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
 
-        @if (!slaHostAndStatusLog && isLoading) {
-          <p-skeleton width="10rem" styleClass="mb-2"/>
-        }
-        @if (slaHostAndStatusLog && !isLoading) {
-          <span class="padding-left-10 font-md">
-            <fa-icon [icon]="['fas', 'desktop']" class="fa fa-fw margin-right-5"></fa-icon>
-            @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser']) | async) {
-              <a [routerLink]="['/', 'hosts', 'browser', slaHostAndStatusLog.host.id]">{{ slaHostAndStatusLog.host.name }}</a>
-              (
-              <oitc-copy-to-clipboard [data]="slaHostAndStatusLog.host.address">
-                {{ slaHostAndStatusLog.host.address }}
-              </oitc-copy-to-clipboard>
-              )
-            } @else {
-              {{ slaHostAndStatusLog.host.name }} ({{ slaHostAndStatusLog.host.address }})
+            @if (!slaHostAndStatusLog && isLoading) {
+                <p-skeleton width="10rem" styleClass="mb-2"/>
             }
-          </span>
-        }
-
-        <!-- Filter -->
-        <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-          <c-row>
-            <c-col>
-              <h6 class="pb-2 mb-3 border-bottom">
-                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                {{ t('Filter') }}
-              </h6>
-            </c-col>
-          </c-row>
-          <form cForm>
-
-            <c-row>
-              <c-col md="6">
-                <c-input-group>
-                  <span cInputGroupText>
-                    {{ t('From') }}
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="from_time"
-                    [placeholder]="'From date' | transloco"
-                    aria-label="from"
-                    name="from"
-                    cFormControl
-                    oitcDebounce
-                    type="datetime-local"
-                    />
-                </c-input-group>
-              </c-col>
-              <c-col md="6">
-                <c-input-group>
-                  <span cInputGroupText>
-                    {{ t('To') }}
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="to_time"
-                    [placeholder]="'To date' | transloco"
-                    aria-label="to"
-                    name="to"
-                    cFormControl
-                    oitcDebounce
-                    type="datetime-local"
-                    />
-                </c-input-group>
-              </c-col>
-            </c-row>
-            <c-row class="mt-2">
-              <c-col class="text-end">
-                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                  {{ t('Reset Filter') }}
-                </button>
-              </c-col>
-            </c-row>
-          </form>
-        </c-container>
-        <!-- End Filter -->
-
-        @if (!slaHostAndStatusLog && isLoading) {
-          <oitc-table-loader></oitc-table-loader>
-        }
-        @if (slaHostAndStatusLog && !isLoading) {
-          <table bordered cTable class="mt-2 mb-2" hover striped matSort
-            (matSortChange)="onSortChange($event)"
-            [matSortActive]="params.sort" [matSortDirection]="params.direction">
-            <thead>
-              <tr>
-                <th scope="col">
-                  {{ t('Evaluation range') }}
-                </th>
-                <th scope="col" class="col-2">
-                  {{ t('State summary') }}
-                </th>
-                <th scope="col" class="col-5">
-                  {{ t('Outage overview') }}
-                </th>
-                <th scope="col">
-                  {{ t('Goal') }}(%)
-                </th>
-                <th scope="col">
-                  {{ t('Achieved') }}(%)
-                </th>
-                <th scope="col" colspan="2">
-                  {{ t('Status') }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (hostStatus of slaHostAndStatusLog.slaHostStatusLog; track hostStatus; let i = $index; let last = $last) {
-                <tr
-                  class="ps-1">
-                  <td>
-                    <ul class="evaluation-range timeline">
-                      <li class="m-1 ps-1 start">
-                        {{ hostStatus.start }}
-                      </li>
-                      <li class="m-1 ps-1 end">
-                        {{ hostStatus.end }}
-                      </li>
-                    </ul>
-                  </td>
-                  <td>
-                    <div class="btn-group btn-group-justified w-100">
-                      <c-badge color="success" class="col-4 rounded-0 rounded-start">
-                        {{ hostStatus.up_human_readable }}
-                      </c-badge>
-                      <c-badge color="danger" class="col-4 rounded-0">
-                        {{ hostStatus.down_human_readable }}
-                      </c-badge>
-                      <c-badge color="secondary" class="col-4 rounded-0 rounded-end">
-                        {{ hostStatus.unreachable_human_readable }}
-                      </c-badge>
-                    </div>
-                  </td>
-                  <td>
-                    <fa-icon [icon]="['fas', 'clock']" class="text-primary"></fa-icon>
-                    {{ hostStatus.determined_outage_time_human_readable }}
-                    @if (hostStatus.sla_host_outages.length > 0) {
-                      <ul class="list-unstyled p-2"
-                        >
-                        <div class="border-primary border-bottom pb-1">
-                          {{ t('Outages') }}
-                        </div>
-                        @for (outage of hostStatus.sla_host_outages|filter:{in_downtime:false}; track outage) {
-                          <li
-                            class="padding-left-15 pb-2">
-                            <fa-icon [icon]="['fas', 'bolt']" class="text-danger"></fa-icon>
-                            {{ outage.start }}
-                            <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
-                            {{ outage.end }} ({{ outage.duration }})
-                            <br/>
-                            <code>
-                              {{ outage.output }}
-                            </code>
-                          </li>
-                        }
-                        @for (outage of hostStatus.sla_host_outages|filter:{in_downtime:true}; track outage) {
-                          <li
-                            class="padding-left-15 cursor-help" [title]="'In downtime' | transloco">
-                            <fa-icon [icon]="['fas', 'power-off']" class="text-primary"></fa-icon>
-                            {{ outage.start }}
-                            <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
-                            {{ outage.end }}
-                            (<span class="outages-in-downtime">{{ outage.duration }}</span>)
-                            <br/>
-                            <code>
-                              {{ outage.output }}
-                            </code>
-                          </li>
-                        }
-                      </ul>
+            @if (slaHostAndStatusLog && !isLoading) {
+                <span class="padding-left-10 font-md">
+                    <fa-icon [icon]="['fas', 'desktop']" class="fa fa-fw margin-right-5"></fa-icon>
+                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser']) | async) {
+                        <a [routerLink]="['/', 'hosts', 'browser', slaHostAndStatusLog.host.id]">{{ slaHostAndStatusLog.host.name }}</a>
+                        (
+                        <oitc-copy-to-clipboard [data]="slaHostAndStatusLog.host.address">
+                            {{ slaHostAndStatusLog.host.address }}
+                        </oitc-copy-to-clipboard>
+                        )
+                    } @else {
+                        {{ slaHostAndStatusLog.host.name }} ({{ slaHostAndStatusLog.host.address }})
                     }
-                  </td>
-                  <td>
-                    {{ hostStatus.minimal_availability_percent }}%
-                  </td>
-                  <td class="text-{{hostStatus.state}}">
-                    {{ hostStatus.determined_availability_percent }}%
-                  </td>
-                  <td>
-                    <c-badge [hidden]="hostStatus.state === 'danger'"
-                      textColor="{{hostStatus.state}}"
-                      class="badge-border w-100 text-{{hostStatus.state}} border-{{hostStatus.state}}">
-                      {{ t('PASSED') }}
-                    </c-badge>
-                    <c-badge [hidden]="hostStatus.state !== 'danger'"
-                      textColor="{{hostStatus.state}}"
-                      class="badge-border w-100 text-{{hostStatus.state}} border-{{hostStatus.state}}">
-                      {{ t('FAILED') }}
-                    </c-badge>
-                  </td>
-                  <td>
-                    @if (!last) {
-                      <span>
-                        <span>
-                          <span [hidden]="!(declineValues[i] > 0)"
-                            class="small text-red-400">
-                            <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
-                            {{ declineValues[i] | number:'1.2-2' }}%
-                          </span>
-                        </span>
-                      </span>
-                    }
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        }
+                </span>
+            }
 
-        @if (slaHostAndStatusLog && slaHostAndStatusLog.slaHostStatusLog && slaHostAndStatusLog.slaHostStatusLog.length === 0) {
-          <oitc-no-records
-          ></oitc-no-records>
-        }
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
 
-        <c-container
-          [fluid]="true">
-          <c-row>
-            <c-col>
-              @if (slaHostAndStatusLog) {
-                <oitc-paginate-or-scroll
-                  (paginatorChange)="onPaginatorChange($event)"
-                [paginateOrScroll]="slaHostAndStatusLog"></oitc-paginate-or-scroll>
-              }
-            </c-col>
-          </c-row>
-        </c-container>
-      </c-card-body>
-      <c-card-footer>
-        &nbsp;
-      </c-card-footer>
+                    <c-row>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{ t('From') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="from_time"
+                                       [placeholder]="'From date' | transloco"
+                                       aria-label="from"
+                                       name="from"
+                                       cFormControl
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{ t('To') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="to_time"
+                                       [placeholder]="'To date' | transloco"
+                                       aria-label="to"
+                                       name="to"
+                                       cFormControl
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset Filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            @if (!slaHostAndStatusLog && isLoading) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (slaHostAndStatusLog && !isLoading) {
+                <table bordered cTable class="mt-2 mb-2" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col">
+                            {{ t('Evaluation range') }}
+                        </th>
+                        <th scope="col" class="col-2">
+                            {{ t('State summary') }}
+                        </th>
+                        <th scope="col" class="col-5">
+                            {{ t('Outage overview') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Goal') }}(%)
+                        </th>
+                        <th scope="col">
+                            {{ t('Achieved') }}(%)
+                        </th>
+                        <th scope="col" colspan="2">
+                            {{ t('Status') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (hostStatus of slaHostAndStatusLog.slaHostStatusLog; track hostStatus; let i = $index; let last = $last) {
+                            <tr
+                                class="ps-1">
+                                <td>
+                                    <ul class="evaluation-range timeline">
+                                        <li class="m-1 ps-1 start">
+                                            {{ hostStatus.start }}
+                                        </li>
+                                        <li class="m-1 ps-1 end">
+                                            {{ hostStatus.end }}
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-justified w-100">
+                                        <c-badge color="success" class="col-4 rounded-0 rounded-start">
+                                            {{ hostStatus.up_human_readable }}
+                                        </c-badge>
+                                        <c-badge color="danger" class="col-4 rounded-0">
+                                            {{ hostStatus.down_human_readable }}
+                                        </c-badge>
+                                        <c-badge color="secondary" class="col-4 rounded-0 rounded-end">
+                                            {{ hostStatus.unreachable_human_readable }}
+                                        </c-badge>
+                                    </div>
+                                </td>
+                                <td>
+                                    <fa-icon [icon]="['fas', 'clock']" class="text-primary"></fa-icon>
+                                    {{ hostStatus.determined_outage_time_human_readable }}
+                                    @if (hostStatus.sla_host_outages.length > 0) {
+                                        <ul class="list-unstyled p-2"
+                                        >
+                                            <div class="border-primary border-bottom pb-1">
+                                                {{ t('Outages') }}
+                                            </div>
+                                            @for (outage of hostStatus.sla_host_outages|filter:{in_downtime: false}; track outage) {
+                                                <li
+                                                    class="padding-left-15 pb-2">
+                                                    <fa-icon [icon]="['fas', 'bolt']" class="text-danger"></fa-icon>
+                                                    {{ outage.start }}
+                                                    <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
+                                                    {{ outage.end }} ({{ outage.duration }})
+                                                    <br/>
+                                                    <code>
+                                                        {{ outage.output }}
+                                                    </code>
+                                                </li>
+                                            }
+                                            @for (outage of hostStatus.sla_host_outages|filter:{in_downtime: true}; track outage) {
+                                                <li
+                                                    class="padding-left-15 cursor-help"
+                                                    [title]="'In downtime' | transloco">
+                                                    <fa-icon [icon]="['fas', 'power-off']"
+                                                             class="text-primary"></fa-icon>
+                                                    {{ outage.start }}
+                                                    <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
+                                                    {{ outage.end }}
+                                                    (<span class="outages-in-downtime">{{ outage.duration }}</span>)
+                                                    <br/>
+                                                    <code>
+                                                        {{ outage.output }}
+                                                    </code>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                </td>
+                                <td>
+                                    {{ hostStatus.minimal_availability_percent }}%
+                                </td>
+                                <td class="text-{{hostStatus.state}}">
+                                    {{ hostStatus.determined_availability_percent }}%
+                                </td>
+                                <td>
+                                    <c-badge [hidden]="hostStatus.state === 'danger'"
+                                             textColor="{{hostStatus.state}}"
+                                             class="badge-border w-100 text-{{hostStatus.state}} border-{{hostStatus.state}}">
+                                        {{ t('PASSED') }}
+                                    </c-badge>
+                                    <c-badge [hidden]="hostStatus.state !== 'danger'"
+                                             textColor="{{hostStatus.state}}"
+                                             class="badge-border w-100 text-{{hostStatus.state}} border-{{hostStatus.state}}">
+                                        {{ t('FAILED') }}
+                                    </c-badge>
+                                </td>
+                                <td>
+                                    @if (!last) {
+                                        <span>
+                                            <span>
+                                                <span [hidden]="!(declineValues[i] > 0)"
+                                                      class="small text-red-400">
+                                                    <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
+                                                    {{ declineValues[i] | number:'1.2-2' }}%
+                                                </span>
+                                            </span>
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @if (slaHostAndStatusLog && slaHostAndStatusLog.slaHostStatusLog && slaHostAndStatusLog.slaHostStatusLog.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        @if (slaHostAndStatusLog) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="slaHostAndStatusLog"></oitc-paginate-or-scroll>
+                        }
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
     </c-card>
-  </ng-container>
+</ng-container>

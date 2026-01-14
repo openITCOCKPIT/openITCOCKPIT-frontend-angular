@@ -24,39 +24,39 @@
 -->
 
 <ng-container *transloco="let t">
-  <c-modal
-    #modal='cModal'
-    [keyboard]="true"
-    id="columnsConfigImportModal"
-    size="lg"
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="columnsConfigImportModal"
+        size="lg"
     >
-    <c-modal-header class="bg-info text-white">
-      <h5 cModalTitle class="text-white">
-        {{ t('Import column configuration') }}
-      </h5>
-      <button (click)="hideModal()" cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body>
+        <c-modal-header class="bg-info text-white">
+            <h5 cModalTitle class="text-white">
+                {{ t('Import column configuration') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
 
-      <label>
-        <b> {{ t('Paste a column configuration string') }}</b>
-      </label>
-      <input
-        cFormControl
-        [(ngModel)]="configString">
-      @if (error) {
-        <div class="help-block text-danger">{{ t(errorMessage) }}</div>
-      }
+            <label>
+                <b> {{ t('Paste a column configuration string') }}</b>
+            </label>
+            <input
+                cFormControl
+                [(ngModel)]="configString">
+            @if (error) {
+                <div class="help-block text-danger">{{ t(errorMessage) }}</div>
+            }
 
 
-    </c-modal-body>
-    <c-modal-footer>
-      <button (click)="sendConfig()" cButton class="ripple" color="success">
-        {{ t('Import') }}
-      </button>
-      <button (click)="hideModal()" cButton class="ripple" color="default">
-        {{ t('Close') }}
-      </button>
-    </c-modal-footer>
-  </c-modal>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="sendConfig()" cButton class="ripple" color="success">
+                {{ t('Import') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
 </ng-container>

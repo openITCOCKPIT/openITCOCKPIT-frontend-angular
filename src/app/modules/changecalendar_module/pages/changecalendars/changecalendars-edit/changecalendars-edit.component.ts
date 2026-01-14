@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {BackButtonDirective} from '../../../../../directives/back-button.directive';
-import {HistoryService} from '../../../../../history.service';
-import {ContainersService} from '../../../../../pages/containers/containers.service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import { HistoryService } from '../../../../../history.service';
+import { ContainersService } from '../../../../../pages/containers/containers.service';
 import {
     CardBodyComponent,
     CardComponent,
@@ -15,39 +15,39 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import {ColorPicker} from 'primeng/colorpicker';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {FormErrorDirective} from '../../../../../layouts/coreui/form-error.directive';
-import {FormFeedbackComponent} from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { ColorPicker } from 'primeng/colorpicker';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { formatDate } from '@angular/common';
-import {PermissionDirective} from '../../../../../permissions/permission.directive';
-import {RequiredIconComponent} from '../../../../../components/required-icon/required-icon.component';
-import {SelectComponent} from '../../../../../layouts/primeng/select/select/select.component';
-import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
-import {XsButtonDirective} from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {Subscription} from 'rxjs';
-import {NotyService} from '../../../../../layouts/coreui/noty.service';
-import {ActivatedRoute, RouterLink} from '@angular/router';
-import {SelectKeyValue} from '../../../../../layouts/primeng/select.interface';
-import {GenericResponseWrapper, GenericValidationError} from '../../../../../generic-responses';
-import {ChangecalendarsService} from '../changecalendars.service';
-import {ContainersLoadContainersByStringParams} from '../../../../../pages/containers/containers.interface';
+import { PermissionDirective } from '../../../../../permissions/permission.directive';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
+import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { Subscription } from 'rxjs';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
+import { ChangecalendarsService } from '../changecalendars.service';
+import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
 import {
     ChangecalendarEvent,
     ChangecalendarEventMove,
     EditChangecalendar,
     EditChangecalendarRoot
 } from '../changecalendars.interface';
-import {FormLoaderComponent} from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import {CalendarEvent} from '../../../../../pages/calendars/calendars.interface';
+import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { CalendarEvent } from '../../../../../pages/calendars/calendars.interface';
 import {
     ChangecalendarsEventEditorComponent
 } from '../../../components/changecalendars-event-editor/changecalendars-event-editor.component';
-import {EventClickArg} from '@fullcalendar/core';
-import {TimezoneObject} from '../../../../../pages/services/timezone.interface';
-import {TimezoneService} from '../../../../../services/timezone.service';
-import {DeleteAllItem} from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { EventClickArg } from '@fullcalendar/core';
+import { TimezoneObject } from '../../../../../pages/services/timezone.interface';
+import { TimezoneService } from '../../../../../services/timezone.service';
+import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
     ChangecalendarsCalendarEditorComponent
 } from '../../../components/changecalendars-calendar-editor/changecalendars-calendar-editor.component';
@@ -55,33 +55,33 @@ import {
 @Component({
     selector: 'oitc-changecalendars-edit',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColorPicker,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RequiredIconComponent,
-    SelectComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    FormLoaderComponent,
-    ChangecalendarsEventEditorComponent,
-    ChangecalendarsCalendarEditorComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColorPicker,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RequiredIconComponent,
+        SelectComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        FormLoaderComponent,
+        ChangecalendarsEventEditorComponent,
+        ChangecalendarsCalendarEditorComponent
+    ],
     templateUrl: './changecalendars-edit.component.html',
     styleUrl: './changecalendars-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

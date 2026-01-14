@@ -17,11 +17,11 @@ import {
 @Component({
     selector: 'oitc-evc-table',
     imports: [
-    NgClass,
-    FaIconComponent,
-    TooltipDirective,
-    EvcServicestatusToasterComponent
-],
+        NgClass,
+        FaIconComponent,
+        TooltipDirective,
+        EvcServicestatusToasterComponent
+    ],
     templateUrl: './evc-table.component.html',
     styleUrl: './evc-table.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

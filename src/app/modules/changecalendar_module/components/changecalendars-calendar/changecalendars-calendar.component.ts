@@ -9,23 +9,23 @@ import {
     signal,
     ViewChild
 } from '@angular/core';
-import {TranslocoDirective} from '@jsverse/transloco';
-import {FullCalendarComponent, FullCalendarModule} from '@fullcalendar/angular';
-import {CalendarOptions, EventApi, EventClickArg} from '@fullcalendar/core';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarOptions, EventApi, EventClickArg } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import {CalendarEvent} from '../../../../pages/calendars/calendars.interface';
+import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
 import { NgStyle } from '@angular/common';
 
 @Component({
     selector: 'oitc-changecalendars-calendar',
     imports: [
-    TranslocoDirective,
-    FullCalendarModule,
-    NgStyle
-],
+        TranslocoDirective,
+        FullCalendarModule,
+        NgStyle
+    ],
     templateUrl: './changecalendars-calendar.component.html',
     styleUrl: './changecalendars-calendar.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

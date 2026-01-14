@@ -9,15 +9,15 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 @Component({
     selector: 'oitc-scroll-index',
     imports: [
-    PaginationComponent,
-    PageItemDirective,
-    PageLinkDirective,
-    FaIconComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    RowComponent,
-    ColComponent
-],
+        PaginationComponent,
+        PageItemDirective,
+        PageLinkDirective,
+        FaIconComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        RowComponent,
+        ColComponent
+    ],
     templateUrl: './scroll-index.component.html',
     styleUrl: './scroll-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

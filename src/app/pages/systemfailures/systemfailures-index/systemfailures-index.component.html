@@ -1,221 +1,221 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['systemfailures', 'index']"
-            [routerLink]="['/', 'systemfailures', 'index']">
-            <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
-            {{ t('System Failure') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'list']"></fa-icon>
-          {{ t('Overview') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['systemfailures', 'index']"
+                   [routerLink]="['/', 'systemfailures', 'index']">
+                    <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
+                    {{ t('System Failure') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
     </nav>
 
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>{{ t('System failures') }}
-          <small class="fw-300">
-            {{ t('overview') }}
-          </small>
-        </h5>
+        <c-card-header>
+            <h5 cCardTitle>{{ t('System failures') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
 
-        <c-nav class="card-toolbar card-header-pills">
-          <c-nav-item class="px-1">
-            <button (click)="loadSystemfailures()" cButton class="ripple" color="default" size="xs">
-              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-              {{ t('Refresh') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button *oitcPermission="['systemfailures', 'add']"
-              [routerLink]="['/', 'systemfailures', 'add']" cButton
-              class="ripple"
-              color="success"
-              size="xs">
-              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-              {{ t('New') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-              {{ t('Filter') }}
-            </button>
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
-        <!-- Filter -->
-        <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-          <c-row>
-            <c-col>
-              <h6 class="pb-2 mb-3 border-bottom">
-                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                {{ t('Filter') }}
-              </h6>
-            </c-col>
-          </c-row>
-          <form cForm>
-            <c-row>
-              <c-col md="6" class="mb-2">
-                <c-input-group>
-                  <span cInputGroupText>
-                    <fa-icon [icon]="['fas', 'comment']"></fa-icon>
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="params['filter[Systemfailures.comment]']"
-                    [placeholder]="'Filter by comment' | transloco"
-                    aria-label="name"
-                    cFormControl
-                    name="Systemfailures.comment"
-                    oitcDebounce
-                    type="text"
-                    />
-                </c-input-group>
-              </c-col>
-              <c-col md="6" class="mb-2">
-                <c-input-group>
-                  <span cInputGroupText>
-                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="params['filter[full_name]']"
-                    [placeholder]="'Filter by first and last name' | transloco"
-                    aria-label="name"
-                    cFormControl
-                    name="full_name"
-                    oitcDebounce
-                    type="text"
-                    />
-                </c-input-group>
-              </c-col>
-
-            </c-row>
-            <c-row class="mt-2">
-              <c-col class="text-end">
-                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                  {{ t('Reset filter') }}
-                </button>
-              </c-col>
-            </c-row>
-          </form>
-        </c-container>
-        <!-- End Filter -->
-        @if (!systemfailures) {
-          <oitc-table-loader></oitc-table-loader>
-        }
-        <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-          (matSortChange)="onSortChange($event)"
-          [matSortActive]="params.sort" [matSortDirection]="params.direction">
-          <thead>
-            <tr>
-              <th class="text-center col-1" scope="col" style="width: 5px;">
-                <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-              </th>
-              <th scope="col" mat-sort-header="Systemfailures.start_time">
-                {{ t('Start time') }}
-              </th>
-              <th scope="col" mat-sort-header="Systemfailures.end_time">
-                {{ t('End time') }}
-              </th>
-              <th scope="col" mat-sort-header="full_name">
-                {{ t('User') }}
-              </th>
-              <th scope="col" mat-sort-header="Systemfailures.comment">
-                {{ t('Comment') }}
-              </th>
-              <th scope="col" class="text-center">
-                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-              </th>
-
-            </tr>
-          </thead>
-          @if (systemfailures) {
-            <tbody>
-              @for (systemfailure of systemfailures.all_systemfailures; track systemfailure) {
-                <tr>
-                  <td class="text-center">
-                    <oitc-item-select
-                      *oitcPermission="['systemfailures', 'delete']"
-                      [disabled]="false"
-                    [item]="systemfailure"></oitc-item-select>
-                  </td>
-                  <td>
-                    {{ systemfailure.start_time }}
-                  </td>
-                  <td>
-                    {{ systemfailure.end_time }}
-                  </td>
-                  <td>
-                    {{ systemfailure.full_name }}
-                  </td>
-                  <td>
-                    {{ systemfailure.comment }}
-                  </td>
-                  <td class="text-center">
-                    <button (click)="toggleDeleteAllModal(systemfailure)"
-                      *oitcPermission="['systemfailures', 'delete']"
-                      cButton class="ripple" color="danger" size="xs">
-                      <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadSystemfailures()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
                     </button>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          }
-        </table>
-        @if (systemfailures && systemfailures.all_systemfailures.length === 0) {
-          <oitc-no-records
-          ></oitc-no-records>
-        }
-        @if (systemfailures && systemfailures.all_systemfailures) {
-          <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-            [fluid]="true">
-            <c-row>
-              <c-col>
-                <oitc-select-all
-                [itemsCount]="systemfailures.all_systemfailures.length"></oitc-select-all>
-              </c-col>
-              <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                <div *oitcPermission="['systemfailures', 'delete']"
-                  class="btn-group d-flex flex-row" role="group">
-                  <button (click)="toggleDeleteAllModal()"
-                    class="btn btn-outline-danger col-3 border-0"
-                    type="button">
-                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                    {{ t('Delete selected') }}
-                  </button>
-                </div>
-              </c-col>
-            </c-row>
-          </c-container>
-        }
-        <c-container
-          [fluid]="true" class="mb-3 py-3">
-          <c-row>
-            <c-col>
-              @if (systemfailures) {
-                <oitc-paginate-or-scroll
-                  (paginatorChange)="onPaginatorChange($event)"
-                [paginateOrScroll]="systemfailures"></oitc-paginate-or-scroll>
-              }
-            </c-col>
-          </c-row>
-        </c-container>
-      </c-card-body>
-      <c-card-footer>
-        &nbsp;
-      </c-card-footer>
-    </c-card>
-  </ng-container>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['systemfailures', 'add']"
+                            [routerLink]="['/', 'systemfailures', 'add']" cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'comment']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Systemfailures.comment]']"
+                                       [placeholder]="'Filter by comment' | transloco"
+                                       aria-label="name"
+                                       cFormControl
+                                       name="Systemfailures.comment"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[full_name]']"
+                                       [placeholder]="'Filter by first and last name' | transloco"
+                                       aria-label="name"
+                                       cFormControl
+                                       name="full_name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
 
-  <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+            @if (!systemfailures) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th class="text-center col-1" scope="col" style="width: 5px;">
+                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                    </th>
+                    <th scope="col" mat-sort-header="Systemfailures.start_time">
+                        {{ t('Start time') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Systemfailures.end_time">
+                        {{ t('End time') }}
+                    </th>
+                    <th scope="col" mat-sort-header="full_name">
+                        {{ t('User') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Systemfailures.comment">
+                        {{ t('Comment') }}
+                    </th>
+                    <th scope="col" class="text-center">
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                    </th>
+
+                </tr>
+                </thead>
+                @if (systemfailures) {
+                    <tbody>
+                        @for (systemfailure of systemfailures.all_systemfailures; track systemfailure) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['systemfailures', 'delete']"
+                                        [disabled]="false"
+                                        [item]="systemfailure"></oitc-item-select>
+                                </td>
+                                <td>
+                                    {{ systemfailure.start_time }}
+                                </td>
+                                <td>
+                                    {{ systemfailure.end_time }}
+                                </td>
+                                <td>
+                                    {{ systemfailure.full_name }}
+                                </td>
+                                <td>
+                                    {{ systemfailure.comment }}
+                                </td>
+                                <td class="text-center">
+                                    <button (click)="toggleDeleteAllModal(systemfailure)"
+                                            *oitcPermission="['systemfailures', 'delete']"
+                                            cButton class="ripple" color="danger" size="xs">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+            @if (systemfailures && systemfailures.all_systemfailures.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (systemfailures && systemfailures.all_systemfailures) {
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="systemfailures.all_systemfailures.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div *oitcPermission="['systemfailures', 'delete']"
+                                 class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
+            <c-container
+                [fluid]="true" class="mb-3 py-3">
+                <c-row>
+                    <c-col>
+                        @if (systemfailures) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="systemfailures"></oitc-paginate-or-scroll>
+                        }
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
+    </c-card>
+</ng-container>
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

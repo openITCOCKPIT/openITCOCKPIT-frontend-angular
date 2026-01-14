@@ -33,40 +33,40 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import {HostsService} from '../../../../../pages/hosts/hosts.service';
+import { HostsService } from '../../../../../pages/hosts/hosts.service';
 import _ from 'lodash';
 
 @Component({
     selector: 'oitc-autoreport-add-step-two',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    FormDirective,
-    FormsModule,
-    ReactiveFormsModule,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    CardBodyComponent,
-    BadgeComponent,
-    RowComponent,
-    TranslocoPipe,
-    FormLabelDirective,
-    MultiSelectComponent,
-    RequiredIconComponent,
-    ColComponent,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    DebounceDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    TrueFalseDirective
-],
+        TranslocoDirective,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        FormDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CardBodyComponent,
+        BadgeComponent,
+        RowComponent,
+        TranslocoPipe,
+        FormLabelDirective,
+        MultiSelectComponent,
+        RequiredIconComponent,
+        ColComponent,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        DebounceDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormControlDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TrueFalseDirective
+    ],
     templateUrl: './autoreport-add-step-two.component.html',
     styleUrl: './../../../assets/autoreport.css', //'./autoreport-add-step-two.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -91,7 +91,7 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
     public selectedSelectedIds: number[] = [];
     public post: PostAutoreport = {
         Autoreport: {
-            hosts:  [],
+            hosts: [],
             services: []
         }
     };
@@ -131,7 +131,7 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
     }
 
     public onServiceChange(event: any) {
-        if(this.selectedHostIds.length === 0){
+        if (this.selectedHostIds.length === 0) {
             return;
         }
         this.selectedServices();
@@ -150,27 +150,27 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
         );
     }
 
-    public onHostChange(event: any){
-        if(this.selectedHostIds.length === 0){
+    public onHostChange(event: any) {
+        if (this.selectedHostIds.length === 0) {
             this.post.Autoreport.hosts = [];
             this.post.Autoreport.services = [];
             this.selectedSelectedIds = [];
             return;
-        } else{
+        } else {
             let deletedHostIds = [];
-            for(let hostId in this.post.Autoreport.hosts){
-              //  hostId = parseInt(hostId, 10);
-                if(this.selectedHostIds.indexOf(Number(hostId)) === -1){
+            for (let hostId in this.post.Autoreport.hosts) {
+                //  hostId = parseInt(hostId, 10);
+                if (this.selectedHostIds.indexOf(Number(hostId)) === -1) {
                     delete this.post.Autoreport.hosts[hostId];
                     deletedHostIds.push(hostId);
                 }
             }
 
             //Also delete services of deleted hosts
-            if(deletedHostIds.length > 0){
-                for(let serviceId in this.post.Autoreport.services){
-                  let hostId = Number(this.post.Autoreport.services[serviceId].host_id);
-                    if(this.selectedHostIds.indexOf(hostId) === -1){
+            if (deletedHostIds.length > 0) {
+                for (let serviceId in this.post.Autoreport.services) {
+                    let hostId = Number(this.post.Autoreport.services[serviceId].host_id);
+                    if (this.selectedHostIds.indexOf(hostId) === -1) {
                         //host was removed from selectbox
                         delete this.post.Autoreport.services[serviceId];
                     }
@@ -215,29 +215,29 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
         this.updateDefaultOption('outage', this.defaultOptionsOutageDuration);
     }
 
-    public onDefaultOptionsAllfailuresChange(event: any){
+    public onDefaultOptionsAllfailuresChange(event: any) {
         this.updateDefaultOption('allfailures', this.defaultOptionsAllfailures);
     }
 
-    protected updateDefaultOption(field: string ,value: any) {
-        if(field === 'outage' && Number(value) < 0) {
+    protected updateDefaultOption(field: string, value: any) {
+        if (field === 'outage' && Number(value) < 0) {
             return;
         }
 
-        for(const hostId in this.post.Autoreport.hosts) {
-            if(field === 'graphSettings') {
+        for (const hostId in this.post.Autoreport.hosts) {
+            if (field === 'graphSettings') {
                 continue;
             }
 
             (this.post.Autoreport.hosts[hostId] as Record<string, any>)[field] = value;
         }
 
-        for(const serviceId in this.post.Autoreport.services) {
-            if(field === 'alias') {
+        for (const serviceId in this.post.Autoreport.services) {
+            if (field === 'alias') {
                 this.post.Autoreport.services[serviceId].graph = value;
             } else {
 
-               // this.post.Autoreport.services[serviceId][field] = value;
+                // this.post.Autoreport.services[serviceId][field] = value;
 
                 (this.post.Autoreport.services[serviceId] as Record<string, any>)[field] = value;
             }
@@ -286,10 +286,10 @@ export class AutoreportAddStepTwoComponent implements OnInit, OnDestroy {
     protected selectedServices() {
 
         this.selectedSelectedIds = [];
-        for(const index in this.post.Autoreport.services){
-            if(this.post.Autoreport.services[index]['percent'] || this.post.Autoreport.services[index]['minute']){
+        for (const index in this.post.Autoreport.services) {
+            if (this.post.Autoreport.services[index]['percent'] || this.post.Autoreport.services[index]['minute']) {
                 this.selectedSelectedIds.includes(this.post.Autoreport.services[index]['service_id']);
-                if(!this.selectedSelectedIds.includes(this.post.Autoreport.services[index]['service_id'])){
+                if (!this.selectedSelectedIds.includes(this.post.Autoreport.services[index]['service_id'])) {
                     this.selectedSelectedIds.push(this.post.Autoreport.services[index]['service_id']);
                 }
             }

@@ -1,111 +1,112 @@
 <ng-container *transloco="let t">
-  @if (changelogentry) {
-    <time class="cbp_tmtime" [dateTime]="changelogentry.time">
-      <span>{{ changelogentry.time }}</span>
-      <span>{{ changelogentry.timeAgoInWords }}</span>
-    </time>
-    <div class="cbp_tmicon text-white {{changelogentry.color}}" title="{{changelogentry.action}}">
-      <fa-icon [icon]="changelogentry.faIcon" class="text-light"></fa-icon>
-    </div>
-    <div class="cbp_tmlabel">
-      <h4 class="font-md">
-        {{ changelogentry.model }}
-        <strong>
-          @if (changelogentry.ngState && changelogentry.recordExists) {
-            <a [routerLink]="changelogentry.routerLink"
-              >
-              {{ changelogentry.name }}
-            </a>
-          }
-          @if (!changelogentry.ngState || !changelogentry.recordExists) {
-            <span
-                          [ngClass]="{'changelog_delete': (changelogentry.action ==='delete' ||
-                  (changelogentry.ngState && !changelogentry.recordExists))}">
-              {{ changelogentry.name }}
-            </span>
-          }
-        </strong>
-        @if (changelogentry.includeUser && changelogentry.user) {
-          <span class="font-xs">
-            {{ t('by') }}
-            <a *oitcPermission="['users', 'edit']"
-              [routerLink]="['/','users','edit', changelogentry.user.id]">
-              {{ changelogentry.user.firstname }}
-              {{ changelogentry.user.lastname }}
-            </a>
-            <span *oitcPermission="['users', 'edit']; negate: true">
-              {{ changelogentry.user.firstname }}
-              {{ changelogentry.user.lastname }}
-            </span>
-          </span>
-        }
-        @if (changelogentry.includeUser && changelogentry.user === null) {
-          <span class="font-xs">
-            {{ t('by Cronjob') }}
-          </span>
-        }
-      </h4>
-      <!-- All Changes -->
-      <blockquote class="blockquote"
-        [ngClass]="{'changelog-blockquote-success': changelogentry.action ==='add', 'changelog-blockquote-primary': changelogentry.action ==='copy', 'changelog-changelog-blockquote-warning': changelogentry.action ==='edit'}">
-        <div class="ms-2">
-          @for (changeEntry of entry; track changeEntry) {
-            <div>
-              <h5 class="pb-3">{{ changeEntry.controllerName }}</h5>
-              @for (change of changeEntry.changes; track change) {
-                <div>
-                  <div class="row mb-2">
-                    @if (change.hasNew && !change.hasOld) {
-                      <div class="col-6">
-                        @for (new of change.new; track new) {
-                          <small class="text-success">
-                            <footer class="blockquote-footer">
-                              {{ new.field.replace('_id', '') }}:
-                              <span class="text-success">{{ new.value }}</span>
-                            </footer>
-                          </small>
-                        }
-                      </div>
-                    }
-                    @if (change.hasOld && !change.hasNew) {
-                      <div class="col-6">
-                        @for (old of change.old; track old) {
-                          <small class="text-danger">
-                            <footer class="blockquote-footer">
-                              {{ old.field }}:
-                              <span class="text-danger changelog_delete">{{ old.value }}</span>
-                            </footer>
-                          </small>
-                        }
-                      </div>
-                    }
-                    @if (change.hasOld && change.hasNew) {
-                      <div class="col-6">
-                        @for (new of change.new; track new; let i = $index) {
-                          <small class="text-danger">
-                            <footer class="blockquote-footer">
-                              {{ new.field.replace('_id', '') }}:
-                              <span
-                                [ngClass]="{'text-primary': change.old[i].value === new.value, 'text-danger': change.old[i].value !== new.value}">
-                                {{ change.old[i].value }}
-                              </span>
-                              <fa-icon [icon]="['fas', 'caret-right']"></fa-icon>
-                              <span
-                                [ngClass]="{'text-primary': change.old[i].value === new.value, 'text-success': change.old[i].value !== new.value}">
-                                {{ new.value }}
-                              </span>
-                            </footer>
-                          </small>
-                        }
-                      </div>
-                    }
-                  </div>
-                </div>
-              }
-            </div>
-          }
+    @if (changelogentry) {
+        <time class="cbp_tmtime" [dateTime]="changelogentry.time">
+            <span>{{ changelogentry.time }}</span>
+            <span>{{ changelogentry.timeAgoInWords }}</span>
+        </time>
+        <div class="cbp_tmicon text-white {{changelogentry.color}}" title="{{changelogentry.action}}">
+            <fa-icon [icon]="changelogentry.faIcon" class="text-light"></fa-icon>
         </div>
-      </blockquote>
-    </div>
-  }
+        <div class="cbp_tmlabel">
+            <h4 class="font-md">
+                {{ changelogentry.model }}
+                <strong>
+                    @if (changelogentry.ngState && changelogentry.recordExists) {
+                        <a [routerLink]="changelogentry.routerLink"
+                        >
+                            {{ changelogentry.name }}
+                        </a>
+                    }
+                    @if (!changelogentry.ngState || !changelogentry.recordExists) {
+                        <span
+                            [ngClass]="{'changelog_delete': (changelogentry.action ==='delete' ||
+                  (changelogentry.ngState && !changelogentry.recordExists))}">
+                            {{ changelogentry.name }}
+                        </span>
+                    }
+                </strong>
+                @if (changelogentry.includeUser && changelogentry.user) {
+                    <span class="font-xs">
+                        {{ t('by') }}
+                        <a *oitcPermission="['users', 'edit']"
+                           [routerLink]="['/','users','edit', changelogentry.user.id]">
+                            {{ changelogentry.user.firstname }}
+                            {{ changelogentry.user.lastname }}
+                        </a>
+                        <span *oitcPermission="['users', 'edit']; negate: true">
+                            {{ changelogentry.user.firstname }}
+                            {{ changelogentry.user.lastname }}
+                        </span>
+                    </span>
+                }
+                @if (changelogentry.includeUser && changelogentry.user === null) {
+                    <span class="font-xs">
+                        {{ t('by Cronjob') }}
+                    </span>
+                }
+            </h4>
+            <!-- All Changes -->
+            <blockquote class="blockquote"
+                        [ngClass]="{'changelog-blockquote-success': changelogentry.action ==='add', 'changelog-blockquote-primary': changelogentry.action ==='copy', 'changelog-changelog-blockquote-warning': changelogentry.action ==='edit'}">
+                <div class="ms-2">
+                    @for (changeEntry of entry; track changeEntry) {
+                        <div>
+                            <h5 class="pb-3">{{ changeEntry.controllerName }}</h5>
+                            @for (change of changeEntry.changes; track change) {
+                                <div>
+                                    <div class="row mb-2">
+                                        @if (change.hasNew && !change.hasOld) {
+                                            <div class="col-6">
+                                                @for (new of change.new; track new) {
+                                                    <small class="text-success">
+                                                        <footer class="blockquote-footer">
+                                                            {{ new.field.replace('_id', '') }}:
+                                                            <span class="text-success">{{ new.value }}</span>
+                                                        </footer>
+                                                    </small>
+                                                }
+                                            </div>
+                                        }
+                                        @if (change.hasOld && !change.hasNew) {
+                                            <div class="col-6">
+                                                @for (old of change.old; track old) {
+                                                    <small class="text-danger">
+                                                        <footer class="blockquote-footer">
+                                                            {{ old.field }}:
+                                                            <span
+                                                                class="text-danger changelog_delete">{{ old.value }}</span>
+                                                        </footer>
+                                                    </small>
+                                                }
+                                            </div>
+                                        }
+                                        @if (change.hasOld && change.hasNew) {
+                                            <div class="col-6">
+                                                @for (new of change.new; track new; let i = $index) {
+                                                    <small class="text-danger">
+                                                        <footer class="blockquote-footer">
+                                                            {{ new.field.replace('_id', '') }}:
+                                                            <span
+                                                                [ngClass]="{'text-primary': change.old[i].value === new.value, 'text-danger': change.old[i].value !== new.value}">
+                                                                {{ change.old[i].value }}
+                                                            </span>
+                                                            <fa-icon [icon]="['fas', 'caret-right']"></fa-icon>
+                                                            <span
+                                                                [ngClass]="{'text-primary': change.old[i].value === new.value, 'text-success': change.old[i].value !== new.value}">
+                                                                {{ new.value }}
+                                                            </span>
+                                                        </footer>
+                                                    </small>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </blockquote>
+        </div>
+    }
 </ng-container>

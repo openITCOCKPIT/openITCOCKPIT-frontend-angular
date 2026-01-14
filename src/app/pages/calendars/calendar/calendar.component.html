@@ -1,168 +1,168 @@
 <ng-container *transloco="let t">
-  <div class="mb-3">
-    <c-row>
-      <c-col xs="12">
-        <c-dropdown class="d-inline">
-          <button cButton cDropdownToggle color="primary">
-            {{ t('Add holiday') }}
-            <span class="fi" [ngClass]="'fi-'+countryCode"></span>
-          </button>
-          <ul cDropdownMenu>
-            @for (c of countries | keyvalue; track c) {
-              <li>
-                <a cDropdownItem (click)="changeCountryCodeAndEmit(c.key)">
-                  <span class="fi" [ngClass]="'fi-'+c.key"></span>
-                  {{ c.value }}
-                </a>
-              </li>
-            }
-          </ul>
-        </c-dropdown>
+    <div class="mb-3">
+        <c-row>
+            <c-col xs="12">
+                <c-dropdown class="d-inline">
+                    <button cButton cDropdownToggle color="primary">
+                        {{ t('Add holiday') }}
+                        <span class="fi" [ngClass]="'fi-'+countryCode"></span>
+                    </button>
+                    <ul cDropdownMenu>
+                        @for (c of countries | keyvalue; track c) {
+                            <li>
+                                <a cDropdownItem (click)="changeCountryCodeAndEmit(c.key)">
+                                    <span class="fi" [ngClass]="'fi-'+c.key"></span>
+                                    {{ c.value }}
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </c-dropdown>
 
-        <button cButton class="ms-1 ripple" color="danger"
-          (click)="deleteAllHolidays()">
-          {{ t('Delete ALL holidays') }}
-        </button>
+                <button cButton class="ms-1 ripple" color="danger"
+                        (click)="deleteAllHolidays()">
+                    {{ t('Delete ALL holidays') }}
+                </button>
 
-        <button cButton class="ms-1 ripple" color="danger"
-          (click)="deleteAllMonthEvents()">
-          {{ t('Delete MONTH events') }}
-        </button>
+                <button cButton class="ms-1 ripple" color="danger"
+                        (click)="deleteAllMonthEvents()">
+                    {{ t('Delete MONTH events') }}
+                </button>
 
-        <button cButton class="ms-1 ripple" color="danger"
-          (click)="deleteAllEvents()">
-          {{ t('Delete ALL events') }}
-        </button>
+                <button cButton class="ms-1 ripple" color="danger"
+                        (click)="deleteAllEvents()">
+                    {{ t('Delete ALL events') }}
+                </button>
 
-      </c-col>
-    </c-row>
-  </div>
+            </c-col>
+        </c-row>
+    </div>
 
-  <div class="mb-3">
-    <full-calendar #fullCalendar [options]="calendarOptions()">
+    <div class="mb-3">
+        <full-calendar #fullCalendar [options]="calendarOptions()">
 
-      <!-- dayCellContent  Content Injection -->
-      <!-- https://fullcalendar.io/docs/day-cell-render-hooks -->
-      <ng-template #dayCellContent let-arg>
-        <div class="d-inline-flex w-100">
-          <div class="fc-daygrid-day-number">
-            {{ arg.dayNumberText }}
-          </div>
-          <div>
-            @if (!hasEvents(formatJsDateToFullcalendarString(arg.date))) {
-              <button cButton
-                (click)="triggerAddEventModal(arg)"
-                class="ripple" size="xs"
-                color="success">
-                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-              </button>
-            }
-          </div>
-        </div>
-      </ng-template>
+            <!-- dayCellContent  Content Injection -->
+            <!-- https://fullcalendar.io/docs/day-cell-render-hooks -->
+            <ng-template #dayCellContent let-arg>
+                <div class="d-inline-flex w-100">
+                    <div class="fc-daygrid-day-number">
+                        {{ arg.dayNumberText }}
+                    </div>
+                    <div>
+                        @if (!hasEvents(formatJsDateToFullcalendarString(arg.date))) {
+                            <button cButton
+                                    (click)="triggerAddEventModal(arg)"
+                                    class="ripple" size="xs"
+                                    color="success">
+                                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            </button>
+                        }
+                    </div>
+                </div>
+            </ng-template>
 
-      <!-- eventContent Content Injection -->
-      <!-- https://fullcalendar.io/docs/event-render-hooks-->
-      <ng-template #eventContent let-arg>
-        <div class="fc-event-title-container">
-          <div class="fc-event-title fc-sticky" [className]="arg.event.classNames" [title]="arg.event.title">
-            <!-- Just for reference in case we cant to add some icons in the future -->
-            <!--
-            <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
-            -->
-            {{ arg.event.title }}
-          </div>
-        </div>
-      </ng-template>
+            <!-- eventContent Content Injection -->
+            <!-- https://fullcalendar.io/docs/event-render-hooks-->
+            <ng-template #eventContent let-arg>
+                <div class="fc-event-title-container">
+                    <div class="fc-event-title fc-sticky" [className]="arg.event.classNames" [title]="arg.event.title">
+                        <!-- Just for reference in case we cant to add some icons in the future -->
+                        <!--
+                        <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
+                        -->
+                        {{ arg.event.title }}
+                    </div>
+                </div>
+            </ng-template>
 
-    </full-calendar>
-  </div>
+        </full-calendar>
+    </div>
 
-  <!-- Add new holiday modal -->
-  <c-modal #addNewHolidayModal fullscreen="md" size="lg" id="addNewHolidayModal">
-    <form cForm (ngSubmit)="addNewHoliday()">
-      <c-modal-header>
-        <h5 cModalTitle>
-          <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-          {{ t('Add new bank holiday') }}
-        </h5>
-        <button [cModalToggle]="addNewHolidayModal.id" cButtonClose></button>
-      </c-modal-header>
-      <c-modal-body>
+    <!-- Add new holiday modal -->
+    <c-modal #addNewHolidayModal fullscreen="md" size="lg" id="addNewHolidayModal">
+        <form cForm (ngSubmit)="addNewHoliday()">
+            <c-modal-header>
+                <h5 cModalTitle>
+                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                    {{ t('Add new bank holiday') }}
+                </h5>
+                <button [cModalToggle]="addNewHolidayModal.id" cButtonClose></button>
+            </c-modal-header>
+            <c-modal-body>
 
-        <div class="mb-3">
-          <label cLabel for="addHolidayName">
-            {{ t('Holiday name') }}
-            <oitc-required-icon></oitc-required-icon>
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
-            </span>
-            <input id="addHolidayName" cFormControl type="text"
-              name="addHolidayName"
-              [placeholder]="'Title' | transloco"
-              [(ngModel)]="addNewEvent.title"/>
-          </c-input-group>
+                <div class="mb-3">
+                    <label cLabel for="addHolidayName">
+                        {{ t('Holiday name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                        </span>
+                        <input id="addHolidayName" cFormControl type="text"
+                               name="addHolidayName"
+                               [placeholder]="'Title' | transloco"
+                               [(ngModel)]="addNewEvent.title"/>
+                    </c-input-group>
 
-        </div>
+                </div>
 
-      </c-modal-body>
-      <c-modal-footer>
-        <button cButton color="primary" type="submit" class="ripple">
-          {{ t('Save') }}
-        </button>
-        <button [cModalToggle]="addNewHolidayModal.id" cButton color="default" class="ripple">
-          {{ t('Close') }}
-        </button>
-      </c-modal-footer>
-    </form>
-  </c-modal>
+            </c-modal-body>
+            <c-modal-footer>
+                <button cButton color="primary" type="submit" class="ripple">
+                    {{ t('Save') }}
+                </button>
+                <button [cModalToggle]="addNewHolidayModal.id" cButton color="default" class="ripple">
+                    {{ t('Close') }}
+                </button>
+            </c-modal-footer>
+        </form>
+    </c-modal>
 
-  <!-- Edit holiday modal -->
-  <c-modal #editHolidayModal fullscreen="md" size="lg" id="editHolidayModal">
-    <form cForm (ngSubmit)="updateHoliday()">
-      <c-modal-header>
-        <h5 cModalTitle>
-          <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-          {{ t('Edit holiday') }}
-        </h5>
-        <button [cModalToggle]="editHolidayModal.id" cButtonClose></button>
-      </c-modal-header>
-      <c-modal-body>
+    <!-- Edit holiday modal -->
+    <c-modal #editHolidayModal fullscreen="md" size="lg" id="editHolidayModal">
+        <form cForm (ngSubmit)="updateHoliday()">
+            <c-modal-header>
+                <h5 cModalTitle>
+                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                    {{ t('Edit holiday') }}
+                </h5>
+                <button [cModalToggle]="editHolidayModal.id" cButtonClose></button>
+            </c-modal-header>
+            <c-modal-body>
 
-        <div class="mb-3">
-          <label cLabel for="editHolidayName">
-            {{ t('Holiday name') }}
-            <oitc-required-icon></oitc-required-icon>
-          </label>
-          <c-input-group>
-            <span cInputGroupText>
-              <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
-            </span>
-            <input id="editHolidayName" cFormControl type="text"
-              name="editHolidayName"
-              [placeholder]="'Title' | transloco"
-              [(ngModel)]="addNewEvent.title"/>
-          </c-input-group>
+                <div class="mb-3">
+                    <label cLabel for="editHolidayName">
+                        {{ t('Holiday name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                        </span>
+                        <input id="editHolidayName" cFormControl type="text"
+                               name="editHolidayName"
+                               [placeholder]="'Title' | transloco"
+                               [(ngModel)]="addNewEvent.title"/>
+                    </c-input-group>
 
-        </div>
+                </div>
 
-      </c-modal-body>
-      <c-modal-footer>
-        <button cButton color="danger" type="button" class="ripple me-auto"
-          (click)="deleteEvent(addNewEvent.start, true)" [cModalToggle]="editHolidayModal.id">
-          {{ t('Delete') }}
-        </button>
+            </c-modal-body>
+            <c-modal-footer>
+                <button cButton color="danger" type="button" class="ripple me-auto"
+                        (click)="deleteEvent(addNewEvent.start, true)" [cModalToggle]="editHolidayModal.id">
+                    {{ t('Delete') }}
+                </button>
 
-        <button cButton color="primary" type="submit" class="ripple">
-          {{ t('Save') }}
-        </button>
-        <button [cModalToggle]="editHolidayModal.id" cButton color="default" class="ripple">
-          {{ t('Close') }}
-        </button>
-      </c-modal-footer>
-    </form>
-  </c-modal>
+                <button cButton color="primary" type="submit" class="ripple">
+                    {{ t('Save') }}
+                </button>
+                <button [cModalToggle]="editHolidayModal.id" cButton color="default" class="ripple">
+                    {{ t('Close') }}
+                </button>
+            </c-modal-footer>
+        </form>
+    </c-modal>
 
 </ng-container>

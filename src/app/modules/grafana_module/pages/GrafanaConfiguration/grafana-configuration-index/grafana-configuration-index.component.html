@@ -1,228 +1,229 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a>
-            <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-            {{ t('Grafana Module') }}
-          </a>
-        </li>
-        <li class="breadcrumb-item">
-          <a [routerLink]="['/', 'grafana_module', 'grafana_configuration', 'index']"
-            *oitcPermission="['GrafanaModule', 'GrafanaConfiguration', 'index']">
-            <fa-icon [icon]="['fas', 'square-poll-horizontal']"></fa-icon>
-            {{ t('Settings') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-          {{ t('Edit') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Grafana Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'grafana_module', 'grafana_configuration', 'index']"
+                   *oitcPermission="['GrafanaModule', 'GrafanaConfiguration', 'index']">
+                    <fa-icon [icon]="['fas', 'square-poll-horizontal']"></fa-icon>
+                    {{ t('Settings') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
     </nav>
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
 
     @if (post) {
-      <form cForm (ngSubmit)="updateGrafanaSettings()">
-        <c-card class="mb-3">
-          <c-card-header>
-            <h5 cCardTitle>
-              {{ t('Grafana') }}
-              <small class="fw-300">
-                {{ t('Configuration') }}
-              </small>
-            </h5>
-          </c-card-header>
-          <c-card-body>
-            <div class="mb-3">
-              <label cLabel for="api_url">
-                {{ t('Grafana URL') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <input cFormControl required
-                id="api_url"
-                name="api_url"
-                placeholder="metrics.example.org"
-                oitcFormError [errors]="errors" errorField="api_url"
-                [(ngModel)]="post.api_url">
-              <oitc-form-feedback [errors]="errors" errorField="api_url"></oitc-form-feedback>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="api_key">
-                {{ t('Grafana Service Account Token') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <input cFormControl required
-                id="api_key"
-                name="api_key"
-                           placeholder="ZXhhbXBsZV9ncmFmYW5hX2FwaV9rZXk="
-                           oitcFormError [errors]="errors" errorField="api_key"
-                [(ngModel)]="post.api_key">
-              <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="graphite_prefix">
-                {{ t('Grafana Prefix') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <input cFormControl required
-                id="graphite_prefix"
-                name="graphite_prefix"
-                placeholder="openitcockpit"
-                oitcFormError [errors]="errors" errorField="graphite_prefix"
-                [(ngModel)]="post.graphite_prefix">
-              <oitc-form-feedback [errors]="errors" errorField="graphite_prefix"></oitc-form-feedback>
-            </div>
-            <div class="mb-3">
-              <c-form-check>
-                <input cFormCheckInput
-                  name="use_https"
-                  id="use_https"
-                  type="checkbox"
-                  trueFalseValue
-                  [falseValue]="0"
-                  [trueValue]="1"
-                  [(ngModel)]="post.use_https"
-                  oitcFormError [errors]="errors" errorField="use_https"/>
-                <oitc-form-feedback [errors]="errors" errorField="use_https"></oitc-form-feedback>
-                <label cFormCheckLabel for="use_https">
-                  {{ t('Connect via HTTPS') }}
-                </label>
-              </c-form-check>
-            </div>
-            <div class="mb-3">
-              <c-form-check>
-                <input cFormCheckInput
-                  name="use_proxy"
-                  id="use_proxy"
-                  type="checkbox"
-                  trueFalseValue
-                  [falseValue]="0"
-                  [trueValue]="1"
-                  [(ngModel)]="post.use_proxy"
-                  oitcFormError [errors]="errors" errorField="use_proxy"/>
-                <oitc-form-feedback [errors]="errors" errorField="use_proxy"></oitc-form-feedback>
-                <label cFormCheckLabel for="use_proxy">
-                  {{ t('Use Proxy Server') }}
-                </label>
-              </c-form-check>
-              <div class="help-block">
-                <span *oitcPermission="['proxy', 'index'];negate:true">
-                  {{ t('Determine if the configured proxy should be used.') }}
-                </span>
-                <a *oitcPermission="['proxy', 'index']" [routerLink]="['/', 'proxy', 'index']">
-                  {{ t('Determine if the configured proxy should be used.') }}
-                </a>
-              </div>
-            </div>
-            <div class="mb-3">
-              <c-form-check>
-                <input cFormCheckInput
-                  name="ignore_ssl_certificate"
-                  id="ignore_ssl_certificate"
-                  type="checkbox"
-                  trueFalseValue
-                  [falseValue]="0"
-                  [trueValue]="1"
-                  [(ngModel)]="post.ignore_ssl_certificate"
-                  oitcFormError [errors]="errors" errorField="ignore_ssl_certificate"/>
-                <oitc-form-feedback [errors]="errors" errorField="ignore_ssl_certificate"></oitc-form-feedback>
-                <label cFormCheckLabel for="ignore_ssl_certificate">
-                  {{ t('Ignore SSL certificate') }}
-                </label>
-              </c-form-check>
-              <div class="help-block">
-                {{ t('Disable certificate validation to allow usage of self-signed certificates.') }}
-              </div>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="dashboard_style">
-                {{ t('Dashboard Style') }}
-              </label>
-              <oitc-select
-                name="dashboard_style"
-                id="dashboard_style"
-                optionValue="key"
-                optionLabel="value"
-                [(ngModel)]="post.dashboard_style"
-                [options]="dashboardStyles"
-                oitcFormError [errors]="errors" errorField="dashboard_style">
-              </oitc-select>
-              <oitc-form-feedback [errors]="errors" errorField="dashboard_style"></oitc-form-feedback>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="Hostgroup">
-                {{ t('Hostgroups') }}
-              </label>
-              <oitc-multi-select
-                name="Hostgroup"
-                id="Hostgroup"
-                optionValue="key"
-                optionLabel="value"
-                class="flex-1"
-                [(ngModel)]="post.Hostgroup"
-                [options]="hostgroups"
-                (onChange)="processHostgroups()"
-                oitcFormError [errors]="errors" errorField="Hostgroup">
-              </oitc-multi-select>
-              <oitc-form-feedback [errors]="errors" errorField="Hostgroup"></oitc-form-feedback>
-              <div class="help-block">
-                {{ t('Only generate dashboards for hosts in the selected host groups. If empty the system will generate a dashboard for all hosts.') }}
-              </div>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="Hostgroup_excluded">
-                {{ t('Hostgroups (excluded)') }}
-              </label>
-              <oitc-multi-select
-                name="Hostgroup_excluded"
-                id="Hostgroup_excluded"
-                optionValue="key"
-                optionLabel="value"
-                class="flex-1"
-                [(ngModel)]="post.Hostgroup_excluded"
-                [options]="hostgroups_excluded"
-                (onChange)="processHostgroups()"
-                oitcFormError [errors]="errors" errorField="hostgroups_excluded">
-              </oitc-multi-select>
-              <oitc-form-feedback [errors]="errors" errorField="hostgroups_excluded"></oitc-form-feedback>
-              <div class="help-block">
-                {{ t('Only generate dashboards for hosts in the selected host groups. If empty the system will generate a dashboard for all hosts.') }}
-              </div>
-            </div>
-            @if (hasGrafanaConnectionError && grafanaErrors) {
-              <oitc-alert color="danger"
-                [baseIcon]="'circle'"
-                [icon]="['fas', 'exclamation-triangle']"
-                [errorHeadline]="grafanaErrors.status + ' - '+grafanaErrors.statusText"
-                [errorText]="grafanaErrors.message">
-              </oitc-alert>
-            }
-            @if (hasGrafanaConnectionError === false) {
-              <oitc-alert color="success"
-                [baseIcon]="'circle'"
-                [icon]="['fas', 'check']"
-                [errorHeadline]="'Success'|transloco"
-                [errorText]="'Connection established successfully.'|transloco">
-              </oitc-alert>
-            }
-          </c-card-body>
-          <c-card-footer class="text-end">
-            <button cButton class="ripple" color="primary" type="button"
-              (click)="checkGrafanaConnection()"
-              *oitcPermission="['GrafanaModule','GrafanaConfiguration','testGrafanaConnection']">
-              {{ t('Check Grafana Connection') }}
-            </button>
-            <button cButton class="ms-1 ripple" color="primary" type="submit">
-              {{ t('Save') }}
-            </button>
-          </c-card-footer>
-        </c-card>
-      </form>
+        <form cForm (ngSubmit)="updateGrafanaSettings()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Grafana') }}
+                        <small class="fw-300">
+                            {{ t('Configuration') }}
+                        </small>
+                    </h5>
+                </c-card-header>
+                <c-card-body>
+                    <div class="mb-3">
+                        <label cLabel for="api_url">
+                            {{ t('Grafana URL') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl required
+                               id="api_url"
+                               name="api_url"
+                               placeholder="metrics.example.org"
+                               oitcFormError [errors]="errors" errorField="api_url"
+                               [(ngModel)]="post.api_url">
+                        <oitc-form-feedback [errors]="errors" errorField="api_url"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="api_key">
+                            {{ t('Grafana Service Account Token') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl required
+                               id="api_key"
+                               name="api_key"
+                               placeholder="ZXhhbXBsZV9ncmFmYW5hX2FwaV9rZXk="
+                               oitcFormError [errors]="errors" errorField="api_key"
+                               [(ngModel)]="post.api_key">
+                        <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="graphite_prefix">
+                            {{ t('Grafana Prefix') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl required
+                               id="graphite_prefix"
+                               name="graphite_prefix"
+                               placeholder="openitcockpit"
+                               oitcFormError [errors]="errors" errorField="graphite_prefix"
+                               [(ngModel)]="post.graphite_prefix">
+                        <oitc-form-feedback [errors]="errors" errorField="graphite_prefix"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput
+                                   name="use_https"
+                                   id="use_https"
+                                   type="checkbox"
+                                   trueFalseValue
+                                   [falseValue]="0"
+                                   [trueValue]="1"
+                                   [(ngModel)]="post.use_https"
+                                   oitcFormError [errors]="errors" errorField="use_https"/>
+                            <oitc-form-feedback [errors]="errors" errorField="use_https"></oitc-form-feedback>
+                            <label cFormCheckLabel for="use_https">
+                                {{ t('Connect via HTTPS') }}
+                            </label>
+                        </c-form-check>
+                    </div>
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput
+                                   name="use_proxy"
+                                   id="use_proxy"
+                                   type="checkbox"
+                                   trueFalseValue
+                                   [falseValue]="0"
+                                   [trueValue]="1"
+                                   [(ngModel)]="post.use_proxy"
+                                   oitcFormError [errors]="errors" errorField="use_proxy"/>
+                            <oitc-form-feedback [errors]="errors" errorField="use_proxy"></oitc-form-feedback>
+                            <label cFormCheckLabel for="use_proxy">
+                                {{ t('Use Proxy Server') }}
+                            </label>
+                        </c-form-check>
+                        <div class="help-block">
+                            <span *oitcPermission="['proxy', 'index'];negate:true">
+                                {{ t('Determine if the configured proxy should be used.') }}
+                            </span>
+                            <a *oitcPermission="['proxy', 'index']" [routerLink]="['/', 'proxy', 'index']">
+                                {{ t('Determine if the configured proxy should be used.') }}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput
+                                   name="ignore_ssl_certificate"
+                                   id="ignore_ssl_certificate"
+                                   type="checkbox"
+                                   trueFalseValue
+                                   [falseValue]="0"
+                                   [trueValue]="1"
+                                   [(ngModel)]="post.ignore_ssl_certificate"
+                                   oitcFormError [errors]="errors" errorField="ignore_ssl_certificate"/>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="ignore_ssl_certificate"></oitc-form-feedback>
+                            <label cFormCheckLabel for="ignore_ssl_certificate">
+                                {{ t('Ignore SSL certificate') }}
+                            </label>
+                        </c-form-check>
+                        <div class="help-block">
+                            {{ t('Disable certificate validation to allow usage of self-signed certificates.') }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="dashboard_style">
+                            {{ t('Dashboard Style') }}
+                        </label>
+                        <oitc-select
+                            name="dashboard_style"
+                            id="dashboard_style"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.dashboard_style"
+                            [options]="dashboardStyles"
+                            oitcFormError [errors]="errors" errorField="dashboard_style">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="dashboard_style"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="Hostgroup">
+                            {{ t('Hostgroups') }}
+                        </label>
+                        <oitc-multi-select
+                            name="Hostgroup"
+                            id="Hostgroup"
+                            optionValue="key"
+                            optionLabel="value"
+                            class="flex-1"
+                            [(ngModel)]="post.Hostgroup"
+                            [options]="hostgroups"
+                            (onChange)="processHostgroups()"
+                            oitcFormError [errors]="errors" errorField="Hostgroup">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors" errorField="Hostgroup"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Only generate dashboards for hosts in the selected host groups. If empty the system will generate a dashboard for all hosts.') }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="Hostgroup_excluded">
+                            {{ t('Hostgroups (excluded)') }}
+                        </label>
+                        <oitc-multi-select
+                            name="Hostgroup_excluded"
+                            id="Hostgroup_excluded"
+                            optionValue="key"
+                            optionLabel="value"
+                            class="flex-1"
+                            [(ngModel)]="post.Hostgroup_excluded"
+                            [options]="hostgroups_excluded"
+                            (onChange)="processHostgroups()"
+                            oitcFormError [errors]="errors" errorField="hostgroups_excluded">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors" errorField="hostgroups_excluded"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Only generate dashboards for hosts in the selected host groups. If empty the system will generate a dashboard for all hosts.') }}
+                        </div>
+                    </div>
+                    @if (hasGrafanaConnectionError && grafanaErrors) {
+                        <oitc-alert color="danger"
+                                    [baseIcon]="'circle'"
+                                    [icon]="['fas', 'exclamation-triangle']"
+                                    [errorHeadline]="grafanaErrors.status + ' - '+grafanaErrors.statusText"
+                                    [errorText]="grafanaErrors.message">
+                        </oitc-alert>
+                    }
+                    @if (hasGrafanaConnectionError === false) {
+                        <oitc-alert color="success"
+                                    [baseIcon]="'circle'"
+                                    [icon]="['fas', 'check']"
+                                    [errorHeadline]="'Success'|transloco"
+                                    [errorText]="'Connection established successfully.'|transloco">
+                        </oitc-alert>
+                    }
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="button"
+                            (click)="checkGrafanaConnection()"
+                            *oitcPermission="['GrafanaModule','GrafanaConfiguration','testGrafanaConnection']">
+                        {{ t('Check Grafana Connection') }}
+                    </button>
+                    <button cButton class="ms-1 ripple" color="primary" type="submit">
+                        {{ t('Save') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        </form>
     }
-  </ng-container>
+</ng-container>

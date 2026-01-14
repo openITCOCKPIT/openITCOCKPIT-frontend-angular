@@ -10,13 +10,13 @@ import { CustomClassInformationComponent } from './custom-class-information/cust
 @Component({
     selector: 'oitc-custom-class',
     imports: [
-    FaIconComponent,
-    FaLayersComponent,
-    TableDirective,
-    TranslocoDirective,
-    KeyValuePipe,
-    CustomClassInformationComponent
-],
+        FaIconComponent,
+        FaLayersComponent,
+        TableDirective,
+        TranslocoDirective,
+        KeyValuePipe,
+        CustomClassInformationComponent
+    ],
     templateUrl: './custom-class.component.html',
     styleUrl: './custom-class.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

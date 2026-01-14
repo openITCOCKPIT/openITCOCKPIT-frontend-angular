@@ -12,13 +12,13 @@ import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-
 @Component({
     selector: 'oitc-services-piechart-widget180',
     imports: [
-    AsyncPipe,
-    FaIconComponent,
-    ServicePieChartComponent,
-    TranslocoDirective,
-    RouterLink,
-    BlockLoaderComponent
-],
+        AsyncPipe,
+        FaIconComponent,
+        ServicePieChartComponent,
+        TranslocoDirective,
+        RouterLink,
+        BlockLoaderComponent
+    ],
     templateUrl: './services-piechart-widget180.component.html',
     styleUrl: './services-piechart-widget180.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

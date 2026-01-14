@@ -13,7 +13,6 @@ import {
 } from '@coreui/angular';
 
 
-
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
@@ -33,24 +32,24 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 @Component({
     selector: 'oitc-imported-hostgroups-dependency-tree',
     imports: [
-    TranslocoDirective,
-    CardComponent,
-    CardHeaderComponent,
-    BlockLoaderComponent,
-    CardBodyComponent,
-    DependencyTreeComponent,
-    CardTitleDirective,
-    BackButtonDirective,
-    FaIconComponent,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    ColComponent,
-    OnlineOfflineComponent,
-    RowComponent,
-    PermissionDirective,
-    RouterLink
-],
+        TranslocoDirective,
+        CardComponent,
+        CardHeaderComponent,
+        BlockLoaderComponent,
+        CardBodyComponent,
+        DependencyTreeComponent,
+        CardTitleDirective,
+        BackButtonDirective,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        ColComponent,
+        OnlineOfflineComponent,
+        RowComponent,
+        PermissionDirective,
+        RouterLink
+    ],
     templateUrl: './imported-hostgroups-dependency-tree.component.html',
     styleUrl: './imported-hostgroups-dependency-tree.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

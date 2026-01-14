@@ -7,10 +7,10 @@ import { Observable } from 'rxjs';
 @Component({
     selector: 'oitc-label-link',
     imports: [
-    RouterLink,
-    NgTemplateOutlet,
-    AsyncPipe
-],
+        RouterLink,
+        NgTemplateOutlet,
+        AsyncPipe
+    ],
     templateUrl: './label-link.component.html',
     styleUrl: './label-link.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,127 +1,127 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-          {{ t('Map Module') }}
-        </li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['MapModule', 'maps', 'index']"
-            [routerLink]="['/', 'map_module', 'maps', 'index']">
-            <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
-            {{ t('Maps') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-          {{ t('Copy') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Map Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['MapModule', 'maps', 'index']"
+                   [routerLink]="['/', 'map_module', 'maps', 'index']">
+                    <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
+                    {{ t('Maps') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                {{ t('Copy') }}
+            </li>
+        </ol>
     </nav>
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>{{ t('Maps') }}
-          <small class="fw-300">
-            {{ t('Copy map/s') }}
-          </small>
-        </h5>
-        <c-nav class="card-toolbar card-header-pills">
-          <c-nav-item class="px-1">
-            <button [fallbackUrl]="['map_module', 'maps', 'index']" cButton class="ripple"
-              color="default"
-              oitcBackButton
-              size="xs">
-              <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-              {{ t('Back') }}
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Maps') }}
+                <small class="fw-300">
+                    {{ t('Copy map/s') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="['map_module', 'maps', 'index']" cButton class="ripple"
+                            color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <oitc-form-loader [isVisible]="sourceMaps.length === 0"></oitc-form-loader>
+
+            @for (map of sourceMaps; track map; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source map:') }}
+                            {{ map.Source.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="Map{{i}}Name">
+                                {{ t('Map name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   id="Map{{i}}Name"
+                                   required
+                                   type="text"
+                                   name="Map{{i}}Name"
+                                   oitcFormError [errors]="map.Error" errorField="name"
+                                   [(ngModel)]="map.Map.name">
+                            <oitc-form-feedback [errors]="map.Error" errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new map') }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="Map{{i}}Title">
+                                {{ t('Map title') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   id="Map{{i}}Title"
+                                   type="text"
+                                   name="Map{{i}}Title"
+                                   oitcFormError [errors]="map.Error" errorField="title"
+                                   [(ngModel)]="map.Map.title">
+                            <oitc-form-feedback [errors]="map.Error" errorField="title"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Title of the new map') }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="Map{{i}}RefreshInterval">
+                                {{ t('Refresh Interval') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   id="Map{{i}}RefreshInterval"
+                                   type="number"
+                                   name="Map{{i}}RefreshInterval"
+                                   min="5"
+                                   max="180"
+                                   [(ngModel)]="map.Map.refresh_interval"
+                                   oitcFormError [errors]="map.Error" errorField="refresh_interval">
+                            <oitc-form-feedback [errors]="map.Error" errorField="refresh_interval"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Automatic maps update interval in seconds') }}
+                            </div>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            }
+
+        </c-card-body>
+        <c-card-footer class="text-end">
+            <button cButton class="ripple" color="primary" type="button" (click)="copyMaps()">
+                {{ t('Copy') }}
             </button>
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
-
-        <oitc-form-loader [isVisible]="sourceMaps.length === 0"></oitc-form-loader>
-
-        @for (map of sourceMaps; track map; let i = $index) {
-          <c-card class="mb-3">
-            <c-card-header>
-              <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
-              <span class="ms-1">
-                {{ t('Source map:') }}
-                {{ map.Source.name }}
-              </span>
-            </c-card-header>
-            <c-card-body>
-              <div class="mb-3">
-                <label cLabel for="Map{{i}}Name">
-                  {{ t('Map name') }}
-                  <oitc-required-icon></oitc-required-icon>
-                </label>
-                <input cFormControl
-                  id="Map{{i}}Name"
-                  required
-                  type="text"
-                  name="Map{{i}}Name"
-                  oitcFormError [errors]="map.Error" errorField="name"
-                  [(ngModel)]="map.Map.name">
-                <oitc-form-feedback [errors]="map.Error" errorField="name"></oitc-form-feedback>
-                <div class="help-block">
-                  {{ t('Name of the new map') }}
-                </div>
-              </div>
-              <div class="mb-3">
-                <label cLabel for="Map{{i}}Title">
-                  {{ t('Map title') }}
-                  <oitc-required-icon></oitc-required-icon>
-                </label>
-                <input cFormControl
-                  id="Map{{i}}Title"
-                  type="text"
-                  name="Map{{i}}Title"
-                  oitcFormError [errors]="map.Error" errorField="title"
-                  [(ngModel)]="map.Map.title">
-                <oitc-form-feedback [errors]="map.Error" errorField="title"></oitc-form-feedback>
-                <div class="help-block">
-                  {{ t('Title of the new map') }}
-                </div>
-              </div>
-              <div class="mb-3">
-                <label cLabel for="Map{{i}}RefreshInterval">
-                  {{ t('Refresh Interval') }}
-                  <oitc-required-icon></oitc-required-icon>
-                </label>
-                <input cFormControl
-                  id="Map{{i}}RefreshInterval"
-                  type="number"
-                  name="Map{{i}}RefreshInterval"
-                  min="5"
-                  max="180"
-                  [(ngModel)]="map.Map.refresh_interval"
-                  oitcFormError [errors]="map.Error" errorField="refresh_interval">
-                <oitc-form-feedback [errors]="map.Error" errorField="refresh_interval"></oitc-form-feedback>
-                <div class="help-block">
-                  {{ t('Automatic maps update interval in seconds') }}
-                </div>
-              </div>
-            </c-card-body>
-          </c-card>
-        }
-
-      </c-card-body>
-      <c-card-footer class="text-end">
-        <button cButton class="ripple" color="primary" type="button" (click)="copyMaps()">
-          {{ t('Copy') }}
-        </button>
-        <button [fallbackUrl]="['map_module', 'maps', 'index']" cButton class="ms-1 ripple" color="default"
-          oitcBackButton
-          type="button">
-          {{ t('Cancel') }}
-        </button>
-      </c-card-footer>
+            <button [fallbackUrl]="['map_module', 'maps', 'index']" cButton class="ms-1 ripple" color="default"
+                    oitcBackButton
+                    type="button">
+                {{ t('Cancel') }}
+            </button>
+        </c-card-footer>
 
     </c-card>
-  </ng-container>
+</ng-container>

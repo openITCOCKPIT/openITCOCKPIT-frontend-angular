@@ -1,467 +1,473 @@
 <ng-container *transloco="let t">
 
-  <!-- This is a light version of the services / browser view but as modal -->
+    <!-- This is a light version of the services / browser view but as modal -->
 
-  <c-modal
-    #modal='cModal'
-    [keyboard]="true"
-    id="automapServiceDetailsModal"
-    [size]="'xl'"
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="automapServiceDetailsModal"
+        [size]="'xl'"
     >
-    <c-modal-header>
-      <h5 cModalTitle>
-        <fa-icon [icon]="['fas', 'gears']"></fa-icon>
-        {{ t('Service status details') }}
-      </h5>
-      <button cButtonClose (click)="hideModal()"></button>
-    </c-modal-header>
-    <c-modal-body>
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'gears']"></fa-icon>
+                {{ t('Service status details') }}
+            </h5>
+            <button cButtonClose (click)="hideModal()"></button>
+        </c-modal-header>
+        <c-modal-body>
 
-      @if (!result) {
-        <oitc-block-loader></oitc-block-loader>
-      }
-
-      @if (result) {
-        <!-- Status for small resolution (mobile) -->
-        <c-card
-          [ngClass]="result.servicestatus.cssClass"
-          class="mb-3 text-white">
-          <c-card-header>
-            {{ result.host.Host.name }} / {{ result.mergedService.name }}
-          </c-card-header>
-          <c-card-body class="bg-gradient">
-            <c-row>
-              <c-col [xs]="6" [md]="2">
-                {{ 'Host' }}
-              </c-col>
-              <c-col [xs]="6" [md]="10">
-                {{ result.host.Host.name }}
-              </c-col>
-            </c-row>
-            <c-row>
-              <c-col [xs]="6" [md]="2">
-                {{ 'Service' }}
-              </c-col>
-              <c-col [xs]="6" [md]="10">
-                {{ result.mergedService.name }}
-              </c-col>
-            </c-row>
-            <c-row>
-              <c-col [xs]="6" [md]="2">
-                {{ 'State' }}
-              </c-col>
-              <c-col [xs]="6" [md]="10">
-                {{ result.servicestatus.currentState | serviceStatusName }}
-              </c-col>
-            </c-row>
-            @if (result.servicestatus.isInMonitoring) {
-              <c-row>
-                <c-col [xs]="6" [md]="2">
-                  {{ 'State since' }}
-                </c-col>
-                <c-col [xs]="6" [md]="10" [title]="result.servicestatus.last_state_change_user">
-                  {{ result.servicestatus.last_state_change }}
-                </c-col>
-                <c-col [xs]="6" [md]="2">
-                  {{ 'Last check' }}
-                </c-col>
-                <c-col [xs]="6" [md]="10" [title]="result.servicestatus.lastCheckUser">
-                  {{ result.servicestatus.lastCheck }}
-                </c-col>
-                <c-col [xs]="6" [md]="2">
-                  {{ 'Next check' }}
-                </c-col>
-                @if (result.mergedService.active_checks_enabled && !result.host.Host.is_satellite_host) {
-                  <c-col [xs]="6" [md]="10" [title]="result.servicestatus.nextCheckUser">
-                    {{ result.servicestatus.nextCheck }}
-                  </c-col>
-                } @else {
-                  <c-col [xs]="6" [md]="10">
-                    {{ t('n/a') }}
-                  </c-col>
-                }
-                <c-col [xs]="6" [md]="2">
-                  {{ 'State type' }}
-                </c-col>
-                <c-col [xs]="6" [md]="10">
-                  @if (result.servicestatus.isHardstate) {
-                    {{ t('Hard state') }}
-                  } @else {
-                    {{ t('Soft state') }}
-                  }
-                  ({{ result.servicestatus.current_check_attempt }}
-                  /{{ result.servicestatus.max_check_attempts }})
-                </c-col>
-                <c-col [xs]="6" [md]="2">
-                  {{ 'Output' }}
-                </c-col>
-                <c-col [xs]="6" [md]="10">
-                  <div class="code-font"
-                  [innerHTML]="String(result.servicestatus.outputHtml) | trustAsHtml "></div>
-                </c-col>
-              </c-row>
+            @if (!result) {
+                <oitc-block-loader></oitc-block-loader>
             }
-            <!-- External Commands Mobile View -->
-            @if (result.canSubmitExternalCommands && result.mergedService.allowEdit && result.servicestatus.isInMonitoring) {
-              <c-row
-                >
-                <c-button-toolbar role="group" class="justify-content-center pt-2">
-                  <c-button-group role="group">
-                    <button cButton color="default"
-                      [cTooltip]="'Reset check time' | transloco" cTooltipPlacement="top"
-                      (click)="resetChecktime(result.mergedService, result.host)">
-                      <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                    </button>
-                    <button cButton color="default"
-                      [cTooltip]="'Schedule maintenance' | transloco" cTooltipPlacement="top"
-                      (click)="toggleDowntimeModal(result.mergedService, result.host)">
-                      <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                    </button>
-                    @if (Number(result.servicestatus.currentState) > 0) {
-                      <button cButton color="default"
-                        [cTooltip]="'Acknowledge service status' | transloco"
-                        cTooltipPlacement="top"
-                        (click)="acknowledgeStatus(result.mergedService, result.host)">
-                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                      </button>
-                    }
-                    <button cButton color="default"
-                      [cTooltip]="'Passive transfer check result' | transloco"
-                      cTooltipPlacement="top"
-                      (click)="processCheckResult(result.mergedService, result.host)">
-                      <fa-icon [icon]="['fas', 'download']"></fa-icon>
-                    </button>
-                    @if (!result.servicestatus.flap_detection_enabled) {
-                      <button cButton color="default"
-                        [cTooltip]="'Enable flap detection' | transloco" cTooltipPlacement="top"
-                        (click)="enableFlapdetection(result.mergedService, result.host)">
-                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
-                      </button>
-                    }
-                    @if (result.servicestatus.flap_detection_enabled) {
-                      <button cButton color="default"
-                        [cTooltip]="'Disable flap detection' | transloco" cTooltipPlacement="top"
-                        (click)="disableFlapdetection(result.mergedService, result.host)">
-                        <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
-                      </button>
-                    }
-                    @if (!result.servicestatus.notifications_enabled) {
-                      <button cButton color="default"
-                        [cTooltip]="'Enable notifications' | transloco" cTooltipPlacement="top"
-                        (click)="enableNotifications(result.mergedService, result.host)">
-                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                      </button>
-                    }
-                    @if (result.servicestatus.notifications_enabled) {
-                      <button cButton color="default"
-                        [cTooltip]="'Disable notifications' | transloco" cTooltipPlacement="top"
-                        (click)="disableNotifications(result.mergedService, result.host)">
-                        <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                      </button>
-                    }
-                  </c-button-group>
-                </c-button-toolbar>
-              </c-row>
-            }
-          </c-card-body>
-        </c-card>
-        <!-- End of mobile status view -->
-        <c-col>
-          <!-- Service Downtime -->
-          @if (Number(result.servicestatus.scheduledDowntimeDepth) > 0 && result.downtime) {
-            <c-row>
-              <c-col [xs]="12">
-                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                  class="mb-3">
-                  <c-card-header>
-                    <h5 class="text-info">
-                      <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                      {{ t('The service is currently in a planned maintenance period') }}
-                    </h5>
-                  </c-card-header>
-                  <c-card-body>
-                    <div>
-                      {{ t('Downtime was set by') }}
-                      <b>{{ result.downtime.authorName }}</b>
-                      {{ t('with an duration of') }}
-                      <b>{{ result.downtime.durationHuman }}</b>.
-                    </div>
-                    <div class="pt-1">
-                      <small>
-                        {{ t('Start time:') }}
-                        {{ result.downtime.scheduledStartTime }}
-                        {{ t('End time:') }}
-                        {{ result.downtime.scheduledEndTime }}
-                      </small>
-                    </div>
-                    <div class="pt-1">
-                      {{ t('Comment: ') }}
-                      {{ result.downtime.commentData }}
-                    </div>
-                    <div class="w-100" *oitcPermission="['downtimes', 'delete']">
-                      @if (result.downtime.allowEdit && result.downtime.isCancellable) {
-                        <button (click)="toggleCancelServiceDowntimeModal(result.downtime)" cButton
-                          class="ripple float-end" color="danger"
-                          size="xs"
-                          >
-                          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                          {{ t('Cancel') }}
-                        </button>
-                      }
-                    </div>
-                  </c-card-body>
-                </c-card>
-              </c-col>
-            </c-row>
-          }
-          <!-- Service Acknowledgement -->
-          @if (result.servicestatus.problemHasBeenAcknowledged && result.acknowledgement) {
-            <c-row>
-              <c-col [xs]="12">
-                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                  class="mb-3">
-                  <c-card-header>
-                    <h5 class="text-info">
-                      <fa-icon
-                      [icon]="(result.acknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
-                      {{ t('State of service is acknowledged') }}
-                      <span [hidden]="!result.acknowledgement.is_sticky">
-                        ({{ t('Sticky') }})
-                      </span>
-                    </h5>
-                  </c-card-header>
-                  <c-card-body>
-                    <div>
-                      {{ t('Acknowledgement was set by') }}
-                      <b>{{ result.acknowledgement.author_name }}</b>
-                      {{ t('at') }}
-                      {{ result.acknowledgement.entry_time }}.
-                    </div>
-                    <div class="pt-1">
-                      {{ t('Comment: ') }}
-                      <div class="word-break d-inline"
-                      [innerHTML]="String(result.acknowledgement.commentDataHtml) | trustAsHtml "></div>
-                    </div>
-                    <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
-                      @if (result.acknowledgement.allowEdit) {
-                        <button
-                          (click)="toggleDeleteAcknowledgementModal(result.mergedService, result.host)"
-                          cButton
-                          class="ripple float-end" color="danger"
-                          size="xs"
-                          >
-                          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                          {{ t('Delete') }}
-                        </button>
-                      }
-                    </div>
-                  </c-card-body>
-                </c-card>
-              </c-col>
-            </c-row>
-          }
-          <!-- Flapping alert -->
-          @if (result.servicestatus.isFlapping) {
-            <c-alert color="warning" [dismissible]="false">
-              <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-              {{ t('The state of this service is currently flapping!') }}
-            </c-alert>
-          }
-          <!-- Host Problem -->
-          @if (Number(result.hoststatus.currentState) > 0) {
-            <c-row>
-              <c-col [xs]="12">
-                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                  class="mb-3">
-                  <c-card-header>
-                    <h5 class="text-info">
-                      <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                      {{ t('Problem with host detected!') }}
-                    </h5>
-                  </c-card-header>
-                  <c-card-body>
-                    @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                      <a [routerLink]="['/', 'hosts', 'browser', result.host.Host.id]">
-                        {{ result.host.Host.hostname }}
-                      </a>
-                    } @else {
-                      {{ result.host.Host.hostname }}
-                    }
-                  </c-card-body>
-                </c-card>
-              </c-col>
-            </c-row>
-          }
-          <!-- Host Downtime -->
-          @if (Number(result.hoststatus.scheduledDowntimeDepth) > 0 && result.hostDowntime) {
-            <c-row>
-              <c-col [xs]="12">
-                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                  class="mb-3">
-                  <c-card-header>
-                    <h5 class="text-info">
-                      <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                      {{ t('The host is currently in a planned maintenance period') }}
-                    </h5>
-                  </c-card-header>
-                  <c-card-body>
-                    <div>
-                      {{ t('Downtime was set by') }}
-                      <b>{{ result.hostDowntime.authorName }}</b>
-                      {{ t('with an duration of') }}
-                      <b>{{ result.hostDowntime.durationHuman }}</b>.
-                    </div>
-                    <div class="pt-1">
-                      <small>
-                        {{ t('Start time:') }}
-                        {{ result.hostDowntime.scheduledStartTime }}
-                        {{ t('End time:') }}
-                        {{ result.hostDowntime.scheduledEndTime }}
-                      </small>
-                    </div>
-                    <div class="pt-1">
-                      {{ t('Comment: ') }}
-                      {{ result.hostDowntime.commentData }}
-                    </div>
-                    <div class="w-100" *oitcPermission="['downtimes', 'delete']">
-                      @if (result.hostDowntime.allowEdit && result.hostDowntime.isCancellable) {
-                        <button (click)="toggleCancelHostDowntimeModal(result.hostDowntime)" cButton
-                          class="ripple float-end" color="danger"
-                          size="xs"
-                          >
-                          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                          {{ t('Cancel') }}
-                        </button>
-                      }
-                    </div>
-                  </c-card-body>
-                </c-card>
-              </c-col>
-            </c-row>
-          }
-          <!-- Host Acknowledgement -->
-          @if (result.hoststatus.problemHasBeenAcknowledged && result.hostAcknowledgement) {
-            <c-row>
-              <c-col [xs]="12">
-                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                  class="mb-3">
-                  <c-card-header>
-                    <h5 class="text-info">
-                      <fa-icon
-                      [icon]="(result.hostAcknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
-                      {{ t('State of host is acknowledged') }}
-                      <span [hidden]="!result.hostAcknowledgement.is_sticky">
-                        ({{ t('Sticky') }})
-                      </span>
-                    </h5>
-                  </c-card-header>
-                  <c-card-body>
-                    <div>
-                      {{ t('Acknowledgement was set by') }}
-                      <b>{{ result.hostAcknowledgement.author_name }}</b>
-                      {{ t('at') }}
-                      {{ result.hostAcknowledgement.entry_time }}.
-                    </div>
-                    <div class="pt-1">
-                      {{ t('Comment: ') }}
-                      <div class="word-break d-inline"
-                      [innerHTML]="String(result.hostAcknowledgement.commentDataHtml) | trustAsHtml "></div>
-                    </div>
-                    <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
-                      @if (result.hostAcknowledgement.allowEdit) {
-                        <button
-                          (click)="toggleDeleteHostAcknowledgementModal(result.host)"
-                          cButton
-                          class="ripple float-end" color="danger"
-                          size="xs"
-                          >
-                          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                          {{ t('Delete') }}
-                        </button>
-                      }
-                    </div>
-                  </c-card-body>
-                </c-card>
-              </c-col>
-            </c-row>
-          }
-          <!-- Long output -->
-          @if (result.servicestatus.longOutputHtml) {
-            <c-row>
-              <c-col [xs]="12" class="mt-1">
-                <h4>{{ t('Long output') }}</h4>
-              </c-col>
-              <c-col [xs]="12">
-                <c-card>
-                  <c-card-body>
-                    <div class="word-break"
-                    [innerHTML]="String(result.servicestatus.longOutputHtml) | trustAsHtml "></div>
-                  </c-card-body>
-                </c-card>
-              </c-col>
-            </c-row>
-          }
-        </c-col>
-        <div class="pt-3">
-          @if (result && result.mergedService.has_graph && timezone) {
-            <oitc-services-browser-chart
-              [hostUuid]="String(result.host.Host.uuid)"
-              [serviceUuid]="String(result.mergedService.uuid)"
-              [availableDataSources]="availableDataSources"
-              [autoRefreshInterval]="Number(result.mergedService.check_interval)"
-            [timezone]="timezone"></oitc-services-browser-chart>
-          }
-        </div>
-      }
 
-    </c-modal-body>
-    <c-modal-footer>
-      <button cButton color="secondary" class="ripple" (click)="hideModal()">
-        {{ t('Close') }}
-      </button>
-      @if (result) {
-        <a cButton color="primary" class="ripple"
-          [routerLink]="['/', 'services', 'browser', result.mergedService.id]">
-          <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-          {{ t('View') }}
-        </a>
-      }
-    </c-modal-footer>
-  </c-modal>
+            @if (result) {
+                <!-- Status for small resolution (mobile) -->
+                <c-card
+                    [ngClass]="result.servicestatus.cssClass"
+                    class="mb-3 text-white">
+                    <c-card-header>
+                        {{ result.host.Host.name }} / {{ result.mergedService.name }}
+                    </c-card-header>
+                    <c-card-body class="bg-gradient">
+                        <c-row>
+                            <c-col [xs]="6" [md]="2">
+                                {{ 'Host' }}
+                            </c-col>
+                            <c-col [xs]="6" [md]="10">
+                                {{ result.host.Host.name }}
+                            </c-col>
+                        </c-row>
+                        <c-row>
+                            <c-col [xs]="6" [md]="2">
+                                {{ 'Service' }}
+                            </c-col>
+                            <c-col [xs]="6" [md]="10">
+                                {{ result.mergedService.name }}
+                            </c-col>
+                        </c-row>
+                        <c-row>
+                            <c-col [xs]="6" [md]="2">
+                                {{ 'State' }}
+                            </c-col>
+                            <c-col [xs]="6" [md]="10">
+                                {{ result.servicestatus.currentState | serviceStatusName }}
+                            </c-col>
+                        </c-row>
+                        @if (result.servicestatus.isInMonitoring) {
+                            <c-row>
+                                <c-col [xs]="6" [md]="2">
+                                    {{ 'State since' }}
+                                </c-col>
+                                <c-col [xs]="6" [md]="10" [title]="result.servicestatus.last_state_change_user">
+                                    {{ result.servicestatus.last_state_change }}
+                                </c-col>
+                                <c-col [xs]="6" [md]="2">
+                                    {{ 'Last check' }}
+                                </c-col>
+                                <c-col [xs]="6" [md]="10" [title]="result.servicestatus.lastCheckUser">
+                                    {{ result.servicestatus.lastCheck }}
+                                </c-col>
+                                <c-col [xs]="6" [md]="2">
+                                    {{ 'Next check' }}
+                                </c-col>
+                                @if (result.mergedService.active_checks_enabled && !result.host.Host.is_satellite_host) {
+                                    <c-col [xs]="6" [md]="10" [title]="result.servicestatus.nextCheckUser">
+                                        {{ result.servicestatus.nextCheck }}
+                                    </c-col>
+                                } @else {
+                                    <c-col [xs]="6" [md]="10">
+                                        {{ t('n/a') }}
+                                    </c-col>
+                                }
+                                <c-col [xs]="6" [md]="2">
+                                    {{ 'State type' }}
+                                </c-col>
+                                <c-col [xs]="6" [md]="10">
+                                    @if (result.servicestatus.isHardstate) {
+                                        {{ t('Hard state') }}
+                                    } @else {
+                                        {{ t('Soft state') }}
+                                    }
+                                    ({{ result.servicestatus.current_check_attempt }}
+                                    /{{ result.servicestatus.max_check_attempts }})
+                                </c-col>
+                                <c-col [xs]="6" [md]="2">
+                                    {{ 'Output' }}
+                                </c-col>
+                                <c-col [xs]="6" [md]="10">
+                                    <div class="code-font"
+                                         [innerHTML]="String(result.servicestatus.outputHtml) | trustAsHtml "></div>
+                                </c-col>
+                            </c-row>
+                        }
+                        <!-- External Commands Mobile View -->
+                        @if (result.canSubmitExternalCommands && result.mergedService.allowEdit && result.servicestatus.isInMonitoring) {
+                            <c-row
+                            >
+                                <c-button-toolbar role="group" class="justify-content-center pt-2">
+                                    <c-button-group role="group">
+                                        <button cButton color="default"
+                                                [cTooltip]="'Reset check time' | transloco" cTooltipPlacement="top"
+                                                (click)="resetChecktime(result.mergedService, result.host)">
+                                            <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                        </button>
+                                        <button cButton color="default"
+                                                [cTooltip]="'Schedule maintenance' | transloco" cTooltipPlacement="top"
+                                                (click)="toggleDowntimeModal(result.mergedService, result.host)">
+                                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                        </button>
+                                        @if (Number(result.servicestatus.currentState) > 0) {
+                                            <button cButton color="default"
+                                                    [cTooltip]="'Acknowledge service status' | transloco"
+                                                    cTooltipPlacement="top"
+                                                    (click)="acknowledgeStatus(result.mergedService, result.host)">
+                                                <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                            </button>
+                                        }
+                                        <button cButton color="default"
+                                                [cTooltip]="'Passive transfer check result' | transloco"
+                                                cTooltipPlacement="top"
+                                                (click)="processCheckResult(result.mergedService, result.host)">
+                                            <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                                        </button>
+                                        @if (!result.servicestatus.flap_detection_enabled) {
+                                            <button cButton color="default"
+                                                    [cTooltip]="'Enable flap detection' | transloco"
+                                                    cTooltipPlacement="top"
+                                                    (click)="enableFlapdetection(result.mergedService, result.host)">
+                                                <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                            </button>
+                                        }
+                                        @if (result.servicestatus.flap_detection_enabled) {
+                                            <button cButton color="default"
+                                                    [cTooltip]="'Disable flap detection' | transloco"
+                                                    cTooltipPlacement="top"
+                                                    (click)="disableFlapdetection(result.mergedService, result.host)">
+                                                <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
+                                            </button>
+                                        }
+                                        @if (!result.servicestatus.notifications_enabled) {
+                                            <button cButton color="default"
+                                                    [cTooltip]="'Enable notifications' | transloco"
+                                                    cTooltipPlacement="top"
+                                                    (click)="enableNotifications(result.mergedService, result.host)">
+                                                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                            </button>
+                                        }
+                                        @if (result.servicestatus.notifications_enabled) {
+                                            <button cButton color="default"
+                                                    [cTooltip]="'Disable notifications' | transloco"
+                                                    cTooltipPlacement="top"
+                                                    (click)="disableNotifications(result.mergedService, result.host)">
+                                                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                            </button>
+                                        }
+                                    </c-button-group>
+                                </c-button-toolbar>
+                            </c-row>
+                        }
+                    </c-card-body>
+                </c-card>
+                <!-- End of mobile status view -->
+                <c-col>
+                    <!-- Service Downtime -->
+                    @if (Number(result.servicestatus.scheduledDowntimeDepth) > 0 && result.downtime) {
+                        <c-row>
+                            <c-col [xs]="12">
+                                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                        class="mb-3">
+                                    <c-card-header>
+                                        <h5 class="text-info">
+                                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                            {{ t('The service is currently in a planned maintenance period') }}
+                                        </h5>
+                                    </c-card-header>
+                                    <c-card-body>
+                                        <div>
+                                            {{ t('Downtime was set by') }}
+                                            <b>{{ result.downtime.authorName }}</b>
+                                            {{ t('with an duration of') }}
+                                            <b>{{ result.downtime.durationHuman }}</b>.
+                                        </div>
+                                        <div class="pt-1">
+                                            <small>
+                                                {{ t('Start time:') }}
+                                                {{ result.downtime.scheduledStartTime }}
+                                                {{ t('End time:') }}
+                                                {{ result.downtime.scheduledEndTime }}
+                                            </small>
+                                        </div>
+                                        <div class="pt-1">
+                                            {{ t('Comment: ') }}
+                                            {{ result.downtime.commentData }}
+                                        </div>
+                                        <div class="w-100" *oitcPermission="['downtimes', 'delete']">
+                                            @if (result.downtime.allowEdit && result.downtime.isCancellable) {
+                                                <button (click)="toggleCancelServiceDowntimeModal(result.downtime)"
+                                                        cButton
+                                                        class="ripple float-end" color="danger"
+                                                        size="xs"
+                                                >
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Cancel') }}
+                                                </button>
+                                            }
+                                        </div>
+                                    </c-card-body>
+                                </c-card>
+                            </c-col>
+                        </c-row>
+                    }
+                    <!-- Service Acknowledgement -->
+                    @if (result.servicestatus.problemHasBeenAcknowledged && result.acknowledgement) {
+                        <c-row>
+                            <c-col [xs]="12">
+                                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                        class="mb-3">
+                                    <c-card-header>
+                                        <h5 class="text-info">
+                                            <fa-icon
+                                                [icon]="(result.acknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
+                                            {{ t('State of service is acknowledged') }}
+                                            <span [hidden]="!result.acknowledgement.is_sticky">
+                                                ({{ t('Sticky') }})
+                                            </span>
+                                        </h5>
+                                    </c-card-header>
+                                    <c-card-body>
+                                        <div>
+                                            {{ t('Acknowledgement was set by') }}
+                                            <b>{{ result.acknowledgement.author_name }}</b>
+                                            {{ t('at') }}
+                                            {{ result.acknowledgement.entry_time }}.
+                                        </div>
+                                        <div class="pt-1">
+                                            {{ t('Comment: ') }}
+                                            <div class="word-break d-inline"
+                                                 [innerHTML]="String(result.acknowledgement.commentDataHtml) | trustAsHtml "></div>
+                                        </div>
+                                        <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
+                                            @if (result.acknowledgement.allowEdit) {
+                                                <button
+                                                    (click)="toggleDeleteAcknowledgementModal(result.mergedService, result.host)"
+                                                    cButton
+                                                    class="ripple float-end" color="danger"
+                                                    size="xs"
+                                                >
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </button>
+                                            }
+                                        </div>
+                                    </c-card-body>
+                                </c-card>
+                            </c-col>
+                        </c-row>
+                    }
+                    <!-- Flapping alert -->
+                    @if (result.servicestatus.isFlapping) {
+                        <c-alert color="warning" [dismissible]="false">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                            {{ t('The state of this service is currently flapping!') }}
+                        </c-alert>
+                    }
+                    <!-- Host Problem -->
+                    @if (Number(result.hoststatus.currentState) > 0) {
+                        <c-row>
+                            <c-col [xs]="12">
+                                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                        class="mb-3">
+                                    <c-card-header>
+                                        <h5 class="text-info">
+                                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                            {{ t('Problem with host detected!') }}
+                                        </h5>
+                                    </c-card-header>
+                                    <c-card-body>
+                                        @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                            <a [routerLink]="['/', 'hosts', 'browser', result.host.Host.id]">
+                                                {{ result.host.Host.hostname }}
+                                            </a>
+                                        } @else {
+                                            {{ result.host.Host.hostname }}
+                                        }
+                                    </c-card-body>
+                                </c-card>
+                            </c-col>
+                        </c-row>
+                    }
+                    <!-- Host Downtime -->
+                    @if (Number(result.hoststatus.scheduledDowntimeDepth) > 0 && result.hostDowntime) {
+                        <c-row>
+                            <c-col [xs]="12">
+                                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                        class="mb-3">
+                                    <c-card-header>
+                                        <h5 class="text-info">
+                                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                            {{ t('The host is currently in a planned maintenance period') }}
+                                        </h5>
+                                    </c-card-header>
+                                    <c-card-body>
+                                        <div>
+                                            {{ t('Downtime was set by') }}
+                                            <b>{{ result.hostDowntime.authorName }}</b>
+                                            {{ t('with an duration of') }}
+                                            <b>{{ result.hostDowntime.durationHuman }}</b>.
+                                        </div>
+                                        <div class="pt-1">
+                                            <small>
+                                                {{ t('Start time:') }}
+                                                {{ result.hostDowntime.scheduledStartTime }}
+                                                {{ t('End time:') }}
+                                                {{ result.hostDowntime.scheduledEndTime }}
+                                            </small>
+                                        </div>
+                                        <div class="pt-1">
+                                            {{ t('Comment: ') }}
+                                            {{ result.hostDowntime.commentData }}
+                                        </div>
+                                        <div class="w-100" *oitcPermission="['downtimes', 'delete']">
+                                            @if (result.hostDowntime.allowEdit && result.hostDowntime.isCancellable) {
+                                                <button (click)="toggleCancelHostDowntimeModal(result.hostDowntime)"
+                                                        cButton
+                                                        class="ripple float-end" color="danger"
+                                                        size="xs"
+                                                >
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Cancel') }}
+                                                </button>
+                                            }
+                                        </div>
+                                    </c-card-body>
+                                </c-card>
+                            </c-col>
+                        </c-row>
+                    }
+                    <!-- Host Acknowledgement -->
+                    @if (result.hoststatus.problemHasBeenAcknowledged && result.hostAcknowledgement) {
+                        <c-row>
+                            <c-col [xs]="12">
+                                <c-card [cBorder]="{top: {color: 'info', width: 3}}"
+                                        class="mb-3">
+                                    <c-card-header>
+                                        <h5 class="text-info">
+                                            <fa-icon
+                                                [icon]="(result.hostAcknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
+                                            {{ t('State of host is acknowledged') }}
+                                            <span [hidden]="!result.hostAcknowledgement.is_sticky">
+                                                ({{ t('Sticky') }})
+                                            </span>
+                                        </h5>
+                                    </c-card-header>
+                                    <c-card-body>
+                                        <div>
+                                            {{ t('Acknowledgement was set by') }}
+                                            <b>{{ result.hostAcknowledgement.author_name }}</b>
+                                            {{ t('at') }}
+                                            {{ result.hostAcknowledgement.entry_time }}.
+                                        </div>
+                                        <div class="pt-1">
+                                            {{ t('Comment: ') }}
+                                            <div class="word-break d-inline"
+                                                 [innerHTML]="String(result.hostAcknowledgement.commentDataHtml) | trustAsHtml "></div>
+                                        </div>
+                                        <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
+                                            @if (result.hostAcknowledgement.allowEdit) {
+                                                <button
+                                                    (click)="toggleDeleteHostAcknowledgementModal(result.host)"
+                                                    cButton
+                                                    class="ripple float-end" color="danger"
+                                                    size="xs"
+                                                >
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </button>
+                                            }
+                                        </div>
+                                    </c-card-body>
+                                </c-card>
+                            </c-col>
+                        </c-row>
+                    }
+                    <!-- Long output -->
+                    @if (result.servicestatus.longOutputHtml) {
+                        <c-row>
+                            <c-col [xs]="12" class="mt-1">
+                                <h4>{{ t('Long output') }}</h4>
+                            </c-col>
+                            <c-col [xs]="12">
+                                <c-card>
+                                    <c-card-body>
+                                        <div class="word-break"
+                                             [innerHTML]="String(result.servicestatus.longOutputHtml) | trustAsHtml "></div>
+                                    </c-card-body>
+                                </c-card>
+                            </c-col>
+                        </c-row>
+                    }
+                </c-col>
+                <div class="pt-3">
+                    @if (result && result.mergedService.has_graph && timezone) {
+                        <oitc-services-browser-chart
+                            [hostUuid]="String(result.host.Host.uuid)"
+                            [serviceUuid]="String(result.mergedService.uuid)"
+                            [availableDataSources]="availableDataSources"
+                            [autoRefreshInterval]="Number(result.mergedService.check_interval)"
+                            [timezone]="timezone"></oitc-services-browser-chart>
+                    }
+                </div>
+            }
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button cButton color="secondary" class="ripple" (click)="hideModal()">
+                {{ t('Close') }}
+            </button>
+            @if (result) {
+                <a cButton color="primary" class="ripple"
+                   [routerLink]="['/', 'services', 'browser', result.mergedService.id]">
+                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                    {{ t('View') }}
+                </a>
+            }
+        </c-modal-footer>
+    </c-modal>
 
 </ng-container>
 
 <oitc-service-reset-checktime-modal [items]="selectedItems"
-(completed)="onMassActionComplete($event)"></oitc-service-reset-checktime-modal>
+                                    (completed)="onMassActionComplete($event)"></oitc-service-reset-checktime-modal>
 
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
 
 <oitc-service-maintenance-modal (completed)="onMassActionComplete($event)"
-[items]="selectedItems"></oitc-service-maintenance-modal>
+                                [items]="selectedItems"></oitc-service-maintenance-modal>
 <oitc-service-acknowledge-modal (completed)="onMassActionComplete($event)"
-[items]="selectedItems"></oitc-service-acknowledge-modal>
+                                [items]="selectedItems"></oitc-service-acknowledge-modal>
 
 <oitc-services-process-checkresult-modal [items]="selectedItems"
-(completed)="onMassActionComplete($event)"></oitc-services-process-checkresult-modal>
+                                         (completed)="onMassActionComplete($event)"></oitc-services-process-checkresult-modal>
 
 <oitc-hosts-enable-flapdetection-modal [items]="selectedItems"
-(completed)="onMassActionComplete($event)"></oitc-hosts-enable-flapdetection-modal>
+                                       (completed)="onMassActionComplete($event)"></oitc-hosts-enable-flapdetection-modal>
 
 <oitc-hosts-disable-flapdetection-modal [items]="selectedItems"
-(completed)="onMassActionComplete($event)"></oitc-hosts-disable-flapdetection-modal>
+                                        (completed)="onMassActionComplete($event)"></oitc-hosts-disable-flapdetection-modal>
 
 <oitc-hosts-send-custom-notification-modal [items]="selectedItems"
-(completed)="onMassActionComplete($event)"></oitc-hosts-send-custom-notification-modal>
+                                           (completed)="onMassActionComplete($event)"></oitc-hosts-send-custom-notification-modal>
 
 <oitc-delete-acknowledgements-modal [items]="selectedItems"
-(completed)="onMassActionComplete($event)"></oitc-delete-acknowledgements-modal>
+                                    (completed)="onMassActionComplete($event)"></oitc-delete-acknowledgements-modal>
 
 <oitc-cancel-hostdowntime-modal [items]="selectedItems"
-(completed)="onMassActionComplete($event)"></oitc-cancel-hostdowntime-modal>
+                                (completed)="onMassActionComplete($event)"></oitc-cancel-hostdowntime-modal>
 
 <oitc-cancel-servicedowntime-modal [items]="selectedItems"
-(completed)="onMassActionComplete($event)"></oitc-cancel-servicedowntime-modal>
+                                   (completed)="onMassActionComplete($event)"></oitc-cancel-servicedowntime-modal>
 
 
 

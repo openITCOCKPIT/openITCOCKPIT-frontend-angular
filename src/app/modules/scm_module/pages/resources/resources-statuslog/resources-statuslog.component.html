@@ -1,127 +1,127 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-          {{ t('Service Capacity Management Module') }}
-        </li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['scmmodule','resources', 'index']"
-            [routerLink]="['/', 'scm_module', 'resources', 'index']">
-            <fa-icon [icon]="['fas', 'chalkboard-user']"></fa-icon>
-            {{ t('Resources') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
-          {{ t('Resource Status Log') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Service Capacity Management Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['scmmodule','resources', 'index']"
+                   [routerLink]="['/', 'scm_module', 'resources', 'index']">
+                    <fa-icon [icon]="['fas', 'chalkboard-user']"></fa-icon>
+                    {{ t('Resources') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                {{ t('Resource Status Log') }}
+            </li>
+        </ol>
     </nav>
     @if (!statuslog) {
-      <oitc-block-loader></oitc-block-loader>
+        <oitc-block-loader></oitc-block-loader>
     }
     <c-card>
-      <c-card-header>
-        <h5 cCardTitle>{{ t('Resources') }}:
-          <small class="fw-300">
-            {{ t('Status log') }}
-          </small>
-        </h5>
-        <c-nav class="card-toolbar card-header-pills">
-          <c-nav-item class="px-1">
-            <button (click)="load()" cButton class="ripple" color="default"
-              size="xs">
-              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-              {{ t('Refresh') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button [fallbackUrl]="['scmmodule', 'resources', 'index']" cButton class="ripple"
-              color="default"
-              oitcBackButton
-              size="xs">
-              <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-              {{ t('Back') }}
-            </button>
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
-        @if (statuslog) {
-          <c-container [fluid]="true">
-            <ul class="cbp_tmtimeline">
-              @for (statuslogItem of statuslog.statuslog; track statuslogItem) {
-                <li>
-                  <time class="cbp_tmtime" [dateTime]="statuslogItem.state_time">
-                    <span>{{ statuslogItem.state_time }}</span>
-                    <span>{{ statuslogItem.timeAgoInWords }} - {{ statuslogItem.status }}</span>
-                  </time>
-                  <div class="cbp_tmicon"
-                    [ngClass]="{'bg-primary': statuslogItem.status===null ,'bg-success': statuslogItem.status===1, 'bg-warning': statuslogItem.status===2, 'bg-danger': statuslogItem.status===3}">
-                    @switch (statuslogItem.status) {
-                      @case (1) {
-                        <fa-icon [icon]="['fas', 'check']" class="text-white"></fa-icon>
-                      }
-                      @case (2) {
-                        <fa-icon [icon]="['fas', 'bell']" class="text-white"></fa-icon>
-                      }
-                      @case (3) {
-                        <fa-icon [icon]="['fas', 'exclamation']" class="text-white"></fa-icon>
-                      }
-                      @default {
-                        <fa-icon [icon]="['fas', 'question']" class="text-white"></fa-icon>
-                      }
-                    }
-                  </div>
-                  <div class="cbp_tmlabel p-3">
-                    <h5 class="font-md">
-                      @if (statuslogItem.user) {
-                        <span class="font-xs">
-                          {{ t('Commented by ') }}
-                          <span *oitcPermission="['users', 'edit']">
-                            <a [routerLink]="['/', 'users', 'edit',statuslogItem.user.id]">
-                              {{ statuslogItem.user.firstname }}
-                              {{ statuslogItem.user.lastname }}
-                            </a>
-                          </span>
-                          <span *oitcPermission="['users', 'edit']; negate: true">
-                            {{ statuslogItem.user.firstname }}
-                            {{ statuslogItem.user.lastname }}
-                          </span>
-                        </span>
-                      }
-                    </h5>
-                    <blockquote
-                      [ngClass]="{ 'blockquote-success': statuslogItem.status==1, 'blockquote-warning': statuslogItem.status==2, 'blockquote-danger': statuslogItem.status==3}"
-                      class="blockquote">
-                      <div class="ms-2 italic font-sm">
-                        {{ statuslogItem.comment }}
-                      </div>
-                    </blockquote>
-                  </div>
-                </li>
-              }
-            </ul>
-          </c-container>
-        }
-        <c-container [fluid]="true">
-          <c-row>
-            <c-col>
-              <oitc-paginate-or-scroll
-                (paginatorChange)="onPaginatorChange($event)"
-              [paginateOrScroll]="statuslog"></oitc-paginate-or-scroll>
-            </c-col>
-          </c-row>
-        </c-container>
-        @if (statuslog && statuslog.statuslog.length === 0) {
-          <oitc-no-records></oitc-no-records>
-        }
-      </c-card-body>
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Resources') }}:
+                <small class="fw-300">
+                    {{ t('Status log') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="['scmmodule', 'resources', 'index']" cButton class="ripple"
+                            color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            @if (statuslog) {
+                <c-container [fluid]="true">
+                    <ul class="cbp_tmtimeline">
+                        @for (statuslogItem of statuslog.statuslog; track statuslogItem) {
+                            <li>
+                                <time class="cbp_tmtime" [dateTime]="statuslogItem.state_time">
+                                    <span>{{ statuslogItem.state_time }}</span>
+                                    <span>{{ statuslogItem.timeAgoInWords }} - {{ statuslogItem.status }}</span>
+                                </time>
+                                <div class="cbp_tmicon"
+                                     [ngClass]="{'bg-primary': statuslogItem.status===null ,'bg-success': statuslogItem.status===1, 'bg-warning': statuslogItem.status===2, 'bg-danger': statuslogItem.status===3}">
+                                    @switch (statuslogItem.status) {
+                                        @case (1) {
+                                            <fa-icon [icon]="['fas', 'check']" class="text-white"></fa-icon>
+                                        }
+                                        @case (2) {
+                                            <fa-icon [icon]="['fas', 'bell']" class="text-white"></fa-icon>
+                                        }
+                                        @case (3) {
+                                            <fa-icon [icon]="['fas', 'exclamation']" class="text-white"></fa-icon>
+                                        }
+                                        @default {
+                                            <fa-icon [icon]="['fas', 'question']" class="text-white"></fa-icon>
+                                        }
+                                    }
+                                </div>
+                                <div class="cbp_tmlabel p-3">
+                                    <h5 class="font-md">
+                                        @if (statuslogItem.user) {
+                                            <span class="font-xs">
+                                                {{ t('Commented by ') }}
+                                                <span *oitcPermission="['users', 'edit']">
+                                                    <a [routerLink]="['/', 'users', 'edit',statuslogItem.user.id]">
+                                                        {{ statuslogItem.user.firstname }}
+                                                        {{ statuslogItem.user.lastname }}
+                                                    </a>
+                                                </span>
+                                                <span *oitcPermission="['users', 'edit']; negate: true">
+                                                    {{ statuslogItem.user.firstname }}
+                                                    {{ statuslogItem.user.lastname }}
+                                                </span>
+                                            </span>
+                                        }
+                                    </h5>
+                                    <blockquote
+                                        [ngClass]="{ 'blockquote-success': statuslogItem.status==1, 'blockquote-warning': statuslogItem.status==2, 'blockquote-danger': statuslogItem.status==3}"
+                                        class="blockquote">
+                                        <div class="ms-2 italic font-sm">
+                                            {{ statuslogItem.comment }}
+                                        </div>
+                                    </blockquote>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </c-container>
+            }
+            <c-container [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            [paginateOrScroll]="statuslog"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+            @if (statuslog && statuslog.statuslog.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+        </c-card-body>
     </c-card>
-  </ng-container>
+</ng-container>
