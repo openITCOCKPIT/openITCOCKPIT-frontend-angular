@@ -19,7 +19,7 @@ import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { RadialGauge } from 'canvas-gauges';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 import {
@@ -34,7 +34,7 @@ import {
 @Component({
     selector: 'oitc-tacho-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf, NgClass],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgClass],
     templateUrl: './tacho-item.component.html',
     styleUrl: './tacho-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

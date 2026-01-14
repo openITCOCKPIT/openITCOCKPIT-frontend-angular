@@ -11,7 +11,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { TrustAsHtmlPipe } from '../../pipes/trust-as-html.pipe';
 import { CurrentMessageOfTheDay } from '../../pages/messagesotd/messagesotd.interface';
 import { BbCodeParserService } from '../../services/bb-code-parser.service';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-message-of-the-day-modal',
@@ -22,7 +22,6 @@ import { NgClass, NgIf } from '@angular/common';
     ModalHeaderComponent,
     TranslocoDirective,
     TrustAsHtmlPipe,
-    NgIf,
     NgClass
 ],
     templateUrl: './message-of-the-day-modal.component.html',

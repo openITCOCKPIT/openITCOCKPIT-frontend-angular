@@ -14,7 +14,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
+
 import { AgentconnectorOperatingSystems } from '../../../../../pages/agentconnector/agentconnector.enums';
 import { MkagentsListDownloadsComponent } from './mkagents-list-downloads/mkagents-list-downloads.component';
 import { MkagentsDownloadRoot } from '../mkagents.interface';
@@ -39,7 +39,6 @@ import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/blo
     ColComponent,
     AlertComponent,
     MkagentsListDownloadsComponent,
-    NgIf,
     BlockLoaderComponent
 ],
     templateUrl: './mkagents-download.component.html',

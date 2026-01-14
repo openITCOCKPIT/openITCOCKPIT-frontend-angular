@@ -25,7 +25,7 @@ import {
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SystemnameService } from '../../../services/systemname.service';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
     AdministratorsDebugGearmanStatusForAngular,
     AdministratorsDebugRootResponse
@@ -72,7 +72,6 @@ echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent
         CardBodyComponent,
         RowComponent,
         ColComponent,
-        NgIf,
         OitcAlertComponent,
         NgClass,
         EolAlertsComponent,
@@ -311,7 +310,6 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
                 nameLocation: 'middle',
                 nameGap: 35,
             },
-
             grid: {
                 left: 40,
                 right: 10,
@@ -319,7 +317,9 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
                 bottom: 10,
                 containLabel: true
             },
+
             legend: {
+                top: 'top',
                 data: [
                     this.TranslocoService.translate('Load 1'),
                     this.TranslocoService.translate('Load 5'),

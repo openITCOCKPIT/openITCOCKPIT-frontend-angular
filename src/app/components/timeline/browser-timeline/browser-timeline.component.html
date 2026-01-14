@@ -1,10 +1,14 @@
 <ng-container *transloco="let t">
-    <p-skeleton *ngIf="failureDurationInPercent == ''" width="10rem" height="2rem"/>
-    <h4 *ngIf="failureDurationInPercent">{{ t('Outages: ') }} {{ failureDurationInPercent }} %</h4>
+  @if (failureDurationInPercent == '') {
+    <p-skeleton width="10rem" height="2rem"/>
+  }
+  @if (failureDurationInPercent) {
+    <h4>{{ t('Outages: ') }} {{ failureDurationInPercent }} %</h4>
+  }
 
-    <!-- Timeline container -->
-    <div id="visualization"></div>
+  <!-- Timeline container -->
+  <div id="visualization"></div>
 
-    <!-- Timeline controls or legend that can be injected as ng-content -->
-    <ng-content></ng-content>
+  <!-- Timeline controls or legend that can be injected as ng-content -->
+  <ng-content></ng-content>
 </ng-container>

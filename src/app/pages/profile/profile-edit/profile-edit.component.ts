@@ -25,7 +25,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { GenericValidationError } from '../../../generic-responses';
 import { ProfileMaxUploadLimit, ProfileUser } from '../profile.interface';
-import { NgIf } from '@angular/common';
+
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../profile.service';
@@ -49,36 +49,35 @@ import { SelectKeyValueString } from '../../../layouts/primeng/select.interface'
 @Component({
     selector: 'oitc-profile-edit',
     imports: [
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        TranslocoDirective,
-        CardBodyComponent,
-        CardFooterComponent,
-        RouterLink,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        NgIf,
-        FormsModule,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        NgSelectModule,
-        NgOptionHighlightDirective,
-        FormDirective,
-        XsButtonDirective,
-        BackButtonDirective,
-        ColComponent,
-        RowComponent,
-        ProfileApikeysComponent,
-        ProfileChangePasswordComponent
-    ],
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    TranslocoDirective,
+    CardBodyComponent,
+    CardFooterComponent,
+    RouterLink,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    FormsModule,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TrueFalseDirective,
+    NgSelectModule,
+    NgOptionHighlightDirective,
+    FormDirective,
+    XsButtonDirective,
+    BackButtonDirective,
+    ColComponent,
+    RowComponent,
+    ProfileApikeysComponent,
+    ProfileChangePasswordComponent
+],
     templateUrl: './profile-edit.component.html',
     styleUrl: './profile-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

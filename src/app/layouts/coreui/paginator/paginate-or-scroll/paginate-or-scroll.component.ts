@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { PaginatorComponent } from '../paginator/paginator.component';
 import { ScrollIndexComponent } from '../scroll-index/scroll-index.component';
 import { PaginateOrScroll, PaginatorChangeEvent } from '../paginator.interface';
-import { NgIf } from '@angular/common';
+
 import { ColComponent, RowComponent } from '@coreui/angular';
 import { XsButtonDirective } from '../../xsbutton-directive/xsbutton.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -10,14 +10,13 @@ import { TranslocoDirective } from '@jsverse/transloco';
 @Component({
     selector: 'oitc-paginate-or-scroll',
     imports: [
-        PaginatorComponent,
-        ScrollIndexComponent,
-        NgIf,
-        RowComponent,
-        ColComponent,
-        XsButtonDirective,
-        TranslocoDirective
-    ],
+    PaginatorComponent,
+    ScrollIndexComponent,
+    RowComponent,
+    ColComponent,
+    XsButtonDirective,
+    TranslocoDirective
+],
     templateUrl: './paginate-or-scroll.component.html',
     styleUrl: './paginate-or-scroll.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

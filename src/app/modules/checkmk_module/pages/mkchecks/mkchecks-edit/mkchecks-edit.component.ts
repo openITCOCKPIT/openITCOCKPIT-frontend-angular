@@ -31,7 +31,7 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -60,7 +60,6 @@ import { FormsModule } from '@angular/forms';
     CardFooterComponent,
     FormDirective,
     FormLoaderComponent,
-    NgIf,
     FormsModule
 ],
     templateUrl: './mkchecks-edit.component.html',

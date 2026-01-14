@@ -34,24 +34,28 @@
                 </c-badge>
             </th>
         </tr>
-        <tr *ngFor="let hostSummaryRowLabel of hostSummaryRowLabels">
-            <th>{{ hostSummaryRowLabel.label }}</th>
-            <td *ngFor="let stateIndex of[0,1,2,3]" class="text-center">
-                @if (hostSummaryRowLabel.key !== 'total' && hostSummaryStat[hostSummaryRowLabel.key][stateIndex] > 0) {
-                    <a *oitcPermission="['services', 'index']"
-                       [routerLink]="['/', 'services', 'index']"
-                       [queryParams]=" Object.assign({}, hostSummaryRowLabel.queryParams,
+            @for (hostSummaryRowLabel of hostSummaryRowLabels; track hostSummaryRowLabel) {
+                <tr>
+                    <th>{{ hostSummaryRowLabel.label }}</th>
+                    @for (stateIndex of [0, 1, 2, 3]; track $index) {
+                        <td class="text-center">
+                            @if (hostSummaryRowLabel.key !== 'total' && hostSummaryStat[hostSummaryRowLabel.key][stateIndex] > 0) {
+                                <a *oitcPermission="['services', 'index']"
+                                   [routerLink]="['/', 'services', 'index']"
+                                   [queryParams]=" Object.assign({}, hostSummaryRowLabel.queryParams,
                         {servicestate: stateIndex, host_id: host.id})">
-                        {{ hostSummaryStat[hostSummaryRowLabel.key][stateIndex] }}
-                    </a>
-                    <span *oitcPermission="['services', 'index']; negate: true">
-                        {{ hostSummaryStat[hostSummaryRowLabel.key][stateIndex] }}
-                    </span>
-                } @else {
-                    ---
-                }
-            </td>
-        </tr>
+                                    {{ hostSummaryStat[hostSummaryRowLabel.key][stateIndex] }}
+                                </a>
+                                <span *oitcPermission="['services', 'index']; negate: true">
+                                    {{ hostSummaryStat[hostSummaryRowLabel.key][stateIndex] }}
+                                </span>
+                            } @else {
+                                ---
+                            }
+                        </td>
+                    }
+                </tr>
+            }
         <tr>
             <th colspan="5" class="text-end">{{ t('TOTAL:') }}
                 {{ hostSummaryStat['total'] }}

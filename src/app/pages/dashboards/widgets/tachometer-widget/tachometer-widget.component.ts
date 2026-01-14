@@ -14,7 +14,7 @@ import {
     FormCheckLabelDirective,
     FormLabelDirective
 } from '@coreui/angular';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SelectOptgroupComponent } from '../../../../layouts/primeng/select/select-optgroup/select-optgroup.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -38,20 +38,19 @@ import { ServiceTypesEnum } from '../../../services/services.enum';
 @Component({
     selector: 'oitc-tachometer-widget',
     imports: [
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormLabelDirective,
-        NgIf,
-        FormsModule,
-        SelectOptgroupComponent,
-        TranslocoDirective,
-        TrueFalseDirective,
-        XsButtonDirective,
-        SelectComponent,
-        NgClass
-    ],
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormLabelDirective,
+    FormsModule,
+    SelectOptgroupComponent,
+    TranslocoDirective,
+    TrueFalseDirective,
+    XsButtonDirective,
+    SelectComponent,
+    NgClass
+],
     templateUrl: './tachometer-widget.component.html',
     styleUrl: './tachometer-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

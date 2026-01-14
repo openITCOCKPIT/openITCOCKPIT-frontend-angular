@@ -1,13 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-custom-class-information',
     imports: [
-        NgIf,
-        NgForOf,
-        NgClass
-    ],
+    NgClass
+],
     templateUrl: './custom-class-information.component.html',
     styleUrl: './custom-class-information.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

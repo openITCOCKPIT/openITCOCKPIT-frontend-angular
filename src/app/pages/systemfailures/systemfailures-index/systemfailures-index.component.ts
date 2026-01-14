@@ -34,7 +34,7 @@ import {
     SystemfailureIndexRoot
 } from '../systemfailures.interface';
 import { Subscription } from 'rxjs';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { SystemfailuresService } from '../systemfailures.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -80,8 +80,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
     TranslocoPipe,
     MatSort,
     MatSortHeader,
-    NgForOf,
-    NgIf,
     TableDirective,
     ItemSelectComponent,
     NoRecordsComponent,

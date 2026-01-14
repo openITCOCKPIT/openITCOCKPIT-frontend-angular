@@ -1,8 +1,9 @@
 <div class="px-2">
+  @if (messageOfTheDay.messageOtdAvailable) {
     <a class="btn btn-xs"
-       *ngIf="messageOfTheDay.messageOtdAvailable"
-       [ngClass]="'pulse-'+messageOfTheDay.messageOtd.style + ' btn-outline-' + messageOfTheDay.messageOtd.style"
-       (click)="showModal()">
-        <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
+      [ngClass]="'pulse-'+messageOfTheDay.messageOtd.style + ' btn-outline-' + messageOfTheDay.messageOtd.style"
+      (click)="showModal()">
+      <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
     </a>
+  }
 </div>

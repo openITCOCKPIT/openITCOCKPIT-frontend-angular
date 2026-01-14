@@ -1,13 +1,15 @@
 <c-dropdown variant="btn-group">
-    <button cButton cDropdownToggle size="xs" color="default" class="ripple" type="button">
-        <fa-icon [icon]="['fas', 'palette']"></fa-icon>
-    </button>
-    <div cDropdownMenu class="p-1 colorpicker-dropdown">
-        <button cDropdownItem *ngFor="let color of colors"
-                type="button"
-                [ngStyle]="{backgroundColor: color}"
-                class="d-inline-block width-2 height-2 m-1 hover-effect-dot"
-                (click)="selectColor(color)">
-        </button>
-    </div>
+  <button cButton cDropdownToggle size="xs" color="default" class="ripple" type="button">
+    <fa-icon [icon]="['fas', 'palette']"></fa-icon>
+  </button>
+  <div cDropdownMenu class="p-1 colorpicker-dropdown">
+    @for (color of colors; track color) {
+      <button cDropdownItem
+        type="button"
+        [ngStyle]="{backgroundColor: color}"
+        class="d-inline-block width-2 height-2 m-1 hover-effect-dot"
+        (click)="selectColor(color)">
+      </button>
+    }
+  </div>
 </c-dropdown>

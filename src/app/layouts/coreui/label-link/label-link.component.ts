@@ -1,17 +1,16 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { RouterLink } from '@angular/router';
-import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { Observable } from 'rxjs';
 
 @Component({
     selector: 'oitc-label-link',
     imports: [
-        RouterLink,
-        NgTemplateOutlet,
-        NgIf,
-        AsyncPipe
-    ],
+    RouterLink,
+    NgTemplateOutlet,
+    AsyncPipe
+],
     templateUrl: './label-link.component.html',
     styleUrl: './label-link.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

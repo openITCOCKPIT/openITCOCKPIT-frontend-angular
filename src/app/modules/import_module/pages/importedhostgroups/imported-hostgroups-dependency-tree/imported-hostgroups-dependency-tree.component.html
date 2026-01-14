@@ -1,48 +1,52 @@
 <ng-container *transloco="let t">
-    <oitc-block-loader *ngIf="!importedHostgroup"></oitc-block-loader>
-    <c-card class="mb-3" *ngIf="importedHostgroup">
-        <c-card-header>
-            <h5 cCardTitle>
-                {{ importedHostgroup.name }}
-                <small class="fw-300">
-                    {{ t('UUID') }}: {{ importedHostgroup.hostgroup?.uuid }}
+  @if (!importedHostgroup) {
+    <oitc-block-loader></oitc-block-loader>
+  }
+  @if (importedHostgroup) {
+    <c-card class="mb-3">
+      <c-card-header>
+        <h5 cCardTitle>
+          {{ importedHostgroup.name }}
+          <small class="fw-300">
+            {{ t('UUID') }}: {{ importedHostgroup.hostgroup?.uuid }}
+          </small>
+        </h5>
+        <c-nav class="card-toolbar card-header-pills">
+          <c-nav-item class="px-1">
+            <button [fallbackUrl]="['hostgroups', 'index']" cButton class="ripple" color="default"
+              oitcBackButton
+              size="xs">
+              <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+              {{ t('Back') }}
+            </button>
+          </c-nav-item>
+        </c-nav>
+      </c-card-header>
+      <c-card-body>
+        <c-row>
+          <c-col [xs]="12">
+            <h4>
+              <a *oitcPermission="['ImportModule', 'ExternalSystems','edit']"
+                [routerLink]="['/', 'import_module','ExternalSystems', 'edit', importedHostgroup.external_system?.id]">
+                {{ importedHostgroup.external_system?.name }}
+              </a>
+              <span *oitcPermission="['ImportModule', 'ExternalSystems','edit']; negate: true">
+                {{ importedHostgroup.external_system?.name }}
+              </span>
+              <sup>
+                <small>
+                  <oitc-online-offline [isOnline]="isConnected"></oitc-online-offline>
                 </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['hostgroups', 'index']" cButton class="ripple" color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
-            <c-row>
-                <c-col [xs]="12">
-                    <h4>
-                        <a *oitcPermission="['ImportModule', 'ExternalSystems','edit']"
-                           [routerLink]="['/', 'import_module','ExternalSystems', 'edit', importedHostgroup.external_system?.id]">
-                            {{ importedHostgroup.external_system?.name }}
-                        </a>
-                        <span *oitcPermission="['ImportModule', 'ExternalSystems','edit']; negate: true">
-                            {{ importedHostgroup.external_system?.name }}
-                        </span>
-                        <sup>
-                            <small>
-                                <oitc-online-offline [isOnline]="isConnected"></oitc-online-offline>
-                            </small>
-                        </sup>
-                    </h4>
-                </c-col>
-            </c-row>
-            <oitc-dependency-tree
-                [objectId]="hostgroupId"
-                (externalSystemConnected)="onExternalSystemConnected($event)"
-                [type]="'hostgroup'"
-                [name]="importedHostgroup.name"></oitc-dependency-tree>
-        </c-card-body>
+              </sup>
+            </h4>
+          </c-col>
+        </c-row>
+        <oitc-dependency-tree
+          [objectId]="hostgroupId"
+          (externalSystemConnected)="onExternalSystemConnected($event)"
+          [type]="'hostgroup'"
+        [name]="importedHostgroup.name"></oitc-dependency-tree>
+      </c-card-body>
     </c-card>
+  }
 </ng-container>

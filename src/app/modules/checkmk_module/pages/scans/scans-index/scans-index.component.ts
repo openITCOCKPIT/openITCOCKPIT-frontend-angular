@@ -34,7 +34,7 @@ import {
 } from '../scans.interface';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
@@ -63,7 +63,6 @@ import { FormsModule } from '@angular/forms';
     CardBodyComponent,
     TranslocoDirective,
     PermissionDirective,
-    NgIf,
     ColComponent,
     RowComponent,
     FormCheckComponent,
@@ -81,7 +80,6 @@ import { FormsModule } from '@angular/forms';
     XsButtonDirective,
     ProgressBarModule,
     TableDirective,
-    NgForOf,
     MultiSelectComponent,
     FormsModule
 ],

@@ -19,7 +19,7 @@ import {
     FormLabelDirective,
     RowComponent
 } from '@coreui/angular';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -40,24 +40,23 @@ import {
 @Component({
     selector: 'oitc-autoreport-widget',
     imports: [
-        FaIconComponent,
-        FormLabelDirective,
-        NgIf,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RowComponent,
-        ColComponent,
-        FormsModule,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        AutoreportAvailibilityColorsComponent,
-        AsyncPipe,
-        RouterLink,
-        SparklineBarEchartsComponent
-    ],
+    FaIconComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    SelectComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RowComponent,
+    ColComponent,
+    FormsModule,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    AutoreportAvailibilityColorsComponent,
+    AsyncPipe,
+    RouterLink,
+    SparklineBarEchartsComponent
+],
     templateUrl: './autoreport-widget.component.html',
     styleUrl: './autoreport-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

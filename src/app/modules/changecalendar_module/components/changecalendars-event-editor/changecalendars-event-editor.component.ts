@@ -37,36 +37,35 @@ import { BbCodeParserService } from '../../../../services/bb-code-parser.service
 import { GenericValidationError } from '../../../../generic-responses';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-changecalendars-event-editor',
     imports: [
-        ModalComponent,
-        ModalHeaderComponent,
-        ModalBodyComponent,
-        ModalFooterComponent,
-        RowComponent,
-        ColComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        ReactiveFormsModule,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TranslocoPipe,
-        BbCodeEditorComponent,
-        TrustAsHtmlPipe,
-        TranslocoDirective,
-        FormsModule,
-        FaIconComponent,
-        XsButtonDirective,
-        CardTitleDirective,
-        CardBodyComponent,
-        CardComponent,
-        NgIf
-    ],
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalBodyComponent,
+    ModalFooterComponent,
+    RowComponent,
+    ColComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    ReactiveFormsModule,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    TranslocoPipe,
+    BbCodeEditorComponent,
+    TrustAsHtmlPipe,
+    TranslocoDirective,
+    FormsModule,
+    FaIconComponent,
+    XsButtonDirective,
+    CardTitleDirective,
+    CardBodyComponent,
+    CardComponent
+],
     templateUrl: './changecalendars-event-editor.component.html',
     styleUrl: './changecalendars-event-editor.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

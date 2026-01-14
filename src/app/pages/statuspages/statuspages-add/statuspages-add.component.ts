@@ -59,7 +59,7 @@ import { SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit } from 
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { intersection } from 'lodash';
@@ -68,37 +68,36 @@ import { intersection } from 'lodash';
 @Component({
     selector: 'oitc-statuspages-add',
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        BackButtonDirective,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        FormErrorDirective,
-        SelectComponent,
-        FormDirective,
-        FormsModule,
-        PaginatorModule,
-        NgIf,
-        FormFeedbackComponent,
-        FormCheckInputDirective,
-        FormControlDirective,
-        MultiSelectComponent,
-        CardFooterComponent,
-        RowComponent,
-        InputGroupComponent,
-        AsyncPipe,
-        ColComponent,
-        InputGroupTextDirective
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    PermissionDirective,
+    RouterLink,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    BackButtonDirective,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormErrorDirective,
+    SelectComponent,
+    FormDirective,
+    FormsModule,
+    PaginatorModule,
+    FormFeedbackComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    MultiSelectComponent,
+    CardFooterComponent,
+    RowComponent,
+    InputGroupComponent,
+    AsyncPipe,
+    ColComponent,
+    InputGroupTextDirective
+],
     templateUrl: './statuspages-add.component.html',
     styleUrl: './statuspages-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

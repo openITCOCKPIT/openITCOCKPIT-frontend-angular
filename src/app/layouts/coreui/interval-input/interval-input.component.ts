@@ -17,7 +17,7 @@ import {
 } from '@coreui/angular';
 import { IntervalInput } from './interval-input.interface';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 import { PaginatorModule } from 'primeng/paginator';
 import { HumanTimeComponent } from './human-time/human-time.component';
@@ -35,7 +35,6 @@ import { FormsModule } from '@angular/forms';
     FormControlDirective,
     PaginatorModule,
     HumanTimeComponent,
-    NgForOf,
     InputGroupComponent,
     FormsModule
 ],

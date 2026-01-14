@@ -37,7 +37,7 @@ import { FormsModule } from '@angular/forms';
 
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -134,7 +134,6 @@ import {
     MatSortHeader,
     NavComponent,
     NavItemComponent,
-    NgIf,
     NoRecordsComponent,
     PaginateOrScrollComponent,
     PaginatorModule,
@@ -162,7 +161,6 @@ import {
     FaStackComponent,
     FaStackItemSizeDirective,
     PopoverGraphComponent,
-    NgForOf,
     ServiceAcknowledgeModalComponent,
     ServiceMaintenanceModalComponent,
     EnableModalComponent,

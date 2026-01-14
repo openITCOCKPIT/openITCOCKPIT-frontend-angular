@@ -26,7 +26,7 @@ import {
   ColComponent,
   RowComponent
 } from '@coreui/angular';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { StatisticsService } from '../statistics.service';
 import { StatisticsIndex } from '../statistics.interface';
@@ -47,7 +47,6 @@ import { LayoutService } from '../../../layouts/coreui/layout.service';
     CardTitleDirective,
     RowComponent,
     ColComponent,
-    NgIf,
     NgClass,
     AsyncPipe
 ],

@@ -1,179 +1,193 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['services', 'index']" [routerLink]="['/', 'services', 'index']">
-                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                    {{ t('Services') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
-                {{ t('Used by') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <a *oitcPermission="['services', 'index']" [routerLink]="['/', 'services', 'index']">
+            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+            {{ t('Services') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+          {{ t('Used by') }}
+        </li>
+      </ol>
     </nav>
 
     <oitc-form-loader [isVisible]="!service"></oitc-form-loader>
-    <c-card class="mb-3" *ngIf="service">
+    @if (service) {
+      <c-card class="mb-3">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Service') }}
-                <small class="fw-300 word-break">
-                    <i>
-                        <strong>
-                            »{{ service.name }}«
-                        </strong>
-                        {{ t('is used by') }}
-                        {{ total }}
-                        {{ t('objects.') }}
-                    </i>
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['hosts', 'index']" cButton class="ripple" color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
+          <h5 cCardTitle>{{ t('Service') }}
+            <small class="fw-300 word-break">
+              <i>
+                <strong>
+                  »{{ service.name }}«
+                </strong>
+                {{ t('is used by') }}
+                {{ total }}
+                {{ t('objects.') }}
+              </i>
+            </small>
+          </h5>
+          <c-nav class="card-toolbar card-header-pills">
+            <c-nav-item class="px-1">
+              <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                {{ t('Refresh') }}
+              </button>
+            </c-nav-item>
+            <c-nav-item class="px-1">
+              <button [fallbackUrl]="['hosts', 'index']" cButton class="ripple" color="default"
+                oitcBackButton
+                size="xs">
+                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                {{ t('Back') }}
+              </button>
+            </c-nav-item>
+          </c-nav>
         </c-card-header>
         <c-card-body>
-            <c-container
-                [fluid]="true">
-                <table bordered cTable class="mt-2 mb-0" hover striped *ngIf="objects">
-                    <tbody>
-                    <!-- Instant reports -->
-                    <tr *ngIf="objects.Instantreports.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-                            {{ t('Instant reports') }} ({{ objects.Instantreports.length }})
-                        </th>
+          <c-container
+            [fluid]="true">
+            @if (objects) {
+              <table bordered cTable class="mt-2 mb-0" hover striped>
+                <tbody>
+                  <!-- Instant reports -->
+                  @if (objects.Instantreports.length > 0) {
+                    <tr>
+                      <th colspan="2" class="bg-secondary bg-opacity-10">
+                        <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                        {{ t('Instant reports') }} ({{ objects.Instantreports.length }})
+                      </th>
                     </tr>
-                    <tr *ngFor="let instantreport of objects.Instantreports">
+                  }
+                  @for (instantreport of objects.Instantreports; track instantreport) {
+                    <tr>
+                      <td colspan="2">
+                        <a *oitcPermission="['instantreports', 'edit']"
+                          [routerLink]="['/', 'instantreports', 'edit', instantreport.id]">
+                          {{ instantreport.name }}
+                        </a>
+                        <span *oitcPermission="['instantreports', 'edit']; negate: true">
+                          {{ instantreport.name }}
+                        </span>
+                      </td>
+                    </tr>
+                  }
+                  @if (PermissionsService.hasModuleObservable('AutoreportModule')|async) {
+                    <!-- Autoreports -->
+                    @if (objects.Autoreports.length > 0) {
+                      <tr>
+                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                          <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                          {{ t('Autoreports') }} ({{ objects.Autoreports.length }})
+                        </th>
+                      </tr>
+                    }
+                    @for (autoreport of objects.Autoreports; track autoreport) {
+                      <tr>
                         <td colspan="2">
-                            <a *oitcPermission="['instantreports', 'edit']"
-                               [routerLink]="['/', 'instantreports', 'edit', instantreport.id]">
-                                {{ instantreport.name }}
-                            </a>
-                            <span *oitcPermission="['instantreports', 'edit']; negate: true">
-                                {{ instantreport.name }}
-                            </span>
+                          <a *oitcPermission="['AutoreportModule', 'autoreports', 'edit']"
+                            [routerLink]="['/', 'autoreport_module', 'autoreports', 'editStepTwo', autoreport.id]">
+                            {{ autoreport.name }}
+                          </a>
+                          <span
+                            *oitcPermission="['AutoreportModule', 'autoreports', 'edit']; negate: true">
+                            {{ autoreport.name }}
+                          </span>
                         </td>
-                    </tr>
-
-                        @if (PermissionsService.hasModuleObservable('AutoreportModule')|async) {
-                            <!-- Autoreports -->
-                            <tr *ngIf="objects.Autoreports.length > 0">
-                                <th colspan="2" class="bg-secondary bg-opacity-10">
-                                    <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-                                    {{ t('Autoreports') }} ({{ objects.Autoreports.length }})
-                                </th>
-                            </tr>
-
-
-                            <tr *ngFor="let autoreport of objects.Autoreports">
-                                <td colspan="2">
-                                    <a *oitcPermission="['AutoreportModule', 'autoreports', 'edit']"
-                                       [routerLink]="['/', 'autoreport_module', 'autoreports', 'editStepTwo', autoreport.id]">
-                                        {{ autoreport.name }}
-                                    </a>
-                                    <span
-                                        *oitcPermission="['AutoreportModule', 'autoreports', 'edit']; negate: true">
-                                        {{ autoreport.name }}
-                                    </span>
-                                </td>
-                            </tr>
-                        }
-
-                        @if (PermissionsService.hasModuleObservable('EventcorrelationModule')|async) {
-                            <!-- Eventcorrelations -->
-                            <tr *ngIf="objects.Eventcorrelations.length > 0">
-                                <th colspan="2" class="bg-secondary bg-opacity-10">
-                                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"></fa-icon>
-                                    {{ t('Eventcorrelations') }} ({{ objects.Eventcorrelations.length }})
-                                </th>
-                            </tr>
-
-
-                            <tr *ngFor="let evc of objects.Eventcorrelations">
-                                <td colspan="2">
-                                    <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'editCorrelation']"
-                                       [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', evc.id]"
-                                       [queryParams]="{'highlightServiceId': service.id}">
-                                        {{ evc.name }}
-                                    </a>
-                                    <span
-                                        *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'editCorrelation']; negate: true">
-                                        {{ evc.name }}
-                                    </span>
-                                </td>
-                            </tr>
-                        }
-
-
-                        @if (PermissionsService.hasModuleObservable('MapModule')|async) {
-                            <!-- Maps -->
-                            <tr *ngIf="objects.Maps.length > 0">
-                                <th colspan="2" class="bg-secondary bg-opacity-10">
-                                    <fa-icon [icon]="['fas', 'map-marked']"></fa-icon>
-                                    {{ t('Maps') }} ({{ objects.Maps.length }})
-                                </th>
-                            </tr>
-
-
-                            <tr *ngFor="let map of objects.Maps">
-                                <td colspan="2">
-                                    <a *oitcPermission="['MapModule', 'mapeditors', 'edit']"
-                                       [routerLink]="['/', 'map_module', 'mapeditors', 'edit', map.id]">
-                                        {{ map.name }}
-                                    </a>
-                                    <span
-                                        *oitcPermission="['MapModule', 'mapeditors', 'edit']; negate: true">
-                                        {{ map.name }}
-                                    </span>
-                                </td>
-                            </tr>
-                        }
-
-                    <!-- Servicegroups -->
-                    <tr *ngIf="objects.Servicegroups.length > 0">
+                      </tr>
+                    }
+                  }
+                  @if (PermissionsService.hasModuleObservable('EventcorrelationModule')|async) {
+                    <!-- Eventcorrelations -->
+                    @if (objects.Eventcorrelations.length > 0) {
+                      <tr>
                         <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                            {{ t('Service Groups') }} ({{ objects.Servicegroups.length }})
+                          <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"></fa-icon>
+                          {{ t('Eventcorrelations') }} ({{ objects.Eventcorrelations.length }})
                         </th>
-                    </tr>
-                    <tr *ngFor="let servicegroup of objects.Servicegroups">
-                        <td>
-                            <a *oitcPermission="['servicegroups', 'edit']"
-                               [routerLink]="['/', 'servicegroups', 'edit', servicegroup.id]">
-                                {{ servicegroup.name }}
-                            </a>
-                            <span *oitcPermission="['servicegroups', 'edit']; negate: true">
-                                {{ servicegroup.name }}
-                            </span>
+                      </tr>
+                    }
+                    @for (evc of objects.Eventcorrelations; track evc) {
+                      <tr>
+                        <td colspan="2">
+                          <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'editCorrelation']"
+                            [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', evc.id]"
+                            [queryParams]="{'highlightServiceId': service.id}">
+                            {{ evc.name }}
+                          </a>
+                          <span
+                            *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'editCorrelation']; negate: true">
+                            {{ evc.name }}
+                          </span>
                         </td>
+                      </tr>
+                    }
+                  }
+                  @if (PermissionsService.hasModuleObservable('MapModule')|async) {
+                    <!-- Maps -->
+                    @if (objects.Maps.length > 0) {
+                      <tr>
+                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                          <fa-icon [icon]="['fas', 'map-marked']"></fa-icon>
+                          {{ t('Maps') }} ({{ objects.Maps.length }})
+                        </th>
+                      </tr>
+                    }
+                    @for (map of objects.Maps; track map) {
+                      <tr>
+                        <td colspan="2">
+                          <a *oitcPermission="['MapModule', 'mapeditors', 'edit']"
+                            [routerLink]="['/', 'map_module', 'mapeditors', 'edit', map.id]">
+                            {{ map.name }}
+                          </a>
+                          <span
+                            *oitcPermission="['MapModule', 'mapeditors', 'edit']; negate: true">
+                            {{ map.name }}
+                          </span>
+                        </td>
+                      </tr>
+                    }
+                  }
+                  <!-- Servicegroups -->
+                  @if (objects.Servicegroups.length > 0) {
+                    <tr>
+                      <th colspan="2" class="bg-secondary bg-opacity-10">
+                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                        {{ t('Service Groups') }} ({{ objects.Servicegroups.length }})
+                      </th>
                     </tr>
-
-                    </tbody>
-                </table>
-                <oitc-not-used-by-object *ngIf="total === 0">
-                    {{ t('This service is not used by any object') }}
-                </oitc-not-used-by-object>
-            </c-container>
+                  }
+                  @for (servicegroup of objects.Servicegroups; track servicegroup) {
+                    <tr>
+                      <td>
+                        <a *oitcPermission="['servicegroups', 'edit']"
+                          [routerLink]="['/', 'servicegroups', 'edit', servicegroup.id]">
+                          {{ servicegroup.name }}
+                        </a>
+                        <span *oitcPermission="['servicegroups', 'edit']; negate: true">
+                          {{ servicegroup.name }}
+                        </span>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+            @if (total === 0) {
+              <oitc-not-used-by-object>
+                {{ t('This service is not used by any object') }}
+              </oitc-not-used-by-object>
+            }
+          </c-container>
         </c-card-body>
-    </c-card>
-</ng-container>
+      </c-card>
+    }
+  </ng-container>

@@ -22,7 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DocumentationView } from '../documentations.interface';
-import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+
 import { BbCodeParserService } from '../../../services/bb-code-parser.service';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
@@ -50,10 +50,6 @@ import {
     RouterLink,
     BackButtonDirective,
     XsButtonDirective,
-    NgIf,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
     CardBodyComponent,
     RowComponent,
     ColComponent,

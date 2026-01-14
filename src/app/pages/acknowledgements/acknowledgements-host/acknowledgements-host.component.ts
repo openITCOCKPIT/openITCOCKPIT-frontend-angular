@@ -29,7 +29,7 @@ import {
 } from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { formatDate } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -76,8 +76,6 @@ import {
     MatSortHeader,
     NavComponent,
     NavItemComponent,
-    NgForOf,
-    NgIf,
     NoRecordsComponent,
     PaginateOrScrollComponent,
     PaginatorModule,

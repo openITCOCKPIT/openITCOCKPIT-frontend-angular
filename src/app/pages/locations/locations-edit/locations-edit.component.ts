@@ -35,7 +35,7 @@ import { LocationsService } from '../locations.service';
 import { UsersService } from '../../users/users.service';
 import { HistoryService } from '../../../history.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
+
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 
@@ -66,7 +66,6 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
     VectormapComponent,
     XsButtonDirective,
     FormLoaderComponent,
-    NgIf,
     RouterLink,
     NgOptionHighlightDirective
 ],

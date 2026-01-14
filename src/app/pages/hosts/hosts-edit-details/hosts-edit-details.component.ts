@@ -20,7 +20,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -60,7 +60,6 @@ import { HistoryService } from '../../../history.service';
     MultiSelectComponent,
     NavComponent,
     NavItemComponent,
-    NgIf,
     PaginatorModule,
     PermissionDirective,
     SelectComponent,

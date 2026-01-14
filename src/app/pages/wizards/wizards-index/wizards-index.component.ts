@@ -21,7 +21,7 @@ import {
 } from '@coreui/angular';
 import { WizardsService } from '../wizards.service';
 import { DeprecatedWizards, WizardElement, WizardsIndex } from '../wizards.interface';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
@@ -32,34 +32,32 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-wizards-index',
     imports: [
-        RowComponent,
-        ColComponent,
-        NgIf,
-        NgForOf,
-        KeyValuePipe,
-        CardComponent,
-        CardBodyComponent,
-        CardFooterComponent,
-        FaIconComponent,
-        TranslocoDirective,
-        RouterLink,
-        CardHeaderComponent,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        ButtonGroupComponent,
-        NgClass,
-        BadgeOutlineComponent,
-        AccordionComponent,
-        AccordionItemComponent,
-        TemplateIdDirective,
-        AccordionButtonDirective,
-        FormControlDirective,
-        FormsModule,
-        TooltipDirective,
-        InputGroupComponent,
-        InputGroupTextDirective
-    ],
+    RowComponent,
+    ColComponent,
+    KeyValuePipe,
+    CardComponent,
+    CardBodyComponent,
+    CardFooterComponent,
+    FaIconComponent,
+    TranslocoDirective,
+    RouterLink,
+    CardHeaderComponent,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    ButtonGroupComponent,
+    NgClass,
+    BadgeOutlineComponent,
+    AccordionComponent,
+    AccordionItemComponent,
+    TemplateIdDirective,
+    AccordionButtonDirective,
+    FormControlDirective,
+    FormsModule,
+    TooltipDirective,
+    InputGroupComponent,
+    InputGroupTextDirective
+],
     templateUrl: './wizards-index.component.html',
     styleUrl: './wizards-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -80,7 +78,8 @@ export class WizardsIndexComponent implements OnInit, OnDestroy {
             docker: true,
             macos: true,
             virtualization: true,
-            hardware: true
+            hardware: true,
+            webserver: true
         }
     }
 

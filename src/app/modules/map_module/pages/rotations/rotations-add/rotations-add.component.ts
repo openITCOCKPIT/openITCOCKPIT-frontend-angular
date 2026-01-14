@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
+
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -38,29 +38,28 @@ import { LoadContainersRoot } from '../../../../../pages/containers/containers.i
 @Component({
     selector: 'oitc-rotations-add',
     imports: [
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        FaIconComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        BackButtonDirective,
-        CardBodyComponent,
-        RequiredIconComponent,
-        FormErrorDirective,
-        NgIf,
-        FormFeedbackComponent,
-        FormsModule,
-        FormDirective,
-        FormLabelDirective,
-        FormControlDirective,
-        MultiSelectComponent,
-        CardFooterComponent,
-        PermissionDirective
-    ],
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    FaIconComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    BackButtonDirective,
+    CardBodyComponent,
+    RequiredIconComponent,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormsModule,
+    FormDirective,
+    FormLabelDirective,
+    FormControlDirective,
+    MultiSelectComponent,
+    CardFooterComponent,
+    PermissionDirective
+],
     templateUrl: './rotations-add.component.html',
     styleUrl: './rotations-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

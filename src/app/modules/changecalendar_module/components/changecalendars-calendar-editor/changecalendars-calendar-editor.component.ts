@@ -19,19 +19,18 @@ import listPlugin from '@fullcalendar/list';
 import {CalendarEvent} from '../../../../pages/calendars/calendars.interface';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {XsButtonDirective} from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {formatDate, NgIf, NgStyle} from '@angular/common';
+import { formatDate, NgStyle } from '@angular/common';
 import {ChangecalendarEventMove} from "../../pages/changecalendars/changecalendars.interface";
 
 @Component({
     selector: 'oitc-changecalendars-calendar-editor',
     imports: [
-        TranslocoDirective,
-        FullCalendarModule,
-        FaIconComponent,
-        XsButtonDirective,
-        NgIf,
-        NgStyle
-    ],
+    TranslocoDirective,
+    FullCalendarModule,
+    FaIconComponent,
+    XsButtonDirective,
+    NgStyle
+],
     templateUrl: './changecalendars-calendar-editor.component.html',
     styleUrl: './changecalendars-calendar-editor.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

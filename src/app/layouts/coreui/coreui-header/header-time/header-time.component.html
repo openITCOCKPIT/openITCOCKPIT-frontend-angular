@@ -1,17 +1,19 @@
 <ng-container *transloco="let t">
-    <div class="nav-item">
-        <div class="btn-group btn-group-xs nav-link" aria-label="Display of server and client times" role="group">
+  <div class="nav-item">
+    <div class="btn-group btn-group-xs nav-link" aria-label="Display of server and client times" role="group">
 
-            <button cButton type="button" color="secondary" *ngIf="showClientTime" class="px-3"
-                    cTooltip="{{t('local time of client')}}">{{ currentClientTime }}
-            </button>
-            <button cButton type="button" color="default" class="px-3"
-                    cTooltip="{{t('display time information')}}">
-                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-            </button>
-            <button cButton type="button" color="primary" class="px-3"
-                    cTooltip="{{t('local time of server')}}">{{ currentServerTime }}
-            </button>
-        </div>
+      @if (showClientTime) {
+        <button cButton type="button" color="secondary" class="px-3"
+          cTooltip="{{t('local time of client')}}">{{ currentClientTime }}
+        </button>
+      }
+      <button cButton type="button" color="default" class="px-3"
+        cTooltip="{{t('display time information')}}">
+        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+      </button>
+      <button cButton type="button" color="primary" class="px-3"
+        cTooltip="{{t('local time of server')}}">{{ currentServerTime }}
+      </button>
     </div>
+  </div>
 </ng-container>

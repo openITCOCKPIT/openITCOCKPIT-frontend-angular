@@ -1,355 +1,371 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['hostgroups', 'index']" [routerLink]="['/', 'hostgroups', 'index']">
-                    <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                    {{ t('Host groups') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Overview') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <a *oitcPermission="['hostgroups', 'index']" [routerLink]="['/', 'hostgroups', 'index']">
+            <fa-icon [icon]="['fas', 'server']"></fa-icon>
+            {{ t('Host groups') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'list']"></fa-icon>
+          {{ t('Overview') }}
+        </li>
+      </ol>
     </nav>
 
     <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Host groups') }}
-                <small class="fw-300">
-                    {{ t('overview') }}
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="loadHostgroups()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button *oitcPermission="['hostgroups', 'add']" [routerLink]="['/', 'hostgroups', 'add']"
-                            cButton
-                            class="ripple"
-                            color="success"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                        {{ t('New') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                        {{ t('Filter') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
+      <c-card-header>
+        <h5 cCardTitle>{{ t('Host groups') }}
+          <small class="fw-300">
+            {{ t('overview') }}
+          </small>
+        </h5>
+        <c-nav class="card-toolbar card-header-pills">
+          <c-nav-item class="px-1">
+            <button (click)="loadHostgroups()" cButton class="ripple" color="default" size="xs">
+              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+              {{ t('Refresh') }}
+            </button>
+          </c-nav-item>
+          <c-nav-item class="px-1">
+            <button *oitcPermission="['hostgroups', 'add']" [routerLink]="['/', 'hostgroups', 'add']"
+              cButton
+              class="ripple"
+              color="success"
+              size="xs">
+              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+              {{ t('New') }}
+            </button>
+          </c-nav-item>
+          <c-nav-item class="px-1">
+            <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+              {{ t('Filter') }}
+            </button>
+          </c-nav-item>
+        </c-nav>
+      </c-card-header>
+      <c-card-body>
 
-            <!-- Filter -->
-            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-                <c-row>
-                    <c-col>
-                        <h6 class="pb-2 mb-3 border-bottom">
-                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                            {{ t('Filter') }}
-                        </h6>
-                    </c-col>
-                </c-row>
-                <form cForm>
-                    <c-row class="mb-2">
-                        <c-col md="6">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="filter['Containers.name']"
-                                       [placeholder]="'Filter by host group name' | transloco"
-                                       aria-label="host group name"
-                                       cFormControl
-                                       name="filter[Containers.name]"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col md="6">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="filter['Hostgroups.description']"
-                                       [placeholder]="'Filter by description' | transloco"
-                                       aria-label="Host group description"
-                                       cFormControl
-                                       name="filter[Hostgroups.description]"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                    </c-row>
-                    <c-row class="mb-2">
-                        <c-col [xs]="12" [lg]="6">
-                            <c-input-group>
-                                <span cInputGroupText class="pe-0 ps-2">
-                                    <fa-stack>
-                                        <fa-icon [icon]="['fas', 'server']"
-                                                 stackItemSize="1x" pull="right"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'tags']" class="text-success"
-                                                 stackItemSize="1x"
-                                                 transform="shrink-3 right-6 down-10"></fa-icon>
-                                    </fa-stack>
-                                </span>
-                                <ng-select
-                                    id="HostgroupKeywordsInput"
-                                    name="HostgroupKeywordsInput"
-                                    [items]="[]"
-                                    [(ngModel)]="filter['Hostgroups.keywords']"
-                                    [addTag]="true"
-                                    [multiple]="true"
-                                    [selectOnTab]="true"
-                                    [placeholder]="'Filter by tags'|transloco"
-                                    oitcDebounce
-                                    (debouncedValue)="onFilterChange($event)"
-                                    [isOpen]="false">
-                                </ng-select>
-                            </c-input-group>
-                        </c-col>
+        <!-- Filter -->
+        <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+          <c-row>
+            <c-col>
+              <h6 class="pb-2 mb-3 border-bottom">
+                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                {{ t('Filter') }}
+              </h6>
+            </c-col>
+          </c-row>
+          <form cForm>
+            <c-row class="mb-2">
+              <c-col md="6">
+                <c-input-group>
+                  <span cInputGroupText>
+                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                  </span>
+                  <input (debouncedValue)="onFilterChange($event)"
+                    [(ngModel)]="filter['Containers.name']"
+                    [placeholder]="'Filter by host group name' | transloco"
+                    aria-label="host group name"
+                    cFormControl
+                    name="filter[Containers.name]"
+                    oitcDebounce
+                    type="text"
+                    />
+                </c-input-group>
+              </c-col>
+              <c-col md="6">
+                <c-input-group>
+                  <span cInputGroupText>
+                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                  </span>
+                  <input (debouncedValue)="onFilterChange($event)"
+                    [(ngModel)]="filter['Hostgroups.description']"
+                    [placeholder]="'Filter by description' | transloco"
+                    aria-label="Host group description"
+                    cFormControl
+                    name="filter[Hostgroups.description]"
+                    oitcDebounce
+                    type="text"
+                    />
+                </c-input-group>
+              </c-col>
+            </c-row>
+            <c-row class="mb-2">
+              <c-col [xs]="12" [lg]="6">
+                <c-input-group>
+                  <span cInputGroupText class="pe-0 ps-2">
+                    <fa-stack>
+                      <fa-icon [icon]="['fas', 'server']"
+                      stackItemSize="1x" pull="right"></fa-icon>
+                      <fa-icon [icon]="['fas', 'tags']" class="text-success"
+                        stackItemSize="1x"
+                      transform="shrink-3 right-6 down-10"></fa-icon>
+                    </fa-stack>
+                  </span>
+                  <ng-select
+                    id="HostgroupKeywordsInput"
+                    name="HostgroupKeywordsInput"
+                    [items]="[]"
+                    [(ngModel)]="filter['Hostgroups.keywords']"
+                    [addTag]="true"
+                    [multiple]="true"
+                    [selectOnTab]="true"
+                    [placeholder]="'Filter by tags'|transloco"
+                    oitcDebounce
+                    (debouncedValue)="onFilterChange($event)"
+                    [isOpen]="false">
+                  </ng-select>
+                </c-input-group>
+              </c-col>
 
-                        <c-col [xs]="12" [lg]="6">
-                            <c-input-group>
-                                <span cInputGroupText class="pe-0 ps-2">
-                                    <fa-stack>
-                                        <fa-icon [icon]="['fas', 'server']"
-                                                 stackItemSize="1x" pull="right"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'tags']" class="text-danger"
-                                                 stackItemSize="1x"
-                                                 transform="shrink-3 right-6 down-10"></fa-icon>
-                                    </fa-stack>
-                                </span>
-                                <ng-select
-                                    id="HostgroupNotKeywordsInput"
-                                    name="HostgroupNotKeywordsInput"
-                                    [items]="[]"
-                                    [(ngModel)]="filter['Hostgroups.not_keywords']"
-                                    [addTag]="true"
-                                    [multiple]="true"
-                                    [selectOnTab]="true"
-                                    [placeholder]="'Filter by excluded tags'|transloco"
-                                    oitcDebounce
-                                    (debouncedValue)="onFilterChange($event)"
-                                    [isOpen]="false">
-                                </ng-select>
-                            </c-input-group>
-                        </c-col>
-                    </c-row>
-                    <c-row class="mt-2">
-                        <c-col class="text-end">
-                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                {{ t('Reset Filter') }}
-                            </button>
-                        </c-col>
-                    </c-row>
-                </form>
-            </c-container>
-            <!-- End Filter -->
+              <c-col [xs]="12" [lg]="6">
+                <c-input-group>
+                  <span cInputGroupText class="pe-0 ps-2">
+                    <fa-stack>
+                      <fa-icon [icon]="['fas', 'server']"
+                      stackItemSize="1x" pull="right"></fa-icon>
+                      <fa-icon [icon]="['fas', 'tags']" class="text-danger"
+                        stackItemSize="1x"
+                      transform="shrink-3 right-6 down-10"></fa-icon>
+                    </fa-stack>
+                  </span>
+                  <ng-select
+                    id="HostgroupNotKeywordsInput"
+                    name="HostgroupNotKeywordsInput"
+                    [items]="[]"
+                    [(ngModel)]="filter['Hostgroups.not_keywords']"
+                    [addTag]="true"
+                    [multiple]="true"
+                    [selectOnTab]="true"
+                    [placeholder]="'Filter by excluded tags'|transloco"
+                    oitcDebounce
+                    (debouncedValue)="onFilterChange($event)"
+                    [isOpen]="false">
+                  </ng-select>
+                </c-input-group>
+              </c-col>
+            </c-row>
+            <c-row class="mt-2">
+              <c-col class="text-end">
+                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                  {{ t('Reset Filter') }}
+                </button>
+              </c-col>
+            </c-row>
+          </form>
+        </c-container>
+        <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!hostgroups"></oitc-table-loader>
+        @if (!hostgroups) {
+          <oitc-table-loader></oitc-table-loader>
+        }
 
-            <table *ngIf="hostgroups" bordered cTable class="mt-2 mb-0" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
+        @if (hostgroups) {
+          <table bordered cTable class="mt-2 mb-0" hover striped matSort
+            (matSortChange)="onSortChange($event)"
+            [matSortActive]="params.sort" [matSortDirection]="params.direction">
+            <thead>
+              <tr>
+                <th class="text-center col-1" scope="col" style="width: 5px;">
+                  <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                </th>
+                <th scope="col" mat-sort-header="Containers.name">
+                  {{ t('Host group name') }}
+                </th>
+                <th scope="col" mat-sort-header="Hostgroups.description">
+                  {{ t('Description') }}
+                </th>
+                <th class="text-center col-1 width-50" scope="col">
+                  <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (hostgroup of hostgroups.all_hostgroups; track hostgroup) {
                 <tr>
-                    <th class="text-center col-1" scope="col" style="width: 5px;">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Containers.name">
-                        {{ t('Host group name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Hostgroups.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th class="text-center col-1 width-50" scope="col">
+                  <td class="text-center">
+                    @if (( PermissionsService.hasPermissionObservable(['hostgroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['hostgroups', 'copy'])|async )) {
+                      <oitc-item-select
+                        [disabled]="!hostgroup.allowEdit"
+                      [item]="hostgroup"></oitc-item-select>
+                    }
+                  </td>
+                  <td class="word-break">
+                    <span *oitcPermission="['hostgroups', 'extended']">
+                      <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id]">
+                        {{ hostgroup.container.name }}
+                      </a>
+                    </span>
+                    <span *oitcPermission="['hostgroups', 'extended']; negate: true">
+                      {{ hostgroup.container.name }}
+                    </span>
+                    @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
+                      <span *oitcPermission="['slamodule', 'slas', 'slahostgrouphostsstatusoverview']">
+                        @if (hostgroup.hasSLAHosts) {
+                          <c-badge
+                            textColor="warning"
+                            class="badge-border badge-clickable margin-right-5"
+                            [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id, { selectedTab: HostgroupExtendedTabs.SlaHostsStatus}]">
+                            <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                            {{ t('SLA') }}
+                          </c-badge>
+                        }
+                      </span>
+                    }
+                    @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
+                      <span
+                        *oitcPermission="['importmodule', 'importedhostgroups', 'dependencytree']">
+                        @if (hostgroup.additionalInformationExists) {
+                          <c-badge
+                            textColor="info"
+                            class="badge-border badge-clickable margin-right-5"
+                            [routerLink]="['/', 'import_module', 'ImportedHostgroups', 'dependencyTree', hostgroup.id]">
+                            <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                            {{ t('CMDB') }}
+                          </c-badge>
+                        }
+                      </span>
+                    }
+                  </td>
+                  <td>{{ hostgroup.description }}</td>
+                  <td class="width-50">
+                    <oitc-actions-button [allowEdit]="hostgroup.allowEdit"
+                      [permission]="'hostgroups.edit'"
+                      [url]="'/hostgroups/edit/' + hostgroup.id">
+                      <oitc-actions-button-element [permission]="'hostgroups.edit'"
+                        [url]="'/hostgroups/edit/' + hostgroup.id">
                         <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let hostgroup of hostgroups.all_hostgroups">
-                    <td class="text-center">
-                        @if (( PermissionsService.hasPermissionObservable(['hostgroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['hostgroups', 'copy'])|async )) {
-                            <oitc-item-select
-                                [disabled]="!hostgroup.allowEdit"
-                                [item]="hostgroup"></oitc-item-select>
+                        {{ t('Edit') }}
+                      </oitc-actions-button-element>
+                      <oitc-actions-button-element [permission]="'changelogs.index'"
+                        [url]="'/changelogs/entity/hostgroup/' + hostgroup.id">
+                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                        {{ t('Changelog') }}
+                      </oitc-actions-button-element>
+                      <oitc-actions-button-element [permission]="'hostgroups.extended'"
+                        [url]="'/hostgroups/extended/' + hostgroup.id">
+                        <fa-icon [icon]="['fas', 'plus-square']" [rotate]="90"></fa-icon>
+                        {{ t('Extended view') }}
+                      </oitc-actions-button-element>
+                      @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
+                        @if (hostgroup.hasSLAHosts) {
+                          <oitc-actions-button-element
+                            [permission]="'slamodule.slas.slahostgrouphostsstatusoverview'"
+                            [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id, { selectedTab: HostgroupExtendedTabs.SlaHostsStatus}]">
+                            <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                            {{ t('SLA Status Overview') }}
+                          </oitc-actions-button-element>
                         }
-                    </td>
-                    <td class="word-break">
-                        <span *oitcPermission="['hostgroups', 'extended']">
-                            <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id]">
-                                {{ hostgroup.container.name }}
-                            </a>
+                      }
+                      @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
+                        @if (hostgroup.additionalInformationExists) {
+                          <oitc-actions-button-element
+                            [permission]="'importmodule.importedhostgroups.dependencytree'"
+                            [url]="'import_module/ImportedHostgroups/dependencyTree/' + hostgroup.id">
+                            <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                            {{ t('CMDB') }}
+                          </oitc-actions-button-element>
+                        }
+                      }
+                      <oitc-actions-button-element [permission]="'hostgroups.usedBy'"
+                        [url]="'/hostgroups/usedBy/' + hostgroup.id">
+                        <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                        {{ t('Used By') }}
+                      </oitc-actions-button-element>
+                      <li cDropdownDivider></li>
+                      <oitc-actions-button-element [permission]="'hostgroups.copy'"
+                        [url]="'/hostgroups/copy/' + hostgroup.id">
+                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                        {{ t('Copy') }}
+                      </oitc-actions-button-element>
+                      <li cDropdownDivider></li>
+                      <oitc-actions-button-element (click)="toggleDeleteAllModal(hostgroup)"
+                        [permission]="'hostgroups.delete'">
+                        <span class="text-danger">
+                          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                          {{ t('Delete') }}
                         </span>
-                        <span *oitcPermission="['hostgroups', 'extended']; negate: true">
-                            {{ hostgroup.container.name }}
-                        </span>
-                        @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
-                            <span *oitcPermission="['slamodule', 'slas', 'slahostgrouphostsstatusoverview']">
-                                <c-badge *ngIf="hostgroup.hasSLAHosts"
-                                         textColor="warning"
-                                         class="badge-border badge-clickable margin-right-5"
-                                         [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id, { selectedTab: HostgroupExtendedTabs.SlaHostsStatus}]">
-                                    <fa-icon [icon]="['fas', 'award']"></fa-icon>
-                                    {{ t('SLA') }}
-                                </c-badge>
-                            </span>
-                        }
-                        @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
-                            <span
-                                *oitcPermission="['importmodule', 'importedhostgroups', 'dependencytree']">
-                                <c-badge *ngIf="hostgroup.additionalInformationExists"
-                                         textColor="info"
-                                         class="badge-border badge-clickable margin-right-5"
-                                         [routerLink]="['/', 'import_module', 'ImportedHostgroups', 'dependencyTree', hostgroup.id]">
-                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                    {{ t('CMDB') }}
-                                </c-badge>
-                            </span>
-                        }
-                    </td>
-                    <td>{{ hostgroup.description }}</td>
-                    <td class="width-50">
-                        <oitc-actions-button [allowEdit]="hostgroup.allowEdit"
-                                             [permission]="'hostgroups.edit'"
-                                             [url]="'/hostgroups/edit/' + hostgroup.id">
-                            <oitc-actions-button-element [permission]="'hostgroups.edit'"
-                                                         [url]="'/hostgroups/edit/' + hostgroup.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                         [url]="'/changelogs/entity/hostgroup/' + hostgroup.id">
-                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                {{ t('Changelog') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'hostgroups.extended'"
-                                                         [url]="'/hostgroups/extended/' + hostgroup.id">
-                                <fa-icon [icon]="['fas', 'plus-square']" [rotate]="90"></fa-icon>
-                                {{ t('Extended view') }}
-                            </oitc-actions-button-element>
-                            @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
-                                <oitc-actions-button-element *ngIf="hostgroup.hasSLAHosts"
-                                                             [permission]="'slamodule.slas.slahostgrouphostsstatusoverview'"
-                                                             [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id, { selectedTab: HostgroupExtendedTabs.SlaHostsStatus}]">
-                                    <fa-icon [icon]="['fas', 'award']"></fa-icon>
-                                    {{ t('SLA Status Overview') }}
-                                </oitc-actions-button-element>
-                            }
-                            @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
-                                <oitc-actions-button-element *ngIf="hostgroup.additionalInformationExists"
-                                                             [permission]="'importmodule.importedhostgroups.dependencytree'"
-                                                             [url]="'import_module/ImportedHostgroups/dependencyTree/' + hostgroup.id">
-                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                    {{ t('CMDB') }}
-                                </oitc-actions-button-element>
-                            }
-                            <oitc-actions-button-element [permission]="'hostgroups.usedBy'"
-                                                         [url]="'/hostgroups/usedBy/' + hostgroup.id">
-                                <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                                {{ t('Used By') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element [permission]="'hostgroups.copy'"
-                                                         [url]="'/hostgroups/copy/' + hostgroup.id">
-                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                {{ t('Copy') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(hostgroup)"
-                                                         [permission]="'hostgroups.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
+                      </oitc-actions-button-element>
+                    </oitc-actions-button>
+                  </td>
                 </tr>
-                </tbody>
-            </table>
+              }
+            </tbody>
+          </table>
+        }
 
-            <oitc-no-records
-                *ngIf="hostgroups && hostgroups.all_hostgroups.length === 0"></oitc-no-records>
+        @if (hostgroups && hostgroups.all_hostgroups.length === 0) {
+          <oitc-no-records
+          ></oitc-no-records>
+        }
 
 
-            <ng-container *ngIf="hostgroups && hostgroups.all_hostgroups">
-                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                             [fluid]="true">
-                    <c-row>
-                        <c-col>
-                            <oitc-select-all
-                                [itemsCount]="hostgroups.all_hostgroups.length"></oitc-select-all>
-                        </c-col>
-                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                            <div class="btn-group d-flex flex-row" role="group">
-                                <button class="btn btn-outline-primary col-3 border-0" type="button"
-                                        *oitcPermission="['hostgroups', 'copy']"
-                                        (click)="navigateCopy()">
-                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                    {{ t('Copy') }}
-                                </button>
-                                <button (click)="toggleDeleteAllModal()"
-                                        *oitcPermission="['hostgroups', 'delete']"
-                                        class="btn btn-outline-danger col-3 border-0"
-                                        type="button">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete selected') }}
-                                </button>
+        @if (hostgroups && hostgroups.all_hostgroups) {
+          <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+            [fluid]="true">
+            <c-row>
+              <c-col>
+                <oitc-select-all
+                [itemsCount]="hostgroups.all_hostgroups.length"></oitc-select-all>
+              </c-col>
+              <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                <div class="btn-group d-flex flex-row" role="group">
+                  <button class="btn btn-outline-primary col-3 border-0" type="button"
+                    *oitcPermission="['hostgroups', 'copy']"
+                    (click)="navigateCopy()">
+                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                    {{ t('Copy') }}
+                  </button>
+                  <button (click)="toggleDeleteAllModal()"
+                    *oitcPermission="['hostgroups', 'delete']"
+                    class="btn btn-outline-danger col-3 border-0"
+                    type="button">
+                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    {{ t('Delete selected') }}
+                  </button>
+                  <c-dropdown>
+                    <button cButton cDropdownToggle color="default">
+                      {{ t('More actions') }}
+                    </button>
+                    <ul cDropdownMenu>
+                      <li><a href="{{linkFor('pdf')}}" cDropdownItem>
+                        <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
+                      {{ t('List as pdf') }}</a></li>
+                      <li><a href="{{linkFor('csv')}}" cDropdownItem>
+                        <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                      {{ t('List as csv') }}</a></li>
+                    </ul>
+                  </c-dropdown>
+                </div>
+              </c-col>
+            </c-row>
+          </c-container>
+        }
 
-                                <c-dropdown>
-                                    <button cButton cDropdownToggle color="default">
-                                        {{ t('More actions') }}
-                                    </button>
-                                    <ul cDropdownMenu>
-                                        <li><a href="{{linkFor('pdf')}}" cDropdownItem>
-                                            <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
-                                            {{ t('List as pdf') }}</a></li>
-                                        <li><a href="{{linkFor('csv')}}" cDropdownItem>
-                                            <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
-                                            {{ t('List as csv') }}</a></li>
-                                    </ul>
-                                </c-dropdown>
-                            </div>
-                        </c-col>
-                    </c-row>
-                </c-container>
-            </ng-container>
-
-            <c-container
-                [fluid]="true" class="mb-3 py-3">
-                <c-row>
-                    <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="hostgroups"
-                            [paginateOrScroll]="hostgroups"></oitc-paginate-or-scroll>
-                    </c-col>
-                </c-row>
-            </c-container>
-        </c-card-body>
-        <c-card-footer>
-            &nbsp;
-        </c-card-footer>
+        <c-container
+          [fluid]="true" class="mb-3 py-3">
+          <c-row>
+            <c-col>
+              @if (hostgroups) {
+                <oitc-paginate-or-scroll
+                  (paginatorChange)="onPaginatorChange($event)"
+                [paginateOrScroll]="hostgroups"></oitc-paginate-or-scroll>
+              }
+            </c-col>
+          </c-row>
+        </c-container>
+      </c-card-body>
+      <c-card-footer>
+        &nbsp;
+      </c-card-footer>
     </c-card>
-</ng-container>
-<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+  </ng-container>
+  <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

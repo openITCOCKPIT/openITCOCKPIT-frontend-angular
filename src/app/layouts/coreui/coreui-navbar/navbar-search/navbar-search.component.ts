@@ -5,7 +5,7 @@ import { MenuHeadline, MenuLink, MenuLinkWithSearchPath } from '../../../../comp
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { PermissionsService } from '../../../../permissions/permissions.service';
 import { UUID } from '../../../../classes/UUID';
 import { SearchService } from '../../../../search/search.service';
@@ -14,14 +14,13 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'oitc-navbar-search',
     imports: [
-        FaIconComponent,
-        TranslocoPipe,
-        RouterLink,
-        FormsModule,
-        DebounceDirective,
-        NgIf,
-        NgClass
-    ],
+    FaIconComponent,
+    TranslocoPipe,
+    RouterLink,
+    FormsModule,
+    DebounceDirective,
+    NgClass
+],
     templateUrl: './navbar-search.component.html',
     styleUrl: './navbar-search.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

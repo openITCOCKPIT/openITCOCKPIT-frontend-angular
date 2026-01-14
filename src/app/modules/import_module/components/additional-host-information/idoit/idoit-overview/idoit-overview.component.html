@@ -1,445 +1,483 @@
 <ng-container *transloco="let t">
+  <c-row>
+    <c-col [xs]="12">
+      <h4>
+        {{ t('i-doit overview') }}
+        <sup>
+          <small>
+            <oitc-online-offline [isOnline]="result.response.status"></oitc-online-offline>
+          </small>
+        </sup>
+      </h4>
+    </c-col>
+  </c-row>
+
+  @if (result.response.status) {
     <c-row>
-        <c-col [xs]="12">
-            <h4>
-                {{ t('i-doit overview') }}
-                <sup>
-                    <small>
-                        <oitc-online-offline [isOnline]="result.response.status"></oitc-online-offline>
-                    </small>
-                </sup>
-            </h4>
-        </c-col>
-    </c-row>
-
-    <c-row *ngIf="result.response.status">
-        <c-col [xs]="12">
-
-            <c-card class="mb-3">
-                <c-card-header>
-                    <h5 cCardTitle>{{ t('Configuration item') }}
-                        <small class="fw-300">
-                            {{ t('details') }}
-                        </small>
-                    </h5>
-
-                    <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
-                        <c-nav-item>
-                            <a
-                                (click)="setSelectedTab('information')"
-                                *oitcPermission="['ImportModule', 'ExternalSystems', 'additionalHostInformation']"
-                                class="nav-link"
-                                [ngClass]="{'active': selectedTab == 'information'}">
-                                <fa-icon [icon]="['fas', 'list-ul']"></fa-icon>
-                                {{ t('Information') }}
-                            </a>
-                        </c-nav-item>
-                        <c-nav-item>
-                            <a
-                                (click)="setSelectedTab('dependencyTree')"
-                                *oitcPermission="['ImportModule', 'ExternalSystems', 'dependencyTree']"
-                                class="nav-link"
-                                [ngClass]="{'active': selectedTab == 'dependencyTree'}">
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
-                                {{ t('i-doit Dependency tree') }}
-                            </a>
-                        </c-nav-item>
-                    </c-nav>
-                </c-card-header>
-                <c-card-body *ngIf="selectedTab == 'information'">
-
-                    <table cTable bordered hover>
-                        <tbody>
-                        <tr>
-                            <th colspan="5">
-                                <fa-icon [icon]="['fas', 'desktop']" class="text-primary"></fa-icon>
-                                {{ result.response.ipv4Address?.hostname }}
-                                <span *ngIf="result.response.ipv4Address?.title">
-                                    <fa-icon [icon]="['fas', 'chevron-right']" class="text-primary"></fa-icon>
-                                    {{ result.response.ipv4Address?.title }}
-                                </span>
-                                <span *ngIf="result.response.ipv4Address?.ip">
-                                    <fa-icon [icon]="['fas', 'chevron-right']" class="text-primary"></fa-icon>
-                                    {{ result.response.ipv4Address?.ip }}
-                                </span>
-                                <span *ngIf="result.response.ipv4Address?.description">
-                                    <fa-icon [icon]="['fas', 'chevron-right']" class="text-primary"></fa-icon>
-                                    {{ result.response.ipv4Address?.description }}
-                                </span>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>
-                                {{ t('Model') }}
-                            </th>
-                            <td colspan="3">
-                                {{ result.response.ipv4Address?.title }}
-                                <span *ngIf="result.response.ipv4Address?.manufacturer">
-                                    [{{ result.response.ipv4Address?.manufacturer }}]
-                                </span>
-                            </td>
-                            <td class="col-lg-1 col-md-1">
-                                @switch (result.response.objectInformation?.status) {
-                                    @case (IdoitStatus.ACTIVE) {
-                                        <span class="badge border border-success text-success w-100">
-                                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                            {{ t('Active') }}
-                                        </span>
-                                    }
-                                    @case (IdoitStatus.ARCHIVED) {
-                                        <span class="badge border border-warning text-warning w-100">
-                                            <fa-icon [icon]="['fas', 'archive']"></fa-icon>
-                                            {{ t('Archived') }}
-                                        </span>
-                                    }
-                                    @case (IdoitStatus.DELETED) {
-                                        <span class="badge border border-danger text-danger w-100">
-                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                            {{ t('Deleted') }}
-                                        </span>
-                                    }
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                {{ t('Description') }}
-                            </th>
-                            <td colspan="3">
-                                {{ result.response.global?.description }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="col-lg-1 col-md-1">
-                                {{ t('Sysid') }}
-                            </th>
-                            <td class="text-primary">
-                                {{ result.response.objectInformation?.id }}
-                                <span *ngIf="result.response.externalLink" class="ng-scope">
-                                    <a target="_blank" [href]="result.response.externalLink">
-                                        <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
-                                    </a>
-                                </span>
-                            </td>
-                            <th colspan="2">
-                                {{ t('Location path') }}
-                            </th>
-                            <td rowspan="6">
-                                <img class="w-100" [src]="result.response.objectInformation?.image" alt="CMDB Image">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                {{ t('Type') }}
-                            </th>
-                            <td>
-                                {{ result.response.objectInformation?.type_title }}
-                            </td>
-                            <td colspan="2">
-                                {{ result.response.location?.location_path }}
-                                <fa-icon *ngIf="result.response.location?.option || result.response.location?.insertion"
-                                         [icon]="['fas', 'server']" class="text-primary"></fa-icon>
-                                <span *ngIf="result.response.location?.option"
-                                      class="badge border-primary border text-primary italic ms-1">
-                                    {{ result.response.location?.option }}
-                                </span>
-                                <span *ngIf="result.response.location?.insertion"
-                                      class="badge border-primary border text-primary italic ms-1">
-                                    {{ result.response.location?.insertion }}
-                                </span>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <th>
-                                {{ t('CMDB Status') }}
-                            </th>
-                            <td>
-                                {{ result.response.objectInformation?.cmdb_status_title }}
-                            </td>
-                            <th colspan="2">
-                                {{ t('Applications') }}
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>
-                                {{ t('Created') }}
-                            </th>
-                            <td>
-                                {{ result.response.objectInformation?.created }}
-                                <span *ngIf="result.response.global?.created_by"
-                                      class="text-primary italic">
-                                    <fa-icon [icon]="['fas', 'user-tag']" class="text-primary"></fa-icon>
-                                    {{ result.response.global?.created_by }}
-                                </span>
-                            </td>
-                            <td rowspan="2" colspan="2">
-                                <ul class="no-padding inside-list">
-                                    <li *ngFor="let application of result.response.applications">
-                                        {{ application.title }}
-                                        <span *ngIf="application.application_type">
-                                            <fa-icon [icon]="['fas', 'chevron-right']" class="text-primary"></fa-icon>
-                                            {{ application.application_type }}
-                                        </span>
-                                        <span *ngIf="application.application_priority"
-                                              class="badge border-primary border text-primary italic">
-
-                                            {{ application.application_priority }}
-                                        </span>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                {{ t('Updated') }}
-                            </th>
-                            <td>
-                                {{ result.response.objectInformation?.updated }}
-                                <span *ngIf="result.response.global?.changed_by"
-                                      class="text-primary italic">
-                                    <fa-icon [icon]="['fas', 'user-tag']" class="text-primary"></fa-icon>
-                                    {{ result.response.global?.changed_by }}
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                {{ t('Hardware Details') }}
-                            </th>
-                            <td>
-                                {{ t('Memory') }}
-                                <fa-icon [icon]="['fas', 'memory']" class="text-primary"></fa-icon>
-                                <ul class="no-padding inside-list">
-                                    <li *ngFor="let mem of result.response.memory">
-                                        {{ mem.counter }}
-                                        <fa-icon [icon]="['fas', 'times']" class="text-primary"></fa-icon>
-                                        {{ mem.capacity }}
-                                        {{ mem.unit }}
-                                        <span *ngIf="mem.title">
-                                            {{ mem.title }}
-                                        </span>
-                                        <span *ngIf="mem.manufacturer">
-                                            [{{ mem.manufacturer }}]
-                                        </span>
-                                    </li>
-                                </ul>
-                            </td>
-                            <td colspan="2">
-                                {{ t('CPU') }}
-                                <fa-icon [icon]="['fas', 'microchip']" class="text-primary"></fa-icon>
-                                <ul class="no-padding inside-list">
-                                    <li *ngFor="let cpu of result.response.cpu">
-                                        {{ cpu.counter }}
-                                        <fa-icon [icon]="['fas', 'times']" class="text-primary"></fa-icon>
-                                        {{ cpu.title }} {{ cpu.frequency }} {{ cpu.frequency_unit }}
-                                        <span *ngIf="cpu.manufacturer">
-                                            [{{ cpu.manufacturer }}]
-                                        </span>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th colspan="5" class="border-primary-top">
-                                <fa-icon [icon]="['fas', 'file-contract']" class="text-primary"></fa-icon>
-                                {{ t('Contract overview') }}
-                            </th>
-                        </tr>
-                            @for (contract of result.response.contractAssignments; track $index) {
-                                <tr>
-                                    <th>
-                                        {{ t('Sysid') }}
-                                    </th>
-                                    <td class="text-primary">
-                                        {{ contract.connected_contract_id }}
-                                    </td>
-                                    <th>
-                                        {{ t('Contract period') }}
-                                    </th>
-                                    <td>
-                                        <fa-icon [icon]="['fas', 'calendar-alt']" class="text-primary"></fa-icon>
-                                        <span *ngIf="contract.details.contract_details.start_date">
-                                            {{ t('From') }}
-                                        </span>
-                                        {{ contract.details.contract_details.start_date }}
-                                        <fa-icon [icon]="['fas', 'calendar-alt']" class="text-primary"
-                                                 *ngIf="contract.details.contract_details.start_date && contract.details.contract_details.end_date"></fa-icon>
-                                        <span *ngIf="contract.details.contract_details.end_date">
-                                            {{ t('until') }}
-                                        </span>
-                                        {{ contract.details.contract_details.end_date }}
-                                    </td>
-                                    <td class="col-lg-1 col-md-1">
-                                        @switch (contract.details.contract.status) {
-                                            @case (IdoitStatus.ACTIVE) {
-                                                <span class="badge border border-success text-success w-100">
-                                                    <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                                    {{ t('Active') }}
-                                                </span>
-                                            }
-                                            @case (IdoitStatus.ARCHIVED) {
-                                                <span class="badge border border-warning text-warning w-100">
-                                                    <fa-icon [icon]="['fas', 'archive']"></fa-icon>
-                                                    {{ t('Archived') }}
-                                                </span>
-                                            }
-                                            @case (IdoitStatus.DELETED) {
-                                                <span class="badge border border-danger text-danger w-100">
-                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                    {{ t('Deleted') }}
-                                                </span>
-                                            }
-                                        }
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="col-lg-1 col-md-1">
-                                        {{ t('Product') }}
-                                    </th>
-                                    <td>
-                                        {{ contract.details.contract_details.product }}
-                                    </td>
-                                    <th>
-                                        {{ t('Reaction rate') }}
-                                    </th>
-                                    <td>
-                                        {{ contract.details.contract_details.reaction_rate }}
-
-                                    </td>
-                                    <td rowspan="5">
-                                        <img class="w-100" [src]="contract.details.contract.image"
-                                             alt="CMDB contact image"/>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <th class="col-lg-1 col-md-1">
-                                        {{ t('Title') }}
-                                    </th>
-                                    <td>
-                                        {{ contract.details.contract.title }}
-                                    </td>
-                                    <th>
-                                        {{ t('Costs') }}
-                                    </th>
-                                    <td>
-                                        {{ contract.details.contract_details.costs }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        {{ t('Type') }}
-                                    </th>
-                                    <td>
-                                        {{ contract.details.contract.type_title }}
-                                    </td>
-                                    <th>
-                                        {{ t('Payment period') }}
-                                    </th>
-                                    <td>
-                                        {{ contract.details.contract_details.payment_period }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        {{ t('CMDB Status ') }}
-                                    </th>
-                                    <td>
-                                        {{ contract.details.contract.cmdb_status_title }}
-                                    </td>
-                                    <th>
-                                        {{ t('Cost calculation') }}
-                                    </th>
-                                    <td>
-                                        {{ contract.details.contract_details.cost_calculation }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        {{ t('Contact') }}
-                                    </th>
-                                    <td>
-                                        {{ contract.details.contact?.contact }}
-                                    </td>
-                                    <th>
-                                        {{ t('Website') }}
-                                    </th>
-                                    <td>
-                                        {{ contract.details.contact?.website }}
-                                    </td>
-                                </tr>
+      <c-col [xs]="12">
+        <c-card class="mb-3">
+          <c-card-header>
+            <h5 cCardTitle>{{ t('Configuration item') }}
+              <small class="fw-300">
+                {{ t('details') }}
+              </small>
+            </h5>
+            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+              <c-nav-item>
+                <a
+                  (click)="setSelectedTab('information')"
+                  *oitcPermission="['ImportModule', 'ExternalSystems', 'additionalHostInformation']"
+                  class="nav-link"
+                  [ngClass]="{'active': selectedTab == 'information'}">
+                  <fa-icon [icon]="['fas', 'list-ul']"></fa-icon>
+                  {{ t('Information') }}
+                </a>
+              </c-nav-item>
+              <c-nav-item>
+                <a
+                  (click)="setSelectedTab('dependencyTree')"
+                  *oitcPermission="['ImportModule', 'ExternalSystems', 'dependencyTree']"
+                  class="nav-link"
+                  [ngClass]="{'active': selectedTab == 'dependencyTree'}">
+                  <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
+                  {{ t('i-doit Dependency tree') }}
+                </a>
+              </c-nav-item>
+            </c-nav>
+          </c-card-header>
+          @if (selectedTab == 'information') {
+            <c-card-body>
+              <table cTable bordered hover>
+                <tbody>
+                  <tr>
+                    <th colspan="5">
+                      <fa-icon [icon]="['fas', 'desktop']" class="text-primary"></fa-icon>
+                      {{ result.response.ipv4Address?.hostname }}
+                      @if (result.response.ipv4Address?.title) {
+                        <span>
+                          <fa-icon [icon]="['fas', 'chevron-right']" class="text-primary"></fa-icon>
+                          {{ result.response.ipv4Address?.title }}
+                        </span>
+                      }
+                      @if (result.response.ipv4Address?.ip) {
+                        <span>
+                          <fa-icon [icon]="['fas', 'chevron-right']" class="text-primary"></fa-icon>
+                          {{ result.response.ipv4Address?.ip }}
+                        </span>
+                      }
+                      @if (result.response.ipv4Address?.description) {
+                        <span>
+                          <fa-icon [icon]="['fas', 'chevron-right']" class="text-primary"></fa-icon>
+                          {{ result.response.ipv4Address?.description }}
+                        </span>
+                      }
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      {{ t('Model') }}
+                    </th>
+                    <td colspan="3">
+                      {{ result.response.ipv4Address?.title }}
+                      @if (result.response.ipv4Address?.manufacturer) {
+                        <span>
+                          [{{ result.response.ipv4Address?.manufacturer }}]
+                        </span>
+                      }
+                    </td>
+                    <td class="col-lg-1 col-md-1">
+                      @switch (result.response.objectInformation?.status) {
+                        @case (IdoitStatus.ACTIVE) {
+                          <span class="badge border border-success text-success w-100">
+                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                            {{ t('Active') }}
+                          </span>
+                        }
+                        @case (IdoitStatus.ARCHIVED) {
+                          <span class="badge border border-warning text-warning w-100">
+                            <fa-icon [icon]="['fas', 'archive']"></fa-icon>
+                            {{ t('Archived') }}
+                          </span>
+                        }
+                        @case (IdoitStatus.DELETED) {
+                          <span class="badge border border-danger text-danger w-100">
+                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                            {{ t('Deleted') }}
+                          </span>
+                        }
+                      }
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      {{ t('Description') }}
+                    </th>
+                    <td colspan="3">
+                      {{ result.response.global?.description }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th class="col-lg-1 col-md-1">
+                      {{ t('Sysid') }}
+                    </th>
+                    <td class="text-primary">
+                      {{ result.response.objectInformation?.id }}
+                      @if (result.response.externalLink) {
+                        <span class="ng-scope">
+                          <a target="_blank" [href]="result.response.externalLink">
+                            <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
+                          </a>
+                        </span>
+                      }
+                    </td>
+                    <th colspan="2">
+                      {{ t('Location path') }}
+                    </th>
+                    <td rowspan="6">
+                      <img class="w-100" [src]="result.response.objectInformation?.image" alt="CMDB Image">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      {{ t('Type') }}
+                    </th>
+                    <td>
+                      {{ result.response.objectInformation?.type_title }}
+                    </td>
+                    <td colspan="2">
+                      {{ result.response.location?.location_path }}
+                      @if (result.response.location?.option || result.response.location?.insertion) {
+                        <fa-icon
+                        [icon]="['fas', 'server']" class="text-primary"></fa-icon>
+                      }
+                      @if (result.response.location?.option) {
+                        <span
+                          class="badge border-primary border text-primary italic ms-1">
+                          {{ result.response.location?.option }}
+                        </span>
+                      }
+                      @if (result.response.location?.insertion) {
+                        <span
+                          class="badge border-primary border text-primary italic ms-1">
+                          {{ result.response.location?.insertion }}
+                        </span>
+                      }
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      {{ t('CMDB Status') }}
+                    </th>
+                    <td>
+                      {{ result.response.objectInformation?.cmdb_status_title }}
+                    </td>
+                    <th colspan="2">
+                      {{ t('Applications') }}
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      {{ t('Created') }}
+                    </th>
+                    <td>
+                      {{ result.response.objectInformation?.created }}
+                      @if (result.response.global?.created_by) {
+                        <span
+                          class="text-primary italic">
+                          <fa-icon [icon]="['fas', 'user-tag']" class="text-primary"></fa-icon>
+                          {{ result.response.global?.created_by }}
+                        </span>
+                      }
+                    </td>
+                    <td rowspan="2" colspan="2">
+                      <ul class="no-padding inside-list">
+                        @for (application of result.response.applications; track application) {
+                          <li>
+                            {{ application.title }}
+                            @if (application.application_type) {
+                              <span>
+                                <fa-icon [icon]="['fas', 'chevron-right']" class="text-primary"></fa-icon>
+                                {{ application.application_type }}
+                              </span>
                             }
-
-                        <tr>
-                            <th colspan="6" class="border-primary-top">
-                                <fa-icon [icon]="['fas', 'file-invoice']" class="text-primary"></fa-icon>
-                                {{ t('Accounting') }}
-                            </th>
-                        </tr>
-                        <tr>
-                            <th class="col-lg-1 col-md-1">
-                                {{ t('Inventory number') }}
-                            </th>
-                            <td>
-                                {{ result.response.accounting?.inventory_no }}
-                            </td>
-                            <th>
-                                {{ t('Acquirement date') }}
-                            </th>
-                            <td colspan="2">
-                                <fa-icon [icon]="['fas', 'calendar-alt']" class="text-primary"></fa-icon>
-                                {{ result.response.accounting?.acquirementdate }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                {{ t('Invoice number') }}
-                            </th>
-                            <td>
-                                {{ result.response.accounting?.invoice_no }}
-                            </td>
-                            <th>
-                                {{ t('Order number') }}
-                            </th>
-                            <td colspan="2">
-                                {{ result.response.accounting?.order_no }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                {{ t('Guarantee period') }}
-                            </th>
-                            <td>
-                                {{ result.response.accounting?.guarantee_period }}
-                                {{ result.response.accounting?.guarantee_period_unit }}
-                            </td>
-                            <th>
-                                {{ t('Guarantee period status / Guarantee period base') }}
-                            </th>
-                            <td colspan="2">
-                                {{ result.response.accounting?.guarantee_period_status }}
-                                <span *ngIf="result.response.accounting?.guarantee_period_base">
-                                    /
-                                    {{ result.response.accounting?.guarantee_period_base }}
-                                </span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-
-                </c-card-body>
-
-                <c-card-body *ngIf="selectedTab == 'dependencyTree'">
-                    <oitc-dependency-tree
-                        [objectId]="hostId"
-                        [type]="'host'"
-                        [name]="hostname"></oitc-dependency-tree>
-                </c-card-body>
-
-            </c-card>
-        </c-col>
-
+                            @if (application.application_priority) {
+                              <span
+                                class="badge border-primary border text-primary italic">
+                                {{ application.application_priority }}
+                              </span>
+                            }
+                          </li>
+                        }
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      {{ t('Updated') }}
+                    </th>
+                    <td>
+                      {{ result.response.objectInformation?.updated }}
+                      @if (result.response.global?.changed_by) {
+                        <span
+                          class="text-primary italic">
+                          <fa-icon [icon]="['fas', 'user-tag']" class="text-primary"></fa-icon>
+                          {{ result.response.global?.changed_by }}
+                        </span>
+                      }
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      {{ t('Hardware Details') }}
+                    </th>
+                    <td>
+                      {{ t('Memory') }}
+                      <fa-icon [icon]="['fas', 'memory']" class="text-primary"></fa-icon>
+                      <ul class="no-padding inside-list">
+                        @for (mem of result.response.memory; track mem) {
+                          <li>
+                            {{ mem.counter }}
+                            <fa-icon [icon]="['fas', 'times']" class="text-primary"></fa-icon>
+                            {{ mem.capacity }}
+                            {{ mem.unit }}
+                            @if (mem.title) {
+                              <span>
+                                {{ mem.title }}
+                              </span>
+                            }
+                            @if (mem.manufacturer) {
+                              <span>
+                                [{{ mem.manufacturer }}]
+                              </span>
+                            }
+                          </li>
+                        }
+                      </ul>
+                    </td>
+                    <td colspan="2">
+                      {{ t('CPU') }}
+                      <fa-icon [icon]="['fas', 'microchip']" class="text-primary"></fa-icon>
+                      <ul class="no-padding inside-list">
+                        @for (cpu of result.response.cpu; track cpu) {
+                          <li>
+                            {{ cpu.counter }}
+                            <fa-icon [icon]="['fas', 'times']" class="text-primary"></fa-icon>
+                            {{ cpu.title }} {{ cpu.frequency }} {{ cpu.frequency_unit }}
+                            @if (cpu.manufacturer) {
+                              <span>
+                                [{{ cpu.manufacturer }}]
+                              </span>
+                            }
+                          </li>
+                        }
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th colspan="5" class="border-primary-top">
+                      <fa-icon [icon]="['fas', 'file-contract']" class="text-primary"></fa-icon>
+                      {{ t('Contract overview') }}
+                    </th>
+                  </tr>
+                  @for (contract of result.response.contractAssignments; track $index) {
+                    <tr>
+                      <th>
+                        {{ t('Sysid') }}
+                      </th>
+                      <td class="text-primary">
+                        {{ contract.connected_contract_id }}
+                      </td>
+                      <th>
+                        {{ t('Contract period') }}
+                      </th>
+                      <td>
+                        <fa-icon [icon]="['fas', 'calendar-alt']" class="text-primary"></fa-icon>
+                        @if (contract.details.contract_details.start_date) {
+                          <span>
+                            {{ t('From') }}
+                          </span>
+                        }
+                        {{ contract.details.contract_details.start_date }}
+                        @if (contract.details.contract_details.start_date && contract.details.contract_details.end_date) {
+                          <fa-icon [icon]="['fas', 'calendar-alt']" class="text-primary"
+                          ></fa-icon>
+                        }
+                        @if (contract.details.contract_details.end_date) {
+                          <span>
+                            {{ t('until') }}
+                          </span>
+                        }
+                        {{ contract.details.contract_details.end_date }}
+                      </td>
+                      <td class="col-lg-1 col-md-1">
+                        @switch (contract.details.contract.status) {
+                          @case (IdoitStatus.ACTIVE) {
+                            <span class="badge border border-success text-success w-100">
+                              <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                              {{ t('Active') }}
+                            </span>
+                          }
+                          @case (IdoitStatus.ARCHIVED) {
+                            <span class="badge border border-warning text-warning w-100">
+                              <fa-icon [icon]="['fas', 'archive']"></fa-icon>
+                              {{ t('Archived') }}
+                            </span>
+                          }
+                          @case (IdoitStatus.DELETED) {
+                            <span class="badge border border-danger text-danger w-100">
+                              <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                              {{ t('Deleted') }}
+                            </span>
+                          }
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="col-lg-1 col-md-1">
+                        {{ t('Product') }}
+                      </th>
+                      <td>
+                        {{ contract.details.contract_details.product }}
+                      </td>
+                      <th>
+                        {{ t('Reaction rate') }}
+                      </th>
+                      <td>
+                        {{ contract.details.contract_details.reaction_rate }}
+                      </td>
+                      <td rowspan="5">
+                        <img class="w-100" [src]="contract.details.contract.image"
+                          alt="CMDB contact image"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="col-lg-1 col-md-1">
+                        {{ t('Title') }}
+                      </th>
+                      <td>
+                        {{ contract.details.contract.title }}
+                      </td>
+                      <th>
+                        {{ t('Costs') }}
+                      </th>
+                      <td>
+                        {{ contract.details.contract_details.costs }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        {{ t('Type') }}
+                      </th>
+                      <td>
+                        {{ contract.details.contract.type_title }}
+                      </td>
+                      <th>
+                        {{ t('Payment period') }}
+                      </th>
+                      <td>
+                        {{ contract.details.contract_details.payment_period }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        {{ t('CMDB Status ') }}
+                      </th>
+                      <td>
+                        {{ contract.details.contract.cmdb_status_title }}
+                      </td>
+                      <th>
+                        {{ t('Cost calculation') }}
+                      </th>
+                      <td>
+                        {{ contract.details.contract_details.cost_calculation }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>
+                        {{ t('Contact') }}
+                      </th>
+                      <td>
+                        {{ contract.details.contact?.contact }}
+                      </td>
+                      <th>
+                        {{ t('Website') }}
+                      </th>
+                      <td>
+                        {{ contract.details.contact?.website }}
+                      </td>
+                    </tr>
+                  }
+                  <tr>
+                    <th colspan="6" class="border-primary-top">
+                      <fa-icon [icon]="['fas', 'file-invoice']" class="text-primary"></fa-icon>
+                      {{ t('Accounting') }}
+                    </th>
+                  </tr>
+                  <tr>
+                    <th class="col-lg-1 col-md-1">
+                      {{ t('Inventory number') }}
+                    </th>
+                    <td>
+                      {{ result.response.accounting?.inventory_no }}
+                    </td>
+                    <th>
+                      {{ t('Acquirement date') }}
+                    </th>
+                    <td colspan="2">
+                      <fa-icon [icon]="['fas', 'calendar-alt']" class="text-primary"></fa-icon>
+                      {{ result.response.accounting?.acquirementdate }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      {{ t('Invoice number') }}
+                    </th>
+                    <td>
+                      {{ result.response.accounting?.invoice_no }}
+                    </td>
+                    <th>
+                      {{ t('Order number') }}
+                    </th>
+                    <td colspan="2">
+                      {{ result.response.accounting?.order_no }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      {{ t('Guarantee period') }}
+                    </th>
+                    <td>
+                      {{ result.response.accounting?.guarantee_period }}
+                      {{ result.response.accounting?.guarantee_period_unit }}
+                    </td>
+                    <th>
+                      {{ t('Guarantee period status / Guarantee period base') }}
+                    </th>
+                    <td colspan="2">
+                      {{ result.response.accounting?.guarantee_period_status }}
+                      @if (result.response.accounting?.guarantee_period_base) {
+                        <span>
+                          /
+                          {{ result.response.accounting?.guarantee_period_base }}
+                        </span>
+                      }
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </c-card-body>
+          }
+          @if (selectedTab == 'dependencyTree') {
+            <c-card-body>
+              <oitc-dependency-tree
+                [objectId]="hostId"
+                [type]="'host'"
+              [name]="hostname"></oitc-dependency-tree>
+            </c-card-body>
+          }
+        </c-card>
+      </c-col>
     </c-row>
+  }
 
 </ng-container>

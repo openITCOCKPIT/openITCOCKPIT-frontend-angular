@@ -26,7 +26,7 @@ import {
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { DeleteAllItem, DeleteAllResponse } from './delete-bookmark.interface';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DELETE_SERVICE_TOKEN } from '../../tokens/delete-injection.token';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -44,10 +44,8 @@ import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbut
     TranslocoDirective,
     RowComponent,
     ColComponent,
-    NgForOf,
     FaIconComponent,
     ProgressComponent,
-    NgIf,
     XsButtonDirective
 ],
     templateUrl: './delete-bookmark-modal.component.html',

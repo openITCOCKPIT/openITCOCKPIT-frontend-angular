@@ -46,7 +46,7 @@ import {
 } from '../../../components/actions-button-element/actions-button-element.component';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -91,8 +91,6 @@ import { ServicetemplateTypesEnum } from '../../servicetemplates/servicetemplate
     MatSortHeader,
     NavComponent,
     NavItemComponent,
-    NgForOf,
-    NgIf,
     NoRecordsComponent,
     PaginateOrScrollComponent,
     SelectAllComponent,

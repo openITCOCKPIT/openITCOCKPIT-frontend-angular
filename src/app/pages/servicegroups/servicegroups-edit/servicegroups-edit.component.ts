@@ -18,7 +18,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 
-import { NgIf } from '@angular/common';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -50,36 +50,35 @@ import {
 @Component({
     selector: 'oitc-servicegroups-edit',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        NgSelectModule,
-        PermissionDirective,
-        RequiredIconComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        ObjectUuidComponent,
-        SelectComponent,
-        MultiSelectComponent,
-        FormLoaderComponent,
-        MultiSelectOptgroupComponent,
-        InputGroupComponent,
-        TranslocoPipe
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    NgSelectModule,
+    PermissionDirective,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    ObjectUuidComponent,
+    SelectComponent,
+    MultiSelectComponent,
+    FormLoaderComponent,
+    MultiSelectOptgroupComponent,
+    InputGroupComponent,
+    TranslocoPipe
+],
     templateUrl: './servicegroups-edit.component.html',
     styleUrl: './servicegroups-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, O
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ColComponent, PopoverDirective, RowComponent, TooltipDirective } from '@coreui/angular';
 import { SkeletonModule } from 'primeng/skeleton';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { DowntimeObject } from '../downtimes.interface';
@@ -12,17 +12,16 @@ import { DowntimesService } from '../downtimes.service';
 @Component({
     selector: 'oitc-downtime-icon',
     imports: [
-        FaIconComponent,
-        PopoverDirective,
-        RowComponent,
-        ColComponent,
-        SkeletonModule,
-        NgIf,
-        TooltipDirective,
-        TranslocoPipe,
-        TranslocoDirective,
-        AsyncPipe
-    ],
+    FaIconComponent,
+    PopoverDirective,
+    RowComponent,
+    ColComponent,
+    SkeletonModule,
+    TooltipDirective,
+    TranslocoPipe,
+    TranslocoDirective,
+    AsyncPipe
+],
     templateUrl: './downtime-icon.component.html',
     styleUrl: './downtime-icon.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

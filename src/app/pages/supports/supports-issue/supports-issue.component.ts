@@ -14,23 +14,22 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SupportsService } from '../supports.service';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-supports-issue',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        RowComponent,
-        ColComponent,
-        NgIf
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    RowComponent,
+    ColComponent
+],
     templateUrl: './supports-issue.component.html',
     styleUrl: './supports-issue.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

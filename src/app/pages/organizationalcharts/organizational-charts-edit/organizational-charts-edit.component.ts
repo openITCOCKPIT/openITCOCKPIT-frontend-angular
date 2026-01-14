@@ -24,7 +24,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import {
     OrganizationalChartsEditorComponent
 } from '../organizational-charts-editor/organizational-charts-editor.component';
@@ -37,31 +37,30 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 @Component({
     selector: 'oitc-organizational-charts-edit',
     imports: [
-        BackButtonDirective,
-        BadgeComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        OrganizationalChartsEditorComponent,
-        PermissionDirective,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        FormLoaderComponent,
-        RouterLink,
-        NgIf
-    ],
+    BackButtonDirective,
+    BadgeComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    OrganizationalChartsEditorComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    FormLoaderComponent,
+    RouterLink
+],
     templateUrl: './organizational-charts-edit.component.html',
     styleUrl: './organizational-charts-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

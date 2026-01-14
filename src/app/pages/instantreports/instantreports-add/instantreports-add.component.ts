@@ -24,7 +24,7 @@ import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { InstantreportPost } from '../instantreports.interface';
@@ -70,7 +70,6 @@ import { HistoryService } from '../../../history.service';
     FormErrorDirective,
     FormFeedbackComponent,
     FormLabelDirective,
-    NgIf,
     RequiredIconComponent,
     SelectComponent,
     FormControlDirective,

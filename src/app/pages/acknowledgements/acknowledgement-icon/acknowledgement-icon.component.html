@@ -1,62 +1,66 @@
 <ng-container *transloco="let t">
-    @if (this.PermissionsService.hasPermissionObservable([type, 'browser'])|async) {
+  @if (this.PermissionsService.hasPermissionObservable([type, 'browser'])|async) {
 
-        <span
-            (mouseenter)="loadAcknowledgementDetails()"
-            (mouseleave)="cancelDebounce()"
-            class="p-1 cursor-pointer">
-            <fa-icon
-                [icon]="(acknowledgement_type === AcknowledgementTypes.Normal)?['far', 'user']:['fas', 'user']"
-                [cPopover]="popoverHtml"
-                cPopoverPlacement="right"
-                [cPopoverTrigger]="'hover'">
-                <ng-template #popoverHtml>
-                    @if (isLoading) {
-                        <c-row>
-                            <c-col xs="12" class="p-4">
-                                <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+    <span
+      (mouseenter)="loadAcknowledgementDetails()"
+      (mouseleave)="cancelDebounce()"
+      class="p-1 cursor-pointer">
+      <fa-icon
+        [icon]="(acknowledgement_type === AcknowledgementTypes.Normal)?['far', 'user']:['fas', 'user']"
+        [cPopover]="popoverHtml"
+        cPopoverPlacement="right"
+        [cPopoverTrigger]="'hover'">
+        <ng-template #popoverHtml>
+          @if (isLoading) {
+            <c-row>
+              <c-col xs="12" class="p-4">
+                <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
 
-                                <p-skeleton styleClass="mb-2"></p-skeleton>
-                                <p-skeleton width="10rem" styleClass="mb-2"></p-skeleton>
-                                <p-skeleton width="5rem" styleClass="mb-2"></p-skeleton>
-                            </c-col>
-                        </c-row>
-                    } @else {
-                        <h3 class="popover-header">
-                            <ng-container *ngIf="type === 'hosts'">
-                                {{ t('State of host is acknowledged') }}
-                            </ng-container>
-                            <ng-container *ngIf="type === 'services'">
-                                {{ t('State of service is acknowledged') }}
-                            </ng-container>
-                            <ng-container *ngIf="acknowledgement?.is_sticky">
-                                ({{ t('Sticky') }})
-                            </ng-container>
-                        </h3>
-                        <div class="popover-body">
-                            <dl class="row">
-                                <dt class="col-4">{{ t('Set by') }}:</dt>
-                                <dd class="col-8">{{ acknowledgement?.author_name }}</dd>
+                <p-skeleton styleClass="mb-2"></p-skeleton>
+                <p-skeleton width="10rem" styleClass="mb-2"></p-skeleton>
+                <p-skeleton width="5rem" styleClass="mb-2"></p-skeleton>
+              </c-col>
+            </c-row>
+          } @else {
+            <h3 class="popover-header">
+              @if (type === 'hosts') {
+                {{ t('State of host is acknowledged') }}
+              }
+              @if (type === 'services') {
+                {{ t('State of service is acknowledged') }}
+              }
+              @if (acknowledgement?.is_sticky) {
+                ({{ t('Sticky') }})
+              }
+            </h3>
+            <div class="popover-body">
+              <dl class="row">
+                <dt class="col-4">{{ t('Set by') }}:</dt>
+                <dd class="col-8">{{ acknowledgement?.author_name }}</dd>
 
-                                <dt class="col-4">{{ t('Set at') }}:</dt>
-                                <dd class="col-8">{{ acknowledgement?.entry_time }}</dd>
+                <dt class="col-4">{{ t('Set at') }}:</dt>
+                <dd class="col-8">{{ acknowledgement?.entry_time }}</dd>
 
-                                <dt class="col-4">{{ t('Comment') }}:</dt>
-                                <dd class="col-8">{{ acknowledgement?.comment_data }}</dd>
-                            </dl>
-                        </div>
-                    }
-                </ng-template>
-            </fa-icon>
-        </span>
-    } @else {
-        <span class="p-1">
-            <!-- User has no permissions to browser action -->
-            <fa-icon [icon]="['far', 'user']" *ngIf="acknowledgement_type === AcknowledgementTypes.Normal"
-                     [cTooltip]="'Acknowledgedment' | transloco" cTooltipPlacement="right"></fa-icon>
+                <dt class="col-4">{{ t('Comment') }}:</dt>
+                <dd class="col-8">{{ acknowledgement?.comment_data }}</dd>
+              </dl>
+            </div>
+          }
+        </ng-template>
+      </fa-icon>
+    </span>
+  } @else {
+    <span class="p-1">
+      <!-- User has no permissions to browser action -->
+      @if (acknowledgement_type === AcknowledgementTypes.Normal) {
+        <fa-icon [icon]="['far', 'user']"
+        [cTooltip]="'Acknowledgedment' | transloco" cTooltipPlacement="right"></fa-icon>
+      }
 
-            <fa-icon [icon]="['fas', 'user']" *ngIf="acknowledgement_type === AcknowledgementTypes.Sticky"
-                     [cTooltip]="'Sticky Acknowledgement' | transloco" cTooltipPlacement="right"></fa-icon>
-        </span>
-    }
+      @if (acknowledgement_type === AcknowledgementTypes.Sticky) {
+        <fa-icon [icon]="['fas', 'user']"
+        [cTooltip]="'Sticky Acknowledgement' | transloco" cTooltipPlacement="right"></fa-icon>
+      }
+    </span>
+  }
 </ng-container>

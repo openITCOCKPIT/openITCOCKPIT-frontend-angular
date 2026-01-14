@@ -23,7 +23,7 @@ import {
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgForOf } from '@angular/common';
+
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { PaginatorModule } from 'primeng/paginator';
@@ -33,28 +33,27 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-automaps-copy',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        XsButtonDirective,
-        FormLoaderComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        NgForOf,
-        PaginatorModule,
-        RequiredIconComponent,
-        CardFooterComponent,
-        FormsModule
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    XsButtonDirective,
+    FormLoaderComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    PaginatorModule,
+    RequiredIconComponent,
+    CardFooterComponent,
+    FormsModule
+],
     templateUrl: './automaps-copy.component.html',
     styleUrl: './automaps-copy.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

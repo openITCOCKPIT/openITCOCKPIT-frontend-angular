@@ -22,7 +22,7 @@ import { GrafanaEditorService } from '../grafana-editor.service';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../../layouts/primeng/select.interface';
 import { GrafanaMetricOptionsService } from './grafana-metric-options.service';
 import { DashboardRowMetric, GrfanaEditorCurrentMetricPost } from '../grafana-editor.interface';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ServicesService } from '../../../../../../pages/services/services.service';
 import { ROOT_CONTAINER } from '../../../../../../pages/changelogs/object-types.enum';
 import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.directive';
@@ -36,27 +36,26 @@ import { GrafanaColor, GrafanaColors } from './GrafanaColors.class';
 @Component({
     selector: 'oitc-grafana-metric-options-modal',
     imports: [
-        ButtonCloseDirective,
-        ColComponent,
-        FaIconComponent,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        FormsModule,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        ModalToggleDirective,
-        NgIf,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        SelectComponent,
-        NgClass
-    ],
+    ButtonCloseDirective,
+    ColComponent,
+    FaIconComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    FormsModule,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    ModalToggleDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    SelectComponent,
+    NgClass
+],
     templateUrl: './grafana-metric-options-modal.component.html',
     styleUrl: './grafana-metric-options-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

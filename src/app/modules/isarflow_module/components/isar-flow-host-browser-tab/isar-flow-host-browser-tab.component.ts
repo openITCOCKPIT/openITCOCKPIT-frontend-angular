@@ -7,7 +7,7 @@ import {
     IsarFlowHostInformationResponse,
     IsarFlowInterfaceInformationResponse
 } from '../../pages/isarflow-hosts/isarflow-hosts.interface';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
     CardBodyComponent,
     CardComponent,
@@ -30,23 +30,22 @@ import { IsarFlowTimepickerChange } from '../isar-flow-timepicker.interface';
 @Component({
     selector: 'oitc-isar-flow-host-browser-tab',
     imports: [
-        NgIf,
-        TranslocoDirective,
-        RowComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        SelectComponent,
-        NgClass,
-        ColComponent,
-        IframeComponent,
-        IsarFlowTimepickerComponent
-    ],
+    TranslocoDirective,
+    RowComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    SelectComponent,
+    NgClass,
+    ColComponent,
+    IframeComponent,
+    IsarFlowTimepickerComponent
+],
     templateUrl: './isar-flow-host-browser-tab.component.html',
     styleUrl: './isar-flow-host-browser-tab.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

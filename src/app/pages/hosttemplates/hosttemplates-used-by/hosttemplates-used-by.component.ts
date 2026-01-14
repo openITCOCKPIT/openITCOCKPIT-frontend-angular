@@ -22,7 +22,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 import { HostObjectCake2 } from '../../hosts/hosts.interface';
 import { HosttemplateEntity } from '../hosttemplates.interface';
@@ -43,35 +43,33 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 @Component({
     selector: 'oitc-hosttemplates-used-by',
     imports: [
-        BackButtonDirective,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        NavComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        NgIf,
-        NotUsedByObjectComponent,
-        NavItemComponent,
-        ContainerComponent,
-        NgForOf,
-        TableDirective,
-        ItemSelectComponent,
-        TranslocoPipe,
-        ActionsButtonComponent,
-        ActionsButtonElementComponent,
-        DropdownDividerDirective,
-        DeleteAllModalComponent,
-        ColComponent,
-        RowComponent,
-        SelectAllComponent,
-        FormLoaderComponent,
-        AsyncPipe
-    ],
+    BackButtonDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    NotUsedByObjectComponent,
+    NavItemComponent,
+    ContainerComponent,
+    TableDirective,
+    ItemSelectComponent,
+    TranslocoPipe,
+    ActionsButtonComponent,
+    ActionsButtonElementComponent,
+    DropdownDividerDirective,
+    DeleteAllModalComponent,
+    ColComponent,
+    RowComponent,
+    SelectAllComponent,
+    FormLoaderComponent,
+    AsyncPipe
+],
     templateUrl: './hosttemplates-used-by.component.html',
     styleUrl: './hosttemplates-used-by.component.css',
     providers: [

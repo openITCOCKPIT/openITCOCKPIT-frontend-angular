@@ -1,128 +1,137 @@
 <!-- Docs: https://flow.foblex.com/ -->
 <f-flow fDraggable (fLoaded)="onLoaded()" class="h-100">
-    <f-canvas fZoom>
-        @for (connection of connections; track connection.id) {
-            <f-connection [fOffset]="8" [fOutputId]="connection.from" [fInputId]="connection.to"
-                          [fSelectionDisabled]="true"
-                          [fReassignDisabled]="true"
-                          [ngClass]="{'animated':animated() > 0}"
-                          [fType]="connectionLine()"
-                          fBehavior="fixed">
+  <f-canvas fZoom>
+    @for (connection of connections; track connection.id) {
+      <f-connection [fOffset]="8" [fOutputId]="connection.from" [fInputId]="connection.to"
+        [fSelectionDisabled]="true"
+        [fReassignDisabled]="true"
+        [ngClass]="{'animated':animated() > 0}"
+        [fType]="connectionLine()"
+        fBehavior="fixed">
 
 
-            </f-connection>
-        }
-        @for (group of groups; track group.id) {
-            <div fGroup class="with-padding"
-                 [fGroupSize]="group.fGroupSize"
-                 [fGroupPosition]="group.fGroupPosition"
-                 [ngClass]="{'f-group-error': layerWithErrors[group.layerIndex]}">
-                <div class="title">
-                    <button cButton class="ripple w-100 text-center" color="success" type="button"
-                            (click)="toggleVServiceModalFunc(group.layerIndex, 'add')">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                        <ng-container *transloco="let t">
-                            {{ t('New vService') }}
-                        </ng-container>
+      </f-connection>
+    }
+    @for (group of groups; track group.id) {
+      <div fGroup class="with-padding"
+        [fGroupSize]="group.fGroupSize"
+        [fGroupPosition]="group.fGroupPosition"
+        [ngClass]="{'f-group-error': layerWithErrors[group.layerIndex]}">
+        <div class="title">
+          <button cButton class="ripple w-100 text-center" color="success" type="button"
+            (click)="toggleVServiceModalFunc(group.layerIndex, 'add')">
+            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+            <ng-container *transloco="let t">
+              {{ t('New vService') }}
+            </ng-container>
+          </button>
+        </div>
+      </div>
+    }
+
+    @for (node of nodes; track node.id) {
+      <!-- vService Node -->
+      <div fNode class="evc-service-container"
+        [ngClass]="{'evc-service-ok': node.evcNode.service?.servicestatus?.currentState === 0,'evc-service-warning': node.evcNode.service?.servicestatus?.currentState === 1,'evc-service-critical': node.evcNode.service?.servicestatus?.currentState === 2,'evc-service-unknown': node.evcNode.service?.servicestatus?.currentState === 3, 'evc-operator-container': node.evcNode.type === 'operator', 'evc-error': evcNodeWithErrors[node.evcNode.id], 'gradient-box': node.highlight }"
+        [fNodePosition]="node.position"
+        fNodeOutput [fOutputId]="node.connectorId"
+        [fOutputConnectableSide]="EFConnectableSide.LEFT"
+        fNodeInput [fInputId]="node.connectorId"
+        [fInputConnectableSide]="EFConnectableSide.RIGHT">
+
+        <!-- We can not have an if or ngIf here or on fNode  -->
+
+        @if (node.evcNode.type === 'service') {
+          <div class="service-node">
+            @if (node.evcNode.layerIndex > 0) {
+              <div class="evc-service-edit-box">
+                <c-button-group aria-label="Basic example" role="group">
+                  <button cButton color="primary" size="xs"
+                    (click)="toggleVServiceModalFunc(node.evcNode.layerIndex, 'edit', node.evcNode.evcTreeItem)">
+                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                  </button>
+                  @if (!node.evcNode.usedBy || node.evcNode.usedBy.length === 0) {
+                    <button cButton color="danger" size="xs"
+                      (click)="toggleDeleteEvcNodeFunc(node.evcNode.layerIndex, node.evcNode)">
+                      <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                     </button>
-                </div>
-            </div>
+                  }
+                  @if (node.evcNode.usedBy && node.evcNode.usedBy.length > 0) {
+                    <button cButton color="warning" size="xs"
+                      [cTooltip]="'Used by: ' + node.evcNode.usedBy.join(', ') | transloco"
+                      cTooltipPlacement="top">
+                      <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                    </button>
+                  }
+                </c-button-group>
+              </div>
+            }
+            <!-- vService container -->
+
+            <!-- Disable Badge -->
+            @if (node.evcNode.service?.disabled) {
+              <span
+                class="position-absolute top-0 start-0 translate-middle badge rounded-pill"
+                [ngClass]="{'bg-ok':stateForDisabledService() == 0,'bg-warning':stateForDisabledService() == 1,'bg-critical':stateForDisabledService() == 2,'bg-unknown':stateForDisabledService() == 3}">
+                <fa-icon [icon]="['fas', 'plug']" size="lg"
+                  [cTooltip]="disabledStateTitle"
+                cTooltipPlacement="top"></fa-icon>
+              </span>
+            }
+
+            <!-- Missing Parent vService / Error Badge -->
+            @if (evcNodeWithErrors[node.evcNode.id]) {
+              <span
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                [cTooltip]="'Missing parent service'|transloco"
+                cTooltipPlacement="top">
+                <fa-icon [icon]="['fas', 'link-slash']" size="lg"></fa-icon>
+              </span>
+            }
+
+            @if (node.evcNode.service) {
+              <c-row class="m-0">
+                <c-col [xs]="12" class="text-truncate p-0 ps-1 evc-tree-hostname"
+                  [ngClass]="{'text-muted':node.evcNode.service.disabled}"
+                  [cTooltip]="node.evcNode.service.host.name" cTooltipPlacement="top">
+                  <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                  {{ node.evcNode.service.host.name }}
+                </c-col>
+                <c-col [xs]="12" class="text-truncate p-0 ps-1"
+                  [cTooltip]="node.evcNode.service.servicename " cTooltipPlacement="top"
+                  [ngClass]="{'text-muted':node.evcNode.service.disabled}">
+                  @if (node.evcNode.service.service_type !== ServiceTypesEnum.EVK_SERVICE) {
+                    <fa-icon [icon]="['fas', 'cog']"
+                    ></fa-icon>
+                  }
+                  @if (node.evcNode.service.service_type === ServiceTypesEnum.EVK_SERVICE) {
+                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
+                    class="text-primary"></fa-icon>
+                  }
+                  {{ node.evcNode.service.servicename }}
+                </c-col>
+              </c-row>
+            }
+          </div>
         }
 
-        @for (node of nodes; track node.id) {
-            <!-- vService Node -->
-            <div fNode class="evc-service-container"
-                 [ngClass]="{'evc-service-ok': node.evcNode.service?.servicestatus?.currentState === 0,'evc-service-warning': node.evcNode.service?.servicestatus?.currentState === 1,'evc-service-critical': node.evcNode.service?.servicestatus?.currentState === 2,'evc-service-unknown': node.evcNode.service?.servicestatus?.currentState === 3, 'evc-operator-container': node.evcNode.type === 'operator', 'evc-error': evcNodeWithErrors[node.evcNode.id], 'gradient-box': node.highlight }"
-                 [fNodePosition]="node.position"
-                 fNodeOutput [fOutputId]="node.connectorId"
-                 [fOutputConnectableSide]="EFConnectableSide.LEFT"
-                 fNodeInput [fInputId]="node.connectorId"
-                 [fInputConnectableSide]="EFConnectableSide.RIGHT">
+        @if (node.evcNode.type === 'operator') {
+          <!-- Operator container -->
+          <div class="operator-node">
+            <div class="d-flex align-items-center h-100">
+              <fa-icon [icon]="['fas', 'microchip']" class="evc-operator-icon ps-1"></fa-icon>
 
-                <!-- We can not have an if or ngIf here or on fNode  -->
-
-                @if (node.evcNode.type === 'service') {
-                    <div class="service-node">
-                        <div class="evc-service-edit-box" *ngIf="node.evcNode.layerIndex > 0">
-                            <c-button-group aria-label="Basic example" role="group">
-                                <button cButton color="primary" size="xs"
-                                        (click)="toggleVServiceModalFunc(node.evcNode.layerIndex, 'edit', node.evcNode.evcTreeItem)">
-                                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                                </button>
-                                <button cButton color="danger" size="xs"
-                                        *ngIf="!node.evcNode.usedBy || node.evcNode.usedBy.length === 0"
-                                        (click)="toggleDeleteEvcNodeFunc(node.evcNode.layerIndex, node.evcNode)">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                </button>
-                                <button cButton color="warning" size="xs"
-                                        *ngIf="node.evcNode.usedBy && node.evcNode.usedBy.length > 0"
-                                        [cTooltip]="'Used by: ' + node.evcNode.usedBy.join(', ') | transloco"
-                                        cTooltipPlacement="top">
-                                    <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                                </button>
-                            </c-button-group>
-                        </div>
-                        <!-- vService container -->
-
-                        <!-- Disable Badge -->
-                        @if (node.evcNode.service?.disabled) {
-                            <span
-                                class="position-absolute top-0 start-0 translate-middle badge rounded-pill"
-                                [ngClass]="{'bg-ok':stateForDisabledService() == 0,'bg-warning':stateForDisabledService() == 1,'bg-critical':stateForDisabledService() == 2,'bg-unknown':stateForDisabledService() == 3}">
-                                <fa-icon [icon]="['fas', 'plug']" size="lg"
-                                         [cTooltip]="disabledStateTitle"
-                                         cTooltipPlacement="top"></fa-icon>
-                            </span>
-                        }
-
-                        <!-- Missing Parent vService / Error Badge -->
-                        @if (evcNodeWithErrors[node.evcNode.id]) {
-                            <span
-                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                [cTooltip]="'Missing parent service'|transloco"
-                                cTooltipPlacement="top">
-                                <fa-icon [icon]="['fas', 'link-slash']" size="lg"></fa-icon>
-                            </span>
-                        }
-
-                        <c-row *ngIf="node.evcNode.service" class="m-0">
-                            <c-col [xs]="12" class="text-truncate p-0 ps-1 evc-tree-hostname"
-                                   [ngClass]="{'text-muted':node.evcNode.service.disabled}"
-                                   [cTooltip]="node.evcNode.service.host.name" cTooltipPlacement="top">
-                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                {{ node.evcNode.service.host.name }}
-                            </c-col>
-                            <c-col [xs]="12" class="text-truncate p-0 ps-1"
-                                   [cTooltip]="node.evcNode.service.servicename " cTooltipPlacement="top"
-                                   [ngClass]="{'text-muted':node.evcNode.service.disabled}">
-                                <fa-icon [icon]="['fas', 'cog']"
-                                         *ngIf="node.evcNode.service.service_type !== ServiceTypesEnum.EVK_SERVICE"></fa-icon>
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
-                                         *ngIf="node.evcNode.service.service_type === ServiceTypesEnum.EVK_SERVICE"
-                                         class="text-primary"></fa-icon>
-                                {{ node.evcNode.service.servicename }}
-                            </c-col>
-                        </c-row>
-                    </div>
-                }
-
-                @if (node.evcNode.type === 'operator') {
-                    <!-- Operator container -->
-                    <div class="operator-node">
-                        <div class="d-flex align-items-center h-100">
-                            <fa-icon [icon]="['fas', 'microchip']" class="evc-operator-icon ps-1"></fa-icon>
-
-                            <div class="flex-1 text-center">
-                                {{ node.evcNode.operator }}
-                            </div>
-                        </div>
-                    </div>
-                }
-
+              <div class="flex-1 text-center">
+                {{ node.evcNode.operator }}
+              </div>
             </div>
-
-
+          </div>
         }
-    </f-canvas>
-    <f-minimap [fMinSize]="2000" [title]="'Navigator' | transloco" class="cursor-grab"></f-minimap>
+
+      </div>
+
+
+    }
+  </f-canvas>
+  <f-minimap [fMinSize]="2000" [title]="'Navigator' | transloco" class="cursor-grab"></f-minimap>
 </f-flow>

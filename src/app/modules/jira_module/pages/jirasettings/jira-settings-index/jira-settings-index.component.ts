@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
@@ -41,38 +41,36 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 @Component({
     selector: 'oitc-jira-settings-index',
     imports: [
-        FaIconComponent,
-        FormLoaderComponent,
-        NgIf,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        ApikeyDocModalComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardFooterComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        RequiredIconComponent,
-        XsButtonDirective,
-        SelectComponent,
-        MultiSelectComponent,
-        InputGroupComponent,
-        RowComponent,
-        ColComponent,
-        NgForOf,
-        CardTextDirective,
-        TranslocoPipe
-    ],
+    FaIconComponent,
+    FormLoaderComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    ApikeyDocModalComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    RequiredIconComponent,
+    XsButtonDirective,
+    SelectComponent,
+    MultiSelectComponent,
+    InputGroupComponent,
+    RowComponent,
+    ColComponent,
+    CardTextDirective,
+    TranslocoPipe
+],
     templateUrl: './jira-settings-index.component.html',
     styleUrl: './jira-settings-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

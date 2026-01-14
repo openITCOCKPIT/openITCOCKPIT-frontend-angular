@@ -14,7 +14,7 @@ export class PushNotificationsService implements OnDestroy {
     private _uuid: string | null = null;
 
     private _success: boolean = false;
-    private keepAliveInterval: number | null = null;
+    private keepAliveInterval: any | null = null;
     private _uniqid: string | null = null;
     private _hasPermission: boolean = false;
 

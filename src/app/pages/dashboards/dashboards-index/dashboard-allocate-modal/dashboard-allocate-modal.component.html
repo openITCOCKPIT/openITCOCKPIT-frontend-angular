@@ -1,141 +1,139 @@
 <ng-container *transloco="let t">
-    <c-modal #dashboardAllocateModal fullscreen="md" id="dashboardAllocateModal" size="lg">
-        <c-modal-header>
-            <h5 cModalTitle>
-                <fa-icon [icon]="['fas', 'table']"></fa-icon>
-                {{ t('Allocate Dashboard') }}
-            </h5>
-            <button (click)="cleanup()" [cModalToggle]="dashboardAllocateModal.id" cButtonClose></button>
-        </c-modal-header>
-        <c-modal-body>
+  <c-modal #dashboardAllocateModal fullscreen="md" id="dashboardAllocateModal" size="lg">
+    <c-modal-header>
+      <h5 cModalTitle>
+        <fa-icon [icon]="['fas', 'table']"></fa-icon>
+        {{ t('Allocate Dashboard') }}
+      </h5>
+      <button (click)="cleanup()" [cModalToggle]="dashboardAllocateModal.id" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
 
-            <div *ngIf="tab && tab.dashboard_tab_allocation">
-
-                <div class="mb-3">
-                    <label cLabel for="allocation_container_id">
-                        {{ t('Container') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-
-                    <oitc-select
-                        name="allocation_container_id"
-                        id="allocation_container_id"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="tab.dashboard_tab_allocation.container_id"
-                        [options]="containers"
-                        (onChange)="loadElements()"
-                        oitcFormError [errors]="errors" errorField="container_id"
-                        [appendTo]="''">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-                </div>
-
-
-                <div class="mb-3">
-                    <label cLabel for="allocation_name">
-                        {{ t('Name of the allocation') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="allocation_name" type="text"
-                           name="allocation_name"
-                           oitcFormError [errors]="errors" errorField="name"
-                           [(ngModel)]="tab.dashboard_tab_allocation.name">
-                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="allocation_container_id">
-                        {{ t('Dashboard to allocate') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-
-                    <oitc-select
-                        name="allocation_dashboard_tab_id"
-                        id="allocation_dashboard_tab_id"
-                        optionValue="key"
-                        optionLabel="value"
-                        [disabled]="true"
-                        [(ngModel)]="tab.dashboard_tab_allocation.dashboard_tab_id"
-                        [options]="dashboardTabs"
-                        oitcFormError [errors]="errors" errorField="dashboard_tab_id"
-                        [appendTo]="''">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors" errorField="dashboard_tab_id"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="allocation_users">
-                        {{ t('Allocated Users') }}
-                    </label>
-                    <oitc-multi-select
-                        name="allocation_users"
-                        id="allocation_users"
-                        optionValue="key"
-                        optionLabel="value"
-                        [options]="users"
-                        [(ngModel)]="tab.dashboard_tab_allocation.users._ids"
-                        [appendTo]="''">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="users"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="allocation_usergroups">
-                        {{ t('Allocated User roles') }}
-                    </label>
-                    <oitc-multi-select
-                        name="allocation_usergroups"
-                        id="allocation_usergroups"
-                        optionValue="key"
-                        optionLabel="value"
-                        [options]="usergroups"
-                        [(ngModel)]="tab.dashboard_tab_allocation.usergroups._ids"
-                        [appendTo]="''">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="usergroups"></oitc-form-feedback>
-                </div>
-
-                <c-form-check>
-                    <input
-                        cFormCheckInput
-                        class="checkbox-lg checkbox-primary"
-                        [(ngModel)]="tab.dashboard_tab_allocation.pinned"
-                        id="allocation_pinned"
-                        name="allocation_pinned"
-                        type="checkbox"/>
-                    <label cFormCheckLabel for="allocation_pinned" class="ms-1 mt-1">
-                        {{ t('Pin Dashboard') }}
-                    </label>
-                    <div class="help-block">
-                        {{ t('If enabled, this dashboard will be pinned at the leftmost tab.') }}
-                    </div>
-                </c-form-check>
-
+      @if (tab && tab.dashboard_tab_allocation) {
+        <div>
+          <div class="mb-3">
+            <label cLabel for="allocation_container_id">
+              {{ t('Container') }}
+              <oitc-required-icon></oitc-required-icon>
+            </label>
+            <oitc-select
+              name="allocation_container_id"
+              id="allocation_container_id"
+              optionValue="key"
+              optionLabel="value"
+              [(ngModel)]="tab.dashboard_tab_allocation.container_id"
+              [options]="containers"
+              (onChange)="loadElements()"
+              oitcFormError [errors]="errors" errorField="container_id"
+              [appendTo]="''">
+            </oitc-select>
+            <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+          </div>
+          <div class="mb-3">
+            <label cLabel for="allocation_name">
+              {{ t('Name of the allocation') }}
+              <oitc-required-icon></oitc-required-icon>
+            </label>
+            <input cFormControl id="allocation_name" type="text"
+              name="allocation_name"
+              oitcFormError [errors]="errors" errorField="name"
+              [(ngModel)]="tab.dashboard_tab_allocation.name">
+            <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+          </div>
+          <div class="mb-3">
+            <label cLabel for="allocation_container_id">
+              {{ t('Dashboard to allocate') }}
+              <oitc-required-icon></oitc-required-icon>
+            </label>
+            <oitc-select
+              name="allocation_dashboard_tab_id"
+              id="allocation_dashboard_tab_id"
+              optionValue="key"
+              optionLabel="value"
+              [disabled]="true"
+              [(ngModel)]="tab.dashboard_tab_allocation.dashboard_tab_id"
+              [options]="dashboardTabs"
+              oitcFormError [errors]="errors" errorField="dashboard_tab_id"
+              [appendTo]="''">
+            </oitc-select>
+            <oitc-form-feedback [errors]="errors" errorField="dashboard_tab_id"></oitc-form-feedback>
+          </div>
+          <div class="mb-3">
+            <label cLabel for="allocation_users">
+              {{ t('Allocated Users') }}
+            </label>
+            <oitc-multi-select
+              name="allocation_users"
+              id="allocation_users"
+              optionValue="key"
+              optionLabel="value"
+              [options]="users"
+              [(ngModel)]="tab.dashboard_tab_allocation.users._ids"
+              [appendTo]="''">
+            </oitc-multi-select>
+            <oitc-form-feedback [errors]="errors" errorField="users"></oitc-form-feedback>
+          </div>
+          <div class="mb-3">
+            <label cLabel for="allocation_usergroups">
+              {{ t('Allocated User roles') }}
+            </label>
+            <oitc-multi-select
+              name="allocation_usergroups"
+              id="allocation_usergroups"
+              optionValue="key"
+              optionLabel="value"
+              [options]="usergroups"
+              [(ngModel)]="tab.dashboard_tab_allocation.usergroups._ids"
+              [appendTo]="''">
+            </oitc-multi-select>
+            <oitc-form-feedback [errors]="errors" errorField="usergroups"></oitc-form-feedback>
+          </div>
+          <c-form-check>
+            <input
+              cFormCheckInput
+              class="checkbox-lg checkbox-primary"
+              [(ngModel)]="tab.dashboard_tab_allocation.pinned"
+              id="allocation_pinned"
+              name="allocation_pinned"
+              type="checkbox"/>
+            <label cFormCheckLabel for="allocation_pinned" class="ms-1 mt-1">
+              {{ t('Pin Dashboard') }}
+            </label>
+            <div class="help-block">
+              {{ t('If enabled, this dashboard will be pinned at the leftmost tab.') }}
             </div>
+          </c-form-check>
+        </div>
+      }
 
-        </c-modal-body>
-        <c-modal-footer>
-            @if (PermissionsService.hasPermissionObservable(['DashboardAllocations', 'delete'])|async) {
-                <button *ngIf="mode === 'edit' && tab?.dashboard_tab_allocation?.id" (click)="deleteAllocation()"
-                        cButton color="danger" class="ripple me-auto" type="button">
-                    {{ t('Delete') }}
-                </button>
-            }
+    </c-modal-body>
+    <c-modal-footer>
+      @if (PermissionsService.hasPermissionObservable(['DashboardAllocations', 'delete'])|async) {
+        @if (mode === 'edit' && tab?.dashboard_tab_allocation?.id) {
+          <button (click)="deleteAllocation()"
+            cButton color="danger" class="ripple me-auto" type="button">
+            {{ t('Delete') }}
+          </button>
+        }
+      }
 
-            <button *ngIf="mode === 'add'" (click)="createAllocation()" cButton color="primary" class="ripple"
-                    type="button">
-                {{ t('Create Allocation') }}
-            </button>
-            <button *ngIf="mode === 'edit'" (click)="updateAllocation()" cButton color="primary" class="ripple"
-                    type="button">
-                {{ t('Update Allocation') }}
-            </button>
-            <button (click)="cleanup()" [cModalToggle]="dashboardAllocateModal.id" cButton color="default"
-                    class="ripple" type="button">
-                {{ t('Close') }}
-            </button>
-        </c-modal-footer>
-    </c-modal>
+      @if (mode === 'add') {
+        <button (click)="createAllocation()" cButton color="primary" class="ripple"
+          type="button">
+          {{ t('Create Allocation') }}
+        </button>
+      }
+      @if (mode === 'edit') {
+        <button (click)="updateAllocation()" cButton color="primary" class="ripple"
+          type="button">
+          {{ t('Update Allocation') }}
+        </button>
+      }
+      <button (click)="cleanup()" [cModalToggle]="dashboardAllocateModal.id" cButton color="default"
+        class="ripple" type="button">
+        {{ t('Close') }}
+      </button>
+    </c-modal-footer>
+  </c-modal>
 
 </ng-container>

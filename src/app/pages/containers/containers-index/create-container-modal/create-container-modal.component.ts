@@ -26,7 +26,7 @@ import {
   ModalTitleDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { LocationPost } from '../../../locations/locations.interface';
@@ -60,7 +60,6 @@ import { FormsModule } from '@angular/forms';
     ModalFooterComponent,
     ModalHeaderComponent,
     ModalTitleDirective,
-    NgIf,
     TranslocoDirective,
     XsButtonDirective,
     InputGroupComponent,

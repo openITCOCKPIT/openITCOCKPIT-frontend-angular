@@ -3,19 +3,16 @@ import { AdditionalHostInformationResult } from '../../../../pages/externalsyste
 import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { TableDirective } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-wan-line',
     imports: [
-        FaIconComponent,
-        FaLayersComponent,
-        TableDirective,
-        TranslocoDirective,
-        NgSwitchCase,
-        NgSwitch,
-        NgIf
-    ],
+    FaIconComponent,
+    FaLayersComponent,
+    TableDirective,
+    TranslocoDirective
+],
     templateUrl: './wan-line.component.html',
     styleUrl: './wan-line.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -21,7 +21,7 @@ import {
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {FormLoaderComponent} from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NgIf} from '@angular/common';
+
 import {PermissionDirective} from '../../../../../permissions/permission.directive';
 import {XsButtonDirective} from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {RouterLink} from '@angular/router';
@@ -38,35 +38,34 @@ import {HttpErrorResponse} from '@angular/common/http';
 @Component({
     selector: 'oitc-grafana-configuration-index',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormDirective,
-        FormLoaderComponent,
-        FormsModule,
-        NgIf,
-        PermissionDirective,
-        ReactiveFormsModule,
-        TranslocoDirective,
-        CardFooterComponent,
-        XsButtonDirective,
-        RouterLink,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        SelectComponent,
-        MultiSelectComponent,
-        OitcAlertComponent,
-        TranslocoPipe
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormDirective,
+    FormLoaderComponent,
+    FormsModule,
+    PermissionDirective,
+    ReactiveFormsModule,
+    TranslocoDirective,
+    CardFooterComponent,
+    XsButtonDirective,
+    RouterLink,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TrueFalseDirective,
+    SelectComponent,
+    MultiSelectComponent,
+    OitcAlertComponent,
+    TranslocoPipe
+],
     templateUrl: './grafana-configuration-index.component.html',
     styleUrl: './grafana-configuration-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

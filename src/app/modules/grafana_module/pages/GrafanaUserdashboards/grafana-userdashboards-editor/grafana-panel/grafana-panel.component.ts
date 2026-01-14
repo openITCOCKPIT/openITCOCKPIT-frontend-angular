@@ -20,7 +20,7 @@ import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-dir
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ChartTypeIconComponent } from './chart-type-icon/chart-type-icon.component';
 import { DashboardRowMetric, GrafanaEditorDashboardRow, GrafanaUnits } from '../grafana-editor.interface';
-import { NgIf } from '@angular/common';
+
 import { LabelLinkComponent } from '../../../../../../layouts/coreui/label-link/label-link.component';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
@@ -65,19 +65,18 @@ export interface MetricUpdatedEvent {
 @Component({
     selector: 'oitc-grafana-panel',
     imports: [
-        RowComponent,
-        ColComponent,
-        TranslocoDirective,
-        ButtonGroupComponent,
-        XsButtonDirective,
-        FaIconComponent,
-        TranslocoPipe,
-        ChartTypeIconComponent,
-        NgIf,
-        LabelLinkComponent,
-        BreadcrumbComponent,
-        BreadcrumbItemComponent
-    ],
+    RowComponent,
+    ColComponent,
+    TranslocoDirective,
+    ButtonGroupComponent,
+    XsButtonDirective,
+    FaIconComponent,
+    TranslocoPipe,
+    ChartTypeIconComponent,
+    LabelLinkComponent,
+    BreadcrumbComponent,
+    BreadcrumbItemComponent
+],
     templateUrl: './grafana-panel.component.html',
     styleUrl: './grafana-panel.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

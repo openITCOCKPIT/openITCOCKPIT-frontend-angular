@@ -48,7 +48,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { InstantreportEvaluationTypes, InstantreportObjectTypes } from '../instantreports.enums';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
@@ -95,7 +95,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
     InputGroupTextDirective,
     RowComponent,
     TranslocoPipe,
-    NgIf,
     TableLoaderComponent,
     MatSort,
     MatSortHeader,
@@ -104,7 +103,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
     SelectAllComponent,
     PaginateOrScrollComponent,
     ItemSelectComponent,
-    NgForOf,
     BadgeOutlineComponent,
     ActionsButtonComponent,
     ActionsButtonElementComponent,

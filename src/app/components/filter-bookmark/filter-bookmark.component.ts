@@ -37,7 +37,7 @@ import {
 import { HttpParams } from '@angular/common/http';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import {
     ButtonGroupComponent,
     CardHeaderComponent,
@@ -73,22 +73,21 @@ import { CustomAlertsIndexFilter } from '../../modules/customalert_module/pages/
 @Component({
     selector: 'oitc-filter-bookmark',
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        NgIf,
-        RowComponent,
-        ColComponent,
-        CardHeaderComponent,
-        FilterBookmarkSaveModalComponent,
-        XsButtonDirective,
-        ButtonGroupComponent,
-        DeleteBookmarkModalComponent,
-        FilterBookmarkExportModalComponent,
-        NgSelectModule,
-        FormsModule,
-        NgOptionHighlightDirective,
-        ContainerComponent
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    RowComponent,
+    ColComponent,
+    CardHeaderComponent,
+    FilterBookmarkSaveModalComponent,
+    XsButtonDirective,
+    ButtonGroupComponent,
+    DeleteBookmarkModalComponent,
+    FilterBookmarkExportModalComponent,
+    NgSelectModule,
+    FormsModule,
+    NgOptionHighlightDirective,
+    ContainerComponent
+],
     templateUrl: './filter-bookmark.component.html',
     styleUrl: './filter-bookmark.component.css',
     providers: [

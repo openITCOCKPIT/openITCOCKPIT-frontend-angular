@@ -20,7 +20,7 @@ import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.
 import { FormFeedbackComponent } from '../../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../../components/required-icon/required-icon.component';
-import { NgIf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FormsModule } from '@angular/forms';
 
@@ -31,7 +31,6 @@ import { FormsModule } from '@angular/forms';
     FormFeedbackComponent,
     PaginatorModule,
     RequiredIconComponent,
-    NgIf,
     FormSelectDirective,
     TranslocoDirective,
     FormsModule

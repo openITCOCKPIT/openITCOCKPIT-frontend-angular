@@ -1,249 +1,259 @@
 <ng-container *transloco="let t">
 
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['messagesOtd', 'index']"
-                   [routerLink]="['/', 'messagesOtd', 'index']">
-                    <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
-                    {{ t('Messages of the day') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Overview') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <a *oitcPermission="['messagesOtd', 'index']"
+            [routerLink]="['/', 'messagesOtd', 'index']">
+            <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
+            {{ t('Messages of the day') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'list']"></fa-icon>
+          {{ t('Overview') }}
+        </li>
+      </ol>
     </nav>
 
     <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Message of the day') }}
-                <small class="fw-300">
-                    {{ t('overview') }}
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="loadMessagesOfTheDay()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button *oitcPermission="['messagesOtd', 'add']"
-                            [routerLink]="['/', 'messagesOtd', 'add']"
-                            cButton
-                            class="ripple"
-                            color="success"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                        {{ t('New') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                        {{ t('Filter') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
+      <c-card-header>
+        <h5 cCardTitle>{{ t('Message of the day') }}
+          <small class="fw-300">
+            {{ t('overview') }}
+          </small>
+        </h5>
+        <c-nav class="card-toolbar card-header-pills">
+          <c-nav-item class="px-1">
+            <button (click)="loadMessagesOfTheDay()" cButton class="ripple" color="default" size="xs">
+              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+              {{ t('Refresh') }}
+            </button>
+          </c-nav-item>
+          <c-nav-item class="px-1">
+            <button *oitcPermission="['messagesOtd', 'add']"
+              [routerLink]="['/', 'messagesOtd', 'add']"
+              cButton
+              class="ripple"
+              color="success"
+              size="xs">
+              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+              {{ t('New') }}
+            </button>
+          </c-nav-item>
+          <c-nav-item class="px-1">
+            <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+              {{ t('Filter') }}
+            </button>
+          </c-nav-item>
+        </c-nav>
+      </c-card-header>
+      <c-card-body>
 
-            <!-- Filter -->
-            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-                <c-row>
-                    <c-col>
-                        <h6 class="pb-2 mb-3 border-bottom">
-                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                            {{ t('Filter') }}
-                        </h6>
-                    </c-col>
-                </c-row>
-                <form cForm>
-                    <c-row>
-                        <c-col md="6">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[MessagesOtd.title]']"
-                                       [placeholder]="'Filter by title' | transloco"
-                                       aria-label="Filter by title"
-                                       cFormControl
-                                       name="filter[MessagesOtd.title]"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col md="6">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[MessagesOtd.description]']"
-                                       [placeholder]="'Filter by description' | transloco"
-                                       aria-label="Filter by description"
-                                       cFormControl
-                                       name="filter[MessagesOtd.description]"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                    </c-row>
-                    <c-row class="mt-2">
-                        <c-col md="6">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[MessagesOtd.date]']"
-                                       [placeholder]="'Filter by date' | transloco"
-                                       aria-label="Filter by date"
-                                       cFormControl
-                                       name="filter[MessagesOtd.date]"
-                                       oitcDebounce
-                                       type="date"
-                                />
-                            </c-input-group>
-                        </c-col>
-                    </c-row>
-                    <c-row class="mt-2">
-                        <c-col class="text-end">
-                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                {{ t('Reset Filter') }}
-                            </button>
-                        </c-col>
-                    </c-row>
-                </form>
-            </c-container>
-            <!-- End Filter -->
+        <!-- Filter -->
+        <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+          <c-row>
+            <c-col>
+              <h6 class="pb-2 mb-3 border-bottom">
+                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                {{ t('Filter') }}
+              </h6>
+            </c-col>
+          </c-row>
+          <form cForm>
+            <c-row>
+              <c-col md="6">
+                <c-input-group>
+                  <span cInputGroupText>
+                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                  </span>
+                  <input (debouncedValue)="onFilterChange($event)"
+                    [(ngModel)]="params['filter[MessagesOtd.title]']"
+                    [placeholder]="'Filter by title' | transloco"
+                    aria-label="Filter by title"
+                    cFormControl
+                    name="filter[MessagesOtd.title]"
+                    oitcDebounce
+                    type="text"
+                    />
+                </c-input-group>
+              </c-col>
+              <c-col md="6">
+                <c-input-group>
+                  <span cInputGroupText>
+                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                  </span>
+                  <input (debouncedValue)="onFilterChange($event)"
+                    [(ngModel)]="params['filter[MessagesOtd.description]']"
+                    [placeholder]="'Filter by description' | transloco"
+                    aria-label="Filter by description"
+                    cFormControl
+                    name="filter[MessagesOtd.description]"
+                    oitcDebounce
+                    type="text"
+                    />
+                </c-input-group>
+              </c-col>
+            </c-row>
+            <c-row class="mt-2">
+              <c-col md="6">
+                <c-input-group>
+                  <span cInputGroupText>
+                    <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
+                  </span>
+                  <input (debouncedValue)="onFilterChange($event)"
+                    [(ngModel)]="params['filter[MessagesOtd.date]']"
+                    [placeholder]="'Filter by date' | transloco"
+                    aria-label="Filter by date"
+                    cFormControl
+                    name="filter[MessagesOtd.date]"
+                    oitcDebounce
+                    type="date"
+                    />
+                </c-input-group>
+              </c-col>
+            </c-row>
+            <c-row class="mt-2">
+              <c-col class="text-end">
+                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                  {{ t('Reset Filter') }}
+                </button>
+              </c-col>
+            </c-row>
+          </form>
+        </c-container>
+        <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!messagesOfTheDay"></oitc-table-loader>
+        @if (!messagesOfTheDay) {
+          <oitc-table-loader></oitc-table-loader>
+        }
 
-            <table *ngIf="messagesOfTheDay" bordered cTable class="mt-2 mb-0" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
+        @if (messagesOfTheDay) {
+          <table bordered cTable class="mt-2 mb-0" hover striped matSort
+            (matSortChange)="onSortChange($event)"
+            [matSortActive]="params.sort" [matSortDirection]="params.direction">
+            <thead>
+              <tr>
+                <th class="text-center col-1" scope="col" style="width: 5px;">
+                  <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                </th>
+                <th scope="col" mat-sort-header="MessagesOtd.title">
+                  {{ t('Title') }}
+                </th>
+                <th scope="col" mat-sort-header="MessagesOtd.description">
+                  {{ t('Description') }}
+                </th>
+                <th scope="col" mat-sort-header="MessagesOtd.date">
+                  {{ t('Date') }}
+                </th>
+                <th scope="col" mat-sort-header="MessagesOtd.expiration_duration">
+                  {{ t('Expiration duration (in days)') }}
+                </th>
+                <th class="text-center col-1 width-50" scope="col">
+                  <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (messageOfTheDay of messagesOfTheDay.messagesOtd; track messageOfTheDay) {
                 <tr>
-                    <th class="text-center col-1" scope="col" style="width: 5px;">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="MessagesOtd.title">
-                        {{ t('Title') }}
-                    </th>
-                    <th scope="col" mat-sort-header="MessagesOtd.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col" mat-sort-header="MessagesOtd.date">
-                        {{ t('Date') }}
-                    </th>
-                    <th scope="col" mat-sort-header="MessagesOtd.expiration_duration">
-                        {{ t('Expiration duration (in days)') }}
-                    </th>
-                    <th class="text-center col-1 width-50" scope="col">
+                  <td class="text-center">
+                    <oitc-item-select
+                      *oitcPermission="['messagesOtd', 'delete']"
+                      [disabled]="false"
+                    [item]="messageOfTheDay"></oitc-item-select>
+                  </td>
+                  <td>{{ messageOfTheDay.title }}</td>
+                  <td>{{ messageOfTheDay.description }}</td>
+                  <td>{{ messageOfTheDay.date }}</td>
+                  <td>
+                    @if (messageOfTheDay.expiration_duration) {
+                      <span
+                      >{{ messageOfTheDay.expiration_duration }}</span>
+                    }
+                    @if (! messageOfTheDay.expiration_duration) {
+                      <span>
+                        <fa-icon [icon]="['fas', 'infinity']" class="text-primary"></fa-icon>
+                      </span>
+                    }
+                  </td>
+                  <td class="width-50">
+                    <oitc-actions-button [allowEdit]="messageOfTheDay.id"
+                      [permission]="'messagesOtd.edit'"
+                      [url]="'/messagesOtd/edit/' + messageOfTheDay.id">
+                      <oitc-actions-button-element [permission]="'messagesOtd.edit'"
+                        [url]="'/messagesOtd/edit/' + messageOfTheDay.id">
                         <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let messageOfTheDay of messagesOfTheDay.messagesOtd">
-                    <td class="text-center">
-                        <oitc-item-select
-                                *oitcPermission="['messagesOtd', 'delete']"
-                                [disabled]="false"
-                                [item]="messageOfTheDay"></oitc-item-select>
-
-                    </td>
-                    <td>{{ messageOfTheDay.title }}</td>
-                    <td>{{ messageOfTheDay.description }}</td>
-                    <td>{{ messageOfTheDay.date }}</td>
-                    <td>
-                        <span
-                                *ngIf="messageOfTheDay.expiration_duration">{{ messageOfTheDay.expiration_duration }}</span>
-                        <span *ngIf="! messageOfTheDay.expiration_duration">
-                            <fa-icon [icon]="['fas', 'infinity']" class="text-primary"></fa-icon>
+                        {{ t('Edit') }}
+                      </oitc-actions-button-element>
+                      <li cDropdownDivider></li>
+                      <oitc-actions-button-element (click)="toggleDeleteAllModal(messageOfTheDay)"
+                        [permission]="'messagesOtd.delete'">
+                        <span class="text-danger">
+                          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                          {{ t('Delete') }}
                         </span>
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [allowEdit]="messageOfTheDay.id"
-                                             [permission]="'messagesOtd.edit'"
-                                             [url]="'/messagesOtd/edit/' + messageOfTheDay.id">
-                            <oitc-actions-button-element [permission]="'messagesOtd.edit'"
-                                                         [url]="'/messagesOtd/edit/' + messageOfTheDay.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-
-
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(messageOfTheDay)"
-                                                         [permission]="'messagesOtd.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
+                      </oitc-actions-button-element>
+                    </oitc-actions-button>
+                  </td>
                 </tr>
-                </tbody>
-            </table>
+              }
+            </tbody>
+          </table>
+        }
 
-            <oitc-no-records
-                    *ngIf="messagesOfTheDay && messagesOfTheDay.messagesOtd.length === 0"></oitc-no-records>
-            <ng-container *ngIf="messagesOfTheDay && messagesOfTheDay">
-                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                             [fluid]="true">
-                    <c-row>
-                        <c-col>
-                            <oitc-select-all
-                                    [itemsCount]="messagesOfTheDay.messagesOtd.length"></oitc-select-all>
-                        </c-col>
-                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                            <div class="btn-group d-flex flex-row" role="group">
-                                <button (click)="toggleDeleteAllModal()"
-                                        *oitcPermission="['messagesotd', 'delete']"
-                                        class="btn btn-outline-danger col-3 border-0"
-                                        type="button">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete selected') }}
-                                </button>
-                            </div>
-                        </c-col>
-                    </c-row>
-                </c-container>
-            </ng-container>
+        @if (messagesOfTheDay && messagesOfTheDay.messagesOtd.length === 0) {
+          <oitc-no-records
+          ></oitc-no-records>
+        }
+        @if (messagesOfTheDay && messagesOfTheDay) {
+          <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+            [fluid]="true">
+            <c-row>
+              <c-col>
+                <oitc-select-all
+                [itemsCount]="messagesOfTheDay.messagesOtd.length"></oitc-select-all>
+              </c-col>
+              <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                <div class="btn-group d-flex flex-row" role="group">
+                  <button (click)="toggleDeleteAllModal()"
+                    *oitcPermission="['messagesotd', 'delete']"
+                    class="btn btn-outline-danger col-3 border-0"
+                    type="button">
+                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    {{ t('Delete selected') }}
+                  </button>
+                </div>
+              </c-col>
+            </c-row>
+          </c-container>
+        }
 
-            <c-container
-                    [fluid]="true">
-                <c-row>
-                    <c-col>
-                        <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="messagesOfTheDay"
-                                [paginateOrScroll]="messagesOfTheDay"></oitc-paginate-or-scroll>
-                    </c-col>
-                </c-row>
-            </c-container>
-        </c-card-body>
-        <c-card-footer>
-            &nbsp;
-        </c-card-footer>
+        <c-container
+          [fluid]="true">
+          <c-row>
+            <c-col>
+              @if (messagesOfTheDay) {
+                <oitc-paginate-or-scroll
+                  (paginatorChange)="onPaginatorChange($event)"
+                [paginateOrScroll]="messagesOfTheDay"></oitc-paginate-or-scroll>
+              }
+            </c-col>
+          </c-row>
+        </c-container>
+      </c-card-body>
+      <c-card-footer>
+        &nbsp;
+      </c-card-footer>
     </c-card>
-</ng-container>
+  </ng-container>
 
 
-<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+  <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
 

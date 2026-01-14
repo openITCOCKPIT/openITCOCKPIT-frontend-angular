@@ -58,7 +58,7 @@ import { SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit } from 
 import { GenericValidationError } from '../../../generic-responses';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -68,38 +68,37 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
 @Component({
     selector: 'oitc-statuspages-edit',
     imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        PermissionDirective,
-        RouterLink,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        BackButtonDirective,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        FormErrorDirective,
-        SelectComponent,
-        FormDirective,
-        FormsModule,
-        PaginatorModule,
-        NgIf,
-        FormFeedbackComponent,
-        FormCheckInputDirective,
-        FormControlDirective,
-        MultiSelectComponent,
-        CardFooterComponent,
-        RowComponent,
-        InputGroupComponent,
-        AsyncPipe,
-        InputGroupTextDirective,
-        ColComponent,
-        ObjectUuidComponent
-    ],
+    TranslocoDirective,
+    FaIconComponent,
+    PermissionDirective,
+    RouterLink,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    BackButtonDirective,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    FormErrorDirective,
+    SelectComponent,
+    FormDirective,
+    FormsModule,
+    PaginatorModule,
+    FormFeedbackComponent,
+    FormCheckInputDirective,
+    FormControlDirective,
+    MultiSelectComponent,
+    CardFooterComponent,
+    RowComponent,
+    InputGroupComponent,
+    AsyncPipe,
+    InputGroupTextDirective,
+    ColComponent,
+    ObjectUuidComponent
+],
     templateUrl: './statuspages-edit.component.html',
     styleUrl: './statuspages-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -13,7 +13,7 @@ import { AnimationEvent } from '@angular/animations';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormLabelDirective } from '@coreui/angular';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -26,15 +26,14 @@ import { MapViewComponent } from '../../components/map-view/map-view.component';
 @Component({
     selector: 'oitc-map-widget',
     imports: [
-        FaIconComponent,
-        FormLabelDirective,
-        NgIf,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        XsButtonDirective,
-        MapViewComponent
-    ],
+    FaIconComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    SelectComponent,
+    TranslocoDirective,
+    XsButtonDirective,
+    MapViewComponent
+],
     templateUrl: './map-widget.component.html',
     styleUrl: './map-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

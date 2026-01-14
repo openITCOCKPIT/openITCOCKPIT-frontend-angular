@@ -22,7 +22,7 @@ import {
     RowComponent,
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -34,21 +34,19 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 @Component({
     selector: 'oitc-enable-modal',
     imports: [
-        ButtonCloseDirective,
-        ColComponent,
-        FaIconComponent,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgForOf,
-        NgIf,
-        ProgressComponent,
-        RowComponent,
-        TranslocoDirective,
-        XsButtonDirective
-    ],
+    ButtonCloseDirective,
+    ColComponent,
+    FaIconComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ProgressComponent,
+    RowComponent,
+    TranslocoDirective,
+    XsButtonDirective
+],
     templateUrl: './enable-modal.component.html',
     styleUrl: './enable-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

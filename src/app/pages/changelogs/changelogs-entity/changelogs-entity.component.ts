@@ -29,7 +29,7 @@ import { ChangelogIndexRoot, ChangelogsEntityParams, getDefaultChangelogsEntityP
 import { Subscription } from 'rxjs';
 import { ChangelogsService } from '../changelogs.service';
 import { ObjectTypesEnum } from '../object-types.enum';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { formatDate } from '@angular/common';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
@@ -66,10 +66,8 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
-    NgIf,
     PaginateOrScrollComponent,
     ChangelogsEntryComponent,
-    NgForOf,
     BackButtonDirective,
     NoRecordsComponent
 ],

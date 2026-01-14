@@ -28,7 +28,7 @@ import {
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { CancelAllItem, CancelAllResponse } from './cancel-hostdowntime.interface';
-import { NgIf } from '@angular/common';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -53,7 +53,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
     ColComponent,
     FaIconComponent,
     ProgressComponent,
-    NgIf,
     DebounceDirective,
     FormCheckComponent,
     FormCheckInputDirective,

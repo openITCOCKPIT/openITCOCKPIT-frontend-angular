@@ -16,7 +16,7 @@ import {
     signal,
     ViewChild
 } from '@angular/core';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -48,21 +48,20 @@ import { AnimationEvent } from '@angular/animations';
 @Component({
     selector: 'oitc-changecalendar-widget',
     imports: [
-        AlertComponent,
-        AlertHeadingDirective,
-        AsyncPipe,
-        ColComponent,
-        FaIconComponent,
-        FormLabelDirective,
-        NgIf,
-        RowComponent,
-        SelectComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        ChangecalendarsCalendarComponent,
-        MultiSelectComponent
-    ],
+    AlertComponent,
+    AlertHeadingDirective,
+    AsyncPipe,
+    ColComponent,
+    FaIconComponent,
+    FormLabelDirective,
+    RowComponent,
+    SelectComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    ChangecalendarsCalendarComponent,
+    MultiSelectComponent
+],
     templateUrl: './changecalendar-widget.component.html',
     styleUrl: './changecalendar-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

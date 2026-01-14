@@ -27,7 +27,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HosttemplateTypesEnum } from '../hosttemplate-types.enum';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { HosttemplateContainerResult, HosttemplatePost, HosttemplateTypeResult, } from '../hosttemplates.interface';
 import { Subscription } from 'rxjs';
@@ -72,9 +72,7 @@ import { HostOrServiceType } from '../../hosts/hosts.interface';
     FormErrorDirective,
     FormFeedbackComponent,
     FormLabelDirective,
-    NgForOf,
     RequiredIconComponent,
-    NgIf,
     NgClass,
     MultiSelectComponent,
     SelectComponent,

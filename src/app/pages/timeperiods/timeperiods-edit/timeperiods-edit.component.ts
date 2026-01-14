@@ -27,19 +27,21 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { FormWarningComponent } from '../../../layouts/coreui/form-warning/form-warning.component';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
-import { DebounceDirective } from '../../../directives/debounce.directive';
-import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
-import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 import { sprintf } from 'sprintf-js';
+import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { FormWarningComponent } from '../../../layouts/coreui/form-warning/form-warning.component';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 
 @Component({
     selector: 'oitc-timeperiods-edit',
@@ -59,7 +61,6 @@ import { sprintf } from 'sprintf-js';
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         ReactiveFormsModule,
         RequiredIconComponent,
@@ -74,8 +75,10 @@ import { sprintf } from 'sprintf-js';
         NgSelectModule,
         NgOptionHighlightDirective,
         DebounceDirective,
+        SelectComponent,
+        ObjectUuidComponent,
         FormLoaderComponent,
-        ObjectUuidComponent
+        LabelLinkComponent
     ],
     templateUrl: './timeperiods-edit.component.html',
     styleUrl: './timeperiods-edit.component.css',
@@ -87,6 +90,7 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
 
     public containers: SelectKeyValue[] = [];
     public calendars: SelectKeyValue[] = [];
+    public timeperiods: SelectKeyValue[] = [];
 
     private TimeperiodsService = inject(TimeperiodsService);
     private readonly TranslocoService = inject(TranslocoService);
@@ -113,12 +117,16 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
     private load() {
         this.subscriptions.add(this.TimeperiodsService.getEdit(this.id).subscribe(result => {
             this.post = result.timeperiod;
+            if (this.post.calendar_id === 0) {
+                this.post.calendar_id = null;
+            }
             this.post.timeperiod_timeranges = _.orderBy(
                 this.post.timeperiod_timeranges,
                 ['day', 'start'],
                 ['asc', 'asc']
             );
             this.loadCalendars('');
+            this.loadTimeperiods();
             this.cdr.markForCheck();
         }));
     }
@@ -132,6 +140,16 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
             })
         );
     };
+
+    private loadTimeperiods() {
+        if (this.post.container_id === null) {
+            return;
+        }
+        this.subscriptions.add(this.TimeperiodsService.loadTimeperiodsByContainerIdAndExludeItself(this.id, this.post.container_id).subscribe((result) => {
+            this.timeperiods = result;
+            this.cdr.markForCheck();
+        }));
+    }
 
     public loadCalendars(searchString: string) {
         if (!this.post?.container_id) {
@@ -262,5 +280,7 @@ export class TimeperiodsEditComponent implements OnInit, OnDestroy {
 
     public onContainerIdChange() {
         this.loadCalendars('');
+        this.loadTimeperiods();
     }
+
 }

@@ -15,7 +15,7 @@ import { HostStatusOverviewWidgetService } from './host-status-overview-widget.s
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { GenericValidationError } from '../../../../generic-responses';
 import {
@@ -34,25 +34,24 @@ import { TrueFalseDirective } from '../../../../directives/true-false.directive'
 @Component({
     selector: 'oitc-host-status-overview-widget',
     imports: [
-        FaIconComponent,
-        NgIf,
-        TranslocoDirective,
-        RowComponent,
-        NgClass,
-        AsyncPipe,
-        ColComponent,
-        RouterLink,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormsModule,
-        TranslocoPipe,
-        XsButtonDirective,
-        TrueFalseDirective,
-        InputGroupTextDirective,
-        InputGroupComponent
-    ],
+    FaIconComponent,
+    TranslocoDirective,
+    RowComponent,
+    NgClass,
+    AsyncPipe,
+    ColComponent,
+    RouterLink,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormsModule,
+    TranslocoPipe,
+    XsButtonDirective,
+    TrueFalseDirective,
+    InputGroupTextDirective,
+    InputGroupComponent
+],
     templateUrl: './host-status-overview-widget.component.html',
     styleUrl: './host-status-overview-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

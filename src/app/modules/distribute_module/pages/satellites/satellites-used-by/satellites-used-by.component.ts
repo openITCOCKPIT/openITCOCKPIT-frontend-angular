@@ -4,7 +4,7 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -26,24 +26,22 @@ import {
 @Component({
     selector: 'oitc-satellites-used-by',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        FormLoaderComponent,
-        NgIf,
-        BackButtonDirective,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        NgForOf,
-        TableDirective,
-        NotUsedByObjectComponent
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    FormLoaderComponent,
+    BackButtonDirective,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    TableDirective,
+    NotUsedByObjectComponent
+],
     templateUrl: './satellites-used-by.component.html',
     styleUrl: './satellites-used-by.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

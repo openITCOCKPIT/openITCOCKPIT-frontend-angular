@@ -36,7 +36,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import {
     AutomapEntity,
@@ -89,12 +89,10 @@ import {
     RowComponent,
     TranslocoPipe,
     MatSort,
-    NgIf,
     TableDirective,
     TableLoaderComponent,
     MatSortHeader,
     ItemSelectComponent,
-    NgForOf,
     BadgeOutlineComponent,
     TooltipDirective,
     ActionsButtonComponent,

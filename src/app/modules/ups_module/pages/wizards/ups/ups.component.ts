@@ -14,7 +14,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
@@ -28,26 +28,25 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 @Component({
     selector: 'oitc-ups',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        NgIf,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        SelectComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        WizardsDynamicfieldsComponent,
-        RouterLink,
-        FormsModule,
-        BackButtonDirective
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    SelectComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    WizardsDynamicfieldsComponent,
+    RouterLink,
+    FormsModule,
+    BackButtonDirective
+],
     templateUrl: './ups.component.html',
     styleUrl: './ups.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

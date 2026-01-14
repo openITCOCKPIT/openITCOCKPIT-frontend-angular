@@ -11,7 +11,7 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -36,8 +36,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
     FaIconComponent,
     NavComponent,
     NavItemComponent,
-    NgForOf,
-    NgIf,
     NotUsedByObjectComponent,
     PermissionDirective,
     TableDirective,

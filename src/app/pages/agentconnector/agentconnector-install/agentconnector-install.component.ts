@@ -14,7 +14,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -28,21 +28,20 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-agentconnector-install',
     imports: [
-        AgentconnectorWizardProgressbarComponent,
-        BlockLoaderComponent,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        NgIf,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        ColComponent,
-        RowComponent,
-        FormsModule
-    ],
+    AgentconnectorWizardProgressbarComponent,
+    BlockLoaderComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    ColComponent,
+    RowComponent,
+    FormsModule
+],
     templateUrl: './agentconnector-install.component.html',
     styleUrl: './agentconnector-install.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

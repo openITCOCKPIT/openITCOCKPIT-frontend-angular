@@ -21,39 +21,38 @@ import { Subscription } from 'rxjs';
 import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
+
 import { SlackSettingsService} from '../slack-settings.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 @Component({
   selector: 'oitc-slack-settings-index',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        FormDirective,
-        FormsModule,
-        ReactiveFormsModule,
-        CardHeaderComponent,
-        CardTitleDirective,
-        CardBodyComponent,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        CardComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        TrueFalseDirective,
-        ApikeyDocModalComponent,
-        CardFooterComponent,
-        XsButtonDirective,
-        FormLoaderComponent,
-        NgIf
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    FormDirective,
+    FormsModule,
+    ReactiveFormsModule,
+    CardHeaderComponent,
+    CardTitleDirective,
+    CardBodyComponent,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    CardComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    TrueFalseDirective,
+    ApikeyDocModalComponent,
+    CardFooterComponent,
+    XsButtonDirective,
+    FormLoaderComponent
+],
   templateUrl: './slack-settings-index.component.html',
   styleUrl: './slack-settings-index.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

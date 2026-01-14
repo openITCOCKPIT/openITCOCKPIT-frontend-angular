@@ -1,70 +1,70 @@
 <ng-container *transloco="let t">
-    <div class="d-flex h-100 flex-column" #boxContainer>
-        <div>
-            <div>
-                <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-                        *ngIf="!isReadonly()">
-                    @if (flipped()) {
-                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                    } @else {
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    }
-                </button>
-            </div>
-        </div>
-
-        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
-             class="box-container">
-            <div class="box-x">
-                <ng-container *ngIf="animationStateShowContent">
-                    <!-- Widget Content -->
-                    <oitc-iframe [url]="config.url" *ngIf="config" [height]="widgetHeight+'px'"></oitc-iframe>
-                    <!-- End Widget Content -->
-                </ng-container>
-            </div>
-
-            <div class="box-x">
-                <ng-container *ngIf="animationStateShowConfig">
-                    <!-- Config area -->
-                    @if (config && widget) {
-
-                        <c-row>
-                            <c-col [xs]="12">
-                                <c-alert color="info">
-                                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                                    {{
-                                        t('To embed a website the {0} HTML tag is used.', {
-                                            '0': '&lt;iframe&gt;'
-                                        })
-                                    }}
-                                    <br>
-                                    {{ t('Most websites have restrictions for embedding and my not work. Depending on the security settings of the web browser mixing of http and https connections can cause issues.') }}
-                                </c-alert>
-                            </c-col>
-                        </c-row>
-
-                        <div>
-                            <label cLabel [for]="'url_'+widget.id">
-                                {{ t('URL') }}
-                            </label>
-                            <input cFormControl type="text"
-                                   [attr.id]="'url_'+widget.id"
-                                   [name]="'url_'+widget.id"
-                                   [(ngModel)]="config.url"
-                                   [placeholder]="'https://itsm.love'">
-                        </div>
-
-                        <div class="mt-2 text-end">
-                            <button cButton type="button" class="ripple" (click)="saveConfig()">
-                                {{ t('Save') }}
-                            </button>
-                        </div>
-
-                    }
-                    <!-- End Config area -->
-                </ng-container>
-            </div>
-        </div>
+  <div class="d-flex h-100 flex-column" #boxContainer>
+    <div>
+      <div>
+        @if (!isReadonly()) {
+          <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
+            >
+            @if (flipped()) {
+              <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+            } @else {
+              <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+            }
+          </button>
+        }
+      </div>
     </div>
 
-</ng-container>
+    <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+      class="box-container">
+      <div class="box-x">
+        @if (animationStateShowContent) {
+          <!-- Widget Content -->
+          @if (config) {
+            <oitc-iframe [url]="config.url" [height]="widgetHeight+'px'"></oitc-iframe>
+          }
+          <!-- End Widget Content -->
+        }
+      </div>
+
+      <div class="box-x">
+        @if (animationStateShowConfig) {
+          <!-- Config area -->
+          @if (config && widget) {
+            <c-row>
+              <c-col [xs]="12">
+                <c-alert color="info">
+                  <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                  {{
+                  t('To embed a website the {0} HTML tag is used.', {
+                  '0': '&lt;iframe&gt;'
+                  })
+                  }}
+                  <br>
+                    {{ t('Most websites have restrictions for embedding and my not work. Depending on the security settings of the web browser mixing of http and https connections can cause issues.') }}
+                  </c-alert>
+                </c-col>
+              </c-row>
+              <div>
+                <label cLabel [for]="'url_'+widget.id">
+                  {{ t('URL') }}
+                </label>
+                <input cFormControl type="text"
+                  [attr.id]="'url_'+widget.id"
+                  [name]="'url_'+widget.id"
+                  [(ngModel)]="config.url"
+                  [placeholder]="'https://itsm.love'">
+                </div>
+                <div class="mt-2 text-end">
+                  <button cButton type="button" class="ripple" (click)="saveConfig()">
+                    {{ t('Save') }}
+                  </button>
+                </div>
+              }
+              <!-- End Config area -->
+            }
+          </div>
+        </div>
+      </div>
+
+    </ng-container>

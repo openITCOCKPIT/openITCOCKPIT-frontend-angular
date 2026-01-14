@@ -15,7 +15,7 @@ import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-dir
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { GrafanaEditorDashboardRow, GrafanaUnits } from '../grafana-editor.interface';
 import { GrafanaPanelComponent, RemovePanelEvent } from '../grafana-panel/grafana-panel.component';
-import { NgIf } from '@angular/common';
+
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
 import { GrafanaEditorService } from '../grafana-editor.service';
 import { Subscription } from 'rxjs';
@@ -30,21 +30,20 @@ export interface RowPanelsChangedEvent {
 @Component({
     selector: 'oitc-grafana-row',
     imports: [
-        CardComponent,
-        BorderDirective,
-        CardHeaderComponent,
-        CardBodyComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        TranslocoDirective,
-        ColComponent,
-        RowComponent,
-        GrafanaPanelComponent,
-        NgIf,
-    ],
+    CardComponent,
+    BorderDirective,
+    CardHeaderComponent,
+    CardBodyComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    TranslocoDirective,
+    ColComponent,
+    RowComponent,
+    GrafanaPanelComponent
+],
     templateUrl: './grafana-row.component.html',
     styleUrl: './grafana-row.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

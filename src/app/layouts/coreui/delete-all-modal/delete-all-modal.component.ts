@@ -26,7 +26,7 @@ import {
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { DeleteAllItem, DeleteAllResponse } from './delete-all.interface';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -36,23 +36,21 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'oitc-delete-all-modal',
     imports: [
-        ModalComponent,
-        ModalHeaderComponent,
-        ModalBodyComponent,
-        ModalTitleDirective,
-        ButtonCloseDirective,
-        ModalFooterComponent,
-        TranslocoDirective,
-        RowComponent,
-        ColComponent,
-        NgForOf,
-        FaIconComponent,
-        ProgressComponent,
-        NgIf,
-        XsButtonDirective,
-        RouterLink,
-        KeyValuePipe
-    ],
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalBodyComponent,
+    ModalTitleDirective,
+    ButtonCloseDirective,
+    ModalFooterComponent,
+    TranslocoDirective,
+    RowComponent,
+    ColComponent,
+    FaIconComponent,
+    ProgressComponent,
+    XsButtonDirective,
+    RouterLink,
+    KeyValuePipe
+],
     templateUrl: './delete-all-modal.component.html',
     styleUrl: './delete-all-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

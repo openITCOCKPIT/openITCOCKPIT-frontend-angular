@@ -1,54 +1,60 @@
 <ng-container *transloco="let t">
-    <div class="row mb-2">
-        <div class="col-lg-3 hidden-mobile {{textClass}}">
-            <div style="padding-top: 29px; width: 100%;">
-            </div>
-            <div *ngIf="macro.name" class="argname-margin-top">
-                $_{{ macroName }}{{ macro.name }}$
-            </div>
+  <div class="row mb-2">
+    <div class="col-lg-3 hidden-mobile {{textClass}}">
+      <div style="padding-top: 29px; width: 100%;">
+      </div>
+      @if (macro.name) {
+        <div class="argname-margin-top">
+          $_{{ macroName }}{{ macro.name }}$
         </div>
-        <div class="col-lg-4 form-group">
-            <label class="form-label">
-                {{ t('Name') }}
-            </label>
-            <oitc-required-icon></oitc-required-icon>
-            <input class="form-control w-100"
-                   type="text"
-                   name="name"
-                   [required]="true"
-                   [(ngModel)]="macro.name"
-                   (ngModelChange)="updateName()"
-            >
-            <oitc-form-feedback [errors]="errors" errorField="customvariables.{{index}}.name"></oitc-form-feedback>
-        </div>
-        <div class="col-lg-4 form-group">
-            <label class="form-label">
-                {{ t('Value') }}
-            </label>
-            <oitc-required-icon></oitc-required-icon>
-            <input class="form-control w-100" type="text"
-                   name="value"
-                   [(ngModel)]="macro.value">
-            <oitc-form-feedback [errors]="errors" errorField="customvariables.{{index}}.value"></oitc-form-feedback>
-        </div>
-        <div class="col-md-1 col-lg-1">
-            <a class="btn btn-default ripple"
-               href="javascript:void(0);"
-               style="margin-top:27px;"
-               title="{{ t('Is password') }}"
-               (click)="togglePassword()">
-                <fa-icon *ngIf="macro.password === 0" class="text-primary"
-                         [icon]="['fas', 'unlock']" size="lg"></fa-icon>
-                <fa-icon *ngIf="macro.password === 1" class="text-warning"
-                         [icon]="['fas', 'lock']" size="lg"></fa-icon>
-            </a>
-            <a class="btn btn-danger ripple"
-               href="javascript:void(0);"
-               style="margin-top:27px;"
-               (click)="deleteMacro()">
-                <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
-            </a>
-        </div>
+      }
     </div>
+    <div class="col-lg-4 form-group">
+      <label class="form-label">
+        {{ t('Name') }}
+      </label>
+      <oitc-required-icon></oitc-required-icon>
+      <input class="form-control w-100"
+        type="text"
+        name="name"
+        [required]="true"
+        [(ngModel)]="macro.name"
+        (ngModelChange)="updateName()"
+        >
+      <oitc-form-feedback [errors]="errors" errorField="customvariables.{{index}}.name"></oitc-form-feedback>
+    </div>
+    <div class="col-lg-4 form-group">
+      <label class="form-label">
+        {{ t('Value') }}
+      </label>
+      <oitc-required-icon></oitc-required-icon>
+      <input class="form-control w-100" type="text"
+        name="value"
+        [(ngModel)]="macro.value">
+      <oitc-form-feedback [errors]="errors" errorField="customvariables.{{index}}.value"></oitc-form-feedback>
+    </div>
+    <div class="col-md-1 col-lg-1">
+      <a class="btn btn-default ripple"
+        href="javascript:void(0);"
+        style="margin-top:27px;"
+        title="{{ t('Is password') }}"
+        (click)="togglePassword()">
+        @if (macro.password === 0) {
+          <fa-icon class="text-primary"
+          [icon]="['fas', 'unlock']" size="lg"></fa-icon>
+        }
+        @if (macro.password === 1) {
+          <fa-icon class="text-warning"
+          [icon]="['fas', 'lock']" size="lg"></fa-icon>
+        }
+      </a>
+      <a class="btn btn-danger ripple"
+        href="javascript:void(0);"
+        style="margin-top:27px;"
+        (click)="deleteMacro()">
+        <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
+      </a>
+    </div>
+  </div>
 
 </ng-container>

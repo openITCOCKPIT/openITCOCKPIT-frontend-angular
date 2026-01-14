@@ -1,296 +1,304 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                {{ t('Snmp Trap Module') }}
-            </li>
-            <li class="breadcrumb-item" *oitcPermission="['snmptrapmodule', 'snmpttList', 'index']">
-                <a *oitcPermission="['snmptrapmodule', 'snmpttList', 'index']"
-                   [routerLink]="['/', 'snmp_trap_module','snmpttList', 'index']">
-                    <fa-icon [icon]="['fas', 'message']"></fa-icon>
-                    {{ t('SnmpttList') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Overview') }}
-            </li>
-        </ol>
-    </nav>
-    <c-card class="mb-3">
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a>
+      </li>
+      <li class="breadcrumb-item">
+        <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+        {{ t('Snmp Trap Module') }}
+      </li>
+      <li class="breadcrumb-item" *oitcPermission="['snmptrapmodule', 'snmpttList', 'index']">
+        <a *oitcPermission="['snmptrapmodule', 'snmpttList', 'index']"
+          [routerLink]="['/', 'snmp_trap_module','snmpttList', 'index']">
+          <fa-icon [icon]="['fas', 'message']"></fa-icon>
+          {{ t('SnmpttList') }}
+        </a>
+      </li>
+      <li aria-current="page" class="breadcrumb-item active">
+        <fa-icon [icon]="['fas', 'list']"></fa-icon>
+        {{ t('Overview') }}
+      </li>
+    </ol>
+  </nav>
+  <c-card class="mb-3">
 
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Snmp trap logs') }}
-                <small class="fw-300">
-                    {{ t('overview') }}
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="loadSnmpttEntries()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                        {{ t('Filter') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
-            <!-- Filter -->
-            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-                <c-row>
-                    <c-col>
-                        <h6 class="pb-2 mb-3 border-bottom">
-                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                            {{ t('Filter') }}
-                        </h6>
-                    </c-col>
-                </c-row>
-                <form cForm>
-                    <c-row>
+    <c-card-header>
+      <h5 cCardTitle>{{ t('Snmp trap logs') }}
+        <small class="fw-300">
+          {{ t('overview') }}
+        </small>
+      </h5>
+      <c-nav class="card-toolbar card-header-pills">
+        <c-nav-item class="px-1">
+          <button (click)="loadSnmpttEntries()" cButton class="ripple" color="default" size="xs">
+            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+            {{ t('Refresh') }}
+          </button>
+        </c-nav-item>
+        <c-nav-item class="px-1">
+          <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+            {{ t('Filter') }}
+          </button>
+        </c-nav-item>
+      </c-nav>
+    </c-card-header>
+    <c-card-body>
+      <!-- Filter -->
+      <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+        <c-row>
+          <c-col>
+            <h6 class="pb-2 mb-3 border-bottom">
+              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+              {{ t('Filter') }}
+            </h6>
+          </c-col>
+        </c-row>
+        <form cForm>
+          <c-row>
 
-                        <c-col md="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Snmptt.eventname]']"
-                                       [placeholder]="'Event name' | transloco"
-                                       aria-label="name"
-                                       cFormControl
-                                       name="Snmptt.eventname"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col md="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Snmptt.eventid]']"
-                                       [placeholder]="'Event ID' | transloco"
-                                       aria-label="name"
-                                       cFormControl
-                                       name="Snmptt.eventid"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col md="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Snmptt.trapoid]']"
-                                       [placeholder]="'Trap OID' | transloco"
-                                       aria-label="name"
-                                       cFormControl
-                                       name="Snmptt.trapoid"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col md="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Snmptt.formatline]']"
-                                       [placeholder]="'Format line' | transloco"
-                                       aria-label="name"
-                                       cFormControl
-                                       name="Snmptt.formatline"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col md="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Snmptt.hostname]']"
-                                       [placeholder]="'Host name' | transloco"
-                                       aria-label="name"
-                                       cFormControl
-                                       name="Snmptt.hostname"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col md="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Snmptt.agentip]']"
-                                       [placeholder]="'Agent IP' | transloco"
-                                       aria-label="name"
-                                       cFormControl
-                                       name="Snmptt.agentip"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                    </c-row>
+            <c-col md="6" class="mb-2">
+              <c-input-group>
+                <span cInputGroupText>
+                  <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="params['filter[Snmptt.eventname]']"
+                  [placeholder]="'Event name' | transloco"
+                  aria-label="name"
+                  cFormControl
+                  name="Snmptt.eventname"
+                  oitcDebounce
+                  type="text"
+                  />
+              </c-input-group>
+            </c-col>
+            <c-col md="6" class="mb-2">
+              <c-input-group>
+                <span cInputGroupText>
+                  <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="params['filter[Snmptt.eventid]']"
+                  [placeholder]="'Event ID' | transloco"
+                  aria-label="name"
+                  cFormControl
+                  name="Snmptt.eventid"
+                  oitcDebounce
+                  type="text"
+                  />
+              </c-input-group>
+            </c-col>
+            <c-col md="6" class="mb-2">
+              <c-input-group>
+                <span cInputGroupText>
+                  <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="params['filter[Snmptt.trapoid]']"
+                  [placeholder]="'Trap OID' | transloco"
+                  aria-label="name"
+                  cFormControl
+                  name="Snmptt.trapoid"
+                  oitcDebounce
+                  type="text"
+                  />
+              </c-input-group>
+            </c-col>
+            <c-col md="6" class="mb-2">
+              <c-input-group>
+                <span cInputGroupText>
+                  <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="params['filter[Snmptt.formatline]']"
+                  [placeholder]="'Format line' | transloco"
+                  aria-label="name"
+                  cFormControl
+                  name="Snmptt.formatline"
+                  oitcDebounce
+                  type="text"
+                  />
+              </c-input-group>
+            </c-col>
+            <c-col md="6" class="mb-2">
+              <c-input-group>
+                <span cInputGroupText>
+                  <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="params['filter[Snmptt.hostname]']"
+                  [placeholder]="'Host name' | transloco"
+                  aria-label="name"
+                  cFormControl
+                  name="Snmptt.hostname"
+                  oitcDebounce
+                  type="text"
+                  />
+              </c-input-group>
+            </c-col>
+            <c-col md="6" class="mb-2">
+              <c-input-group>
+                <span cInputGroupText>
+                  <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="params['filter[Snmptt.agentip]']"
+                  [placeholder]="'Agent IP' | transloco"
+                  aria-label="name"
+                  cFormControl
+                  name="Snmptt.agentip"
+                  oitcDebounce
+                  type="text"
+                  />
+              </c-input-group>
+            </c-col>
+          </c-row>
 
-                    <c-row class="mt-2">
-                        <c-col class="text-end">
-                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                {{ t('Reset filter') }}
-                            </button>
-                        </c-col>
-                    </c-row>
-                </form>
-            </c-container>
-            <!-- End Filter -->
+          <c-row class="mt-2">
+            <c-col class="text-end">
+              <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                {{ t('Reset filter') }}
+              </button>
+            </c-col>
+          </c-row>
+        </form>
+      </c-container>
+      <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!snmptt_entries"></oitc-table-loader>
-            <table *ngIf="snmptt_entries" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col" mat-sort-header="NotificationHosts.state">
-                        <fa-icon [icon]="['fas', 'check-square']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Snmptt.severity">
-                        {{ t('Severity') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Snmptt.eventname">
-                        {{ t('Event name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Snmptt.hostname">
-                        {{ t('Host name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Snmptt.eventid">
-                        {{ t('Event ID') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Snmptt.trapoid">
-                        {{ t('Trap OID') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Snmptt.agentip">
-                        {{ t('Agent IP') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Snmptt.formatline">
-                        {{ t('Format line') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let snmpttEntry of snmptt_entries.snmptt_entries">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['snmptrapmodule', 'snmpttList', 'delete']"
-                            [disabled]="false"
-                            [item]="snmpttEntry"></oitc-item-select>
+      @if (!snmptt_entries) {
+        <oitc-table-loader></oitc-table-loader>
+      }
+      @if (snmptt_entries) {
+        <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+          (matSortChange)="onSortChange($event)"
+          [matSortActive]="params.sort" [matSortDirection]="params.direction">
+          <thead>
+            <tr>
+              <th class="width-50 text-center" scope="col" mat-sort-header="NotificationHosts.state">
+                <fa-icon [icon]="['fas', 'check-square']"></fa-icon>
+              </th>
+              <th scope="col" mat-sort-header="Snmptt.severity">
+                {{ t('Severity') }}
+              </th>
+              <th scope="col" mat-sort-header="Snmptt.eventname">
+                {{ t('Event name') }}
+              </th>
+              <th scope="col" mat-sort-header="Snmptt.hostname">
+                {{ t('Host name') }}
+              </th>
+              <th scope="col" mat-sort-header="Snmptt.eventid">
+                {{ t('Event ID') }}
+              </th>
+              <th scope="col" mat-sort-header="Snmptt.trapoid">
+                {{ t('Trap OID') }}
+              </th>
+              <th scope="col" mat-sort-header="Snmptt.agentip">
+                {{ t('Agent IP') }}
+              </th>
+              <th scope="col" mat-sort-header="Snmptt.formatline">
+                {{ t('Format line') }}
+              </th>
+              <th class="text-center width-50" scope="col">
+                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (snmpttEntry of snmptt_entries.snmptt_entries; track snmpttEntry) {
+              <tr>
+                <td class="text-center">
+                  <oitc-item-select
+                    *oitcPermission="['snmptrapmodule', 'snmpttList', 'delete']"
+                    [disabled]="false"
+                  [item]="snmpttEntry"></oitc-item-select>
+                </td>
+                <td class="text-center pt-1 pb-0 text-info" [ngClass]="snmpttEntry.Snmptt.severity">
+                  <fa-icon [icon]="['fas', 'square']" [size]="'xl'" [title]="snmpttEntry.Snmptt.severity">
+                  </fa-icon>
+                </td>
+                <td>
+                  {{ snmpttEntry.Snmptt.eventname }}
+                </td>
+                <td>
+                  {{ snmpttEntry.Snmptt.hostname }}
+                </td>
+                <td>
+                  {{ snmpttEntry.Snmptt.eventid }}
+                </td>
+                <td>
+                  {{ snmpttEntry.Snmptt.trapoid }}
+                </td>
+                <td>
+                  {{ snmpttEntry.Snmptt.agentip }}
+                </td>
+                <td>
+                  {{ snmpttEntry.Snmptt.formatline }}
+                </td>
+                <td class="width-50">
+                  <oitc-actions-button [permission]="'commands.edit'"
+                    [url]="'/snmp_trap_module/SnmpttList/delete/' + snmpttEntry.Snmptt.id">
+                    <oitc-actions-button-element (click)="toggleDeleteAllModal(snmpttEntry)"
+                      [permission]="'snmptrapmodule.snmpttlist.delete'">
+                      <span class="text-danger">
+                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                        {{ t('Delete') }}
+                      </span>
+                    </oitc-actions-button-element>
+                  </oitc-actions-button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+      @if (snmptt_entries && snmptt_entries.snmptt_entries.length === 0) {
+        <oitc-no-records
+        ></oitc-no-records>
+      }
+      @if (snmptt_entries && snmptt_entries.snmptt_entries) {
+        <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+          [fluid]="true">
+          <c-row>
+            <c-col>
+              <oitc-select-all
+              [itemsCount]="snmptt_entries.snmptt_entries.length"></oitc-select-all>
+            </c-col>
+            <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+              <div class="btn-group d-flex flex-row" role="group">
+                <button (click)="toggleDeleteAllModal()"
+                  *oitcPermission="['snmptrapmodule', 'snmpttList', 'delete']"
+                  class="btn btn-outline-danger col-3 border-0"
+                  type="button">
+                  <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                  {{ t('Delete selected') }}
+                </button>
+              </div>
+            </c-col>
+          </c-row>
+        </c-container>
+      }
 
-                    </td>
-                    <td class="text-center pt-1 pb-0 text-info" [ngClass]="snmpttEntry.Snmptt.severity">
-                        <fa-icon [icon]="['fas', 'square']" [size]="'xl'" [title]="snmpttEntry.Snmptt.severity">
-                        </fa-icon>
-                    </td>
-                    <td>
-                        {{ snmpttEntry.Snmptt.eventname }}
-                    </td>
-                    <td>
-                        {{ snmpttEntry.Snmptt.hostname }}
-                    </td>
-                    <td>
-                        {{ snmpttEntry.Snmptt.eventid }}
-                    </td>
-                    <td>
-                        {{ snmpttEntry.Snmptt.trapoid }}
-                    </td>
-                    <td>
-                        {{ snmpttEntry.Snmptt.agentip }}
-                    </td>
-                    <td>
-                        {{ snmpttEntry.Snmptt.formatline }}
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'commands.edit'"
-                                             [url]="'/snmp_trap_module/SnmpttList/delete/' + snmpttEntry.Snmptt.id">
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(snmpttEntry)"
-                                                         [permission]="'snmptrapmodule.snmpttlist.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <oitc-no-records
-                *ngIf="snmptt_entries && snmptt_entries.snmptt_entries.length === 0"></oitc-no-records>
-            <ng-container *ngIf="snmptt_entries && snmptt_entries.snmptt_entries">
-                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                             [fluid]="true">
-                    <c-row>
-                        <c-col>
-                            <oitc-select-all
-                                [itemsCount]="snmptt_entries.snmptt_entries.length"></oitc-select-all>
-                        </c-col>
-                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                            <div class="btn-group d-flex flex-row" role="group">
-                                <button (click)="toggleDeleteAllModal()"
-                                        *oitcPermission="['snmptrapmodule', 'snmpttList', 'delete']"
-                                        class="btn btn-outline-danger col-3 border-0"
-                                        type="button">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete selected') }}
-                                </button>
-                            </div>
-                        </c-col>
-                    </c-row>
-                </c-container>
-            </ng-container>
-
-            <c-container
-                [fluid]="true" class="mb-3 py-3">
-                <c-row>
-                    <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="snmptt_entries"
-                            [paginateOrScroll]="snmptt_entries"></oitc-paginate-or-scroll>
-                    </c-col>
-                </c-row>
-            </c-container>
-        </c-card-body>
-        <c-card-footer>
-            &nbsp;
-        </c-card-footer>
-    </c-card>
+      <c-container
+        [fluid]="true" class="mb-3 py-3">
+        <c-row>
+          <c-col>
+            @if (snmptt_entries) {
+              <oitc-paginate-or-scroll
+                (paginatorChange)="onPaginatorChange($event)"
+              [paginateOrScroll]="snmptt_entries"></oitc-paginate-or-scroll>
+            }
+          </c-col>
+        </c-row>
+      </c-container>
+    </c-card-body>
+    <c-card-footer>
+      &nbsp;
+    </c-card-footer>
+  </c-card>
 </ng-container>
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

@@ -28,7 +28,7 @@ import { Subscription } from 'rxjs';
 import { BackupsService } from '../backups.service';
 import { StartBackupResponse } from '../backups.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
 import { ProgressBar } from 'primeng/progressbar';
 
@@ -36,33 +36,32 @@ import { ProgressBar } from 'primeng/progressbar';
 @Component({
     selector: 'oitc-backups-index',
     imports: [
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        RouterLink,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        CardBodyComponent,
-        AlertComponent,
-        RowComponent,
-        ColComponent,
-        FormsModule,
-        FormControlDirective,
-        FormErrorDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        RequiredIconComponent,
-        TranslocoPipe,
-        CardFooterComponent,
-        NgIf,
-        OitcAlertComponent,
-        NgClass,
-        ProgressBar
-    ],
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    RouterLink,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    CardBodyComponent,
+    AlertComponent,
+    RowComponent,
+    ColComponent,
+    FormsModule,
+    FormControlDirective,
+    FormErrorDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    RequiredIconComponent,
+    TranslocoPipe,
+    CardFooterComponent,
+    OitcAlertComponent,
+    NgClass,
+    ProgressBar
+],
     templateUrl: './backups-index.component.html',
     styleUrl: './backups-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

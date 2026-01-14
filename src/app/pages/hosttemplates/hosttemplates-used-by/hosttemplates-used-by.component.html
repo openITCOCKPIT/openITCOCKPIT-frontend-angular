@@ -1,167 +1,171 @@
 <ng-container *transloco="let t">
 
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['hosttemplates', 'index']" [routerLink]="['/', 'hosttemplates', 'index']">
-                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                    {{ t('Host templates') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
-                {{ t('Used by') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <a *oitcPermission="['hosttemplates', 'index']" [routerLink]="['/', 'hosttemplates', 'index']">
+            <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+            {{ t('Host templates') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+          {{ t('Used by') }}
+        </li>
+      </ol>
     </nav>
 
     <oitc-form-loader [isVisible]="!hosttemplate"></oitc-form-loader>
     <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Host template') }}
-                <small class="fw-300">
-                    <i>
-                        <strong>
-                            »{{ hosttemplate?.name }}«
-                        </strong>
-                        {{ t('is used by') }}
-                        {{ total }}
-                        {{ t('objects.') }}
-                    </i>
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
+      <c-card-header>
+        <h5 cCardTitle>{{ t('Host template') }}
+          <small class="fw-300">
+            <i>
+              <strong>
+                »{{ hosttemplate?.name }}«
+              </strong>
+              {{ t('is used by') }}
+              {{ total }}
+              {{ t('objects.') }}
+            </i>
+          </small>
+        </h5>
+        <c-nav class="card-toolbar card-header-pills">
+          <c-nav-item class="px-1">
+            <button (click)="load()" cButton class="ripple" color="default" size="xs">
+              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+              {{ t('Refresh') }}
+            </button>
+          </c-nav-item>
+          <c-nav-item class="px-1">
+            <button [fallbackUrl]="['hosttemplates', 'index']" cButton class="ripple" color="default"
+              oitcBackButton
+              size="xs">
+              <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+              {{ t('Back') }}
+            </button>
+          </c-nav-item>
+        </c-nav>
+      </c-card-header>
+      <c-card-body>
+        <c-container
+          [fluid]="true">
+          <table bordered cTable class="mt-2 mb-0" hover striped>
+            <tbody>
+
+              <!-- Hosts -->
+              @if (hosts.length > 0) {
+                <tr>
+                  <th class="width-50 text-center bg-secondary bg-opacity-10" scope="col">
+                    <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                  </th>
+                  <th class="bg-secondary bg-opacity-10">
+                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                    {{ t('Hosts') }} ({{ hosts.length }})
+                  </th>
+                  <th class="text-center width-50 bg-secondary bg-opacity-10" scope="col">
+                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                  </th>
+                </tr>
+              }
+              @for (host of hosts; track host) {
+                <tr>
+                  <td class="text-center">
+                    <oitc-item-select
+                      *oitcPermission="['hosts', 'edit']"
+                      [disabled]="!host.Host.allow_edit"
+                    [item]="host"></oitc-item-select>
+                  </td>
+                  <td>
+                    @if (PermissionsService.hasPermissionObservable(['hosts', 'edit']) | async) {
+                      <a [routerLink]="['/', 'hosts', 'edit', host.Host.id]">
+                        {{ host.Host.hostname }} ({{ host.Host.address }})
+                        <span [hidden]="!host.Host.disabled" [title]="'Disabled' | transloco">
+                          <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                        </span>
+                      </a>
+                    } @else {
+                      {{ host.Host.hostname }} ({{ host.Host.address }})
+                      <span [hidden]="!host.Host.disabled" [title]="'Disabled' | transloco">
+                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                      </span>
+                    }
+                    @if (PermissionsService.hasPermissionObservable(['services', 'serviceList'])| async) {
+                      <a class="float-end"
+                        [routerLink]="['/', 'services', 'serviceList', host.Host.id]">
+                        <span [title]="'Go to Service list'|transloco">
+                          <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                        </span>
+                      </a>
+                    }
+                  </td>
+                  <td>
+                    <oitc-actions-button [permission]="'hosts.edit'"
+                      [allowEdit]="host.Host.allow_edit"
+                      [url]="'/hosts/edit/' + host.Host.id">
+                      @if (host.Host.allow_edit) {
+                        <oitc-actions-button-element [permission]="'hosts.edit'"
+                          [url]="'/hosts/edit/' + host.Host.id"
+                          >
+                          <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                          {{ t('Edit') }}
+                        </oitc-actions-button-element>
+                      }
+                      @if (host.Host.allow_edit) {
+                        <li cDropdownDivider></li>
+                      }
+                      @if (host.Host.allow_edit) {
+                        <oitc-actions-button-element (click)="toggleDeleteAllModal(host)"
+                          [permission]="'hosts.delete'">
+                          <span class="text-danger">
+                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                            {{ t('Delete') }}
+                          </span>
+                        </oitc-actions-button-element>
+                      }
+                    </oitc-actions-button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          @if (hosts) {
+            <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+              [fluid]="true">
+              <c-row>
+                <c-col>
+                  <oitc-select-all
+                  [itemsCount]="total"></oitc-select-all>
+                </c-col>
+                <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                  <div class="btn-group d-flex flex-row" role="group">
+                    <button (click)="toggleDeleteAllModal()" class="btn btn-outline-danger col-3"
+                      type="button">
+                      <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                      {{ t('Delete selected') }}
                     </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['hosttemplates', 'index']" cButton class="ripple" color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
-            <c-container
-                [fluid]="true">
-                <table bordered cTable class="mt-2 mb-0" hover striped>
-                    <tbody>
-
-                    <!-- Hosts -->
-                    <tr *ngIf="hosts.length > 0">
-                        <th class="width-50 text-center bg-secondary bg-opacity-10" scope="col">
-                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                        </th>
-                        <th class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                            {{ t('Hosts') }} ({{ hosts.length }})
-                        </th>
-                        <th class="text-center width-50 bg-secondary bg-opacity-10" scope="col">
-                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                        </th>
-                    </tr>
-                    <tr *ngFor="let host of hosts">
-                        <td class="text-center">
-                            <oitc-item-select
-                                *oitcPermission="['hosts', 'edit']"
-                                [disabled]="!host.Host.allow_edit"
-                                [item]="host"></oitc-item-select>
-                        </td>
-
-                        <td>
-                            @if (PermissionsService.hasPermissionObservable(['hosts', 'edit']) | async) {
-                                <a [routerLink]="['/', 'hosts', 'edit', host.Host.id]">
-                                    {{ host.Host.hostname }} ({{ host.Host.address }})
-
-                                    <span [hidden]="!host.Host.disabled" [title]="'Disabled' | transloco">
-                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                    </span>
-                                </a>
-                            } @else {
-                                {{ host.Host.hostname }} ({{ host.Host.address }})
-                                <span [hidden]="!host.Host.disabled" [title]="'Disabled' | transloco">
-                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                </span>
-                            }
-
-                            @if (PermissionsService.hasPermissionObservable(['services', 'serviceList'])| async) {
-                                <a class="float-end"
-                                   [routerLink]="['/', 'services', 'serviceList', host.Host.id]">
-                                    <span [title]="'Go to Service list'|transloco">
-                                        <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                                    </span>
-                                </a>
-                            }
-
-                        </td>
-
-                        <td>
-                            <oitc-actions-button [permission]="'hosts.edit'"
-                                                 [allowEdit]="host.Host.allow_edit"
-                                                 [url]="'/hosts/edit/' + host.Host.id">
-                                <oitc-actions-button-element [permission]="'hosts.edit'"
-                                                             [url]="'/hosts/edit/' + host.Host.id"
-                                                             *ngIf="host.Host.allow_edit">
-                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                    {{ t('Edit') }}
-                                </oitc-actions-button-element>
-
-                                <li cDropdownDivider *ngIf="host.Host.allow_edit"></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(host)"
-                                                             *ngIf="host.Host.allow_edit"
-                                                             [permission]="'hosts.delete'">
-                                    <span class="text-danger">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete') }}
-                                    </span>
-                                </oitc-actions-button-element>
-                            </oitc-actions-button>
-                        </td>
-
-                    </tr>
-                    </tbody>
-                </table>
-
-                <ng-container *ngIf="hosts">
-                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                                 [fluid]="true">
-                        <c-row>
-                            <c-col>
-                                <oitc-select-all
-                                    [itemsCount]="total"></oitc-select-all>
-                            </c-col>
-                            <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                                <div class="btn-group d-flex flex-row" role="group">
-                                    <button (click)="toggleDeleteAllModal()" class="btn btn-outline-danger col-3"
-                                            type="button">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete selected') }}
-                                    </button>
-                                </div>
-                            </c-col>
-                        </c-row>
-                    </c-container>
-                </ng-container>
-
-
-                <oitc-not-used-by-object *ngIf="total === 0">
-                    {{ t('This host template is not used by any object') }}
-                </oitc-not-used-by-object>
-
+                  </div>
+                </c-col>
+              </c-row>
             </c-container>
-        </c-card-body>
-    </c-card>
-</ng-container>
+          }
 
-<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+
+          @if (total === 0) {
+            <oitc-not-used-by-object>
+              {{ t('This host template is not used by any object') }}
+            </oitc-not-used-by-object>
+          }
+
+        </c-container>
+      </c-card-body>
+    </c-card>
+  </ng-container>
+
+  <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

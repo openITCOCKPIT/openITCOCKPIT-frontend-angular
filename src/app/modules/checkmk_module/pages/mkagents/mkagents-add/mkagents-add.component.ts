@@ -24,7 +24,7 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { PaginatorModule } from 'primeng/paginator';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { MkagentPost } from '../mkagents.interface';
@@ -59,7 +59,6 @@ import { FormsModule } from '@angular/forms';
     FormErrorDirective,
     FormFeedbackComponent,
     FormLabelDirective,
-    NgIf,
     RequiredIconComponent,
     SelectComponent,
     FormControlDirective,

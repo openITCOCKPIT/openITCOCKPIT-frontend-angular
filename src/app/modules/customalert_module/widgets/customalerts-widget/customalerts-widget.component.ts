@@ -15,7 +15,7 @@ import {
     getCustomAlertsWidgetParams
 } from '../../pages/customalerts/customalerts.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
     ColComponent,
     FormCheckComponent,
@@ -38,24 +38,23 @@ import { KtdResizeEnd } from '@katoid/angular-grid-layout';
 @Component({
     selector: 'oitc-customalerts-widget',
     imports: [
-        FaIconComponent,
-        NgIf,
-        NgClass,
-        RowComponent,
-        ColComponent,
-        AsyncPipe,
-        TranslocoDirective,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormsModule,
-        DebounceDirective,
-        FormControlDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TranslocoPipe,
-        XsButtonDirective
-    ],
+    FaIconComponent,
+    NgClass,
+    RowComponent,
+    ColComponent,
+    AsyncPipe,
+    TranslocoDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormsModule,
+    DebounceDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    TranslocoPipe,
+    XsButtonDirective
+],
     templateUrl: './customalerts-widget.component.html',
     styleUrl: './customalerts-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

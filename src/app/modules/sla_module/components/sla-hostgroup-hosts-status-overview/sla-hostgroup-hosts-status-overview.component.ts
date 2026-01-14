@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { NgForOf, NgIf, NgStyle } from '@angular/common';
+import { NgStyle } from '@angular/common';
 
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -49,38 +49,36 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-sla-hostgroup-hosts-status-overview',
     imports: [
-        TranslocoDirective,
-        SkeletonModule,
-        NgIf,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        ColComponent,
-        ContainerComponent,
-        DebounceDirective,
-        FaIconComponent,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        NavComponent,
-        NavItemComponent,
-        NgForOf,
-        NoRecordsComponent,
-        PermissionDirective,
-        RowComponent,
-        TranslocoPipe,
-        XsButtonDirective,
-        RouterLink,
-        MultiSelectComponent,
-        NgStyle,
-        DropdownComponent,
-        DropdownItemDirective,
-        DropdownMenuDirective,
-        DropdownToggleDirective,
-        FormDirective,
-        FormControlDirective,
-        FormsModule
-    ],
+    TranslocoDirective,
+    SkeletonModule,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DebounceDirective,
+    FaIconComponent,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    NoRecordsComponent,
+    PermissionDirective,
+    RowComponent,
+    TranslocoPipe,
+    XsButtonDirective,
+    RouterLink,
+    MultiSelectComponent,
+    NgStyle,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormDirective,
+    FormControlDirective,
+    FormsModule
+],
     templateUrl: './sla-hostgroup-hosts-status-overview.component.html',
     styleUrl: './sla-hostgroup-hosts-status-overview.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

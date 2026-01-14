@@ -37,7 +37,7 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { LocationsService } from '../locations.service';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
@@ -84,9 +84,7 @@ import { IndexPage } from '../../../pages.interface';
     MatSort,
     TableDirective,
     MatSortHeader,
-    NgIf,
     TableLoaderComponent,
-    NgForOf,
     ItemSelectComponent,
     ActionsButtonComponent,
     ActionsButtonElementComponent,

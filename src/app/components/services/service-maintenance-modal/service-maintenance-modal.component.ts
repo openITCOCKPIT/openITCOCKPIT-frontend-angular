@@ -50,7 +50,7 @@ import {
   RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -75,8 +75,6 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
     ModalFooterComponent,
     ModalHeaderComponent,
     ModalTitleDirective,
-    NgForOf,
-    NgIf,
     RowComponent,
     TranslocoDirective,
     FormTextDirective,

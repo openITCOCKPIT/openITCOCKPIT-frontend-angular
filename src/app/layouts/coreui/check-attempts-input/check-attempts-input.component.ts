@@ -15,24 +15,23 @@ import {
     InputGroupComponent,
     RowComponent
 } from '@coreui/angular';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-check-attempts-input',
     imports: [
-        FormsModule,
-        RowComponent,
-        ColComponent,
-        ButtonGroupComponent,
-        NgClass,
-        FormControlDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        NgForOf,
-        InputGroupComponent
-    ],
+    FormsModule,
+    RowComponent,
+    ColComponent,
+    ButtonGroupComponent,
+    NgClass,
+    FormControlDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    InputGroupComponent
+],
     templateUrl: './check-attempts-input.component.html',
     styleUrl: './check-attempts-input.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

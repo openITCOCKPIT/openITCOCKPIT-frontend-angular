@@ -1,286 +1,298 @@
 <ng-container *transloco="let t">
 
+  @if (hostBrowserConfig) {
     <oitc-hosts-browser-menu
-        *ngIf="hostBrowserConfig"
-        [config]="hostBrowserConfig"></oitc-hosts-browser-menu>
+    [config]="hostBrowserConfig"></oitc-hosts-browser-menu>
+  }
 
-    <c-card class="mb-3 mt-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Host') }}
-                <small class="fw-300">
-                    {{ t('check history') }}
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="loadHostchecks()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                        {{ t('Filter') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
-            <!-- Filter -->
-            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-                <c-row>
-                    <c-col>
-                        <h6 class="pb-2 mb-3 border-bottom">
-                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                            {{ t('Filter') }}
-                        </h6>
-                    </c-col>
-                </c-row>
-                <form cForm>
-                    <c-row>
-                        <c-col md="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    {{ t('From') }}
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="from"
-                                       [placeholder]="'From date' | transloco"
-                                       aria-label="from"
-                                       name="from"
-                                       cFormControl
-                                       oitcDebounce
-                                       type="datetime-local"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col md="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    {{ t('To') }}
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="to"
-                                       [placeholder]="'From date' | transloco"
-                                       aria-label="to"
-                                       name="to"
-                                       cFormControl
-                                       oitcDebounce
-                                       type="datetime-local"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col md="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Hostchecks.output]']"
-                                       [placeholder]="'Filter by output' | transloco"
-                                       aria-label="name"
-                                       cFormControl
-                                       name="Hostchecks.output"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
+  <c-card class="mb-3 mt-3">
+    <c-card-header>
+      <h5 cCardTitle>{{ t('Host') }}
+        <small class="fw-300">
+          {{ t('check history') }}
+        </small>
+      </h5>
+      <c-nav class="card-toolbar card-header-pills">
+        <c-nav-item class="px-1">
+          <button (click)="loadHostchecks()" cButton class="ripple" color="default" size="xs">
+            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+            {{ t('Refresh') }}
+          </button>
+        </c-nav-item>
+        <c-nav-item class="px-1">
+          <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+            {{ t('Filter') }}
+          </button>
+        </c-nav-item>
+      </c-nav>
+    </c-card-header>
+    <c-card-body>
+      <!-- Filter -->
+      <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+        <c-row>
+          <c-col>
+            <h6 class="pb-2 mb-3 border-bottom">
+              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+              {{ t('Filter') }}
+            </h6>
+          </c-col>
+        </c-row>
+        <form cForm>
+          <c-row>
+            <c-col md="6" class="mb-2">
+              <c-input-group>
+                <span cInputGroupText>
+                  {{ t('From') }}
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="from"
+                  [placeholder]="'From date' | transloco"
+                  aria-label="from"
+                  name="from"
+                  cFormControl
+                  oitcDebounce
+                  type="datetime-local"
+                  />
+              </c-input-group>
+            </c-col>
+            <c-col md="6" class="mb-2">
+              <c-input-group>
+                <span cInputGroupText>
+                  {{ t('To') }}
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="to"
+                  [placeholder]="'From date' | transloco"
+                  aria-label="to"
+                  name="to"
+                  cFormControl
+                  oitcDebounce
+                  type="datetime-local"
+                  />
+              </c-input-group>
+            </c-col>
+            <c-col md="6" class="mb-2">
+              <c-input-group>
+                <span cInputGroupText>
+                  <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="params['filter[Hostchecks.output]']"
+                  [placeholder]="'Filter by output' | transloco"
+                  aria-label="name"
+                  cFormControl
+                  name="Hostchecks.output"
+                  oitcDebounce
+                  type="text"
+                  />
+              </c-input-group>
+            </c-col>
 
-                    </c-row>
-                    <c-row class="my-3">
-                        <c-col [xs]="12" lg="2">
-                            <fieldset>
-                                <h5>
-                                    {{ t('States') }}
-                                </h5>
-                                <c-form-check>
-                                    <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-success"
-                                        name="stateFilter.recovery"
-                                        id="stateFilter.recovery"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [(ngModel)]="stateFilter.recovery"/>
+          </c-row>
+          <c-row class="my-3">
+            <c-col [xs]="12" lg="2">
+              <fieldset>
+                <h5>
+                  {{ t('States') }}
+                </h5>
+                <c-form-check>
+                  <input
+                    (debouncedValue)="onFilterChange($event)"
+                    cFormCheckInput
+                    class="checkbox-lg checkbox-success"
+                    name="stateFilter.recovery"
+                    id="stateFilter.recovery"
+                    type="checkbox"
+                    trueFalseValue
+                    oitcDebounce
+                    [(ngModel)]="stateFilter.recovery"/>
 
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="stateFilter.recovery">{{ t('Up') }}</label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-danger"
-                                        name="stateFilter.down"
-                                        id="stateFilter.down"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [(ngModel)]="stateFilter.down"/>
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="stateFilter.down">{{ t('Down') }}</label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-secondary"
-                                        name="stateFilter.unreachable"
-                                        id="stateFilter.unreachable"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [(ngModel)]="stateFilter.unreachable"/>
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="stateFilter.unreachable">{{ t('Unreachable') }}</label>
-                                </c-form-check>
-                            </fieldset>
-                        </c-col>
-                        <c-col [xs]="12" lg="2">
-                            <fieldset>
-                                <h5>
-                                    {{ t('State Types') }}
-                                </h5>
-                                <c-form-check>
-                                    <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        name="Hostchecks.soft"
-                                        id="Hostchecks.soft"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [(ngModel)]="state_typesFilter.soft"/>
+                  <label cFormCheckLabel class="ms-1 mt-1"
+                  for="stateFilter.recovery">{{ t('Up') }}</label>
+                </c-form-check>
+                <c-form-check>
+                  <input
+                    (debouncedValue)="onFilterChange($event)"
+                    cFormCheckInput
+                    class="checkbox-lg checkbox-danger"
+                    name="stateFilter.down"
+                    id="stateFilter.down"
+                    type="checkbox"
+                    trueFalseValue
+                    oitcDebounce
+                    [(ngModel)]="stateFilter.down"/>
+                  <label cFormCheckLabel class="ms-1 mt-1"
+                  for="stateFilter.down">{{ t('Down') }}</label>
+                </c-form-check>
+                <c-form-check>
+                  <input
+                    (debouncedValue)="onFilterChange($event)"
+                    cFormCheckInput
+                    class="checkbox-lg checkbox-secondary"
+                    name="stateFilter.unreachable"
+                    id="stateFilter.unreachable"
+                    type="checkbox"
+                    trueFalseValue
+                    oitcDebounce
+                    [(ngModel)]="stateFilter.unreachable"/>
+                  <label cFormCheckLabel class="ms-1 mt-1"
+                  for="stateFilter.unreachable">{{ t('Unreachable') }}</label>
+                </c-form-check>
+              </fieldset>
+            </c-col>
+            <c-col [xs]="12" lg="2">
+              <fieldset>
+                <h5>
+                  {{ t('State Types') }}
+                </h5>
+                <c-form-check>
+                  <input
+                    (debouncedValue)="onFilterChange($event)"
+                    cFormCheckInput
+                    class="checkbox-lg checkbox-primary"
+                    name="Hostchecks.soft"
+                    id="Hostchecks.soft"
+                    type="checkbox"
+                    trueFalseValue
+                    oitcDebounce
+                    [(ngModel)]="state_typesFilter.soft"/>
 
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="Hostchecks.soft">{{ t('Soft') }}</label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        name="Hostchecks.hard"
-                                        id="Hostchecks.hard"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [(ngModel)]="state_typesFilter.hard"/>
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           for="Hostchecks.hard">{{ t('Hard') }}</label>
-                                </c-form-check>
-                            </fieldset>
-                        </c-col>
-                    </c-row>
-                    <c-row class="mt-2">
-                        <c-col class="text-end">
-                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                {{ t('Reset filter') }}
-                            </button>
-                        </c-col>
-                    </c-row>
-                </form>
-            </c-container>
-            <!-- End Filter -->
+                  <label cFormCheckLabel class="ms-1 mt-1"
+                  for="Hostchecks.soft">{{ t('Soft') }}</label>
+                </c-form-check>
+                <c-form-check>
+                  <input
+                    (debouncedValue)="onFilterChange($event)"
+                    cFormCheckInput
+                    class="checkbox-lg checkbox-primary"
+                    name="Hostchecks.hard"
+                    id="Hostchecks.hard"
+                    type="checkbox"
+                    trueFalseValue
+                    oitcDebounce
+                    [(ngModel)]="state_typesFilter.hard"/>
+                  <label cFormCheckLabel class="ms-1 mt-1"
+                  for="Hostchecks.hard">{{ t('Hard') }}</label>
+                </c-form-check>
+              </fieldset>
+            </c-col>
+          </c-row>
+          <c-row class="mt-2">
+            <c-col class="text-end">
+              <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                {{ t('Reset filter') }}
+              </button>
+            </c-col>
+          </c-row>
+        </form>
+      </c-container>
+      <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!hostchecks"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="hostchecks"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col" mat-sort-header="Hostchecks.state">
-                        {{ t('State') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Hostchecks.start_time">
-                        {{ t('Date') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Hostchecks.execution_time">
-                        {{ t('Execution time') }}
-                        &nbsp;
-                        <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
-                                 [cTooltip]="'Time in seconds required by the plugin to collect the status information' | transloco"
-                                 cTooltipPlacement="bottom"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Hostchecks.current_check_attempt">
-                        {{ t('Check attempt') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Hostchecks.is_hardstate">
-                        {{ t('State type') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Hostchecks.output">
-                        {{ t('Host output') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let hostcheck of hostchecks.all_hostchecks">
-                    <td class="text-center">
-                        <oitc-hoststatus-simple-icon
-                            [hoststatus]="hostcheck.Hostcheck.state"
-                            [hardstate]="hostcheck.Hostcheck.is_hardstate"></oitc-hoststatus-simple-icon>
-                    </td>
-                    <td>
-                        {{ hostcheck.Hostcheck.start_time }}
-                    </td>
-                    <td>
-                        {{ hostcheck.Hostcheck.execution_time|localNumber }}s
-                    </td>
-                    <td class="text-center">
-                        {{ hostcheck.Hostcheck.current_check_attempt }}/
-                        {{ hostcheck.Hostcheck.max_check_attempts }}
-                    </td>
-                    <td class="text-center">
-                        <span class="badge text-uppercase"
+      @if (!hostchecks) {
+        <oitc-table-loader></oitc-table-loader>
+      }
+      @if (hostchecks) {
+        <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+          (matSortChange)="onSortChange($event)"
+          [matSortActive]="params.sort" [matSortDirection]="params.direction">
+          <thead>
+            <tr>
+              <th class="width-50 text-center" scope="col" mat-sort-header="Hostchecks.state">
+                {{ t('State') }}
+              </th>
+              <th scope="col" mat-sort-header="Hostchecks.start_time">
+                {{ t('Date') }}
+              </th>
+              <th scope="col" mat-sort-header="Hostchecks.execution_time">
+                {{ t('Execution time') }}
+                &nbsp;
+                <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
+                  [cTooltip]="'Time in seconds required by the plugin to collect the status information' | transloco"
+                cTooltipPlacement="bottom"></fa-icon>
+              </th>
+              <th scope="col" mat-sort-header="Hostchecks.current_check_attempt">
+                {{ t('Check attempt') }}
+              </th>
+              <th scope="col" mat-sort-header="Hostchecks.is_hardstate">
+                {{ t('State type') }}
+              </th>
+              <th scope="col" mat-sort-header="Hostchecks.output">
+                {{ t('Host output') }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (hostcheck of hostchecks.all_hostchecks; track hostcheck) {
+              <tr>
+                <td class="text-center">
+                  <oitc-hoststatus-simple-icon
+                    [hoststatus]="hostcheck.Hostcheck.state"
+                  [hardstate]="hostcheck.Hostcheck.is_hardstate"></oitc-hoststatus-simple-icon>
+                </td>
+                <td>
+                  {{ hostcheck.Hostcheck.start_time }}
+                </td>
+                <td>
+                  {{ hostcheck.Hostcheck.execution_time|localNumber }}s
+                </td>
+                <td class="text-center">
+                  {{ hostcheck.Hostcheck.current_check_attempt }}/
+                  {{ hostcheck.Hostcheck.max_check_attempts }}
+                </td>
+                <td class="text-center">
+                  @if (hostcheck.Hostcheck.is_hardstate) {
+                    <span class="badge text-uppercase"
                               [ngClass]="{
                                     'bg-up': hostcheck.Hostcheck.state == 0,
                                     'bg-down': hostcheck.Hostcheck.state == 1,
                                     'bg-unreachable': hostcheck.Hostcheck.state == 2
                                     }"
-                              *ngIf="hostcheck.Hostcheck.is_hardstate">
-                            {{ 'Hard' | transloco }}
-                        </span>
-                        <span class="badge text-uppercase opacity-50"
+                      >
+                      {{ 'Hard' | transloco }}
+                    </span>
+                  }
+                  @if (!hostcheck.Hostcheck.is_hardstate) {
+                    <span class="badge text-uppercase opacity-50"
                               [ngClass]="{
                                     'bg-up': hostcheck.Hostcheck.state == 0,
                                     'bg-down': hostcheck.Hostcheck.state == 1,
                                     'bg-unreachable': hostcheck.Hostcheck.state == 2
                                     }"
-                              *ngIf="!hostcheck.Hostcheck.is_hardstate">
-                            {{ 'Soft' | transloco }}
-                        </span>
-                    </td>
-                    <td>
-                        <div class="word-break"
-                             [innerHTML]="hostcheck.Hostcheck.outputHtml | trustAsHtml "></div>
-                    </td>
-
-                </tr>
-                </tbody>
-            </table>
-            <oitc-no-records
-                *ngIf="hostchecks && hostchecks.all_hostchecks.length === 0"></oitc-no-records>
-            <c-container
-                [fluid]="true" class="mb-3 py-3">
-                <c-row>
-                    <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="hostchecks"
-                            [paginateOrScroll]="hostchecks"></oitc-paginate-or-scroll>
-                    </c-col>
-                </c-row>
-            </c-container>
-        </c-card-body>
-        <c-card-footer>
-            &nbsp;
-        </c-card-footer>
-    </c-card>
+                      >
+                      {{ 'Soft' | transloco }}
+                    </span>
+                  }
+                </td>
+                <td>
+                  <div class="word-break"
+                  [innerHTML]="hostcheck.Hostcheck.outputHtml | trustAsHtml "></div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+      @if (hostchecks && hostchecks.all_hostchecks.length === 0) {
+        <oitc-no-records
+        ></oitc-no-records>
+      }
+      <c-container
+        [fluid]="true" class="mb-3 py-3">
+        <c-row>
+          <c-col>
+            @if (hostchecks) {
+              <oitc-paginate-or-scroll
+                (paginatorChange)="onPaginatorChange($event)"
+              [paginateOrScroll]="hostchecks"></oitc-paginate-or-scroll>
+            }
+          </c-col>
+        </c-row>
+      </c-container>
+    </c-card-body>
+    <c-card-footer>
+      &nbsp;
+    </c-card-footer>
+  </c-card>
 </ng-container>
 

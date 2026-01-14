@@ -24,34 +24,33 @@ import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loa
 import { Subscription } from 'rxjs';
 import { DocumentationWikiRecord, DocumentationWikiRecordResponse } from '../documentations.interface';
 import { DocumentationsService } from '../documentations.service';
-import { NgIf } from '@angular/common';
+
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 
 @Component({
     selector: 'oitc-documentations-wiki',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        TranslocoDirective,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        RouterLink,
-        CardBodyComponent,
-        RowComponent,
-        ColComponent,
-        CardTextDirective,
-        XsButtonDirective,
-        BlockLoaderComponent,
-        NgIf,
-        ButtonCloseDirective,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        ModalToggleDirective,
-        TrustAsHtmlPipe
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    TranslocoDirective,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    RouterLink,
+    CardBodyComponent,
+    RowComponent,
+    ColComponent,
+    CardTextDirective,
+    XsButtonDirective,
+    BlockLoaderComponent,
+    ButtonCloseDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ModalToggleDirective,
+    TrustAsHtmlPipe
+],
     templateUrl: './documentations-wiki.component.html',
     styleUrl: './documentations-wiki.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

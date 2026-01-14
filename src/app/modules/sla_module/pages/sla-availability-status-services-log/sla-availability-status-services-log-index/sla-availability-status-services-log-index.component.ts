@@ -31,7 +31,7 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AsyncPipe, DecimalPipe, formatDate, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, DecimalPipe, formatDate } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -69,8 +69,6 @@ import { SlaAvailabilityStatusLogIndexParams } from '../../slas/slas.interface';
     MatSort,
     NavComponent,
     NavItemComponent,
-    NgForOf,
-    NgIf,
     NoRecordsComponent,
     PaginateOrScrollComponent,
     PermissionDirective,

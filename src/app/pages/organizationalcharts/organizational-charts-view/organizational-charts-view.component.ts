@@ -7,7 +7,7 @@ import { OrganizationalChartsService } from '../organizationalcharts.service';
 import { TitleService } from '../../../services/title.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
-import { NgIf } from '@angular/common';
+
 import {
     CardBodyComponent,
     CardComponent,
@@ -29,24 +29,23 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 @Component({
     selector: 'oitc-organizational-charts-view',
     imports: [
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        FaIconComponent,
-        FormsModule,
-        NavComponent,
-        NavItemComponent,
-        NgIf,
-        PermissionDirective,
-        ReactiveFormsModule,
-        TranslocoDirective,
-        XsButtonDirective,
-        RouterLink,
-        BlockLoaderComponent,
-        OrganizationalChartsViewerComponent,
-        BackButtonDirective
-    ],
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FaIconComponent,
+    FormsModule,
+    NavComponent,
+    NavItemComponent,
+    PermissionDirective,
+    ReactiveFormsModule,
+    TranslocoDirective,
+    XsButtonDirective,
+    RouterLink,
+    BlockLoaderComponent,
+    OrganizationalChartsViewerComponent,
+    BackButtonDirective
+],
     templateUrl: './organizational-charts-view.component.html',
     styleUrl: './organizational-charts-view.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

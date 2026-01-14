@@ -1,114 +1,130 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3" [hidden]="fullscreen">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                {{ t('Map Module') }}
-            </li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['mapmodule', 'maps', 'index']"
-                   [routerLink]="['/', 'map_module', 'maps', 'index']">
-                    <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
-                    {{ t('Maps') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                {{ t('View') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3" [hidden]="fullscreen">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+          {{ t('Map Module') }}
+        </li>
+        <li class="breadcrumb-item">
+          <a *oitcPermission="['mapmodule', 'maps', 'index']"
+            [routerLink]="['/', 'map_module', 'maps', 'index']">
+            <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
+            {{ t('Maps') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+          {{ t('View') }}
+        </li>
+      </ol>
     </nav>
 
     <c-card class="mb-3" id="fullscreenMapeditorsView" [ngClass]="{'mt-3': fullscreen}">
-        <c-card-header>
-            <h5 cCardTitle>
-                {{ t('View map:') }}
+      <c-card-header>
+        <h5 cCardTitle>
+          {{ t('View map:') }}
 
-                <small class="fw-300 word-break" *ngIf="map">
-                    {{ map.Map.name }}
-                </small>
-            </h5>
+          @if (map) {
+            <small class="fw-300 word-break">
+              {{ map.Map.name }}
+            </small>
+          }
+        </h5>
 
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['map_module', 'maps', 'index']" cButton class="ripple"
-                            (click)="toggleFullscreenMode()"
-                            color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1" *ngIf="map">
-                    <button *oitcPermission="['mapmodule', 'mapeditors', 'edit']"
-                            [routerLink]="['/', 'map_module', 'mapeditors', 'edit', map.Map.id]" cButton
-                            class="ripple"
-                            color="default"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                        {{ t('Edit') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1" *ngIf="map" [hidden]="fullscreen">
-                    <button *ngIf="!rotate"
-                            [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id, 'true']"
-                            cButton
-                            (click)="toggleFullscreenMode()"
-                            class="ripple"
-                            color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'expand']"></fa-icon>
-                        {{ t('Fullscreen') }}
-                    </button>
-                    <button *ngIf="rotate"
-                            [routerLink]="'/map_module/mapeditors/view/' +  map.Map.id + '/true/' + rotate.toString() + '/' + intervalParam"
-                            cButton
-                            (click)="toggleFullscreenMode()"
-                            class="ripple"
-                            color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'expand']"></fa-icon>
-                        {{ t('Fullscreen') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1" *ngIf="map" [hidden]="!fullscreen">
-                    <button *ngIf="!rotate"
-                            [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id, 'false']"
-                            cButton
-                            (click)="toggleFullscreenMode()"
-                            class="ripple"
-                            color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'compress']"></fa-icon>
-                        {{ t('Leave fullscreen') }}
-                    </button>
-                    <button *ngIf="rotate"
-                            [routerLink]="'/map_module/mapeditors/view/' + map.Map.id + '/false/' + rotate.toString() + '/' +  intervalParam"
-                            cButton
-                            (click)="toggleFullscreenMode()"
-                            class="ripple"
-                            color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'compress']"></fa-icon>
-                        {{ t('Leave fullscreen') }}
-                    </button>
-                </c-nav-item>
+        <c-nav class="card-toolbar card-header-pills">
+          <c-nav-item class="px-1">
+            <button [fallbackUrl]="['map_module', 'maps', 'index']" cButton class="ripple"
+              (click)="toggleFullscreenMode()"
+              color="default"
+              oitcBackButton
+              size="xs">
+              <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+              {{ t('Back') }}
+            </button>
+          </c-nav-item>
+          @if (map) {
+            <c-nav-item class="px-1">
+              <button *oitcPermission="['mapmodule', 'mapeditors', 'edit']"
+                [routerLink]="['/', 'map_module', 'mapeditors', 'edit', map.Map.id]" cButton
+                class="ripple"
+                color="default"
+                size="xs">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Edit') }}
+              </button>
+            </c-nav-item>
+          }
+          @if (map) {
+            <c-nav-item class="px-1" [hidden]="fullscreen">
+              @if (!rotate) {
+                <button
+                  [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id, 'true']"
+                  cButton
+                  (click)="toggleFullscreenMode()"
+                  class="ripple"
+                  color="default" size="xs">
+                  <fa-icon [icon]="['fas', 'expand']"></fa-icon>
+                  {{ t('Fullscreen') }}
+                </button>
+              }
+              @if (rotate) {
+                <button
+                  [routerLink]="'/map_module/mapeditors/view/' +  map.Map.id + '/true/' + rotate.toString() + '/' + intervalParam"
+                  cButton
+                  (click)="toggleFullscreenMode()"
+                  class="ripple"
+                  color="default" size="xs">
+                  <fa-icon [icon]="['fas', 'expand']"></fa-icon>
+                  {{ t('Fullscreen') }}
+                </button>
+              }
+            </c-nav-item>
+          }
+          @if (map) {
+            <c-nav-item class="px-1" [hidden]="!fullscreen">
+              @if (!rotate) {
+                <button
+                  [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id, 'false']"
+                  cButton
+                  (click)="toggleFullscreenMode()"
+                  class="ripple"
+                  color="default" size="xs">
+                  <fa-icon [icon]="['fas', 'compress']"></fa-icon>
+                  {{ t('Leave fullscreen') }}
+                </button>
+              }
+              @if (rotate) {
+                <button
+                  [routerLink]="'/map_module/mapeditors/view/' + map.Map.id + '/false/' + rotate.toString() + '/' +  intervalParam"
+                  cButton
+                  (click)="toggleFullscreenMode()"
+                  class="ripple"
+                  color="default" size="xs">
+                  <fa-icon [icon]="['fas', 'compress']"></fa-icon>
+                  {{ t('Leave fullscreen') }}
+                </button>
+              }
+            </c-nav-item>
+          }
 
-            </c-nav>
+        </c-nav>
 
-        </c-card-header>
-        <c-card-body>
+      </c-card-header>
+      <c-card-body>
 
-            @if (map) {
-                <!-- start map-editor -->
-                <div id="map-editor" class="map-editor">
-                    <oitc-map-view class="widget-body" [mapId]="map.Map.id"></oitc-map-view>
-                </div>
-                <!-- end map-editor -->
-            }
+        @if (map) {
+          <!-- start map-editor -->
+          <div id="map-editor" class="map-editor">
+            <oitc-map-view class="widget-body" [mapId]="map.Map.id"></oitc-map-view>
+          </div>
+          <!-- end map-editor -->
+        }
 
-        </c-card-body>
+      </c-card-body>
     </c-card>
-</ng-container>
+  </ng-container>

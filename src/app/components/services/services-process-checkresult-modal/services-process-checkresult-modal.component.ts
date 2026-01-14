@@ -32,7 +32,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -40,30 +40,29 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 @Component({
     selector: 'oitc-services-process-checkresult-modal',
     imports: [
-        ButtonCloseDirective,
-        ColComponent,
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormLabelDirective,
-        FormSelectDirective,
-        FormTextDirective,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgIf,
-        ReactiveFormsModule,
-        RequiredIconComponent,
-        RowComponent,
-        TranslocoDirective,
-        TranslocoPipe,
-        XsButtonDirective,
-        FormsModule
-    ],
+    ButtonCloseDirective,
+    ColComponent,
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    FormSelectDirective,
+    FormTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ReactiveFormsModule,
+    RequiredIconComponent,
+    RowComponent,
+    TranslocoDirective,
+    TranslocoPipe,
+    XsButtonDirective,
+    FormsModule
+],
     templateUrl: './services-process-checkresult-modal.component.html',
     styleUrl: './services-process-checkresult-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

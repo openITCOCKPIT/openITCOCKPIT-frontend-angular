@@ -1,215 +1,217 @@
 <ng-container *transloco="let t">
 
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li aria-current="page" class="breadcrumb-item">
-                <a [routerLink]="['/', 'wizards', 'index']">
-                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                    {{ t('Wizards') }}
-                </a></li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                {{ t('Proxmox') }}
-            </li>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li aria-current="page" class="breadcrumb-item">
+          <a [routerLink]="['/', 'wizards', 'index']">
+            <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+            {{ t('Wizards') }}
+          </a></li>
+          <li aria-current="page" class="breadcrumb-item active">
+            <fa-icon [icon]="['fas', 'server']"></fa-icon>
+            {{ t('Proxmox') }}
+          </li>
         </ol>
-    </nav>
+      </nav>
 
-    <c-card>
+      <c-card>
         <c-card-header>
-            <h5 cCardTitle>
-                {{ t('Configuration Wizard: Proxmox Storage') }}
-            </h5>
+          <h5 cCardTitle>
+            {{ t('Configuration Wizard: Proxmox Storage') }}
+          </h5>
         </c-card-header>
         <c-card-body class="p-0">
-            <div class="row m-0 text-center mb-3" style="min-height: 22px;">
-                <div
-                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
-                    <span>
-                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Host Information') }}
-                    </span>
-                </div>
-                <div
-                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
-                    <span>
-                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Configure services per Proxmox Storage') }}
-                    </span>
-                </div>
-                <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
-                </div>
-                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
-                    <div class="btn-group btn-group-xs w-100 h-100">
-                        <button type="button" class="btn btn-primary"
-                                [title]="'Back' | transloco"
-                                style="border-radius: 0;"
-                                [fallbackUrl]="['wizards', 'index']"
-                                oitcBackButton>
-                            <i class="fa fa-arrow-left"></i>
-                        </button>
-
-                        <button type="button" class="btn btn-success"
-                                style="border-radius: 0;"
-                                [title]="'Next' | transloco"
-                                (click)="submit()">
-                            {{ t('Next') }}
-                            <i class="fa fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
+          <div class="row m-0 text-center mb-3" style="min-height: 22px;">
+            <div
+              class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+              <span>
+                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                {{ t('Host Information') }}
+              </span>
             </div>
+            <div
+              class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+              <span>
+                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                {{ t('Configure services per Proxmox Storage') }}
+              </span>
+            </div>
+            <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+              <div class="btn-group btn-group-xs w-100 h-100">
+                <button type="button" class="btn btn-primary"
+                  [title]="'Back' | transloco"
+                  style="border-radius: 0;"
+                  [fallbackUrl]="['wizards', 'index']"
+                  oitcBackButton>
+                  <i class="fa fa-arrow-left"></i>
+                </button>
+
+                <button type="button" class="btn btn-success"
+                  style="border-radius: 0;"
+                  [title]="'Next' | transloco"
+                  (click)="submit()">
+                  {{ t('Next') }}
+                  <i class="fa fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
         </c-card-body>
         <c-card-body>
-            <fieldset class="padding-bottom-20">
-                <legend class="fs-md fieldset-legend-border-bottom">
-                    <h4>
-                        {{ t('Proxmox Server Settings') }}
-                    </h4>
-                </legend>
+          <fieldset class="padding-bottom-20">
+            <legend class="fs-md fieldset-legend-border-bottom">
+              <h4>
+                {{ t('Proxmox Server Settings') }}
+              </h4>
+            </legend>
 
-                <c-accordion class="mb-3">
-                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
-                        <ng-template cTemplateId="accordionHeaderTemplate">
-                            <button class="wizard-accordion bg-info-subtle" (click)="item0.toggleItem()"
-                                    [collapsed]="!item0.visible" cAccordionButton>
-                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
-                                {{ t('Setup Guide') }}:
-                            </button>
-                        </ng-template>
-                        <ng-template cTemplateId="accordionBodyTemplate">
-                            <div class="accordion-body">
-                                <p>
-                                    {{ t('To connect openITCOCKPIT to your Proxmox Virtual Environment, follow these steps:') }}
-                                </p>
-                                <ol>
-                                    <li>{{ t('Log in to your Proxmox Virtual Environment.') }}</li>
-                                    <li>
-                                        {{ t('In the server view, select the root element of your datacenter. Then, on the left hand navigation, go to [Permissions] -> [API Tokens]') }}
-                                    </li>
-                                    <li>
-                                        {{ t('Create a new API Token:') }}
-                                        <ol>
-                                            <li>{{ t('Select the user, your Token will be created for.') }}</li>
-                                            <li>{{ t('Provide a Token ID to distinguish between multiple different tokens.') }}</li>
-                                            <li>
-                                                {{ t('Click [add] and on the next screen, copy the generated Secret. As usual for tokens, it will be hidden for good.') }}
-                                            </li>
-                                        </ol>
-                                    </li>
-                                </ol>
-                                <p>
-
-                                    <img width="600" [src]="'./assets/images/wizards/proxmox_screenshot.png'"
-                                         alt="Proxmox Wizard "/>
-                                </p>
-                            </div>
-                        </ng-template>
-                    </c-accordion-item>
-                </c-accordion>
-
-                <div class="mb-3">
-                    <label cLabel for="post.pveUsername">
-                        {{ t('User') }}
-                        <oitc-required-icon/>
-                    </label>
-                    <input cFormControl
-                           id="post.pveUsername"
-                           type="text"
-                           name="post.pveUsername"
-                           oitcFormError [errors]="errors" errorField="pveUsername"
-                           placeholder="root@pam"
-                           [(ngModel)]="post.pveUsername">
-                    <oitc-form-feedback [errors]="errors" errorField="pveUsername"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="post.pveApiTokenName">
-                        {{ t('Token ID') }}
-                        <oitc-required-icon/>
-                    </label>
-                    <input cFormControl
-                           id="post.pveApiTokenName"
-                           type="text"
-                           name="post.pveApiTokenName"
-                           placeholder="openITCOCKPIT"
-                           oitcFormError [errors]="errors" errorField="pveApiTokenName"
-                           [(ngModel)]="post.pveApiTokenName">
-                    <oitc-form-feedback [errors]="errors" errorField="pveApiTokenName"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="post.pveApiTokenSecret">
-                        {{ t('Secret') }}
-                        <oitc-required-icon/>
-                    </label>
-                    <input cFormControl
-                           id="post.pveApiTokenSecret"
-                           type="password"
-                           name="post.pveApiTokenSecret"
-                           oitcFormError [errors]="errors" errorField="pveApiTokenSecret"
-                           [(ngModel)]="post.pveApiTokenSecret">
-                    <oitc-form-feedback [errors]="errors" errorField="pveApiTokenSecret"></oitc-form-feedback>
-                </div>
-
-            </fieldset>
-
-
-            <div>
-                <ng-template #contentTemplate let-data>
-                    <span class="h5 text-info" *ngIf="data">
-                        {{ t('Discovering Storages for Services') }}
-                    </span>
-                    <br>
-                    {{ t('Scan Proxmox and find all Storages. Only possible with a valid Proxmox configuration') }}
+            <c-accordion class="mb-3">
+              <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                <ng-template cTemplateId="accordionHeaderTemplate">
+                  <button class="wizard-accordion bg-info-subtle" (click)="item0.toggleItem()"
+                    [collapsed]="!item0.visible" cAccordionButton>
+                    <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                    {{ t('Setup Guide') }}:
+                  </button>
                 </ng-template>
+                <ng-template cTemplateId="accordionBodyTemplate">
+                  <div class="accordion-body">
+                    <p>
+                      {{ t('To connect openITCOCKPIT to your Proxmox Virtual Environment, follow these steps:') }}
+                    </p>
+                    <ol>
+                      <li>{{ t('Log in to your Proxmox Virtual Environment.') }}</li>
+                      <li>
+                        {{ t('In the server view, select the root element of your datacenter. Then, on the left hand navigation, go to [Permissions] -> [API Tokens]') }}
+                      </li>
+                      <li>
+                        {{ t('Create a new API Token:') }}
+                        <ol>
+                          <li>{{ t('Select the user, your Token will be created for.') }}</li>
+                          <li>{{ t('Provide a Token ID to distinguish between multiple different tokens.') }}</li>
+                          <li>
+                            {{ t('Click [add] and on the next screen, copy the generated Secret. As usual for tokens, it will be hidden for good.') }}
+                          </li>
+                        </ol>
+                      </li>
+                    </ol>
+                    <p>
 
-                <ng-template #buttonTemplate let-data>
-                    <div class="ms-2">
-                        <button
-                            cButton
-                            class="ripple"
-                            color="primary"
-                            type="button"
-                            [disabled]="DiscoveryIsRunning"
-                            (click)="runStorageDiscovery()">
-                            @if (DiscoveryIsRunning) {
-                                <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-                            } @else {
-                                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                            }
-                            {{ t('Start Storage discovery') }}
-                        </button>
-                    </div>
+                      <img width="600" [src]="'./assets/images/wizards/proxmox_screenshot.png'"
+                        alt="Proxmox Wizard "/>
+                    </p>
+                  </div>
                 </ng-template>
+              </c-accordion-item>
+            </c-accordion>
 
-                <oitc-alert
-                    baseIcon="circle"
-                    color="info"
-                    [icon]="['fas', 'info']"
-                    [contentTemplate]="contentTemplate"
-                    [buttonTemplate]="buttonTemplate"></oitc-alert>
+            <div class="mb-3">
+              <label cLabel for="post.pveUsername">
+                {{ t('User') }}
+                <oitc-required-icon/>
+              </label>
+              <input cFormControl
+                id="post.pveUsername"
+                type="text"
+                name="post.pveUsername"
+                oitcFormError [errors]="errors" errorField="pveUsername"
+                placeholder="root@pam"
+                [(ngModel)]="post.pveUsername">
+              <oitc-form-feedback [errors]="errors" errorField="pveUsername"></oitc-form-feedback>
+            </div>
+
+            <div class="mb-3">
+              <label cLabel for="post.pveApiTokenName">
+                {{ t('Token ID') }}
+                <oitc-required-icon/>
+              </label>
+              <input cFormControl
+                id="post.pveApiTokenName"
+                type="text"
+                name="post.pveApiTokenName"
+                placeholder="openITCOCKPIT"
+                oitcFormError [errors]="errors" errorField="pveApiTokenName"
+                [(ngModel)]="post.pveApiTokenName">
+              <oitc-form-feedback [errors]="errors" errorField="pveApiTokenName"></oitc-form-feedback>
+            </div>
+
+            <div class="mb-3">
+              <label cLabel for="post.pveApiTokenSecret">
+                {{ t('Secret') }}
+                <oitc-required-icon/>
+              </label>
+              <input cFormControl
+                id="post.pveApiTokenSecret"
+                type="password"
+                name="post.pveApiTokenSecret"
+                oitcFormError [errors]="errors" errorField="pveApiTokenSecret"
+                [(ngModel)]="post.pveApiTokenSecret">
+              <oitc-form-feedback [errors]="errors" errorField="pveApiTokenSecret"></oitc-form-feedback>
+            </div>
+
+          </fieldset>
+
+
+          <div>
+            <ng-template #contentTemplate let-data>
+              @if (data) {
+                <span class="h5 text-info">
+                  {{ t('Discovering Storages for Services') }}
+                </span>
+              }
+              <br>
+                {{ t('Scan Proxmox and find all Storages. Only possible with a valid Proxmox configuration') }}
+              </ng-template>
+
+              <ng-template #buttonTemplate let-data>
+                <div class="ms-2">
+                  <button
+                    cButton
+                    class="ripple"
+                    color="primary"
+                    type="button"
+                    [disabled]="DiscoveryIsRunning"
+                    (click)="runStorageDiscovery()">
+                    @if (DiscoveryIsRunning) {
+                      <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                    } @else {
+                      <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    }
+                    {{ t('Start Storage discovery') }}
+                  </button>
+                </div>
+              </ng-template>
+
+              <oitc-alert
+                baseIcon="circle"
+                color="info"
+                [icon]="['fas', 'info']"
+                [contentTemplate]="contentTemplate"
+              [buttonTemplate]="buttonTemplate"></oitc-alert>
 
             </div>
 
             <c-row class="mb-1">
-                <c-col md="6">
-                    <oitc-form-feedback [errors]="errors" errorField="proxmoxstoragecommand"></oitc-form-feedback>
-                </c-col>
+              <c-col md="6">
+                <oitc-form-feedback [errors]="errors" errorField="proxmoxstoragecommand"></oitc-form-feedback>
+              </c-col>
             </c-row>
             <oitc-wizards-dynamicfields
-                [(post)]="post.services"
-                [errors]="errors"
-                [titleErrorField]="'services'"
-                [title]="'Proxmox Storages'|transloco"
-            />
+              [(post)]="post.services"
+              [errors]="errors"
+              [titleErrorField]="'services'"
+              [title]="'Proxmox Storages'|transloco"
+              />
 
 
-        </c-card-body>
-    </c-card>
+          </c-card-body>
+        </c-card>
 
-</ng-container>
+      </ng-container>

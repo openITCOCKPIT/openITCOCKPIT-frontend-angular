@@ -1,512 +1,528 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a></li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['automaps', 'index']" [routerLink]="['/', 'automaps', 'index']">
-                    <fa-icon [icon]="['fas', 'magic-wand-sparkles']"></fa-icon>
-                    {{ t('Auto Maps') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                {{ t('Add') }}
-            </li>
-        </ol>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a></li>
+        <li class="breadcrumb-item">
+          <a *oitcPermission="['automaps', 'index']" [routerLink]="['/', 'automaps', 'index']">
+            <fa-icon [icon]="['fas', 'magic-wand-sparkles']"></fa-icon>
+            {{ t('Auto Maps') }}
+          </a>
+        </li>
+        <li aria-current="page" class="breadcrumb-item active">
+          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+          {{ t('Add') }}
+        </li>
+      </ol>
     </nav>
     <form cForm (ngSubmit)="submit()">
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('Create new auto map') }}</h5>
+      <c-card class="mb-3">
+        <c-card-header>
+          <h5 cCardTitle>{{ t('Create new auto map') }}</h5>
 
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['automaps', 'index']" cButton class="ripple" color="default"
-                                oitcBackButton
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                            {{ t('Back') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-            </c-card-header>
-            <c-card-body>
+          <c-nav class="card-toolbar card-header-pills">
+            <c-nav-item class="px-1">
+              <button [fallbackUrl]="['automaps', 'index']" cButton class="ripple" color="default"
+                oitcBackButton
+                size="xs">
+                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                {{ t('Back') }}
+              </button>
+            </c-nav-item>
+          </c-nav>
+        </c-card-header>
+        <c-card-body>
 
-                <div class="mb-3">
+          <div class="mb-3">
+            <label cLabel for="container">
+              {{ t('Container') }}
+              <oitc-required-icon></oitc-required-icon>
+            </label>
+            <oitc-select
+              name="container"
+              id="container"
+              optionValue="key"
+              optionLabel="value"
+              [options]="containers"
+              [(ngModel)]="post.container_id"
+              (onChange)="getMatchingHostAndServices($event)">
+            </oitc-select>
+            @if (!post.container_id) {
+              <div class="text-warning-glow pt-1">
+                {{ t('Please select a container.') }}
+              </div>
+            }
+            <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+          </div>
+
+          <div class="mb-3">
+            <c-form-check>
+              <input cFormCheckInput
+                name="Recursive"
+                id="Recursive"
+                type="checkbox"
+                [(ngModel)]="post.recursive"
+                oitcDebounce
+                (debouncedValue)="getMatchingHostAndServices($event)"/>
+              <label cFormCheckLabel for="Recursive">
+                {{ t('Recursive container lookup') }}
+              </label>
+            </c-form-check>
+            <oitc-form-feedback [errors]="errors"
+            errorField="recursive"></oitc-form-feedback>
+          </div>
+
+          <div class="mb-3">
+            <label cLabel for="name">
+              {{ t('Name') }}
+              <oitc-required-icon></oitc-required-icon>
+            </label>
+            <input cFormControl id="name" required type="text"
+              name="name"
+              oitcFormError [errors]="errors" errorField="name"
+              [(ngModel)]="post.name">
+            <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+          </div>
+
+          <div class="mb-3">
+            <label cLabel for="description">
+              {{ t('Description') }}
+            </label>
+            <input cFormControl id="description" required type="text"
+              name="description"
+              oitcFormError [errors]="errors" errorField="description"
+              [(ngModel)]="post.description">
+            <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+          </div>
+
+          <div class="mb-3">
+            <label cLabel for="host_regex">
+              {{ t('Host RegEx') }}
+              <oitc-required-icon></oitc-required-icon>
+            </label>
+            <input cFormControl id="host_regex" required type="text"
+              name="host_regex"
+              oitcFormError [errors]="errors" errorField="host_regex"
+              placeholder=".+"
+              [(ngModel)]="post.host_regex"
+              oitcDebounce
+              (debouncedValue)="getMatchingHostAndServices($event)">
+            <oitc-form-feedback [errors]="errors" errorField="host_regex"></oitc-form-feedback>
+            @if (post.container_id > 0) {
+              <div class="help-block">
+                {{
+                t('{0} hosts matching to regular expression.', {
+                '0': hostAndServiceCount.hostCount
+                })
+                }}
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label cLabel for="service_regex">
+              {{ t('Service RegEx') }}
+              <oitc-required-icon></oitc-required-icon>
+            </label>
+            <input cFormControl id="service_regex" required type="text"
+              name="service_regex"
+              oitcFormError [errors]="errors" errorField="service_regex"
+              placeholder=".+"
+              [(ngModel)]="post.service_regex"
+              oitcDebounce
+              (debouncedValue)="getMatchingHostAndServices($event)">
+            <oitc-form-feedback [errors]="errors" errorField="service_regex"></oitc-form-feedback>
+            @if (post.container_id > 0) {
+              <div class="help-block">
+                {{
+                t('{0} services matching to regular expression.', {
+                '0': hostAndServiceCount.serviceCount
+                })
+                }}
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label cLabel for="hostgroup_regex">
+              {{ t('Host group RegEx') }}
+            </label>
+            <input cFormControl id="hostgroup_regex" required type="text"
+              name="hostgroup_regex"
+              oitcFormError [errors]="errors" errorField="hostgroup_regex"
+              [(ngModel)]="post.hostgroup_regex"
+              oitcDebounce
+              (debouncedValue)="getMatchingHostAndServices($event)">
+            <oitc-form-feedback [errors]="errors" errorField="hostgroup_regex"></oitc-form-feedback>
+            @if (post.container_id > 0) {
+              <div class="help-block">
+                {{
+                t('{0} host groups matching to regular expression.', {
+                '0': hostAndServiceCount.hostgroupCount
+                })
+                }}
+              </div>
+            }
+          </div>
+
+          <c-row>
+            <c-col [xs]="12" [lg]="6" class="flex-1">
+              <c-card>
+                <c-card-header>
+                  <fa-icon [icon]="['fas', 'filter']"/>
+                  {{ t('Filter and display options') }}
+                </c-card-header>
+                <c-card-body>
+
+
+                  <div class="custom-control custom-checkbox mb-1">
+                    <oitc-form-feedback [errors]="errors"
+                    errorField="show_ok"></oitc-form-feedback>
+                    <c-form-check>
+                      <input
+                        type="checkbox"
+                        id="show_ok"
+                        name="show_ok"
+                        [(ngModel)]="post.show_ok"
+                        cFormCheckInput
+                        />
+                      <label
+                        cFormCheckLabel
+                        for="show_ok">
+                        <c-badge class="notify-label" color="success">
+                          {{ t('Show Ok') }}
+                        </c-badge>
+                      </label>
+                    </c-form-check>
+                  </div>
+
+                  <div class="custom-control custom-checkbox mb-1">
+                    <oitc-form-feedback [errors]="errors"
+                    errorField="show_warning"></oitc-form-feedback>
+                    <c-form-check>
+                      <input
+                        type="checkbox"
+                        id="show_warning"
+                        name="show_warning"
+                        [(ngModel)]="post.show_warning"
+                        cFormCheckInput
+                        />
+                      <label
+                        cFormCheckLabel
+                        for="show_warning">
+                        <c-badge class="notify-label" color="warning">
+                          {{ t('Show Warning') }}
+                        </c-badge>
+                      </label>
+                    </c-form-check>
+                  </div>
+
+                  <div class="custom-control custom-checkbox mb-1">
+                    <oitc-form-feedback [errors]="errors"
+                    errorField="show_critical"></oitc-form-feedback>
+                    <c-form-check>
+                      <input
+                        type="checkbox"
+                        id="show_critical"
+                        name="show_critical"
+                        [(ngModel)]="post.show_critical"
+                        cFormCheckInput
+                        />
+                      <label
+                        cFormCheckLabel
+                        for="show_critical">
+                        <c-badge class="notify-label" color="danger">
+                          {{ t('Show Critical') }}
+                        </c-badge>
+                      </label>
+                    </c-form-check>
+                  </div>
+
+
+                  <div class="custom-control custom-checkbox mb-1">
+                    <oitc-form-feedback [errors]="errors"
+                    errorField="show_unknown"></oitc-form-feedback>
+                    <c-form-check>
+                      <input
+                        type="checkbox"
+                        id="show_unknown"
+                        name="show_unknown"
+                        [(ngModel)]="post.show_unknown"
+                        cFormCheckInput
+                        />
+                      <label
+                        cFormCheckLabel
+                        for="show_unknown">
+                        <c-badge class="notify-label" color="secondary">
+                          {{ t('Show Unknown') }}
+                        </c-badge>
+                      </label>
+                    </c-form-check>
+                  </div>
+
+                  <div class="custom-control custom-checkbox mb-1">
+                    <oitc-form-feedback [errors]="errors"
+                    errorField="show_downtime"></oitc-form-feedback>
+                    <c-form-check>
+                      <input
+                        type="checkbox"
+                        id="show_downtime"
+                        name="show_downtime"
+                        [(ngModel)]="post.show_downtime"
+                        cFormCheckInput
+                        />
+                      <label
+                        cFormCheckLabel
+                        for="show_downtime">
+                        <c-badge class="notify-label" color="primary">
+                          {{ t('Show Downtime') }}
+                        </c-badge>
+                      </label>
+                    </c-form-check>
+                  </div>
+
+                  <div class="custom-control custom-checkbox mb-1">
+                    <oitc-form-feedback [errors]="errors"
+                    errorField="show_acknowledged"></oitc-form-feedback>
+                    <c-form-check>
+                      <input
+                        type="checkbox"
+                        id="show_acknowledged"
+                        name="show_acknowledged"
+                        [(ngModel)]="post.show_acknowledged"
+                        cFormCheckInput
+                        />
+                      <label
+                        cFormCheckLabel
+                        for="show_acknowledged">
+                        <c-badge class="notify-label" color="primary">
+                          {{ t('Show Acknowledged') }}
+                        </c-badge>
+                      </label>
+                    </c-form-check>
+                  </div>
+
+                  <fieldset>
+                    <legend class="fs-md mt-2">
+                      <label>
+                      {{ t('Display options') }}</label>
+                    </legend>
+
+                    <div class="custom-control custom-checkbox mb-1">
+                      <oitc-form-feedback [errors]="errors"
+                      errorField="show_label"></oitc-form-feedback>
+                      <c-form-check>
+                        <input
+                          type="checkbox"
+                          id="show_label"
+                          name="show_label"
+                          [(ngModel)]="post.show_label"
+                          cFormCheckInput
+                          />
+                        <label
+                          cFormCheckLabel
+                          for="show_label">
+                          <c-badge class="notify-label" color="primary">
+                            {{ t('Show Label') }}
+                          </c-badge>
+                        </label>
+                      </c-form-check>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-1">
+                      <oitc-form-feedback [errors]="errors"
+                      errorField="group_by_host"></oitc-form-feedback>
+                      <c-form-check>
+                        <input
+                          type="checkbox"
+                          id="group_by_host"
+                          name="group_by_host"
+                          [(ngModel)]="post.group_by_host"
+                          cFormCheckInput
+                          />
+                        <label
+                          cFormCheckLabel
+                          for="group_by_host">
+                          <c-badge class="notify-label" color="primary">
+                            {{ t('Group by Host') }}
+                          </c-badge>
+                        </label>
+                      </c-form-check>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-1">
+                      <oitc-form-feedback [errors]="errors"
+                      errorField="use_paginator"></oitc-form-feedback>
+                      <c-form-check>
+                        <input
+                          type="checkbox"
+                          id="use_paginator"
+                          name="use_paginator"
+                          [(ngModel)]="post.use_paginator"
+                          cFormCheckInput
+                          />
+                        <label
+                          cFormCheckLabel
+                          for="use_paginator">
+                          <c-badge class="notify-label" color="primary">
+                            {{ t('Use pagination') }}
+                          </c-badge>
+                        </label>
+                      </c-form-check>
+                      <div class="help-block">
+                        {{ t('Will may decrease loading performance if disabled.') }}
+                      </div>
+                    </div>
+
+                  </fieldset>
+
+                  <div class="mb-3">
                     <label cLabel for="container">
-                        {{ t('Container') }}
-                        <oitc-required-icon></oitc-required-icon>
+                      {{ t('Icon size') }}
+                      <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
-                        name="container"
-                        id="container"
-                        optionValue="key"
-                        optionLabel="value"
-                        [options]="containers"
-                        [(ngModel)]="post.container_id"
-                        (onChange)="getMatchingHostAndServices($event)">
+                      name="font_size"
+                      id="font_size"
+                      optionValue="key"
+                      optionLabel="value"
+                      [options]="fontSizesSelect"
+                      [(ngModel)]="post.font_size"
+                      (onChange)="onFontsizeChange()">
                     </oitc-select>
-                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
-                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <c-form-check>
-                        <input cFormCheckInput
-                               name="Recursive"
-                               id="Recursive"
-                               type="checkbox"
-                               [(ngModel)]="post.recursive"
-                               oitcDebounce
-                               (debouncedValue)="getMatchingHostAndServices($event)"/>
-                        <label cFormCheckLabel for="Recursive">
-                            {{ t('Recursive container lookup') }}
-                        </label>
-                    </c-form-check>
                     <oitc-form-feedback [errors]="errors"
-                                        errorField="recursive"></oitc-form-feedback>
-                </div>
+                    errorField="font_size"></oitc-form-feedback>
+                  </div>
 
-                <div class="mb-3">
-                    <label cLabel for="name">
-                        {{ t('Name') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="name" required type="text"
-                           name="name"
-                           oitcFormError [errors]="errors" errorField="name"
-                           [(ngModel)]="post.name">
-                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
-                </div>
+                </c-card-body>
+              </c-card>
+            </c-col>
 
-                <div class="mb-3">
-                    <label cLabel for="description">
-                        {{ t('Description') }}
-                    </label>
-                    <input cFormControl id="description" required type="text"
-                           name="description"
-                           oitcFormError [errors]="errors" errorField="description"
-                           [(ngModel)]="post.description">
-                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-                </div>
+            <c-col [xs]="12" [lg]="6" class="flex-1">
+              <c-card class="h-100 flex-1">
+                <c-card-header>
+                  <fa-icon [icon]="['fas', 'image']"/>
+                  {{ t('Icon Preview') }}
+                </c-card-header>
+                <c-card-body>
 
-                <div class="mb-3">
-                    <label cLabel for="host_regex">
-                        {{ t('Host RegEx') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="host_regex" required type="text"
-                           name="host_regex"
-                           oitcFormError [errors]="errors" errorField="host_regex"
-                           placeholder=".+"
-                           [(ngModel)]="post.host_regex"
-                           oitcDebounce
-                           (debouncedValue)="getMatchingHostAndServices($event)">
-                    <oitc-form-feedback [errors]="errors" errorField="host_regex"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="post.container_id > 0">
-                        {{
-                            t('{0} hosts matching to regular expression.', {
-                                '0': hostAndServiceCount.hostCount
-                            })
-                        }}
-                    </div>
-                </div>
+                  @if (post.show_label && post.group_by_host) {
+                    <c-row>
+                      <c-col [xs]="12">
+                        <h3>
+                          <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                          <strong>
+                            {{ t('Example host') }}
+                          </strong>
+                        </h3>
+                      </c-col>
+                      <c-col [xs]="6" class="text-truncate"
+                        [style.font-size]="currentHtmlFontsize">
+                        <fa-icon [icon]="['fas', 'square']"
+                          class="up"
+                        title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                        <span>
+                          {{ t('Example host') }}/{{ t('Service 1') }}
+                        </span>
+                      </c-col>
+                      <c-col [xs]="6" class="text-truncate"
+                        [style.font-size]="currentHtmlFontsize">
+                        <fa-icon [icon]="['fas', 'square']" class="critical"
+                        title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                        <span>
+                          {{ t('Example host') }}/{{ t('Service 2') }}
+                        </span>
+                      </c-col>
+                    </c-row>
+                  }
 
-                <div class="mb-3">
-                    <label cLabel for="service_regex">
-                        {{ t('Service RegEx') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="service_regex" required type="text"
-                           name="service_regex"
-                           oitcFormError [errors]="errors" errorField="service_regex"
-                           placeholder=".+"
-                           [(ngModel)]="post.service_regex"
-                           oitcDebounce
-                           (debouncedValue)="getMatchingHostAndServices($event)">
-                    <oitc-form-feedback [errors]="errors" errorField="service_regex"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="post.container_id > 0">
-                        {{
-                            t('{0} services matching to regular expression.', {
-                                '0': hostAndServiceCount.serviceCount
-                            })
-                        }}
-                    </div>
-                </div>
+                  @if (!post.show_label && post.group_by_host) {
+                    <c-row>
+                      <c-col [xs]="12">
+                        <h3>
+                          <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                          <strong>
+                            {{ t('Example host') }}
+                          </strong>
+                        </h3>
+                      </c-col>
+                      <c-col [xs]="12" class="text-truncate"
+                        [style.font-size]="currentHtmlFontsize">
+                        <fa-icon [icon]="['fas', 'square']"
+                          class="up me-1"
+                        title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                        <fa-icon [icon]="['fas', 'square']" class="critical me-1"
+                        title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                      </c-col>
+                    </c-row>
+                  }
 
-                <div class="mb-3">
-                    <label cLabel for="hostgroup_regex">
-                        {{ t('Host group RegEx') }}
-                    </label>
-                    <input cFormControl id="hostgroup_regex" required type="text"
-                           name="hostgroup_regex"
-                           oitcFormError [errors]="errors" errorField="hostgroup_regex"
-                           [(ngModel)]="post.hostgroup_regex"
-                           oitcDebounce
-                           (debouncedValue)="getMatchingHostAndServices($event)">
-                    <oitc-form-feedback [errors]="errors" errorField="hostgroup_regex"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="post.container_id > 0">
-                        {{
-                            t('{0} host groups matching to regular expression.', {
-                                '0': hostAndServiceCount.hostgroupCount
-                            })
-                        }}
-                    </div>
-                </div>
+                  @if (!post.show_label && !post.group_by_host) {
+                    <c-row>
+                      <c-col [xs]="12" class="text-truncate"
+                        [style.font-size]="currentHtmlFontsize">
+                        <fa-icon [icon]="['fas', 'square']"
+                          class="up me-1"
+                        title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                        <fa-icon [icon]="['fas', 'square']" class="critical me-1"
+                        title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                      </c-col>
+                    </c-row>
+                  }
 
-                <c-row>
-                    <c-col [xs]="12" [lg]="6" class="flex-1">
-                        <c-card>
-                            <c-card-header>
-                                <fa-icon [icon]="['fas', 'filter']"/>
-                                {{ t('Filter and display options') }}
-                            </c-card-header>
-                            <c-card-body>
-
-
-                                <div class="custom-control custom-checkbox mb-1">
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="show_ok"></oitc-form-feedback>
-                                    <c-form-check>
-                                        <input
-                                            type="checkbox"
-                                            id="show_ok"
-                                            name="show_ok"
-                                            [(ngModel)]="post.show_ok"
-                                            cFormCheckInput
-                                        />
-                                        <label
-                                            cFormCheckLabel
-                                            for="show_ok">
-                                            <c-badge class="notify-label" color="success">
-                                                {{ t('Show Ok') }}
-                                            </c-badge>
-                                        </label>
-                                    </c-form-check>
-                                </div>
-
-                                <div class="custom-control custom-checkbox mb-1">
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="show_warning"></oitc-form-feedback>
-                                    <c-form-check>
-                                        <input
-                                            type="checkbox"
-                                            id="show_warning"
-                                            name="show_warning"
-                                            [(ngModel)]="post.show_warning"
-                                            cFormCheckInput
-                                        />
-                                        <label
-                                            cFormCheckLabel
-                                            for="show_warning">
-                                            <c-badge class="notify-label" color="warning">
-                                                {{ t('Show Warning') }}
-                                            </c-badge>
-                                        </label>
-                                    </c-form-check>
-                                </div>
-
-                                <div class="custom-control custom-checkbox mb-1">
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="show_critical"></oitc-form-feedback>
-                                    <c-form-check>
-                                        <input
-                                            type="checkbox"
-                                            id="show_critical"
-                                            name="show_critical"
-                                            [(ngModel)]="post.show_critical"
-                                            cFormCheckInput
-                                        />
-                                        <label
-                                            cFormCheckLabel
-                                            for="show_critical">
-                                            <c-badge class="notify-label" color="danger">
-                                                {{ t('Show Critical') }}
-                                            </c-badge>
-                                        </label>
-                                    </c-form-check>
-                                </div>
+                  @if (post.show_label && !post.group_by_host) {
+                    <c-row>
+                      <c-col [xs]="6" class="text-truncate"
+                        [style.font-size]="currentHtmlFontsize">
+                        <fa-icon [icon]="['fas', 'square']"
+                          class="up"
+                        title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                        <span>
+                          {{ t('Example host') }}/{{ t('Service 1') }}
+                        </span>
+                      </c-col>
+                      <c-col [xs]="6" class="text-truncate"
+                        [style.font-size]="currentHtmlFontsize">
+                        <fa-icon [icon]="['fas', 'square']" class="critical"
+                        title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                        <span>
+                          {{ t('Example host') }}/{{ t('Service 2') }}
+                        </span>
+                      </c-col>
+                    </c-row>
+                  }
 
 
-                                <div class="custom-control custom-checkbox mb-1">
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="show_unknown"></oitc-form-feedback>
-                                    <c-form-check>
-                                        <input
-                                            type="checkbox"
-                                            id="show_unknown"
-                                            name="show_unknown"
-                                            [(ngModel)]="post.show_unknown"
-                                            cFormCheckInput
-                                        />
-                                        <label
-                                            cFormCheckLabel
-                                            for="show_unknown">
-                                            <c-badge class="notify-label" color="secondary">
-                                                {{ t('Show Unknown') }}
-                                            </c-badge>
-                                        </label>
-                                    </c-form-check>
-                                </div>
+                </c-card-body>
+              </c-card>
+            </c-col>
 
-                                <div class="custom-control custom-checkbox mb-1">
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="show_downtime"></oitc-form-feedback>
-                                    <c-form-check>
-                                        <input
-                                            type="checkbox"
-                                            id="show_downtime"
-                                            name="show_downtime"
-                                            [(ngModel)]="post.show_downtime"
-                                            cFormCheckInput
-                                        />
-                                        <label
-                                            cFormCheckLabel
-                                            for="show_downtime">
-                                            <c-badge class="notify-label" color="primary">
-                                                {{ t('Show Downtime') }}
-                                            </c-badge>
-                                        </label>
-                                    </c-form-check>
-                                </div>
+          </c-row>
 
-                                <div class="custom-control custom-checkbox mb-1">
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="show_acknowledged"></oitc-form-feedback>
-                                    <c-form-check>
-                                        <input
-                                            type="checkbox"
-                                            id="show_acknowledged"
-                                            name="show_acknowledged"
-                                            [(ngModel)]="post.show_acknowledged"
-                                            cFormCheckInput
-                                        />
-                                        <label
-                                            cFormCheckLabel
-                                            for="show_acknowledged">
-                                            <c-badge class="notify-label" color="primary">
-                                                {{ t('Show Acknowledged') }}
-                                            </c-badge>
-                                        </label>
-                                    </c-form-check>
-                                </div>
+        </c-card-body>
+        <c-card-footer class="text-end">
 
-                                <fieldset>
-                                    <legend class="fs-md mt-2">
-                                        <label>
-                                            {{ t('Display options') }}</label>
-                                    </legend>
+          <label class="me-2">
+            <input cFormCheckInput type="checkbox" name="createAnother"
+              [(ngModel)]="createAnother">
+            {{ t('Create another') }}
+          </label>
 
-                                    <div class="custom-control custom-checkbox mb-1">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="show_label"></oitc-form-feedback>
-                                        <c-form-check>
-                                            <input
-                                                type="checkbox"
-                                                id="show_label"
-                                                name="show_label"
-                                                [(ngModel)]="post.show_label"
-                                                cFormCheckInput
-                                            />
-                                            <label
-                                                cFormCheckLabel
-                                                for="show_label">
-                                                <c-badge class="notify-label" color="primary">
-                                                    {{ t('Show Label') }}
-                                                </c-badge>
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="custom-control custom-checkbox mb-1">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="group_by_host"></oitc-form-feedback>
-                                        <c-form-check>
-                                            <input
-                                                type="checkbox"
-                                                id="group_by_host"
-                                                name="group_by_host"
-                                                [(ngModel)]="post.group_by_host"
-                                                cFormCheckInput
-                                            />
-                                            <label
-                                                cFormCheckLabel
-                                                for="group_by_host">
-                                                <c-badge class="notify-label" color="primary">
-                                                    {{ t('Group by Host') }}
-                                                </c-badge>
-                                            </label>
-                                        </c-form-check>
-                                    </div>
-
-                                    <div class="custom-control custom-checkbox mb-1">
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="use_paginator"></oitc-form-feedback>
-                                        <c-form-check>
-                                            <input
-                                                type="checkbox"
-                                                id="use_paginator"
-                                                name="use_paginator"
-                                                [(ngModel)]="post.use_paginator"
-                                                cFormCheckInput
-                                            />
-                                            <label
-                                                cFormCheckLabel
-                                                for="use_paginator">
-                                                <c-badge class="notify-label" color="primary">
-                                                    {{ t('Use pagination') }}
-                                                </c-badge>
-                                            </label>
-                                        </c-form-check>
-                                        <div class="help-block">
-                                            {{ t('Will may decrease loading performance if disabled.') }}
-                                        </div>
-                                    </div>
-
-                                </fieldset>
-
-                                <div class="mb-3">
-                                    <label cLabel for="container">
-                                        {{ t('Icon size') }}
-                                        <oitc-required-icon></oitc-required-icon>
-                                    </label>
-                                    <oitc-select
-                                        name="font_size"
-                                        id="font_size"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        [options]="fontSizesSelect"
-                                        [(ngModel)]="post.font_size"
-                                        (onChange)="onFontsizeChange()">
-                                    </oitc-select>
-                                    <oitc-form-feedback [errors]="errors"
-                                                        errorField="font_size"></oitc-form-feedback>
-                                </div>
-
-                            </c-card-body>
-                        </c-card>
-                    </c-col>
-
-                    <c-col [xs]="12" [lg]="6" class="flex-1">
-                        <c-card class="h-100 flex-1">
-                            <c-card-header>
-                                <fa-icon [icon]="['fas', 'image']"/>
-                                {{ t('Icon Preview') }}
-                            </c-card-header>
-                            <c-card-body>
-
-                                <c-row *ngIf="post.show_label && post.group_by_host">
-                                    <c-col [xs]="12">
-                                        <h3>
-                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                            <strong>
-                                                {{ t('Example host') }}
-                                            </strong>
-                                        </h3>
-                                    </c-col>
-                                    <c-col [xs]="6" class="text-truncate"
-                                           [style.font-size]="currentHtmlFontsize">
-                                        <fa-icon [icon]="['fas', 'square']"
-                                                 class="up"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                        <span>
-                                            {{ t('Example host') }}/{{ t('Service 1') }}
-                                        </span>
-                                    </c-col>
-                                    <c-col [xs]="6" class="text-truncate"
-                                           [style.font-size]="currentHtmlFontsize">
-                                        <fa-icon [icon]="['fas', 'square']" class="critical"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                        <span>
-                                            {{ t('Example host') }}/{{ t('Service 2') }}
-                                        </span>
-                                    </c-col>
-                                </c-row>
-
-                                <c-row *ngIf="!post.show_label && post.group_by_host">
-                                    <c-col [xs]="12">
-                                        <h3>
-                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                            <strong>
-                                                {{ t('Example host') }}
-                                            </strong>
-                                        </h3>
-                                    </c-col>
-                                    <c-col [xs]="12" class="text-truncate"
-                                           [style.font-size]="currentHtmlFontsize">
-                                        <fa-icon [icon]="['fas', 'square']"
-                                                 class="up me-1"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'square']" class="critical me-1"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                    </c-col>
-                                </c-row>
-
-                                <c-row *ngIf="!post.show_label && !post.group_by_host">
-                                    <c-col [xs]="12" class="text-truncate"
-                                           [style.font-size]="currentHtmlFontsize">
-                                        <fa-icon [icon]="['fas', 'square']"
-                                                 class="up me-1"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'square']" class="critical me-1"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                    </c-col>
-                                </c-row>
-
-                                <c-row *ngIf="post.show_label && !post.group_by_host">
-                                    <c-col [xs]="6" class="text-truncate"
-                                           [style.font-size]="currentHtmlFontsize">
-                                        <fa-icon [icon]="['fas', 'square']"
-                                                 class="up"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                        <span>
-                                            {{ t('Example host') }}/{{ t('Service 1') }}
-                                        </span>
-                                    </c-col>
-                                    <c-col [xs]="6" class="text-truncate"
-                                           [style.font-size]="currentHtmlFontsize">
-                                        <fa-icon [icon]="['fas', 'square']" class="critical"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                        <span>
-                                            {{ t('Example host') }}/{{ t('Service 2') }}
-                                        </span>
-                                    </c-col>
-                                </c-row>
+          <button cButton class="ripple" color="primary" type="submit">
+            {{ t('Create auto map') }}
+          </button>
+          <button [fallbackUrl]="['automaps', 'index']" cButton class="ms-1 ripple" color="default"
+            oitcBackButton
+            type="button">
+            {{ t('Cancel') }}
+          </button>
 
 
-                            </c-card-body>
-                        </c-card>
-                    </c-col>
-
-                </c-row>
-
-            </c-card-body>
-            <c-card-footer class="text-end">
-
-                <label class="me-2">
-                    <input cFormCheckInput type="checkbox" name="createAnother"
-                           [(ngModel)]="createAnother">
-                    {{ t('Create another') }}
-                </label>
-
-                <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Create auto map') }}
-                </button>
-                <button [fallbackUrl]="['automaps', 'index']" cButton class="ms-1 ripple" color="default"
-                        oitcBackButton
-                        type="button">
-                    {{ t('Cancel') }}
-                </button>
-
-
-            </c-card-footer>
-        </c-card>
+        </c-card-footer>
+      </c-card>
     </form>
 
-</ng-container>
+  </ng-container>

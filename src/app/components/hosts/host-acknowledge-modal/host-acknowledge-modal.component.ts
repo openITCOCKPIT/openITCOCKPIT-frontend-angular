@@ -28,7 +28,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ExternalCommandsService, HostAcknowledgeItem } from '../../../services/external-commands.service';
@@ -42,31 +42,30 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 @Component({
     selector: 'oitc-host-acknowledge-modal',
     imports: [
-        ButtonCloseDirective,
-        ColComponent,
-        FaIconComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        FormCheckLabelDirective,
-        FormControlDirective,
-        FormLabelDirective,
-        FormTextDirective,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        NgIf,
-        ReactiveFormsModule,
-        RowComponent,
-        TranslocoDirective,
-        NgSelectModule,
-        RequiredIconComponent,
-        FormsModule,
-        FormSelectDirective,
-        TranslocoPipe,
-        XsButtonDirective
-    ],
+    ButtonCloseDirective,
+    ColComponent,
+    FaIconComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    FormTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ReactiveFormsModule,
+    RowComponent,
+    TranslocoDirective,
+    NgSelectModule,
+    RequiredIconComponent,
+    FormsModule,
+    FormSelectDirective,
+    TranslocoPipe,
+    XsButtonDirective
+],
     templateUrl: './host-acknowledge-modal.component.html',
     styleUrl: './host-acknowledge-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

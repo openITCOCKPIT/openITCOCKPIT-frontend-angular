@@ -38,7 +38,7 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 import { SelectItemOptionGroup, SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
@@ -87,7 +87,6 @@ import {
     TranslocoDirective,
     XsButtonDirective,
     RouterLink,
-    NgIf,
     SelectComponent,
     ColComponent,
     RowComponent,

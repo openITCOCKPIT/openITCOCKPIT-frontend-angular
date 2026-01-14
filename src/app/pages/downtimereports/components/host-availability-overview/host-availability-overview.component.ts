@@ -10,7 +10,7 @@ import {
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
 import { OutageHost } from '../../downtimereports.interface';
-import { KeyValuePipe, NgForOf, NgIf, NgStyle } from '@angular/common';
+import { KeyValuePipe, NgStyle } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
     ServiceAvailabilityOverviewComponent
@@ -20,22 +20,20 @@ import { HostPieEchartComponent } from '../../../../components/charts/host-pie-e
 @Component({
     selector: 'oitc-host-availability-overview',
     imports: [
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        PermissionDirective,
-        RouterLink,
-        CardBodyComponent,
-        RowComponent,
-        ColComponent,
-        NgForOf,
-        TranslocoDirective,
-        ServiceAvailabilityOverviewComponent,
-        NgIf,
-        KeyValuePipe,
-        HostPieEchartComponent,
-        NgStyle
-    ],
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    PermissionDirective,
+    RouterLink,
+    CardBodyComponent,
+    RowComponent,
+    ColComponent,
+    TranslocoDirective,
+    ServiceAvailabilityOverviewComponent,
+    KeyValuePipe,
+    HostPieEchartComponent,
+    NgStyle
+],
     templateUrl: './host-availability-overview.component.html',
     styleUrl: './host-availability-overview.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

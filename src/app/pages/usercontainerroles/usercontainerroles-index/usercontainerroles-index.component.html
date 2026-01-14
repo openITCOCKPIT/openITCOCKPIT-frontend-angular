@@ -1,245 +1,250 @@
 <ng-container *transloco="let t">
-    <nav aria-label="breadcrumb" class="mt-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/']">
-                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                    {{ t('Home') }}
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a *oitcPermission="['usercontainerroles', 'index']"
-                   [routerLink]="['/', 'usercontainerroles', 'index']">
-                    <fa-icon [icon]="['fas', 'users']"></fa-icon>
-                    {{ t('User container roles') }}
-                </a>
-            </li>
-            <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                {{ t('Overview') }}
-            </li>
-        </ol>
-    </nav>
-    <c-card class="mb-3">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('User container roles') }}
-                <small class="fw-300">
-                    {{ t('Overview') }}
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
+  <nav aria-label="breadcrumb" class="mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/']">
+          <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          {{ t('Home') }}
+        </a>
+      </li>
+      <li class="breadcrumb-item">
+        <a *oitcPermission="['usercontainerroles', 'index']"
+          [routerLink]="['/', 'usercontainerroles', 'index']">
+          <fa-icon [icon]="['fas', 'users']"></fa-icon>
+          {{ t('User container roles') }}
+        </a>
+      </li>
+      <li aria-current="page" class="breadcrumb-item active">
+        <fa-icon [icon]="['fas', 'list']"></fa-icon>
+        {{ t('Overview') }}
+      </li>
+    </ol>
+  </nav>
+  <c-card class="mb-3">
+    <c-card-header>
+      <h5 cCardTitle>{{ t('User container roles') }}
+        <small class="fw-300">
+          {{ t('Overview') }}
+        </small>
+      </h5>
+      <c-nav class="card-toolbar card-header-pills">
+        <c-nav-item class="px-1">
+          <button (click)="load()" cButton class="ripple" color="default" size="xs">
+            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+            {{ t('Refresh') }}
+          </button>
+        </c-nav-item>
 
-                <c-nav-item class="px-1">
-                    <button *oitcPermission="['usercontainerroles', 'add']"
-                            [routerLink]="['/', 'usercontainerroles', 'add']"
-                            cButton
-                            class="ripple"
-                            color="success"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                        {{ t('New') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                        {{ t('Filter') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
-            <!-- Filter -->
-            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-                <c-row>
-                    <c-col>
-                        <h6 class="pb-2 mb-3 border-bottom">
-                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                            {{ t('Filter') }}
-                        </h6>
-                    </c-col>
-                </c-row>
-                <form cForm>
-                    <c-row>
-                        <c-col md="12">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[Usercontainerroles.name]']"
-                                       [placeholder]="'Filter by name' | transloco"
-                                       aria-label="usercontainerrolesName"
-                                       cFormControl
-                                       name="usercontainerrolesName"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
+        <c-nav-item class="px-1">
+          <button *oitcPermission="['usercontainerroles', 'add']"
+            [routerLink]="['/', 'usercontainerroles', 'add']"
+            cButton
+            class="ripple"
+            color="success"
+            size="xs">
+            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+            {{ t('New') }}
+          </button>
+        </c-nav-item>
+        <c-nav-item class="px-1">
+          <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+            {{ t('Filter') }}
+          </button>
+        </c-nav-item>
+      </c-nav>
+    </c-card-header>
+    <c-card-body>
+      <!-- Filter -->
+      <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+        <c-row>
+          <c-col>
+            <h6 class="pb-2 mb-3 border-bottom">
+              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+              {{ t('Filter') }}
+            </h6>
+          </c-col>
+        </c-row>
+        <form cForm>
+          <c-row>
+            <c-col md="12">
+              <c-input-group>
+                <span cInputGroupText>
+                  <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                </span>
+                <input (debouncedValue)="onFilterChange($event)"
+                  [(ngModel)]="params['filter[Usercontainerroles.name]']"
+                  [placeholder]="'Filter by name' | transloco"
+                  aria-label="usercontainerrolesName"
+                  cFormControl
+                  name="usercontainerrolesName"
+                  oitcDebounce
+                  type="text"
+                  />
+              </c-input-group>
+            </c-col>
 
-                    </c-row>
+          </c-row>
 
-                    <c-row class="mt-2">
-                        <c-col class="text-end">
-                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                                {{ t('Reset filter') }}
-                            </button>
-                        </c-col>
-                    </c-row>
-                </form>
-            </c-container>
-            <!-- End Filter -->
-            <oitc-table-loader *ngIf="!usercontainerroles"></oitc-table-loader>
-            <table *ngIf="usercontainerroles" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th mat-sort-header="Usercontainerroles.name">
-                        {{ t('Name') }}
-                    </th>
-                    <th>
-                        {{ t('Users') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                    @for (usercontainerrole of usercontainerroles.all_usercontainerroles; track $index) {
-                        <tr>
-                            <td class="text-center">
-                                @if (( PermissionsService.hasPermissionObservable(['usercontainerroles', 'delete'])|async ) ||
-                                ( PermissionsService.hasPermissionObservable(['usercontainerroles', 'copy'])|async )) {
-                                    <oitc-item-select
-                                        [disabled]="!usercontainerrole.allow_edit"
-                                        [item]="usercontainerrole"></oitc-item-select>
-
-                                }
-                            </td>
-
-                            <td>
-                                {{ usercontainerrole.name }}
-                            </td>
-
-                            <td>
-                                @if (usercontainerrole.users.length > 0) {
-                                    <ul class="mb-0 ms-1 ps-2">
-                                        <li *ngFor="let user of usercontainerrole.users">
-                                            <oitc-label-link
-                                                [objectId]="user.id"
-                                                [route]="'/users/edit'"
-                                                [permissions]="'users.edit'">
-                                                {{ user.full_name }}
-                                            </oitc-label-link>
-                                            <span *ngIf="user._joinData.through_ldap">
-                                                <oitc-badge-outline color="warning" class="me-1">
-                                                    <fa-icon [icon]="['fas', 'key']"></fa-icon>
-                                                    {{ t('User container role through LDAP') }}
-                                                </oitc-badge-outline>
-                                            </span>
-                                        </li>
-                                    </ul>
-                                }
-
-                            </td>
-
-                            <td class="width-50">
-                                <oitc-actions-button [permission]="'usercontainerroles.edit'"
-                                                     [icon]="['fas', 'cog']"
-                                                     [url]="'/usercontainerroles/edit/' + usercontainerrole.id"
-                                                     [allowEdit]="usercontainerrole.allow_edit">
-                                    <oitc-actions-button-element [permission]="'usercontainerroles.edit'"
-                                                                 *ngIf="usercontainerrole.allow_edit"
-                                                                 [url]="'/usercontainerroles/edit/' + usercontainerrole.id">
-                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                        {{ t('Edit') }}
-                                    </oitc-actions-button-element>
-                                    @if (( PermissionsService.hasPermissionObservable(['usercontainerroles', 'copy'])|async ) && usercontainerrole.allow_edit) {
-                                        <oitc-actions-button-element [permission]="'usercontainerroles.copy'"
-                                                                     [url]="'/usercontainerroles/copy/' + usercontainerrole.id">
-                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                            {{ t('Copy') }}
-                                        </oitc-actions-button-element>
-                                    }
-                                    @if (( PermissionsService.hasPermissionObservable(['usercontainerroles', 'delete'])|async ) && usercontainerrole.allow_edit) {
-                                        <li cDropdownDivider></li>
-                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(usercontainerrole)"
-                                                                     *ngIf="usercontainerrole.allow_edit"
-                                                                     [permission]="'usercontainerroles.delete'">
-                                            <span class="text-danger">
-                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                {{ t('Delete') }}
-                                            </span>
-                                        </oitc-actions-button-element>
-                                    }
-                                </oitc-actions-button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-            <oitc-no-records
-                *ngIf="usercontainerroles && usercontainerroles.all_usercontainerroles.length === 0"></oitc-no-records>
-            <ng-container *ngIf="usercontainerroles">
-                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                             [fluid]="true">
-                    @if (( PermissionsService.hasPermissionObservable(['usercontainerroles', 'delete'])|async ) ||
+          <c-row class="mt-2">
+            <c-col class="text-end">
+              <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                {{ t('Reset filter') }}
+              </button>
+            </c-col>
+          </c-row>
+        </form>
+      </c-container>
+      <!-- End Filter -->
+      @if (!usercontainerroles) {
+        <oitc-table-loader></oitc-table-loader>
+      }
+      @if (usercontainerroles) {
+        <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+          (matSortChange)="onSortChange($event)"
+          [matSortActive]="params.sort" [matSortDirection]="params.direction">
+          <thead>
+            <tr>
+              <th class="width-50 text-center" scope="col">
+                <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+              </th>
+              <th mat-sort-header="Usercontainerroles.name">
+                {{ t('Name') }}
+              </th>
+              <th>
+                {{ t('Users') }}
+              </th>
+              <th class="text-center width-50" scope="col">
+                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (usercontainerrole of usercontainerroles.all_usercontainerroles; track $index) {
+              <tr>
+                <td class="text-center">
+                  @if (( PermissionsService.hasPermissionObservable(['usercontainerroles', 'delete'])|async ) ||
                     ( PermissionsService.hasPermissionObservable(['usercontainerroles', 'copy'])|async )) {
-
-                        <c-row>
-                            <c-col>
-                                <oitc-select-all
-                                    [itemsCount]="usercontainerroles.all_usercontainerroles.length"></oitc-select-all>
-                            </c-col>
-                            <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                                <div class="btn-group d-flex flex-row" role="group">
-
-                                    @if (PermissionsService.hasPermissionObservable(['usercontainerroles', 'copy'])|async) {
-                                        <button class="btn btn-outline-primary col-3 border-0" type="button"
-                                                (click)="navigateCopy()">
-                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                            {{ t('Copy') }}
-                                        </button>
-                                    }
-                                    @if (PermissionsService.hasPermissionObservable(['usercontainerroles', 'delete'])|async) {
-                                        <button (click)="toggleDeleteAllModal()"
-                                                class="btn btn-outline-danger col-3 border-0"
-                                                type="button">
-                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                            {{ t('Delete selected') }}
-                                        </button>
-                                    }
-                                </div>
-                            </c-col>
-                        </c-row>
+                    <oitc-item-select
+                      [disabled]="!usercontainerrole.allow_edit"
+                    [item]="usercontainerrole"></oitc-item-select>
+                  }
+                </td>
+                <td>
+                  {{ usercontainerrole.name }}
+                </td>
+                <td>
+                  @if (usercontainerrole.users.length > 0) {
+                    <ul class="mb-0 ms-1 ps-2">
+                      @for (user of usercontainerrole.users; track user) {
+                        <li>
+                          <oitc-label-link
+                            [objectId]="user.id"
+                            [route]="'/users/edit'"
+                            [permissions]="'users.edit'">
+                            {{ user.full_name }}
+                          </oitc-label-link>
+                          @if (user._joinData.through_ldap) {
+                            <span>
+                              <oitc-badge-outline color="warning" class="me-1">
+                                <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                                {{ t('User container role through LDAP') }}
+                              </oitc-badge-outline>
+                            </span>
+                          }
+                        </li>
+                      }
+                    </ul>
+                  }
+                </td>
+                <td class="width-50">
+                  <oitc-actions-button [permission]="'usercontainerroles.edit'"
+                    [icon]="['fas', 'cog']"
+                    [url]="'/usercontainerroles/edit/' + usercontainerrole.id"
+                    [allowEdit]="usercontainerrole.allow_edit">
+                    @if (usercontainerrole.allow_edit) {
+                      <oitc-actions-button-element [permission]="'usercontainerroles.edit'"
+                        [url]="'/usercontainerroles/edit/' + usercontainerrole.id">
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        {{ t('Edit') }}
+                      </oitc-actions-button-element>
                     }
-                </c-container>
-            </ng-container>
+                    @if (( PermissionsService.hasPermissionObservable(['usercontainerroles', 'copy'])|async ) && usercontainerrole.allow_edit) {
+                      <oitc-actions-button-element [permission]="'usercontainerroles.copy'"
+                        [url]="'/usercontainerroles/copy/' + usercontainerrole.id">
+                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                        {{ t('Copy') }}
+                      </oitc-actions-button-element>
+                    }
+                    @if (( PermissionsService.hasPermissionObservable(['usercontainerroles', 'delete'])|async ) && usercontainerrole.allow_edit) {
+                      <li cDropdownDivider></li>
+                      @if (usercontainerrole.allow_edit) {
+                        <oitc-actions-button-element (click)="toggleDeleteAllModal(usercontainerrole)"
+                          [permission]="'usercontainerroles.delete'">
+                          <span class="text-danger">
+                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                            {{ t('Delete') }}
+                          </span>
+                        </oitc-actions-button-element>
+                      }
+                    }
+                  </oitc-actions-button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
 
-            <c-container
-                [fluid]="true">
-                <c-row>
-                    <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            [paginateOrScroll]="usercontainerroles"></oitc-paginate-or-scroll>
-                    </c-col>
-                </c-row>
-            </c-container>
-        </c-card-body>
-    </c-card>
+      @if (usercontainerroles && usercontainerroles.all_usercontainerroles.length === 0) {
+        <oitc-no-records
+        ></oitc-no-records>
+      }
+      @if (usercontainerroles) {
+        <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+          [fluid]="true">
+          @if (( PermissionsService.hasPermissionObservable(['usercontainerroles', 'delete'])|async ) ||
+            ( PermissionsService.hasPermissionObservable(['usercontainerroles', 'copy'])|async )) {
+            <c-row>
+              <c-col>
+                <oitc-select-all
+                [itemsCount]="usercontainerroles.all_usercontainerroles.length"></oitc-select-all>
+              </c-col>
+              <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                <div class="btn-group d-flex flex-row" role="group">
+                  @if (PermissionsService.hasPermissionObservable(['usercontainerroles', 'copy'])|async) {
+                    <button class="btn btn-outline-primary col-3 border-0" type="button"
+                      (click)="navigateCopy()">
+                      <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                      {{ t('Copy') }}
+                    </button>
+                  }
+                  @if (PermissionsService.hasPermissionObservable(['usercontainerroles', 'delete'])|async) {
+                    <button (click)="toggleDeleteAllModal()"
+                      class="btn btn-outline-danger col-3 border-0"
+                      type="button">
+                      <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                      {{ t('Delete selected') }}
+                    </button>
+                  }
+                </div>
+              </c-col>
+            </c-row>
+          }
+        </c-container>
+      }
+
+      <c-container
+        [fluid]="true">
+        <c-row>
+          <c-col>
+            <oitc-paginate-or-scroll
+              (paginatorChange)="onPaginatorChange($event)"
+            [paginateOrScroll]="usercontainerroles"></oitc-paginate-or-scroll>
+          </c-col>
+        </c-row>
+      </c-container>
+    </c-card-body>
+  </c-card>
 </ng-container>
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

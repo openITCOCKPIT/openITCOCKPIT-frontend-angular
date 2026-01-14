@@ -20,30 +20,29 @@ import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loa
 import { AutomapsViewParams, AutomapsViewRoot, getDefaultAutomapsViewParams } from '../automaps.interface';
 import { Subscription } from 'rxjs';
 import { AutomapsService } from '../automaps.service';
-import { NgIf } from '@angular/common';
+
 import { AutomapViewerComponent } from './automap-viewer/automap-viewer.component';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 
 @Component({
     selector: 'oitc-automaps-view',
     imports: [
-        FaIconComponent,
-        PermissionDirective,
-        QueryHandlerCheckerComponent,
-        TranslocoDirective,
-        RouterLink,
-        CardBodyComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardTitleDirective,
-        NavComponent,
-        NavItemComponent,
-        XsButtonDirective,
-        BackButtonDirective,
-        BlockLoaderComponent,
-        NgIf,
-        AutomapViewerComponent
-    ],
+    FaIconComponent,
+    PermissionDirective,
+    QueryHandlerCheckerComponent,
+    TranslocoDirective,
+    RouterLink,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    XsButtonDirective,
+    BackButtonDirective,
+    BlockLoaderComponent,
+    AutomapViewerComponent
+],
     templateUrl: './automaps-view.component.html',
     styleUrl: './automaps-view.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

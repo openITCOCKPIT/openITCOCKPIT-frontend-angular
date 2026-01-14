@@ -31,33 +31,32 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-dashboard-add-widget-modal',
     imports: [
-        ButtonCloseDirective,
-        FaIconComponent,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalFooterComponent,
-        ModalHeaderComponent,
-        ModalTitleDirective,
-        ReactiveFormsModule,
-        TranslocoDirective,
-        XsButtonDirective,
-        ModalToggleDirective,
-        RowComponent,
-        ColComponent,
-        FormControlDirective,
-        FormLabelDirective,
-        InputGroupComponent,
-        InputGroupTextDirective,
-        TranslocoPipe,
-        FormsModule,
-        FormCheckInputDirective,
-        NgIf
-    ],
+    ButtonCloseDirective,
+    FaIconComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalTitleDirective,
+    ReactiveFormsModule,
+    TranslocoDirective,
+    XsButtonDirective,
+    ModalToggleDirective,
+    RowComponent,
+    ColComponent,
+    FormControlDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    TranslocoPipe,
+    FormsModule,
+    FormCheckInputDirective
+],
     templateUrl: './dashboard-add-widget-modal.component.html',
     styleUrl: './dashboard-add-widget-modal.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

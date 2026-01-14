@@ -1,37 +1,39 @@
 <ng-container *transloco="let t">
-    <c-modal
-        #modal='cModal'
-        [keyboard]="true"
-        id="hostAddToHostgroupModal"
-        size="lg"
+  <c-modal
+    #modal='cModal'
+    [keyboard]="true"
+    id="hostAddToHostgroupModal"
+    size="lg"
     >
-        <c-modal-header class="text-bg-gray bg-primary text-white">
-            <h5 cModalTitle>
-                <fa-icon [icon]="['fas', 'chain']"></fa-icon>
-                {{ t('Append host/s to host group') }}
-            </h5>
-            <button (click)="hideModal()" cButtonClose></button>
-        </c-modal-header>
-        <c-modal-body>
-            {{ t('Selected hosts') }}
-            <ul>
-                <li *ngFor="let item of items">{{ item.value }}</li>
-            </ul>
-        </c-modal-body>
-        <c-modal-footer>
-            <button [disabled]="isSend" cButton class="ripple" color="success"
-                    [routerLink]="['/', 'hostgroups', 'add', joinedHostIds]">
-                {{ t('Create new host group') }}
-            </button>
-            <button [disabled]="isSend" cButton class="ripple" color="primary"
-                    [routerLink]="['/', 'hostgroups', 'append', joinedHostIds]">
-                {{ t('Append existing host group') }}
-            </button>
-            <button (click)="hideModal()" cButton class="ripple" color="default">
-                {{ t('Cancel') }}
-            </button>
-        </c-modal-footer>
-    </c-modal>
+    <c-modal-header class="text-bg-gray bg-primary text-white">
+      <h5 cModalTitle>
+        <fa-icon [icon]="['fas', 'chain']"></fa-icon>
+        {{ t('Append host/s to host group') }}
+      </h5>
+      <button (click)="hideModal()" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
+      {{ t('Selected hosts') }}
+      <ul>
+        @for (item of items; track item) {
+          <li>{{ item.value }}</li>
+        }
+      </ul>
+    </c-modal-body>
+    <c-modal-footer>
+      <button [disabled]="isSend" cButton class="ripple" color="success"
+        [routerLink]="['/', 'hostgroups', 'add', joinedHostIds]">
+        {{ t('Create new host group') }}
+      </button>
+      <button [disabled]="isSend" cButton class="ripple" color="primary"
+        [routerLink]="['/', 'hostgroups', 'append', joinedHostIds]">
+        {{ t('Append existing host group') }}
+      </button>
+      <button (click)="hideModal()" cButton class="ripple" color="default">
+        {{ t('Cancel') }}
+      </button>
+    </c-modal-footer>
+  </c-modal>
 </ng-container>
 
 
