@@ -17,7 +17,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { AgentConfig } from '../agentconfig.interface';
@@ -37,20 +37,19 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
     selector: 'oitc-agentconnector-auto-tls',
     imports: [
-    AgentconnectorWizardProgressbarComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    NgIf,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    ColComponent,
-    RowComponent,
-    ProgressBarModule
-],
+        AgentconnectorWizardProgressbarComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        ColComponent,
+        RowComponent,
+        ProgressBarModule
+    ],
     templateUrl: './agentconnector-auto-tls.component.html',
     styleUrl: './agentconnector-auto-tls.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

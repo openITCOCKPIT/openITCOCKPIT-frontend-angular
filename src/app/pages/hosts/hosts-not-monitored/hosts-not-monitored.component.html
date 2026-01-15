@@ -205,181 +205,174 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!hosts"></oitc-table-loader>
-            <table *ngIf="hosts" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th colspan="2" class="width-90">
-                        {{ t('Hoststatus') }}
-                    </th>
-
-                    <th class="text-center"
-                        [cTooltip]="'Passively transferred host' | transloco" cTooltipPlacement="top">
-                        <strong>P</strong>
-                    </th>
-
-                    <th
-                        mat-sort-header="Hosts.name">
-                        {{ t('Host name') }}
-                    </th>
-
-                    <th
-                        mat-sort-header="Hosts.address">
-                        {{ t('IP address') }}
-                    </th>
-
-                    <th
-                        mat-sort-header="Hosts.satellite_id">
-                        {{ t('Instance') }}
-                    </th>
-
-                    <th class="text-center editItemWidth" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let host of hosts.all_hosts">
-                    <td class="text-center width-50">
-                        <oitc-item-select
-                            [disabled]="!host.Host.allow_edit"
-                            [item]="host"></oitc-item-select>
-                    </td>
-                    <td class="text-center width-50">
-                        <oitc-hoststatus-simple-icon></oitc-hoststatus-simple-icon>
-                    </td>
-
-                    <td class="text-center">
-                        <strong
-                            *ngIf="host.Host.active_checks_enabled === true || host.Host.is_satellite_host === true"
-                            [cTooltip]="'Passively transferred host' | transloco" cTooltipPlacement="right">
-                            P
-                        </strong>
-                    </td>
-
-                    <td class="word-break">
-                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                            <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
-                                {{ host.Host.name }}
-                            </a>
-                        } @else {
-                            {{ host.Host.name }}
+            @if (!hosts) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (hosts) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th colspan="2" class="width-90">
+                            {{ t('Hoststatus') }}
+                        </th>
+                        <th class="text-center"
+                            [cTooltip]="'Passively transferred host' | transloco" cTooltipPlacement="top">
+                            <strong>P</strong>
+                        </th>
+                        <th
+                            mat-sort-header="Hosts.name">
+                            {{ t('Host name') }}
+                        </th>
+                        <th
+                            mat-sort-header="Hosts.address">
+                            {{ t('IP address') }}
+                        </th>
+                        <th
+                            mat-sort-header="Hosts.satellite_id">
+                            {{ t('Instance') }}
+                        </th>
+                        <th class="text-center editItemWidth" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (host of hosts.all_hosts; track host) {
+                            <tr>
+                                <td class="text-center width-50">
+                                    <oitc-item-select
+                                        [disabled]="!host.Host.allow_edit"
+                                        [item]="host"></oitc-item-select>
+                                </td>
+                                <td class="text-center width-50">
+                                    <oitc-hoststatus-simple-icon></oitc-hoststatus-simple-icon>
+                                </td>
+                                <td class="text-center">
+                                    @if (host.Host.active_checks_enabled === true || host.Host.is_satellite_host === true) {
+                                        <strong
+                                            [cTooltip]="'Passively transferred host' | transloco"
+                                            cTooltipPlacement="right">
+                                            P
+                                        </strong>
+                                    }
+                                </td>
+                                <td class="word-break">
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                        <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
+                                            {{ host.Host.name }}
+                                        </a>
+                                    } @else {
+                                        {{ host.Host.name }}
+                                    }
+                                </td>
+                                <td>
+                                    <oitc-copy-to-clipboard [data]="host.Host.address">
+                                        {{ host.Host.address }}
+                                    </oitc-copy-to-clipboard>
+                                </td>
+                                <td>
+                                    {{ host.Host.satelliteName }}
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'hosts.edit'"
+                                                         [url]="'/hosts/edit/' + host.Host.id"
+                                                         [allowEdit]="host.Host.allow_edit">
+                                        @if (host.Host.allow_edit) {
+                                            <oitc-actions-button-element [permission]="'hosts.edit'"
+                                                                         [url]="'/hosts/edit/' + host.Host.id">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        @if (host.Host.allow_sharing) {
+                                            <oitc-actions-button-element [permission]="'hosts.sharing'"
+                                                                         [url]="'/hosts/sharing/' + host.Host.id">
+                                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
+                                                {{ t('Sharing') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        @if (host.Host.allow_edit) {
+                                            <oitc-actions-button-element [permission]="'hosts.deactivate'"
+                                                                         (click)="toggleDisableModal(host.Host)">
+                                                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                                {{ t('Disable') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/host/' + host.Host.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'services.serviceList'"
+                                                                     [url]="'/services/serviceList/' + host.Host.id">
+                                            <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
+                                            {{ t('Service list') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element
+                                            [permission]="'servicetemplategroups.allocateToHost'"
+                                            [url]="'/servicetemplategroups/allocateToHost/0/' + host.Host.id">
+                                            <fa-icon [icon]="['fas', 'external-link-square-alt']"></fa-icon>
+                                            {{ t('Allocate service template group') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'hostgroups.add'"
+                                                                     (click)="confirmAddHostsToHostgroup(host.Host)">
+                                            <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                            {{ t('Add to host group') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'agentconnector.wizard'"
+                                                                     [url]="'/agentconnector/wizard'"
+                                                                     [queryParams]="{hostId: host.Host.id}">
+                                            <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                            {{ t('openITCOCKPIT Agent discovery') }}
+                                        </oitc-actions-button-element>
+                                        @if (this.PermissionsService.hasModuleObservable('CheckmkModule')|async) {
+                                            <oitc-actions-button-element [permission]="'CheckmkModule.scans.index'"
+                                                                         [url]="'/checkmk_module/scans/index/' + host.Host.id">
+                                                <fa-icon [icon]="['fas', 'share-alt']"></fa-icon>
+                                                {{ t('Checkmk discovery') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element [permission]="'hosts.usedBy'"
+                                                                     [url]="'/hosts/usedBy/' + host.Host.id">
+                                            <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                            {{ t('Used By') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'documentations.view'"
+                                                                     [url]="'/documentations/view/' + host.Host.uuid+'/host'">
+                                            <fa-icon [icon]="['fas', 'book']"></fa-icon>
+                                            {{ t('Documentation') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *oitcPermission="['hosts', 'copy']"></li>
+                                        <oitc-actions-button-element [permission]="'hosts.copy'"
+                                                                     [url]="'/hosts/copy/' + host.Host.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                        @if (host.Host.allow_edit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(host.Host)"
+                                                                     [permission]="'hosts.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
                         }
-                    </td>
+                    </tbody>
+                </table>
+            }
 
-                    <td>
-                        <oitc-copy-to-clipboard [data]="host.Host.address">
-                            {{ host.Host.address }}
-                        </oitc-copy-to-clipboard>
-                    </td>
-
-                    <td>
-                        {{ host.Host.satelliteName }}
-                    </td>
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'hosts.edit'"
-                                             [url]="'/hosts/edit/' + host.Host.id"
-                                             [allowEdit]="host.Host.allow_edit">
-                            <oitc-actions-button-element [permission]="'hosts.edit'"
-                                                         *ngIf="host.Host.allow_edit"
-                                                         [url]="'/hosts/edit/' + host.Host.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-
-                            <oitc-actions-button-element [permission]="'hosts.sharing'"
-                                                         *ngIf="host.Host.allow_sharing"
-                                                         [url]="'/hosts/sharing/' + host.Host.id">
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
-                                {{ t('Sharing') }}
-                            </oitc-actions-button-element>
-
-                            <oitc-actions-button-element [permission]="'hosts.deactivate'"
-                                                         *ngIf="host.Host.allow_edit"
-                                                         (click)="toggleDisableModal(host.Host)">
-                                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                {{ t('Disable') }}
-                            </oitc-actions-button-element>
-
-                            <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                         [url]="'/changelogs/entity/host/' + host.Host.id">
-                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                {{ t('Changelog') }}
-                            </oitc-actions-button-element>
-
-                            <oitc-actions-button-element [permission]="'services.serviceList'"
-                                                         [url]="'/services/serviceList/' + host.Host.id">
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
-                                {{ t('Service list') }}
-                            </oitc-actions-button-element>
-
-                            <oitc-actions-button-element [permission]="'servicetemplategroups.allocateToHost'"
-                                                         [url]="'/servicetemplategroups/allocateToHost/0/' + host.Host.id">
-                                <fa-icon [icon]="['fas', 'external-link-square-alt']"></fa-icon>
-                                {{ t('Allocate service template group') }}
-                            </oitc-actions-button-element>
-
-                            <oitc-actions-button-element [permission]="'hostgroups.add'"
-                                                         (click)="confirmAddHostsToHostgroup(host.Host)">
-                                <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
-                                {{ t('Add to host group') }}
-                            </oitc-actions-button-element>
-
-                            <oitc-actions-button-element [permission]="'agentconnector.wizard'"
-                                                         [url]="'/agentconnector/wizard'"
-                                                         [queryParams]="{hostId: host.Host.id}">
-                                <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-                                {{ t('openITCOCKPIT Agent discovery') }}
-                            </oitc-actions-button-element>
-
-                            @if (this.PermissionsService.hasModuleObservable('CheckmkModule')|async) {
-                                <oitc-actions-button-element [permission]="'CheckmkModule.scans.index'"
-                                                             [url]="'/checkmk_module/scans/index/' + host.Host.id">
-                                    <fa-icon [icon]="['fas', 'share-alt']"></fa-icon>
-                                    {{ t('Checkmk discovery') }}
-                                </oitc-actions-button-element>
-                            }
-
-                            <oitc-actions-button-element [permission]="'hosts.usedBy'"
-                                                         [url]="'/hosts/usedBy/' + host.Host.id">
-                                <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                                {{ t('Used By') }}
-                            </oitc-actions-button-element>
-
-                            <oitc-actions-button-element [permission]="'documentations.view'"
-                                                         [url]="'/documentations/view/' + host.Host.uuid+'/host'">
-                                <fa-icon [icon]="['fas', 'book']"></fa-icon>
-                                {{ t('Documentation') }}
-                            </oitc-actions-button-element>
-
-                            <li cDropdownDivider *oitcPermission="['hosts', 'copy']"></li>
-                            <oitc-actions-button-element [permission]="'hosts.copy'"
-                                                         [url]="'/hosts/copy/' + host.Host.id">
-                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                {{ t('Copy') }}
-                            </oitc-actions-button-element>
-
-                            <li cDropdownDivider *ngIf="host.Host.allow_edit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(host.Host)"
-                                                         [permission]="'hosts.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records
-                *ngIf="hosts && hosts.all_hosts.length === 0"></oitc-no-records>
-            <ng-container *ngIf="hosts && hosts.all_hosts">
+            @if (hosts && hosts.all_hosts.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (hosts && hosts.all_hosts) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -402,7 +395,6 @@
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete selected') }}
                                 </button>
-
                                 <c-dropdown>
                                     <button cButton cDropdownToggle color="default">
                                         {{ t('More actions') }}
@@ -416,7 +408,6 @@
                                                 {{ t('Edit details') }}
                                             </a>
                                         </li>
-
                                         <li *oitcPermission="['hosts', 'deactivate']">
                                             <a
                                                 href="javascript:void(0);" cDropdownItem
@@ -434,21 +425,21 @@
                                         </li>
                                     </ul>
                                 </c-dropdown>
-
                             </div>
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="hosts"
-                            [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
+                        @if (hosts) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

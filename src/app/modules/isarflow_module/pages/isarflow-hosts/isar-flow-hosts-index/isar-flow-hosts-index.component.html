@@ -141,79 +141,91 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!isarflowHosts"></oitc-table-loader>
-            <oitc-no-records *ngIf="isarflowHosts && isarflowHosts.isarflowHosts.length === 0"></oitc-no-records>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="isarflowHosts"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th scope="col" mat-sort-header="Hosts.name">
-                        {{ t('Host name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="IsarflowHosts.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col" mat-sort-header="IsarflowHosts.ipaddress">
-                        {{ t('IP Address') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Interfaces') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody *ngIf="isarflowHosts">
-                <tr *ngFor="let isarflowHost of isarflowHosts.isarflowHosts">
-                    <td>
-                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                            <a [routerLink]="['/', 'hosts', 'browser', isarflowHost.host_id]"
-                               [queryParams]="{selectedTab: HostBrowserTabs.IsarFlow}">
-                                {{ isarflowHost.host.name }}
-                            </a>
-                        } @else {
-                            {{ isarflowHost.host.name }}
-                        }
-                    </td>
-                    <td>
-                        {{ isarflowHost.description }}
-                    </td>
-                    <td>
-                        {{ isarflowHost.ipaddress }}
-                    </td>
-                    <td>
-                        <ul>
-                            <li *ngFor="let interface of isarflowHost.isarflow_interfaces">
-                                {{ interface.interface_name }}
-                            </li>
-                        </ul>
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'hosts.browser'"
-                                             [icon]="['fas', 'desktop']"
-                                             [url]="'/hosts/browser/' + isarflowHost.host_id">
-                            <oitc-actions-button-element [permission]="'hosts.browser'"
-                                                         [url]="'/hosts/browser/' + isarflowHost.host_id">
-                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                {{ t('Browser') }}
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            @if (!isarflowHosts) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (isarflowHosts && isarflowHosts.isarflowHosts.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (isarflowHosts) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Host name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="IsarflowHosts.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="IsarflowHosts.ipaddress">
+                            {{ t('IP Address') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Interfaces') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    @if (isarflowHosts) {
+                        <tbody>
+                            @for (isarflowHost of isarflowHosts.isarflowHosts; track isarflowHost) {
+                                <tr>
+                                    <td>
+                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                            <a [routerLink]="['/', 'hosts', 'browser', isarflowHost.host_id]"
+                                               [queryParams]="{selectedTab: HostBrowserTabs.IsarFlow}">
+                                                {{ isarflowHost.host.name }}
+                                            </a>
+                                        } @else {
+                                            {{ isarflowHost.host.name }}
+                                        }
+                                    </td>
+                                    <td>
+                                        {{ isarflowHost.description }}
+                                    </td>
+                                    <td>
+                                        {{ isarflowHost.ipaddress }}
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            @for (interface of isarflowHost.isarflow_interfaces; track interface) {
+                                                <li>
+                                                    {{ interface.interface_name }}
+                                                </li>
+                                            }
+                                        </ul>
+                                    </td>
+                                    <td class="width-50">
+                                        <oitc-actions-button [permission]="'hosts.browser'"
+                                                             [icon]="['fas', 'desktop']"
+                                                             [url]="'/hosts/browser/' + isarflowHost.host_id">
+                                            <oitc-actions-button-element [permission]="'hosts.browser'"
+                                                                         [url]="'/hosts/browser/' + isarflowHost.host_id">
+                                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                {{ t('Browser') }}
+                                            </oitc-actions-button-element>
+                                        </oitc-actions-button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+            }
 
             <c-container class="mt-3"
                          [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
+                        @if (isarflowHosts) {
+                            <oitc-paginate-or-scroll
                                 (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="isarflowHosts"
                                 [paginateOrScroll]="isarflowHosts"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

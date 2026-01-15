@@ -17,7 +17,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { HumanTimeComponent } from '../interval-input/human-time/human-time.component';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
@@ -29,7 +29,6 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         FormControlDirective,
         HumanTimeComponent,
         InputGroupComponent,
-        NgForOf,
         ReactiveFormsModule,
         RowComponent,
         TranslocoPipe,

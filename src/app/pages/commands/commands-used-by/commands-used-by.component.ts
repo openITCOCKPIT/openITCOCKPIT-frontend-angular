@@ -18,7 +18,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { Subscription } from 'rxjs';
 import { CommandsService } from '../commands.service';
 import { CommandUsedByCommand, CommandUsedByObjects } from '../commands.interface';
-import { NgForOf, NgIf } from '@angular/common';
+
 
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 
@@ -28,25 +28,23 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 @Component({
     selector: 'oitc-commands-used-by',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    BackButtonDirective,
-    NavComponent,
-    XsButtonDirective,
-    NgIf,
-    CardBodyComponent,
-    ContainerComponent,
-    TableDirective,
-    NgForOf,
-    NotUsedByObjectComponent,
-    NavItemComponent,
-    FormLoaderComponent
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        BackButtonDirective,
+        NavComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        ContainerComponent,
+        TableDirective,
+        NotUsedByObjectComponent,
+        NavItemComponent,
+        FormLoaderComponent
+    ],
     templateUrl: './commands-used-by.component.html',
     styleUrl: './commands-used-by.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

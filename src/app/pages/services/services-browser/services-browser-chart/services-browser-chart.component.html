@@ -103,7 +103,7 @@
         </c-card-header>
 
         <c-card-body>
-            @if (hasEnoughData && this.currentGraphUnit === 'c'){
+            @if (hasEnoughData && this.currentGraphUnit === 'c') {
                 <c-row>
                     <c-col [xs]="12">
                         <c-alert [color]="'info'">
@@ -114,7 +114,7 @@
                 </c-row>
             }
 
-            @if (!hasEnoughData){
+            @if (!hasEnoughData) {
                 <c-row>
                     <c-col [xs]="12">
                         <c-alert [color]="'info'">

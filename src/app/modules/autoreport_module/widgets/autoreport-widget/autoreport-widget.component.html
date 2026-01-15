@@ -2,22 +2,26 @@
     <div class="d-flex h-100 flex-column" #boxContainer>
         <div>
             <div>
-                <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-                        *ngIf="!isReadonly()">
-                    @if (flipped()) {
-                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                    } @else {
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    }
-                </button>
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())"
+                    >
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        }
+                    </button>
+                }
 
                 @if (this.PermissionsService.hasPermissionObservable(['AutoreportModule', 'autoreports', 'generate'])|async) {
-                    <button class="btn btn-primary ripple mb-2 btn-xs px-2 float-end" type="button"
-                            *ngIf="autoreport_id"
-                            (click)="calculateAvailabilityForReport(autoreport_id);">
-                        <fa-icon [icon]="['fas', 'calculator']"></fa-icon>
-                        {{ t('Calculate availability') }}
-                    </button>
+                    @if (autoreport_id) {
+                        <button class="btn btn-primary ripple mb-2 btn-xs px-2 float-end" type="button"
+                                (click)="calculateAvailabilityForReport(autoreport_id);">
+                            <fa-icon [icon]="['fas', 'calculator']"></fa-icon>
+                            {{ t('Calculate availability') }}
+                        </button>
+                    }
                 }
 
             </div>
@@ -26,23 +30,27 @@
         <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
              class="box-container">
             <div class="box-x">
-                <ng-container *ngIf="animationStateShowContent">
+                @if (animationStateShowContent) {
                     <!-- Widget Content -->
-                    <div class="ps-2 text-info" *ngIf="!autoreport_id">
-                        {{ t('No element selected') }}
-                    </div>
-
+                    @if (!autoreport_id) {
+                        <div class="ps-2 text-info">
+                            {{ t('No element selected') }}
+                        </div>
+                    }
                     @if (autoreport_id && config && widget) {
                         @if (this.PermissionsService.hasPermissionObservable(['AutoreportModule', 'autoreports', 'generate'])|async) {
-
                             @if (autoreport?.last_send_date) {
                                 <div class="info-box" [style.background-color]="backgroundColor"
                                      [style.height.px]="widgetHeight">
                                     <div class="info-box-icon">
-                                        <fa-icon [icon]="['fas', 'percent']" size="lg"
-                                                 *ngIf="config.in_percent"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'clock']" size="lg"
-                                                 *ngIf="!config.in_percent"></fa-icon>
+                                        @if (config.in_percent) {
+                                            <fa-icon [icon]="['fas', 'percent']" size="lg"
+                                            ></fa-icon>
+                                        }
+                                        @if (!config.in_percent) {
+                                            <fa-icon [icon]="['fas', 'clock']" size="lg"
+                                            ></fa-icon>
+                                        }
                                     </div>
                                     <div class="info-box-content text-white position-relative">
                                         <a [routerLink]="['/', 'autoreport_module', 'autoreports', 'generate', autoreport?.id]"
@@ -50,34 +58,42 @@
                                            class="info-box-text">
                                             <span class="text-white">{{ autoreport?.name }}</span>
                                         </a>
-                                        <div class="info-update-date" *ngIf="config.show_update_date">
-                                            {{ t('Last update: ') }}{{ autoreport?.last_send_date }}
-                                        </div>
-                                        <div *ngIf="config.show_bar_chart">
-                                            <oitc-sparkline-bar-echarts
-                                                [dataInput]="sparklineData"
-                                                [max]="maxValueInMinutes"
-                                                [triggerResize]="triggerResizeCounter"></oitc-sparkline-bar-echarts>
-                                        </div>
-                                        <span *ngIf="!config.show_bar_chart"
-                                              class="info-box-sparkline"></span>
+                                        @if (config.show_update_date) {
+                                            <div class="info-update-date">
+                                                {{ t('Last update: ') }}{{ autoreport?.last_send_date }}
+                                            </div>
+                                        }
+                                        @if (config.show_bar_chart) {
+                                            <div>
+                                                <oitc-sparkline-bar-echarts
+                                                    [dataInput]="sparklineData"
+                                                    [max]="maxValueInMinutes"
+                                                    [triggerResize]="triggerResizeCounter"></oitc-sparkline-bar-echarts>
+                                            </div>
+                                        }
+                                        @if (!config.show_bar_chart) {
+                                            <span
+                                                class="info-box-sparkline"></span>
+                                        }
                                         <div class="info-box-number" [style.font-size.px]="fontSize">
-                                            <p *ngIf="config.in_percent">
-                                                {{ autoreport?.last_percent_value }}%
-                                            </p>
-                                            <p *ngIf="!config.in_percent">
-                                                {{ autoreport?.last_absolut_value_human }}
-                                            </p>
+                                            @if (config.in_percent) {
+                                                <p>
+                                                    {{ autoreport?.last_percent_value }}%
+                                                </p>
+                                            }
+                                            @if (!config.in_percent) {
+                                                <p>
+                                                    {{ autoreport?.last_absolut_value_human }}
+                                                </p>
+                                            }
                                         </div>
                                         <div class="progress">
                                             <div class="progress-bar"
                                                  [style.width.%]="last_percent_value"></div>
                                         </div>
                                     </div>
-
                                 </div>
                             } @else {
-
                                 <div class="info-box" [style.background-color]="'#5856d6'"
                                      [style.height.px]="widgetHeight">
                                     <div class="info-box-icon">
@@ -89,7 +105,6 @@
                                            class="info-box-text">
                                             <span class="text-white">{{ autoreport?.name }}</span>
                                         </a>
-
                                         <div class="info-box-number" [style.font-size.px]="fontSize">
                                             <p>
                                                 {{ t('No data available ') }}
@@ -98,7 +113,6 @@
                                     </div>
                                 </div>
                             }
-
                         } @else {
                             <c-row>
                                 <c-col [xs]="12" class="p-2 text-danger text-center">
@@ -108,16 +122,14 @@
                             </c-row>
                         }
                     }
-
                     <!-- End Widget Content -->
-                </ng-container>
+                }
             </div>
 
             <div class="box-x">
-                <ng-container *ngIf="animationStateShowConfig">
+                @if (animationStateShowConfig) {
                     <!-- Config area -->
                     @if (widget && config) {
-
                         <c-row>
                             <c-col [xs]="12">
                                 <div class="mb-3">
@@ -125,7 +137,6 @@
                                         {{ t('Autoreport') }}
                                         <oitc-required-icon></oitc-required-icon>
                                     </label>
-
                                     <oitc-select
                                         [id]="'autoreport_id_'+widget.id"
                                         [name]="'autoreport_id_'+widget.id"
@@ -139,7 +150,6 @@
                                 </div>
                             </c-col>
                         </c-row>
-
                         <c-row class="mb-2">
                             <c-col [xs]="12" [sm]="4">
                                 <fieldset>
@@ -176,7 +186,6 @@
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
-
                             <c-col [xs]="12" [sm]="4">
                                 <fieldset>
                                     <legend class="fs-5">
@@ -190,7 +199,6 @@
                                             [name]="'show_update_date-'+widget.id"
                                             type="checkbox"
                                             [(ngModel)]="config.show_update_date"/>
-
                                         <label cFormCheckLabel class="ms-1 mt-1"
                                                [for]="'show_update_date-'+widget.id">
                                             {{ t('Log date') }}
@@ -211,7 +219,6 @@
                                     </c-form-check>
                                 </fieldset>
                             </c-col>
-
                             <c-col [xs]="12" [sm]="4">
                                 <fieldset>
                                     <legend class="fs-5">
@@ -226,7 +233,6 @@
                                             [name]="'set_color_dynamically-'+widget.id"
                                             type="checkbox"
                                             [(ngModel)]="config.set_color_dynamically"/>
-
                                         <label cFormCheckLabel class="ms-1 mt-1"
                                                [for]="'set_color_dynamically-'+widget.id">
                                             {{ t('Yes') }}
@@ -235,8 +241,6 @@
                                 </fieldset>
                             </c-col>
                         </c-row>
-
-
                         <c-row class="mb-2">
                             <c-col [xs]="12" class="text-end">
                                 <button cButton type="button" class="ripple" (click)="saveConfig()">
@@ -244,10 +248,9 @@
                                 </button>
                             </c-col>
                         </c-row>
-
                     }
                     <!-- End Config area -->
-                </ng-container>
+                }
             </div>
         </div>
     </div>

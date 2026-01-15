@@ -17,7 +17,7 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { GrafanaTimepickerComponent } from '../../../components/grafana-timepicker/grafana-timepicker.component';
-import { NgIf } from '@angular/common';
+
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -54,7 +54,6 @@ import { HistoryService } from '../../../../../history.service';
         GrafanaTimepickerComponent,
         NavComponent,
         NavItemComponent,
-        NgIf,
         OitcAlertComponent,
         PermissionDirective,
         RequiredIconComponent,

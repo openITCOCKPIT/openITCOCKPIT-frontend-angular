@@ -170,8 +170,7 @@
                                             {{ t('Collection') }}
                                         </th>
 
-                                        @for (
-                                            category of StatupagegroupViewRootResponse.statuspagegroup.statuspagegroup_categories; track $index) {
+                                        @for (category of StatupagegroupViewRootResponse.statuspagegroup.statuspagegroup_categories; track $index) {
                                             <th scope="col">
                                                 <oitc-statuspage-icon-simple
                                                     class="me-1"
@@ -183,8 +182,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        @for (
-                                            collection of StatupagegroupViewRootResponse.statuspagegroup.statuspagegroup_collections; track $index; let
+                                        @for (collection of StatupagegroupViewRootResponse.statuspagegroup.statuspagegroup_collections; track $index; let
                                             collectionIndex = $index) {
                                             <tr>
                                                 <th class="col-2">
@@ -195,8 +193,7 @@
                                                     {{ collection.name }}
                                                 </th>
 
-                                                @for (
-                                                    category of StatupagegroupViewRootResponse.statuspagegroup.statuspagegroup_categories; track $index; let
+                                                @for (category of StatupagegroupViewRootResponse.statuspagegroup.statuspagegroup_categories; track $index; let
                                                     categoryIndex = $index) {
 
                                                     @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_statuspages > 0) {

@@ -56,9 +56,11 @@
                         oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
 
-                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
+                    @if (!post.container_id) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                 </div>
 
@@ -96,76 +98,84 @@
                     </div>
                 </div>
 
-                <div class="mb-3" *ngIf="post.type === InstantreportObjectTypes.Hosts">
-                    <label cLabel for="post.hosts._ids">
-                        {{ t('Hosts') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <oitc-multi-select
-                        name="post.hosts._ids"
-                        id="post.hosts._ids"
-                        [(ngModel)]="post.hosts._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [searchCallback]="loadHosts"
-                        [options]="hosts"
-                        oitcFormError [errors]="errors" errorField="hosts">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="hosts"></oitc-form-feedback>
-                </div>
+                @if (post.type === InstantreportObjectTypes.Hosts) {
+                    <div class="mb-3">
+                        <label cLabel for="post.hosts._ids">
+                            {{ t('Hosts') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-multi-select
+                            name="post.hosts._ids"
+                            id="post.hosts._ids"
+                            [(ngModel)]="post.hosts._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadHosts"
+                            [options]="hosts"
+                            oitcFormError [errors]="errors" errorField="hosts">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors" errorField="hosts"></oitc-form-feedback>
+                    </div>
+                }
 
-                <div class="mb-3" *ngIf="post.type === InstantreportObjectTypes.Services">
-                    <label cLabel for="post.services._ids">
-                        {{ t('Services') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <oitc-multi-select-optgroup
-                        name="post.services._ids"
-                        id="post.services._ids"
-                        optionValue="value"
-                        optionLabel="label"
-                        [options]="services"
-                        [(ngModel)]="post.services._ids"
-                        [searchCallback]="loadServices"
-                        class="flex-1"
-                        oitcFormError [errors]="errors" errorField="services">
-                    </oitc-multi-select-optgroup>
-                    <oitc-form-feedback [errors]="errors" errorField="services"></oitc-form-feedback>
-                </div>
+                @if (post.type === InstantreportObjectTypes.Services) {
+                    <div class="mb-3">
+                        <label cLabel for="post.services._ids">
+                            {{ t('Services') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-multi-select-optgroup
+                            name="post.services._ids"
+                            id="post.services._ids"
+                            optionValue="value"
+                            optionLabel="label"
+                            [options]="services"
+                            [(ngModel)]="post.services._ids"
+                            [searchCallback]="loadServices"
+                            class="flex-1"
+                            oitcFormError [errors]="errors" errorField="services">
+                        </oitc-multi-select-optgroup>
+                        <oitc-form-feedback [errors]="errors" errorField="services"></oitc-form-feedback>
+                    </div>
+                }
 
-                <div class="mb-3" *ngIf="post.type === InstantreportObjectTypes.Hostgroups">
-                    <label cLabel for="post.hostgroups._ids">
-                        {{ t('Host groups') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <oitc-multi-select
-                        name="post.hostgroups._ids"
-                        id="post.hostgroups._ids"
-                        [(ngModel)]="post.hostgroups._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [options]="hostgroups"
-                        oitcFormError [errors]="errors" errorField="hostgroups">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="hostgroups"></oitc-form-feedback>
-                </div>
+                @if (post.type === InstantreportObjectTypes.Hostgroups) {
+                    <div class="mb-3">
+                        <label cLabel for="post.hostgroups._ids">
+                            {{ t('Host groups') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-multi-select
+                            name="post.hostgroups._ids"
+                            id="post.hostgroups._ids"
+                            [(ngModel)]="post.hostgroups._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [options]="hostgroups"
+                            oitcFormError [errors]="errors" errorField="hostgroups">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors" errorField="hostgroups"></oitc-form-feedback>
+                    </div>
+                }
 
-                <div class="mb-3" *ngIf="post.type === InstantreportObjectTypes.Servicegroups">
-                    <label cLabel for="post.servicegroups._ids">
-                        {{ t('Service groups') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <oitc-multi-select
-                        name="post.servicegroups._ids"
-                        id="post.servicegroups._ids"
-                        [(ngModel)]="post.servicegroups._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [options]="servicegroups"
-                        oitcFormError [errors]="errors" errorField="servicegroups">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors" errorField="servicegroups"></oitc-form-feedback>
-                </div>
+                @if (post.type === InstantreportObjectTypes.Servicegroups) {
+                    <div class="mb-3">
+                        <label cLabel for="post.servicegroups._ids">
+                            {{ t('Service groups') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-multi-select
+                            name="post.servicegroups._ids"
+                            id="post.servicegroups._ids"
+                            [(ngModel)]="post.servicegroups._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [options]="servicegroups"
+                            oitcFormError [errors]="errors" errorField="servicegroups">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors" errorField="servicegroups"></oitc-form-feedback>
+                    </div>
+                }
 
                 <div class="mb-3">
                     <div>
@@ -315,45 +325,44 @@
                                for="send_email">{{ t('Send email') }}</label>
                     </c-form-check>
                 </div>
-                <div *ngIf="post.send_email">
-                    <div class="mb-3">
-                        <label cLabel for="SendInterval">
-                            {{ t('Send interval') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-
-                        <oitc-select
-                            name="SendInterval"
-                            id="SendInterval"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.send_interval"
-                            [options]="SendIntervalSelect"
-                            oitcFormError [errors]="errors" errorField="send_interval">
-                        </oitc-select>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="send_interval"></oitc-form-feedback>
+                @if (post.send_email) {
+                    <div>
+                        <div class="mb-3">
+                            <label cLabel for="SendInterval">
+                                {{ t('Send interval') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <oitc-select
+                                name="SendInterval"
+                                id="SendInterval"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="post.send_interval"
+                                [options]="SendIntervalSelect"
+                                oitcFormError [errors]="errors" errorField="send_interval">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="send_interval"></oitc-form-feedback>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="UsersSelect">
+                                {{ t('Users to send') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <oitc-multi-select
+                                name="UsersSelect"
+                                id="UsersSelect"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="post.users._ids"
+                                [options]="users"
+                                oitcFormError [errors]="errors" errorField="send_email">
+                            </oitc-multi-select>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="send_email"></oitc-form-feedback>
+                        </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="UsersSelect">
-                            {{ t('Users to send') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-
-                        <oitc-multi-select
-                            name="UsersSelect"
-                            id="UsersSelect"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.users._ids"
-                            [options]="users"
-                            oitcFormError [errors]="errors" errorField="send_email">
-                        </oitc-multi-select>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="send_email"></oitc-form-feedback>
-                    </div>
-                </div>
+                }
 
             </c-card-body>
             <c-card-footer class="text-end">

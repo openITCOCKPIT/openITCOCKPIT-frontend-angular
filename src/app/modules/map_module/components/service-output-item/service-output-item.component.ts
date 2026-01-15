@@ -16,7 +16,7 @@ import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { NgClass, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
 import {
     HostForMapItem,
@@ -28,7 +28,7 @@ import {
 @Component({
     selector: 'oitc-service-output-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf, NgStyle, NgClass, TrustAsHtmlPipe],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgStyle, NgClass, TrustAsHtmlPipe],
     templateUrl: './service-output-item.component.html',
     styleUrl: './service-output-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

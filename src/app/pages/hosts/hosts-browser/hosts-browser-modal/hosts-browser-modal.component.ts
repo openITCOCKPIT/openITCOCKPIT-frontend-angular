@@ -39,7 +39,7 @@ import { ExternalCommandsEnum } from '../../../../enums/external-commands.enum';
 import { DowntimeObject } from '../../../downtimes/downtimes.interface';
 import { CancelAllItem } from '../../../downtimes/cancel-hostdowntime-modal/cancel-hostdowntime.interface';
 import { DeleteAcknowledgementItem } from '../../../acknowledgements/acknowledgement.interface';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
     CancelHostdowntimeModalComponent
@@ -104,7 +104,6 @@ import {
         ModalFooterComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
-        NgIf,
         PermissionDirective,
         RowComponent,
         TranslocoDirective,
@@ -115,7 +114,6 @@ import {
         TooltipDirective,
         BorderDirective,
         HoststatusSimpleIconComponent,
-        NgForOf,
         TableDirective,
         RouterLink,
         HostAcknowledgeModalComponent,

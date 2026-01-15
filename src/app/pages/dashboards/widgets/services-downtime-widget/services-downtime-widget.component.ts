@@ -28,7 +28,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgIf } from '@angular/common';
+
 import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-records.component';
 import { ScrollIndexComponent } from '../../../../layouts/coreui/paginator/scroll-index/scroll-index.component';
 import { SliderTimeComponent } from '../../../../components/slider-time/slider-time.component';
@@ -57,7 +57,6 @@ import { ServiceDowntimeWidgetParams, ServicesDowntimeWidgetConfig } from './ser
         LabelLinkComponent,
         MatSort,
         MatSortHeader,
-        NgIf,
         NoRecordsComponent,
         RowComponent,
         ScrollIndexComponent,

@@ -6,14 +6,15 @@ import { map, Observable } from 'rxjs';
 import { MenuStatsRoot } from '../header-stats/header-stats.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class SystemHealthService {
     private readonly http = inject(HttpClient);
     private readonly document = inject(DOCUMENT);
     private readonly proxyPath = inject(PROXY_PATH);
 
-  constructor() { }
+    constructor() {
+    }
 
     public getSystemHealth(): Observable<any> {
         const proxyPath = this.proxyPath;

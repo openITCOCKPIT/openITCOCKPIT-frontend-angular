@@ -27,7 +27,6 @@ import {
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 
-
 @Injectable({
     providedIn: 'root'
 })
@@ -50,7 +49,7 @@ export class AutoreportsService {
         )
     }
 
-    public getAutreportsGenerateIndex():Observable<AutoreportsIndexRoot> {
+    public getAutreportsGenerateIndex(): Observable<AutoreportsIndexRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<AutoreportsIndexRoot>(`${proxyPath}/autoreport_module/autoreports/generate.json`, {
             params: {
@@ -69,9 +68,11 @@ export class AutoreportsService {
         return this.http.post(`${proxyPath}/autoreport_module/autoreports/delete/${item.id}.json?angular=true`, {});
     }
 
-    public loadCalendars(params:CalendarParams): Observable<SelectKeyValue[]> {
+    public loadCalendars(params: CalendarParams): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
-        return this.http.get<{ calendars: SelectKeyValue[] }>(`${proxyPath}/calendars/loadCalendarsByContainerId.json`, {
+        return this.http.get<{
+            calendars: SelectKeyValue[]
+        }>(`${proxyPath}/calendars/loadCalendarsByContainerId.json`, {
             params: params as {}
         }).pipe(
             map(data => {
@@ -126,7 +127,9 @@ export class AutoreportsService {
 
     public getAddStepTwo(id: number): Observable<AutoreportObject> {
         const proxyPath = this.proxyPath;
-        return this.http.get<{autoreport: AutoreportObject}>(`${proxyPath}/autoreport_module/autoreports/addStepTwo/${id}.json`, {
+        return this.http.get<{
+            autoreport: AutoreportObject
+        }>(`${proxyPath}/autoreport_module/autoreports/addStepTwo/${id}.json`, {
             params: {
                 angular: true
             }
@@ -139,7 +142,9 @@ export class AutoreportsService {
 
     public getEditStepOne(id: number): Observable<AutoreportPostObject> {
         const proxyPath = this.proxyPath;
-        return this.http.get<{autoreport: AutoreportPostObject}>(`${proxyPath}/autoreport_module/autoreports/editStepOne/${id}.json`, {
+        return this.http.get<{
+            autoreport: AutoreportPostObject
+        }>(`${proxyPath}/autoreport_module/autoreports/editStepOne/${id}.json`, {
             params: {
                 angular: true
             }
@@ -184,6 +189,7 @@ export class AutoreportsService {
             })
         )
     }
+
     public setEditStepTwo(id: number, post: any): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/autoreport_module/autoreports/editStepTwo/${id}.json?angular=true`,
@@ -208,7 +214,9 @@ export class AutoreportsService {
 
     public getEditStepThree(id: number): Observable<AutoreportObject> {
         const proxyPath = this.proxyPath;
-        return this.http.get<{autoreport: AutoreportObject}>(`${proxyPath}/autoreport_module/autoreports/editStepThree/${id}.json`, {
+        return this.http.get<{
+            autoreport: AutoreportObject
+        }>(`${proxyPath}/autoreport_module/autoreports/editStepThree/${id}.json`, {
             params: {
                 angular: true
             }
@@ -220,7 +228,7 @@ export class AutoreportsService {
     }
 
 
-    public loadServicesWithHostByHostIds(params: HostServiceParams): Observable<any>{
+    public loadServicesWithHostByHostIds(params: HostServiceParams): Observable<any> {
         const proxyPath = this.proxyPath;
         return this.http.get<any>(`${proxyPath}/autoreport_module/autoreports/hostAndServicesByHostId.json`, {
             params: params as {}
@@ -231,25 +239,25 @@ export class AutoreportsService {
         );
     }
 
-    public generateReport(post: any):Observable<GenericResponseWrapper> {
+    public generateReport(post: any): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/autoreport_module/autoreports/generate.json`, post)
-        .pipe(
-            map(data => {
-                // Return true on 200 Ok
-                return {
-                    success: true,
-                    data: data as GenericResponse
-                };
-            }),
-            catchError((error: any) => {
-                const err = error.error as GenericValidationError;
-                return of({
-                    success: false,
-                    data: err
-                });
-            })
-        );
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error as GenericValidationError;
+                    return of({
+                        success: false,
+                        data: err
+                    });
+                })
+            );
     }
 
     public generateReportPdf(params: AutoreportDownloadParams): Observable<Blob> {
@@ -270,7 +278,7 @@ export class AutoreportsService {
         )
     }
 
-    public serviceUsedByAutoreport(id:number): Observable<AutoreportServiceUsedByResponse> {
+    public serviceUsedByAutoreport(id: number): Observable<AutoreportServiceUsedByResponse> {
         const proxyPath = this.proxyPath;
         return this.http.get<AutoreportServiceUsedByResponse>(`${proxyPath}/autoreport_module/autoreports/serviceUsedBy/${id}.json`, {
             params: {
@@ -283,7 +291,7 @@ export class AutoreportsService {
         )
     }
 
-    public hostUsedByAutoreport(id:number): Observable<AutoreportHostUsedByResponse> {
+    public hostUsedByAutoreport(id: number): Observable<AutoreportHostUsedByResponse> {
         const proxyPath = this.proxyPath;
         return this.http.get<AutoreportHostUsedByResponse>(`${proxyPath}/autoreport_module/autoreports/hostUsedBy/${id}.json`, {
             params: {

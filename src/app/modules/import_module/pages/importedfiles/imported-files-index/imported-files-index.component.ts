@@ -44,7 +44,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -60,50 +60,48 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
 @Component({
     selector: 'oitc-imported-files-index',
     imports: [
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    DeleteAllModalComponent,
-    DropdownDividerDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ItemSelectComponent,
-    MatSort,
-    MatSortHeader,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RowComponent,
-    SelectAllComponent,
-    TableDirective,
-    TableLoaderComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    XsButtonDirective,
-    RouterLink,
-    LabelLinkComponent,
-    DropdownItemDirective
-],
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        DeleteAllModalComponent,
+        DropdownDividerDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        SelectAllComponent,
+        TableDirective,
+        TableLoaderComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective,
+        RouterLink,
+        LabelLinkComponent,
+        DropdownItemDirective
+    ],
     templateUrl: './imported-files-index.component.html',
     styleUrl: './imported-files-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: ImportedFilesService } // Inject the ImportedFilesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ImportedFilesService} // Inject the ImportedFilesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
