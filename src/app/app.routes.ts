@@ -46,6 +46,8 @@ import { networkModuleRoutes } from './modules/network_module/network_module.rou
 import { broadcomProxyModuleRoutes } from './modules/broadcomproxy_module/broadcomproxy_module.routes';
 import { nutanixModuleRoutes } from './modules/nutanix_module/nutanix_module.routes';
 import { gudeModuleRoutes } from './modules/gude_module/gude_module.routes';
+import { nginxModuleRoutes } from './modules/nginx_module/nginx_module.routes';
+import { citrixModuleRoutes } from './modules/citrix_module/citrix_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -113,7 +115,9 @@ const moduleRoutes: Routes = [
     ...broadcomProxyModuleRoutes,
     ...nutanixModuleRoutes,
     ...networkModuleRoutes,
-    ...gudeModuleRoutes
+    ...gudeModuleRoutes,
+    ...nginxModuleRoutes,
+    ...citrixModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{

@@ -10,12 +10,13 @@
 
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
-                    <button cButton class="ripple" color="success" size="xs"
-                            *ngIf="panelsLocal.length < 4"
-                            (click)="createPanel()">
-                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                        {{ t('Add Panel') }}
-                    </button>
+                    @if (panelsLocal.length < 4) {
+                        <button cButton class="ripple" color="success" size="xs"
+                                (click)="createPanel()">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('Add Panel') }}
+                        </button>
+                    }
                 </c-nav-item>
 
                 <c-nav-item class="px-1">

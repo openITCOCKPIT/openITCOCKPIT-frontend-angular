@@ -14,7 +14,7 @@ import {
 } from '../../pages/PrometheusQuery/prometheus-query.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ChartLoaderComponent } from '../../../../components/popover-graph/chart-loader/chart-loader.component';
 import * as _uPlot from 'uplot';
 import { PerformanceData } from '../../../../components/popover-graph/popover-graph.interface';
@@ -27,6 +27,7 @@ import { Popover } from 'primeng/popover';
 import { PrimeTemplate } from 'primeng/api';
 
 const uPlot: any = (_uPlot as any)?.default;
+
 @Component({
     selector: 'oitc-prometheus-popover-graph',
     standalone: true,
@@ -35,7 +36,6 @@ const uPlot: any = (_uPlot as any)?.default;
         ChartLoaderComponent,
         FaIconComponent,
         TranslocoDirective,
-        NgIf,
         Popover,
         PrimeTemplate
     ],
@@ -114,7 +114,7 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
         host_uuid: '',
         jsTimestamp: 0,
         metric: 'process_cpu_seconds_total',
-        promql : '',
+        promql: '',
         start: 0
     } as PrometheusPerformanceDataParams;
 
@@ -129,7 +129,7 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
         this._metric = metric;
     }
 
-    protected _promql : string = '';
+    protected _promql: string = '';
 
     get promql() {
         return this._promql;

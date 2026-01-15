@@ -42,27 +42,37 @@
                 {{ result.response.general_information?.name?.value }}
             </td>
             <td class="col-lg-1 col-md-1">
-                <div [ngSwitch]="result.response.general_information?.status?.value">
-                    <span *ngSwitchCase="'implementation'"
-                          class="badge border-info border text-info w-100">
-                        <fa-icon [icon]="['fas', 'archive']" class="text-info"></fa-icon>
-                        {{ t('implementation') }}
-                    </span>
-                    <span *ngSwitchCase="'production'"
-                          class="badge border-success border text-success w-100">
-                        <fa-icon [icon]="['fas', 'power-off']" class="text-success"></fa-icon>
-                        {{ t('production') }}
-                    </span>
-                    <span *ngSwitchCase="'stock'"
-                          class="badge border-primary border text-primary w-100">
-                        <fa-icon [icon]="['fas', 'archive']" class="text-primary"></fa-icon>
-                        {{ t('stock') }}
-                    </span>
-                    <span *ngSwitchCase="'obsolete'"
-                          class="badge border-danger border text-danger w-100">
-                        <fa-icon [icon]="['fas', 'trash']" class="text-danger"></fa-icon>
-                        {{ t('obsolete') }}
-                    </span>
+                <div>
+                    @switch (result.response.general_information?.status?.value) {
+                        @case ('implementation') {
+                            <span
+                                class="badge border-info border text-info w-100">
+                                <fa-icon [icon]="['fas', 'archive']" class="text-info"></fa-icon>
+                                {{ t('implementation') }}
+                            </span>
+                        }
+                        @case ('production') {
+                            <span
+                                class="badge border-success border text-success w-100">
+                                <fa-icon [icon]="['fas', 'power-off']" class="text-success"></fa-icon>
+                                {{ t('production') }}
+                            </span>
+                        }
+                        @case ('stock') {
+                            <span
+                                class="badge border-primary border text-primary w-100">
+                                <fa-icon [icon]="['fas', 'archive']" class="text-primary"></fa-icon>
+                                {{ t('stock') }}
+                            </span>
+                        }
+                        @case ('obsolete') {
+                            <span
+                                class="badge border-danger border text-danger w-100">
+                                <fa-icon [icon]="['fas', 'trash']" class="text-danger"></fa-icon>
+                                {{ t('obsolete') }}
+                            </span>
+                        }
+                    }
                 </div>
             </td>
 
@@ -70,10 +80,12 @@
                 {{ t('Scope') }}
             </th>
             <td>
-                <span class="badge badge-primary"
-                      *ngIf="result.response.network_component?.scope?.value">
-                    {{ result.response.network_component?.scope?.value }}
-                </span>
+                @if (result.response.network_component?.scope?.value) {
+                    <span class="badge badge-primary"
+                    >
+                        {{ result.response.network_component?.scope?.value }}
+                    </span>
+                }
             </td>
             <td class="col-lg-1 col-md-1">
                 @switch (result.response.general_information?.business_criticity?.value) {
@@ -105,13 +117,23 @@
                 {{ result.response.general_information?.hostname?.value }}
             </td>
             <td rowspan="3" class="text-center align-middle">
-                <span [ngSwitch]="result.response.general_information?.status?.value">
-                    <!-- Gradient colored icons -->
-                    <i class="fas fa-file-circle-check fa-4x status-implementation"
-                       *ngSwitchCase="'implementation'"></i>
-                    <i class="fas fa-plug-circle-check fa-4x status-production lh-sm" *ngSwitchCase="'production'"></i>
-                    <i class="fas fa-boxes-packing fa-4x status-stock lh-sm" *ngSwitchCase="'stock'"></i>
-                    <i class="fas fa-plug-circle-bolt fa-4x status-obsolete lh-sm" *ngSwitchCase="'obsolete'"></i>
+                <span>
+                    @switch (result.response.general_information?.status?.value) {
+                        <!-- Gradient colored icons -->
+                        @case ('implementation') {
+                            <i class="fas fa-file-circle-check fa-4x status-implementation"
+                            ></i>
+                        }
+                        @case ('production') {
+                            <i class="fas fa-plug-circle-check fa-4x status-production lh-sm"></i>
+                        }
+                        @case ('stock') {
+                            <i class="fas fa-boxes-packing fa-4x status-stock lh-sm"></i>
+                        }
+                        @case ('obsolete') {
+                            <i class="fas fa-plug-circle-bolt fa-4x status-obsolete lh-sm"></i>
+                        }
+                    }
                 </span>
             </td>
             <th>
@@ -121,18 +143,22 @@
                 {{ result.response.network_component?.wanedgetype?.value }}
             </td>
             <td rowspan="3" class="text-center align-middle">
-                <span [ngSwitch]="result.response.general_information?.business_criticity?.value">
-
-                    <!-- Gradient colored icons -->
-                    <i class="fas fa-bars fa-4x business-criticity-low helptext"
-                       *ngSwitchCase="'low'"
-                       [title]="'No Production relevance' | transloco"></i>
-                    <i class="fas fa-bars fa-4x business-criticity-medium helptext"
-                       *ngSwitchCase="'medium'"
-                       [title]="'Production relevant' | transloco"></i>
-                    <i class="fas fa-bars fa-4x business-criticity-high helptext"
-                       *ngSwitchCase="'high'"
-                       [title]="'Production relevance high' | transloco"></i>
+                <span>
+                    @switch (result.response.general_information?.business_criticity?.value) {
+                        <!-- Gradient colored icons -->
+                        @case ('low') {
+                            <i class="fas fa-bars fa-4x business-criticity-low helptext"
+                               [title]="'No Production relevance' | transloco"></i>
+                        }
+                        @case ('medium') {
+                            <i class="fas fa-bars fa-4x business-criticity-medium helptext"
+                               [title]="'Production relevant' | transloco"></i>
+                        }
+                        @case ('high') {
+                            <i class="fas fa-bars fa-4x business-criticity-high helptext"
+                               [title]="'Production relevance high' | transloco"></i>
+                        }
+                    }
                 </span>
             </td>
         </tr>
@@ -143,11 +169,13 @@
             </th>
             <td class="text-primary">
                 {{ result.response.general_information?.id?.value }}
-                <span *ngIf="result.response.externalLink" class="ng-scope">
-                    <a target="_blank" [href]="result.response.externalLink">
-                        <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
-                    </a>
-                </span>
+                @if (result.response.externalLink) {
+                    <span class="ng-scope">
+                        <a target="_blank" [href]="result.response.externalLink">
+                            <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
+                        </a>
+                    </span>
+                }
             </td>
             <th class="border-primary-top" colspan="2">
                 <fa-icon [icon]="['fas', 'sitemap']" class="text-primary width-15"></fa-icon>

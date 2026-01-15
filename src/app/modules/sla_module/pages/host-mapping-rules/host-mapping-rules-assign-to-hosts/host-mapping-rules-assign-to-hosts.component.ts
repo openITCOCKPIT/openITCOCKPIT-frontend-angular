@@ -41,7 +41,7 @@ import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/pa
 import { Sla } from '../../slas/slas.interface';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { FormsModule } from '@angular/forms';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -92,7 +92,6 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
         DropdownMenuDirective,
         DropdownItemDirective,
         AlertComponent,
-        NgIf,
         DebounceDirective,
         FormControlDirective,
         InputGroupComponent,
@@ -111,7 +110,6 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
         BadgeComponent,
         MatSort,
         MatSortHeader,
-        NgForOf,
         TableDirective,
         NgClass,
         PaginateOrScrollComponent,

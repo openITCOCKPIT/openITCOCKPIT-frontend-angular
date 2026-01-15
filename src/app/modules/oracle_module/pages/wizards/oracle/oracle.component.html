@@ -29,13 +29,15 @@
         <c-card-body class="p-0">
 
             <div class="row m-0 text-center mb-3" style="min-height: 22px;">
-                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('Host Information') }}
                     </span>
                 </div>
-                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('Configure Oracle Monitoring') }}
@@ -197,9 +199,9 @@ grant select on sys.v_$session to nagios;</pre>
             </fieldset>
 
             <oitc-wizards-dynamicfields
-                    [(post)]="post.services"
-                    [errors]="errors"
-                    [title]="'Oracle Database services'|transloco"
+                [(post)]="post.services"
+                [errors]="errors"
+                [title]="'Oracle Database services'|transloco"
             />
         </c-card-body>
     </c-card>

@@ -52,12 +52,14 @@
                 <rect [attr.width]="width" [attr.height]="height" rx="10" ry="10"
                       [attr.fill]="'url(#tlBg_' + item()!.id + ')'" stroke="#444" stroke-width="2"></rect>
 
-                <text *ngIf="item()!.show_label && this.Host && this.Service" x="0" [attr.y]="height - 10"
-                      [attr.font-size]="width / 8"
-                      font-family="Verdana" fill="#FFF"
-                      [attr.transform]="'rotate(-90, 0, ' + (height - 10 - (width / 8)) + ')'">
-                    {{ this.Host!.hostname + '/' + this.Service!.servicename }}
-                </text>
+                @if (item()!.show_label && this.Host && this.Service) {
+                    <text x="0" [attr.y]="height - 10"
+                          [attr.font-size]="width / 8"
+                          font-family="Verdana" fill="#FFF"
+                          [attr.transform]="'rotate(-90, 0, ' + (height - 10 - (width / 8)) + ')'">
+                        {{ this.Host!.hostname + '/' + this.Service!.servicename }}
+                    </text>
+                }
 
                 <g [attr.id]="'lights_' + item()!.id">
                     <g #redLightGroup [attr.id]="'redLightGroup_' + item()!.id">
@@ -71,9 +73,11 @@
                                 stroke="#444" stroke-width="2"></circle>
                     </g>
                     <g [attr.id]="'blueLightGroup_' + item()!.id">
-                        <circle *ngIf="showBlue" [attr.cx]="circleX"
-                                [attr.cy]="lightDiameter + lightPadding * 2 + lightRadius" [attr.r]="lightRadius"
-                                fill="#6e99ff"></circle>
+                        @if (showBlue) {
+                            <circle [attr.cx]="circleX"
+                                    [attr.cy]="lightDiameter + lightPadding * 2 + lightRadius" [attr.r]="lightRadius"
+                                    fill="#6e99ff"></circle>
+                        }
                     </g>
                     <g #greenLightGroup [attr.id]="'greenLightGroup_' + item()!.id">
                         <circle [attr.cx]="circleX" [attr.cy]="lightDiameter * 2 + lightPadding * 3 + lightRadius"
@@ -84,8 +88,10 @@
             </svg>
         </div>
     </div>
-    <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
-                   appendTo="body"></p-contextMenu>
+    @if (!isViewMode()) {
+        <p-contextMenu [target]="container" [model]="contextMenuItems"
+                       appendTo="body"></p-contextMenu>
+    }
 } @else {
     <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
         <div [id]="'map-trafficlight-' + item()?.id" [style.width.px]="width + 10"
@@ -136,12 +142,14 @@
                 <rect [attr.width]="width" [attr.height]="height" rx="10" ry="10"
                       [attr.fill]="'url(#tlBg_' + item()!.id + ')'" stroke="#444" stroke-width="2"></rect>
 
-                <text *ngIf="item()!.show_label && this.Host && this.Service" x="0" [attr.y]="height - 10"
-                      [attr.font-size]="width / 8"
-                      font-family="Verdana" fill="#FFF"
-                      [attr.transform]="'rotate(-90, 0, ' + (height - 10 - (width / 8)) + ')'">
-                    {{ this.Host!.hostname + '/' + this.Service!.servicename }}
-                </text>
+                @if (item()!.show_label && this.Host && this.Service) {
+                    <text x="0" [attr.y]="height - 10"
+                          [attr.font-size]="width / 8"
+                          font-family="Verdana" fill="#FFF"
+                          [attr.transform]="'rotate(-90, 0, ' + (height - 10 - (width / 8)) + ')'">
+                        {{ this.Host!.hostname + '/' + this.Service!.servicename }}
+                    </text>
+                }
 
                 <g [attr.id]="'lights_' + item()!.id">
                     <g #redLightGroup [attr.id]="'redLightGroup_' + item()!.id">
@@ -155,9 +163,11 @@
                                 stroke="#444" stroke-width="2"></circle>
                     </g>
                     <g [attr.id]="'blueLightGroup_' + item()!.id">
-                        <circle *ngIf="showBlue" [attr.cx]="circleX"
-                                [attr.cy]="lightDiameter + lightPadding * 2 + lightRadius" [attr.r]="lightRadius"
-                                fill="#6e99ff"></circle>
+                        @if (showBlue) {
+                            <circle [attr.cx]="circleX"
+                                    [attr.cy]="lightDiameter + lightPadding * 2 + lightRadius" [attr.r]="lightRadius"
+                                    fill="#6e99ff"></circle>
+                        }
                     </g>
                     <g #greenLightGroup [attr.id]="'greenLightGroup_' + item()!.id">
                         <circle [attr.cx]="circleX" [attr.cy]="lightDiameter * 2 + lightPadding * 3 + lightRadius"

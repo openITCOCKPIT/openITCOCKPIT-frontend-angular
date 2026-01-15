@@ -24,7 +24,7 @@ import { Subscription } from 'rxjs';
 import { HostsService } from '../hosts.service';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { HostBrowserMenu } from '../hosts.interface';
-import { AsyncPipe, NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -50,7 +50,6 @@ export interface HostBrowserMenuConfig {
         ColComponent,
         RowComponent,
         FaIconComponent,
-        NgIf,
         NgClass,
         CopyToClipboardComponent,
         TranslocoDirective,

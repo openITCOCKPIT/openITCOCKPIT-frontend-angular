@@ -182,7 +182,9 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!eventlogs"></oitc-table-loader>
+            @if (!eventlogs) {
+                <oitc-table-loader></oitc-table-loader>
+            }
 
             <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
@@ -195,48 +197,66 @@
                     <th scope="col" mat-sort-header="name">
                         {{ t('Name') }}
                     </th>
-                    <th scope="col" mat-sort-header="user_email"
-                        *ngIf="eventlogs && (eventlogs.logTypes.includes('login') || eventlogs.logTypes.includes('user_delete') || eventlogs.logTypes.includes('user_password_change'))">
-                        {{ t('Email') }}
-                    </th>
+                    @if (eventlogs && ( eventlogs.logTypes.includes('login') || eventlogs.logTypes.includes('user_delete') || eventlogs.logTypes.includes('user_password_change') )) {
+                        <th scope="col" mat-sort-header="user_email"
+                        >
+                            {{ t('Email') }}
+                        </th>
+                    }
                     <th scope="col" mat-sort-header="Eventlogs.created">
                         {{ t('Date') }}
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="eventlogs">
-                <tr *ngFor="let event of eventlogs.all_events">
-                    <td>
-                        <fa-icon [icon]="eventlogs.typeIconClasses[event.type].icon"
-                                 title="{{eventlogs.typeTranslations[event.type]}}"
-                                 class="{{eventlogs.typeIconClasses[event.type].className}}"></fa-icon>
-                    </td>
-                    <td>{{ eventlogs.typeTranslations[event.type] }}</td>
-                    <td>
-                        <span *ngIf="event.recordExists">
-                            {{ event.name }}
-                        </span>
-                        <span *ngIf="!event.recordExists">
-                            <s>{{ event.name }}</s>
-                        </span>
-                    </td>
-                    <td *ngIf="eventlogs && (eventlogs.logTypes.includes('login') || eventlogs.logTypes.includes('user_delete') || eventlogs.logTypes.includes('user_password_change'))">
-                        <span *ngIf="event.recordExists">
-                            {{ event.user_email }}
-                        </span>
-                        <span *ngIf="!event.recordExists">
-                            <s>{{ event.data['user_email'] }}</s>
-                        </span>
-                    </td>
-                    <td>{{ event.time }}</td>
-                </tr>
-                </tbody>
+                @if (eventlogs) {
+                    <tbody>
+                        @for (event of eventlogs.all_events; track event) {
+                            <tr>
+                                <td>
+                                    <fa-icon [icon]="eventlogs.typeIconClasses[event.type].icon"
+                                             title="{{eventlogs.typeTranslations[event.type]}}"
+                                             class="{{eventlogs.typeIconClasses[event.type].className}}"></fa-icon>
+                                </td>
+                                <td>{{ eventlogs.typeTranslations[event.type] }}</td>
+                                <td>
+                                    @if (event.recordExists) {
+                                        <span>
+                                            {{ event.name }}
+                                        </span>
+                                    }
+                                    @if (!event.recordExists) {
+                                        <span>
+                                            <s>{{ event.name }}</s>
+                                        </span>
+                                    }
+                                </td>
+                                @if (eventlogs && ( eventlogs.logTypes.includes('login') || eventlogs.logTypes.includes('user_delete') || eventlogs.logTypes.includes('user_password_change') )) {
+                                    <td>
+                                        @if (event.recordExists) {
+                                            <span>
+                                                {{ event.user_email }}
+                                            </span>
+                                        }
+                                        @if (!event.recordExists) {
+                                            <span>
+                                                <s>{{ event.data['user_email'] }}</s>
+                                            </span>
+                                        }
+                                    </td>
+                                }
+                                <td>{{ event.time }}</td>
+                            </tr>
+                        }
+                    </tbody>
+                }
             </table>
 
-            <oitc-no-records
-                *ngIf="eventlogs && eventlogs.all_events.length === 0"></oitc-no-records>
+            @if (eventlogs && eventlogs.all_events.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
 
-            <ng-container *ngIf="eventlogs && eventlogs.all_events">
+            @if (eventlogs && eventlogs.all_events) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -259,15 +279,16 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
             <c-container
                 [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="eventlogs"
-                            [paginateOrScroll]="eventlogs"></oitc-paginate-or-scroll>
+                        @if (eventlogs) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="eventlogs"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

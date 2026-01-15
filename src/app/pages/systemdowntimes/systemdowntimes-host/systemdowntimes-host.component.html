@@ -216,7 +216,9 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!hostSystemdowntimes"></oitc-table-loader>
+            @if (!hostSystemdowntimes) {
+                <oitc-table-loader></oitc-table-loader>
+            }
             <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -254,69 +256,79 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="hostSystemdowntimes">
-                <tr *ngFor="let hostSystemdowntime of hostSystemdowntimes.all_host_recurring_downtimes">
-                    <td class="text-center">
-                        <div *ngIf="hostSystemdowntime.Host.allow_edit">
-                            <oitc-item-select
-                                *oitcPermission="['systemdowntimes', 'delete']"
-                                [disabled]="false"
-                                [item]="hostSystemdowntime"></oitc-item-select>
-                        </div>
-                    </td>
-                    <td class="word-break">
-                        <a *oitcPermission="['hosts', 'browser']"
-                           [routerLink]="['/', 'hosts', 'browser', hostSystemdowntime.Host.id]">
-                            {{ hostSystemdowntime.Host.hostname }}
-                        </a>
-                        <span *oitcPermission="['hosts', 'browser']; negate: true">
-                            {{ hostSystemdowntime.Host.hostname }}
-                        </span>
-                    </td>
-                    <td>
-                        @if (hostSystemdowntime.Systemdowntime.downtimeTypeId == 1) {
-                            {{ t('Yes') }}
-                        } @else {
-                            {{ t('No') }}
+                @if (hostSystemdowntimes) {
+                    <tbody>
+                        @for (hostSystemdowntime of hostSystemdowntimes.all_host_recurring_downtimes; track hostSystemdowntime) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (hostSystemdowntime.Host.allow_edit) {
+                                        <div>
+                                            <oitc-item-select
+                                                *oitcPermission="['systemdowntimes', 'delete']"
+                                                [disabled]="false"
+                                                [item]="hostSystemdowntime"></oitc-item-select>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="word-break">
+                                    <a *oitcPermission="['hosts', 'browser']"
+                                       [routerLink]="['/', 'hosts', 'browser', hostSystemdowntime.Host.id]">
+                                        {{ hostSystemdowntime.Host.hostname }}
+                                    </a>
+                                    <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                        {{ hostSystemdowntime.Host.hostname }}
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (hostSystemdowntime.Systemdowntime.downtimeTypeId == 1) {
+                                        {{ t('Yes') }}
+                                    } @else {
+                                        {{ t('No') }}
+                                    }
+                                </td>
+                                <td>
+                                    {{ hostSystemdowntime.Systemdowntime.author }}
+                                </td>
+                                <td>
+                                    <span class="text-muted">
+                                        AUTO[{{ hostSystemdowntime.Systemdowntime.id }}]:
+                                    </span>
+                                    {{ hostSystemdowntime.Systemdowntime.comment }}
+                                </td>
+                                <td>
+                                    {{ hostSystemdowntime.Systemdowntime.weekdaysHuman.join(', ') }}
+                                </td>
+                                <td>
+                                    {{ hostSystemdowntime.Systemdowntime.dayOfMonth.join(', ') }}
+                                </td>
+                                <td>
+                                    {{ hostSystemdowntime.Systemdowntime.startTime }}
+                                </td>
+                                <td>
+                                    {{ hostSystemdowntime.Systemdowntime.duration }}
+                                </td>
+                                <td>
+                                    @if (hostSystemdowntime.Host.allow_edit) {
+                                        <div>
+                                            <button (click)="toggleDeleteAllModal(hostSystemdowntime)"
+                                                    *oitcPermission="['downtimes', 'delete']"
+                                                    cButton class="ripple" color="danger" size="xs">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </button>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
                         }
-                    </td>
-                    <td>
-                        {{ hostSystemdowntime.Systemdowntime.author }}
-                    </td>
-                    <td>
-                        <span class="text-muted">
-                            AUTO[{{ hostSystemdowntime.Systemdowntime.id }}]:
-                        </span>
-                        {{ hostSystemdowntime.Systemdowntime.comment }}
-                    </td>
-                    <td>
-                        {{ hostSystemdowntime.Systemdowntime.weekdaysHuman.join(', ') }}
-                    </td>
-                    <td>
-                        {{ hostSystemdowntime.Systemdowntime.dayOfMonth.join(', ') }}
-                    </td>
-                    <td>
-                        {{ hostSystemdowntime.Systemdowntime.startTime }}
-                    </td>
-                    <td>
-                        {{ hostSystemdowntime.Systemdowntime.duration }}
-                    </td>
-                    <td>
-                        <div *ngIf="hostSystemdowntime.Host.allow_edit">
-                            <button (click)="toggleDeleteAllModal(hostSystemdowntime)"
-                                    *oitcPermission="['downtimes', 'delete']"
-                                    cButton class="ripple" color="danger" size="xs">
-                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                {{ t('Delete') }}
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
+                    </tbody>
+                }
             </table>
-            <oitc-no-records
-                *ngIf="hostSystemdowntimes && hostSystemdowntimes.all_host_recurring_downtimes.length === 0"></oitc-no-records>
-            <ng-container *ngIf="hostSystemdowntimes && hostSystemdowntimes.all_host_recurring_downtimes">
+            @if (hostSystemdowntimes && hostSystemdowntimes.all_host_recurring_downtimes.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (hostSystemdowntimes && hostSystemdowntimes.all_host_recurring_downtimes) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -337,15 +349,16 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
             <c-container
                 [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="hostSystemdowntimes"
-                            [paginateOrScroll]="hostSystemdowntimes"></oitc-paginate-or-scroll>
+                        @if (hostSystemdowntimes) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="hostSystemdowntimes"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

@@ -35,7 +35,7 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { formatDate } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -61,7 +61,6 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
         FaIconComponent,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         TableDirective,
         TranslocoDirective,
@@ -70,7 +69,6 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
         TableLoaderComponent,
         MatSort,
         MatSortHeader,
-        NgForOf,
         TranslocoPipe,
         LabelLinkComponent,
         BadgeComponent,

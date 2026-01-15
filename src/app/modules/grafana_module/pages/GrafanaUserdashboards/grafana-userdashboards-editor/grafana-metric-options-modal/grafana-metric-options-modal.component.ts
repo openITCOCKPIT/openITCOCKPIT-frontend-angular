@@ -22,7 +22,7 @@ import { GrafanaEditorService } from '../grafana-editor.service';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../../layouts/primeng/select.interface';
 import { GrafanaMetricOptionsService } from './grafana-metric-options.service';
 import { DashboardRowMetric, GrfanaEditorCurrentMetricPost } from '../grafana-editor.interface';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ServicesService } from '../../../../../../pages/services/services.service';
 import { ROOT_CONTAINER } from '../../../../../../pages/changelogs/object-types.enum';
 import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.directive';
@@ -49,7 +49,6 @@ import { GrafanaColor, GrafanaColors } from './GrafanaColors.class';
         TranslocoDirective,
         XsButtonDirective,
         ModalToggleDirective,
-        NgIf,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,

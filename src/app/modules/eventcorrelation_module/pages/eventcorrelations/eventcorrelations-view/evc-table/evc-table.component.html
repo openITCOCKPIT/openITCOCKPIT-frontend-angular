@@ -21,14 +21,19 @@
                                 </span>
                             }
 
-                            <span *ngIf="Number(column.scheduledDowntimeDepth) > 0 || column.problemHasBeenAcknowledged"
-                                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                                <fa-icon [icon]="['fas', 'power-off']" size="lg" class="me-1"
-                                         *ngIf="Number(column.scheduledDowntimeDepth) > 0"></fa-icon>
-
-                                <fa-icon [icon]="['far', 'user']"
-                                         *ngIf="column.problemHasBeenAcknowledged"></fa-icon>
-                            </span>
+                            @if (Number(column.scheduledDowntimeDepth) > 0 || column.problemHasBeenAcknowledged) {
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                    @if (Number(column.scheduledDowntimeDepth) > 0) {
+                                        <fa-icon [icon]="['fas', 'power-off']" size="lg" class="me-1"
+                                        ></fa-icon>
+                                    }
+                                    @if (column.problemHasBeenAcknowledged) {
+                                        <fa-icon [icon]="['far', 'user']"
+                                        ></fa-icon>
+                                    }
+                                </span>
+                            }
 
                             <div class="evc-summary-first-layser-service code-font">
                                 {{ column.hostName }}/{{ column.serviceName }}

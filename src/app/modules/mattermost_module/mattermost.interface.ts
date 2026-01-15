@@ -1,4 +1,4 @@
-import { GenericValidationError } from  '../../generic-responses';
+import { GenericValidationError } from '../../generic-responses';
 
 export interface GetMattermostSettings {
     mattermostSettings: MattermostSettings,

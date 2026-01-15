@@ -24,7 +24,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -56,7 +56,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
         MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgIf,
         ReactiveFormsModule,
         RequiredIconComponent,
         XsButtonDirective,

@@ -37,11 +37,13 @@
                         <label cLabel for="inputcomment">{{ t('Comment') }}</label>
                         <input cFormControl id="inputcomment"
                                [(ngModel)]="downtimeModal.comment">
-                        <div *ngIf="errors && errors.comment" cFormText>
-                            <ng-container *ngFor="let error of errors.comment">
-                                <div class="text-danger">{{ t(error) }}</div>
-                            </ng-container>
-                        </div>
+                        @if (errors && errors.comment) {
+                            <div cFormText>
+                                @for (error of errors.comment; track error) {
+                                    <div class="text-danger">{{ t(error) }}</div>
+                                }
+                            </div>
+                        }
                     </div>
                 </c-col>
             </c-row>
@@ -53,16 +55,20 @@
                     <input id="downtimeModal.from_time" class="form-control mt-1"
                            [(ngModel)]="downtimeModal.from_time"
                            type="time">
-                    <div *ngIf="errors && errors.from_date" cFormText>
-                        <ng-container *ngFor="let error of errors.from_date">
-                            <div class="text-danger">{{ t(error) }}</div>
-                        </ng-container>
-                    </div>
-                    <div *ngIf="errors && errors.from_time" cFormText>
-                        <ng-container *ngFor="let error of errors.from_time">
-                            <div class="text-danger">{{ t(error) }}</div>
-                        </ng-container>
-                    </div>
+                    @if (errors && errors.from_date) {
+                        <div cFormText>
+                            @for (error of errors.from_date; track error) {
+                                <div class="text-danger">{{ t(error) }}</div>
+                            }
+                        </div>
+                    }
+                    @if (errors && errors.from_time) {
+                        <div cFormText>
+                            @for (error of errors.from_time; track error) {
+                                <div class="text-danger">{{ t(error) }}</div>
+                            }
+                        </div>
+                    }
                 </c-col>
                 <c-col>
                     <label>{{ t('To') }}:</label>
@@ -71,16 +77,20 @@
                     <input id="downtimeModal.to_time" class="form-control mt-1"
                            [(ngModel)]="downtimeModal.to_time"
                            type="time">
-                    <div *ngIf="errors && errors.to_date" cFormText>
-                        <ng-container *ngFor="let error of errors.to_date">
-                            <div class="text-danger">{{ t(error) }}</div>
-                        </ng-container>
-                    </div>
-                    <div *ngIf="errors && errors.to_time" cFormText>
-                        <ng-container *ngFor="let error of errors.to_time">
-                            <div class="text-danger">{{ t(error) }}</div>
-                        </ng-container>
-                    </div>
+                    @if (errors && errors.to_date) {
+                        <div cFormText>
+                            @for (error of errors.to_date; track error) {
+                                <div class="text-danger">{{ t(error) }}</div>
+                            }
+                        </div>
+                    }
+                    @if (errors && errors.to_time) {
+                        <div cFormText>
+                            @for (error of errors.to_time; track error) {
+                                <div class="text-danger">{{ t(error) }}</div>
+                            }
+                        </div>
+                    }
                 </c-col>
             </c-row>
 

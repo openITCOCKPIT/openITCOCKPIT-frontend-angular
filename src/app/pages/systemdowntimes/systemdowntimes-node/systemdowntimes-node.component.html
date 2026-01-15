@@ -217,7 +217,9 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!nodeSystemdowntimes"></oitc-table-loader>
+            @if (!nodeSystemdowntimes) {
+                <oitc-table-loader></oitc-table-loader>
+            }
             <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -255,64 +257,73 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="nodeSystemdowntimes">
-                <tr *ngFor="let nodeSystemdowntime of nodeSystemdowntimes.all_node_recurring_downtimes">
-                    <td class="text-center">
-                        <div *ngIf="nodeSystemdowntime.Container.allow_edit">
-                            <oitc-item-select
-                                *oitcPermission="['systemdowntimes', 'delete']"
-                                [disabled]="false"
-                                [item]="nodeSystemdowntime"></oitc-item-select>
-                        </div>
-                    </td>
-                    <td class="word-break">
-                        {{ nodeSystemdowntime.Container.name }}
-                    </td>
-                    <td>
-                        @if (nodeSystemdowntime.Systemdowntime.downtimeTypeId == 1) {
-                            {{ t('Yes') }}
-                        } @else {
-                            {{ t('No') }}
+                @if (nodeSystemdowntimes) {
+                    <tbody>
+                        @for (nodeSystemdowntime of nodeSystemdowntimes.all_node_recurring_downtimes; track nodeSystemdowntime) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (nodeSystemdowntime.Container.allow_edit) {
+                                        <div>
+                                            <oitc-item-select
+                                                *oitcPermission="['systemdowntimes', 'delete']"
+                                                [disabled]="false"
+                                                [item]="nodeSystemdowntime"></oitc-item-select>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="word-break">
+                                    {{ nodeSystemdowntime.Container.name }}
+                                </td>
+                                <td>
+                                    @if (nodeSystemdowntime.Systemdowntime.downtimeTypeId == 1) {
+                                        {{ t('Yes') }}
+                                    } @else {
+                                        {{ t('No') }}
+                                    }
+                                </td>
+                                <td>
+                                    {{ nodeSystemdowntime.Systemdowntime.author }}
+                                </td>
+                                <td>
+                                    <span class="text-muted">
+                                        AUTO[{{ nodeSystemdowntime.Systemdowntime.id }}]:
+                                    </span>
+                                    {{ nodeSystemdowntime.Systemdowntime.comment }}
+                                </td>
+                                <td>
+                                    {{ nodeSystemdowntime.Systemdowntime.weekdaysHuman.join(', ') }}
+                                </td>
+                                <td>
+                                    {{ nodeSystemdowntime.Systemdowntime.dayOfMonth.join(', ') }}
+                                </td>
+                                <td>
+                                    {{ nodeSystemdowntime.Systemdowntime.startTime }}
+                                </td>
+                                <td>
+                                    {{ nodeSystemdowntime.Systemdowntime.duration }}
+                                </td>
+                                <td>
+                                    @if (nodeSystemdowntime.Container.allow_edit) {
+                                        <div>
+                                            <button (click)="toggleDeleteAllModal(nodeSystemdowntime)"
+                                                    *oitcPermission="['downtimes', 'delete']"
+                                                    cButton class="ripple" color="danger" size="xs">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </button>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
                         }
-                    </td>
-                    <td>
-                        {{ nodeSystemdowntime.Systemdowntime.author }}
-                    </td>
-                    <td>
-                        <span class="text-muted">
-                            AUTO[{{ nodeSystemdowntime.Systemdowntime.id }}]:
-                        </span>
-                        {{ nodeSystemdowntime.Systemdowntime.comment }}
-                    </td>
-                    <td>
-                        {{ nodeSystemdowntime.Systemdowntime.weekdaysHuman.join(', ') }}
-                    </td>
-                    <td>
-                        {{ nodeSystemdowntime.Systemdowntime.dayOfMonth.join(', ') }}
-                    </td>
-                    <td>
-                        {{ nodeSystemdowntime.Systemdowntime.startTime }}
-                    </td>
-                    <td>
-                        {{ nodeSystemdowntime.Systemdowntime.duration }}
-                    </td>
-                    <td>
-                        <div *ngIf="nodeSystemdowntime.Container.allow_edit">
-                            <button (click)="toggleDeleteAllModal(nodeSystemdowntime)"
-                                    *oitcPermission="['downtimes', 'delete']"
-                                    cButton class="ripple" color="danger" size="xs">
-                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                {{ t('Delete') }}
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
+                    </tbody>
+                }
             </table>
-            <oitc-no-records
-                *ngIf="nodeSystemdowntimes && nodeSystemdowntimes.all_node_recurring_downtimes.length === 0"></oitc-no-records>
-            <ng-container
-                *ngIf="nodeSystemdowntimes && nodeSystemdowntimes.all_node_recurring_downtimes">
+            @if (nodeSystemdowntimes && nodeSystemdowntimes.all_node_recurring_downtimes.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (nodeSystemdowntimes && nodeSystemdowntimes.all_node_recurring_downtimes) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -333,15 +344,16 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
             <c-container
                 [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="nodeSystemdowntimes"
-                            [paginateOrScroll]="nodeSystemdowntimes"></oitc-paginate-or-scroll>
+                        @if (nodeSystemdowntimes) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="nodeSystemdowntimes"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

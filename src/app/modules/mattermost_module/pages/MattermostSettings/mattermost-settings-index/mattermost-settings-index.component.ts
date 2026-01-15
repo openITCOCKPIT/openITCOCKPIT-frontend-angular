@@ -20,14 +20,14 @@ import { Subscription } from 'rxjs';
 import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
-import { MattermostSettings} from '../../../mattermost.interface';
+
+import { MattermostSettings } from '../../../mattermost.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { MattermostService} from '../../../mattermost.service';
+import { MattermostService } from '../../../mattermost.service';
 
 
 @Component({
-  selector: 'oitc-mattermost-settings-index',
+    selector: 'oitc-mattermost-settings-index',
     imports: [
         TranslocoDirective,
         FaIconComponent,
@@ -36,7 +36,6 @@ import { MattermostService} from '../../../mattermost.service';
         FormDirective,
         FormsModule,
         FormLoaderComponent,
-        NgIf,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
@@ -54,9 +53,9 @@ import { MattermostService} from '../../../mattermost.service';
         CardFooterComponent,
         XsButtonDirective
     ],
-  templateUrl: './mattermost-settings-index.component.html',
-  styleUrl: './mattermost-settings-index.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './mattermost-settings-index.component.html',
+    styleUrl: './mattermost-settings-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MattermostSettingsIndexComponent implements OnInit, OnDestroy {
 
@@ -64,7 +63,7 @@ export class MattermostSettingsIndexComponent implements OnInit, OnDestroy {
     private readonly MattermostService: MattermostService = inject(MattermostService);
     private cdr = inject(ChangeDetectorRef);
     private readonly subscriptions: Subscription = new Subscription();
-    public post!:MattermostSettings;
+    public post!: MattermostSettings;
     public errors: GenericValidationError | null = null;
 
     public ngOnInit(): void {

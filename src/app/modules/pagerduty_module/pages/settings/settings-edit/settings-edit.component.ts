@@ -7,7 +7,7 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
+
 
 import {
     CardBodyComponent,
@@ -44,7 +44,6 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
         TranslocoDirective,
         RouterLink,
         FormLoaderComponent,
-        NgIf,
         CardBodyComponent,
         CardComponent,
         CardFooterComponent,

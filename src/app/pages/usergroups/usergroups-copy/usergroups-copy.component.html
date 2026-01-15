@@ -38,53 +38,52 @@
         </c-card-header>
         <c-card-body>
 
-            <oitc-form-loader [isVisible]="! usergroups.data" />
+            <oitc-form-loader [isVisible]="! usergroups.data"/>
 
-            <c-card class="mb-3" *ngFor="let usergroup of usergroups.data; let i = index">
-                <c-card-header>
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    <span class="ms-1">
-                        {{ t('Source user role:') }}
-                        {{ usergroup.Usergroup.name }}
-                    </span>
-                </c-card-header>
-                <c-card-body>
-
-                    <div class="mb-3">
-                        <label cLabel for="name{{i}}">
-                            {{ t('User role name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl
-                               required
-                               type="text"
-                               name="name{{i}}"
-                               id="name{{i}}"
-                               [(ngModel)]="usergroup.Usergroup.name"
-                               oitcFormError [errors]="usergroup.Error" errorField="name">
-                        <oitc-form-feedback [errors]="usergroup.Error"
-                                            errorField="name"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Name of the new user role') }}
+            @for (usergroup of usergroups.data; track usergroup; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source user role:') }}
+                            {{ usergroup.Usergroup.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('User role name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   required
+                                   type="text"
+                                   name="name{{i}}"
+                                   id="name{{i}}"
+                                   [(ngModel)]="usergroup.Usergroup.name"
+                                   oitcFormError [errors]="usergroup.Error" errorField="name">
+                            <oitc-form-feedback [errors]="usergroup.Error"
+                                                errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new user role') }}
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="description{{i}}">
-                            {{ t('Description') }}
-                        </label>
-                        <input cFormControl
-                               type="text"
-                               name="description{{i}}"
-                               id="description{{i}}"
-                               [(ngModel)]="usergroup.Usergroup.description"
-                               oitcFormError [errors]="usergroup.Error" errorField="description">
-                        <oitc-form-feedback [errors]="usergroup.Error"
-                                            errorField="description"></oitc-form-feedback>
-                    </div>
-
-                </c-card-body>
-            </c-card>
+                        <div class="mb-3">
+                            <label cLabel for="description{{i}}">
+                                {{ t('Description') }}
+                            </label>
+                            <input cFormControl
+                                   type="text"
+                                   name="description{{i}}"
+                                   id="description{{i}}"
+                                   [(ngModel)]="usergroup.Usergroup.description"
+                                   oitcFormError [errors]="usergroup.Error" errorField="description">
+                            <oitc-form-feedback [errors]="usergroup.Error"
+                                                errorField="description"></oitc-form-feedback>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            }
 
         </c-card-body>
         <c-card-footer class="text-end">

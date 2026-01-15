@@ -234,93 +234,100 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!notifications"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="notifications"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col" mat-sort-header="NotificationHosts.state">
-                        {{ t('State') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Hosts.name">
-                        {{ t('Host') }}
-                    </th>
-                    <th scope="col" mat-sort-header="NotificationHosts.start_time">
-                        {{ t('Date') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Contacts.name">
-                        {{ t('Contact') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Commands.name">
-                        {{ t('Notification Method') }}
-                    </th>
-                    <th scope="col" mat-sort-header="NotificationHosts.reason_type">
-                        {{ t('Notification Reason') }}
-                    </th>
-                    <th scope="col" mat-sort-header="NotificationHosts.output">
-                        {{ t('Output') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let notification of notifications.all_notifications">
-                    <td class="text-center">
-                        <oitc-hoststatus-simple-icon
-                            [hoststatus]="notification.NotificationHost.state"></oitc-hoststatus-simple-icon>
-                    </td>
-                    <td class="word-break">
-                        <a *oitcPermission="['hosts', 'browser']"
-                           [routerLink]="['/', 'hosts', 'browser', notification.Host.id]">
-                            {{ notification.Host.hostname }}
-                        </a>
-                        <span *oitcPermission="['hosts', 'browser']; negate: true">
-                            {{ notification.Host.hostname }}
-                        </span>
-                    </td>
-                    <td>
-                        {{ notification.NotificationHost.start_time }}
-                    </td>
-                    <td>
-                        <a *oitcPermission="['contacts', 'edit']"
-                           [routerLink]="['/', 'contacts', 'edit', notification.Contact.id]">
-                            {{ notification.Contact.name }}
-                        </a>
-                        <span *oitcPermission="['contacts', 'edit']; negate: true">
-                            {{ notification.Contact.name }}
-                        </span>
-                    </td>
-                    <td>
-                        <a *oitcPermission="['commands', 'edit']"
-                           [routerLink]="['/', 'commands', 'edit', notification.Command.id]">
-                            {{ notification.Command.name }}
-                        </a>
-                        <span *oitcPermission="['commands', 'edit']; negate: true">
-                            {{ notification.Command.name }}
-                        </span>
-                    </td>
-                    <td>
-                        <oitc-notification-reason-type
-                            [reasonType]="notification.NotificationHost.reason_type"></oitc-notification-reason-type>
-                    </td>
-                    <td>
-                        {{ notification.NotificationHost.output }}
-                    </td>
-
-                </tr>
-                </tbody>
-            </table>
-            <oitc-no-records
-                *ngIf="notifications && notifications.all_notifications.length === 0"></oitc-no-records>
+            @if (!notifications) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (notifications) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col" mat-sort-header="NotificationHosts.state">
+                            {{ t('State') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Host') }}
+                        </th>
+                        <th scope="col" mat-sort-header="NotificationHosts.start_time">
+                            {{ t('Date') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Contacts.name">
+                            {{ t('Contact') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Commands.name">
+                            {{ t('Notification Method') }}
+                        </th>
+                        <th scope="col" mat-sort-header="NotificationHosts.reason_type">
+                            {{ t('Notification Reason') }}
+                        </th>
+                        <th scope="col" mat-sort-header="NotificationHosts.output">
+                            {{ t('Output') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (notification of notifications.all_notifications; track notification) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-hoststatus-simple-icon
+                                        [hoststatus]="notification.NotificationHost.state"></oitc-hoststatus-simple-icon>
+                                </td>
+                                <td class="word-break">
+                                    <a *oitcPermission="['hosts', 'browser']"
+                                       [routerLink]="['/', 'hosts', 'browser', notification.Host.id]">
+                                        {{ notification.Host.hostname }}
+                                    </a>
+                                    <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                        {{ notification.Host.hostname }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {{ notification.NotificationHost.start_time }}
+                                </td>
+                                <td>
+                                    <a *oitcPermission="['contacts', 'edit']"
+                                       [routerLink]="['/', 'contacts', 'edit', notification.Contact.id]">
+                                        {{ notification.Contact.name }}
+                                    </a>
+                                    <span *oitcPermission="['contacts', 'edit']; negate: true">
+                                        {{ notification.Contact.name }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a *oitcPermission="['commands', 'edit']"
+                                       [routerLink]="['/', 'commands', 'edit', notification.Command.id]">
+                                        {{ notification.Command.name }}
+                                    </a>
+                                    <span *oitcPermission="['commands', 'edit']; negate: true">
+                                        {{ notification.Command.name }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <oitc-notification-reason-type
+                                        [reasonType]="notification.NotificationHost.reason_type"></oitc-notification-reason-type>
+                                </td>
+                                <td>
+                                    {{ notification.NotificationHost.output }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @if (notifications && notifications.all_notifications.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
             <c-container
                 [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="notifications"
-                            [paginateOrScroll]="notifications"></oitc-paginate-or-scroll>
+                        @if (notifications) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="notifications"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

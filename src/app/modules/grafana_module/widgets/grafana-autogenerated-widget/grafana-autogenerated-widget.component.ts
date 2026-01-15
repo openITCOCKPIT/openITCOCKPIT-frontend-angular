@@ -15,7 +15,7 @@ import { FormLabelDirective } from '@coreui/angular';
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -29,7 +29,6 @@ import { AnimationEvent } from '@angular/animations';
         RequiredIconComponent,
         SelectComponent,
         FaIconComponent,
-        NgIf,
         FormsModule,
         TranslocoDirective,
         XsButtonDirective,

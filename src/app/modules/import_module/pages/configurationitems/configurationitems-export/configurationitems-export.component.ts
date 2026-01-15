@@ -8,19 +8,19 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ConfigurationitemsService } from '../configurationitems.service';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 
 
@@ -41,28 +41,27 @@ import { DateTime } from 'luxon';
 @Component({
     selector: 'oitc-configurationitems-export',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    NgIf,
-    FormLoaderComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormDirective,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    ReactiveFormsModule,
-    XsButtonDirective,
-    MultiSelectComponent,
-    NgClass,
-    UiBlockerComponent
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        FormLoaderComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FormDirective,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        ReactiveFormsModule,
+        XsButtonDirective,
+        MultiSelectComponent,
+        NgClass,
+        UiBlockerComponent
+    ],
     templateUrl: './configurationitems-export.component.html',
     styleUrl: './configurationitems-export.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

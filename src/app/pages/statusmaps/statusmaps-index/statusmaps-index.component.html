@@ -98,12 +98,16 @@
         </c-card-header>
 
         <c-card-body>
-            <oitc-block-loader *ngIf="isLoading"></oitc-block-loader>
+            @if (isLoading) {
+                <oitc-block-loader></oitc-block-loader>
+            }
 
             <c-row>
-                <c-col xs="12" *ngIf="isEmpty">
-                    <oitc-no-records></oitc-no-records>
-                </c-col>
+                @if (isEmpty) {
+                    <c-col xs="12">
+                        <oitc-no-records></oitc-no-records>
+                    </c-col>
+                }
                 <c-col xs="12">
                     <fa-icon [icon]="['fas', 'check-circle']" class="p-0 up"></fa-icon>
                     <em class="pe-1">
@@ -146,9 +150,11 @@
                     </em>
                 </c-col>
 
-                <c-col xs="12" *ngIf="showProgressbar">
-                    <c-progress [value]="progress" class="m-3">{{ progress | number: '1.0-0' }}%</c-progress>
-                </c-col>
+                @if (showProgressbar) {
+                    <c-col xs="12">
+                        <c-progress [value]="progress" class="m-3">{{ progress | number: '1.0-0' }}%</c-progress>
+                    </c-col>
+                }
                 <c-col xs="12" id="statusmapNetwork"></c-col>
             </c-row>
         </c-card-body>
@@ -169,10 +175,12 @@
                     </c-progress>
                 </c-toast-header>
                 <c-toast-body class="w-100">
-                    <div *ngIf="hostSummaryState && toastHost">
-                        <oitc-host-summary-statusmap [hostSummaryStat]="hostSummaryState"
-                                                     [host]="toastHost"></oitc-host-summary-statusmap>
-                    </div>
+                    @if (hostSummaryState && toastHost) {
+                        <div>
+                            <oitc-host-summary-statusmap [hostSummaryStat]="hostSummaryState"
+                                                         [host]="toastHost"></oitc-host-summary-statusmap>
+                        </div>
+                    }
 
                     <c-progress thin>
                         <c-progress-bar [value]="toastPercentage"></c-progress-bar>

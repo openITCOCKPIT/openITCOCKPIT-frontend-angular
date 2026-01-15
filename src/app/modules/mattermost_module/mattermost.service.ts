@@ -6,7 +6,7 @@ import { GenericResponseWrapper, GenericValidationError } from '../../generic-re
 import { MattermostSettings, GetMattermostSettings, MattermostSettingsPostResponse } from './mattermost.interface';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class MattermostService {
 
@@ -30,7 +30,7 @@ export class MattermostService {
         const proxyPath: string = this.proxyPath;
 
         return this.http.post<MattermostSettingsPostResponse>(`${proxyPath}/mattermost_module/MattermostSettings/index.json?angular=true`,
-             settings
+            settings
         ).pipe(
             map((data: MattermostSettingsPostResponse): any => {
                 // Return true on 200 Ok

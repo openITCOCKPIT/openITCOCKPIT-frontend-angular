@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 
 import {
     CardBodyComponent,
@@ -13,23 +13,23 @@ import {
     FormDirective,
     FormLabelDirective
 } from '@coreui/angular';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {FormErrorDirective} from '../../../../../layouts/coreui/form-error.directive';
-import {FormFeedbackComponent} from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import {FormsModule} from '@angular/forms';
-import {PermissionDirective} from '../../../../../permissions/permission.directive';
-import {RequiredIconComponent} from '../../../../../components/required-icon/required-icon.component';
-import {TranslocoDirective} from '@jsverse/transloco';
-import {XsButtonDirective} from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {TeamsSettings} from '../msteamssettings.interface';
-import {Subscription} from 'rxjs';
-import {NotyService} from '../../../../../layouts/coreui/noty.service';
-import {MsteamssettingsService} from '../msteamssettings.service';
-import {RouterLink} from '@angular/router';
-import {GenericValidationError} from '../../../../../generic-responses';
-import {NgIf} from '@angular/common';
-import {FormLoaderComponent} from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import {TrueFalseDirective} from "../../../../../directives/true-false.directive";
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormsModule } from '@angular/forms';
+import { PermissionDirective } from '../../../../../permissions/permission.directive';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { TeamsSettings } from '../msteamssettings.interface';
+import { Subscription } from 'rxjs';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { MsteamssettingsService } from '../msteamssettings.service';
+import { RouterLink } from '@angular/router';
+import { GenericValidationError } from '../../../../../generic-responses';
+
+import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { TrueFalseDirective } from "../../../../../directives/true-false.directive";
 
 @Component({
     selector: 'oitc-msteamssettings-index',
@@ -54,7 +54,6 @@ import {TrueFalseDirective} from "../../../../../directives/true-false.directive
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        NgIf,
         FormLoaderComponent,
         TrueFalseDirective
     ],

@@ -153,87 +153,96 @@
             <!-- End Filter -->
 
 
-            <oitc-table-loader *ngIf="! result"></oitc-table-loader>
+            @if (!result) {
+                <oitc-table-loader></oitc-table-loader>
+            }
 
 
-            <table *ngIf="result" bordered cTable class="mt-2 mb-0" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th scope="col" mat-sort-header="SatelliteTasks.id">
-                        {{ t('Task ID') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Satellites.name">
-                        {{ t('Instance name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatelliteTasks.task">
-                        {{ t('Task') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatelliteTasks.status">
-                        {{ t('Status') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatelliteTasks.result">
-                        {{ t('Task Result') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatelliteTasks.error">
-                        {{ t('Error') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatelliteTasks.modified">
-                        {{ t('Modified') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatelliteTasks.created">
-                        {{ t('Created') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let task of result.all_satellite_tasks">
-                    <td>
-                        {{ task.id }}
-                    </td>
-                    <td>
-                        {{ task.satellite.name }}
-                    </td>
-                    <td>
-                        <code>{{ task.task }}</code>
-                    </td>
-                    <td>
-                        <c-badge
-                            [title]="task.status_human"
-                            [color]="task.status_human.class.replaceAll('badge-', '')"
-                            class="mr-5"
-                        >{{ task.status_human.title }}
-                        </c-badge>
-                    </td>
-                    <td>
-                        {{ task.result }}
-                    </td>
-                    <td class="text-danger">
-                        {{ task.error }}
-                    </td>
-                    <td>
-                        {{ task.created }}
-                    </td>
-                    <td>
-                        {{ task.modified }}
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            @if (result) {
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="SatelliteTasks.id">
+                            {{ t('Task ID') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Satellites.name">
+                            {{ t('Instance name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatelliteTasks.task">
+                            {{ t('Task') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatelliteTasks.status">
+                            {{ t('Status') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatelliteTasks.result">
+                            {{ t('Task Result') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatelliteTasks.error">
+                            {{ t('Error') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatelliteTasks.modified">
+                            {{ t('Modified') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatelliteTasks.created">
+                            {{ t('Created') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (task of result.all_satellite_tasks; track task) {
+                            <tr>
+                                <td>
+                                    {{ task.id }}
+                                </td>
+                                <td>
+                                    {{ task.satellite.name }}
+                                </td>
+                                <td>
+                                    <code>{{ task.task }}</code>
+                                </td>
+                                <td>
+                                    <c-badge
+                                        [title]="task.status_human"
+                                        [color]="task.status_human.class.replaceAll('badge-', '')"
+                                        class="mr-5"
+                                    >{{ task.status_human.title }}
+                                    </c-badge>
+                                </td>
+                                <td>
+                                    {{ task.result }}
+                                </td>
+                                <td class="text-danger">
+                                    {{ task.error }}
+                                </td>
+                                <td>
+                                    {{ task.created }}
+                                </td>
+                                <td>
+                                    {{ task.modified }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
 
-            <oitc-no-records
-                *ngIf="result && result.all_satellite_tasks.length === 0"></oitc-no-records>
+            @if (result && result.all_satellite_tasks.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="result"
-                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        @if (result) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

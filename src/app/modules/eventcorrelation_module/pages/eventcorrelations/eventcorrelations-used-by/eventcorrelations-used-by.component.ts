@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -52,8 +52,6 @@ import { SelectionServiceService } from '../../../../../layouts/coreui/select-al
         FormLoaderComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NotUsedByObjectComponent,
         PermissionDirective,
         TableDirective,
@@ -71,7 +69,7 @@ import { SelectionServiceService } from '../../../../../layouts/coreui/select-al
     templateUrl: './eventcorrelations-used-by.component.html',
     styleUrl: './eventcorrelations-used-by.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: EventcorrelationsService } // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: EventcorrelationsService} // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
