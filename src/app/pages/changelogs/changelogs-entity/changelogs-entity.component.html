@@ -171,24 +171,26 @@
                                 </c-form-check>
                             </fieldset>
                         </c-col>
-                        <c-col md="6" *ngIf="entityType === 'HOST'">
-                            <fieldset>
-                                <h5>
-                                    {{ t('Show services') }}
-                                </h5>
-                                <c-form-check>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[ShowServices]']" cFormCheckInput
-                                           id="ShowServices"
-                                           name="ShowServices"
-                                           oitcDebounce
-                                           type="checkbox"/>
-                                    <label cFormCheckLabel for="ShowServices">
-                                        {{ t('Yes') }}
-                                    </label>
-                                </c-form-check>
-                            </fieldset>
-                        </c-col>
+                        @if (entityType === 'HOST') {
+                            <c-col md="6">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Show services') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input (debouncedValue)="onFilterChange($event)"
+                                               [(ngModel)]="params['filter[ShowServices]']" cFormCheckInput
+                                               id="ShowServices"
+                                               name="ShowServices"
+                                               oitcDebounce
+                                               type="checkbox"/>
+                                        <label cFormCheckLabel for="ShowServices">
+                                            {{ t('Yes') }}
+                                        </label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+                        }
                     </c-row>
                     <c-row class="mt-2">
                         <c-col class="text-end">
@@ -199,23 +201,30 @@
                     </c-row>
                 </form>
             </c-container>
-            <c-container
-                [fluid]="true" *ngIf="changes && changes.all_changes">
-                <ul class="cbp_tmtimeline">
-                    <li *ngFor="let changeLogEntry of changes.all_changes">
-                        <oitc-changelogs-entry [changelogentry]="changeLogEntry"></oitc-changelogs-entry>
-                    </li>
-                </ul>
-            </c-container>
-            <oitc-no-records *ngIf="changes && changes.all_changes.length === 0"></oitc-no-records>
+            @if (changes && changes.all_changes) {
+                <c-container
+                    [fluid]="true">
+                    <ul class="cbp_tmtimeline">
+                        @for (changeLogEntry of changes.all_changes; track changeLogEntry) {
+                            <li>
+                                <oitc-changelogs-entry [changelogentry]="changeLogEntry"></oitc-changelogs-entry>
+                            </li>
+                        }
+                    </ul>
+                </c-container>
+            }
+            @if (changes && changes.all_changes.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="changes"
-                            [paginateOrScroll]="changes"></oitc-paginate-or-scroll>
+                        @if (changes) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="changes"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

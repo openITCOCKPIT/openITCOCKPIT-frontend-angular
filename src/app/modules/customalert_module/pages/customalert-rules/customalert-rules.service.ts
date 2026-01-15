@@ -59,7 +59,9 @@ export class CustomalertRulesService {
 
     public getEdit(id: number): Observable<EditableCustomAlertRule> {
         const proxyPath = this.proxyPath;
-        return this.http.get<{ customalertRule: EditableCustomAlertRule }>(`${proxyPath}/customalert_module/customalert_rules/edit/${id}.json?angular=true`, {}).pipe(
+        return this.http.get<{
+            customalertRule: EditableCustomAlertRule
+        }>(`${proxyPath}/customalert_module/customalert_rules/edit/${id}.json?angular=true`, {}).pipe(
             map(data => {
                 return data.customalertRule;
             })

@@ -53,71 +53,84 @@
             </c-card-header>
             <c-card-body>
 
-                <table *ngIf="init" bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
-                    <thead>
-                    <tr>
-                        <th>
-                            {{ t('Key') }}
-                        </th>
-                        <th class="text-left col-6">
-                            {{ t('Value') }}
-                        </th>
-                        <th class="text-center col-1">
-                            {{ t('Info') }}
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let setting of defaultAutoreportSettings; let i = index">
-                        <td>
-                            {{ setting.key }}
-                        </td>
-                        <td>
-                            <div *ngIf="setting.key !== 'AUTOREPORTS_ERROR_NOTIFICATION' && setting.key !== 'AUTOREPORTS_STORE_PATH'">
-                                <c-form-check>
-                                    <input
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        name="{{setting.key}}"
-                                        id="{{setting.key}}"
-                                        type="checkbox"
-                                        (debouncedValue)="setBitValueForOption($event, setting.value.value)"
-                                        oitcDebounce
-                                        trueFalseValue
-                                        [trueValue]=true
-                                        [falseValue]=false
-                                        [(ngModel)]="selected[i]"/>
-                                </c-form-check>
-                            </div>
-
-                            <div *ngIf="setting.key === 'AUTOREPORTS_ERROR_NOTIFICATION'">
-                                <input cFormControl
-                                       name="{{setting.key}}"
-                                       id="{{setting.key}}"
-                                       type="text"
-                                       [(ngModel)]="post.notification_emails"
-                                       oitcFormError [errors]="errors" errorField="notification_emails"/>
-                                <oitc-form-feedback [errors]="errors" errorField="notification_emails"></oitc-form-feedback>
-                            </div>
-                            <div  *ngIf="setting.key === 'AUTOREPORTS_STORE_PATH'">
-                                <input cFormControl
-                                       name="{{setting.key}}"
-                                       id="{{setting.key}}"
-                                       type="text"
-                                       [(ngModel)]="post.store_path"
-                                       oitcFormError [errors]="errors" errorField="store_path"/>
-                                <oitc-form-feedback [errors]="errors" errorField="store_path"></oitc-form-feedback>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <a href="javascript:void(0);"
-                               [cTooltip]="setting.value.info" cTooltipPlacement="left">
-                                <fa-icon class="text-info" [icon]="['fas', 'info-circle']" size="2x"></fa-icon>
-                            </a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                @if (init) {
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                        <thead>
+                        <tr>
+                            <th>
+                                {{ t('Key') }}
+                            </th>
+                            <th class="text-left col-6">
+                                {{ t('Value') }}
+                            </th>
+                            <th class="text-center col-1">
+                                {{ t('Info') }}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @for (setting of defaultAutoreportSettings; track setting; let i = $index) {
+                                <tr>
+                                    <td>
+                                        {{ setting.key }}
+                                    </td>
+                                    <td>
+                                        @if (setting.key !== 'AUTOREPORTS_ERROR_NOTIFICATION' && setting.key !== 'AUTOREPORTS_STORE_PATH') {
+                                            <div>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-primary"
+                                                        name="{{setting.key}}"
+                                                        id="{{setting.key}}"
+                                                        type="checkbox"
+                                                        (debouncedValue)="setBitValueForOption($event, setting.value.value)"
+                                                        oitcDebounce
+                                                        trueFalseValue
+                                                        [trueValue]=true
+                                                        [falseValue]=false
+                                                        [(ngModel)]="selected[i]"/>
+                                                </c-form-check>
+                                            </div>
+                                        }
+                                        @if (setting.key === 'AUTOREPORTS_ERROR_NOTIFICATION') {
+                                            <div>
+                                                <input cFormControl
+                                                       name="{{setting.key}}"
+                                                       id="{{setting.key}}"
+                                                       type="text"
+                                                       [(ngModel)]="post.notification_emails"
+                                                       oitcFormError [errors]="errors"
+                                                       errorField="notification_emails"/>
+                                                <oitc-form-feedback [errors]="errors"
+                                                                    errorField="notification_emails"></oitc-form-feedback>
+                                            </div>
+                                        }
+                                        @if (setting.key === 'AUTOREPORTS_STORE_PATH') {
+                                            <div>
+                                                <input cFormControl
+                                                       name="{{setting.key}}"
+                                                       id="{{setting.key}}"
+                                                       type="text"
+                                                       [(ngModel)]="post.store_path"
+                                                       oitcFormError [errors]="errors" errorField="store_path"/>
+                                                <oitc-form-feedback [errors]="errors"
+                                                                    errorField="store_path"></oitc-form-feedback>
+                                            </div>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="javascript:void(0);"
+                                           [cTooltip]="setting.value.info" cTooltipPlacement="left">
+                                            <fa-icon class="text-info" [icon]="['fas', 'info-circle']"
+                                                     size="2x"></fa-icon>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
 
             </c-card-body>
             <c-card-footer class="text-end">

@@ -84,7 +84,7 @@ import {
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -139,6 +139,9 @@ import {
     ServiceAddToServicegroupModalComponent
 } from '../../../components/services/service-add-to-servicegroup-modal/service-add-to-servicegroup-modal.component';
 import { IndexPage } from '../../../pages.interface';
+import { HostgroupsService } from '../../hostgroups/hostgroups.service';
+import { ServicegroupsService } from '../../servicegroups/servicegroups.service';
+import { HostgroupsLoadHostgroupsByStringParams } from '../../hostgroups/hostgroups.interface';
 
 @Component({
     selector: 'oitc-services-index',
@@ -160,7 +163,6 @@ import { IndexPage } from '../../../pages.interface';
         MatSort,
         MatSortHeader,
         TableDirective,
-        NgIf,
         ItemSelectComponent,
         RowComponent,
         NoRecordsComponent,
@@ -221,6 +223,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private ServicesService: ServicesService = inject(ServicesService);
+    private readonly HostgroupsService = inject(HostgroupsService);
+    private readonly ServicegroupsService = inject(ServicegroupsService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public readonly PermissionsService = inject(PermissionsService);
     private readonly notyService = inject(NotyService);
@@ -250,6 +254,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
     public configString: string = ''
     //Filter
     public satellites: ServicesIndexRoot['satellites'] = [];
+    public hostgroups: SelectKeyValue[] = [];
+    public servicegroups: SelectKeyValue[] = [];
     public serviceTypes: any[] = [];
     public filter: ServiceIndexFilter = getDefaultServicesIndexFilter();
     private RequestFilter: ServicesIndexFilterApiRequest = getDefaultServicesIndexFilterApiRequest();
@@ -395,7 +401,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.setFilterAndLoad(this.filter);
             this.cdr.markForCheck();
         });
-
+        this.loadHostgroups('');
+        this.loadServicegroups('');
     }
 
     public ngOnDestroy() {
@@ -414,6 +421,26 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
                 this.userFullname = services.username;
             })
         );
+    }
+
+    protected loadHostgroups = (search: string) => {
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({
+            'filter[Containers.name]': search,
+            'selected[]': this.filter.Hostgroups.id
+        } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+            this.hostgroups = data;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    protected loadServicegroups = (search: string) => {
+        this.subscriptions.add(this.ServicegroupsService.loadServicegroupsByString({
+            'filter[Containers.name]': search,
+            'selected[]': this.filter.Servicegroups.id
+        } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+            this.servicegroups = data;
+            this.cdr.markForCheck();
+        }));
     }
 
     public onSortChange(sort: Sort) {
@@ -553,6 +580,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             'filter[Servicestatus.active_checks_enabled]': activeChecksEnabled,
             'filter[Servicestatus.notifications_enabled]': notificationsEnabled,
             'filter[servicepriority][]': priorityFilter,
+            'filter[Hostgroups.id][]': this.filter.Hostgroups.id,
+            'filter[Servicegroups.id][]': this.filter.Servicegroups.id
         };
 
 
@@ -772,7 +801,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Service.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'services', 'copy', ids]);
-        } else{
+        } else {
             const message = this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
             return;
@@ -816,6 +845,9 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.RequestFilter['Hosts.id'] = filter.Hosts.id;
         this.RequestFilter['Hosts.name'] = filter.Hosts.name;
         this.RequestFilter['Hosts.name_regex'] = !!(filter.Hosts.name_regex);
+        this.RequestFilter['Hosts.satellite_id'] = filter.Hosts.satellite_id;
+        this.RequestFilter['Hostgroups.id'] = filter.Hostgroups.id;
+        this.RequestFilter['Servicegroups.id'] = filter.Servicegroups.id;
         this.RequestFilter['Hosts.satellite_id'] = filter.Hosts.satellite_id;
 
         this.RequestFilter['Services.id'] = filter.Services.id;

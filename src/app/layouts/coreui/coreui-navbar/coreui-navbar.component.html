@@ -81,11 +81,11 @@
 
             <!--
             <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-                <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+              <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
             </div>
             <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
-                <div class="simplebar-scrollbar"
-                     style="height: 404px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
+              <div class="simplebar-scrollbar"
+              style="height: 404px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
             </div>
             -->
         </ul>
@@ -97,6 +97,8 @@
 
 <!-- black menu backdrop / close area on mobile devices -->
 @if (visible) {
-    <div class="sidebar-backdrop fade show" *ngIf="visible" (click)="hideMenu()"></div>
+    @if (visible) {
+        <div class="sidebar-backdrop fade show" (click)="hideMenu()"></div>
+    }
 }
 

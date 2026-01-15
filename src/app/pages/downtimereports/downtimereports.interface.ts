@@ -154,8 +154,6 @@ export interface Availability {
 }
 
 
-
-
 export interface Host {
     id: number
     name: string

@@ -27,370 +27,349 @@
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
 
     <form cForm (ngSubmit)="submit()">
-        <c-card class="mb-3" *ngIf="post">
-            <c-card-header>
-                <h5 cCardTitle>
-                    {{ t('Edit host defaults: ') }}
-                    <small class="fw-300">
-                        {{ post.name }}
-                    </small>
-                    @if (post.host) {
-                        @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                            <a [routerLink]="['/', 'hosts', 'browser', post.host.id]"
-                               *ngIf="post.host.disabled == 1">
-                                <c-badge color="warning"
-                                         class="ms-2">
-                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                    {{ t('In monitoring (disabled)') }}
+        @if (post) {
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Edit host defaults: ') }}
+                        <small class="fw-300">
+                            {{ post.name }}
+                        </small>
+                        @if (post.host) {
+                            @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                @if (post.host.disabled == 1) {
+                                    <a [routerLink]="['/', 'hosts', 'browser', post.host.id]"
+                                    >
+                                        <c-badge color="warning"
+                                                 class="ms-2">
+                                            <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                            {{ t('In monitoring (disabled)') }}
+                                        </c-badge>
+                                    </a>
+                                }
+                            } @else {
+                                @if (post.host.disabled == 1) {
+                                    <c-badge
+                                        color="warning"
+                                        class="ms-2">
+                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                        {{ t('In monitoring (disabled)') }}
+                                    </c-badge>
+                                }
+                            }
+                            @if (post.host.disabled == 0 && hasFlag(post.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)) {
+                                <c-badge
+                                    color="danger"
+                                    class="ms-2"
+                                    [cTooltip]="'Marked for disable' | transloco"
+                                    cTooltipPlacement="top">
+                                    <fa-icon [icon]="['fas', 'box-archive']"></fa-icon>
                                 </c-badge>
-                            </a>
-                        } @else {
-                            <c-badge
-                                *ngIf="post.host.disabled == 1"
-                                color="warning"
-                                class="ms-2">
-                                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                {{ t('In monitoring (disabled)') }}
-                            </c-badge>
+                            }
                         }
-
-                        <c-badge
-                            *ngIf="post.host.disabled == 0 && hasFlag(post.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)"
-                            color="danger"
-                            class="ms-2"
-                            [cTooltip]="'Marked for disable' | transloco"
-                            cTooltipPlacement="top">
-                            <fa-icon [icon]="['fas', 'box-archive']"></fa-icon>
-                        </c-badge>
-                    }
-
-                </h5>
-
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['import_module', 'ImportedHosts', 'index']" cButton class="ripple"
-                                color="default"
-                                oitcBackButton
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                            {{ t('Back') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-
-            </c-card-header>
-            <c-card-body>
-
-                <div class="mb-3">
-                    <label cLabel for="Name">
-                        {{ t('Name') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="Name"
-                           name="Name"
-                           oitcFormError [errors]="errors" errorField="name"
-                           [(ngModel)]="post.name"
-                           readonly
-                           disabled>
-                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="identifier">
-                        {{ t('Identifier') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="identifier"
-                           name="identifier"
-                           oitcFormError [errors]="errors" errorField="identifier"
-                           [(ngModel)]="post.identifier"
-                           readonly
-                           disabled>
-                    <oitc-form-feedback [errors]="errors" errorField="identifier"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('The identifier is used by the Importer to be able to identify and update records.') }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="address">
-                        {{ t('Address') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="address"
-                           name="address"
-                           oitcFormError [errors]="errors" errorField="address"
-                           [(ngModel)]="post.address"
-                           readonly
-                           disabled>
-                    <oitc-form-feedback [errors]="errors" errorField="address"></oitc-form-feedback>
-                </div>
-
-
-                <div class="mb-3">
-                    <label cLabel for="description">
-                        {{ t('Description') }}
-                    </label>
-                    <input cFormControl id="description"
-                           name="description"
-                           oitcFormError [errors]="errors" errorField="description"
-                           [(ngModel)]="post.description"
-                           readonly
-                           disabled>
-                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="ImportedHostsTags">
-                        {{ t('Tags') }}
-                    </label>
-
-                    <c-input-group>
-                        <ng-select
-                            id="ImportedHostsTags"
-                            name="ImportedHostsTags"
-                            [items]="[]"
-                            [(ngModel)]="tagsForSelect"
-                            [addTag]="true"
-                            [multiple]="true"
-                            [selectOnTab]="true"
-                            [placeholder]="'Add tags'|transloco"
-                            [isOpen]="false">
-                        </ng-select>
-                    </c-input-group>
-                    <div class="help-block">
-                        {{ t('Press return to separate tags') }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="container">
-                        {{ t('Container') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-
-                    <oitc-select
-                        name="container"
-                        id="container"
-                        optionValue="key"
-                        optionLabel="value"
-                        [disabled]="post.readonly"
-                        [(ngModel)]="post.container_id"
-                        [options]="containers"
-                        (onChange)="onContainerChange()"
-                        oitcFormError [errors]="errors" errorField="container_id">
-                    </oitc-select>
-                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
-
-                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-
-                    <div *ngIf="post.container_id === ROOT_CONTAINER"
-                         class="help-block text-warning text-warning-glow">
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                        {{ t('Objects in /root can\'t be moved to other containers') }}
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="HostSharingContainer">
-                        {{ t('Shared containers') }}
-                    </label>
-
-                    <oitc-multi-select
-                        name="HostSharingContainer"
-                        id="HostSharingContainer"
-                        optionValue="key"
-                        optionLabel="value"
-                        [disabled]="post.readonly"
-                        [(ngModel)]="post.imported_hosts_to_containers_sharing._ids"
-                        [options]="sharingContainers"
-                        oitcFormError [errors]="errors" errorField="importedhosts_to_containers">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors"
-                                        errorField="importedhosts_to_containers"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="HostTemplate">
-                        <oitc-label-link
-                            [objectId]="post.hosttemplate_id"
-                            [route]="'/hosttemplates/edit'"
-                            [permissions]="'hosttemplates.edit'"
-                        >
-                            {{ t('Host template') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </oitc-label-link>
-                    </label>
-
-                    <oitc-select
-                        name="HostTemplate"
-                        id="HostTemplate"
-                        optionValue="key"
-                        optionLabel="value"
-                        [disabled]="post.readonly"
-                        [(ngModel)]="post.hosttemplate_id"
-                        [options]="hosttemplates"
-                        oitcFormError [errors]="errors" errorField="hosttemplate_id">
-                    </oitc-select>
-
-                    <div *ngIf="!post.hosttemplate_id" class="text-warning-glow pt-1">
-                        {{ t('Please select a host template.') }}
-                    </div>
-                    <oitc-form-feedback [errors]="errors" errorField="hosttemplate_id"></oitc-form-feedback>
-                </div>
-
-                @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
+                    </h5>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['import_module', 'ImportedHosts', 'index']" cButton class="ripple"
+                                    color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
                     <div class="mb-3">
-                        <label cLabel for="SatellitesSelect">
-                            <oitc-label-link
-                                [objectId]="post.satellite_id"
-                                [route]="'/distribute_module/satellites/edit'"
-                                [permissions]="'DistributeModule.satellites.edit'"
-                            >
-                                {{ t('Satellite') }}
-                            </oitc-label-link>
+                        <label cLabel for="Name">
+                            {{ t('Name') }}
+                            <oitc-required-icon></oitc-required-icon>
                         </label>
-
+                        <input cFormControl id="Name"
+                               name="Name"
+                               oitcFormError [errors]="errors" errorField="name"
+                               [(ngModel)]="post.name"
+                               readonly
+                               disabled>
+                        <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="identifier">
+                            {{ t('Identifier') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="identifier"
+                               name="identifier"
+                               oitcFormError [errors]="errors" errorField="identifier"
+                               [(ngModel)]="post.identifier"
+                               readonly
+                               disabled>
+                        <oitc-form-feedback [errors]="errors" errorField="identifier"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('The identifier is used by the Importer to be able to identify and update records.') }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="address">
+                            {{ t('Address') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="address"
+                               name="address"
+                               oitcFormError [errors]="errors" errorField="address"
+                               [(ngModel)]="post.address"
+                               readonly
+                               disabled>
+                        <oitc-form-feedback [errors]="errors" errorField="address"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="description">
+                            {{ t('Description') }}
+                        </label>
+                        <input cFormControl id="description"
+                               name="description"
+                               oitcFormError [errors]="errors" errorField="description"
+                               [(ngModel)]="post.description"
+                               readonly
+                               disabled>
+                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="ImportedHostsTags">
+                            {{ t('Tags') }}
+                        </label>
+                        <c-input-group>
+                            <ng-select
+                                id="ImportedHostsTags"
+                                name="ImportedHostsTags"
+                                [items]="[]"
+                                [(ngModel)]="tagsForSelect"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                [placeholder]="'Add tags'|transloco"
+                                [isOpen]="false">
+                            </ng-select>
+                        </c-input-group>
+                        <div class="help-block">
+                            {{ t('Press return to separate tags') }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="container">
+                            {{ t('Container') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
                         <oitc-select
-                            name="SatellitesSelect"
-                            id="SatellitesSelect"
+                            name="container"
+                            id="container"
                             optionValue="key"
                             optionLabel="value"
-                            [disabled]="post.readonly || hasFlag(post.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE) > 0"
-
-                            [(ngModel)]="post.satellite_id"
-                            [options]="satellites"
-                            oitcFormError [errors]="errors" errorField="satellite_id">
+                            [disabled]="post.readonly"
+                            [(ngModel)]="post.container_id"
+                            [options]="containers"
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container_id">
                         </oitc-select>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="satellite_id"></oitc-form-feedback>
+                        @if (!post.container_id) {
+                            <div class="text-warning-glow pt-1">
+                                {{ t('Please select a container.') }}
+                            </div>
+                        }
+                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                        @if (post.container_id === ROOT_CONTAINER) {
+                            <div
+                                class="help-block text-warning text-warning-glow">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                {{ t('Objects in /root can\'t be moved to other containers') }}
+                            </div>
+                        }
                     </div>
-                }
-
-                <div class="mb-3">
-                    <label cLabel for="ImportedhostServicetemplates">
-                        {{ t('Service templates') }}
-                    </label>
-
-                    <oitc-multi-select
-                        name="ImportedhostServicetemplates"
-                        id="ImportedhostServicetemplates"
-                        optionValue="key"
-                        optionLabel="value"
-                        [disabled]="post.readonly"
-                        [(ngModel)]="post.imported_hosts_to_servicetemplates._ids"
-                        [options]="servicetemplates"
-                        oitcFormError [errors]="errors" errorField="imported_hosts_to_servicetemplates">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors"
-                                        errorField="imported_hosts_to_servicetemplates"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="ImportedhostServicetemplategroups">
-                        {{ t('Service template groups') }}
-                    </label>
-
-                    <oitc-multi-select
-                        name="ImportedhostServicetemplategroups"
-                        id="ImportedhostServicetemplategroups"
-                        optionValue="key"
-                        optionLabel="value"
-                        [disabled]="post.readonly"
-                        [(ngModel)]="post.imported_hosts_to_servicetemplategroups._ids"
-                        [options]="servicetemplategroups"
-                        oitcFormError [errors]="errors" errorField="imported_hosts_to_servicetemplategroups">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors"
-                                        errorField="imported_hosts_to_servicetemplategroups"></oitc-form-feedback>
-                </div>
-
-                <c-row *ngIf="post.imported_hosts_to_agentchecks.length > 0">
-                    <c-col [xs]="12">
+                    <div class="mb-3">
+                        <label cLabel for="HostSharingContainer">
+                            {{ t('Shared containers') }}
+                        </label>
+                        <oitc-multi-select
+                            name="HostSharingContainer"
+                            id="HostSharingContainer"
+                            optionValue="key"
+                            optionLabel="value"
+                            [disabled]="post.readonly"
+                            [(ngModel)]="post.imported_hosts_to_containers_sharing._ids"
+                            [options]="sharingContainers"
+                            oitcFormError [errors]="errors" errorField="importedhosts_to_containers">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="importedhosts_to_containers"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="HostTemplate">
+                            <oitc-label-link
+                                [objectId]="post.hosttemplate_id"
+                                [route]="'/hosttemplates/edit'"
+                                [permissions]="'hosttemplates.edit'"
+                            >
+                                {{ t('Host template') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </oitc-label-link>
+                        </label>
+                        <oitc-select
+                            name="HostTemplate"
+                            id="HostTemplate"
+                            optionValue="key"
+                            optionLabel="value"
+                            [disabled]="post.readonly"
+                            [(ngModel)]="post.hosttemplate_id"
+                            [options]="hosttemplates"
+                            oitcFormError [errors]="errors" errorField="hosttemplate_id">
+                        </oitc-select>
+                        @if (!post.hosttemplate_id) {
+                            <div class="text-warning-glow pt-1">
+                                {{ t('Please select a host template.') }}
+                            </div>
+                        }
+                        <oitc-form-feedback [errors]="errors" errorField="hosttemplate_id"></oitc-form-feedback>
+                    </div>
+                    @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
                         <div class="mb-3">
-                            <label cLabel>
-                                {{ t('Agent checks') }}
+                            <label cLabel for="SatellitesSelect">
+                                <oitc-label-link
+                                    [objectId]="post.satellite_id"
+                                    [route]="'/distribute_module/satellites/edit'"
+                                    [permissions]="'DistributeModule.satellites.edit'"
+                                >
+                                    {{ t('Satellite') }}
+                                </oitc-label-link>
                             </label>
+                            <oitc-select
+                                name="SatellitesSelect"
+                                id="SatellitesSelect"
+                                optionValue="key"
+                                optionLabel="value"
+                                [disabled]="post.readonly || hasFlag(post.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE) > 0"
+                                [(ngModel)]="post.satellite_id"
+                                [options]="satellites"
+                                oitcFormError [errors]="errors" errorField="satellite_id">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="satellite_id"></oitc-form-feedback>
                         </div>
-                    </c-col>
-                </c-row>
-
-                @for (match of post.imported_hosts_to_agentchecks; track $index) {
-                    <c-row class="mb-2">
-                        <c-col [xs]="12" [md]="12" [lg]="4">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-                                </span>
-                                <oitc-select
-                                    class="flex-1"
-                                    name="hd_field_agent_match_{{$index}}"
-                                    id="hd_field_agent_match_{{$index}}"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [options]="agentchecks"
-                                    [(ngModel)]="post.imported_hosts_to_agentchecks[$index].agentcheck_id"
-                                    [showClear]="false"
-                                    [disabled]="true"
-                                    oitcFormError [errors]="errors"
-                                    errorField="imported_hosts_to_agentchecks.{{$index}}.regex">
-                                </oitc-select>
-                            </c-input-group>
-                            <oitc-form-feedback [errors]="errors"
-                                                errorField="imported_hosts_to_agentchecks.{{$index}}.agentcheck_id"></oitc-form-feedback>
-
-                            <div class="help-block">
-                                {{ t('Agent check to assign on match') }}
-                            </div>
-                        </c-col>
-                        <c-col [xs]="12" [md]="12" [lg]="6">
-                            <c-input-group>
-                                <span cInputGroupText class="bg-info text-white">
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input type="text" cFormControl
-                                       name="hd_regex_ac_{{$index}}"
-                                       id="hd_regex_ac_{{$index}}"
-                                       oitcDebounce
-                                       placeholder="{{ t('RegEx') }}"
-                                       [(ngModel)]="post.imported_hosts_to_agentchecks[$index].regex"
-                                       [readonly]="true"
-                                       [disabled]="true"
-                                       oitcFormError [errors]="errors"
-                                       errorField="imported_hosts_to_agentchecks.{{$index}}.regex"
-                                />
-                                <span cInputGroupText>
-                                    <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
-                                </span>
-                            </c-input-group>
-                            <oitc-form-feedback [errors]="errors"
-                                                errorField="imported_hosts_to_agentchecks.{{$index}}.regex"></oitc-form-feedback>
-
-                            <div class="help-block">
-                                {{ t('RegEx that needs to match') }}
-                            </div>
-                        </c-col>
-                    </c-row>
-                }
-
-
-            </c-card-body>
-            <c-card-footer class="text-end">
-                <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Update imported host') }}
-                </button>
-                <button [fallbackUrl]="['import_module', 'ImportedHosts', 'index']" cButton class="ms-1 ripple"
-                        color="default"
-                        oitcBackButton
-                        type="button">
-                    {{ t('Cancel') }}
-                </button>
-
-            </c-card-footer>
-
-        </c-card>
+                    }
+                    <div class="mb-3">
+                        <label cLabel for="ImportedhostServicetemplates">
+                            {{ t('Service templates') }}
+                        </label>
+                        <oitc-multi-select
+                            name="ImportedhostServicetemplates"
+                            id="ImportedhostServicetemplates"
+                            optionValue="key"
+                            optionLabel="value"
+                            [disabled]="post.readonly"
+                            [(ngModel)]="post.imported_hosts_to_servicetemplates._ids"
+                            [options]="servicetemplates"
+                            oitcFormError [errors]="errors" errorField="imported_hosts_to_servicetemplates">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="imported_hosts_to_servicetemplates"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="ImportedhostServicetemplategroups">
+                            {{ t('Service template groups') }}
+                        </label>
+                        <oitc-multi-select
+                            name="ImportedhostServicetemplategroups"
+                            id="ImportedhostServicetemplategroups"
+                            optionValue="key"
+                            optionLabel="value"
+                            [disabled]="post.readonly"
+                            [(ngModel)]="post.imported_hosts_to_servicetemplategroups._ids"
+                            [options]="servicetemplategroups"
+                            oitcFormError [errors]="errors" errorField="imported_hosts_to_servicetemplategroups">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="imported_hosts_to_servicetemplategroups"></oitc-form-feedback>
+                    </div>
+                    @if (post.imported_hosts_to_agentchecks.length > 0) {
+                        <c-row>
+                            <c-col [xs]="12">
+                                <div class="mb-3">
+                                    <label cLabel>
+                                        {{ t('Agent checks') }}
+                                    </label>
+                                </div>
+                            </c-col>
+                        </c-row>
+                    }
+                    @for (match of post.imported_hosts_to_agentchecks; track $index) {
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" [md]="12" [lg]="4">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                    </span>
+                                    <oitc-select
+                                        class="flex-1"
+                                        name="hd_field_agent_match_{{$index}}"
+                                        id="hd_field_agent_match_{{$index}}"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [options]="agentchecks"
+                                        [(ngModel)]="post.imported_hosts_to_agentchecks[$index].agentcheck_id"
+                                        [showClear]="false"
+                                        [disabled]="true"
+                                        oitcFormError [errors]="errors"
+                                        errorField="imported_hosts_to_agentchecks.{{$index}}.regex">
+                                    </oitc-select>
+                                </c-input-group>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="imported_hosts_to_agentchecks.{{$index}}.agentcheck_id"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('Agent check to assign on match') }}
+                                </div>
+                            </c-col>
+                            <c-col [xs]="12" [md]="12" [lg]="6">
+                                <c-input-group>
+                                    <span cInputGroupText class="bg-info text-white">
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input type="text" cFormControl
+                                           name="hd_regex_ac_{{$index}}"
+                                           id="hd_regex_ac_{{$index}}"
+                                           oitcDebounce
+                                           placeholder="{{ t('RegEx') }}"
+                                           [(ngModel)]="post.imported_hosts_to_agentchecks[$index].regex"
+                                           [readonly]="true"
+                                           [disabled]="true"
+                                           oitcFormError [errors]="errors"
+                                           errorField="imported_hosts_to_agentchecks.{{$index}}.regex"
+                                    />
+                                    <span cInputGroupText>
+                                        <oitc-regex-helper-tooltip></oitc-regex-helper-tooltip>
+                                    </span>
+                                </c-input-group>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="imported_hosts_to_agentchecks.{{$index}}.regex"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('RegEx that needs to match') }}
+                                </div>
+                            </c-col>
+                        </c-row>
+                    }
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Update imported host') }}
+                    </button>
+                    <button [fallbackUrl]="['import_module', 'ImportedHosts', 'index']" cButton class="ms-1 ripple"
+                            color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        }
 
     </form>
 

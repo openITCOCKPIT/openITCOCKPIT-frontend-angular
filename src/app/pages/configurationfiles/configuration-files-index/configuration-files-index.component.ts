@@ -19,7 +19,7 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -39,7 +39,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         NavItemComponent,
         XsButtonDirective,
         CardBodyComponent,
-        NgIf,
         TableLoaderComponent,
         TableDirective,
         NoRecordsComponent,
@@ -88,5 +87,5 @@ export class ConfigurationFilesIndexComponent implements OnInit, OnDestroy {
             })
         );
     }
-    
+
 }

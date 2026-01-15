@@ -20,7 +20,7 @@ import {
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -71,7 +71,6 @@ import { Hostdefault } from '../../hostdefaults/hostdefaults.interface';
         InputGroupTextDirective,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         ReactiveFormsModule,
         RowComponent,
@@ -87,7 +86,6 @@ import { Hostdefault } from '../../hostdefaults/hostdefaults.interface';
         ItemSelectComponent,
         MatSort,
         MatSortHeader,
-        NgForOf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         SelectAllComponent,

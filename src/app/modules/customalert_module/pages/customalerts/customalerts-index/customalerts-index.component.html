@@ -46,73 +46,74 @@
             </c-nav>
         </c-card-header>
         <c-card-body>
-            <c-card *ngIf="result" class=" mb-2">
-                <!--<c-card-header>-->
-                <oitc-filter-bookmark [plugin]="'CustomalertModule'" [controller]="'Customalerts'" [action]="'index'"
-                                      [filter]="filter"
-                                      (selected)="onSelectedBookmark($event)"></oitc-filter-bookmark>
-
-                <!--</c-card-header>-->
-                <c-card-body class="fieldset-legend-border-bottom">
-                    <c-row>
-                        <c-col lg="4" md="12" xs="12">
-                            <div
-                                class="p-2 new-flame-bg bg-danger rounded overflow-hidden position-relative text-white mb-4">
-                                <div>
-                                    <h6 class="display-4 d-block l-h-n m-0 fw-500 ng-binding">
-                                        {{ result.customalertGlobalOverview['0'] }}
-                                        <span class="small opacity-40 ng-binding">
-                                            / {{ result.customalertGlobalOverview.total }}
-                                        </span>
-                                        <br/>
-                                        <small class="m-0 l-h-n">
-                                            New alerts </small>
-                                    </h6>
+            @if (result) {
+                <c-card class=" mb-2">
+                    <!--<c-card-header>-->
+                    <oitc-filter-bookmark [plugin]="'CustomalertModule'" [controller]="'Customalerts'"
+                                          [action]="'index'"
+                                          [filter]="filter"
+                                          (selected)="onSelectedBookmark($event)"></oitc-filter-bookmark>
+                    <!--</c-card-header>-->
+                    <c-card-body class="fieldset-legend-border-bottom">
+                        <c-row>
+                            <c-col lg="4" md="12" xs="12">
+                                <div
+                                    class="p-2 new-flame-bg bg-danger rounded overflow-hidden position-relative text-white mb-4">
+                                    <div>
+                                        <h6 class="display-4 d-block l-h-n m-0 fw-500 ng-binding">
+                                            {{ result.customalertGlobalOverview['0'] }}
+                                            <span class="small opacity-40 ng-binding">
+                                                / {{ result.customalertGlobalOverview.total }}
+                                            </span>
+                                            <br/>
+                                            <small class="m-0 l-h-n">
+                                                New alerts </small>
+                                        </h6>
+                                    </div>
+                                    <fa-icon [icon]="['fas', 'fire-flame-curved']"
+                                             class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
                                 </div>
-                                <fa-icon [icon]="['fas', 'fire-flame-curved']"
-                                         class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
-                            </div>
-                        </c-col>
-                        <c-col lg="4" md="12" xs="12">
-                            <div class="p-2 bg-secondary rounded overflow-hidden position-relative text-white mb-4">
-                                <div>
-                                    <h6 class="display-4 d-block l-h-n m-0 fw-500 ng-binding">
-                                        {{ result.customalertGlobalOverview['1'] }}
-                                        <span class="small opacity-40 ng-binding">
-                                            / {{ result.customalertGlobalOverview.total }}
-                                        </span>
-                                        <br/>
-                                        <small class="m-0 l-h-n">
-                                            {{ t('In progress') }}
-                                        </small>
-                                    </h6>
+                            </c-col>
+                            <c-col lg="4" md="12" xs="12">
+                                <div class="p-2 bg-secondary rounded overflow-hidden position-relative text-white mb-4">
+                                    <div>
+                                        <h6 class="display-4 d-block l-h-n m-0 fw-500 ng-binding">
+                                            {{ result.customalertGlobalOverview['1'] }}
+                                            <span class="small opacity-40 ng-binding">
+                                                / {{ result.customalertGlobalOverview.total }}
+                                            </span>
+                                            <br/>
+                                            <small class="m-0 l-h-n">
+                                                {{ t('In progress') }}
+                                            </small>
+                                        </h6>
+                                    </div>
+                                    <fa-icon [icon]="['fas', 'person-digging']"
+                                             class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
                                 </div>
-                                <fa-icon [icon]="['fas', 'person-digging']"
-                                         class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
-                            </div>
-                        </c-col>
-                        <c-col lg="4" md="12" xs="12">
-                            <div class="row">
-                                <div class="col-12 text-end">
-
-                                    <i class="fa-solid fa-fire-flame-curved flame"></i>
-                                    <em class="padding-right-10">
-                                        New </em>
-                                    <i class="fa-solid fa-person-digging text-secondary"></i>
-                                    <em class="padding-right-10">
-                                        In progress </em>
-                                    <i class="fa-solid fa-clipboard-check text-success"></i>
-                                    <em class="padding-right-10">
-                                        Done </em>
-                                    <i class="fa-solid fa-folder-closed text-primary"></i>
-                                    <em class="padding-right-10">
-                                        Manually closed </em>
+                            </c-col>
+                            <c-col lg="4" md="12" xs="12">
+                                <div class="row">
+                                    <div class="col-12 text-end">
+                                        <i class="fa-solid fa-fire-flame-curved flame"></i>
+                                        <em class="padding-right-10">
+                                            New </em>
+                                        <i class="fa-solid fa-person-digging text-secondary"></i>
+                                        <em class="padding-right-10">
+                                            In progress </em>
+                                        <i class="fa-solid fa-clipboard-check text-success"></i>
+                                        <em class="padding-right-10">
+                                            Done </em>
+                                        <i class="fa-solid fa-folder-closed text-primary"></i>
+                                        <em class="padding-right-10">
+                                            Manually closed </em>
+                                    </div>
                                 </div>
-                            </div>
-                        </c-col>
-                    </c-row>
-                </c-card-body>
-            </c-card>
+                            </c-col>
+                        </c-row>
+                    </c-card-body>
+                </c-card>
+            }
 
 
             <c-card [hidden]="hideFilter">
@@ -335,268 +336,297 @@
             </c-row>
 
 
-            <oitc-table-loader *ngIf="!result"></oitc-table-loader>
+            @if (!result) {
+                <oitc-table-loader></oitc-table-loader>
+            }
 
-            <ng-container *ngIf="groupViewByHost">
-                <table *ngIf="result" bordered cTable class="mt-2 mb-0" hover striped matSort
-                       (matSortChange)="onSortChange($event)"
-                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                    <thead>
-                    <tr>
-                        <th scope="col" mat-sort-header="Hosts.name">
-                            {{ t('Host') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Customalerts.state">
-                            {{ t('State') }}
-                        </th>
-                        <th scope="col" mat-sort-header="servicename">
-                            {{ t('Service') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Customalerts.message">
-                            {{ t('Message') }}
-                        </th>
-                        <th scope="col" mat-sort-header="CustomalertComments.comment">
-                            {{ t('Annotation') }}
-                        </th>
-                        <th scope="col">
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']" cTextColor="danger"></fa-icon>
-                            {{ t('last 24h') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Customalerts.created">
-                            {{ t('Created') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Customalerts.modified">
-                            {{ t('Modified') }}
-                        </th>
-                        <th class="text-center col-1 width-50" scope="col">
-                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <ng-container *ngFor="let hostId of this.hostIdsInOrder">
+            @if (groupViewByHost) {
+                @if (result) {
+                    <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                           (matSortChange)="onSortChange($event)"
+                           [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                        <thead>
                         <tr>
-                            <td colspan="10">
-                                <span *oitcPermission="['hosts', 'browser']">
-                                    <a [routerLink]="['/', 'hosts', 'browser',groupedList[hostId][0].service.host.id]">
-                                        <fa-icon [icon]="['fas', 'desktop']"/>
-                                        {{ groupedList[hostId][0].service.host.name }}
-                                    </a>
-                                </span>
-                                <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                    <fa-icon [icon]="['fas', 'desktop']"/>
-                                    {{ groupedList[hostId][0].service.host.name }}
-                                </span>
-                                <oitc-badge-outline color="primary">
-
-                                    /{{ groupedList[hostId][0].service.host.primary_container }}
-                                </oitc-badge-outline>
-                            </td>
+                            <th scope="col" mat-sort-header="Hosts.name">
+                                {{ t('Host') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Customalerts.state">
+                                {{ t('State') }}
+                            </th>
+                            <th scope="col" mat-sort-header="servicename">
+                                {{ t('Service') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Customalerts.message">
+                                {{ t('Message') }}
+                            </th>
+                            <th scope="col" mat-sort-header="CustomalertComments.comment">
+                                {{ t('Annotation') }}
+                            </th>
+                            <th scope="col">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']" cTextColor="danger"></fa-icon>
+                                {{ t('last 24h') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Customalerts.created">
+                                {{ t('Created') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Customalerts.modified">
+                                {{ t('Modified') }}
+                            </th>
+                            <th class="text-center col-1 width-50" scope="col">
+                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                            </th>
                         </tr>
-
-                        <tr *ngFor="let customAlertRule of (this.groupedList[hostId])">
-                            <td class="text-center">
-                                <div>
-                                    <oitc-item-select
-                                        *oitcPermission="['CustomalertModule', 'Customalerts', 'annotate']"
-                                        [disabled]="false"
-                                        [item]="customAlertRule"></oitc-item-select>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <i *ngIf="customAlertRule.state  === 0" class="fa-solid fa-fire-flame-curved flame"></i>
-                                <i *ngIf="customAlertRule.state  === 1"
-                                   class="fa-solid fa-person-digging text-secondary"></i>
-                                <i *ngIf="customAlertRule.state  === 2"
-                                   class="fa-solid fa-clipboard-check text-success"></i>
-                                <i *ngIf="customAlertRule.state  === 3"
-                                   class="fa-solid fa-folder-closed text-primary"></i>
-                            </td>
-                            <td>
-                                <span *oitcPermission="['services', 'browser']">
-                                    <a [routerLink]="['/', 'services', 'browser',customAlertRule.service.id]">
-                                        {{ customAlertRule.servicename }}
-                                    </a>
-                                </span>
-                                <span *oitcPermission="['services', 'browser']; negate: true">
-                                    {{ customAlertRule.servicename }}
-                                </span>
-                            </td>
-                            <td>
-                                {{ customAlertRule.message }}
-                            </td>
-                            <td>
-                                <span class="text-info">{{ customAlertRule.CustomalertComments.entry_time }}</span>
-                                {{ customAlertRule.CustomalertComments.comment }}
-                            </td>
-                            <td [ngClass]="{'text-success': customAlertRule.last24hoursAlerts === 0}">
-                                {{ customAlertRule.last24hoursAlerts }}
-                            </td>
-                            <td>
-                                {{ customAlertRule.createdInHumanShort }}
-                            </td>
-                            <td>
-                                {{ customAlertRule.modifiedInHumanShort }}
-                            </td>
-                            <td class="width-50">
-                                <oitc-actions-button [url]="''" [click]="toggleAnnotateModal"
-                                                     [element]="customAlertRule"
-                                                     [icon]="['fas', 'comment']"
-                                                     [permission]="'CustomalertModule.Customalerts.annotate'">
-                                    <oitc-actions-button-element (click)="toggleAnnotateModal(customAlertRule)"
+                        </thead>
+                        <tbody>
+                            @for (hostId of this.hostIdsInOrder; track hostId) {
+                                <tr>
+                                    <td colspan="10">
+                                        <span *oitcPermission="['hosts', 'browser']">
+                                            <a [routerLink]="['/', 'hosts', 'browser',groupedList[hostId][0].service.host.id]">
+                                                <fa-icon [icon]="['fas', 'desktop']"/>
+                                                {{ groupedList[hostId][0].service.host.name }}
+                                            </a>
+                                        </span>
+                                        <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                            <fa-icon [icon]="['fas', 'desktop']"/>
+                                            {{ groupedList[hostId][0].service.host.name }}
+                                        </span>
+                                        <oitc-badge-outline color="primary">
+                                            /{{ groupedList[hostId][0].service.host.primary_container }}
+                                        </oitc-badge-outline>
+                                    </td>
+                                </tr>
+                                @for (customAlertRule of ( this.groupedList[hostId] ); track customAlertRule) {
+                                    <tr>
+                                        <td class="text-center">
+                                            <div>
+                                                <oitc-item-select
+                                                    *oitcPermission="['CustomalertModule', 'Customalerts', 'annotate']"
+                                                    [disabled]="false"
+                                                    [item]="customAlertRule"></oitc-item-select>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            @if (customAlertRule.state === 0) {
+                                                <i class="fa-solid fa-fire-flame-curved flame"></i>
+                                            }
+                                            @if (customAlertRule.state === 1) {
+                                                <i
+                                                    class="fa-solid fa-person-digging text-secondary"></i>
+                                            }
+                                            @if (customAlertRule.state === 2) {
+                                                <i
+                                                    class="fa-solid fa-clipboard-check text-success"></i>
+                                            }
+                                            @if (customAlertRule.state === 3) {
+                                                <i
+                                                    class="fa-solid fa-folder-closed text-primary"></i>
+                                            }
+                                        </td>
+                                        <td>
+                                            <span *oitcPermission="['services', 'browser']">
+                                                <a [routerLink]="['/', 'services', 'browser',customAlertRule.service.id]">
+                                                    {{ customAlertRule.servicename }}
+                                                </a>
+                                            </span>
+                                            <span *oitcPermission="['services', 'browser']; negate: true">
+                                                {{ customAlertRule.servicename }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {{ customAlertRule.message }}
+                                        </td>
+                                        <td>
+                                            <span
+                                                class="text-info">{{ customAlertRule.CustomalertComments.entry_time }}</span>
+                                            {{ customAlertRule.CustomalertComments.comment }}
+                                        </td>
+                                        <td [ngClass]="{'text-success': customAlertRule.last24hoursAlerts === 0}">
+                                            {{ customAlertRule.last24hoursAlerts }}
+                                        </td>
+                                        <td>
+                                            {{ customAlertRule.createdInHumanShort }}
+                                        </td>
+                                        <td>
+                                            {{ customAlertRule.modifiedInHumanShort }}
+                                        </td>
+                                        <td class="width-50">
+                                            <oitc-actions-button [url]="''" [click]="toggleAnnotateModal"
+                                                                 [element]="customAlertRule"
+                                                                 [icon]="['fas', 'comment']"
                                                                  [permission]="'CustomalertModule.Customalerts.annotate'">
-                                        <fa-icon [icon]="['fas', 'comment']"></fa-icon>
-                                        {{ t('Annotate') }}
-                                    </oitc-actions-button-element>
-                                    <oitc-actions-button-element (click)="toggleCloseModal(customAlertRule)"
-                                                                 [permission]="'CustomalertModule.Customalerts.close'">
-                                        <fa-icon [icon]="['fas', 'folder']"></fa-icon>
-                                        {{ t('Close manually') }}
-                                    </oitc-actions-button-element>
-                                    <oitc-actions-button-element [permission]="'CustomalertModule.Customalerts.history'"
-                                                                 [url]="'/customalert_module/customalerts/history/' + customAlertRule.id">
-                                        <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
-                                        {{ t('History') }}
-                                    </oitc-actions-button-element>
-                                </oitc-actions-button>
-                            </td>
+                                                <oitc-actions-button-element
+                                                    (click)="toggleAnnotateModal(customAlertRule)"
+                                                    [permission]="'CustomalertModule.Customalerts.annotate'">
+                                                    <fa-icon [icon]="['fas', 'comment']"></fa-icon>
+                                                    {{ t('Annotate') }}
+                                                </oitc-actions-button-element>
+                                                <oitc-actions-button-element (click)="toggleCloseModal(customAlertRule)"
+                                                                             [permission]="'CustomalertModule.Customalerts.close'">
+                                                    <fa-icon [icon]="['fas', 'folder']"></fa-icon>
+                                                    {{ t('Close manually') }}
+                                                </oitc-actions-button-element>
+                                                <oitc-actions-button-element
+                                                    [permission]="'CustomalertModule.Customalerts.history'"
+                                                    [url]="'/customalert_module/customalerts/history/' + customAlertRule.id">
+                                                    <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
+                                                    {{ t('History') }}
+                                                </oitc-actions-button-element>
+                                            </oitc-actions-button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+            @if (!groupViewByHost) {
+                @if (result) {
+                    <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                           (matSortChange)="onSortChange($event)"
+                           [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                        <thead>
+                        <tr>
+                            <th class="text-center col-1" scope="col" style="width: 5px;">
+                                <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                            </th>
+                            <th scope="col" mat-sort-header="Customalerts.state">
+                                {{ t('State') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Containers.name">
+                                {{ t('Container') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Hosts.name">
+                                {{ t('Host') }}
+                            </th>
+                            <th scope="col" mat-sort-header="servicename">
+                                {{ t('Service') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Customalerts.message">
+                                {{ t('Message') }}
+                            </th>
+                            <th scope="col" mat-sort-header="CustomalertComments.comment">
+                                {{ t('Annotation') }}
+                            </th>
+                            <th scope="col">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']" cTextColor="danger"></fa-icon>
+                                {{ t('last 24h') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Customalerts.created">
+                                {{ t('Created') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Customalerts.modified">
+                                {{ t('Modified') }}
+                            </th>
+                            <th class="text-center col-1 width-50" scope="col">
+                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                            </th>
                         </tr>
-
-                    </ng-container>
-                    </tbody>
-                </table>
-            </ng-container>
-            <ng-container *ngIf="! groupViewByHost">
-                <table *ngIf="result" bordered cTable class="mt-2 mb-0" hover striped matSort
-                       (matSortChange)="onSortChange($event)"
-                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                    <thead>
-                    <tr>
-                        <th class="text-center col-1" scope="col" style="width: 5px;">
-                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                        </th>
-                        <th scope="col" mat-sort-header="Customalerts.state">
-                            {{ t('State') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Containers.name">
-                            {{ t('Container') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Hosts.name">
-                            {{ t('Host') }}
-                        </th>
-                        <th scope="col" mat-sort-header="servicename">
-                            {{ t('Service') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Customalerts.message">
-                            {{ t('Message') }}
-                        </th>
-                        <th scope="col" mat-sort-header="CustomalertComments.comment">
-                            {{ t('Annotation') }}
-                        </th>
-                        <th scope="col">
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']" cTextColor="danger"></fa-icon>
-                            {{ t('last 24h') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Customalerts.created">
-                            {{ t('Created') }}
-                        </th>
-                        <th scope="col" mat-sort-header="Customalerts.modified">
-                            {{ t('Modified') }}
-                        </th>
-                        <th class="text-center col-1 width-50" scope="col">
-                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let customAlertRule of result.customalerts">
-
-                        <td class="text-center">
-                            <div>
-                                <oitc-item-select
-                                    *oitcPermission="['CustomalertModule', 'Customalerts', 'annotate']"
-                                    [disabled]="false"
-                                    [item]="customAlertRule"></oitc-item-select>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <i *ngIf="customAlertRule.state  === 0" class="fa-solid fa-fire-flame-curved flame"></i>
-                            <i *ngIf="customAlertRule.state  === 1"
-                               class="fa-solid fa-person-digging text-secondary"></i>
-                            <i *ngIf="customAlertRule.state  === 2"
-                               class="fa-solid fa-clipboard-check text-success"></i>
-                            <i *ngIf="customAlertRule.state  === 3" class="fa-solid fa-folder-closed text-primary"></i>
-                        </td>
-                        <td>
-                            {{ customAlertRule.service.container }}
-                        </td>
-                        <td>
-                            <span *oitcPermission="['hosts', 'browser']">
-                                <a [routerLink]="['/', 'hosts', 'browser',customAlertRule.service.host.id]">
-                                    {{ customAlertRule.service.host.name }}
-                                </a>
-                            </span>
-                            <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                {{ customAlertRule.service.host.name }}
-                            </span>
-                        </td>
-                        <td>
-                            <span *oitcPermission="['services', 'browser']">
-                                <a [routerLink]="['/', 'services', 'browser',customAlertRule.service.id]">
-                                    {{ customAlertRule.servicename }}
-                                </a>
-                            </span>
-                            <span *oitcPermission="['services', 'browser']; negate: true">
-                                {{ customAlertRule.servicename }}
-                            </span>
-                        </td>
-                        <td>
-                            {{ customAlertRule.message }}
-                        </td>
-                        <td>
-                            <span class="text-info">{{ customAlertRule.CustomalertComments.entry_time }}</span>
-                            {{ customAlertRule.CustomalertComments.comment }}
-                        </td>
-                        <td [ngClass]="{'text-success': customAlertRule.last24hoursAlerts === 0, 'text-danger': customAlertRule.last24hoursAlerts > 1}">
-                            {{ customAlertRule.last24hoursAlerts }}
-                        </td>
-                        <td>
-                            {{ customAlertRule.createdInHumanShort }}
-                        </td>
-                        <td>
-                            {{ customAlertRule.modifiedInHumanShort }}
-                        </td>
-                        <td class="width-50">
-                            <oitc-actions-button [url]="''" [click]="toggleAnnotateModal"
-                                                 [element]="customAlertRule"
-                                                 [icon]="['fas', 'comment']"
-                                                 [permission]="'CustomalertModule.Customalerts.annotate'">
-                                <oitc-actions-button-element (click)="toggleAnnotateModal(customAlertRule)"
+                        </thead>
+                        <tbody>
+                            @for (customAlertRule of result.customalerts; track customAlertRule) {
+                                <tr>
+                                    <td class="text-center">
+                                        <div>
+                                            <oitc-item-select
+                                                *oitcPermission="['CustomalertModule', 'Customalerts', 'annotate']"
+                                                [disabled]="false"
+                                                [item]="customAlertRule"></oitc-item-select>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        @if (customAlertRule.state === 0) {
+                                            <i class="fa-solid fa-fire-flame-curved flame"></i>
+                                        }
+                                        @if (customAlertRule.state === 1) {
+                                            <i
+                                                class="fa-solid fa-person-digging text-secondary"></i>
+                                        }
+                                        @if (customAlertRule.state === 2) {
+                                            <i
+                                                class="fa-solid fa-clipboard-check text-success"></i>
+                                        }
+                                        @if (customAlertRule.state === 3) {
+                                            <i class="fa-solid fa-folder-closed text-primary"></i>
+                                        }
+                                    </td>
+                                    <td>
+                                        {{ customAlertRule.service.container }}
+                                    </td>
+                                    <td>
+                                        <span *oitcPermission="['hosts', 'browser']">
+                                            <a [routerLink]="['/', 'hosts', 'browser',customAlertRule.service.host.id]">
+                                                {{ customAlertRule.service.host.name }}
+                                            </a>
+                                        </span>
+                                        <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                            {{ customAlertRule.service.host.name }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span *oitcPermission="['services', 'browser']">
+                                            <a [routerLink]="['/', 'services', 'browser',customAlertRule.service.id]">
+                                                {{ customAlertRule.servicename }}
+                                            </a>
+                                        </span>
+                                        <span *oitcPermission="['services', 'browser']; negate: true">
+                                            {{ customAlertRule.servicename }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {{ customAlertRule.message }}
+                                    </td>
+                                    <td>
+                                        <span
+                                            class="text-info">{{ customAlertRule.CustomalertComments.entry_time }}</span>
+                                        {{ customAlertRule.CustomalertComments.comment }}
+                                    </td>
+                                    <td [ngClass]="{'text-success': customAlertRule.last24hoursAlerts === 0, 'text-danger': customAlertRule.last24hoursAlerts > 1}">
+                                        {{ customAlertRule.last24hoursAlerts }}
+                                    </td>
+                                    <td>
+                                        {{ customAlertRule.createdInHumanShort }}
+                                    </td>
+                                    <td>
+                                        {{ customAlertRule.modifiedInHumanShort }}
+                                    </td>
+                                    <td class="width-50">
+                                        <oitc-actions-button [url]="''" [click]="toggleAnnotateModal"
+                                                             [element]="customAlertRule"
+                                                             [icon]="['fas', 'comment']"
                                                              [permission]="'CustomalertModule.Customalerts.annotate'">
-                                    <fa-icon [icon]="['fas', 'comment']"></fa-icon>
-                                    {{ t('Annotate') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element (click)="toggleCloseModal(customAlertRule)"
-                                                             *ngIf="customAlertRule.state < 2"
-                                                             [permission]="'CustomalertModule.Customalerts.close'">
-                                    <fa-icon [icon]="['fas', 'folder']"></fa-icon>
-                                    {{ t('Close manually') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element [permission]="'CustomalertModule.Customalerts.history'"
-                                                             [url]="'/customalert_module/customalerts/history/' + customAlertRule.id">
-                                    <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
-                                    {{ t('History') }}
-                                </oitc-actions-button-element>
-                            </oitc-actions-button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </ng-container>
+                                            <oitc-actions-button-element (click)="toggleAnnotateModal(customAlertRule)"
+                                                                         [permission]="'CustomalertModule.Customalerts.annotate'">
+                                                <fa-icon [icon]="['fas', 'comment']"></fa-icon>
+                                                {{ t('Annotate') }}
+                                            </oitc-actions-button-element>
+                                            @if (customAlertRule.state < 2) {
+                                                <oitc-actions-button-element (click)="toggleCloseModal(customAlertRule)"
+                                                                             [permission]="'CustomalertModule.Customalerts.close'">
+                                                    <fa-icon [icon]="['fas', 'folder']"></fa-icon>
+                                                    {{ t('Close manually') }}
+                                                </oitc-actions-button-element>
+                                            }
+                                            <oitc-actions-button-element
+                                                [permission]="'CustomalertModule.Customalerts.history'"
+                                                [url]="'/customalert_module/customalerts/history/' + customAlertRule.id">
+                                                <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
+                                                {{ t('History') }}
+                                            </oitc-actions-button-element>
+                                        </oitc-actions-button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
 
-            <oitc-no-records *ngIf="result && result.customalerts.length === 0"></oitc-no-records>
-            <ng-container *ngIf="result">
+            @if (result && result.customalerts.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (result) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -624,16 +654,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="result"
-                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        @if (result) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

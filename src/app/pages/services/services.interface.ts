@@ -77,6 +77,12 @@ export interface ServiceIndexFilter {
         name: string,
         name_regex: boolean | string,
         satellite_id: number[]
+    },
+    Hostgroups: {
+        id: number[]
+    },
+    Servicegroups: {
+        id: number[]
     }
 }
 
@@ -120,6 +126,12 @@ export function getDefaultServicesIndexFilter(): ServiceIndexFilter {
             name: '',
             name_regex: false,
             satellite_id: []
+        },
+        Hostgroups: {
+            id: []
+        },
+        Servicegroups: {
+            id: []
         }
     };
 }
@@ -145,6 +157,9 @@ export interface ServicesIndexFilterApiRequest {
     'Servicestatus.scheduled_downtime_depth': string
     'Servicestatus.active_checks_enabled': string
     'Servicestatus.notifications_enabled': string
+
+    'Hostgroups.id': number[]
+    'Servicegroups.id': number[]
 }
 
 export function getDefaultServicesIndexFilterApiRequest(): ServicesIndexFilterApiRequest {
@@ -170,6 +185,8 @@ export function getDefaultServicesIndexFilterApiRequest(): ServicesIndexFilterAp
         'Servicestatus.notifications_enabled': '',
         //'Servicestatus.is_hardstate': '',
         'Servicestatus.active_checks_enabled': '',
+        'Hostgroups.id': [],
+        'Servicegroups.id': []
     }
 }
 

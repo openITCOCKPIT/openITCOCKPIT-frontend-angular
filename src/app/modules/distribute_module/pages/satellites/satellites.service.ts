@@ -10,7 +10,9 @@ import {
     SatelliteEntityCake2,
     SatelliteIndex,
     SatelliteIndexParams,
+    SatelliteInfoIndex,
     SatellitesAddRoot,
+    SatellitesInformationParams,
     SatellitesLoadSatellitesByStringParams,
     SatellitesStatusParams,
     SatelliteStatusIndex,
@@ -233,5 +235,17 @@ export class SatellitesService {
                     return data;
                 })
             )
+    }
+
+    public getInformationIndex(params: SatellitesInformationParams): Observable<SatelliteInfoIndex> {
+        return this.http.get<SatelliteInfoIndex>(`${this.proxyPath}/distribute_module/satellites/info.json`, {
+            params: {
+                ...params
+            }
+        }).pipe(
+            map((data: SatelliteInfoIndex): SatelliteInfoIndex => {
+                return data;
+            })
+        );
     }
 }

@@ -15,7 +15,9 @@
         <c-modal-body>
             {{ t('Selected services') }}
             <ul>
-                <li *ngFor="let item of items">{{ item.value }}</li>
+                @for (item of items; track item) {
+                    <li>{{ item.value }}</li>
+                }
             </ul>
         </c-modal-body>
         <c-modal-footer>

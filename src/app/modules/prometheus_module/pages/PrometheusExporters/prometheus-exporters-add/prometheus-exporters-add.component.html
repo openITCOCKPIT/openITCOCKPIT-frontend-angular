@@ -63,9 +63,11 @@
                         [debounce]="true"
                         oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
-                    <div *ngIf="!post.PrometheusExporter.container_id" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
+                    @if (!post.PrometheusExporter.container_id) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                 </div>
 

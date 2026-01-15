@@ -27,7 +27,7 @@
 /* <i class="fas fa-cloud-sun-rain sun-cloud-gradient-rain"></i> */
 .sun-cloud-gradient-rain {
     background: rgb(255, 252, 10);
-    background: conic-gradient(from 41deg at 32% 50%, rgb(134, 125, 125), rgb(71, 89, 113), rgb(71, 89, 113),  transparent, rgb(255, 252, 10), rgb(255, 252, 10), rgb(255, 252, 10), rgb(255, 252, 10), rgb(255, 252, 10));
+    background: conic-gradient(from 41deg at 32% 50%, rgb(134, 125, 125), rgb(71, 89, 113), rgb(71, 89, 113), transparent, rgb(255, 252, 10), rgb(255, 252, 10), rgb(255, 252, 10), rgb(255, 252, 10), rgb(255, 252, 10));
     font-size: 28px;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

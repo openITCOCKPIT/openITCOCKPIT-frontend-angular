@@ -45,14 +45,16 @@
                     </a>
                 </c-nav-item>
                 <c-nav-item class="px-1" *oitcPermission="['users', 'add']">
-                    <a *ngIf="users?.isLdapAuth" [routerLink]="['/', 'users', 'ldap']"
-                       cButton
-                       class="ripple"
-                       color="warning"
-                       size="xs">
-                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                        {{ t('Import from LDAP') }}
-                    </a>
+                    @if (users?.isLdapAuth) {
+                        <a [routerLink]="['/', 'users', 'ldap']"
+                           cButton
+                           class="ripple"
+                           color="warning"
+                           size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('Import from LDAP') }}
+                        </a>
+                    }
                 </c-nav-item>
                 <c-nav-item class="px-1">
                     <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
@@ -178,118 +180,135 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!users"></oitc-table-loader>
-            <table *ngIf="users" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="full_name" class="word-break">
-                        {{ t('Full name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Users.email" class="word-break">
-                        {{ t('Email') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Users.phone">
-                        {{ t('Phone') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Users.company">
-                        {{ t('Company') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Users.is_active">
-                        {{ t('Is active') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Type') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Users.usergroup_id">
-                        {{ t('User role') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Users.last_login">
-                        {{ t('Last Login') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let user of users.all_users">
-                    <td class="text-center">
-                        @if (user.id !== users.myUserId) {
-                            <oitc-item-select
-                                *oitcPermission="['users', 'delete']"
-                                [disabled]="!user.allow_edit"
-                                [item]="user"></oitc-item-select>
-                        }
-                    </td>
-                    <td>{{ user.full_name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.phone }}</td>
-                    <td>{{ user.company }}</td>
-                    <td>
-                        <oitc-badge-outline *ngIf="user.is_active" color="success">
-                            {{ t('Active') }}
-                        </oitc-badge-outline>
-                        <oitc-badge-outline *ngIf="! user.is_active" color="danger">
-                            {{ t('Disabled') }}
-                        </oitc-badge-outline>
-                    </td>
-                    <td>
-                        @for (userType of user.UserTypes; track $index) {
-                            <oitc-badge-outline class="{{ userType.class }} {{ userType.color }} pe-1"
-                                                [color]="userType.color">
-                                {{ userType.title }}
-                            </oitc-badge-outline>
-                        }
-                    </td>
-                    <td>
-                        {{ user.usergroup.name }}
-                    </td>
-                    <td>
-                        {{ user.last_login }}
-                    </td>
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'users.edit'"
-                                             [url]="'/users/edit/' + user.id"
-                                             [allowEdit]="user.allow_edit">
-                            <oitc-actions-button-element [permission]="'users.edit'"
+            @if (!users) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (users) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="full_name" class="word-break">
+                            {{ t('Full name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Users.email" class="word-break">
+                            {{ t('Email') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Users.phone">
+                            {{ t('Phone') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Users.company">
+                            {{ t('Company') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Users.is_active">
+                            {{ t('Is active') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Type') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Users.usergroup_id">
+                            {{ t('User role') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Users.last_login">
+                            {{ t('Last Login') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (user of users.all_users; track user) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (user.id !== users.myUserId) {
+                                        <oitc-item-select
+                                            *oitcPermission="['users', 'delete']"
+                                            [disabled]="!user.allow_edit"
+                                            [item]="user"></oitc-item-select>
+                                    }
+                                </td>
+                                <td>{{ user.full_name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.phone }}</td>
+                                <td>{{ user.company }}</td>
+                                <td>
+                                    @if (user.is_active) {
+                                        <oitc-badge-outline color="success">
+                                            {{ t('Active') }}
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (!user.is_active) {
+                                        <oitc-badge-outline color="danger">
+                                            {{ t('Disabled') }}
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+                                <td>
+                                    @for (userType of user.UserTypes; track $index) {
+                                        <oitc-badge-outline class="{{ userType.class }} {{ userType.color }} pe-1"
+                                                            [color]="userType.color">
+                                            {{ userType.title }}
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+                                <td>
+                                    {{ user.usergroup.name }}
+                                </td>
+                                <td>
+                                    {{ user.last_login }}
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'users.edit'"
                                                          [url]="'/users/edit/' + user.id"
-                                                         *ngIf="user.allow_edit">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'users.edit'"
-                                                         (click)="resetPasswordModal(user)"
-                                                         *ngIf="!user.samaccountname && user.allow_edit && !user.is_oauth">
-                                <fa-icon [icon]="['fas', 'key']"></fa-icon>
-                                {{ t('Reset password') }}
-                            </oitc-actions-button-element>
+                                                         [allowEdit]="user.allow_edit">
+                                        @if (user.allow_edit) {
+                                            <oitc-actions-button-element [permission]="'users.edit'"
+                                                                         [url]="'/users/edit/' + user.id"
+                                            >
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        @if (!user.samaccountname && user.allow_edit && !user.is_oauth) {
+                                            <oitc-actions-button-element [permission]="'users.edit'"
+                                                                         (click)="resetPasswordModal(user)"
+                                            >
+                                                <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                                                {{ t('Reset password') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        @if (user.allow_edit && user.id !== users.myUserId) {
+                                            <li cDropdownDivider
+                                            ></li>
+                                        }
+                                        @if (user.allow_edit && user.id !== users.myUserId) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(user)"
+                                                                         [permission]="'users.delete'">
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                            <li cDropdownDivider
-                                *ngIf="user.allow_edit && user.id !== users.myUserId"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(user)"
-                                                         *ngIf="user.allow_edit && user.id !== users.myUserId"
-                                                         [permission]="'users.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
 
-
-            <oitc-no-records
-                *ngIf="users && users.all_users.length === 0"></oitc-no-records>
-            <ng-container *ngIf="users && users.all_users">
+            @if (users && users.all_users.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (users && users.all_users) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -305,7 +324,6 @@
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete selected') }}
                                 </button>
-
                                 <c-dropdown>
                                     <button cButton cDropdownToggle color="default">
                                         {{ t('More actions') }}
@@ -319,24 +337,23 @@
                                             {{ t('Export all permissions as XLS') }}</a></li>
                                     </ul>
                                 </c-dropdown>
-
                             </div>
                         </c-col>
                     </c-row>
                 </c-container>
-
                 <c-container
                     [fluid]="true">
                     <c-row>
                         <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="users"
-                                [paginateOrScroll]="users"></oitc-paginate-or-scroll>
+                            @if (users) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="users"></oitc-paginate-or-scroll>
+                            }
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
         </c-card-body>
 

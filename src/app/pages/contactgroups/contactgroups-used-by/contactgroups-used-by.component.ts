@@ -12,7 +12,7 @@ import {
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -31,25 +31,23 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 @Component({
     selector: 'oitc-contactgroups-used-by',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ContainerComponent,
-    FaIconComponent,
-    NavComponent,
-    NgForOf,
-    NgIf,
-    PermissionDirective,
-    TableDirective,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    NavItemComponent,
-    NotUsedByObjectComponent,
-    FormLoaderComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ContainerComponent,
+        FaIconComponent,
+        NavComponent,
+        PermissionDirective,
+        TableDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        NavItemComponent,
+        NotUsedByObjectComponent,
+        FormLoaderComponent
+    ],
     templateUrl: './contactgroups-used-by.component.html',
     styleUrl: './contactgroups-used-by.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

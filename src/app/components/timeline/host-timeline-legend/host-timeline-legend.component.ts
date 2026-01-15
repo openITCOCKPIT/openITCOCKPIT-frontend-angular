@@ -6,9 +6,9 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 @Component({
     selector: 'oitc-host-timeline-legend',
     imports: [
-    TranslocoDirective,
-    FaIconComponent
-],
+        TranslocoDirective,
+        FaIconComponent
+    ],
     templateUrl: './host-timeline-legend.component.html',
     styleUrl: './host-timeline-legend.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 
@@ -16,7 +16,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -39,31 +39,30 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-hosts-sharing',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PermissionDirective,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    ObjectUuidComponent,
-    SelectComponent,
-    MultiSelectComponent,
-    FormLoaderComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        ObjectUuidComponent,
+        SelectComponent,
+        MultiSelectComponent,
+        FormLoaderComponent
+    ],
     templateUrl: './hosts-sharing.component.html',
     styleUrl: './hosts-sharing.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

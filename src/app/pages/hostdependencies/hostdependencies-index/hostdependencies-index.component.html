@@ -377,206 +377,251 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!hostdependencies"></oitc-table-loader>
-            <table *ngIf="hostdependencies" bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col">
-                        {{ t('Hosts') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Dependent hosts') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Host groups') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Dependent host groups') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Timeperiod') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Inherits parent') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Execution failure criteria') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Notification failure criteria') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let hostdependency of hostdependencies.all_hostdependencies">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['hostdependencies', 'delete']"
-                            [disabled]="!hostdependency.allowEdit"
-                            [item]="hostdependency"></oitc-item-select>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                            <li *ngFor="let host of hostdependency.hosts">
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"
-                                         class="badge bg-secondary"></fa-icon>
-                                <a *oitcPermission="['hosts', 'edit']"
-                                   [routerLink]="['/', 'hosts', 'edit', host.id]">
-                                    {{ host.name }}
-                                </a>
-                                <span *oitcPermission="['hosts', 'edit']; negate: true">
-                                    {{ host.name }}
-                                </span>
-                                <fa-icon *ngIf="host.disabled == 1" [icon]="['fas', 'power-off']"
-                                         class="text-danger"></fa-icon>
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                            <li *ngFor="let host of hostdependency.hosts_dependent">
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
-                                         class="badge bg-primary"></fa-icon>
-                                <a *oitcPermission="['hosts', 'edit']"
-                                   [routerLink]="['/', 'hosts', 'edit', host.id]">
-                                    {{ host.name }}
-                                </a>
-                                <span *oitcPermission="['hosts', 'edit']; negate: true">
-                                    {{ host.name }}
-                                </span>
-                                <fa-icon *ngIf="host.disabled == 1" [icon]="['fas', 'power-off']"
-                                         class="text-danger"></fa-icon>
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                            <li *ngFor="let hostgroup of hostdependency.hostgroups">
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"
-                                         class="badge bg-secondary"></fa-icon>
-                                <a *oitcPermission="['hostgroups', 'edit']"
-                                   [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
-                                    {{ hostgroup.container.name }}
-                                </a>
-                                <span *oitcPermission="['hostgroups', 'edit']; negate: true">
-                                    {{ hostgroup.container.name }}
-                                </span>
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                            <li *ngFor="let hostgroup of hostdependency.hostgroups_dependent">
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
-                                         class="badge bg-primary"></fa-icon>
-                                <a *oitcPermission="['hostgroups', 'edit']"
-                                   [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
-                                    {{ hostgroup.container.name }}
-                                </a>
-                                <span *oitcPermission="['hostgroups', 'edit']; negate: true">
-                                    {{ hostgroup.container.name }}
-                                </span>
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                        <div *ngIf="hostdependency.timeperiod">
-                            <a *oitcPermission="['timeperiods', 'edit']"
-                               [routerLink]="['/', 'timeperiods', 'edit', hostdependency.timeperiod.id]">
-                                {{ hostdependency.timeperiod.name }}
-                            </a>
-                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
-                                {{ hostdependency.timeperiod.name }}
-                            </span>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <span class="badge bg-success mx-1" title="{{ t('Yes') }}"
-                              *ngIf="hostdependency.inherits_parent">
-                            {{ t('Yes') }}
-                        </span>
-                        <span class="badge bg-danger mx-1" title="{{ t('No') }}"
-                              *ngIf="!hostdependency.inherits_parent">
-                            {{ t('No') }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="badge bg-success mx-1" title="{{ t('Up') }}"
-                              *ngIf="hostdependency.execution_fail_on_up">
-                            {{ t('O') }}
-                        </span>
-                        <span class="badge bg-danger mx-1" title="{{ t('Down') }}"
-                              *ngIf="hostdependency.execution_fail_on_down">
-                            {{ t('D') }}
-                        </span>
-                        <span class="badge bg-secondary mx-1" title="{{ t('Unreachable') }}"
-                              *ngIf="hostdependency.execution_fail_on_unreachable">
-                            {{ t('U') }}
-                        </span>
-                        <span class="badge bg-primary mx-1" title="{{ t('Pending') }}"
-                              *ngIf="hostdependency.execution_fail_on_pending">
-                            {{ t('P') }}
-                        </span>
-                        <span class="badge bg-primary mx-1" title="{{ t('Execution none') }}"
-                              *ngIf="hostdependency.execution_none">
-                            {{ t('N') }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="badge bg-success mx-1" title="{{ t('Recovery') }}"
-                              *ngIf="hostdependency.notification_fail_on_up">
-                            {{ t('O') }}
-                        </span>
-                        <span class="badge bg-danger mx-1" title="{{ t('Down') }}"
-                              *ngIf="hostdependency.notification_fail_on_down">
-                            {{ t('D') }}
-                        </span>
-                        <span class="badge bg-secondary mx-1" title="{{ t('Unreachable') }}"
-                              *ngIf="hostdependency.notification_fail_on_unreachable">
-                            {{ t('U') }}
-                        </span>
-                        <span class="badge bg-primary mx-1" title="{{ t('Pending') }}"
-                              *ngIf="hostdependency.notification_fail_on_pending">
-                            {{ t('P') }}
-                        </span>
-                        <span class="badge bg-primary mx-1" title="{{ t('Notification none') }}"
-                              *ngIf="hostdependency.notification_none">
-                            {{ t('N') }}
-                        </span>
-                    </td>
+            @if (!hostdependencies) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (hostdependencies) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col">
+                            {{ t('Hosts') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Dependent hosts') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Host groups') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Dependent host groups') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Timeperiod') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Inherits parent') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Execution failure criteria') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Notification failure criteria') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (hostdependency of hostdependencies.all_hostdependencies; track hostdependency) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['hostdependencies', 'delete']"
+                                        [disabled]="!hostdependency.allowEdit"
+                                        [item]="hostdependency"></oitc-item-select>
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @for (host of hostdependency.hosts; track host) {
+                                            <li>
+                                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"
+                                                         class="badge bg-secondary"></fa-icon>
+                                                <a *oitcPermission="['hosts', 'edit']"
+                                                   [routerLink]="['/', 'hosts', 'edit', host.id]">
+                                                    {{ host.name }}
+                                                </a>
+                                                <span *oitcPermission="['hosts', 'edit']; negate: true">
+                                                    {{ host.name }}
+                                                </span>
+                                                @if (host.disabled == 1) {
+                                                    <fa-icon [icon]="['fas', 'power-off']"
+                                                             class="text-danger"></fa-icon>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @for (host of hostdependency.hosts_dependent; track host) {
+                                            <li>
+                                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
+                                                         class="badge bg-primary"></fa-icon>
+                                                <a *oitcPermission="['hosts', 'edit']"
+                                                   [routerLink]="['/', 'hosts', 'edit', host.id]">
+                                                    {{ host.name }}
+                                                </a>
+                                                <span *oitcPermission="['hosts', 'edit']; negate: true">
+                                                    {{ host.name }}
+                                                </span>
+                                                @if (host.disabled == 1) {
+                                                    <fa-icon [icon]="['fas', 'power-off']"
+                                                             class="text-danger"></fa-icon>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @for (hostgroup of hostdependency.hostgroups; track hostgroup) {
+                                            <li>
+                                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"
+                                                         class="badge bg-secondary"></fa-icon>
+                                                <a *oitcPermission="['hostgroups', 'edit']"
+                                                   [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
+                                                    {{ hostgroup.container.name }}
+                                                </a>
+                                                <span *oitcPermission="['hostgroups', 'edit']; negate: true">
+                                                    {{ hostgroup.container.name }}
+                                                </span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @for (hostgroup of hostdependency.hostgroups_dependent; track hostgroup) {
+                                            <li>
+                                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
+                                                         class="badge bg-primary"></fa-icon>
+                                                <a *oitcPermission="['hostgroups', 'edit']"
+                                                   [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
+                                                    {{ hostgroup.container.name }}
+                                                </a>
+                                                <span *oitcPermission="['hostgroups', 'edit']; negate: true">
+                                                    {{ hostgroup.container.name }}
+                                                </span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>
+                                    @if (hostdependency.timeperiod) {
+                                        <div>
+                                            <a *oitcPermission="['timeperiods', 'edit']"
+                                               [routerLink]="['/', 'timeperiods', 'edit', hostdependency.timeperiod.id]">
+                                                {{ hostdependency.timeperiod.name }}
+                                            </a>
+                                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                                {{ hostdependency.timeperiod.name }}
+                                            </span>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (hostdependency.inherits_parent) {
+                                        <span class="badge bg-success mx-1" title="{{ t('Yes') }}"
+                                        >
+                                            {{ t('Yes') }}
+                                        </span>
+                                    }
+                                    @if (!hostdependency.inherits_parent) {
+                                        <span class="badge bg-danger mx-1" title="{{ t('No') }}"
+                                        >
+                                            {{ t('No') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (hostdependency.execution_fail_on_up) {
+                                        <span class="badge bg-success mx-1" title="{{ t('Up') }}"
+                                        >
+                                            {{ t('O') }}
+                                        </span>
+                                    }
+                                    @if (hostdependency.execution_fail_on_down) {
+                                        <span class="badge bg-danger mx-1" title="{{ t('Down') }}"
+                                        >
+                                            {{ t('D') }}
+                                        </span>
+                                    }
+                                    @if (hostdependency.execution_fail_on_unreachable) {
+                                        <span class="badge bg-secondary mx-1" title="{{ t('Unreachable') }}"
+                                        >
+                                            {{ t('U') }}
+                                        </span>
+                                    }
+                                    @if (hostdependency.execution_fail_on_pending) {
+                                        <span class="badge bg-primary mx-1" title="{{ t('Pending') }}"
+                                        >
+                                            {{ t('P') }}
+                                        </span>
+                                    }
+                                    @if (hostdependency.execution_none) {
+                                        <span class="badge bg-primary mx-1" title="{{ t('Execution none') }}"
+                                        >
+                                            {{ t('N') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (hostdependency.notification_fail_on_up) {
+                                        <span class="badge bg-success mx-1" title="{{ t('Recovery') }}"
+                                        >
+                                            {{ t('O') }}
+                                        </span>
+                                    }
+                                    @if (hostdependency.notification_fail_on_down) {
+                                        <span class="badge bg-danger mx-1" title="{{ t('Down') }}"
+                                        >
+                                            {{ t('D') }}
+                                        </span>
+                                    }
+                                    @if (hostdependency.notification_fail_on_unreachable) {
+                                        <span class="badge bg-secondary mx-1" title="{{ t('Unreachable') }}"
+                                        >
+                                            {{ t('U') }}
+                                        </span>
+                                    }
+                                    @if (hostdependency.notification_fail_on_pending) {
+                                        <span class="badge bg-primary mx-1" title="{{ t('Pending') }}"
+                                        >
+                                            {{ t('P') }}
+                                        </span>
+                                    }
+                                    @if (hostdependency.notification_none) {
+                                        <span class="badge bg-primary mx-1" title="{{ t('Notification none') }}"
+                                        >
+                                            {{ t('N') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'hostdependencies.edit'"
+                                                         [url]="'/hostdependencies/edit/' + hostdependency.id"
+                                                         [allowEdit]="hostdependency.allowEdit">
+                                        <oitc-actions-button-element [permission]="'hostdependencies.edit'"
+                                                                     [url]="'/hostdependencies/edit/' + hostdependency.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(hostdependency)"
+                                                                     [permission]="'hostdependencies.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'hostdependencies.edit'"
-                                             [url]="'/hostdependencies/edit/' + hostdependency.id"
-                                             [allowEdit]="hostdependency.allowEdit">
-                            <oitc-actions-button-element [permission]="'hostdependencies.edit'"
-                                                         [url]="'/hostdependencies/edit/' + hostdependency.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(hostdependency)"
-                                                         [permission]="'hostdependencies.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records
-                *ngIf="hostdependencies && hostdependencies.all_hostdependencies.length === 0"></oitc-no-records>
-            <ng-container *ngIf="hostdependencies && hostdependencies.all_hostdependencies">
+            @if (hostdependencies && hostdependencies.all_hostdependencies.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (hostdependencies && hostdependencies.all_hostdependencies) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -586,7 +631,6 @@
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
-
                                 <button (click)="toggleDeleteAllModal()"
                                         *oitcPermission="['hostdependencies', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
@@ -598,16 +642,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="hostdependencies"
-                            [paginateOrScroll]="hostdependencies"></oitc-paginate-or-scroll>
+                        @if (hostdependencies) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="hostdependencies"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

@@ -42,63 +42,72 @@
             </c-nav>
         </c-card-header>
         <c-card-body>
-            <oitc-table-loader *ngIf="!autoreportsWithHost"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="autoreportsWithHost">
-                <thead>
-                <tr>
-                    <th scope="col">
-                        {{ t('Auto report name') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Description') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let autoreport of autoreportsWithHost.autoreports">
-                    <td>
-                        {{ autoreport.name }}
-                    </td>
-                    <td>
-                        {{ autoreport.description }}
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'autoreportmodule.autoreports.edit'"
-                                             [url]="'/autoreport_module/autoreports/editStepOne/' + autoreport.id"
-                                             [allowEdit]="autoreport.allowEdit">
-                            <oitc-actions-button-element [permission]="'autoreportmodule.autoreports.edit'"
-                                                         *ngIf="autoreport.allowEdit"
-                                                         [url]="'/autoreport_module/autoreports/editStepTwo/' + autoreport.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-
-                            <oitc-actions-button-element [permission]="'autoreportmodule.autoreports.generate'"
-                                                         [url]="'/autoreport_module/autoreports/generate/' + autoreport.id">
-                                <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-                                {{ t('Generate report') }}
-                            </oitc-actions-button-element>
-
-                            <li cDropdownDivider *ngIf="autoreport.allowEdit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(autoreport)"
-                                                         [permission]="'autoreportmodule.autoreports.delete'"
-                                                         *ngIf="autoreport.allowEdit">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-
-                    </td>
-
-                </tr>
-                </tbody>
-            </table>
+            @if (!autoreportsWithHost) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (autoreportsWithHost) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                >
+                    <thead>
+                    <tr>
+                        <th scope="col">
+                            {{ t('Auto report name') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Description') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (autoreport of autoreportsWithHost.autoreports; track autoreport) {
+                            <tr>
+                                <td>
+                                    {{ autoreport.name }}
+                                </td>
+                                <td>
+                                    {{ autoreport.description }}
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'autoreportmodule.autoreports.edit'"
+                                                         [url]="'/autoreport_module/autoreports/editStepOne/' + autoreport.id"
+                                                         [allowEdit]="autoreport.allowEdit">
+                                        @if (autoreport.allowEdit) {
+                                            <oitc-actions-button-element
+                                                [permission]="'autoreportmodule.autoreports.edit'"
+                                                [url]="'/autoreport_module/autoreports/editStepTwo/' + autoreport.id">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element
+                                            [permission]="'autoreportmodule.autoreports.generate'"
+                                            [url]="'/autoreport_module/autoreports/generate/' + autoreport.id">
+                                            <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                                            {{ t('Generate report') }}
+                                        </oitc-actions-button-element>
+                                        @if (autoreport.allowEdit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        @if (autoreport.allowEdit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(autoreport)"
+                                                                         [permission]="'autoreportmodule.autoreports.delete'"
+                                            >
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
         </c-card-body>
     </c-card>
 </ng-container>

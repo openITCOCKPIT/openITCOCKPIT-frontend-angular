@@ -126,86 +126,94 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!agentchecks"></oitc-table-loader>
-            <table *ngIf="agentchecks" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Agentchecks.name">
-                        {{ t('Agent check name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Agentchecks.plugin_name">
-                        {{ t('Plugin name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicetemplates.template_name">
-                        {{ t('Service template name') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let agentcheck of agentchecks.all_agentchecks">
-                    <td class="text-center">
-                        <oitc-item-select
-                                *oitcPermission="['agentchecks', 'delete']"
-                                [disabled]="!agentcheck.allow_edit"
-                                [item]="agentcheck"></oitc-item-select>
-                    </td>
+            @if (!agentchecks) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (agentchecks) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Agentchecks.name">
+                            {{ t('Agent check name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Agentchecks.plugin_name">
+                            {{ t('Plugin name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicetemplates.template_name">
+                            {{ t('Service template name') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (agentcheck of agentchecks.all_agentchecks; track agentcheck) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['agentchecks', 'delete']"
+                                        [disabled]="!agentcheck.allow_edit"
+                                        [item]="agentcheck"></oitc-item-select>
+                                </td>
+                                <td>{{ agentcheck.name }}</td>
+                                <td>{{ agentcheck.plugin_name }}</td>
+                                <td>
+                                    <oitc-label-link
+                                        [objectId]="agentcheck.servicetemplate.id"
+                                        [route]="'/servicetemplates/edit'"
+                                        [permissions]="'servicetemplates.edit'"
+                                    >
+                                        {{ agentcheck.servicetemplate.template_name }}
+                                    </oitc-label-link>
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'agentchecks.edit'"
+                                                         [url]="'/agentchecks/edit/' + agentcheck.id"
+                                                         [allowEdit]="agentcheck.allow_edit">
+                                        <oitc-actions-button-element [permission]="'agentchecks.edit'"
+                                                                     [url]="'/agentchecks/edit/' + agentcheck.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        @if (agentcheck.allow_edit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        @if (agentcheck.allow_edit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(agentcheck)"
+                                                                         [permission]="'agentchecks.delete'"
+                                            >
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                    <td>{{ agentcheck.name }}</td>
 
-                    <td>{{ agentcheck.plugin_name }}</td>
-
-                    <td>
-                        <oitc-label-link
-                                [objectId]="agentcheck.servicetemplate.id"
-                                [route]="'/servicetemplates/edit'"
-                                [permissions]="'servicetemplates.edit'"
-                        >
-                            {{ agentcheck.servicetemplate.template_name }}
-                        </oitc-label-link>
-                    </td>
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'agentchecks.edit'"
-                                             [url]="'/agentchecks/edit/' + agentcheck.id"
-                                             [allowEdit]="agentcheck.allow_edit">
-                            <oitc-actions-button-element [permission]="'agentchecks.edit'"
-                                                         [url]="'/agentchecks/edit/' + agentcheck.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *ngIf="agentcheck.allow_edit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(agentcheck)"
-                                                         [permission]="'agentchecks.delete'"
-                                                         *ngIf="agentcheck.allow_edit">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-
-            <oitc-no-records
-                    *ngIf="agentchecks && agentchecks.all_agentchecks.length === 0"></oitc-no-records>
-            <ng-container *ngIf="agentchecks && agentchecks.all_agentchecks">
+            @if (agentchecks && agentchecks.all_agentchecks.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (agentchecks && agentchecks.all_agentchecks) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                    [itemsCount]="agentchecks.all_agentchecks.length"></oitc-select-all>
+                                [itemsCount]="agentchecks.all_agentchecks.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
@@ -220,19 +228,19 @@
                         </c-col>
                     </c-row>
                 </c-container>
-
                 <c-container
-                        [fluid]="true">
+                    [fluid]="true">
                     <c-row>
                         <c-col>
-                            <oitc-paginate-or-scroll
+                            @if (agentchecks) {
+                                <oitc-paginate-or-scroll
                                     (paginatorChange)="onPaginatorChange($event)"
-                                    *ngIf="agentchecks"
                                     [paginateOrScroll]="agentchecks"></oitc-paginate-or-scroll>
+                            }
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
         </c-card-body>
 

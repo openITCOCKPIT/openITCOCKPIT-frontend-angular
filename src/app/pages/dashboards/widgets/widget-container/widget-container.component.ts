@@ -84,6 +84,9 @@ import {
 } from '../../../../modules/scm_module/widgets/resourcegroups-cronjob-status-widget/resourcegroups-cronjob-status-widget.component';
 import { StatuspagegroupWidgetComponent } from '../statuspagegroup-widget/statuspagegroup-widget.component';
 import { OrganizationalchartWidgetComponent } from '../organizationalchart-widget/organizationalchart-widget.component';
+import {
+    SlasSummaryWidgetComponent
+} from '../../../../modules/sla_module/widgets/slas-summary-widget/slas-summary-widget.component';
 
 
 @Component({
@@ -136,7 +139,8 @@ import { OrganizationalchartWidgetComponent } from '../organizationalchart-widge
         MyResourcesSummaryWidgetComponent,
         ResourcegroupsCronjobStatusWidgetComponent,
         StatuspagegroupWidgetComponent,
-        OrganizationalchartWidgetComponent
+        OrganizationalchartWidgetComponent,
+        SlasSummaryWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl:

@@ -1,0 +1,141 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item">
+                <a [routerLink]="['/', 'wizards', 'index']">
+                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    {{ t('Wizards') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                {{ t('nginx Status') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card>
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Configuration Wizard: nginx Status') }}
+            </h5>
+        </c-card-header>
+        <c-card-body class="p-0">
+            <div class="row m-0 text-center mb-3" style="min-height: 22px;">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Host Information') }}
+                    </span>
+                </div>
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Configure services for nginx Status') }}
+                    </span>
+                </div>
+                <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+                    <div class="btn-group btn-group-xs w-100 h-100">
+                        <button type="button" class="btn btn-primary"
+                                [title]="'Back' | transloco"
+                                style="border-radius: 0;"
+                                [fallbackUrl]="['wizards', 'index']"
+                                oitcBackButton>
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-success"
+                                style="border-radius: 0;"
+                                [title]="'Next' | transloco"
+                                (click)="submit()">
+                            {{ t('Next') }}
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </c-card-body>
+        <c-card-body>
+
+            <fieldset class="padding-bottom-20">
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4>
+                        {{ t('nginx Status') }}
+                    </h4>
+                </legend>
+
+                <c-accordion class="mb-3">
+                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                        <ng-template cTemplateId="accordionHeaderTemplate">
+                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                                {{ t('nginx Status configuration help') }}
+                            </button>
+                        </ng-template>
+                        <ng-template cTemplateId="accordionBodyTemplate">
+                            <div class="accordion-body">
+                                <ol>
+                                    <li>
+                                        {{ t('Add the following code to your nginx configuration file in the monitored server:') }}
+                                        <pre>location /stub_status &#123;
+  # Turn on nginx stats
+  stub_status on;
+
+  # Disable access.log for stats
+  access_log off;
+&#125;</pre>
+                                    </li>
+                                    <li>
+                                        {{ t('Restart the ngninx server:') }}
+                                        <pre>systemctl restart nginx</pre>
+                                    </li>
+                                </ol>
+                            </div>
+                        </ng-template>
+                    </c-accordion-item>
+                </c-accordion>
+
+                <div class="mb-3">
+                    <c-form-check>
+                        <input
+                            cFormCheckInput
+                            class="checkbox-lg checkbox-primary"
+                            name="useSsl"
+                            id="useSsl"
+                            type="checkbox"
+                            [(ngModel)]="useSsl"
+                            (ngModelChange)="useSslChanged()"
+                            oitcFormError [errors]="errors" errorField="hostNginxOptions"/>
+                        <label cFormCheckLabel class="ms-1 mt-1"
+                               for="useSsl">
+                            {{ t('Use SSL') }}
+                        </label>
+                    </c-form-check>
+                    <div class="help-block">
+                        {{ t('If your nginx server is running SSL, the check-command needs the optional parameter --ssl.') }}
+                    </div>
+                </div>
+
+            </fieldset>
+
+            <oitc-wizards-dynamicfields
+                [(post)]="post.services"
+                [errors]="errors"
+                [titleErrorField]="'services'"
+                [title]="'nginx Status services'|transloco"
+            />
+
+
+        </c-card-body>
+    </c-card>
+
+</ng-container>
