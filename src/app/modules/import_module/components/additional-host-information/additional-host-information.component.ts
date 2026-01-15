@@ -21,11 +21,11 @@ import { ItopOverviewComponent } from './itop/itop-overview/itop-overview.compon
 @Component({
     selector: 'oitc-additional-host-information',
     imports: [
-    TranslocoDirective,
-    TableLoaderComponent,
-    IdoitOverviewComponent,
-    ItopOverviewComponent
-],
+        TranslocoDirective,
+        TableLoaderComponent,
+        IdoitOverviewComponent,
+        ItopOverviewComponent
+    ],
     templateUrl: './additional-host-information.component.html',
     styleUrl: './additional-host-information.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

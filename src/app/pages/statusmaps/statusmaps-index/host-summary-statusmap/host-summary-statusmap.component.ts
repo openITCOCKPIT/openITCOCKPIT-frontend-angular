@@ -11,13 +11,13 @@ import { HostEntity } from '../../../hosts/hosts.interface';
 @Component({
     selector: 'oitc-host-summary-statusmap',
     imports: [
-    BadgeComponent,
-    FaIconComponent,
-    PermissionDirective,
-    TableDirective,
-    TranslocoDirective,
-    RouterLink
-],
+        BadgeComponent,
+        FaIconComponent,
+        PermissionDirective,
+        TableDirective,
+        TranslocoDirective,
+        RouterLink
+    ],
     templateUrl: './host-summary-statusmap.component.html',
     styleUrl: './host-summary-statusmap.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

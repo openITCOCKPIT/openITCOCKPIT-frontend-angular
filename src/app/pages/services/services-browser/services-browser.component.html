@@ -578,8 +578,7 @@
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @for (
-                                                                downtime of result.plannedHostDowntimes; track $index) {
+                                                            @for (downtime of result.plannedHostDowntimes; track $index) {
                                                                 <tr>
                                                                     <td>{{ downtime.authorName }}</td>
                                                                     <td>{{ downtime.scheduledStartTime }}</td>
@@ -827,8 +826,7 @@
                                                         <tr>
                                                             <td>{{ t('Contacts') }}</td>
                                                             <td>
-                                                                @for (
-                                                                    contact of result.mergedService.contacts; track contact) {
+                                                                @for (contact of result.mergedService.contacts; track contact) {
                                                                     <div>
                                                                         @if (( PermissionsService.hasPermissionObservable(['contacts', 'edit']) |async ) && contact.allowEdit) {
                                                                             <a [routerLink]="['/', 'contacts', 'edit', contact.id]">
@@ -846,8 +844,7 @@
                                                         <tr>
                                                             <td>{{ t('Contact groups') }}</td>
                                                             <td>
-                                                                @for (
-                                                                    contactgroup of result.mergedService.contactgroups; track contactgroup) {
+                                                                @for (contactgroup of result.mergedService.contactgroups; track contactgroup) {
                                                                     <div
                                                                     >
                                                                         @if (( PermissionsService.hasPermissionObservable(['contactgroups', 'edit']) |async ) && contactgroup.allowEdit) {

@@ -1,140 +1,140 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-          {{ t('Checkmk Module') }}
-        </li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['CheckmkModule', 'mkagents', 'index']"
-            [routerLink]="['/', 'checkmk_module', 'mkagents', 'index']">
-            <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-            {{ t('Checkmk special agents') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'download']"></fa-icon>
-          {{ t('Agent downloads') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Checkmk Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['CheckmkModule', 'mkagents', 'index']"
+                   [routerLink]="['/', 'checkmk_module', 'mkagents', 'index']">
+                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                    {{ t('Checkmk special agents') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                {{ t('Agent downloads') }}
+            </li>
+        </ol>
     </nav>
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>{{ t('Checkmk') }}
-          <small class="fw-300">
-            {{ t('Agent Downloads') }}
-          </small>
-        </h5>
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Checkmk') }}
+                <small class="fw-300">
+                    {{ t('Agent Downloads') }}
+                </small>
+            </h5>
 
-        <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
-          <c-nav-item>
-            <a [routerLink]="['/', 'checkmk_module','mkagents', 'index']"
-              *oitcPermission="['CheckmkModule', 'mkagents', 'index']" class="nav-link">
-              <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-              {{ t('Special agents') }}
-            </a>
-          </c-nav-item>
-          <c-nav-item>
-            <a [routerLink]="['/', 'checkmk_module','mkagents', 'download']"
-              *oitcPermission="['CheckmkModule', 'mkagents', 'download']" class="nav-link active">
-              <fa-icon [icon]="['fas', 'download']"></fa-icon>
-              {{ t('Agent downloads') }}
-            </a>
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
+            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                <c-nav-item>
+                    <a [routerLink]="['/', 'checkmk_module','mkagents', 'index']"
+                       *oitcPermission="['CheckmkModule', 'mkagents', 'index']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                        {{ t('Special agents') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'checkmk_module','mkagents', 'download']"
+                       *oitcPermission="['CheckmkModule', 'mkagents', 'download']" class="nav-link active">
+                        <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                        {{ t('Agent downloads') }}
+                    </a>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
 
-      <c-card-body>
+        <c-card-body>
 
-        <c-row>
-          <c-col [xs]="12">
-            <c-alert color="info">
-              <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-              {{
-              t('All files are located at {0} on the file system.', {
-              '0': base_path
-              })
-              }}
-            </c-alert>
-          </c-col>
-        </c-row>
-
-        @if (!agentDownloads) {
-          <oitc-block-loader height="35rem"></oitc-block-loader>
-        }
-
-        @if (agentDownloads) {
-          <div>
-            <c-row class="mt-3">
-              <c-col [xs]="12">
-                <c-card>
-                  <c-card-body>
-                    <fieldset>
-                      <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                        <h4>
-                          <fa-icon [icon]="['fab', 'linux']"></fa-icon>
-                          {{ t('Linux, Unix, macOS and other') }}
-                        </h4>
-                      </legend>
-                      <div>
-                        <oitc-mkagents-list-downloads
-                        [filetypeWithFiles]="agentDownloads.agents.unix"></oitc-mkagents-list-downloads>
-                      </div>
-                    </fieldset>
-                  </c-card-body>
-                </c-card>
-              </c-col>
+            <c-row>
+                <c-col [xs]="12">
+                    <c-alert color="info">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{
+                            t('All files are located at {0} on the file system.', {
+                                '0': base_path
+                            })
+                        }}
+                    </c-alert>
+                </c-col>
             </c-row>
-            <c-row class="mt-3">
-              <c-col [xs]="12">
-                <c-card>
-                  <c-card-body>
-                    <fieldset>
-                      <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                        <h4>
-                          <fa-icon [icon]="['fab', 'windows']"></fa-icon>
-                          {{ t('Windows') }}
-                        </h4>
-                      </legend>
-                      <div>
-                        <oitc-mkagents-list-downloads
-                        [filetypeWithFiles]="agentDownloads.agents.windows"></oitc-mkagents-list-downloads>
-                      </div>
-                    </fieldset>
-                  </c-card-body>
-                </c-card>
-              </c-col>
-            </c-row>
-            <c-row class="mt-3">
-              <c-col [xs]="12">
-                <c-card>
-                  <c-card-body>
-                    <fieldset>
-                      <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                        <h4>
-                          <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
-                          {{ t('z/OS') }}
-                        </h4>
-                      </legend>
-                      <div>
-                        <oitc-mkagents-list-downloads
-                        [filetypeWithFiles]="agentDownloads.agents.z_os"></oitc-mkagents-list-downloads>
-                      </div>
-                    </fieldset>
-                  </c-card-body>
-                </c-card>
-              </c-col>
-            </c-row>
-          </div>
-        }
+
+            @if (!agentDownloads) {
+                <oitc-block-loader height="35rem"></oitc-block-loader>
+            }
+
+            @if (agentDownloads) {
+                <div>
+                    <c-row class="mt-3">
+                        <c-col [xs]="12">
+                            <c-card>
+                                <c-card-body>
+                                    <fieldset>
+                                        <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                            <h4>
+                                                <fa-icon [icon]="['fab', 'linux']"></fa-icon>
+                                                {{ t('Linux, Unix, macOS and other') }}
+                                            </h4>
+                                        </legend>
+                                        <div>
+                                            <oitc-mkagents-list-downloads
+                                                [filetypeWithFiles]="agentDownloads.agents.unix"></oitc-mkagents-list-downloads>
+                                        </div>
+                                    </fieldset>
+                                </c-card-body>
+                            </c-card>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-3">
+                        <c-col [xs]="12">
+                            <c-card>
+                                <c-card-body>
+                                    <fieldset>
+                                        <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                            <h4>
+                                                <fa-icon [icon]="['fab', 'windows']"></fa-icon>
+                                                {{ t('Windows') }}
+                                            </h4>
+                                        </legend>
+                                        <div>
+                                            <oitc-mkagents-list-downloads
+                                                [filetypeWithFiles]="agentDownloads.agents.windows"></oitc-mkagents-list-downloads>
+                                        </div>
+                                    </fieldset>
+                                </c-card-body>
+                            </c-card>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-3">
+                        <c-col [xs]="12">
+                            <c-card>
+                                <c-card-body>
+                                    <fieldset>
+                                        <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                            <h4>
+                                                <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                                                {{ t('z/OS') }}
+                                            </h4>
+                                        </legend>
+                                        <div>
+                                            <oitc-mkagents-list-downloads
+                                                [filetypeWithFiles]="agentDownloads.agents.z_os"></oitc-mkagents-list-downloads>
+                                        </div>
+                                    </fieldset>
+                                </c-card-body>
+                            </c-card>
+                        </c-col>
+                    </c-row>
+                </div>
+            }
 
 
-      </c-card-body>
+        </c-card-body>
 
     </c-card>
-  </ng-container>
+</ng-container>

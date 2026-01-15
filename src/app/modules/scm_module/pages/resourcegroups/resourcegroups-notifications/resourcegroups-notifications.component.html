@@ -1,376 +1,384 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-          {{ t('Service Capacity Management Module') }}
-        </li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['scmmodule','resourcegroups', 'index']"
-            [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']">
-            <fa-icon [icon]="['fas', 'user-group']"></fa-icon>
-            {{ t('Resource groups') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-          {{ t('Notifications') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Service Capacity Management Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['scmmodule','resourcegroups', 'index']"
+                   [routerLink]="['/', 'scm_module', 'resourcegroups', 'index']">
+                    <fa-icon [icon]="['fas', 'user-group']"></fa-icon>
+                    {{ t('Resource groups') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                {{ t('Notifications') }}
+            </li>
+        </ol>
     </nav>
     <c-card class="mb-3">
-      <c-card-header>
-        @if (resourcegroup) {
-          <h5 cCardTitle>
-            {{ t('Notifications') }}
-            <small class="fw-300">
-              {{ resourcegroup.container.name }}
-            </small>
-          </h5>
-        }
-        <c-nav class="card-toolbar card-header-pills">
-          <c-nav-item class="px-1">
-            <button (click)="load()" cButton class="ripple" color="default" size="xs">
-              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-              {{ t('Refresh') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button [fallbackUrl]="[ 'scm_module', 'resourcegroups', 'index']" cButton class="ripple"
-              color="default"
-              oitcBackButton
-              size="xs">
-              <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-              {{ t('Back') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-              {{ t('Filter') }}
-            </button>
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
-        @if (!notifications) {
-          <oitc-table-loader></oitc-table-loader>
-        }
-        <!-- Filter -->
-        <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-          <c-row>
-            <c-col>
-              <h6 class="pb-2 mb-3 border-bottom">
-                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                {{ t('Filter') }}
-              </h6>
-            </c-col>
-          </c-row>
-          <form cForm>
-            <c-row>
-              <c-col md="6" class="mb-2">
-                <c-input-group>
-                  <span cInputGroupText>
-                    {{ t('From') }}
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="from"
-                    [placeholder]="'From date' | transloco"
-                    aria-label="from"
-                    name="from"
-                    cFormControl
-                    oitcDebounce
-                    type="datetime-local"
-                    />
-                </c-input-group>
-              </c-col>
-              <c-col md="6" class="mb-2">
-                <c-input-group>
-                  <span cInputGroupText>
-                    {{ t('To') }}
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="to"
-                    [placeholder]="'To date' | transloco"
-                    aria-label="to"
-                    name="to"
-                    cFormControl
-                    oitcDebounce
-                    type="datetime-local"
-                    />
-                </c-input-group>
-              </c-col>
-              <c-col md="6">
-                <c-input-group>
-                  <span cInputGroupText>
-                    <fa-icon [icon]="['fas', 'envelopes-bulk']" class="px-2"></fa-icon>
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="params['filter[recipient]']"
-                    [placeholder]="'Filter by recipient' | transloco"
-                    aria-label="NotificationRecipient"
-                    cFormControl
-                    name="NotificationRecipient"
-                    oitcDebounce
-                    type="text"
-                    />
-                </c-input-group>
-              </c-col>
-            </c-row>
-            <c-row class="my-2">
-              <c-col md="6">
-                <fieldset>
-                  <h5>
-                    {{ t('Reason type') }}
-                  </h5>
-                  <c-form-check>
-                    <input (debouncedValue)="onFilterChange($event)"
-                      [(ngModel)]="notificationReasonTypeFilter.reminder"
-                      cFormCheckInput
-                      id="ReasonTypeReminder"
-                      name="ReasonTypeReminder"
-                      class="checkbox-lg checkbox-primary"
-                      oitcDebounce
-                      type="checkbox"/>
-                    <label cFormCheckLabel class="ms-1 mt-1"
-                      for="ReasonTypeReminder">
-                      ⏰ {{ t('Reminder') }}
-                    </label>
-                  </c-form-check>
-                  <c-form-check>
-                    <input (debouncedValue)="onFilterChange($event)"
-                      [(ngModel)]="notificationReasonTypeFilter.escalation"
-                      cFormCheckInput
-                      id="ReasonTypeEscalation"
-                      name="ReasonTypeEscalation"
-                      class="checkbox-lg checkbox-primary"
-                      oitcDebounce
-                      type="checkbox"/>
-                    <label cFormCheckLabel class="ms-1 mt-1"
-                      for="ReasonTypeEscalation">
-                      ‼️ {{ t('Escalation') }}
-                    </label>
-                  </c-form-check>
-                  <c-form-check>
-                    <input (debouncedValue)="onFilterChange($event)"
-                      [(ngModel)]="notificationReasonTypeFilter.status_report"
-                      cFormCheckInput
-                      id="ReasonTypeStatusReport"
-                      name="ReasonTypeStatusReport"
-                      class="checkbox-lg checkbox-primary"
-                      oitcDebounce
-                      type="checkbox"/>
-                    <label cFormCheckLabel class="ms-1 mt-1"
-                      for="ReasonTypeStatusReport">
-                      🗓️ {{ t('Status report') }}
-                    </label>
-                  </c-form-check>
-                  <c-form-check>
-                    <input (debouncedValue)="onFilterChange($event)"
-                      [(ngModel)]="notificationReasonTypeFilter.cumulative_status_report"
-                      cFormCheckInput
-                      id="ReasonTypeCumulativeStatusReport"
-                      name="ReasonTypeCumulativeStatusReport"
-                      class="checkbox-lg checkbox-primary"
-                      oitcDebounce
-                      type="checkbox"/>
-                    <label cFormCheckLabel class="ms-1 mt-1"
-                      for="ReasonTypeCumulativeStatusReport">
-                      📑️ {{ t('Cumulative status report') }}
-                    </label>
-                  </c-form-check>
-                </fieldset>
-              </c-col>
-            </c-row>
-
-            <c-row class="mt-2">
-              <c-col class="text-end">
-                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                  {{ t('Reset filter') }}
-                </button>
-              </c-col>
-            </c-row>
-          </form>
-        </c-container>
-        <!-- End Filter -->
-        @if (notifications) {
-          <c-container [fluid]="true">
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-              (matSortChange)="onSortChange($event)"
-              [matSortActive]="params.sort" [matSortDirection]="params.direction">
-              <thead>
-                <tr>
-                  <th scope="col" mat-sort-header="ScmNotificationsLog.reason_type" class="col-1">
-                    {{ t('Reason type') }}
-                  </th>
-                  <th scope="col" mat-sort-header="recipient">
-                    {{ t('Recipient') }}
-                  </th>
-                  <th scope="col">
-                    {{ t('Unconfirmed resources') }}
-                  </th>
-                  <th scope="col">
-                    {{ t('Confirmed resources') }}
-                  </th>
-                  <th scope="col" mat-sort-header="ScmNotificationsLog.created">
-                    {{ t('Send time') }}
-                  </th>
-                  <th scope="col" mat-sort-header="ScmNotificationsLog.has_been_sent" class="col-1">
-                    {{ t('Has been sent') }}
-                  </th>
-                </tr>
-              </thead>
-              @if (notifications) {
-                <tbody>
-                  @for (notification of notifications.notifications; track notification) {
-                    <tr>
-                      <td class="text-center">
-                        @switch (notification.reason_type) {
-                          @case (ScmNotificationLogTypesEnum.REMINDER) {
-                            <span [title]="'Reminder' |transloco">
-                              ⏰
-                            </span>
-                          }
-                          @case (ScmNotificationLogTypesEnum.ESCALATION) {
-                            <span [title]="'Escalation' |transloco">
-                              ‼️
-                            </span>
-                          }
-                          @case (ScmNotificationLogTypesEnum.STATUS_OVERVIEW) {
-                            <span [title]="'Status report' |transloco">
-                              🗓️
-                            </span>
-                          }
-                          @case (ScmNotificationLogTypesEnum.CUMULATIVE_STATUS_SUMMARY) {
-                            <span [title]="'Cumulative status report' |transloco">
-                              📑
-                            </span>
-                          }
-                        }
-                      </td>
-                      <td>
-                        @if (notification.object_type === ScmNotificationLogRecipientTypesEnum.USER) {
-                          <oitc-label-link
-                            [objectId]="notification.object_id"
-                            [route]="'/users/edit'"
-                            [permissions]="'users.edit'">
-                            <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                            {{ notification.recipient }}
-                          </oitc-label-link>
-                        }
-                        @if (notification.object_type === ScmNotificationLogRecipientTypesEnum.MAILINGLIST) {
-                          <oitc-label-link
-                            [objectId]="notification.object_id"
-                            [route]="'/scm_module/mailinglists/edit'"
-                            [permissions]="'ScmModule.mailinglists.edit'">
-                            <fa-icon [icon]="['fas', 'envelopes-bulk']"></fa-icon>
-                            {{ notification.recipient }}
-                          </oitc-label-link>
-                        }
-                      </td>
-                      <td>
-                        @if (notification.unconfirmed_resources.length > 0) {
-                          <ul class="mb-0 ms-1 ps-2">
-                            @for (unconfirmed_resource of notification.unconfirmed_resources; track unconfirmed_resource) {
-                              <li
-                                class="pb-1">
-                                <oitc-label-link
-                                  [objectId]="unconfirmed_resource.id"
-                                  [route]="'/scm_module/resources/edit'"
-                                  [permissions]="'scmmodule.resources.edit'">
-                                  {{ unconfirmed_resource.name }}
-                                </oitc-label-link>
-                              </li>
-                            }
-                          </ul>
-                        }
-                      </td>
-                      <td>
-                        @if (notification.confirmed_resources.length > 0) {
-                          <ul class="mb-0 ms-1 ps-2">
-                            @for (confirmed_resource of notification.confirmed_resources; track confirmed_resource) {
-                              <li
-                                class="pb-1">
-                                <oitc-label-link
-                                  [objectId]="confirmed_resource.id"
-                                  [route]="'/scm_module/resources/edit'"
-                                  [permissions]="'scmmodule.resources.edit'">
-                                  @switch (confirmed_resource.status) {
-                                    @case (1) {
-                                      <fa-layers [size]="'lg'">
-                                        <fa-icon [icon]="['fas', 'square']" class="text-success"/>
-                                        <fa-icon [inverse]="true" [icon]="['fas', 'check']"
-                                          transform="shrink-6"/>
-                                      </fa-layers>
-                                    }
-                                    @case (2) {
-                                      <fa-layers [size]="'lg'">
-                                        <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
-                                        <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
-                                          transform="shrink-6"/>
-                                      </fa-layers>
-                                    }
-                                    @case (3) {
-                                      <fa-layers [size]="'lg'">
-                                        <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
-                                        <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
-                                          transform="shrink-6"/>
-                                      </fa-layers>
-                                    }
-                                    @default {
-                                      <fa-layers [size]="'lg'">
-                                        <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
-                                        <fa-icon [inverse]="true" [icon]="['fas', 'question']"
-                                          transform="shrink-6"/>
-                                      </fa-layers>
-                                    }
-                                  }
-                                  {{ confirmed_resource.name }}
-                                </oitc-label-link>
-                              </li>
-                            }
-                          </ul>
-                        }
-                      </td>
-                      <td>
-                        {{ notification.created }}
-                      </td>
-                      <td class="text-center">
-                        @if (notification.has_been_sent) {
-                          <c-badge color="success">
-                            {{ t('Yes') }}
-                          </c-badge>
-                        }
-                        @if (!notification.has_been_sent) {
-                          <c-badge color="danger">
-                            {{ t('No') }}
-                          </c-badge>
-                        }
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              }
-            </table>
-            @if (notifications && notifications.notifications.length === 0) {
-              <oitc-no-records></oitc-no-records>
+        <c-card-header>
+            @if (resourcegroup) {
+                <h5 cCardTitle>
+                    {{ t('Notifications') }}
+                    <small class="fw-300">
+                        {{ resourcegroup.container.name }}
+                    </small>
+                </h5>
             }
-          </c-container>
-        }
-        <c-container [fluid]="true">
-          <c-row>
-            <c-col>
-              <oitc-paginate-or-scroll
-                (paginatorChange)="onPaginatorChange($event)"
-              [paginateOrScroll]="notifications"></oitc-paginate-or-scroll>
-            </c-col>
-          </c-row>
-        </c-container>
-      </c-card-body>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button [fallbackUrl]="[ 'scm_module', 'resourcegroups', 'index']" cButton class="ripple"
+                            color="default"
+                            oitcBackButton
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        {{ t('Back') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            @if (!notifications) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{ t('From') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="from"
+                                       [placeholder]="'From date' | transloco"
+                                       aria-label="from"
+                                       name="from"
+                                       cFormControl
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{ t('To') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="to"
+                                       [placeholder]="'To date' | transloco"
+                                       aria-label="to"
+                                       name="to"
+                                       cFormControl
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'envelopes-bulk']" class="px-2"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[recipient]']"
+                                       [placeholder]="'Filter by recipient' | transloco"
+                                       aria-label="NotificationRecipient"
+                                       cFormControl
+                                       name="NotificationRecipient"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="my-2">
+                        <c-col md="6">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Reason type') }}
+                                </h5>
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="notificationReasonTypeFilter.reminder"
+                                           cFormCheckInput
+                                           id="ReasonTypeReminder"
+                                           name="ReasonTypeReminder"
+                                           class="checkbox-lg checkbox-primary"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="ReasonTypeReminder">
+                                        ⏰ {{ t('Reminder') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="notificationReasonTypeFilter.escalation"
+                                           cFormCheckInput
+                                           id="ReasonTypeEscalation"
+                                           name="ReasonTypeEscalation"
+                                           class="checkbox-lg checkbox-primary"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="ReasonTypeEscalation">
+                                        ‼️ {{ t('Escalation') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="notificationReasonTypeFilter.status_report"
+                                           cFormCheckInput
+                                           id="ReasonTypeStatusReport"
+                                           name="ReasonTypeStatusReport"
+                                           class="checkbox-lg checkbox-primary"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="ReasonTypeStatusReport">
+                                        🗓️ {{ t('Status report') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="notificationReasonTypeFilter.cumulative_status_report"
+                                           cFormCheckInput
+                                           id="ReasonTypeCumulativeStatusReport"
+                                           name="ReasonTypeCumulativeStatusReport"
+                                           class="checkbox-lg checkbox-primary"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="ReasonTypeCumulativeStatusReport">
+                                        📑️ {{ t('Cumulative status report') }}
+                                    </label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+            @if (notifications) {
+                <c-container [fluid]="true">
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                           (matSortChange)="onSortChange($event)"
+                           [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                        <thead>
+                        <tr>
+                            <th scope="col" mat-sort-header="ScmNotificationsLog.reason_type" class="col-1">
+                                {{ t('Reason type') }}
+                            </th>
+                            <th scope="col" mat-sort-header="recipient">
+                                {{ t('Recipient') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Unconfirmed resources') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Confirmed resources') }}
+                            </th>
+                            <th scope="col" mat-sort-header="ScmNotificationsLog.created">
+                                {{ t('Send time') }}
+                            </th>
+                            <th scope="col" mat-sort-header="ScmNotificationsLog.has_been_sent" class="col-1">
+                                {{ t('Has been sent') }}
+                            </th>
+                        </tr>
+                        </thead>
+                        @if (notifications) {
+                            <tbody>
+                                @for (notification of notifications.notifications; track notification) {
+                                    <tr>
+                                        <td class="text-center">
+                                            @switch (notification.reason_type) {
+                                                @case (ScmNotificationLogTypesEnum.REMINDER) {
+                                                    <span [title]="'Reminder' |transloco">
+                                                        ⏰
+                                                    </span>
+                                                }
+                                                @case (ScmNotificationLogTypesEnum.ESCALATION) {
+                                                    <span [title]="'Escalation' |transloco">
+                                                        ‼️
+                                                    </span>
+                                                }
+                                                @case (ScmNotificationLogTypesEnum.STATUS_OVERVIEW) {
+                                                    <span [title]="'Status report' |transloco">
+                                                        🗓️
+                                                    </span>
+                                                }
+                                                @case (ScmNotificationLogTypesEnum.CUMULATIVE_STATUS_SUMMARY) {
+                                                    <span [title]="'Cumulative status report' |transloco">
+                                                        📑
+                                                    </span>
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (notification.object_type === ScmNotificationLogRecipientTypesEnum.USER) {
+                                                <oitc-label-link
+                                                    [objectId]="notification.object_id"
+                                                    [route]="'/users/edit'"
+                                                    [permissions]="'users.edit'">
+                                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                                    {{ notification.recipient }}
+                                                </oitc-label-link>
+                                            }
+                                            @if (notification.object_type === ScmNotificationLogRecipientTypesEnum.MAILINGLIST) {
+                                                <oitc-label-link
+                                                    [objectId]="notification.object_id"
+                                                    [route]="'/scm_module/mailinglists/edit'"
+                                                    [permissions]="'ScmModule.mailinglists.edit'">
+                                                    <fa-icon [icon]="['fas', 'envelopes-bulk']"></fa-icon>
+                                                    {{ notification.recipient }}
+                                                </oitc-label-link>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (notification.unconfirmed_resources.length > 0) {
+                                                <ul class="mb-0 ms-1 ps-2">
+                                                    @for (unconfirmed_resource of notification.unconfirmed_resources; track unconfirmed_resource) {
+                                                        <li
+                                                            class="pb-1">
+                                                            <oitc-label-link
+                                                                [objectId]="unconfirmed_resource.id"
+                                                                [route]="'/scm_module/resources/edit'"
+                                                                [permissions]="'scmmodule.resources.edit'">
+                                                                {{ unconfirmed_resource.name }}
+                                                            </oitc-label-link>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (notification.confirmed_resources.length > 0) {
+                                                <ul class="mb-0 ms-1 ps-2">
+                                                    @for (confirmed_resource of notification.confirmed_resources; track confirmed_resource) {
+                                                        <li
+                                                            class="pb-1">
+                                                            <oitc-label-link
+                                                                [objectId]="confirmed_resource.id"
+                                                                [route]="'/scm_module/resources/edit'"
+                                                                [permissions]="'scmmodule.resources.edit'">
+                                                                @switch (confirmed_resource.status) {
+                                                                    @case (1) {
+                                                                        <fa-layers [size]="'lg'">
+                                                                            <fa-icon [icon]="['fas', 'square']"
+                                                                                     class="text-success"/>
+                                                                            <fa-icon [inverse]="true"
+                                                                                     [icon]="['fas', 'check']"
+                                                                                     transform="shrink-6"/>
+                                                                        </fa-layers>
+                                                                    }
+                                                                    @case (2) {
+                                                                        <fa-layers [size]="'lg'">
+                                                                            <fa-icon [icon]="['fas', 'square']"
+                                                                                     class="text-warning"/>
+                                                                            <fa-icon [inverse]="true"
+                                                                                     [icon]="['fas', 'bell']"
+                                                                                     transform="shrink-6"/>
+                                                                        </fa-layers>
+                                                                    }
+                                                                    @case (3) {
+                                                                        <fa-layers [size]="'lg'">
+                                                                            <fa-icon [icon]="['fas', 'square']"
+                                                                                     class="text-danger"/>
+                                                                            <fa-icon [inverse]="true"
+                                                                                     [icon]="['fas', 'exclamation']"
+                                                                                     transform="shrink-6"/>
+                                                                        </fa-layers>
+                                                                    }
+                                                                    @default {
+                                                                        <fa-layers [size]="'lg'">
+                                                                            <fa-icon [icon]="['fas', 'square']"
+                                                                                     class="text-primary"/>
+                                                                            <fa-icon [inverse]="true"
+                                                                                     [icon]="['fas', 'question']"
+                                                                                     transform="shrink-6"/>
+                                                                        </fa-layers>
+                                                                    }
+                                                                }
+                                                                {{ confirmed_resource.name }}
+                                                            </oitc-label-link>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
+                                        </td>
+                                        <td>
+                                            {{ notification.created }}
+                                        </td>
+                                        <td class="text-center">
+                                            @if (notification.has_been_sent) {
+                                                <c-badge color="success">
+                                                    {{ t('Yes') }}
+                                                </c-badge>
+                                            }
+                                            @if (!notification.has_been_sent) {
+                                                <c-badge color="danger">
+                                                    {{ t('No') }}
+                                                </c-badge>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                    </table>
+                    @if (notifications && notifications.notifications.length === 0) {
+                        <oitc-no-records></oitc-no-records>
+                    }
+                </c-container>
+            }
+            <c-container [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            [paginateOrScroll]="notifications"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
     </c-card>
-  </ng-container>
+</ng-container>

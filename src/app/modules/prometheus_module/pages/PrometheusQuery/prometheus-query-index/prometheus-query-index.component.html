@@ -1,279 +1,280 @@
 <ng-container *transloco="let t">
 
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-          {{ t('Prometheus Module') }}
-        </li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['PrometheusModule', 'PrometheusQuery', 'index']"
-            [routerLink]="['/', 'prometheus_module', 'PrometheusQuery', 'index']">
-            <fa-icon [icon]="['fas', 'burn']"></fa-icon>
-            {{ t('Query') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'code']"></fa-icon>
-          {{ t('Overview') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Prometheus Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['PrometheusModule', 'PrometheusQuery', 'index']"
+                   [routerLink]="['/', 'prometheus_module', 'PrometheusQuery', 'index']">
+                    <fa-icon [icon]="['fas', 'burn']"></fa-icon>
+                    {{ t('Query') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'code']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
     </nav>
 
     <div class="mb-3">
-      <oitc-select
-        name="params.hostId"
-        id="params.hostId"
-        [(ngModel)]="params.hostId"
-        optionValue="key"
-        optionLabel="value"
-        (onChange)="loadIndex()"
-        [options]="hosts">
-      </oitc-select>
+        <oitc-select
+            name="params.hostId"
+            id="params.hostId"
+            [(ngModel)]="params.hostId"
+            optionValue="key"
+            optionLabel="value"
+            (onChange)="loadIndex()"
+            [options]="hosts">
+        </oitc-select>
     </div>
 
 
     <div>
 
-      <ng-template #contentTemplate let-data>
-        @if (data) {
-          <span class="h5">
-            {{ t('Metrics missing?') }}
-          </span>
-        }
-        <br>
-          {{ t('Have you refreshed the monitoring configuration?') }}
+        <ng-template #contentTemplate let-data>
+            @if (data) {
+                <span class="h5">
+                    {{ t('Metrics missing?') }}
+                </span>
+            }
+            <br>
+            {{ t('Have you refreshed the monitoring configuration?') }}
 
         </ng-template>
 
         <ng-template #buttonTemplate let-data>
-          @if (data) {
-            <div class="ms-2">
-              <button class="btn btn-sm ripple" [ngClass]="'btn-outline-'+data.color"
-                [routerLink]="['/', 'exports','index']">
-                <fa-icon [icon]="['fas', 'retweet']"></fa-icon>
-                {{ t('Go to "Refresh monitoring configuration"') }}
-              </button>
-            </div>
-          }
+            @if (data) {
+                <div class="ms-2">
+                    <button class="btn btn-sm ripple" [ngClass]="'btn-outline-'+data.color"
+                            [routerLink]="['/', 'exports','index']">
+                        <fa-icon [icon]="['fas', 'retweet']"></fa-icon>
+                        {{ t('Go to "Refresh monitoring configuration"') }}
+                    </button>
+                </div>
+            }
 
         </ng-template>
 
         <oitc-alert
-          baseIcon="circle"
-          color="info"
-          [icon]="['fas', 'info']"
-          [contentTemplate]="contentTemplate"
-        [buttonTemplate]="buttonTemplate"></oitc-alert>
+            baseIcon="circle"
+            color="info"
+            [icon]="['fas', 'info']"
+            [contentTemplate]="contentTemplate"
+            [buttonTemplate]="buttonTemplate"></oitc-alert>
 
-      </div>
+    </div>
 
-      <c-card class="mb-3">
+    <c-card class="mb-3">
         <c-card-header>
-          <h5 cCardTitle>{{ t('Prometheus metrics') }}
-            <small class="fw-300">
-              {{ t('of Host') }}
-            </small>
-          </h5>
+            <h5 cCardTitle>{{ t('Prometheus metrics') }}
+                <small class="fw-300">
+                    {{ t('of Host') }}
+                </small>
+            </h5>
 
-          <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
-            <c-nav-item>
-              <a class="nav-link active">
-                <fa-icon [icon]="['fas', 'chart-line']"></fa-icon>
-                {{ t('Metrics') }}
-              </a>
-            </c-nav-item>
-            <c-nav-item *oitcPermission="['PrometheusModule', 'PrometheusAlertRules', 'index']">
-              <a [routerLink]="['/', 'prometheus_module', 'PrometheusAlertRules', 'index', this.params.hostId]"
-                class="nav-link">
-                <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
-                {{ t('Alert rules') }}
-              </a>
-            </c-nav-item>
-          </c-nav>
+            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                <c-nav-item>
+                    <a class="nav-link active">
+                        <fa-icon [icon]="['fas', 'chart-line']"></fa-icon>
+                        {{ t('Metrics') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item *oitcPermission="['PrometheusModule', 'PrometheusAlertRules', 'index']">
+                    <a [routerLink]="['/', 'prometheus_module', 'PrometheusAlertRules', 'index', this.params.hostId]"
+                       class="nav-link">
+                        <fa-icon [icon]="['fas', 'bullhorn']"></fa-icon>
+                        {{ t('Alert rules') }}
+                    </a>
+                </c-nav-item>
+            </c-nav>
 
-          <c-nav class="card-toolbar card-header-pills">
-            <c-nav-item class="px-1">
-              <button (click)="loadIndex()" cButton class="ripple" color="default" size="xs">
-                <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                {{ t('Refresh') }}
-              </button>
-            </c-nav-item>
-            <c-nav-item class="px-1">
-              <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                {{ t('Filter') }}
-              </button>
-            </c-nav-item>
-          </c-nav>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadIndex()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
         </c-card-header>
         <c-card-body>
 
-          <!-- Filter -->
-          <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-            <c-row>
-              <c-col>
-                <h6 class="pb-2 mb-3 border-bottom">
-                  <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                  {{ t('Filter') }}
-                </h6>
-              </c-col>
-            </c-row>
-            <form cForm>
-              <c-row class="mb-3">
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row class="mb-3">
 
-                <c-col md="6">
-                  <c-input-group>
-                    <span cInputGroupText>
-                      <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                    </span>
-                    <input (debouncedValue)="onFilterChange($event)"
-                      [(ngModel)]="params['filter[PrometheusQuery.name]']"
-                      [placeholder]="'Filter by metric name' | transloco"
-                      aria-label="Filter by metric name"
-                      cFormControl
-                      name="params['filter[PrometheusQuery.name]']"
-                      oitcDebounce
-                      type="text"
-                      />
-                  </c-input-group>
-                </c-col>
-              </c-row>
-              <c-row class="mt-2">
-                <c-col class="text-end">
-                  <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                    {{ t('Reset Filter') }}
-                  </button>
-                </c-col>
-              </c-row>
-            </form>
-          </c-container>
-
-          @if (! index) {
-            <oitc-table-loader></oitc-table-loader>
-          }
-
-
-          <table bordered cTable class="mt-2 mb-0" hover striped>
-            <thead>
-              <tr>
-                <th class="width-50 text-center" scope="col">
-                  <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                </th>
-                <th class="width-50 text-center" scope="col">
-                  <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
-                </th>
-                <th scope="col">
-                  {{ t('Metric') }}
-                </th>
-                <th scope="col">
-                  {{ t('Help') }}
-                </th>
-                <th scope="col">
-                  {{ t('Type') }}
-                </th>
-                <th scope="col">
-                  {{ t('Unit') }}
-                </th>
-                <th class="text-center col-1 width-50" scope="col">
-                  <fa-stack>
-                    <fa-icon [icon]="['fas', 'gear']" stackItemSize="1x" pull="right"></fa-icon>
-                    <fa-icon [icon]="['fas', 'plus']" class="text-success"
-                      stackItemSize="1x"
-                    transform="shrink-8 right-6 down-6"></fa-icon>
-                  </fa-stack>
-                </th>
-              </tr>
-            </thead>
-            @if (index.targets.data) {
-              <tbody>
-                @for (datum of index.targets.data; track datum) {
-                  <tr>
-                    <td class="text-center">
-                      <oitc-item-select
-                        *oitcPermission="['PrometheusModule', 'PrometheusExporters', 'add']"
-                        [disabled]="false"
-                      [item]="datum"></oitc-item-select>
-                    </td>
-                    <td class="text-center">
-                      <oitc-prometheus-popover-graph
-                        [service]="'A'"
-                        [host]="this.index.host.uuid"
-                        [timezone]="timezone"
-                        [metric]="datum.metric"
-                        />
-                    </td>
-                    <td>
-                      {{ datum.metric }}
-                    </td>
-                    <td>
-                      {{ datum.help }}
-                    </td>
-                    <td>
-                      {{ datum.type }}
-                    </td>
-                    <td>
-                      {{ datum.unit }}
-                    </td>
-                    <td class="width-50">
-                      <oitc-actions-button [permission]="'PrometheusModule.PrometheusQuery.toService'"
-                        [url]="'/prometheus_module/PrometheusQuery/toService/' + params.hostId"
-                        [queryParams]="{'metrics[]': [datum.metric]}">
-                        <oitc-actions-button-element [permission]="'PrometheusModule.PrometheusQuery.toService'"
-                          [url]="'/prometheus_module/PrometheusQuery/toService/' + params.hostId"
-                          [queryParams]="{'metrics[]': [datum.metric]}">
-                          <fa-stack>
-                            <fa-icon [icon]="['fas', 'cog']"
-                            stackItemSize="1x" pull="right"></fa-icon>
-                            <fa-icon [icon]="['fas', 'plus']" class="text-success"
-                              stackItemSize="1x"
-                            transform="shrink-8 right-13 down-10"></fa-icon>
-                          </fa-stack>
-                          {{ t('Create service from metric') }}
-                        </oitc-actions-button-element>
-                      </oitc-actions-button>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            }
-          </table>
-          @if (params.hostId !== 0 && index && index.targets.data.length === 0) {
-            <oitc-no-records
-            ></oitc-no-records>
-          }
-
-          @if (index && index.targets.data) {
-            <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-              [fluid]="true">
-              <c-row>
-                <c-col>
-                  <oitc-select-all
-                  [itemsCount]="index.targets.data.length"></oitc-select-all>
-                </c-col>
-                <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                  <div class="btn-group d-flex flex-row" role="group">
-                    <button class="btn btn-outline-default col-3 border-0"
-                      type="button" (click)="createFromMetrics()">
-                      <fa-stack>
-                        <fa-icon [icon]="['fas', 'gear']" stackItemSize="1x" pull="right"></fa-icon>
-                        <fa-icon [icon]="['fas', 'plus']" class="text-success"
-                          stackItemSize="1x"
-                        transform="shrink-8 right-6 down-6"></fa-icon>
-                      </fa-stack>
-                      {{ t('Create service from metrics') }}
-                    </button>
-                  </div>
-                </c-col>
-              </c-row>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[PrometheusQuery.name]']"
+                                       [placeholder]="'Filter by metric name' | transloco"
+                                       aria-label="Filter by metric name"
+                                       cFormControl
+                                       name="params['filter[PrometheusQuery.name]']"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset Filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
             </c-container>
-          }
+
+            @if (!index) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+
+
+            <table bordered cTable class="mt-2 mb-0" hover striped>
+                <thead>
+                <tr>
+                    <th class="width-50 text-center" scope="col">
+                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                    </th>
+                    <th class="width-50 text-center" scope="col">
+                        <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
+                    </th>
+                    <th scope="col">
+                        {{ t('Metric') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Help') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Type') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Unit') }}
+                    </th>
+                    <th class="text-center col-1 width-50" scope="col">
+                        <fa-stack>
+                            <fa-icon [icon]="['fas', 'gear']" stackItemSize="1x" pull="right"></fa-icon>
+                            <fa-icon [icon]="['fas', 'plus']" class="text-success"
+                                     stackItemSize="1x"
+                                     transform="shrink-8 right-6 down-6"></fa-icon>
+                        </fa-stack>
+                    </th>
+                </tr>
+                </thead>
+                @if (index.targets.data) {
+                    <tbody>
+                        @for (datum of index.targets.data; track datum) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['PrometheusModule', 'PrometheusExporters', 'add']"
+                                        [disabled]="false"
+                                        [item]="datum"></oitc-item-select>
+                                </td>
+                                <td class="text-center">
+                                    <oitc-prometheus-popover-graph
+                                        [service]="'A'"
+                                        [host]="this.index.host.uuid"
+                                        [timezone]="timezone"
+                                        [metric]="datum.metric"
+                                    />
+                                </td>
+                                <td>
+                                    {{ datum.metric }}
+                                </td>
+                                <td>
+                                    {{ datum.help }}
+                                </td>
+                                <td>
+                                    {{ datum.type }}
+                                </td>
+                                <td>
+                                    {{ datum.unit }}
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'PrometheusModule.PrometheusQuery.toService'"
+                                                         [url]="'/prometheus_module/PrometheusQuery/toService/' + params.hostId"
+                                                         [queryParams]="{'metrics[]': [datum.metric]}">
+                                        <oitc-actions-button-element
+                                            [permission]="'PrometheusModule.PrometheusQuery.toService'"
+                                            [url]="'/prometheus_module/PrometheusQuery/toService/' + params.hostId"
+                                            [queryParams]="{'metrics[]': [datum.metric]}">
+                                            <fa-stack>
+                                                <fa-icon [icon]="['fas', 'cog']"
+                                                         stackItemSize="1x" pull="right"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'plus']" class="text-success"
+                                                         stackItemSize="1x"
+                                                         transform="shrink-8 right-13 down-10"></fa-icon>
+                                            </fa-stack>
+                                            {{ t('Create service from metric') }}
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+            @if (params.hostId !== 0 && index && index.targets.data.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+
+            @if (index && index.targets.data) {
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="index.targets.data.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button class="btn btn-outline-default col-3 border-0"
+                                        type="button" (click)="createFromMetrics()">
+                                    <fa-stack>
+                                        <fa-icon [icon]="['fas', 'gear']" stackItemSize="1x" pull="right"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'plus']" class="text-success"
+                                                 stackItemSize="1x"
+                                                 transform="shrink-8 right-6 down-6"></fa-icon>
+                                    </fa-stack>
+                                    {{ t('Create service from metrics') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
 
         </c-card-body>
-      </c-card>
-    </ng-container>
+    </c-card>
+</ng-container>

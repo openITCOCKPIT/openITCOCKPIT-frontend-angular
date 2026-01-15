@@ -28,26 +28,26 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 @Component({
     selector: 'oitc-configuration-files-index',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    TableLoaderComponent,
-    TableDirective,
-    NoRecordsComponent,
-    CardFooterComponent,
-    ProgressBarModule,
-    RowComponent,
-    ColComponent,
-    AsyncPipe
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        TableLoaderComponent,
+        TableDirective,
+        NoRecordsComponent,
+        CardFooterComponent,
+        ProgressBarModule,
+        RowComponent,
+        ColComponent,
+        AsyncPipe
+    ],
     templateUrl: './configuration-files-index.component.html',
     styleUrl: './configuration-files-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -87,5 +87,5 @@ export class ConfigurationFilesIndexComponent implements OnInit, OnDestroy {
             })
         );
     }
-    
+
 }

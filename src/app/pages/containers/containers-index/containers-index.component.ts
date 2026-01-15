@@ -37,31 +37,31 @@ import { EditContainerModalComponent } from './edit-container-modal/edit-contain
 @Component({
     selector: 'oitc-containers-index',
     imports: [
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardBodyComponent,
-    FormLabelDirective,
-    SelectComponent,
-    RowComponent,
-    ColComponent,
-    NestLoaderComponent,
-    ContainerNestComponent,
-    LabelLinkComponent,
-    TranslocoPipe,
-    CommonModule,
-    DeleteAllModalComponent,
-    CreateContainerModalComponent,
-    EditContainerModalComponent
-],
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardBodyComponent,
+        FormLabelDirective,
+        SelectComponent,
+        RowComponent,
+        ColComponent,
+        NestLoaderComponent,
+        ContainerNestComponent,
+        LabelLinkComponent,
+        TranslocoPipe,
+        CommonModule,
+        DeleteAllModalComponent,
+        CreateContainerModalComponent,
+        EditContainerModalComponent
+    ],
     templateUrl: './containers-index.component.html',
     styleUrl: './containers-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: ContainersService } // Inject the ContainersService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ContainersService} // Inject the ContainersService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

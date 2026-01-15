@@ -7,10 +7,10 @@ import { TranslocoDirective } from '@jsverse/transloco';
 @Component({
     selector: 'oitc-eol-alerts',
     imports: [
-    AlertComponent,
-    FaIconComponent,
-    TranslocoDirective
-],
+        AlertComponent,
+        FaIconComponent,
+        TranslocoDirective
+    ],
     templateUrl: './eol-alerts.component.html',
     styleUrl: './eol-alerts.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

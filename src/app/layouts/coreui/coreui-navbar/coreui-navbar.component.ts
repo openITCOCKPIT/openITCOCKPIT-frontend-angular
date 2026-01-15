@@ -28,14 +28,14 @@ import { Skeleton } from 'primeng/skeleton';
 @Component({
     selector: 'oitc-coreui-navbar',
     imports: [
-    RouterLink,
-    FaIconComponent,
-    NavbarGroupComponent,
-    NgClass,
-    NavbarSearchComponent,
-    AsyncPipe,
-    Skeleton
-],
+        RouterLink,
+        FaIconComponent,
+        NavbarGroupComponent,
+        NgClass,
+        NavbarSearchComponent,
+        AsyncPipe,
+        Skeleton
+    ],
     templateUrl: './coreui-navbar.component.html',
     styleUrl: './coreui-navbar.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

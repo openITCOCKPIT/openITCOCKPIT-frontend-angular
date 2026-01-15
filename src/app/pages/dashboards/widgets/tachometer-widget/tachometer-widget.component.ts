@@ -38,19 +38,19 @@ import { ServiceTypesEnum } from '../../../services/services.enum';
 @Component({
     selector: 'oitc-tachometer-widget',
     imports: [
-    FaIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormLabelDirective,
-    FormsModule,
-    SelectOptgroupComponent,
-    TranslocoDirective,
-    TrueFalseDirective,
-    XsButtonDirective,
-    SelectComponent,
-    NgClass
-],
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormLabelDirective,
+        FormsModule,
+        SelectOptgroupComponent,
+        TranslocoDirective,
+        TrueFalseDirective,
+        XsButtonDirective,
+        SelectComponent,
+        NgClass
+    ],
     templateUrl: './tachometer-widget.component.html',
     styleUrl: './tachometer-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

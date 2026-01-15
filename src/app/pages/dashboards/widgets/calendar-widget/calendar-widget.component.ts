@@ -20,17 +20,17 @@ import { CalendarDateDetails } from './calendar-widget.interface';
 @Component({
     selector: 'oitc-calendar-widget',
     imports: [
-    RowComponent,
-    ColComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardBodyComponent,
-    BgColorDirective,
-    CardFooterComponent,
-    TableDirective,
-    BadgeComponent,
-    NgClass
-],
+        RowComponent,
+        ColComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardBodyComponent,
+        BgColorDirective,
+        CardFooterComponent,
+        TableDirective,
+        BadgeComponent,
+        NgClass
+    ],
     templateUrl: './calendar-widget.component.html',
     styleUrl: './calendar-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

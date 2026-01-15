@@ -1,101 +1,101 @@
 <ng-container *transloco="let t">
 
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['contactgroups', 'index']" [routerLink]="['/', 'contactgroups', 'index']">
-            <fa-icon [icon]="['fas', 'users']"></fa-icon>
-            {{ t('Contact groups') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-          {{ t('Copy') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['contactgroups', 'index']" [routerLink]="['/', 'contactgroups', 'index']">
+                    <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                    {{ t('Contact groups') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                {{ t('Copy') }}
+            </li>
+        </ol>
     </nav>
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>{{ t('Contact groups') }}
-          <small class="fw-300">
-            {{ t('Copy contact group/s') }}
-          </small>
-        </h5>
-        <c-nav class="card-toolbar card-header-pills">
-          <button [fallbackUrl]="['contactgroups', 'index']" cButton class="ripple" color="default"
-            oitcBackButton
-            size="xs">
-            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-            {{ t('Back') }}
-          </button>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Contact groups') }}
+                <small class="fw-300">
+                    {{ t('Copy contact group/s') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <button [fallbackUrl]="['contactgroups', 'index']" cButton class="ripple" color="default"
+                        oitcBackButton
+                        size="xs">
+                    <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                    {{ t('Back') }}
+                </button>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
 
-        <oitc-form-loader [isVisible]="contactgroups.length === 0"></oitc-form-loader>
+            <oitc-form-loader [isVisible]="contactgroups.length === 0"></oitc-form-loader>
 
-        @for (contactgroup of contactgroups; track contactgroup; let i = $index) {
-          <c-card class="mb-3">
-            <c-card-header>
-              <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-              <span class="ms-1">
-                {{ t('Source contact group:') }}
-                {{ contactgroup.Source.name }}
-              </span>
-            </c-card-header>
-            <c-card-body>
-              <div class="mb-3">
-                <label cLabel for="name{{i}}">
-                  {{ t('Name') }}
-                  <oitc-required-icon></oitc-required-icon>
-                </label>
-                <input cFormControl
-                  required
-                  type="text"
-                  name="name{{i}}"
-                  id="name{{i}}"
-                  [(ngModel)]="contactgroup.Contactgroup.container.name"
-                  oitcFormError [errors]="contactgroup.Error" errorField="name">
-                <oitc-form-feedback [errors]="contactgroup.Error" errorField="name"></oitc-form-feedback>
-                <div class="help-block">
-                  {{ t('Name of the new contact group') }}
-                </div>
-              </div>
-              <div class="mb-3">
-                <label cLabel for="description{{i}}">
-                  {{ t('Description') }}
-                </label>
-                <input cFormControl
-                  type="text"
-                  name="description{{i}}"
-                  id="description{{i}}"
-                  [(ngModel)]="contactgroup.Contactgroup.description"
-                  oitcFormError [errors]="contactgroup.Error" errorField="description">
-                <oitc-form-feedback [errors]="contactgroup.Error"
-                errorField="description"></oitc-form-feedback>
-              </div>
-            </c-card-body>
-          </c-card>
-        }
+            @for (contactgroup of contactgroups; track contactgroup; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source contact group:') }}
+                            {{ contactgroup.Source.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('Name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   required
+                                   type="text"
+                                   name="name{{i}}"
+                                   id="name{{i}}"
+                                   [(ngModel)]="contactgroup.Contactgroup.container.name"
+                                   oitcFormError [errors]="contactgroup.Error" errorField="name">
+                            <oitc-form-feedback [errors]="contactgroup.Error" errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new contact group') }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="description{{i}}">
+                                {{ t('Description') }}
+                            </label>
+                            <input cFormControl
+                                   type="text"
+                                   name="description{{i}}"
+                                   id="description{{i}}"
+                                   [(ngModel)]="contactgroup.Contactgroup.description"
+                                   oitcFormError [errors]="contactgroup.Error" errorField="description">
+                            <oitc-form-feedback [errors]="contactgroup.Error"
+                                                errorField="description"></oitc-form-feedback>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            }
 
-      </c-card-body>
-      <c-card-footer class="text-end">
-        <button cButton class="ripple" color="primary" type="button" (click)="copyContactgroups()">
-          {{ t('Copy') }}
-        </button>
-        <button [fallbackUrl]="['contactgroups', 'index']" cButton class="ms-1 ripple" color="default"
-          oitcBackButton>
-          {{ t('Cancel') }}
-        </button>
-      </c-card-footer>
+        </c-card-body>
+        <c-card-footer class="text-end">
+            <button cButton class="ripple" color="primary" type="button" (click)="copyContactgroups()">
+                {{ t('Copy') }}
+            </button>
+            <button [fallbackUrl]="['contactgroups', 'index']" cButton class="ms-1 ripple" color="default"
+                    oitcBackButton>
+                {{ t('Cancel') }}
+            </button>
+        </c-card-footer>
 
     </c-card>
 
-  </ng-container>
+</ng-container>
 
 

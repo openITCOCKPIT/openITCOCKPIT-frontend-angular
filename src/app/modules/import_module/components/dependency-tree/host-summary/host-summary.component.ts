@@ -12,13 +12,13 @@ import { BadgeComponent, TableDirective } from '@coreui/angular';
 @Component({
     selector: 'oitc-host-summary',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    TranslocoDirective,
-    BadgeComponent,
-    TableDirective
-],
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        TranslocoDirective,
+        BadgeComponent,
+        TableDirective
+    ],
     templateUrl: './host-summary.component.html',
     styleUrl: './host-summary.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,434 +1,437 @@
 <ng-container *transloco="let t">
-  @if (widget) {
-    <div class="d-flex h-100 flex-column" #boxContainer>
-      <div>
-        @if (!isReadonly()) {
-          <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-            >
-            @if (flipped()) {
-              <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-            } @else {
-              <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-            }
-          </button>
-        }
-      </div>
-      <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
-        class="box-container">
-        <div class="box-x">
-          @if (animationStateShowContent) {
-            @if (config) {
-              <div class="position-absolute top-0 end-0 p-1 fs-5 fw-light text-white">
-                <fa-icon [icon]="['fas', 'business-time']" class="text-white"></fa-icon>
-                <span class="italic px-2 ">{{ t('State older than') }}:
-                  @if (config && config.Hoststatus.state_older_than && config.Hoststatus.state_older_than_unit) {
-                    {{ config.Hoststatus.state_older_than }}
-                    @switch (config.Hoststatus.state_older_than_unit) {
-                      @case ('SECOND') {
-                        {{ t('second(s)') }}
-                      }
-                      @case ('MINUTE') {
-                        {{ t('minute(s)') }}
-                      }
-                      @case ('HOUR') {
-                        {{ t('hour(s)') }}
-                      }
-                      @case ('DAY') {
-                        {{ t('day(s)') }}
-                      }
-                    }
-                  } @else {
-                    <fa-icon [icon]="['fas', 'infinity']" class="text-white"></fa-icon>
-                  }
-                </span>
-              </div>
-            }
-            <div [style.height.px]="widgetHeight"
-                         [ngClass]="{'bg-up': config?.Hoststatus?.current_state === 0,
+    @if (widget) {
+        <div class="d-flex h-100 flex-column" #boxContainer>
+            <div>
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())"
+                    >
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        }
+                    </button>
+                }
+            </div>
+            <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+                 class="box-container">
+                <div class="box-x">
+                    @if (animationStateShowContent) {
+                        @if (config) {
+                            <div class="position-absolute top-0 end-0 p-1 fs-5 fw-light text-white">
+                                <fa-icon [icon]="['fas', 'business-time']" class="text-white"></fa-icon>
+                                <span class="italic px-2 ">{{ t('State older than') }}:
+                                    @if (config && config.Hoststatus.state_older_than && config.Hoststatus.state_older_than_unit) {
+                                        {{ config.Hoststatus.state_older_than }}
+                                        @switch (config.Hoststatus.state_older_than_unit) {
+                                            @case ('SECOND') {
+                                                {{ t('second(s)') }}
+                                            }
+                                            @case ('MINUTE') {
+                                                {{ t('minute(s)') }}
+                                            }
+                                            @case ('HOUR') {
+                                                {{ t('hour(s)') }}
+                                            }
+                                            @case ('DAY') {
+                                                {{ t('day(s)') }}
+                                            }
+                                        }
+                                    } @else {
+                                        <fa-icon [icon]="['fas', 'infinity']" class="text-white"></fa-icon>
+                                    }
+                                </span>
+                            </div>
+                        }
+                        <div [style.height.px]="widgetHeight"
+                             [ngClass]="{'bg-up': config?.Hoststatus?.current_state === 0,
                          'bg-down': config?.Hoststatus?.current_state === 1,
                          'bg-unreachable': config?.Hoststatus?.current_state === 2}"
-              class="w-100">
-              @if (statusCount !== null) {
-                <c-row class="h-100 align-items-center">
-                  @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
-                    <c-col class="text-center text-white" [style.font-size.px]="fontSize">
-                      @if (statusCount > 0 && config && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                        <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
-                          [queryParams]="{'id': hostIds,  'hoststate': config.Hoststatus.current_state ,'hostname': config.Host.name, 'name_regex': config.Host.name_regex, 'address': config.Host.address, 'address_regex': config.Host.address_regex, 'acknowledged': config.Hoststatus.acknowledged,'not_acknowledged': config.Hoststatus.not_acknowledged,'in_downtime': config.Hoststatus.in_downtime,'not_in_downtime': config.Hoststatus.not_in_downtime,sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
-                          {{ statusCount }}
-                        </a>
-                      } @else {
-                        {{ statusCount }}
-                      }
-                    </c-col>
-                  } @else {
-                    <c-col class="text-center text-white h5">
-                      <small>
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                        {{ t('You are not permitted to access this object') }}
-                      </small>
-                    </c-col>
-                  }
-                </c-row>
-              }
-              @switch (config?.Hoststatus?.current_state) {
-                @case (0) {
-                  <fa-icon [icon]="['fas', 'check-circle']" [style.font-size.px]="fontSizeIcon"
-                    [style.top.px]="iconTopPosition"
-                  class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                }
-                @case (1) {
-                  <fa-icon [icon]="['fas', 'exclamation-circle']" [style.font-size.px]="fontSizeIcon"
-                    [style.top.px]="iconTopPosition"
-                  class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                }
-                @case (2) {
-                  <fa-icon [icon]="['fas', 'question-circle']" [style.font-size.px]="fontSizeIcon"
-                    [style.top.px]="iconTopPosition"
-                  class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                }
-              }
-            </div>
-          }
-        </div>
-        <div class="box-x">
-          @if (animationStateShowConfig) {
-            @if (config) {
-              <div>
-                <c-row class="mb-1">
-                  <c-col [xs]="12" [lg]="12">
-                    <c-input-group>
-                      <span cInputGroupText>
-                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                      </span>
-                      <input [(ngModel)]="config.Host.name"
-                        [placeholder]="'Filter by host name' | transloco"
-                        cFormControl
-                        [id]="'Hosts.name-'+widget.id"
-                        [name]="'Hosts.name-'+widget.id"
-                        oitcDebounce
-                        type="text"
-                        />
-                      <span cInputGroupText>
-                        <label>
-                          {{ t('Enable RegEx') }}
-                          <input type="checkbox"
-                            cFormCheckInput
-                            [id]="'filter.Host.name_regex-'+widget.id"
-                            [name]="'filter.Host.name_regex-'+widget.id"
-                            [(ngModel)]="config.Host.name_regex"
-                            />
-                          <oitc-regex-helper-tooltip/>
-                        </label>
-                      </span>
-                    </c-input-group>
-                  </c-col>
-                </c-row>
-                <c-row class="mb-1">
-                  <c-col [xs]="12" [lg]="12">
-                    <c-input-group>
-                      <span cInputGroupText>
-                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                      </span>
-                      <input [(ngModel)]="config.Host.address"
-                        [placeholder]="'Filter by IP address' | transloco"
-                        cFormControl
-                        [id]="'Hosts.address-'+widget.id"
-                        [name]="'Hosts.address-'+widget.id"
-                        type="text"
-                        />
-                      <span cInputGroupText>
-                        <label>
-                          {{ t('Enable RegEx') }}
-                          <input type="checkbox"
-                            cFormCheckInput
-                            [id]="'Hosts.address_regex-'+widget.id"
-                            [name]="'Hosts.address_regex-'+widget.id"
-                            [(ngModel)]="config.Host.address_regex"
-                            />
-                          <oitc-regex-helper-tooltip/>
-                        </label>
-                      </span>
-                    </c-input-group>
-                  </c-col>
-                </c-row>
-                <c-row class="mb-1">
-                  <c-col [xs]="12" [lg]="12">
-                    <c-input-group>
-                      <span cInputGroupText>
-                        <div class="icon-stack">
-                          <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                          <fa-icon [icon]="['fas', 'tags']"
-                          class="text-success cornered cornered-lr"></fa-icon>
-                        </div>
-                      </span>
-                      <ng-select
-                        [id]="'HostKeywordsInput-'+widget.id"
-                        [name]="'HostKeywordsInput-'+widget.id"
-                        [items]="[]"
-                        [(ngModel)]="keywords"
-                        [addTag]="true"
-                        [multiple]="true"
-                        [selectOnTab]="true"
-                        [placeholder]="'Filter by tags'|transloco"
-                        [isOpen]="false">
-                      </ng-select>
-                    </c-input-group>
-                  </c-col>
-                </c-row>
-                <c-row class="mb-1">
-                  <c-col [xs]="12" [lg]="12">
-                    <c-input-group>
-                      <span cInputGroupText>
-                        <div class="icon-stack">
-                          <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                          <fa-icon [icon]="['fas', 'tags']"
-                          class="text-danger cornered cornered-lr"></fa-icon>
-                        </div>
-                      </span>
-                      <ng-select
-                        [id]="'HostNotKeywordsInput-'+widget.id"
-                        [name]="'HostNotKeywordsInput-'+widget.id"
-                        [items]="[]"
-                        [(ngModel)]="notKeywords"
-                        [addTag]="true"
-                        [multiple]="true"
-                        [selectOnTab]="true"
-                        [placeholder]="'Filter by excluded tags'|transloco"
-                        [isOpen]="false">
-                      </ng-select>
-                    </c-input-group>
-                  </c-col>
-                </c-row>
-                <c-row>
-                  <c-col [xs]="12" [lg]="12">
-                    <fieldset class="mt-2">
-                      <legend class="fs-5">
-                        {{ t('Containers') }}
-                      </legend>
-                      <c-input-group>
-                        <oitc-multi-select
-                          [id]="'Containers-'+widget.id"
-                          [name]="'Containers-'+widget.id"
-                          optionValue="key"
-                          optionLabel="value"
-                          [options]="containers"
-                          [(ngModel)]="containerIds"
-                          [searchCallback]="loadContainers"
-                          [appendTo]="'body'"
-                          class="flex-1">
-                        </oitc-multi-select>
-                      </c-input-group>
-                    </fieldset>
-                  </c-col>
-                  <c-col [xs]="12" [lg]="12">
-                    <fieldset class="mt-2">
-                      <legend class="fs-5">
-                        {{ t('Host groups') }}
-                      </legend>
-                      <c-input-group>
-                        <oitc-multi-select
-                          [id]="'Hostgroups-'+widget.id"
-                          [name]="'Hostgroups-'+widget.id"
-                          optionValue="key"
-                          optionLabel="value"
-                          [options]="hostgroups"
-                          [(ngModel)]="hostgroupsIds"
-                          [searchCallback]="loadHostgroups"
-                          [appendTo]="'body'"
-                          class="flex-1">
-                        </oitc-multi-select>
-                      </c-input-group>
-                    </fieldset>
-                  </c-col>
-                  <c-col [xs]="12" [md]="6" [lg]="6">
-                    <fieldset>
-                      <legend class="fs-5">
-                        {{ t('Host status') }}
-                      </legend>
-                      <c-form-check>
-                        <input cFormCheckInput
-                          class="radio-lg radio-success border-success"
-                          type="radio"
-                          [id]="'widget-radio0-'+widget.id"
-                          [name]="'widget-radio0-'+widget.id"
-                          [value]="0"
-                          [(ngModel)]="config.Hoststatus.current_state"
-                          />
-                        <label cFormCheckLabel class="ms-1 mt-1"
-                          [for]="'widget-radio0-'+widget.id">
-                          {{ t('Up') }}
-                        </label>
-                      </c-form-check>
-                      <c-form-check>
-                        <input cFormCheckInput
-                          class="radio-lg radio-danger border-danger"
-                          type="radio"
-                          [id]="'widget-radio1-'+widget.id"
-                          [name]="'widget-radio1-'+widget.id"
-                          [value]="1"
-                          [(ngModel)]="config.Hoststatus.current_state"
-                          />
-                        <label cFormCheckLabel class="ms-1 mt-1"
-                          [for]="'widget-radio1-'+widget.id">
-                          {{ t('Down') }}
-                        </label>
-                      </c-form-check>
-                      <c-form-check>
-                        <input cFormCheckInput
-                          class="radio-lg radio-secondary border-secondary"
-                          type="radio"
-                          [id]="'widget-radio2-'+widget.id"
-                          [name]="'widget-radio2-'+widget.id"
-                          [value]="2"
-                          [(ngModel)]="config.Hoststatus.current_state"
-                          />
-                        <label cFormCheckLabel class="ms-1 mt-1"
-                          [for]="'widget-radio2-'+widget.id">
-                          {{ t('Unreachable') }}
-                        </label>
-                      </c-form-check>
-                    </fieldset>
-                  </c-col>
-                  @if (config.Hoststatus.current_state > 0) {
-                    <c-col [xs]="12" [md]="6" [lg]="6">
-                      <fieldset class="mt-2">
-                        <legend class="fs-5">
-                          {{ t('Acknowledgements') }}
-                        </legend>
-                        <c-form-check>
-                          <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-primary"
-                            [id]="'Hosts.acknowledged-'+widget.id"
-                            [name]="'Hosts.acknowledged-'+widget.id"
-                            type="checkbox"
-                            trueFalseValue
-                            [(ngModel)]="config.Hoststatus.acknowledged"/>
-                          <label cFormCheckLabel class="ms-1 mt-1"
-                            [for]="'Hosts.acknowledged-'+widget.id">
-                            {{ t('Acknowledged') }}
-                          </label>
-                        </c-form-check>
-                        <c-form-check>
-                          <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-primary"
-                            [id]="'Hosts.not_acknowledged-'+widget.id"
-                            [name]="'Hosts.not_acknowledged-'+widget.id"
-                            type="checkbox"
-                            trueFalseValue
-                            [(ngModel)]="config.Hoststatus.not_acknowledged"/>
-                          <label cFormCheckLabel class="ms-1 mt-1"
-                            [for]="'Hosts.not_acknowledged-'+widget.id">
-                            {{ t('Not Acknowledged') }}
-                          </label>
-                        </c-form-check>
-                      </fieldset>
-                      <fieldset class="mt-2">
-                        <legend class="fs-5">
-                          {{ t('Downtimes') }}
-                        </legend>
-                        <c-form-check>
-                          <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-primary"
-                            [id]="'Hosts.in_downtime-'+widget.id"
-                            [name]="'Hosts.in_downtime-'+widget.id"
-                            type="checkbox"
-                            trueFalseValue
-                            [(ngModel)]="config.Hoststatus.in_downtime"/>
-                          <label cFormCheckLabel class="ms-1 mt-1" [for]="'Hosts.in_downtime-'+widget.id">
-                            {{ t('In Downtime') }}
-                          </label>
-                        </c-form-check>
-                        <c-form-check>
-                          <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-primary"
-                            [id]="'Hosts.not_in_downtime-'+widget.id"
-                            [name]="'Hosts.not_in_downtime-'+widget.id"
-                            type="checkbox"
-                            trueFalseValue
-                            [(ngModel)]="config.Hoststatus.not_in_downtime"/>
-                          <label cFormCheckLabel class="ms-1 mt-1"
-                            [for]="'Hosts.not_in_downtime-'+widget.id">
-                            {{ t('Not in Downtime') }}
-                          </label>
-                        </c-form-check>
-                      </fieldset>
-                    </c-col>
-                  }
-                </c-row>
-                <c-row class="mb-3">
-                  <c-col>
-                    <fieldset class="mt-2">
-                      <legend class="fs-5">
-                        {{ t('Status older than') }}
-                      </legend>
-                      <c-input-group>
-                        <span cInputGroupText>
-                          <fa-icon [icon]="['fas', 'history']" class="text-secondary"></fa-icon>
-                        </span>
-                        <input [(ngModel)]="config.Hoststatus.state_older_than"
-                          [placeholder]="'Leave empty for all' | transloco"
-                          [name]="'state_older_than-'+widget.id"
-                          [id]="'state_older_than-'+widget.id"
-                          cFormControl
-                          type="number"
-                          />
-                        <c-dropdown alignment="end">
-                          <button cButton cDropdownToggle color="primary">
-                            @switch (config.Hoststatus.state_older_than_unit) {
-                              @case ('SECOND') {
-                                {{ t('seconds') }}
-                              }
-                              @case ('MINUTE') {
-                                {{ t('minutes') }}
-                              }
-                              @case ('HOUR') {
-                                {{ t('hours') }}
-                              }
-                              @case ('DAY') {
-                                {{ t('days') }}
-                              }
+                             class="w-100">
+                            @if (statusCount !== null) {
+                                <c-row class="h-100 align-items-center">
+                                    @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
+                                        <c-col class="text-center text-white" [style.font-size.px]="fontSize">
+                                            @if (statusCount > 0 && config && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                                <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
+                                                   [queryParams]="{'id': hostIds,  'hoststate': config.Hoststatus.current_state ,'hostname': config.Host.name, 'name_regex': config.Host.name_regex, 'address': config.Host.address, 'address_regex': config.Host.address_regex, 'acknowledged': config.Hoststatus.acknowledged,'not_acknowledged': config.Hoststatus.not_acknowledged,'in_downtime': config.Hoststatus.in_downtime,'not_in_downtime': config.Hoststatus.not_in_downtime,sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                                    {{ statusCount }}
+                                                </a>
+                                            } @else {
+                                                {{ statusCount }}
+                                            }
+                                        </c-col>
+                                    } @else {
+                                        <c-col class="text-center text-white h5">
+                                            <small>
+                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                {{ t('You are not permitted to access this object') }}
+                                            </small>
+                                        </c-col>
+                                    }
+                                </c-row>
                             }
-                          </button>
-                          <ul cDropdownMenu>
-                            <li cDropdownItem
-                              (click)="config.Hoststatus.state_older_than_unit = 'SECOND'">
-                              {{ t('seconds') }}
-                            </li>
-                            <li cDropdownItem
-                              (click)="config.Hoststatus.state_older_than_unit = 'MINUTE'">
-                              {{ t('minutes') }}
-                            </li>
-                            <li cDropdownItem
-                              (click)="config.Hoststatus.state_older_than_unit = 'HOUR'">
-                              {{ t('hours') }}
-                            </li>
-                            <li cDropdownItem
-                              (click)="config.Hoststatus.state_older_than_unit = 'DAY'">
-                              {{ t('days') }}
-                            </li>
-                          </ul>
-                        </c-dropdown>
-                      </c-input-group>
-                    </fieldset>
-                  </c-col>
-                </c-row>
-                <c-row>
-                  <c-col class="text-end">
-                    <button cButton class="ripple" color="primary" (click)="submit()">
-                      {{ t('Save') }}
-                    </button>
-                  </c-col>
-                </c-row>
-              </div>
-            }
-          }
+                            @switch (config?.Hoststatus?.current_state) {
+                                @case (0) {
+                                    <fa-icon [icon]="['fas', 'check-circle']" [style.font-size.px]="fontSizeIcon"
+                                             [style.top.px]="iconTopPosition"
+                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                }
+                                @case (1) {
+                                    <fa-icon [icon]="['fas', 'exclamation-circle']" [style.font-size.px]="fontSizeIcon"
+                                             [style.top.px]="iconTopPosition"
+                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                }
+                                @case (2) {
+                                    <fa-icon [icon]="['fas', 'question-circle']" [style.font-size.px]="fontSizeIcon"
+                                             [style.top.px]="iconTopPosition"
+                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                }
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="box-x">
+                    @if (animationStateShowConfig) {
+                        @if (config) {
+                            <div>
+                                <c-row class="mb-1">
+                                    <c-col [xs]="12" [lg]="12">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            </span>
+                                            <input [(ngModel)]="config.Host.name"
+                                                   [placeholder]="'Filter by host name' | transloco"
+                                                   cFormControl
+                                                   [id]="'Hosts.name-'+widget.id"
+                                                   [name]="'Hosts.name-'+widget.id"
+                                                   oitcDebounce
+                                                   type="text"
+                                            />
+                                            <span cInputGroupText>
+                                                <label>
+                                                    {{ t('Enable RegEx') }}
+                                                    <input type="checkbox"
+                                                           cFormCheckInput
+                                                           [id]="'filter.Host.name_regex-'+widget.id"
+                                                           [name]="'filter.Host.name_regex-'+widget.id"
+                                                           [(ngModel)]="config.Host.name_regex"
+                                                    />
+                                                    <oitc-regex-helper-tooltip/>
+                                                </label>
+                                            </span>
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
+                                <c-row class="mb-1">
+                                    <c-col [xs]="12" [lg]="12">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                            </span>
+                                            <input [(ngModel)]="config.Host.address"
+                                                   [placeholder]="'Filter by IP address' | transloco"
+                                                   cFormControl
+                                                   [id]="'Hosts.address-'+widget.id"
+                                                   [name]="'Hosts.address-'+widget.id"
+                                                   type="text"
+                                            />
+                                            <span cInputGroupText>
+                                                <label>
+                                                    {{ t('Enable RegEx') }}
+                                                    <input type="checkbox"
+                                                           cFormCheckInput
+                                                           [id]="'Hosts.address_regex-'+widget.id"
+                                                           [name]="'Hosts.address_regex-'+widget.id"
+                                                           [(ngModel)]="config.Host.address_regex"
+                                                    />
+                                                    <oitc-regex-helper-tooltip/>
+                                                </label>
+                                            </span>
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
+                                <c-row class="mb-1">
+                                    <c-col [xs]="12" [lg]="12">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <div class="icon-stack">
+                                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'tags']"
+                                                             class="text-success cornered cornered-lr"></fa-icon>
+                                                </div>
+                                            </span>
+                                            <ng-select
+                                                [id]="'HostKeywordsInput-'+widget.id"
+                                                [name]="'HostKeywordsInput-'+widget.id"
+                                                [items]="[]"
+                                                [(ngModel)]="keywords"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="'Filter by tags'|transloco"
+                                                [isOpen]="false">
+                                            </ng-select>
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
+                                <c-row class="mb-1">
+                                    <c-col [xs]="12" [lg]="12">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <div class="icon-stack">
+                                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'tags']"
+                                                             class="text-danger cornered cornered-lr"></fa-icon>
+                                                </div>
+                                            </span>
+                                            <ng-select
+                                                [id]="'HostNotKeywordsInput-'+widget.id"
+                                                [name]="'HostNotKeywordsInput-'+widget.id"
+                                                [items]="[]"
+                                                [(ngModel)]="notKeywords"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="'Filter by excluded tags'|transloco"
+                                                [isOpen]="false">
+                                            </ng-select>
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
+                                <c-row>
+                                    <c-col [xs]="12" [lg]="12">
+                                        <fieldset class="mt-2">
+                                            <legend class="fs-5">
+                                                {{ t('Containers') }}
+                                            </legend>
+                                            <c-input-group>
+                                                <oitc-multi-select
+                                                    [id]="'Containers-'+widget.id"
+                                                    [name]="'Containers-'+widget.id"
+                                                    optionValue="key"
+                                                    optionLabel="value"
+                                                    [options]="containers"
+                                                    [(ngModel)]="containerIds"
+                                                    [searchCallback]="loadContainers"
+                                                    [appendTo]="'body'"
+                                                    class="flex-1">
+                                                </oitc-multi-select>
+                                            </c-input-group>
+                                        </fieldset>
+                                    </c-col>
+                                    <c-col [xs]="12" [lg]="12">
+                                        <fieldset class="mt-2">
+                                            <legend class="fs-5">
+                                                {{ t('Host groups') }}
+                                            </legend>
+                                            <c-input-group>
+                                                <oitc-multi-select
+                                                    [id]="'Hostgroups-'+widget.id"
+                                                    [name]="'Hostgroups-'+widget.id"
+                                                    optionValue="key"
+                                                    optionLabel="value"
+                                                    [options]="hostgroups"
+                                                    [(ngModel)]="hostgroupsIds"
+                                                    [searchCallback]="loadHostgroups"
+                                                    [appendTo]="'body'"
+                                                    class="flex-1">
+                                                </oitc-multi-select>
+                                            </c-input-group>
+                                        </fieldset>
+                                    </c-col>
+                                    <c-col [xs]="12" [md]="6" [lg]="6">
+                                        <fieldset>
+                                            <legend class="fs-5">
+                                                {{ t('Host status') }}
+                                            </legend>
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       class="radio-lg radio-success border-success"
+                                                       type="radio"
+                                                       [id]="'widget-radio0-'+widget.id"
+                                                       [name]="'widget-radio0-'+widget.id"
+                                                       [value]="0"
+                                                       [(ngModel)]="config.Hoststatus.current_state"
+                                                />
+                                                <label cFormCheckLabel class="ms-1 mt-1"
+                                                       [for]="'widget-radio0-'+widget.id">
+                                                    {{ t('Up') }}
+                                                </label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       class="radio-lg radio-danger border-danger"
+                                                       type="radio"
+                                                       [id]="'widget-radio1-'+widget.id"
+                                                       [name]="'widget-radio1-'+widget.id"
+                                                       [value]="1"
+                                                       [(ngModel)]="config.Hoststatus.current_state"
+                                                />
+                                                <label cFormCheckLabel class="ms-1 mt-1"
+                                                       [for]="'widget-radio1-'+widget.id">
+                                                    {{ t('Down') }}
+                                                </label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       class="radio-lg radio-secondary border-secondary"
+                                                       type="radio"
+                                                       [id]="'widget-radio2-'+widget.id"
+                                                       [name]="'widget-radio2-'+widget.id"
+                                                       [value]="2"
+                                                       [(ngModel)]="config.Hoststatus.current_state"
+                                                />
+                                                <label cFormCheckLabel class="ms-1 mt-1"
+                                                       [for]="'widget-radio2-'+widget.id">
+                                                    {{ t('Unreachable') }}
+                                                </label>
+                                            </c-form-check>
+                                        </fieldset>
+                                    </c-col>
+                                    @if (config.Hoststatus.current_state > 0) {
+                                        <c-col [xs]="12" [md]="6" [lg]="6">
+                                            <fieldset class="mt-2">
+                                                <legend class="fs-5">
+                                                    {{ t('Acknowledgements') }}
+                                                </legend>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-primary"
+                                                        [id]="'Hosts.acknowledged-'+widget.id"
+                                                        [name]="'Hosts.acknowledged-'+widget.id"
+                                                        type="checkbox"
+                                                        trueFalseValue
+                                                        [(ngModel)]="config.Hoststatus.acknowledged"/>
+                                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                                           [for]="'Hosts.acknowledged-'+widget.id">
+                                                        {{ t('Acknowledged') }}
+                                                    </label>
+                                                </c-form-check>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-primary"
+                                                        [id]="'Hosts.not_acknowledged-'+widget.id"
+                                                        [name]="'Hosts.not_acknowledged-'+widget.id"
+                                                        type="checkbox"
+                                                        trueFalseValue
+                                                        [(ngModel)]="config.Hoststatus.not_acknowledged"/>
+                                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                                           [for]="'Hosts.not_acknowledged-'+widget.id">
+                                                        {{ t('Not Acknowledged') }}
+                                                    </label>
+                                                </c-form-check>
+                                            </fieldset>
+                                            <fieldset class="mt-2">
+                                                <legend class="fs-5">
+                                                    {{ t('Downtimes') }}
+                                                </legend>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-primary"
+                                                        [id]="'Hosts.in_downtime-'+widget.id"
+                                                        [name]="'Hosts.in_downtime-'+widget.id"
+                                                        type="checkbox"
+                                                        trueFalseValue
+                                                        [(ngModel)]="config.Hoststatus.in_downtime"/>
+                                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                                           [for]="'Hosts.in_downtime-'+widget.id">
+                                                        {{ t('In Downtime') }}
+                                                    </label>
+                                                </c-form-check>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-primary"
+                                                        [id]="'Hosts.not_in_downtime-'+widget.id"
+                                                        [name]="'Hosts.not_in_downtime-'+widget.id"
+                                                        type="checkbox"
+                                                        trueFalseValue
+                                                        [(ngModel)]="config.Hoststatus.not_in_downtime"/>
+                                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                                           [for]="'Hosts.not_in_downtime-'+widget.id">
+                                                        {{ t('Not in Downtime') }}
+                                                    </label>
+                                                </c-form-check>
+                                            </fieldset>
+                                        </c-col>
+                                    }
+                                </c-row>
+                                <c-row class="mb-3">
+                                    <c-col>
+                                        <fieldset class="mt-2">
+                                            <legend class="fs-5">
+                                                {{ t('Status older than') }}
+                                            </legend>
+                                            <c-input-group>
+                                                <span cInputGroupText>
+                                                    <fa-icon [icon]="['fas', 'history']"
+                                                             class="text-secondary"></fa-icon>
+                                                </span>
+                                                <input [(ngModel)]="config.Hoststatus.state_older_than"
+                                                       [placeholder]="'Leave empty for all' | transloco"
+                                                       [name]="'state_older_than-'+widget.id"
+                                                       [id]="'state_older_than-'+widget.id"
+                                                       cFormControl
+                                                       type="number"
+                                                />
+                                                <c-dropdown alignment="end">
+                                                    <button cButton cDropdownToggle color="primary">
+                                                        @switch (config.Hoststatus.state_older_than_unit) {
+                                                            @case ('SECOND') {
+                                                                {{ t('seconds') }}
+                                                            }
+                                                            @case ('MINUTE') {
+                                                                {{ t('minutes') }}
+                                                            }
+                                                            @case ('HOUR') {
+                                                                {{ t('hours') }}
+                                                            }
+                                                            @case ('DAY') {
+                                                                {{ t('days') }}
+                                                            }
+                                                        }
+                                                    </button>
+                                                    <ul cDropdownMenu>
+                                                        <li cDropdownItem
+                                                            (click)="config.Hoststatus.state_older_than_unit = 'SECOND'">
+                                                            {{ t('seconds') }}
+                                                        </li>
+                                                        <li cDropdownItem
+                                                            (click)="config.Hoststatus.state_older_than_unit = 'MINUTE'">
+                                                            {{ t('minutes') }}
+                                                        </li>
+                                                        <li cDropdownItem
+                                                            (click)="config.Hoststatus.state_older_than_unit = 'HOUR'">
+                                                            {{ t('hours') }}
+                                                        </li>
+                                                        <li cDropdownItem
+                                                            (click)="config.Hoststatus.state_older_than_unit = 'DAY'">
+                                                            {{ t('days') }}
+                                                        </li>
+                                                    </ul>
+                                                </c-dropdown>
+                                            </c-input-group>
+                                        </fieldset>
+                                    </c-col>
+                                </c-row>
+                                <c-row>
+                                    <c-col class="text-end">
+                                        <button cButton class="ripple" color="primary" (click)="submit()">
+                                            {{ t('Save') }}
+                                        </button>
+                                    </c-col>
+                                </c-row>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  }
+    }
 </ng-container>

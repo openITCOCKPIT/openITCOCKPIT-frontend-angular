@@ -26,14 +26,14 @@ import { MapViewComponent } from '../../components/map-view/map-view.component';
 @Component({
     selector: 'oitc-map-widget',
     imports: [
-    FaIconComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    SelectComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    MapViewComponent
-],
+        FaIconComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        MapViewComponent
+    ],
     templateUrl: './map-widget.component.html',
     styleUrl: './map-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

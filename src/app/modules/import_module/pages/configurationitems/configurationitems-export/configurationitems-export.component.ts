@@ -12,15 +12,15 @@ import { NgClass } from '@angular/common';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 
 
@@ -41,27 +41,27 @@ import { DateTime } from 'luxon';
 @Component({
     selector: 'oitc-configurationitems-export',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    FormLoaderComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormDirective,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    ReactiveFormsModule,
-    XsButtonDirective,
-    MultiSelectComponent,
-    NgClass,
-    UiBlockerComponent
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        FormLoaderComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FormDirective,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        ReactiveFormsModule,
+        XsButtonDirective,
+        MultiSelectComponent,
+        NgClass,
+        UiBlockerComponent
+    ],
     templateUrl: './configurationitems-export.component.html',
     styleUrl: './configurationitems-export.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

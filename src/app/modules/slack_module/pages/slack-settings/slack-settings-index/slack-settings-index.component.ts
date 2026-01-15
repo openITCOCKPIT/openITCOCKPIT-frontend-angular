@@ -11,7 +11,7 @@ import {
     FormDirective, FormLabelDirective
 } from '@coreui/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SlackSettings} from '../slack-settings.interface';
+import { SlackSettings } from '../slack-settings.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -22,40 +22,40 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 
-import { SlackSettingsService} from '../slack-settings.service';
+import { SlackSettingsService } from '../slack-settings.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 @Component({
-  selector: 'oitc-slack-settings-index',
+    selector: 'oitc-slack-settings-index',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    FormDirective,
-    FormsModule,
-    ReactiveFormsModule,
-    CardHeaderComponent,
-    CardTitleDirective,
-    CardBodyComponent,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    CardComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    TrueFalseDirective,
-    ApikeyDocModalComponent,
-    CardFooterComponent,
-    XsButtonDirective,
-    FormLoaderComponent
-],
-  templateUrl: './slack-settings-index.component.html',
-  styleUrl: './slack-settings-index.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        FormDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CardBodyComponent,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        CardComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        ApikeyDocModalComponent,
+        CardFooterComponent,
+        XsButtonDirective,
+        FormLoaderComponent
+    ],
+    templateUrl: './slack-settings-index.component.html',
+    styleUrl: './slack-settings-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SlackSettingsIndexComponent implements OnInit, OnDestroy {
 
@@ -66,7 +66,7 @@ export class SlackSettingsIndexComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
     public errors: GenericValidationError | null = null;
     protected currentCommandAsPostRequest: string = '';
-    public post!:SlackSettings;
+    public post!: SlackSettings;
 
     public ngOnInit(): void {
         this.subscriptions.add(this.SlackSettingsService.getSlackSettings().subscribe(data => {
@@ -82,7 +82,6 @@ export class SlackSettingsIndexComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
-
 
 
     public submitSlackSettings() {

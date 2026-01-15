@@ -1,37 +1,27 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 
 
-
 import {
-  AlertComponent,
-  AlertHeadingDirective,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  FormControlDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  RowComponent,
-  TableDirective
+    AlertComponent,
+    AlertHeadingDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    FormControlDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
-
-
-
 
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-
-
-
-
-
 
 
 import { KeyValuePipe } from '@angular/common';
@@ -44,10 +34,7 @@ import {
 } from '../../../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 
 
-
-
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-
 
 
 import { RouterLink } from '@angular/router';
@@ -63,34 +50,34 @@ import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-do
 @Component({
     selector: 'oitc-cmd-index',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    FaIconComponent,
-    FormControlDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NgSelectModule,
-    PermissionDirective,
-    QueryHandlerCheckerComponent,
-    ReactiveFormsModule,
-    RowComponent,
-    TableDirective,
-    TranslocoDirective,
-    RouterLink,
-    AlertComponent,
-    AlertHeadingDirective,
-    FormLabelDirective,
-    RequiredIconComponent,
-    SelectComponent,
-    KeyValuePipe,
-    ApikeyDocModalComponent
-],
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        FaIconComponent,
+        FormControlDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NgSelectModule,
+        PermissionDirective,
+        QueryHandlerCheckerComponent,
+        ReactiveFormsModule,
+        RowComponent,
+        TableDirective,
+        TranslocoDirective,
+        RouterLink,
+        AlertComponent,
+        AlertHeadingDirective,
+        FormLabelDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        KeyValuePipe,
+        ApikeyDocModalComponent
+    ],
     templateUrl: './cmd-index.component.html',
     styleUrl: './cmd-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -37,19 +37,19 @@ import { DeleteAcknowledgementItem } from '../../../pages/acknowledgements/ackno
 @Component({
     selector: 'oitc-delete-acknowledgements-modal',
     imports: [
-    ButtonCloseDirective,
-    ColComponent,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ProgressComponent,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective
-],
+        ButtonCloseDirective,
+        ColComponent,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ProgressComponent,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective
+    ],
     templateUrl: './delete-acknowledgements-modal.component.html',
     styleUrl: './delete-acknowledgements-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

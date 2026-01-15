@@ -7,6 +7,7 @@
 .leaflet-pane > svg .d3-overlay path {
     pointer-events: all;
 }
+
 #legend {
     position: relative;
     height: 225px;

@@ -3,15 +3,15 @@ import { Subscription } from 'rxjs';
 import { ServicenowService } from '../../servicenow.service';
 import { ServicenowHostBrowserResult } from '../../servicenow.interface';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  FormSelectDirective,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    FormSelectDirective,
+    TableDirective
 } from '@coreui/angular';
 
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -28,25 +28,25 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
 @Component({
     selector: 'oitc-servicenow-host-browser-tab',
     imports: [
-    CardComponent,
-    CardHeaderComponent,
-    CardBodyComponent,
-    TranslocoDirective,
-    FaIconComponent,
-    TableDirective,
-    FormDirective,
-    FormsModule,
-    ReactiveFormsModule,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    CardFooterComponent,
-    XsButtonDirective,
-    FormSelectDirective,
-    BlockLoaderComponent
-],
+        CardComponent,
+        CardHeaderComponent,
+        CardBodyComponent,
+        TranslocoDirective,
+        FaIconComponent,
+        TableDirective,
+        FormDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        CardFooterComponent,
+        XsButtonDirective,
+        FormSelectDirective,
+        BlockLoaderComponent
+    ],
     templateUrl: './servicenow-host-browser-tab.component.html',
     styleUrl: './servicenow-host-browser-tab.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

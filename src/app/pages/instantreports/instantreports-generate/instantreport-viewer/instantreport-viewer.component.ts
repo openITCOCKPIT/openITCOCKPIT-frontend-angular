@@ -16,7 +16,6 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 
-
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ChartAbsolutValue, PieChartMetric } from '../../../../components/charts/charts.interface';
 import { HostPieEchartComponent } from '../../../../components/charts/host-pie-echart/host-pie-echart.component';
@@ -36,22 +35,22 @@ import {
 @Component({
     selector: 'oitc-instantreport-viewer',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FaIconComponent,
-    RowComponent,
-    TranslocoDirective,
-    HostPieEchartComponent,
-    LabelLinkComponent,
-    ServicePieEchartComponent,
-    PermissionDirective,
-    RouterLink,
-    ServiceProgressbarComponent,
-    HostSimplePieChartComponent
-],
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        FaIconComponent,
+        RowComponent,
+        TranslocoDirective,
+        HostPieEchartComponent,
+        LabelLinkComponent,
+        ServicePieEchartComponent,
+        PermissionDirective,
+        RouterLink,
+        ServiceProgressbarComponent,
+        HostSimplePieChartComponent
+    ],
     templateUrl: './instantreport-viewer.component.html',
     styleUrl: './instantreport-viewer.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -112,7 +111,7 @@ export class InstantreportViewerComponent {
                         }
                         service.Service._chartAbsolutValues = serviceChartAbsolutValues;
                     });
-                    
+
                     this.hostsWithServices.push({
                             Host: host.Host,
                             Services: services

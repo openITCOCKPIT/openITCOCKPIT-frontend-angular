@@ -1,72 +1,75 @@
 <ng-container *transloco="let t">
-  <c-modal
-    #modal='cModal'
-    [keyboard]="true"
-    id="customalertsCloseModal"
-    size="lg"
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="customalertsCloseModal"
+        size="lg"
     >
-    <c-modal-header class="bg-primary">
-      <h5 cModalTitle class="text-white">
-        <fa-icon [icon]="['fas', 'folder-closed']"></fa-icon>
-        {{ t('Close manually') }}
-      </h5>
-      <button (click)="hideModal()" cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body>
-      <ng-container>
-        <c-alert color="light">
-          <div class="d-flex align-items-center">
-            <div class="alert-icon">
-              <span class="icon-stack icon-stack-md">
-                <i class="base-7 icon-stack-3x text-info"></i>
-                <i class="fas fa-info icon-stack-1x text-white"></i>
-              </span>
-            </div>
-            <div class="flex-1 pl-5">
-              <span class="h5 text-info">
-                {{ t('Information') }}
-              </span>
-              <br>
-                {{ t('Only custom notifications with a status of \"{0}\" or \"{1}\" can be closed. Custom notifications with a different status are automatically removed from the selection.', {
-                '{0}' : t('New'),
-                '{1}' : t('In progress')
-                }) }}
-              </div>
-            </div>
-          </c-alert>
-          {{ t('Do you want close the selected objects?') }}
-          <c-row class="pt-2">
-            <c-col sm="12">
-              <ul class="mb-3">
-                @for (item of items; track item) {
-                  <li>
-                    {{ item.service.host.name }} / {{ item.servicename }}
-                  </li>
-                }
-              </ul>
-            </c-col>
-          </c-row>
-          <textarea cFormControl
-            [(ngModel)]="comment"
-            [ngClass]="{'is-invalid': comment.length > 1024}"
-          ></textarea>
-          <oitc-form-feedback [errors]="errors" errorField="comment" ></oitc-form-feedback>
+        <c-modal-header class="bg-primary">
+            <h5 cModalTitle class="text-white">
+                <fa-icon [icon]="['fas', 'folder-closed']"></fa-icon>
+                {{ t('Close manually') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <ng-container>
+                <c-alert color="light">
+                    <div class="d-flex align-items-center">
+                        <div class="alert-icon">
+                            <span class="icon-stack icon-stack-md">
+                                <i class="base-7 icon-stack-3x text-info"></i>
+                                <i class="fas fa-info icon-stack-1x text-white"></i>
+                            </span>
+                        </div>
+                        <div class="flex-1 pl-5">
+                            <span class="h5 text-info">
+                                {{ t('Information') }}
+                            </span>
+                            <br>
+                            {{
+                                t('Only custom notifications with a status of \"{0}\" or \"{1}\" can be closed. Custom notifications with a different status are automatically removed from the selection.', {
+                                    '{0}': t('New'),
+                                    '{1}': t('In progress')
+                                })
+                            }}
+                        </div>
+                    </div>
+                </c-alert>
+                {{ t('Do you want close the selected objects?') }}
+                <c-row class="pt-2">
+                    <c-col sm="12">
+                        <ul class="mb-3">
+                            @for (item of items; track item) {
+                                <li>
+                                    {{ item.service.host.name }} / {{ item.servicename }}
+                                </li>
+                            }
+                        </ul>
+                    </c-col>
+                </c-row>
+                <textarea cFormControl
+                          [(ngModel)]="comment"
+                          [ngClass]="{'is-invalid': comment.length > 1024}"
+                ></textarea>
+                <oitc-form-feedback [errors]="errors" errorField="comment"></oitc-form-feedback>
 
-          <div class="help-block mb-3"
-            [ngClass]="{'text-danger': comment.length > 1024}">
-            {{ t('The maximum length for this field is 1024. Characters available:') }}
-            <code>{{ 1024 - comment.length }}</code>
-          </div>
-        </ng-container>
-      </c-modal-body>
-      <c-modal-footer>
-        <button (click)="closeManually()" [disabled]="isProcessing || comment.length > 1024 || comment.length === 0" cButton class="ripple" color="primary">
-          <fa-icon [hidden]="!isProcessing" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-          {{ t('Close manually') }}
-        </button>
-        <button (click)="hideModal()" cButton class="ripple" color="default">
-          {{ t('Cancel') }}
-        </button>
-      </c-modal-footer>
+                <div class="help-block mb-3"
+                     [ngClass]="{'text-danger': comment.length > 1024}">
+                    {{ t('The maximum length for this field is 1024. Characters available:') }}
+                    <code>{{ 1024 - comment.length }}</code>
+                </div>
+            </ng-container>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="closeManually()" [disabled]="isProcessing || comment.length > 1024 || comment.length === 0"
+                    cButton class="ripple" color="primary">
+                <fa-icon [hidden]="!isProcessing" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Close manually') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
     </c-modal>
-  </ng-container>
+</ng-container>

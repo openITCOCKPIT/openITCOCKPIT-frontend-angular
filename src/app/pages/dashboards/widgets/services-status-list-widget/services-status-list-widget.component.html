@@ -1,546 +1,548 @@
 <ng-container *transloco="let t">
-  <div class="d-flex h-100 flex-column" #boxContainer>
-    <c-row>
-      <c-col [xs]="12" [md]="1">
-        @if (!isReadonly()) {
-          <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-            >
-            @if (flipped()) {
-              <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-            } @else {
-              <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-            }
-          </button>
-        }
-      </c-col>
-
-      <c-col [xs]="12" [md]="11">
+    <div class="d-flex h-100 flex-column" #boxContainer>
         <c-row>
-          <c-col [xs]="1" [offset]="{lg: 8}">
-            @if (config && config.useScroll) {
-              <button type="button" cButton class="ripple" color="primary" size="xs"
-                (click)="stopScroll()"
-                [cTooltip]="'Pause scrolling'|transloco" cTooltipPlacement="bottom">
-                <fa-icon [icon]="['fas', 'pause']"></fa-icon>
-              </button>
-            }
-            @if (config && !config.useScroll) {
-              <button type="button" cButton class="ripple" color="primary" size="xs"
-                (click)="startScroll()"
-                [cTooltip]="'Start scrolling'|transloco" cTooltipPlacement="bottom">
-                <fa-icon [icon]="['fas', 'play']"></fa-icon>
-              </button>
-            }
-          </c-col>
-          @if (widget && config) {
-            <c-col [xs]="11" [lg]="3">
-              <oitc-slider-time
-                [name]="'scroll_interval_slider_'+widget.id"
-                [attr.id]="'filter.scroll_interval_slider_'+widget.id"
-                [unit]="'milliseconds'"
-                [size]="'xs'"
-                [label]="'Scroll interval:' | transloco"
-                [disabled]="isReadonly()"
-                [min]="0"
-                [max]="300*1000"
-                [step]="5*1000"
-                [(ngModel)]="config.scroll_interval"
-              (change)="onIntervalSliderChanged()"></oitc-slider-time>
-            </c-col>
-          }
-        </c-row>
-      </c-col>
-    </c-row>
-
-    <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
-      class="box-container">
-      <div class="box-x">
-        @if (animationStateShowContent) {
-          <!-- Downtime Area -->
-          @if (!services) {
-            <oitc-table-loader></oitc-table-loader>
-          }
-          @if (services && config) {
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-              (matSortChange)="onSortChange($event)"
-              [matSortActive]="config.sort" [matSortDirection]="config.direction">
-              <thead>
-                <tr>
-                  <th class="width-90"
-                    mat-sort-header="Servicestatus.current_state">
-                    {{ t('Servicestatus') }}
-                  </th>
-                  <th class="text-center"
-                    mat-sort-header="Servicestatus.acknowledgement_type"
-                    [cTooltip]="'is acknowledged' | transloco" cTooltipPlacement="top">
-                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                  </th>
-                  <th class="text-center"
-                    mat-sort-header="Servicestatus.scheduled_downtime_depth"
-                    [cTooltip]="'is in downtime' | transloco" cTooltipPlacement="top">
-                    <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                  </th>
-                  <th mat-sort-header="Hosts.name">
-                    {{ t('Host name') }}
-                  </th>
-                  <th mat-sort-header="servicename">
-                    {{ t('Service name') }}
-                  </th>
-                  <th class="tableStatewidth" mat-sort-header="Servicestatus.last_state_change">
-                    {{ t('Last state change') }}
-                  </th>
-                  <th mat-sort-header="Servicestatus.output">
-                    {{ t('Service output') }}
-                  </th>
-                </tr>
-              </thead>
-              @if (services) {
-                <tbody>
-                  @for (service of services.all_services; track $index) {
-                    <tr>
-                      <td class="text-center">
-                        <oitc-servicestatus-icon
-                        [servicestatus]="service.Servicestatus"></oitc-servicestatus-icon>
-                      </td>
-                      <td class="text-center">
-                        @if (service.Servicestatus.problemHasBeenAcknowledged) {
-                          <oitc-acknowledgement-icon
-                            type="services"
-                            [objectId]="service.Service.id"
-                          [acknowledgement_type]="service.Servicestatus.acknowledgement_type"></oitc-acknowledgement-icon>
-                        }
-                      </td>
-                      <td class="text-center">
-                        @if (service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0) {
-                          <oitc-downtime-icon
-                            type="services"
-                          [objectId]="service.Service.id"></oitc-downtime-icon>
-                        }
-                      </td>
-                      <td [ngClass]="{'bg-up': service.Hoststatus.currentState === 0, 'bg-down': service.Hoststatus.currentState === 1, 'bg-unreachable': service.Hoststatus.currentState === 2, 'text-white': service.Hoststatus.isInMonitoring}"
-                        class="word-break">
-                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                          <a [routerLink]="['/', 'hosts', 'browser', service.Host.id]">
-                            {{ service.Host.name }}
-                          </a>
+            <c-col [xs]="12" [md]="1">
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())"
+                    >
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                         } @else {
-                          {{ service.Host.name }}
-                        }
-                      </td>
-                      <td class="word-break">
-                        @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
-                          <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
-                            {{ service.Service.servicename }}
-                          </a>
-                        } @else {
-                          {{ service.Service.servicename }}
-                        }
-                      </td>
-                      <td>
-                        {{ service.Servicestatus.last_state_change }}
-                      </td>
-                      <td>
-                        <div class="word-break"
-                        [innerHTML]="String(service.Servicestatus.outputHtml) | trustAsHtml "></div>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              }
-            </table>
-          }
-          @if (services && services.all_services.length === 0) {
-            <oitc-no-records
-            ></oitc-no-records>
-          }
-          <c-container
-            [fluid]="true" class="pt-1 pb-0 mb-0">
-            <c-row>
-              <c-col>
-                <!-- To save space we only use scroll index on dashboards -->
-                @if (services && services.scroll) {
-                  <oitc-scroll-index
-                    (pageChange)="onPaginatorChange($event)"
-                    [scroll]="services.scroll">
-                  </oitc-scroll-index>
-                }
-              </c-col>
-            </c-row>
-          </c-container>
-          <!-- end downtime area -->
-        }
-      </div>
-
-      <div class="box-x">
-        @if (animationStateShowConfig) {
-          <!-- Config area -->
-          @if (widget) {
-            <c-container class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-              <c-row>
-                <c-col>
-                  <h6 class="pb-2 mb-3 border-bottom">
-                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                    {{ t('Filter') }}
-                  </h6>
-                </c-col>
-              </c-row>
-              <form cForm>
-                @if (config) {
-                  <c-row class="mb-2">
-                    <c-col [xs]="12" [lg]="6">
-                      <c-input-group>
-                        <span cInputGroupText>
-                          <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                        </span>
-                        <input
-                          [(ngModel)]="config.Host.name"
-                          [placeholder]="'Filter by host name' | transloco"
-                          cFormControl
-                          [name]="'Hosts.name_'+widget.id"
-                          [attr.id]="'Hosts.name_'+widget.id"
-                          type="text"
-                          />
-                        <span cInputGroupText>
-                          <label>
-                            {{ t('Enable RegEx') }}
-                            <input type="checkbox"
-                              cFormCheckInput
-                              [name]="'Hosts.name_regex_'+widget.id"
-                              [attr.id]="'Hosts.name_regex_'+widget.id"
-                              [(ngModel)]="config.Host.name_regex"
-                              />
-                            <oitc-regex-helper-tooltip/>
-                          </label>
-                        </span>
-                      </c-input-group>
-                    </c-col>
-                    <c-col [xs]="12" [lg]="6">
-                      <c-input-group>
-                        <span cInputGroupText>
-                          <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                        </span>
-                        <input
-                          [(ngModel)]="config.Service.name"
-                          [placeholder]="'Filter by service name' | transloco"
-                          cFormControl
-                          [name]="'servicename_'+widget.id"
-                          [attr.id]="'servicename_'+widget.id"
-                          type="text"
-                          />
-                        <span cInputGroupText>
-                          <label>
-                            {{ t('Enable RegEx') }}
-                            <input type="checkbox"
-                              cFormCheckInput
-                              [name]="'servicename_regex_'+widget.id"
-                              [attr.id]="'servicename_regex_'+widget.id"
-                              [(ngModel)]="config.Service.name_regex"
-                              />
-                            <oitc-regex-helper-tooltip/>
-                          </label>
-                        </span>
-                      </c-input-group>
-                    </c-col>
-                    <c-col [xs]="12" [lg]="6" class="mt-2">
-                      <c-input-group>
-                        <span cInputGroupText>
-                          <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                        </span>
-                        <input [(ngModel)]="config.Servicestatus.output"
-                          [placeholder]="'Filter by service output' | transloco"
-                          cFormControl
-                          [name]="'Services.output_'+widget.id"
-                          [attr.id]="'Services.output_'+widget.id"
-                          type="text"
-                          />
-                      </c-input-group>
-                    </c-col>
-                  </c-row>
-                }
-                @if (config) {
-                  <c-row class="mb-2">
-                    <c-col [xs]="12" [lg]="6">
-                      <c-input-group>
-                        <span cInputGroupText>
-                          <div class="icon-stack">
-                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                            <fa-icon [icon]="['fas', 'tags']"
-                            class="text-success cornered cornered-lr"></fa-icon>
-                          </div>
-                        </span>
-                        <ng-select
-                          [name]="'Hosts.HostKeywordsInput_'+widget.id"
-                          [attr.id]="'Hosts.HostKeywordsInput_'+widget.id"
-                          [items]="[]"
-                          [(ngModel)]="configHostKeyWords"
-                          [addTag]="true"
-                          [multiple]="true"
-                          [selectOnTab]="true"
-                          [placeholder]="'Filter by host tags'|transloco"
-                          [isOpen]="false">
-                        </ng-select>
-                      </c-input-group>
-                    </c-col>
-                    <c-col [xs]="12" [lg]="6">
-                      <c-input-group>
-                        <span cInputGroupText>
-                          <div class="icon-stack">
-                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                            <fa-icon [icon]="['fas', 'tags']"
-                            class="text-danger cornered cornered-lr"></fa-icon>
-                          </div>
-                        </span>
-                        <ng-select
-                          [name]="'Hosts.HostNotKeywordsInput_'+widget.id"
-                          [attr.id]="'Hosts.HostNotKeywordsInput_'+widget.id"
-                          [items]="[]"
-                          [(ngModel)]="configHostNotKeyWords"
-                          [addTag]="true"
-                          [multiple]="true"
-                          [selectOnTab]="true"
-                          [placeholder]="'Filter by excluded host tags'|transloco"
-                          [isOpen]="false">
-                        </ng-select>
-                      </c-input-group>
-                    </c-col>
-                  </c-row>
-                }
-                @if (config) {
-                  <c-row class="mb-2">
-                    <c-col [xs]="12" [lg]="6">
-                      <c-input-group>
-                        <span cInputGroupText>
-                          <div class="icon-stack">
                             <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                            <fa-icon [icon]="['fas', 'tags']"
-                            class="text-success cornered cornered-lr"></fa-icon>
-                          </div>
-                        </span>
-                        <ng-select
-                          [name]="'Services.ServiceKeywordsInput_'+widget.id"
-                          [attr.id]="'Services.ServiceKeywordsInput_'+widget.id"
-                          [items]="[]"
-                          [(ngModel)]="configServiceKeyWords"
-                          [addTag]="true"
-                          [multiple]="true"
-                          [selectOnTab]="true"
-                          [placeholder]="'Filter by service tags'|transloco"
-                          [isOpen]="false">
-                        </ng-select>
-                      </c-input-group>
-                    </c-col>
-                    <c-col [xs]="12" [lg]="6">
-                      <c-input-group>
-                        <span cInputGroupText>
-                          <div class="icon-stack">
-                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                            <fa-icon [icon]="['fas', 'tags']"
-                            class="text-danger cornered cornered-lr"></fa-icon>
-                          </div>
-                        </span>
-                        <ng-select
-                          [name]="'Services.ServiceNotKeywordsInput_'+widget.id"
-                          [attr.id]="'Services.ServiceNotKeywordsInput_'+widget.id"
-                          [items]="[]"
-                          [(ngModel)]="configServiceNotKeyWords"
-                          [addTag]="true"
-                          [multiple]="true"
-                          [selectOnTab]="true"
-                          [placeholder]="'Filter by excluded service tags'|transloco"
-                          [isOpen]="false">
-                        </ng-select>
-                      </c-input-group>
-                    </c-col>
-                  </c-row>
-                }
-                @if (config) {
-                  <c-row class="mb-2">
-                    <c-col xs="12" md="6">
-                      <fieldset class="mt-2">
-                        <legend class="fs-5">
-                          {{ t('Status older than') }}
-                        </legend>
-                        <c-input-group>
-                          <span cInputGroupText>
-                            <fa-icon [icon]="['fas', 'history']" class="text-secondary"></fa-icon>
-                          </span>
-                          <input [(ngModel)]="config.Servicestatus.state_older_than"
-                            [placeholder]="'Leave empty for all' | transloco"
-                            [name]="'state_older_than-'+widget.id"
-                            [id]="'state_older_than-'+widget.id"
-                            cFormControl
-                            type="number"
-                            />
-                          <c-dropdown alignment="end">
-                            <button cButton cDropdownToggle color="primary">
-                              @switch (config.Servicestatus.state_older_than_unit) {
-                                @case ('SECOND') {
-                                  {{ t('seconds') }}
-                                }
-                                @case ('MINUTE') {
-                                  {{ t('minutes') }}
-                                }
-                                @case ('HOUR') {
-                                  {{ t('hours') }}
-                                }
-                                @case ('DAY') {
-                                  {{ t('days') }}
-                                }
-                              }
-                            </button>
-                            <ul cDropdownMenu>
-                              <li cDropdownItem
-                                (click)="config.Servicestatus.state_older_than_unit = 'SECOND'">
-                                {{ t('seconds') }}
-                              </li>
-                              <li cDropdownItem
-                                (click)="config.Servicestatus.state_older_than_unit = 'MINUTE'">
-                                {{ t('minutes') }}
-                              </li>
-                              <li cDropdownItem
-                                (click)="config.Servicestatus.state_older_than_unit = 'HOUR'">
-                                {{ t('hours') }}
-                              </li>
-                              <li cDropdownItem
-                                (click)="config.Servicestatus.state_older_than_unit = 'DAY'">
-                                {{ t('days') }}
-                              </li>
-                            </ul>
-                          </c-dropdown>
-                        </c-input-group>
-                      </fieldset>
-                    </c-col>
-                  </c-row>
-                }
-                @if (config) {
-                  <c-row class="mb-2">
-                    <c-col [xs]="12" lg="2">
-                      <fieldset>
-                        <h5>
-                          {{ t('Service status') }}
-                        </h5>
-                        <c-form-check>
-                          <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-success"
-                            [name]="'currentStateOk-'+widget.id"
-                            [attr.id]="'currentStateOk-'+widget.id"
-                            type="checkbox"
-                            [(ngModel)]="config.Servicestatus.current_state.ok"/>
-                          <label cFormCheckLabel class="ms-1 mt-1"
-                          [for]="'currentStateOk-'+widget.id">{{ t('Ok') }}</label>
-                        </c-form-check>
-                        <c-form-check>
-                          <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-warning"
-                            [name]="'currentStateWarning-'+widget.id"
-                            [attr.id]="'currentStateWarning-'+widget.id"
-                            type="checkbox"
-                            [(ngModel)]="config.Servicestatus.current_state.warning"/>
-                          <label cFormCheckLabel class="ms-1 mt-1"
-                          [for]="'currentStateWarning-'+widget.id">{{ t('Warning') }}</label>
-                        </c-form-check>
-                        <c-form-check>
-                          <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-danger"
-                            [name]="'currentStateCritical-'+widget.id"
-                            [attr.id]="'currentStateCritical-'+widget.id"
-                            type="checkbox"
-                            [(ngModel)]="config.Servicestatus.current_state.critical"/>
-                          <label cFormCheckLabel class="ms-1 mt-1"
-                          [for]="'currentStateCritical-'+widget.id">{{ t('Critical') }}</label>
-                        </c-form-check>
-                        <c-form-check>
-                          <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-secondary"
-                            [name]="'currentStateUnknown-'+widget.id"
-                            [attr.id]="'currentStateUnknown-'+widget.id"
-                            type="checkbox"
-                            [(ngModel)]="config.Servicestatus.current_state.unknown"/>
-                          <label cFormCheckLabel class="ms-1 mt-1"
-                          [for]="'currentStateUnknown-'+widget.id">{{ t('Unknown') }}</label>
-                        </c-form-check>
-                      </fieldset>
-                    </c-col>
-                    <c-col [xs]="12" lg="2">
-                      <fieldset>
-                        <h5>
-                          {{ t('Acknowledgements') }}
-                        </h5>
-                        <c-form-check>
-                          <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-primary"
-                            [name]="'Servicestatus.acknowledged-'+widget.id"
-                            [attr.id]="'Servicestatus.acknowledged-'+widget.id"
-                            type="checkbox"
-                            [(ngModel)]="config.Servicestatus.acknowledged"/>
-                          <label cFormCheckLabel class="ms-1 mt-1"
-                          [for]="'Servicestatus.acknowledged-'+widget.id">{{ t('Acknowledged') }}</label>
-                        </c-form-check>
-                        <c-form-check>
-                          <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-primary"
-                            [name]="'Servicestatus.not_acknowledged-'+widget.id"
-                            [attr.id]="'Servicestatus.not_acknowledged-'+widget.id"
-                            type="checkbox"
-                            [(ngModel)]="config.Servicestatus.not_acknowledged"/>
-                          <label cFormCheckLabel class="ms-1 mt-1"
-                          [for]="'Servicestatus.not_acknowledged-'+widget.id">{{ t('Not acknowledged') }}</label>
-                        </c-form-check>
-                      </fieldset>
-                    </c-col>
-                    <c-col [xs]="12" lg="2">
-                      <fieldset>
-                        <h5>
-                          {{ t('Downtimes') }}
-                        </h5>
-                        <c-form-check>
-                          <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-primary"
-                            [name]="'Servicestatus.in_downtime-'+widget.id"
-                            [attr.id]="'Servicestatus.in_downtime-'+widget.id"
-                            type="checkbox"
-                            [(ngModel)]="config.Servicestatus.in_downtime"/>
-                          <label cFormCheckLabel class="ms-1 mt-1"
-                          [for]="'Servicestatus.in_downtime-'+widget.id">{{ t('In downtime') }}</label>
-                        </c-form-check>
-                        <c-form-check>
-                          <input
-                            cFormCheckInput
-                            class="checkbox-lg checkbox-primary"
-                            [name]="'Servicestatus.not_in_downtime-'+widget.id"
-                            [attr.id]="'Servicestatus.not_in_downtime-'+widget.id"
-                            type="checkbox"
-                            [(ngModel)]="config.Servicestatus.not_in_downtime"/>
-                          <label cFormCheckLabel class="ms-1 mt-1"
-                          [for]="'Servicestatus.not_in_downtime-'+widget.id">{{ t('Not in downtime') }}</label>
-                        </c-form-check>
-                      </fieldset>
-                    </c-col>
-                  </c-row>
-                }
-                <c-row class="mt-2">
-                  <c-col class="text-end">
-                    <button (click)="saveWidgetConfig()" type="button" cButton class="ripple"
-                      color="primary">
-                      {{ t('Save') }}
+                        }
                     </button>
-                  </c-col>
-                </c-row>
-              </form>
-            </c-container>
-          }
-          <!-- End config area -->
-        }
-      </div>
+                }
+            </c-col>
 
+            <c-col [xs]="12" [md]="11">
+                <c-row>
+                    <c-col [xs]="1" [offset]="{lg: 8}">
+                        @if (config && config.useScroll) {
+                            <button type="button" cButton class="ripple" color="primary" size="xs"
+                                    (click)="stopScroll()"
+                                    [cTooltip]="'Pause scrolling'|transloco" cTooltipPlacement="bottom">
+                                <fa-icon [icon]="['fas', 'pause']"></fa-icon>
+                            </button>
+                        }
+                        @if (config && !config.useScroll) {
+                            <button type="button" cButton class="ripple" color="primary" size="xs"
+                                    (click)="startScroll()"
+                                    [cTooltip]="'Start scrolling'|transloco" cTooltipPlacement="bottom">
+                                <fa-icon [icon]="['fas', 'play']"></fa-icon>
+                            </button>
+                        }
+                    </c-col>
+                    @if (widget && config) {
+                        <c-col [xs]="11" [lg]="3">
+                            <oitc-slider-time
+                                [name]="'scroll_interval_slider_'+widget.id"
+                                [attr.id]="'filter.scroll_interval_slider_'+widget.id"
+                                [unit]="'milliseconds'"
+                                [size]="'xs'"
+                                [label]="'Scroll interval:' | transloco"
+                                [disabled]="isReadonly()"
+                                [min]="0"
+                                [max]="300*1000"
+                                [step]="5*1000"
+                                [(ngModel)]="config.scroll_interval"
+                                (change)="onIntervalSliderChanged()"></oitc-slider-time>
+                        </c-col>
+                    }
+                </c-row>
+            </c-col>
+        </c-row>
+
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container">
+            <div class="box-x">
+                @if (animationStateShowContent) {
+                    <!-- Downtime Area -->
+                    @if (!services) {
+                        <oitc-table-loader></oitc-table-loader>
+                    }
+                    @if (services && config) {
+                        <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                               (matSortChange)="onSortChange($event)"
+                               [matSortActive]="config.sort" [matSortDirection]="config.direction">
+                            <thead>
+                            <tr>
+                                <th class="width-90"
+                                    mat-sort-header="Servicestatus.current_state">
+                                    {{ t('Servicestatus') }}
+                                </th>
+                                <th class="text-center"
+                                    mat-sort-header="Servicestatus.acknowledgement_type"
+                                    [cTooltip]="'is acknowledged' | transloco" cTooltipPlacement="top">
+                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                </th>
+                                <th class="text-center"
+                                    mat-sort-header="Servicestatus.scheduled_downtime_depth"
+                                    [cTooltip]="'is in downtime' | transloco" cTooltipPlacement="top">
+                                    <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                </th>
+                                <th mat-sort-header="Hosts.name">
+                                    {{ t('Host name') }}
+                                </th>
+                                <th mat-sort-header="servicename">
+                                    {{ t('Service name') }}
+                                </th>
+                                <th class="tableStatewidth" mat-sort-header="Servicestatus.last_state_change">
+                                    {{ t('Last state change') }}
+                                </th>
+                                <th mat-sort-header="Servicestatus.output">
+                                    {{ t('Service output') }}
+                                </th>
+                            </tr>
+                            </thead>
+                            @if (services) {
+                                <tbody>
+                                    @for (service of services.all_services; track $index) {
+                                        <tr>
+                                            <td class="text-center">
+                                                <oitc-servicestatus-icon
+                                                    [servicestatus]="service.Servicestatus"></oitc-servicestatus-icon>
+                                            </td>
+                                            <td class="text-center">
+                                                @if (service.Servicestatus.problemHasBeenAcknowledged) {
+                                                    <oitc-acknowledgement-icon
+                                                        type="services"
+                                                        [objectId]="service.Service.id"
+                                                        [acknowledgement_type]="service.Servicestatus.acknowledgement_type"></oitc-acknowledgement-icon>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                @if (service.Servicestatus.scheduledDowntimeDepth && service.Servicestatus.scheduledDowntimeDepth > 0) {
+                                                    <oitc-downtime-icon
+                                                        type="services"
+                                                        [objectId]="service.Service.id"></oitc-downtime-icon>
+                                                }
+                                            </td>
+                                            <td [ngClass]="{'bg-up': service.Hoststatus.currentState === 0, 'bg-down': service.Hoststatus.currentState === 1, 'bg-unreachable': service.Hoststatus.currentState === 2, 'text-white': service.Hoststatus.isInMonitoring}"
+                                                class="word-break">
+                                                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                                    <a [routerLink]="['/', 'hosts', 'browser', service.Host.id]">
+                                                        {{ service.Host.name }}
+                                                    </a>
+                                                } @else {
+                                                    {{ service.Host.name }}
+                                                }
+                                            </td>
+                                            <td class="word-break">
+                                                @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                                    <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
+                                                        {{ service.Service.servicename }}
+                                                    </a>
+                                                } @else {
+                                                    {{ service.Service.servicename }}
+                                                }
+                                            </td>
+                                            <td>
+                                                {{ service.Servicestatus.last_state_change }}
+                                            </td>
+                                            <td>
+                                                <div class="word-break"
+                                                     [innerHTML]="String(service.Servicestatus.outputHtml) | trustAsHtml "></div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            }
+                        </table>
+                    }
+                    @if (services && services.all_services.length === 0) {
+                        <oitc-no-records
+                        ></oitc-no-records>
+                    }
+                    <c-container
+                        [fluid]="true" class="pt-1 pb-0 mb-0">
+                        <c-row>
+                            <c-col>
+                                <!-- To save space we only use scroll index on dashboards -->
+                                @if (services && services.scroll) {
+                                    <oitc-scroll-index
+                                        (pageChange)="onPaginatorChange($event)"
+                                        [scroll]="services.scroll">
+                                    </oitc-scroll-index>
+                                }
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                    <!-- end downtime area -->
+                }
+            </div>
+
+            <div class="box-x">
+                @if (animationStateShowConfig) {
+                    <!-- Config area -->
+                    @if (widget) {
+                        <c-container class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                            <c-row>
+                                <c-col>
+                                    <h6 class="pb-2 mb-3 border-bottom">
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                        {{ t('Filter') }}
+                                    </h6>
+                                </c-col>
+                            </c-row>
+                            <form cForm>
+                                @if (config) {
+                                    <c-row class="mb-2">
+                                        <c-col [xs]="12" [lg]="6">
+                                            <c-input-group>
+                                                <span cInputGroupText>
+                                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                </span>
+                                                <input
+                                                    [(ngModel)]="config.Host.name"
+                                                    [placeholder]="'Filter by host name' | transloco"
+                                                    cFormControl
+                                                    [name]="'Hosts.name_'+widget.id"
+                                                    [attr.id]="'Hosts.name_'+widget.id"
+                                                    type="text"
+                                                />
+                                                <span cInputGroupText>
+                                                    <label>
+                                                        {{ t('Enable RegEx') }}
+                                                        <input type="checkbox"
+                                                               cFormCheckInput
+                                                               [name]="'Hosts.name_regex_'+widget.id"
+                                                               [attr.id]="'Hosts.name_regex_'+widget.id"
+                                                               [(ngModel)]="config.Host.name_regex"
+                                                        />
+                                                        <oitc-regex-helper-tooltip/>
+                                                    </label>
+                                                </span>
+                                            </c-input-group>
+                                        </c-col>
+                                        <c-col [xs]="12" [lg]="6">
+                                            <c-input-group>
+                                                <span cInputGroupText>
+                                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                </span>
+                                                <input
+                                                    [(ngModel)]="config.Service.name"
+                                                    [placeholder]="'Filter by service name' | transloco"
+                                                    cFormControl
+                                                    [name]="'servicename_'+widget.id"
+                                                    [attr.id]="'servicename_'+widget.id"
+                                                    type="text"
+                                                />
+                                                <span cInputGroupText>
+                                                    <label>
+                                                        {{ t('Enable RegEx') }}
+                                                        <input type="checkbox"
+                                                               cFormCheckInput
+                                                               [name]="'servicename_regex_'+widget.id"
+                                                               [attr.id]="'servicename_regex_'+widget.id"
+                                                               [(ngModel)]="config.Service.name_regex"
+                                                        />
+                                                        <oitc-regex-helper-tooltip/>
+                                                    </label>
+                                                </span>
+                                            </c-input-group>
+                                        </c-col>
+                                        <c-col [xs]="12" [lg]="6" class="mt-2">
+                                            <c-input-group>
+                                                <span cInputGroupText>
+                                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                                </span>
+                                                <input [(ngModel)]="config.Servicestatus.output"
+                                                       [placeholder]="'Filter by service output' | transloco"
+                                                       cFormControl
+                                                       [name]="'Services.output_'+widget.id"
+                                                       [attr.id]="'Services.output_'+widget.id"
+                                                       type="text"
+                                                />
+                                            </c-input-group>
+                                        </c-col>
+                                    </c-row>
+                                }
+                                @if (config) {
+                                    <c-row class="mb-2">
+                                        <c-col [xs]="12" [lg]="6">
+                                            <c-input-group>
+                                                <span cInputGroupText>
+                                                    <div class="icon-stack">
+                                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'tags']"
+                                                                 class="text-success cornered cornered-lr"></fa-icon>
+                                                    </div>
+                                                </span>
+                                                <ng-select
+                                                    [name]="'Hosts.HostKeywordsInput_'+widget.id"
+                                                    [attr.id]="'Hosts.HostKeywordsInput_'+widget.id"
+                                                    [items]="[]"
+                                                    [(ngModel)]="configHostKeyWords"
+                                                    [addTag]="true"
+                                                    [multiple]="true"
+                                                    [selectOnTab]="true"
+                                                    [placeholder]="'Filter by host tags'|transloco"
+                                                    [isOpen]="false">
+                                                </ng-select>
+                                            </c-input-group>
+                                        </c-col>
+                                        <c-col [xs]="12" [lg]="6">
+                                            <c-input-group>
+                                                <span cInputGroupText>
+                                                    <div class="icon-stack">
+                                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'tags']"
+                                                                 class="text-danger cornered cornered-lr"></fa-icon>
+                                                    </div>
+                                                </span>
+                                                <ng-select
+                                                    [name]="'Hosts.HostNotKeywordsInput_'+widget.id"
+                                                    [attr.id]="'Hosts.HostNotKeywordsInput_'+widget.id"
+                                                    [items]="[]"
+                                                    [(ngModel)]="configHostNotKeyWords"
+                                                    [addTag]="true"
+                                                    [multiple]="true"
+                                                    [selectOnTab]="true"
+                                                    [placeholder]="'Filter by excluded host tags'|transloco"
+                                                    [isOpen]="false">
+                                                </ng-select>
+                                            </c-input-group>
+                                        </c-col>
+                                    </c-row>
+                                }
+                                @if (config) {
+                                    <c-row class="mb-2">
+                                        <c-col [xs]="12" [lg]="6">
+                                            <c-input-group>
+                                                <span cInputGroupText>
+                                                    <div class="icon-stack">
+                                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'tags']"
+                                                                 class="text-success cornered cornered-lr"></fa-icon>
+                                                    </div>
+                                                </span>
+                                                <ng-select
+                                                    [name]="'Services.ServiceKeywordsInput_'+widget.id"
+                                                    [attr.id]="'Services.ServiceKeywordsInput_'+widget.id"
+                                                    [items]="[]"
+                                                    [(ngModel)]="configServiceKeyWords"
+                                                    [addTag]="true"
+                                                    [multiple]="true"
+                                                    [selectOnTab]="true"
+                                                    [placeholder]="'Filter by service tags'|transloco"
+                                                    [isOpen]="false">
+                                                </ng-select>
+                                            </c-input-group>
+                                        </c-col>
+                                        <c-col [xs]="12" [lg]="6">
+                                            <c-input-group>
+                                                <span cInputGroupText>
+                                                    <div class="icon-stack">
+                                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'tags']"
+                                                                 class="text-danger cornered cornered-lr"></fa-icon>
+                                                    </div>
+                                                </span>
+                                                <ng-select
+                                                    [name]="'Services.ServiceNotKeywordsInput_'+widget.id"
+                                                    [attr.id]="'Services.ServiceNotKeywordsInput_'+widget.id"
+                                                    [items]="[]"
+                                                    [(ngModel)]="configServiceNotKeyWords"
+                                                    [addTag]="true"
+                                                    [multiple]="true"
+                                                    [selectOnTab]="true"
+                                                    [placeholder]="'Filter by excluded service tags'|transloco"
+                                                    [isOpen]="false">
+                                                </ng-select>
+                                            </c-input-group>
+                                        </c-col>
+                                    </c-row>
+                                }
+                                @if (config) {
+                                    <c-row class="mb-2">
+                                        <c-col xs="12" md="6">
+                                            <fieldset class="mt-2">
+                                                <legend class="fs-5">
+                                                    {{ t('Status older than') }}
+                                                </legend>
+                                                <c-input-group>
+                                                    <span cInputGroupText>
+                                                        <fa-icon [icon]="['fas', 'history']"
+                                                                 class="text-secondary"></fa-icon>
+                                                    </span>
+                                                    <input [(ngModel)]="config.Servicestatus.state_older_than"
+                                                           [placeholder]="'Leave empty for all' | transloco"
+                                                           [name]="'state_older_than-'+widget.id"
+                                                           [id]="'state_older_than-'+widget.id"
+                                                           cFormControl
+                                                           type="number"
+                                                    />
+                                                    <c-dropdown alignment="end">
+                                                        <button cButton cDropdownToggle color="primary">
+                                                            @switch (config.Servicestatus.state_older_than_unit) {
+                                                                @case ('SECOND') {
+                                                                    {{ t('seconds') }}
+                                                                }
+                                                                @case ('MINUTE') {
+                                                                    {{ t('minutes') }}
+                                                                }
+                                                                @case ('HOUR') {
+                                                                    {{ t('hours') }}
+                                                                }
+                                                                @case ('DAY') {
+                                                                    {{ t('days') }}
+                                                                }
+                                                            }
+                                                        </button>
+                                                        <ul cDropdownMenu>
+                                                            <li cDropdownItem
+                                                                (click)="config.Servicestatus.state_older_than_unit = 'SECOND'">
+                                                                {{ t('seconds') }}
+                                                            </li>
+                                                            <li cDropdownItem
+                                                                (click)="config.Servicestatus.state_older_than_unit = 'MINUTE'">
+                                                                {{ t('minutes') }}
+                                                            </li>
+                                                            <li cDropdownItem
+                                                                (click)="config.Servicestatus.state_older_than_unit = 'HOUR'">
+                                                                {{ t('hours') }}
+                                                            </li>
+                                                            <li cDropdownItem
+                                                                (click)="config.Servicestatus.state_older_than_unit = 'DAY'">
+                                                                {{ t('days') }}
+                                                            </li>
+                                                        </ul>
+                                                    </c-dropdown>
+                                                </c-input-group>
+                                            </fieldset>
+                                        </c-col>
+                                    </c-row>
+                                }
+                                @if (config) {
+                                    <c-row class="mb-2">
+                                        <c-col [xs]="12" lg="2">
+                                            <fieldset>
+                                                <h5>
+                                                    {{ t('Service status') }}
+                                                </h5>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-success"
+                                                        [name]="'currentStateOk-'+widget.id"
+                                                        [attr.id]="'currentStateOk-'+widget.id"
+                                                        type="checkbox"
+                                                        [(ngModel)]="config.Servicestatus.current_state.ok"/>
+                                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                                           [for]="'currentStateOk-'+widget.id">{{ t('Ok') }}</label>
+                                                </c-form-check>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-warning"
+                                                        [name]="'currentStateWarning-'+widget.id"
+                                                        [attr.id]="'currentStateWarning-'+widget.id"
+                                                        type="checkbox"
+                                                        [(ngModel)]="config.Servicestatus.current_state.warning"/>
+                                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                                           [for]="'currentStateWarning-'+widget.id">{{ t('Warning') }}</label>
+                                                </c-form-check>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-danger"
+                                                        [name]="'currentStateCritical-'+widget.id"
+                                                        [attr.id]="'currentStateCritical-'+widget.id"
+                                                        type="checkbox"
+                                                        [(ngModel)]="config.Servicestatus.current_state.critical"/>
+                                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                                           [for]="'currentStateCritical-'+widget.id">{{ t('Critical') }}</label>
+                                                </c-form-check>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-secondary"
+                                                        [name]="'currentStateUnknown-'+widget.id"
+                                                        [attr.id]="'currentStateUnknown-'+widget.id"
+                                                        type="checkbox"
+                                                        [(ngModel)]="config.Servicestatus.current_state.unknown"/>
+                                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                                           [for]="'currentStateUnknown-'+widget.id">{{ t('Unknown') }}</label>
+                                                </c-form-check>
+                                            </fieldset>
+                                        </c-col>
+                                        <c-col [xs]="12" lg="2">
+                                            <fieldset>
+                                                <h5>
+                                                    {{ t('Acknowledgements') }}
+                                                </h5>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-primary"
+                                                        [name]="'Servicestatus.acknowledged-'+widget.id"
+                                                        [attr.id]="'Servicestatus.acknowledged-'+widget.id"
+                                                        type="checkbox"
+                                                        [(ngModel)]="config.Servicestatus.acknowledged"/>
+                                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                                           [for]="'Servicestatus.acknowledged-'+widget.id">{{ t('Acknowledged') }}</label>
+                                                </c-form-check>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-primary"
+                                                        [name]="'Servicestatus.not_acknowledged-'+widget.id"
+                                                        [attr.id]="'Servicestatus.not_acknowledged-'+widget.id"
+                                                        type="checkbox"
+                                                        [(ngModel)]="config.Servicestatus.not_acknowledged"/>
+                                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                                           [for]="'Servicestatus.not_acknowledged-'+widget.id">{{ t('Not acknowledged') }}</label>
+                                                </c-form-check>
+                                            </fieldset>
+                                        </c-col>
+                                        <c-col [xs]="12" lg="2">
+                                            <fieldset>
+                                                <h5>
+                                                    {{ t('Downtimes') }}
+                                                </h5>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-primary"
+                                                        [name]="'Servicestatus.in_downtime-'+widget.id"
+                                                        [attr.id]="'Servicestatus.in_downtime-'+widget.id"
+                                                        type="checkbox"
+                                                        [(ngModel)]="config.Servicestatus.in_downtime"/>
+                                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                                           [for]="'Servicestatus.in_downtime-'+widget.id">{{ t('In downtime') }}</label>
+                                                </c-form-check>
+                                                <c-form-check>
+                                                    <input
+                                                        cFormCheckInput
+                                                        class="checkbox-lg checkbox-primary"
+                                                        [name]="'Servicestatus.not_in_downtime-'+widget.id"
+                                                        [attr.id]="'Servicestatus.not_in_downtime-'+widget.id"
+                                                        type="checkbox"
+                                                        [(ngModel)]="config.Servicestatus.not_in_downtime"/>
+                                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                                           [for]="'Servicestatus.not_in_downtime-'+widget.id">{{ t('Not in downtime') }}</label>
+                                                </c-form-check>
+                                            </fieldset>
+                                        </c-col>
+                                    </c-row>
+                                }
+                                <c-row class="mt-2">
+                                    <c-col class="text-end">
+                                        <button (click)="saveWidgetConfig()" type="button" cButton class="ripple"
+                                                color="primary">
+                                            {{ t('Save') }}
+                                        </button>
+                                    </c-col>
+                                </c-row>
+                            </form>
+                        </c-container>
+                    }
+                    <!-- End config area -->
+                }
+            </div>
+
+        </div>
     </div>
-  </div>
 
 </ng-container>

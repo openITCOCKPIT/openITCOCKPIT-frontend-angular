@@ -1,65 +1,65 @@
 <ng-container *transloco="let t">
-  <c-row>
-    @if (paging) {
-      <c-col md="6">
-        {{ t('Page') }}
-        {{ paging.page | localNumber }}
-        {{ t('of') }}
-        {{ paging.pageCount | localNumber }},
-        {{ t('Total') }}
-        {{ paging.count | localNumber }}
-        {{ t('entries') }}
-      </c-col>
-    }
-    <c-col md="6">
-      @if (paging) {
-        <c-pagination class="float-end">
-          <li [disabled]="!paging.prevPage" cPageItem>
-            <button type="button" (click)="firstPage()"
-              [title]="'First page' | transloco"
-              cPageLink
-              class="ripple">
-              <fa-icon [icon]="faAnglesLeft"></fa-icon>
-            </button>
-          </li>
-          <li [disabled]="!paging.prevPage" cPageItem>
-            <button type="button" (click)="prevPage()"
-              [title]="'Previous page' | transloco"
-              cPageLink
-              class="ripple"
-              >
-              <fa-icon [icon]="faAngleLeft"></fa-icon>
-            </button>
-          </li>
-          @for (page of pages; track page) {
-            <li [active]="page === paging.page" cPageItem>
-              <button type="button" (click)="changePage(page)"
-                cPageLink
-                class="ripple">
-                {{ page }}
-              </button>
-            </li>
-          }
-          <li [disabled]="!paging.nextPage" cPageItem>
-            <button type="button" (click)="nextPage()"
-              [title]="'Next page' | transloco"
-              cPageLink
-              class="ripple"
-              >
-              <fa-icon [icon]="faAngleRight"></fa-icon>
-            </button>
-          </li>
-          <li [disabled]="!paging.nextPage" cPageItem>
-            <button type="button" (click)="lastPage()"
-              [title]="'Last page' | transloco"
-              cPageLink
-              class="ripple"
-              >
-              <fa-icon [icon]="faAnglesRight"></fa-icon>
-            </button>
-          </li>
-        </c-pagination>
-      }
-    </c-col>
-  </c-row>
+    <c-row>
+        @if (paging) {
+            <c-col md="6">
+                {{ t('Page') }}
+                {{ paging.page | localNumber }}
+                {{ t('of') }}
+                {{ paging.pageCount | localNumber }},
+                {{ t('Total') }}
+                {{ paging.count | localNumber }}
+                {{ t('entries') }}
+            </c-col>
+        }
+        <c-col md="6">
+            @if (paging) {
+                <c-pagination class="float-end">
+                    <li [disabled]="!paging.prevPage" cPageItem>
+                        <button type="button" (click)="firstPage()"
+                                [title]="'First page' | transloco"
+                                cPageLink
+                                class="ripple">
+                            <fa-icon [icon]="faAnglesLeft"></fa-icon>
+                        </button>
+                    </li>
+                    <li [disabled]="!paging.prevPage" cPageItem>
+                        <button type="button" (click)="prevPage()"
+                                [title]="'Previous page' | transloco"
+                                cPageLink
+                                class="ripple"
+                        >
+                            <fa-icon [icon]="faAngleLeft"></fa-icon>
+                        </button>
+                    </li>
+                    @for (page of pages; track page) {
+                        <li [active]="page === paging.page" cPageItem>
+                            <button type="button" (click)="changePage(page)"
+                                    cPageLink
+                                    class="ripple">
+                                {{ page }}
+                            </button>
+                        </li>
+                    }
+                    <li [disabled]="!paging.nextPage" cPageItem>
+                        <button type="button" (click)="nextPage()"
+                                [title]="'Next page' | transloco"
+                                cPageLink
+                                class="ripple"
+                        >
+                            <fa-icon [icon]="faAngleRight"></fa-icon>
+                        </button>
+                    </li>
+                    <li [disabled]="!paging.nextPage" cPageItem>
+                        <button type="button" (click)="lastPage()"
+                                [title]="'Last page' | transloco"
+                                cPageLink
+                                class="ripple"
+                        >
+                            <fa-icon [icon]="faAnglesRight"></fa-icon>
+                        </button>
+                    </li>
+                </c-pagination>
+            }
+        </c-col>
+    </c-row>
 </ng-container>

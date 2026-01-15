@@ -1,15 +1,15 @@
 <ng-container *transloco="let t">
-  @if (!result) {
-    <oitc-table-loader></oitc-table-loader>
-  }
-  @if (result) {
-    @switch (result.data_source) {
-      @case ('idoit') {
-        <oitc-idoit-overview [result]="result" [hostId]="hostId" [hostname]="hostname"></oitc-idoit-overview>
-      }
-      @case ('itop') {
-        <oitc-itop-overview [result]="result" [hostId]="hostId" [hostname]="hostname"></oitc-itop-overview>
-      }
+    @if (!result) {
+        <oitc-table-loader></oitc-table-loader>
     }
-  }
+    @if (result) {
+        @switch (result.data_source) {
+            @case ('idoit') {
+                <oitc-idoit-overview [result]="result" [hostId]="hostId" [hostname]="hostname"></oitc-idoit-overview>
+            }
+            @case ('itop') {
+                <oitc-itop-overview [result]="result" [hostId]="hostId" [hostname]="hostname"></oitc-itop-overview>
+            }
+        }
+    }
 </ng-container>

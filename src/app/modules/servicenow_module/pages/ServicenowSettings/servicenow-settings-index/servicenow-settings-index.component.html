@@ -1,265 +1,265 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-          {{ t('ServiceNow Module') }}
-        </li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['servicenowmodule', 'servicenowsettings', 'index']"
-            [routerLink]="['/', 'servicenow_module', 'servicenow_settings', 'index']">
-            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-            {{ t('Settings') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-          {{ t('Edit') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('ServiceNow Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['servicenowmodule', 'servicenowsettings', 'index']"
+                   [routerLink]="['/', 'servicenow_module', 'servicenow_settings', 'index']">
+                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                    {{ t('Settings') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
     </nav>
 
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
 
     @if (post) {
-      <form cForm (ngSubmit)="updateServicenowSettings()">
-        <c-card class="mb-3">
-          <c-card-header>
-            <h5 cCardTitle>
-              {{ t('ServiceNow') }}
-              <small class="fw-300">
-                {{ t('Settings') }}
-              </small>
-            </h5>
-          </c-card-header>
-          <c-card-body>
-            <div class="mb-3">
-              <label cLabel for="domain">
-                {{ t('ServiceNow URL') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <input cFormControl
-                id="domain"
-                required
-                type="text"
-                name="domain"
-                placeholder="https://my-servicenow.service-now.com"
-                oitcFormError [errors]="errors" errorField="domain"
-                [(ngModel)]="post.domain">
-              <oitc-form-feedback [errors]="errors" errorField="domain"></oitc-form-feedback>
-              <span class="help-block">
-                {{ t('URL to your ServiceNow Instance') }}
-              </span>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="user_id">
-                {{ t('User ID') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <input cFormControl
-                id="user_id"
-                required
-                type="text"
-                name="user_id"
-                placeholder="openitcockpit"
-                autocomplete="false"
-                oitcFormError [errors]="errors" errorField="user_id"
-                [(ngModel)]="post.user_id">
-              <oitc-form-feedback [errors]="errors" errorField="user_id"></oitc-form-feedback>
-              <span class="help-block">
-                {{ t('ServiceNow User ID') }}
-              </span>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="user_password">
-                {{ t('User Password') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <input cFormControl
-                id="user_password"
-                required
-                type="password"
-                name="user_password"
-                placeholder="password123"
-                autocomplete="false"
-                oitcFormError [errors]="errors" errorField="user_password"
-                [(ngModel)]="post.user_password">
-              <oitc-form-feedback [errors]="errors" errorField="user_password"></oitc-form-feedback>
-              <span class="help-block">
-                {{ t('ServiceNow User Password') }}
-              </span>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="impact">
-                {{ t('Incident Impact') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <oitc-select
-                name="impact"
-                id="impact"
-                optionValue="key"
-                optionLabel="value"
-                [(ngModel)]="post.impact"
-                [options]="selectOptions"
-                oitcFormError [errors]="errors" errorField="impact">
-              </oitc-select>
-              <oitc-form-feedback [errors]="errors" errorField="impact"></oitc-form-feedback>
-              <span class="help-block">
-                {{ t('Impact defines the effect that the task has on business') }}
-                <br>
-                  {{ t('Including urgency used for priority calculating') }}
-                  <a href="https://docs.servicenow.com/bundle/london-it-service-management/page/product/incident-management/reference/r_PrioritizationOfIncidents.html?cshalt=yes">
-                    {{ t('(More information)') }}
-                  </a>
-                </span>
-              </div>
-              <div class="mb-3">
-                <label cLabel for="urgency">
-                  {{ t('Incident Urgency') }}
-                  <oitc-required-icon></oitc-required-icon>
-                </label>
-                <oitc-select
-                  name="urgency"
-                  id="urgency"
-                  optionValue="key"
-                  optionLabel="value"
-                  [(ngModel)]="post.urgency"
-                  [options]="selectOptions"
-                  oitcFormError [errors]="errors" errorField="urgency">
-                </oitc-select>
-                <oitc-form-feedback [errors]="errors" errorField="urgency"></oitc-form-feedback>
-                <span class="help-block">
-                  {{ t('Urgency defines the extent to which the task resolution can be delayed') }}
-                  <br>
-                    {{ t('Including impact used for priority calculating') }}
-                    <a href="https://docs.servicenow.com/bundle/london-it-service-management/page/product/incident-management/reference/r_PrioritizationOfIncidents.html?cshalt=yes">
-                      {{ t('(More information)') }}
-                    </a>
-                  </span>
-                </div>
-                <div class="mb-3">
-                  <label cLabel for="recovery_state">
-                    {{ t('Incident recovery state') }}
-                    <oitc-required-icon></oitc-required-icon>
-                  </label>
-                  <oitc-select
-                    name="recovery_state"
-                    id="recovery_state"
-                    optionValue="key"
-                    optionLabel="value"
-                    [(ngModel)]="post.recovery_state"
-                    [options]="selectOptionsRecoveryState"
-                    oitcFormError [errors]="errors" errorField="recovery_state">
-                  </oitc-select>
-                  <oitc-form-feedback [errors]="errors" errorField="recovery_state"></oitc-form-feedback>
-                  <span class="help-block">
-                    {{ t('Incident state on host / service recovery') }}
-                  </span>
-                </div>
-                <div class="mb-3">
-                  <label cLabel for="assignment_group">
-                    {{ t('Assignment Group') }}
-                  </label>
-                  <input cFormControl
-                    id="assignment_group"
-                    type="text"
-                    name="assignment_group"
-                    placeholder="Incident Management"
-                    oitcFormError [errors]="errors" errorField="assignment_group"
-                    [(ngModel)]="post.assignment_group">
-                  <oitc-form-feedback [errors]="errors" errorField="assignment_group"></oitc-form-feedback>
-                  <span class="help-block">
-                    {{ t('ServiceNow Incident Assignment Group') }}
-                  </span>
-                </div>
-                <div class="mb-3">
-                  <label cLabel for="assigned_to">
-                    {{ t('Assigned To') }}
-                  </label>
-                  <input cFormControl
-                    id="assigned_to"
-                    type="text"
-                    name="assigned_to"
-                    placeholder="Incident Manager"
-                    oitcFormError [errors]="errors" errorField="assigned_to"
-                    [(ngModel)]="post.assigned_to">
-                  <oitc-form-feedback [errors]="errors" errorField="assigned_to"></oitc-form-feedback>
-                  <span class="help-block">
-                    {{ t('ServiceNow Incident Assigned To (automatically sets status to "In progress")') }}
-                  </span>
-                </div>
-                <div class="mb-3">
-                  <label cLabel for="business_service">
-                    {{ t('Business Service') }}
-                  </label>
-                  <input cFormControl
-                    id="business_service"
-                    type="text"
-                    name="business_service"
-                    oitcFormError [errors]="errors" errorField="business_service"
-                    [(ngModel)]="post.business_service">
-                  <oitc-form-feedback [errors]="errors" errorField="business_service"></oitc-form-feedback>
-                  <span class="help-block">
-                    {{ t('ServiceNow Incident Business Service') }}
-                  </span>
-                </div>
-                <div class="mb-3">
-                  <c-form-check>
-                    <input
-                      cFormCheckInput
-                      id="two_way"
-                      name="two_way"
-                      type="checkbox"
-                      trueFalseValue
-                      [trueValue]="true"
-                      [falseValue]="false"
-                      [(ngModel)]="post.two_way"/>
-                    <label cFormCheckLabel
-                    for="two_way">{{ t('Enable Two-Way Integration') }}</label>
-                    <div class="help-block">
-                      {{ t('Via the Two-Way Integration ServiceNow is able, to acknowledge host and service problems.') }}
-                      <br>
-                        {{ t('For this it is required, that your openITCOCKPIT Server is accessible from the Internet.') }}
-                      </div>
-                    </c-form-check>
-                  </div>
-                  <div class="mb-3">
-                    <c-form-check>
-                      <input
-                        cFormCheckInput
-                        id="use_proxy"
-                        name="use_proxy"
-                        type="checkbox"
-                        trueFalseValue
-                        [trueValue]="true"
-                        [falseValue]="false"
-                        [(ngModel)]="post.use_proxy"/>
-                      <label cFormCheckLabel
-                      for="use_proxy">{{ t('Use Proxy Server') }}</label>
-                      <div class="help-block">
-                        <span *oitcPermission="['proxy', 'index']">
-                          {{ t('Determine if the ') }}
-                          <a [routerLink]="['/', 'proxy', 'index']">{{ t('configured proxy') }}</a>
-                          {{ t(' should be used.') }}
+        <form cForm (ngSubmit)="updateServicenowSettings()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('ServiceNow') }}
+                        <small class="fw-300">
+                            {{ t('Settings') }}
+                        </small>
+                    </h5>
+                </c-card-header>
+                <c-card-body>
+                    <div class="mb-3">
+                        <label cLabel for="domain">
+                            {{ t('ServiceNow URL') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               id="domain"
+                               required
+                               type="text"
+                               name="domain"
+                               placeholder="https://my-servicenow.service-now.com"
+                               oitcFormError [errors]="errors" errorField="domain"
+                               [(ngModel)]="post.domain">
+                        <oitc-form-feedback [errors]="errors" errorField="domain"></oitc-form-feedback>
+                        <span class="help-block">
+                            {{ t('URL to your ServiceNow Instance') }}
                         </span>
-                        <span *oitcPermission="['proxy', 'index']; negate: true">
-                          {{ t('Determine if the configured proxy should be used.') }}
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="user_id">
+                            {{ t('User ID') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               id="user_id"
+                               required
+                               type="text"
+                               name="user_id"
+                               placeholder="openitcockpit"
+                               autocomplete="false"
+                               oitcFormError [errors]="errors" errorField="user_id"
+                               [(ngModel)]="post.user_id">
+                        <oitc-form-feedback [errors]="errors" errorField="user_id"></oitc-form-feedback>
+                        <span class="help-block">
+                            {{ t('ServiceNow User ID') }}
                         </span>
-                      </div>
-                    </c-form-check>
-                  </div>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="user_password">
+                            {{ t('User Password') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               id="user_password"
+                               required
+                               type="password"
+                               name="user_password"
+                               placeholder="password123"
+                               autocomplete="false"
+                               oitcFormError [errors]="errors" errorField="user_password"
+                               [(ngModel)]="post.user_password">
+                        <oitc-form-feedback [errors]="errors" errorField="user_password"></oitc-form-feedback>
+                        <span class="help-block">
+                            {{ t('ServiceNow User Password') }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="impact">
+                            {{ t('Incident Impact') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-select
+                            name="impact"
+                            id="impact"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.impact"
+                            [options]="selectOptions"
+                            oitcFormError [errors]="errors" errorField="impact">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="impact"></oitc-form-feedback>
+                        <span class="help-block">
+                            {{ t('Impact defines the effect that the task has on business') }}
+                            <br>
+                            {{ t('Including urgency used for priority calculating') }}
+                            <a href="https://docs.servicenow.com/bundle/london-it-service-management/page/product/incident-management/reference/r_PrioritizationOfIncidents.html?cshalt=yes">
+                                {{ t('(More information)') }}
+                            </a>
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="urgency">
+                            {{ t('Incident Urgency') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-select
+                            name="urgency"
+                            id="urgency"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.urgency"
+                            [options]="selectOptions"
+                            oitcFormError [errors]="errors" errorField="urgency">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="urgency"></oitc-form-feedback>
+                        <span class="help-block">
+                            {{ t('Urgency defines the extent to which the task resolution can be delayed') }}
+                            <br>
+                            {{ t('Including impact used for priority calculating') }}
+                            <a href="https://docs.servicenow.com/bundle/london-it-service-management/page/product/incident-management/reference/r_PrioritizationOfIncidents.html?cshalt=yes">
+                                {{ t('(More information)') }}
+                            </a>
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="recovery_state">
+                            {{ t('Incident recovery state') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-select
+                            name="recovery_state"
+                            id="recovery_state"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.recovery_state"
+                            [options]="selectOptionsRecoveryState"
+                            oitcFormError [errors]="errors" errorField="recovery_state">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="recovery_state"></oitc-form-feedback>
+                        <span class="help-block">
+                            {{ t('Incident state on host / service recovery') }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="assignment_group">
+                            {{ t('Assignment Group') }}
+                        </label>
+                        <input cFormControl
+                               id="assignment_group"
+                               type="text"
+                               name="assignment_group"
+                               placeholder="Incident Management"
+                               oitcFormError [errors]="errors" errorField="assignment_group"
+                               [(ngModel)]="post.assignment_group">
+                        <oitc-form-feedback [errors]="errors" errorField="assignment_group"></oitc-form-feedback>
+                        <span class="help-block">
+                            {{ t('ServiceNow Incident Assignment Group') }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="assigned_to">
+                            {{ t('Assigned To') }}
+                        </label>
+                        <input cFormControl
+                               id="assigned_to"
+                               type="text"
+                               name="assigned_to"
+                               placeholder="Incident Manager"
+                               oitcFormError [errors]="errors" errorField="assigned_to"
+                               [(ngModel)]="post.assigned_to">
+                        <oitc-form-feedback [errors]="errors" errorField="assigned_to"></oitc-form-feedback>
+                        <span class="help-block">
+                            {{ t('ServiceNow Incident Assigned To (automatically sets status to "In progress")') }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="business_service">
+                            {{ t('Business Service') }}
+                        </label>
+                        <input cFormControl
+                               id="business_service"
+                               type="text"
+                               name="business_service"
+                               oitcFormError [errors]="errors" errorField="business_service"
+                               [(ngModel)]="post.business_service">
+                        <oitc-form-feedback [errors]="errors" errorField="business_service"></oitc-form-feedback>
+                        <span class="help-block">
+                            {{ t('ServiceNow Incident Business Service') }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input
+                                cFormCheckInput
+                                id="two_way"
+                                name="two_way"
+                                type="checkbox"
+                                trueFalseValue
+                                [trueValue]="true"
+                                [falseValue]="false"
+                                [(ngModel)]="post.two_way"/>
+                            <label cFormCheckLabel
+                                   for="two_way">{{ t('Enable Two-Way Integration') }}</label>
+                            <div class="help-block">
+                                {{ t('Via the Two-Way Integration ServiceNow is able, to acknowledge host and service problems.') }}
+                                <br>
+                                {{ t('For this it is required, that your openITCOCKPIT Server is accessible from the Internet.') }}
+                            </div>
+                        </c-form-check>
+                    </div>
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input
+                                cFormCheckInput
+                                id="use_proxy"
+                                name="use_proxy"
+                                type="checkbox"
+                                trueFalseValue
+                                [trueValue]="true"
+                                [falseValue]="false"
+                                [(ngModel)]="post.use_proxy"/>
+                            <label cFormCheckLabel
+                                   for="use_proxy">{{ t('Use Proxy Server') }}</label>
+                            <div class="help-block">
+                                <span *oitcPermission="['proxy', 'index']">
+                                    {{ t('Determine if the ') }}
+                                    <a [routerLink]="['/', 'proxy', 'index']">{{ t('configured proxy') }}</a>
+                                    {{ t(' should be used.') }}
+                                </span>
+                                <span *oitcPermission="['proxy', 'index']; negate: true">
+                                    {{ t('Determine if the configured proxy should be used.') }}
+                                </span>
+                            </div>
+                        </c-form-check>
+                    </div>
                 </c-card-body>
                 <c-card-footer class="text-end">
-                  <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Save') }}
-                  </button>
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Save') }}
+                    </button>
                 </c-card-footer>
-              </c-card>
-            </form>
-          }
-        </ng-container>
+            </c-card>
+        </form>
+    }
+</ng-container>

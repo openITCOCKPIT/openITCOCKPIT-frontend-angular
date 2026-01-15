@@ -24,71 +24,71 @@
 -->
 
 <ng-container *transloco="let t">
-  <c-card-header>
-    <c-container [fluid]="true">
-      <c-row>
-        <c-col [xs]="1" [lg]="1" class="p-2 float-start">
-          <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-          {{ t('Filter') }}
-        </c-col>
+    <c-card-header>
+        <c-container [fluid]="true">
+            <c-row>
+                <c-col [xs]="1" [lg]="1" class="p-2 float-start">
+                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                    {{ t('Filter') }}
+                </c-col>
 
-        <c-col [xs]="7" [lg]="7">
+                <c-col [xs]="7" [lg]="7">
 
-          <ng-select [items]="bookmarks"
-            groupBy="fav_group"
-            class="w-100"
-            [(ngModel)]="selectedBookmarkId"
-            bindLabel="name"
-            bindValue="id"
-            [multiple]="false"
-            notFoundText="{{t('No Items')}}"
-            placeholder="{{t('Please choose')}}"
-            (change)="onBookmarkChange()">
-            <ng-template ng-label-tmp let-item="item">
-              <b>{{ item.name }}</b>
-            </ng-template>
-            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-              <b [ngOptionHighlight]="search">{{ item.name }}</b>
-            </ng-template>
-          </ng-select>
+                    <ng-select [items]="bookmarks"
+                               groupBy="fav_group"
+                               class="w-100"
+                               [(ngModel)]="selectedBookmarkId"
+                               bindLabel="name"
+                               bindValue="id"
+                               [multiple]="false"
+                               notFoundText="{{t('No Items')}}"
+                               placeholder="{{t('Please choose')}}"
+                               (change)="onBookmarkChange()">
+                        <ng-template ng-label-tmp let-item="item">
+                            <b>{{ item.name }}</b>
+                        </ng-template>
+                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                            <b [ngOptionHighlight]="search">{{ item.name }}</b>
+                        </ng-template>
+                    </ng-select>
 
-        </c-col>
-        <c-col [xs]="4" [lg]="4" class="p-1">
+                </c-col>
+                <c-col [xs]="4" [lg]="4" class="p-1">
 
-          @if (showEdit) {
-            <c-button-group class="ripple" aria-label="Crud" role="group">
-              <button cButton class="ripple" color="default" size="xs" (click)="editBookmark()"
-                title="{{t('Edit bookmark')}}">
-                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-              </button>
-              <button cButton class="ripple " color="info" size="xs"
-                title="{{t('Share Filter')}}" (click)="computeBookmarkUrl()">
-                <fa-icon [icon]="['fas', 'bookmark']"></fa-icon>
-              </button>
-              <button cButton class="ripple float-end" color="danger" size="xs"
-                title="{{t('Delete current filter')}}" (click)="toggleDeleteAllModal()">
-                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-              </button>
-              <button cButton class="ripple" color="success" size="xs" (click)="updateBookmark()">
-                {{ t('Update filter') }}
-              </button>
-            </c-button-group>
-          }
-          <c-button-group class="ripple ms-2 float-end" aria-label="Crud" role="group">
-            <button cButton color="success" size="xs"
-              (click)="showNewBookmarkModel()">
-              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-              {{ t('Save as new filter') }}
-            </button>
-          </c-button-group>
-        </c-col>
-      </c-row>
-    </c-container>
-  </c-card-header>
+                    @if (showEdit) {
+                        <c-button-group class="ripple" aria-label="Crud" role="group">
+                            <button cButton class="ripple" color="default" size="xs" (click)="editBookmark()"
+                                    title="{{t('Edit bookmark')}}">
+                                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                            </button>
+                            <button cButton class="ripple " color="info" size="xs"
+                                    title="{{t('Share Filter')}}" (click)="computeBookmarkUrl()">
+                                <fa-icon [icon]="['fas', 'bookmark']"></fa-icon>
+                            </button>
+                            <button cButton class="ripple float-end" color="danger" size="xs"
+                                    title="{{t('Delete current filter')}}" (click)="toggleDeleteAllModal()">
+                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                            </button>
+                            <button cButton class="ripple" color="success" size="xs" (click)="updateBookmark()">
+                                {{ t('Update filter') }}
+                            </button>
+                        </c-button-group>
+                    }
+                    <c-button-group class="ripple ms-2 float-end" aria-label="Crud" role="group">
+                        <button cButton color="success" size="xs"
+                                (click)="showNewBookmarkModel()">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('Save as new filter') }}
+                        </button>
+                    </c-button-group>
+                </c-col>
+            </c-row>
+        </c-container>
+    </c-card-header>
 
-  <oitc-filter-bookmark-save-modal (saved)="savedNewBookmark($event)" [actionType]="actionType" [plugin]="plugin"
-    [controller]="controller" [bookmark]="selectedBookmark"
-  [action]="action" [filter]="filter"></oitc-filter-bookmark-save-modal>
-  <oitc-delete-bookmark-modal (completed)="deleted($event)" [items]="deleteItems"></oitc-delete-bookmark-modal>
-  <oitc-filter-bookmark-export-modal [urlString]="computedUrl"/>
+    <oitc-filter-bookmark-save-modal (saved)="savedNewBookmark($event)" [actionType]="actionType" [plugin]="plugin"
+                                     [controller]="controller" [bookmark]="selectedBookmark"
+                                     [action]="action" [filter]="filter"></oitc-filter-bookmark-save-modal>
+    <oitc-delete-bookmark-modal (completed)="deleted($event)" [items]="deleteItems"></oitc-delete-bookmark-modal>
+    <oitc-filter-bookmark-export-modal [urlString]="computedUrl"/>
 </ng-container>

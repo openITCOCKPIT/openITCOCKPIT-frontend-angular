@@ -1,8 +1,8 @@
 <ng-container *transloco="let t">
     <div class="d-flex h-100 flex-column" #boxContainer>
         <c-row>
-            <c-col [xs]="12" [md]="1">
-                @if (!isReadonly()) {
+            @if (!isReadonly()) {
+                <c-col [xs]="12" [md]="1">
                     <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
                             (click)="flipped.set(!flipped())">
                         @if (flipped()) {
@@ -11,17 +11,17 @@
                             <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                         }
                     </button>
-                }
-            </c-col>
-            <c-col [xs]="12" [md]="11">
-                <c-row>
-                    @if (widget && config && !flipped()) {
-                        <c-col [xs]="12" class="text-end">
-                            <oitc-interval-picker (change)="onRefreshChange($event)"></oitc-interval-picker>
-                        </c-col>
-                    }
-                </c-row>
-            </c-col>
+                </c-col>
+                <c-col [xs]="12" [md]="11">
+                    <c-row>
+                        @if (widget && config && !flipped()) {
+                            <c-col [xs]="12" class="text-end">
+                                <oitc-interval-picker (change)="onRefreshChange($event)"></oitc-interval-picker>
+                            </c-col>
+                        }
+                    </c-row>
+                </c-col>
+            }
         </c-row>
 
         <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"

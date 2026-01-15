@@ -26,16 +26,16 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 @Component({
     selector: 'oitc-isar-flow-timepicker',
     imports: [
-    ColComponent,
-    DropdownComponent,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FaIconComponent,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    NgClass
-],
+        ColComponent,
+        DropdownComponent,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        FaIconComponent,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        NgClass
+    ],
     templateUrl: './isar-flow-timepicker.component.html',
     styleUrl: './isar-flow-timepicker.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

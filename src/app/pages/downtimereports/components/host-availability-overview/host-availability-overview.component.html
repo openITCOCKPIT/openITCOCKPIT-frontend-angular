@@ -1,87 +1,87 @@
 <ng-container *transloco="let t">
-  <c-card class="mb-3">
-    <c-card-header
-      [ngStyle]="{background: this.dynamicColour() ? host().pieChartData.background : ''}">
-      <h5 cCardTitle [ngStyle]="{color: this.dynamicColour() ? 'white' : ''}">
-        <i class="fa fa-desktop"></i>
-        <span *oitcPermission="['hosts', 'browser']; negate: true">
-          {{ host().Host.name }}
-        </span>
-        <span *oitcPermission="['hosts', 'browser']"
-          [routerLink]="['/', 'hosts', 'browser', host().Host.id]">
-          {{ host().Host.name }}
-        </span>
-      </h5>
-    </c-card-header>
-    <c-card-body>
-      <c-row>
-        <c-col md="1">
-          <oitc-host-pie-echart
-            [showLegend]="false"
-            [title]="''"
-            [scaleSize]="10"
+    <c-card class="mb-3">
+        <c-card-header
+            [ngStyle]="{background: this.dynamicColour() ? host().pieChartData.background : ''}">
+            <h5 cCardTitle [ngStyle]="{color: this.dynamicColour() ? 'white' : ''}">
+                <i class="fa fa-desktop"></i>
+                <span *oitcPermission="['hosts', 'browser']; negate: true">
+                    {{ host().Host.name }}
+                </span>
+                <span *oitcPermission="['hosts', 'browser']"
+                      [routerLink]="['/', 'hosts', 'browser', host().Host.id]">
+                    {{ host().Host.name }}
+                </span>
+            </h5>
+        </c-card-header>
+        <c-card-body>
+            <c-row>
+                <c-col md="1">
+                    <oitc-host-pie-echart
+                        [showLegend]="false"
+                        [title]="''"
+                        [scaleSize]="10"
                         [chartData]="[
                                 {name: 'UP',value: host().pieChartData.widgetOverview[0].percent},
                                 {name: 'DOWN',value: host().pieChartData.widgetOverview[1].percent},
                                 {name: 'UNKNOWN',value: host().pieChartData.widgetOverview[2].percent}]"/>
-        </c-col>
-        <c-col md="11">
-          @if (host().Host.description) {
-            <c-row>
-              <c-col md="3">
-                {{ t('Description') }}
-              </c-col>
-              <c-col md="9">
-                {{ host().Host.description }}&nbsp;
-              </c-col>
+                </c-col>
+                <c-col md="11">
+                    @if (host().Host.description) {
+                        <c-row>
+                            <c-col md="3">
+                                {{ t('Description') }}
+                            </c-col>
+                            <c-col md="9">
+                                {{ host().Host.description }}&nbsp;
+                            </c-col>
+                        </c-row>
+                    }
+                    <c-row>
+                        <c-col md="3">
+                            {{ t('IP address') }}
+                        </c-col>
+                        <c-col md="9">
+                            {{ host().Host.address }}
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col md="3">
+                            {{ t('Status') }}
+                        </c-col>
+                        <c-col md="3" class="bg-up shadow-up downtime-report-state-overview font-sm padding-5">
+                            <strong>
+                                {{ host().pieChartData.widgetOverview[0].percent }} %
+                                ({{ host().pieChartData.widgetOverview[0].human }})
+                            </strong>
+                        </c-col>
+                        <c-col md="3" class="bg-down shadow-down downtime-report-state-overview font-sm padding-5">
+                            <strong>
+                                {{ host().pieChartData.widgetOverview[1].percent }} %
+                                ({{ host().pieChartData.widgetOverview[1].human }})
+                            </strong>
+                        </c-col>
+                        <c-col md="3"
+                               class="bg-unreachable shadow-unreachable downtime-report-state-overview font-sm padding-5">
+                            <strong>
+                                {{ host().pieChartData.widgetOverview[2].percent }} %
+                                ({{ host().pieChartData.widgetOverview[2].human }})
+                            </strong>
+                        </c-col>
+                    </c-row>
+                </c-col>
             </c-row>
-          }
-          <c-row>
-            <c-col md="3">
-              {{ t('IP address') }}
-            </c-col>
-            <c-col md="9">
-              {{ host().Host.address }}
-            </c-col>
-          </c-row>
-          <c-row>
-            <c-col md="3">
-              {{ t('Status') }}
-            </c-col>
-            <c-col md="3" class="bg-up shadow-up downtime-report-state-overview font-sm padding-5">
-              <strong>
-                {{ host().pieChartData.widgetOverview[0].percent }} %
-                ({{ host().pieChartData.widgetOverview[0].human }})
-              </strong>
-            </c-col>
-            <c-col md="3" class="bg-down shadow-down downtime-report-state-overview font-sm padding-5">
-              <strong>
-                {{ host().pieChartData.widgetOverview[1].percent }} %
-                ({{ host().pieChartData.widgetOverview[1].human }})
-              </strong>
-            </c-col>
-            <c-col md="3"
-              class="bg-unreachable shadow-unreachable downtime-report-state-overview font-sm padding-5">
-              <strong>
-                {{ host().pieChartData.widgetOverview[2].percent }} %
-                ({{ host().pieChartData.widgetOverview[2].human }})
-              </strong>
-            </c-col>
-          </c-row>
-        </c-col>
-      </c-row>
-      @if (host().Services && evaluationType() === 1) {
-        <c-row>
-          @for (service of host().Services | keyvalue; track service) {
-            <c-col md="3"
-              >
-              <oitc-service-availability-overview
-                [service]="service.value"
-                [dynamicColour]="dynamicColour()"/>
-            </c-col>
-          }
-        </c-row>
-      }
-    </c-card-body>
-  </c-card>
+            @if (host().Services && evaluationType() === 1) {
+                <c-row>
+                    @for (service of host().Services | keyvalue; track service) {
+                        <c-col md="3"
+                        >
+                            <oitc-service-availability-overview
+                                [service]="service.value"
+                                [dynamicColour]="dynamicColour()"/>
+                        </c-col>
+                    }
+                </c-row>
+            }
+        </c-card-body>
+    </c-card>
 </ng-container>

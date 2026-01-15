@@ -28,18 +28,18 @@ import { DefaultMacros } from '../../../components/code-mirror-container/code-mi
 @Component({
     selector: 'oitc-default-macros-modal',
     imports: [
-    ModalToggleDirective,
-    ModalComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ModalBodyComponent,
-    FaIconComponent,
-    XsButtonDirective,
-    ButtonCloseDirective,
-    TranslocoDirective,
-    TableDirective,
-    ModalFooterComponent
-],
+        ModalToggleDirective,
+        ModalComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ModalBodyComponent,
+        FaIconComponent,
+        XsButtonDirective,
+        ButtonCloseDirective,
+        TranslocoDirective,
+        TableDirective,
+        ModalFooterComponent
+    ],
     templateUrl: './default-macros-modal.component.html',
     styleUrl: './default-macros-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

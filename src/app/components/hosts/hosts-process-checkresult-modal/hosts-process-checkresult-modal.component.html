@@ -1,68 +1,68 @@
 <ng-container *transloco="let t">
-  <c-modal
-    #modal='cModal'
-    [keyboard]="true"
-    id="hostProcessCheckresultModal"
-    size="lg"
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="hostProcessCheckresultModal"
+        size="lg"
     >
-    <c-modal-header>
-      <h5 cModalTitle>
-        <fa-icon [icon]="['fas', 'download']"></fa-icon>
-        {{ t('Passive transfer of check result') }}
-      </h5>
-      <button (click)="hideModal()" cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body>
-      <c-row>
-        <c-col>
-          <div class="mb-3">
-            <label for="CheckResultStatusHost">
-              {{ t('Select method') }}
-              <oitc-required-icon/>
-            </label>
-            <select
-              cSelect
-              name="CheckResultStatusHost"
-              id="CheckResultStatusHost"
-              [(ngModel)]="processCheckresultModal.state">
-              <option [value]="0">{{ t('Up') }}</option>
-              <option [value]="1">{{ t('Down') }}</option>
-              <option [value]="2">{{ t('Unreachable') }}</option>
-            </select>
-          </div>
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                {{ t('Passive transfer of check result') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col>
+                    <div class="mb-3">
+                        <label for="CheckResultStatusHost">
+                            {{ t('Select method') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <select
+                            cSelect
+                            name="CheckResultStatusHost"
+                            id="CheckResultStatusHost"
+                            [(ngModel)]="processCheckresultModal.state">
+                            <option [value]="0">{{ t('Up') }}</option>
+                            <option [value]="1">{{ t('Down') }}</option>
+                            <option [value]="2">{{ t('Unreachable') }}</option>
+                        </select>
+                    </div>
 
-          <div class="mb-3">
-            <label cLabel for="output_host">{{ t('Output') }}</label>
-            <input cFormControl id="output_host" name="output_host"
-              [placeholder]="'Test alert | counter=1' | transloco"
-              [(ngModel)]="processCheckresultModal.output">
-            @if (error) {
-              <div cFormText>
-                <div class="help-block text-danger">
-                  {{ t('Output can not be empty') }}
-                </div>
-              </div>
-            }
-          </div>
-          <c-form-check class="mb-3">
-            <input cFormCheckInput id="force_hardstate_host" name="force_hardstate_host" type="checkbox"
-              class="checkbox-lg custom-check-default"
-              [(ngModel)]="processCheckresultModal.force_hardstate"/>
-            <label cFormCheckLabel class="ms-1 mt-1"
-            for="force_hardstate_host">{{ t('Force to hard state ') }}</label>
-          </c-form-check>
+                    <div class="mb-3">
+                        <label cLabel for="output_host">{{ t('Output') }}</label>
+                        <input cFormControl id="output_host" name="output_host"
+                               [placeholder]="'Test alert | counter=1' | transloco"
+                               [(ngModel)]="processCheckresultModal.output">
+                        @if (error) {
+                            <div cFormText>
+                                <div class="help-block text-danger">
+                                    {{ t('Output can not be empty') }}
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <c-form-check class="mb-3">
+                        <input cFormCheckInput id="force_hardstate_host" name="force_hardstate_host" type="checkbox"
+                               class="checkbox-lg custom-check-default"
+                               [(ngModel)]="processCheckresultModal.force_hardstate"/>
+                        <label cFormCheckLabel class="ms-1 mt-1"
+                               for="force_hardstate_host">{{ t('Force to hard state ') }}</label>
+                    </c-form-check>
 
-        </c-col>
-      </c-row>
-    </c-modal-body>
-    <c-modal-footer>
-      <button (click)="setExternalCommands()" [disabled]="isSend" cButton class="ripple" color="success">
-        <fa-icon [hidden]="!isSend" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-        {{ t('Save') }}
-      </button>
-      <button (click)="hideModal()" cButton class="ripple" color="default">
-        {{ t('Cancel') }}
-      </button>
-    </c-modal-footer>
-  </c-modal>
+                </c-col>
+            </c-row>
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="setExternalCommands()" [disabled]="isSend" cButton class="ripple" color="success">
+                <fa-icon [hidden]="!isSend" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Save') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
 </ng-container>

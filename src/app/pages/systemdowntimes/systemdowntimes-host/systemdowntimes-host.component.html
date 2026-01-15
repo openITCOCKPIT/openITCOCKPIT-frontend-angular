@@ -1,368 +1,368 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['downtimes', 'host']"
-            [routerLink]="['/', 'downtimes', 'host']">
-            <fa-icon [icon]="['fas', 'repeat']"></fa-icon>
-            {{ t('Recurring downtimes') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-          {{ t('Host') }}
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'list']"></fa-icon>
-          {{ t('Overview') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['downtimes', 'host']"
+                   [routerLink]="['/', 'downtimes', 'host']">
+                    <fa-icon [icon]="['fas', 'repeat']"></fa-icon>
+                    {{ t('Recurring downtimes') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                {{ t('Host') }}
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
     </nav>
 
     <c-col sm="12">
-      <c-alert color="info">
-        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-        <strong>
-          {{ t('Notice') }}:
-        </strong>
-        {{ t('Recurring downtimes with deleted objects will be deleted automatically by the cronjob') }}
-      </c-alert>
+        <c-alert color="info">
+            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+            <strong>
+                {{ t('Notice') }}:
+            </strong>
+            {{ t('Recurring downtimes with deleted objects will be deleted automatically by the cronjob') }}
+        </c-alert>
     </c-col>
 
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>{{ t('Recurring downtimes') }}
-          <small class="fw-300">
-            {{ t('overview') }}
-          </small>
-        </h5>
-        <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
-          <c-nav-item>
-            <a [routerLink]="['/', 'systemdowntimes', 'host']"
-              *oitcPermission="['systemdowntimes', 'host']" class="nav-link active">
-              <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-              {{ t('Host') }}
-            </a>
-          </c-nav-item>
-          <c-nav-item>
-            <a [routerLink]="['/', 'systemdowntimes', 'service']"
-              *oitcPermission="['systemdowntimes', 'service']" class="nav-link">
-              <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-              {{ t('Service') }}
-            </a>
-          </c-nav-item>
-          <c-nav-item>
-            <a [routerLink]="['/', 'systemdowntimes', 'hostgroup']"
-              *oitcPermission="['systemdowntimes', 'hostgroup']" class="nav-link">
-              <fa-icon [icon]="['fas', 'server']"></fa-icon>
-              {{ t('Host group') }}
-            </a>
-          </c-nav-item>
-          <c-nav-item>
-            <a [routerLink]="['/', 'systemdowntimes', 'node']"
-              *oitcPermission="['systemdowntimes', 'node']" class="nav-link">
-              <fa-icon [icon]="['fas', 'chain']"></fa-icon>
-              {{ t('Container') }}
-            </a>
-          </c-nav-item>
-          @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
-            <c-nav-item>
-              <a [routerLink]="['/', 'distribute_module', 'satellites', 'downtime']"
-                *oitcPermission="['distributemodule', 'satellites', 'downtime']" class="nav-link">
-                <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
-                {{ t('Satellite') }}
-              </a>
-            </c-nav-item>
-          }
-        </c-nav>
-        <c-nav class="card-toolbar card-header-pills">
-          <c-nav-item class="px-1">
-            <button (click)="loadHostSystemdowntimes()" cButton class="ripple" color="default" size="xs">
-              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-              {{ t('Refresh') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <c-dropdown>
-              <button cButton cDropdownToggle color="success" size="xs">
-                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                {{ t('Create downtime') }}
-              </button>
-              <ul cDropdownMenu>
-                <li>
-                  <a [routerLink]="['/', 'systemdowntimes', 'addHostdowntime']" cDropdownItem
-                    class="pointer"
-                    *oitcPermission="['systemdowntimes', 'addhostdowntime']">
-                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                    {{ t('Create host downtime') }}
-                  </a>
-                </li>
-                <li>
-                  <a [routerLink]="['/', 'systemdowntimes', 'addServicedowntime']" cDropdownItem
-                    *oitcPermission="['systemdowntimes', 'addservicedowntime']">
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    {{ t('Create service downtime') }}
-                  </a>
-                </li>
-                <li>
-                  <a [routerLink]="['/', 'systemdowntimes', 'addHostgroupdowntime']" cDropdownItem
-                    *oitcPermission="['systemdowntimes', 'addhostdowntime']">
-                    <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                    {{ t('Create host group downtime') }}
-                  </a>
-                </li>
-                <li>
-                  <a [routerLink]="['/', 'systemdowntimes', 'addContainerdowntime']" cDropdownItem
-                    *oitcPermission="['systemdowntimes', 'addhostdowntime']">
-                    <fa-icon [icon]="['fas', 'link']"></fa-icon>
-                    {{ t('Create container downtime') }}
-                  </a>
-                </li>
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Recurring downtimes') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                <c-nav-item>
+                    <a [routerLink]="['/', 'systemdowntimes', 'host']"
+                       *oitcPermission="['systemdowntimes', 'host']" class="nav-link active">
+                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                        {{ t('Host') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'systemdowntimes', 'service']"
+                       *oitcPermission="['systemdowntimes', 'service']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        {{ t('Service') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'systemdowntimes', 'hostgroup']"
+                       *oitcPermission="['systemdowntimes', 'hostgroup']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                        {{ t('Host group') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'systemdowntimes', 'node']"
+                       *oitcPermission="['systemdowntimes', 'node']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'chain']"></fa-icon>
+                        {{ t('Container') }}
+                    </a>
+                </c-nav-item>
                 @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
-                  <li>
-                    <a [routerLink]="['/', 'distribute_module', 'satellites', 'addSatelliteDowntime']"
-                      cDropdownItem
-                      *oitcPermission="['distributemodule', 'satellites', 'addsatellitedowntime']">
-                      <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
-                      {{ t('Create satellite downtime') }}
-                    </a>
-                  </li>
+                    <c-nav-item>
+                        <a [routerLink]="['/', 'distribute_module', 'satellites', 'downtime']"
+                           *oitcPermission="['distributemodule', 'satellites', 'downtime']" class="nav-link">
+                            <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
+                            {{ t('Satellite') }}
+                        </a>
+                    </c-nav-item>
                 }
-              </ul>
-            </c-dropdown>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-              {{ t('Filter') }}
-            </button>
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
-        <!-- Filter -->
-        <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
-          <c-row>
-            <c-col>
-              <h6 class="pb-2 mb-3 border-bottom">
-                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                {{ t('Filter') }}
-              </h6>
-            </c-col>
-          </c-row>
-          <form cForm>
-            <c-row>
-              <c-col md="6" class="mb-2">
-                <c-input-group>
-                  <span cInputGroupText>
-                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="params['filter[Hosts.name]']"
-                    [placeholder]="'Filter by host name' | transloco"
-                    aria-label="name"
-                    cFormControl
-                    name="Hosts.name"
-                    oitcDebounce
-                    type="text"
-                    />
-                </c-input-group>
-              </c-col>
-              <c-col md="6" class="mb-2">
-                <c-input-group>
-                  <span cInputGroupText>
-                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="params['filter[Systemdowntimes.author]']"
-                    [placeholder]="'Filter by user' | transloco"
-                    aria-label="name"
-                    cFormControl
-                    name="Systemdowntimes.author"
-                    oitcDebounce
-                    type="text"
-                    />
-                </c-input-group>
-              </c-col>
-              <c-col md="6" class="mb-2">
-                <c-input-group>
-                  <span cInputGroupText>
-                    <fa-icon [icon]="['fas', 'comment']"></fa-icon>
-                  </span>
-                  <input (debouncedValue)="onFilterChange($event)"
-                    [(ngModel)]="params['filter[Systemdowntimes.comment]']"
-                    [placeholder]="'Filter by comment' | transloco"
-                    aria-label="name"
-                    cFormControl
-                    name="Systemdowntimes.comment"
-                    oitcDebounce
-                    type="text"
-                    />
-                </c-input-group>
-              </c-col>
-            </c-row>
-            <c-row class="mt-2">
-              <c-col class="text-end">
-                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                  {{ t('Reset filter') }}
-                </button>
-              </c-col>
-            </c-row>
-          </form>
-        </c-container>
-        <!-- End Filter -->
-        @if (!hostSystemdowntimes) {
-          <oitc-table-loader></oitc-table-loader>
-        }
-        <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-          (matSortChange)="onSortChange($event)"
-          [matSortActive]="params.sort" [matSortDirection]="params.direction">
-          <thead>
-            <tr>
-              <th class="text-center col-1" scope="col" style="width: 5px;">
-                <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-              </th>
-              <th scope="col" mat-sort-header="Hosts.name">
-                {{ t('Host name') }}
-              </th>
-              <th scope="col" mat-sort-header="Systemdowntimes.downtimetype_id">
-                {{ t('Include services') }}
-              </th>
-              <th scope="col" mat-sort-header="Systemdowntimes.author">
-                {{ t('User') }}
-              </th>
-              <th scope="col" mat-sort-header="Systemdowntimes.comment">
-                {{ t('Comment') }}
-              </th>
-              <th scope="col">
-                {{ t('Weekdays') }}
-              </th>
-              <th scope="col">
-                {{ t('Days of month') }}
-              </th>
-              <th scope="col" mat-sort-header="Systemdowntimes.from_time">
-                {{ t('Start time') }}
-              </th>
-              <th scope="col" mat-sort-header="Systemdowntimes.duration">
-                {{ t('Duration') }}
-              </th>
-              <th scope="col">
-                {{ t('Delete') }}
-              </th>
-            </tr>
-          </thead>
-          @if (hostSystemdowntimes) {
-            <tbody>
-              @for (hostSystemdowntime of hostSystemdowntimes.all_host_recurring_downtimes; track hostSystemdowntime) {
-                <tr>
-                  <td class="text-center">
-                    @if (hostSystemdowntime.Host.allow_edit) {
-                      <div>
-                        <oitc-item-select
-                          *oitcPermission="['systemdowntimes', 'delete']"
-                          [disabled]="false"
-                        [item]="hostSystemdowntime"></oitc-item-select>
-                      </div>
-                    }
-                  </td>
-                  <td class="word-break">
-                    <a *oitcPermission="['hosts', 'browser']"
-                      [routerLink]="['/', 'hosts', 'browser', hostSystemdowntime.Host.id]">
-                      {{ hostSystemdowntime.Host.hostname }}
-                    </a>
-                    <span *oitcPermission="['hosts', 'browser']; negate: true">
-                      {{ hostSystemdowntime.Host.hostname }}
-                    </span>
-                  </td>
-                  <td>
-                    @if (hostSystemdowntime.Systemdowntime.downtimeTypeId == 1) {
-                      {{ t('Yes') }}
-                    } @else {
-                      {{ t('No') }}
-                    }
-                  </td>
-                  <td>
-                    {{ hostSystemdowntime.Systemdowntime.author }}
-                  </td>
-                  <td>
-                    <span class="text-muted">
-                      AUTO[{{ hostSystemdowntime.Systemdowntime.id }}]:
-                    </span>
-                    {{ hostSystemdowntime.Systemdowntime.comment }}
-                  </td>
-                  <td>
-                    {{ hostSystemdowntime.Systemdowntime.weekdaysHuman.join(', ') }}
-                  </td>
-                  <td>
-                    {{ hostSystemdowntime.Systemdowntime.dayOfMonth.join(', ') }}
-                  </td>
-                  <td>
-                    {{ hostSystemdowntime.Systemdowntime.startTime }}
-                  </td>
-                  <td>
-                    {{ hostSystemdowntime.Systemdowntime.duration }}
-                  </td>
-                  <td>
-                    @if (hostSystemdowntime.Host.allow_edit) {
-                      <div>
-                        <button (click)="toggleDeleteAllModal(hostSystemdowntime)"
-                          *oitcPermission="['downtimes', 'delete']"
-                          cButton class="ripple" color="danger" size="xs">
-                          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                          {{ t('Delete') }}
+            </c-nav>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadHostSystemdowntimes()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <c-dropdown>
+                        <button cButton cDropdownToggle color="success" size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('Create downtime') }}
                         </button>
-                      </div>
-                    }
-                  </td>
+                        <ul cDropdownMenu>
+                            <li>
+                                <a [routerLink]="['/', 'systemdowntimes', 'addHostdowntime']" cDropdownItem
+                                   class="pointer"
+                                   *oitcPermission="['systemdowntimes', 'addhostdowntime']">
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    {{ t('Create host downtime') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a [routerLink]="['/', 'systemdowntimes', 'addServicedowntime']" cDropdownItem
+                                   *oitcPermission="['systemdowntimes', 'addservicedowntime']">
+                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    {{ t('Create service downtime') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a [routerLink]="['/', 'systemdowntimes', 'addHostgroupdowntime']" cDropdownItem
+                                   *oitcPermission="['systemdowntimes', 'addhostdowntime']">
+                                    <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                    {{ t('Create host group downtime') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a [routerLink]="['/', 'systemdowntimes', 'addContainerdowntime']" cDropdownItem
+                                   *oitcPermission="['systemdowntimes', 'addhostdowntime']">
+                                    <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                                    {{ t('Create container downtime') }}
+                                </a>
+                            </li>
+                            @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
+                                <li>
+                                    <a [routerLink]="['/', 'distribute_module', 'satellites', 'addSatelliteDowntime']"
+                                       cDropdownItem
+                                       *oitcPermission="['distributemodule', 'satellites', 'addsatellitedowntime']">
+                                        <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
+                                        {{ t('Create satellite downtime') }}
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </c-dropdown>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Hosts.name]']"
+                                       [placeholder]="'Filter by host name' | transloco"
+                                       aria-label="name"
+                                       cFormControl
+                                       name="Hosts.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Systemdowntimes.author]']"
+                                       [placeholder]="'Filter by user' | transloco"
+                                       aria-label="name"
+                                       cFormControl
+                                       name="Systemdowntimes.author"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'comment']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Systemdowntimes.comment]']"
+                                       [placeholder]="'Filter by comment' | transloco"
+                                       aria-label="name"
+                                       cFormControl
+                                       name="Systemdowntimes.comment"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+            @if (!hostSystemdowntimes) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th class="text-center col-1" scope="col" style="width: 5px;">
+                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                    </th>
+                    <th scope="col" mat-sort-header="Hosts.name">
+                        {{ t('Host name') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Systemdowntimes.downtimetype_id">
+                        {{ t('Include services') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Systemdowntimes.author">
+                        {{ t('User') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Systemdowntimes.comment">
+                        {{ t('Comment') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Weekdays') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Days of month') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Systemdowntimes.from_time">
+                        {{ t('Start time') }}
+                    </th>
+                    <th scope="col" mat-sort-header="Systemdowntimes.duration">
+                        {{ t('Duration') }}
+                    </th>
+                    <th scope="col">
+                        {{ t('Delete') }}
+                    </th>
                 </tr>
-              }
-            </tbody>
-          }
-        </table>
-        @if (hostSystemdowntimes && hostSystemdowntimes.all_host_recurring_downtimes.length === 0) {
-          <oitc-no-records
-          ></oitc-no-records>
-        }
-        @if (hostSystemdowntimes && hostSystemdowntimes.all_host_recurring_downtimes) {
-          <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-            [fluid]="true">
-            <c-row>
-              <c-col>
-                <oitc-select-all
-                [itemsCount]="hostSystemdowntimes.all_host_recurring_downtimes.length"></oitc-select-all>
-              </c-col>
-              <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                <div *oitcPermission="['downtimes', 'delete']"
-                  class="btn-group d-flex flex-row" role="group">
-                  <button (click)="toggleDeleteAllModal()"
-                    class="btn btn-outline-danger col-3 border-0"
-                    type="button">
-                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                    {{ t('Delete selected') }}
-                  </button>
-                </div>
-              </c-col>
-            </c-row>
-          </c-container>
-        }
-        <c-container
-          [fluid]="true" class="mb-3 py-3">
-          <c-row>
-            <c-col>
-              @if (hostSystemdowntimes) {
-                <oitc-paginate-or-scroll
-                  (paginatorChange)="onPaginatorChange($event)"
-                [paginateOrScroll]="hostSystemdowntimes"></oitc-paginate-or-scroll>
-              }
-            </c-col>
-          </c-row>
-        </c-container>
-      </c-card-body>
+                </thead>
+                @if (hostSystemdowntimes) {
+                    <tbody>
+                        @for (hostSystemdowntime of hostSystemdowntimes.all_host_recurring_downtimes; track hostSystemdowntime) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (hostSystemdowntime.Host.allow_edit) {
+                                        <div>
+                                            <oitc-item-select
+                                                *oitcPermission="['systemdowntimes', 'delete']"
+                                                [disabled]="false"
+                                                [item]="hostSystemdowntime"></oitc-item-select>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="word-break">
+                                    <a *oitcPermission="['hosts', 'browser']"
+                                       [routerLink]="['/', 'hosts', 'browser', hostSystemdowntime.Host.id]">
+                                        {{ hostSystemdowntime.Host.hostname }}
+                                    </a>
+                                    <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                        {{ hostSystemdowntime.Host.hostname }}
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (hostSystemdowntime.Systemdowntime.downtimeTypeId == 1) {
+                                        {{ t('Yes') }}
+                                    } @else {
+                                        {{ t('No') }}
+                                    }
+                                </td>
+                                <td>
+                                    {{ hostSystemdowntime.Systemdowntime.author }}
+                                </td>
+                                <td>
+                                    <span class="text-muted">
+                                        AUTO[{{ hostSystemdowntime.Systemdowntime.id }}]:
+                                    </span>
+                                    {{ hostSystemdowntime.Systemdowntime.comment }}
+                                </td>
+                                <td>
+                                    {{ hostSystemdowntime.Systemdowntime.weekdaysHuman.join(', ') }}
+                                </td>
+                                <td>
+                                    {{ hostSystemdowntime.Systemdowntime.dayOfMonth.join(', ') }}
+                                </td>
+                                <td>
+                                    {{ hostSystemdowntime.Systemdowntime.startTime }}
+                                </td>
+                                <td>
+                                    {{ hostSystemdowntime.Systemdowntime.duration }}
+                                </td>
+                                <td>
+                                    @if (hostSystemdowntime.Host.allow_edit) {
+                                        <div>
+                                            <button (click)="toggleDeleteAllModal(hostSystemdowntime)"
+                                                    *oitcPermission="['downtimes', 'delete']"
+                                                    cButton class="ripple" color="danger" size="xs">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </button>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+            @if (hostSystemdowntimes && hostSystemdowntimes.all_host_recurring_downtimes.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (hostSystemdowntimes && hostSystemdowntimes.all_host_recurring_downtimes) {
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="hostSystemdowntimes.all_host_recurring_downtimes.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div *oitcPermission="['downtimes', 'delete']"
+                                 class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
+            <c-container
+                [fluid]="true" class="mb-3 py-3">
+                <c-row>
+                    <c-col>
+                        @if (hostSystemdowntimes) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="hostSystemdowntimes"></oitc-paginate-or-scroll>
+                        }
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
     </c-card>
-  </ng-container>
-  <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+</ng-container>
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

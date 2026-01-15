@@ -1,325 +1,325 @@
 <ng-container *transloco="let t">
-  <c-modal
-    #modal='cModal'
-    [keyboard]="true"
-    id="importDataModal"
-    size="xl">
-    @if (importer) {
-      <c-modal-header>
-        <h5 cModalTitle>
-          @switch (importer.data_source) {
-            @case ('idoit') {
-              <!-- Import i-doit data -->
-              <fa-stack [size]="'2xl'" class="me-2">
-                <fa-icon [icon]="['fas', 'database']"
-                stackItemSize="1x" class="text-info"></fa-icon>
-                <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                  stackItemSize="1x"
-                transform="shrink-8 right-10 down-7"></fa-icon>
-              </fa-stack>
-              {{ t('Import data from i-doit system') }}
-            }
-            @case ('openitcockpit_agent') {
-              <!-- Import openITCOCKPIT Agent data -->
-              <fa-stack [size]="'2xl'" class="me-2">
-                <fa-icon [icon]="['fas', 'user-secret']"
-                stackItemSize="1x" class="text-info"></fa-icon>
-                <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                  stackItemSize="1x"
-                transform="shrink-8 right-10 down-7"></fa-icon>
-              </fa-stack>
-              {{ t('Import data from openITCOCKPIT Agent') }}
-            }
-            @case ('itop') {
-              <!-- Import iTop data -->
-              <fa-stack [size]="'2xl'" class="me-2">
-                <fa-icon [icon]="['fas', 'database']"
-                stackItemSize="1x" class="text-info"></fa-icon>
-                <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                  stackItemSize="1x"
-                transform="shrink-8 right-10 down-7"></fa-icon>
-              </fa-stack>
-              {{ t('Import data from openITCOCKPIT Agent') }}
-            }
-            @case ('external_monitoring') {
-              <!-- Import ExternalMonitoringSystem data -->
-              <fa-stack [size]="'2xl'" class="me-2">
-                <fa-icon [icon]="['fas', 'tower-observation']"
-                stackItemSize="1x" class="text-info"></fa-icon>
-                <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
-                  stackItemSize="1x"
-                transform="shrink-8 right-10 down-7"></fa-icon>
-              </fa-stack>
-              {{ t('Import data from External Monitoring System system') }}
-            }
-          }
-        </h5>
-        <button (click)="hideModal()" cButtonClose></button>
-      </c-modal-header>
-    }
-    <c-modal-body>
-
-      <c-row class="fieldset-legend-border-bottom">
-        <c-col>
-          <fieldset>
-            <legend>
-              <h5>
-                {{ t('Overview importer configuration') }}
-                @if (importer) {
-                  <span>
-                    <a *oitcPermission="['ImportModule','Importers', 'edit']"
-                      [routerLink]="['/', 'import_module', 'importers', 'edit', importer.id]">
-                      {{ importer.name }}
-                    </a>
-                    <span *oitcPermission="['ImportModule','Importers', 'edit']; negate: true">
-                      {{ importer.name }}
-                    </span>
-                  </span>
-                }
-                @if (importer) {
-                  <span class="float-end">
-                    <a *oitcPermission="['ImportModule','Importers', 'edit']"
-                      class="btn btn-outline-primary btn-sm ripple"
-                      [routerLink]="['/', 'import_module', 'importers', 'edit', importer.id]">
-                      {{ t('Go to "Importer configuration"') }}
-                    </a>
-                  </span>
-                }
-              </h5>
-            </legend>
-            @if (dynamicFieldsNameValue.length > 0) {
-              <div class="pb-3">
-                @for (formField of dynamicFieldsNameValue; track formField) {
-                  <div class="bold">
-                    {{ formField.label }}:
-                    @if (formField.type !== 'checkbox') {
-                      <span class="text-info">
-                        {{ formField.value }}
-                      </span>
-                    } @else {
-                      @if (formField.value == 0) {
-                        <fa-icon [icon]="['fas', 'times']" class="text-danger"
-                        ></fa-icon>
-                      }
-                      @if (formField.value == 1) {
-                        <fa-icon [icon]="['fas', 'check']" class="text-success"
-                        ></fa-icon>
-                      }
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="importDataModal"
+        size="xl">
+        @if (importer) {
+            <c-modal-header>
+                <h5 cModalTitle>
+                    @switch (importer.data_source) {
+                        @case ('idoit') {
+                            <!-- Import i-doit data -->
+                            <fa-stack [size]="'2xl'" class="me-2">
+                                <fa-icon [icon]="['fas', 'database']"
+                                         stackItemSize="1x" class="text-info"></fa-icon>
+                                <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+                                         stackItemSize="1x"
+                                         transform="shrink-8 right-10 down-7"></fa-icon>
+                            </fa-stack>
+                            {{ t('Import data from i-doit system') }}
+                        }
+                        @case ('openitcockpit_agent') {
+                            <!-- Import openITCOCKPIT Agent data -->
+                            <fa-stack [size]="'2xl'" class="me-2">
+                                <fa-icon [icon]="['fas', 'user-secret']"
+                                         stackItemSize="1x" class="text-info"></fa-icon>
+                                <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+                                         stackItemSize="1x"
+                                         transform="shrink-8 right-10 down-7"></fa-icon>
+                            </fa-stack>
+                            {{ t('Import data from openITCOCKPIT Agent') }}
+                        }
+                        @case ('itop') {
+                            <!-- Import iTop data -->
+                            <fa-stack [size]="'2xl'" class="me-2">
+                                <fa-icon [icon]="['fas', 'database']"
+                                         stackItemSize="1x" class="text-info"></fa-icon>
+                                <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+                                         stackItemSize="1x"
+                                         transform="shrink-8 right-10 down-7"></fa-icon>
+                            </fa-stack>
+                            {{ t('Import data from openITCOCKPIT Agent') }}
+                        }
+                        @case ('external_monitoring') {
+                            <!-- Import ExternalMonitoringSystem data -->
+                            <fa-stack [size]="'2xl'" class="me-2">
+                                <fa-icon [icon]="['fas', 'tower-observation']"
+                                         stackItemSize="1x" class="text-info"></fa-icon>
+                                <fa-icon [icon]="['fas', 'plus-circle']" class="text-success"
+                                         stackItemSize="1x"
+                                         transform="shrink-8 right-10 down-7"></fa-icon>
+                            </fa-stack>
+                            {{ t('Import data from External Monitoring System system') }}
+                        }
                     }
-                  </div>
-                }
-              </div>
+                </h5>
+                <button (click)="hideModal()" cButtonClose></button>
+            </c-modal-header>
+        }
+        <c-modal-body>
 
+            <c-row class="fieldset-legend-border-bottom">
+                <c-col>
+                    <fieldset>
+                        <legend>
+                            <h5>
+                                {{ t('Overview importer configuration') }}
+                                @if (importer) {
+                                    <span>
+                                        <a *oitcPermission="['ImportModule','Importers', 'edit']"
+                                           [routerLink]="['/', 'import_module', 'importers', 'edit', importer.id]">
+                                            {{ importer.name }}
+                                        </a>
+                                        <span *oitcPermission="['ImportModule','Importers', 'edit']; negate: true">
+                                            {{ importer.name }}
+                                        </span>
+                                    </span>
+                                }
+                                @if (importer) {
+                                    <span class="float-end">
+                                        <a *oitcPermission="['ImportModule','Importers', 'edit']"
+                                           class="btn btn-outline-primary btn-sm ripple"
+                                           [routerLink]="['/', 'import_module', 'importers', 'edit', importer.id]">
+                                            {{ t('Go to "Importer configuration"') }}
+                                        </a>
+                                    </span>
+                                }
+                            </h5>
+                        </legend>
+                        @if (dynamicFieldsNameValue.length > 0) {
+                            <div class="pb-3">
+                                @for (formField of dynamicFieldsNameValue; track formField) {
+                                    <div class="bold">
+                                        {{ formField.label }}:
+                                        @if (formField.type !== 'checkbox') {
+                                            <span class="text-info">
+                                                {{ formField.value }}
+                                            </span>
+                                        } @else {
+                                            @if (formField.value == 0) {
+                                                <fa-icon [icon]="['fas', 'times']" class="text-danger"
+                                                ></fa-icon>
+                                            }
+                                            @if (formField.value == 1) {
+                                                <fa-icon [icon]="['fas', 'check']" class="text-success"
+                                                ></fa-icon>
+                                            }
+                                        }
+                                    </div>
+                                }
+                            </div>
+
+                        }
+                    </fieldset>
+                </c-col>
+            </c-row>
+            @if (!importData) {
+                <oitc-table-loader></oitc-table-loader>
             }
-          </fieldset>
-        </c-col>
-      </c-row>
-      @if (!importData) {
-        <oitc-table-loader></oitc-table-loader>
-      }
-      @if (importData) {
-        <c-row>
-          @if (!importData.success) {
-            <c-col>
-              <c-alert color="danger" class="my-3 p-1">
-                <h5 cAlertHeading> {{ t('Error!') }}</h5>
-                @if (importData.errorMessage) {
-                  <p>
-                    <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
-                    {{ importData.errorMessage }}
-                  </p>
-                }
-                @if (importData.errors.notValidRawData && importData.errors.notValidRawData.length>0) {
-                  <p>
-                    <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
-                    {{ importData.errors.notValidRawData.error }}
-                    <span class="help-block text-danger italic">
-                      {{ importData.errors.notValidRawData.description }}
-                    </span>
-                  </p>
-                }
-              </c-alert>
-            </c-col>
-          }
-        </c-row>
-      }
-      @if (importData && importData.success && importer) {
-        <c-row class="mt-3">
-          @switch (importer.data_source) {
-            @case ('idoit') {
-              <c-col>
-                <h5>
-                  {{ t('i-doit Data preview') }}
-                </h5>
-                <div class="help-block text-info pb-2 small">
-                  {{ t('This preview shows maximal 10 first valid records from i-doit system.') }}
-                  <span>
-                    {{ t('Furthermore are all hosts displayed and no filter rules get applied.') }}
-                  </span>
-                  <span class="text-warning italic text-decoration-underline">
-                    {{ t('Lines with duplicate identifiers are automatically ignored') }}
-                  </span>
-                </div>
-              </c-col>
-            }
-            @case ('itop') {
-              <c-col>
-                <h5>
-                  {{ t('iTop Data preview!') }}
-                </h5>
-                @if (importData.message && importData.message.length > 0) {
-                  <figure class="text-info">
-                    <blockquote class="blockquote">
-                      <p>
-                        <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
-                        {{ importData.message }}
-                      </p>
-                    </blockquote>
-                  </figure>
-                }
-                @if (importData.errors && !importData.errors.notValidRawData.error) {
-                  <figure
-                    class="text-danger">
-                    <blockquote class="blockquote">
-                      <p>
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                        {{ importData.errors }}
-                      </p>
-                    </blockquote>
-                  </figure>
-                }
-                @if (importData.errors && importData.errors.notValidRawData.error) {
-                  <figure
-                    class="text-danger">
-                    <blockquote class="blockquote">
-                      <p>
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                        {{ importData.errors.notValidRawData.error }}
-                      </p>
-                    </blockquote>
-                    @if (importData.errors.notValidRawData.description) {
-                      <figcaption class="blockquote-footer mb-1"
-                        >
-                        {{ importData.errors.notValidRawData.description }}
-                      </figcaption>
+            @if (importData) {
+                <c-row>
+                    @if (!importData.success) {
+                        <c-col>
+                            <c-alert color="danger" class="my-3 p-1">
+                                <h5 cAlertHeading> {{ t('Error!') }}</h5>
+                                @if (importData.errorMessage) {
+                                    <p>
+                                        <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
+                                        {{ importData.errorMessage }}
+                                    </p>
+                                }
+                                @if (importData.errors.notValidRawData && importData.errors.notValidRawData.length > 0) {
+                                    <p>
+                                        <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
+                                        {{ importData.errors.notValidRawData.error }}
+                                        <span class="help-block text-danger italic">
+                                            {{ importData.errors.notValidRawData.description }}
+                                        </span>
+                                    </p>
+                                }
+                            </c-alert>
+                        </c-col>
                     }
-                  </figure>
-                }
-                <div class="help-block text-info pb-2 small">
-                  {{ t('This preview shows maximal 10 first valid records from iTop system.') }}
-                  <span>
-                    {{ t('Furthermore are all objects displayed and no filter rules get applied.') }}
-                  </span>
-                  <span class="text-warning italic text-decoration-underline">
-                    {{ t('Lines with duplicate identifiers are automatically ignored') }}
-                  </span>
-                </div>
-              </c-col>
+                </c-row>
             }
-            @case ('openitcockpit_agent') {
-              <c-col>
-                <h5>
-                  {{ t('openITCOCKPIT Agent Data preview') }}
-                </h5>
-                <div class="help-block text-info pb-2 small">
-                  {{ t('This preview shows maximal 10 first valid records from openITCOCKPIT Agent.') }}
-                  <span>
-                    {{ t('Furthermore are all hosts displayed and no filter rules get applied.') }}
-                  </span>
-                  <span class="text-warning italic text-decoration-underline">
-                    {{ t('Lines with duplicate identifiers are automatically ignored') }}
-                  </span>
-                </div>
-              </c-col>
+            @if (importData && importData.success && importer) {
+                <c-row class="mt-3">
+                    @switch (importer.data_source) {
+                        @case ('idoit') {
+                            <c-col>
+                                <h5>
+                                    {{ t('i-doit Data preview') }}
+                                </h5>
+                                <div class="help-block text-info pb-2 small">
+                                    {{ t('This preview shows maximal 10 first valid records from i-doit system.') }}
+                                    <span>
+                                        {{ t('Furthermore are all hosts displayed and no filter rules get applied.') }}
+                                    </span>
+                                    <span class="text-warning italic text-decoration-underline">
+                                        {{ t('Lines with duplicate identifiers are automatically ignored') }}
+                                    </span>
+                                </div>
+                            </c-col>
+                        }
+                        @case ('itop') {
+                            <c-col>
+                                <h5>
+                                    {{ t('iTop Data preview!') }}
+                                </h5>
+                                @if (importData.message && importData.message.length > 0) {
+                                    <figure class="text-info">
+                                        <blockquote class="blockquote">
+                                            <p>
+                                                <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                                                {{ importData.message }}
+                                            </p>
+                                        </blockquote>
+                                    </figure>
+                                }
+                                @if (importData.errors && !importData.errors.notValidRawData.error) {
+                                    <figure
+                                        class="text-danger">
+                                        <blockquote class="blockquote">
+                                            <p>
+                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                {{ importData.errors }}
+                                            </p>
+                                        </blockquote>
+                                    </figure>
+                                }
+                                @if (importData.errors && importData.errors.notValidRawData.error) {
+                                    <figure
+                                        class="text-danger">
+                                        <blockquote class="blockquote">
+                                            <p>
+                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                {{ importData.errors.notValidRawData.error }}
+                                            </p>
+                                        </blockquote>
+                                        @if (importData.errors.notValidRawData.description) {
+                                            <figcaption class="blockquote-footer mb-1"
+                                            >
+                                                {{ importData.errors.notValidRawData.description }}
+                                            </figcaption>
+                                        }
+                                    </figure>
+                                }
+                                <div class="help-block text-info pb-2 small">
+                                    {{ t('This preview shows maximal 10 first valid records from iTop system.') }}
+                                    <span>
+                                        {{ t('Furthermore are all objects displayed and no filter rules get applied.') }}
+                                    </span>
+                                    <span class="text-warning italic text-decoration-underline">
+                                        {{ t('Lines with duplicate identifiers are automatically ignored') }}
+                                    </span>
+                                </div>
+                            </c-col>
+                        }
+                        @case ('openitcockpit_agent') {
+                            <c-col>
+                                <h5>
+                                    {{ t('openITCOCKPIT Agent Data preview') }}
+                                </h5>
+                                <div class="help-block text-info pb-2 small">
+                                    {{ t('This preview shows maximal 10 first valid records from openITCOCKPIT Agent.') }}
+                                    <span>
+                                        {{ t('Furthermore are all hosts displayed and no filter rules get applied.') }}
+                                    </span>
+                                    <span class="text-warning italic text-decoration-underline">
+                                        {{ t('Lines with duplicate identifiers are automatically ignored') }}
+                                    </span>
+                                </div>
+                            </c-col>
+                        }
+                    }
+                </c-row>
+                <c-row>
+                    <c-col>
+                        <table class="mt-2 mb-0 table table-fit" bordered cTable hover striped small>
+                            <thead>
+                            <tr>
+                                <th class="col-1">
+                                    {{ t('UID') }}
+                                </th>
+                                <th class="col-2">
+                                    {{ t('Name') }}
+                                </th>
+                                <th class="col-2">
+                                    {{ t('Address') }}
+                                </th>
+                                <th>
+                                    {{ t('Description') }}
+                                </th>
+                                <th>
+                                    {{ t('Software') }}
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @if (importData.data) {
+                                    @for (importHostData of importData.data; track importHostData) {
+                                        <tr class="word-break">
+                                            <td>
+                                                {{ importHostData.identifier }}
+                                            </td>
+                                            <td>
+                                                {{ importHostData.hostname }}
+                                            </td>
+                                            <td>
+                                                {{ importHostData.address }}
+                                            </td>
+                                            <td>
+                                                {{ importHostData.description }}
+                                            </td>
+                                            <td>
+                                                {{ importHostData.software }}
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                @if (importData.errors !== null && importData.errors.notValidRawData && importData.errors.notValidRawData.invalidData.length > 0) {
+                                    @for (importInvalidHostData of importData.errors.notValidRawData.invalidData; track importInvalidHostData) {
+                                        <tr
+                                            class="word-break">
+                                            <td class="text-decoration-line-through text-decoration-color-danger">
+                                                {{ importInvalidHostData.identifier }}
+                                            </td>
+                                            <td class="text-decoration-line-through text-decoration-color-danger">
+                                                {{ importInvalidHostData.hostname }}
+                                            </td>
+                                            <td class="text-decoration-line-through text-decoration-color-danger">
+                                                {{ importInvalidHostData.address }}
+                                            </td>
+                                            <td class="text-decoration-line-through text-decoration-color-danger">
+                                                {{ importInvalidHostData.description }}
+                                            </td>
+                                            <td class="text-decoration-line-through text-decoration-color-danger">
+                                                {{ importInvalidHostData.software }}
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </c-col>
+                </c-row>
             }
-          }
-        </c-row>
-        <c-row>
-          <c-col>
-            <table class="mt-2 mb-0 table table-fit" bordered cTable hover striped small>
-              <thead>
-                <tr>
-                  <th class="col-1">
-                    {{ t('UID') }}
-                  </th>
-                  <th class="col-2">
-                    {{ t('Name') }}
-                  </th>
-                  <th class="col-2">
-                    {{ t('Address') }}
-                  </th>
-                  <th>
-                    {{ t('Description') }}
-                  </th>
-                  <th>
-                    {{ t('Software') }}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                @if (importData.data) {
-                  @for (importHostData of importData.data; track importHostData) {
-                    <tr class="word-break">
-                      <td>
-                        {{ importHostData.identifier }}
-                      </td>
-                      <td>
-                        {{ importHostData.hostname }}
-                      </td>
-                      <td>
-                        {{ importHostData.address }}
-                      </td>
-                      <td>
-                        {{ importHostData.description }}
-                      </td>
-                      <td>
-                        {{ importHostData.software }}
-                      </td>
-                    </tr>
-                  }
-                }
-                @if (importData.errors !== null && importData.errors.notValidRawData && importData.errors.notValidRawData.invalidData.length > 0) {
-                  @for (importInvalidHostData of importData.errors.notValidRawData.invalidData; track importInvalidHostData) {
-                    <tr
-                      class="word-break">
-                      <td class="text-decoration-line-through text-decoration-color-danger">
-                        {{ importInvalidHostData.identifier }}
-                      </td>
-                      <td class="text-decoration-line-through text-decoration-color-danger">
-                        {{ importInvalidHostData.hostname }}
-                      </td>
-                      <td class="text-decoration-line-through text-decoration-color-danger">
-                        {{ importInvalidHostData.address }}
-                      </td>
-                      <td class="text-decoration-line-through text-decoration-color-danger">
-                        {{ importInvalidHostData.description }}
-                      </td>
-                      <td class="text-decoration-line-through text-decoration-color-danger">
-                        {{ importInvalidHostData.software }}
-                      </td>
-                    </tr>
-                  }
-                }
-              </tbody>
-            </table>
-          </c-col>
-        </c-row>
-      }
-    </c-modal-body>
-    <c-modal-footer>
-      @if (importData) {
-        <button cButton class="ripple" color="primary"
-          [disabled]="showSynchronizingSpinner || showSpinner || importData.errors !== null || importData.data?.length === 0"
-          (click)="startDataImport()">
-          @if (showSpinner) {
-            <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-          }
-          {{ t('Start data import') }}
-        </button>
-      }
-      <button (click)="hideModal()" cButton class="ripple" color="default">
-        {{ t('Close') }}
-      </button>
-    </c-modal-footer>
-  </c-modal>
+        </c-modal-body>
+        <c-modal-footer>
+            @if (importData) {
+                <button cButton class="ripple" color="primary"
+                        [disabled]="showSynchronizingSpinner || showSpinner || importData.errors !== null || importData.data?.length === 0"
+                        (click)="startDataImport()">
+                    @if (showSpinner) {
+                        <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                    }
+                    {{ t('Start data import') }}
+                </button>
+            }
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
 </ng-container>

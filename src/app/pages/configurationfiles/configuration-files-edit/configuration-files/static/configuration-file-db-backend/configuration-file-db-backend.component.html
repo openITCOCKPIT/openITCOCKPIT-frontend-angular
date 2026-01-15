@@ -1,30 +1,30 @@
 <ng-container *transloco="let t">
 
-  <!-- This config file only contains a single field, the database backend -->
+    <!-- This config file only contains a single field, the database backend -->
 
-  @if (fields.length > 0) {
-    <div class="mb-3">
-      <label [for]="fields[0].field">
-        {{ t('Database backend') }}
-        <oitc-required-icon/>
-      </label>
-      <select
-        cSelect
-        [attr.id]="fields[0].field"
-        [name]="fields[0].field"
-        oitcFormError [errors]="errors" errorField="Configfile.{{fields[0].field}}"
-        [(ngModel)]="fields[0].value"
-        >
-        <option [ngValue]="'Statusengine3'">{{ t('Statusengine 3 - MySQL') }}</option>
-        <option [ngValue]="'Crate'">{{ t('Statusengine 3 - CrateDB') }}</option>
-        <option [ngValue]="'Nagios'">{{ t('Statusengine 2 / NDOUtils - MySQL') }}</option>
-      </select>
-      <oitc-form-feedback [errors]="errors" errorField="Configfile.{{fields[0].field}}"></oitc-form-feedback>
-      @if (fields[0].help) {
-        <div class="help-block">
-          {{ fields[0].help }}
+    @if (fields.length > 0) {
+        <div class="mb-3">
+            <label [for]="fields[0].field">
+                {{ t('Database backend') }}
+                <oitc-required-icon/>
+            </label>
+            <select
+                cSelect
+                [attr.id]="fields[0].field"
+                [name]="fields[0].field"
+                oitcFormError [errors]="errors" errorField="Configfile.{{fields[0].field}}"
+                [(ngModel)]="fields[0].value"
+            >
+                <option [ngValue]="'Statusengine3'">{{ t('Statusengine 3 - MySQL') }}</option>
+                <option [ngValue]="'Crate'">{{ t('Statusengine 3 - CrateDB') }}</option>
+                <option [ngValue]="'Nagios'">{{ t('Statusengine 2 / NDOUtils - MySQL') }}</option>
+            </select>
+            <oitc-form-feedback [errors]="errors" errorField="Configfile.{{fields[0].field}}"></oitc-form-feedback>
+            @if (fields[0].help) {
+                <div class="help-block">
+                    {{ fields[0].help }}
+                </div>
+            }
         </div>
-      }
-    </div>
-  }
+    }
 </ng-container>

@@ -35,19 +35,19 @@ import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbut
 @Component({
     selector: 'oitc-delete-bookmark-modal',
     imports: [
-    ModalComponent,
-    ModalHeaderComponent,
-    ModalBodyComponent,
-    ModalTitleDirective,
-    ButtonCloseDirective,
-    ModalFooterComponent,
-    TranslocoDirective,
-    RowComponent,
-    ColComponent,
-    FaIconComponent,
-    ProgressComponent,
-    XsButtonDirective
-],
+        ModalComponent,
+        ModalHeaderComponent,
+        ModalBodyComponent,
+        ModalTitleDirective,
+        ButtonCloseDirective,
+        ModalFooterComponent,
+        TranslocoDirective,
+        RowComponent,
+        ColComponent,
+        FaIconComponent,
+        ProgressComponent,
+        XsButtonDirective
+    ],
     templateUrl: './delete-bookmark-modal.component.html',
     styleUrl: './delete-bookmark-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

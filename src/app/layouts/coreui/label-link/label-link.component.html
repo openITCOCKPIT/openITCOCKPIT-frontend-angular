@@ -4,16 +4,16 @@ https://github.com/angular/angular/issues/22972#issuecomment-407358396
 -->
 
 <ng-template #content>
-  <ng-content></ng-content>
+    <ng-content></ng-content>
 </ng-template>
 
 
-@if (objectId() && (hasPermission$|async)) {
-  <a [routerLink]="route() + '/' + objectId()">
-    <ng-container *ngTemplateOutlet="content"></ng-container>
-  </a>
+@if (objectId() && ( hasPermission$|async )) {
+    <a [routerLink]="route() + '/' + objectId()">
+        <ng-container *ngTemplateOutlet="content"></ng-container>
+    </a>
 }
 
-@if (!objectId() || !(hasPermission$|async)) {
-  <ng-container *ngTemplateOutlet="content"></ng-container>
+@if (!objectId() || !( hasPermission$|async )) {
+    <ng-container *ngTemplateOutlet="content"></ng-container>
 }

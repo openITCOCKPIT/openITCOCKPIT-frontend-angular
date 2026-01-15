@@ -1,4 +1,3 @@
-
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -17,29 +16,31 @@ import { AsyncPipe } from '@angular/common';
 import { AutoreportObject, AutoreportPost } from '../autoreports.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { AutoreportBitwiseIconComponent } from '../../../components/autoreport-bitwise-icon/autoreport-bitwise-icon.component';
+import {
+    AutoreportBitwiseIconComponent
+} from '../../../components/autoreport-bitwise-icon/autoreport-bitwise-icon.component';
 
 @Component({
-  selector: 'oitc-autoreport-edit-step-three',
+    selector: 'oitc-autoreport-edit-step-three',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    CardBodyComponent,
-    BadgeComponent,
-    RowComponent,
-    TranslocoPipe,
-    ColComponent,
-    AsyncPipe,
-    AutoreportBitwiseIconComponent
-],
-  templateUrl: './autoreport-edit-step-three.component.html',
-  styleUrl: './../../../assets/autoreport.css',//'./autoreport-edit-step-three.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+        TranslocoDirective,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CardBodyComponent,
+        BadgeComponent,
+        RowComponent,
+        TranslocoPipe,
+        ColComponent,
+        AsyncPipe,
+        AutoreportBitwiseIconComponent
+    ],
+    templateUrl: './autoreport-edit-step-three.component.html',
+    styleUrl: './../../../assets/autoreport.css',//'./autoreport-edit-step-three.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutoreportEditStepThreeComponent implements OnInit, OnDestroy {
 

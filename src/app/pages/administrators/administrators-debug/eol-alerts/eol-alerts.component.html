@@ -1,72 +1,72 @@
 <!-- alerts -->
 <ng-container *transloco="let t">
-  @if (codename() === 'bionic') {
-    <c-alert>
-      <h4>
-        <fa-icon [icon]="['fas', 'warning']"></fa-icon>
-        {{ t('Ubuntu Bionic 18.04 is end of life soon!') }}
-      </h4>
-      {{ t('Official end of life of Ubuntu Bionic scheduled for April 2023.') }}
-      {{ t('Therefore openITCOCKPIT 4.5.5 will be one of the last releases for Ubuntu Bionic. Please update to Ubuntu Focal to receive further updates.') }}
-      <br/>
-      {{
-      t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
-      '0': 'support@itsm.it-novum.com'
-      })
-      }}
-    </c-alert>
-  }
+    @if (codename() === 'bionic') {
+        <c-alert>
+            <h4>
+                <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+                {{ t('Ubuntu Bionic 18.04 is end of life soon!') }}
+            </h4>
+            {{ t('Official end of life of Ubuntu Bionic scheduled for April 2023.') }}
+            {{ t('Therefore openITCOCKPIT 4.5.5 will be one of the last releases for Ubuntu Bionic. Please update to Ubuntu Focal to receive further updates.') }}
+            <br/>
+            {{
+                t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
+                    '0': 'support@itsm.it-novum.com'
+                })
+            }}
+        </c-alert>
+    }
 
-  @if (codename() === 'buster') {
-    <c-alert>
-      <h4>
-        <fa-icon [icon]="['fas', 'warning']"></fa-icon>
-        {{ t('Debian Buster 10 end of life!') }}
-      </h4>
-      {{ t('Debian Buster is not supported by the Debian security team anymore!') }}
-      {{ t('Therefore openITCOCKPIT 4.5.5 will be one of the last releases for Debian Buster. Please update to Debian Bullseye to receive further updates.') }}
-      <br/>
-      {{
-      t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
-      '0': 'support@itsm.it-novum.com'
-      })
-      }}
-    </c-alert>
-  }
+    @if (codename() === 'buster') {
+        <c-alert>
+            <h4>
+                <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+                {{ t('Debian Buster 10 end of life!') }}
+            </h4>
+            {{ t('Debian Buster is not supported by the Debian security team anymore!') }}
+            {{ t('Therefore openITCOCKPIT 4.5.5 will be one of the last releases for Debian Buster. Please update to Debian Bullseye to receive further updates.') }}
+            <br/>
+            {{
+                t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
+                    '0': 'support@itsm.it-novum.com'
+                })
+            }}
+        </c-alert>
+    }
 
-  @if (codename() === 'focal') {
-    <c-alert>
-      <h4>
-        <fa-icon [icon]="['fas', 'warning']"></fa-icon>
-        {{ t('Ubuntu Focal 20.04 is end of life soon!') }}
-      </h4>
-      {{ t('Official end of life of Ubuntu Focal scheduled for April 2025.') }}
-      {{ t('Please update to Ubuntu Jammy to receive further updates.') }}
-      <br/>
-      {{
-      t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
-      '0': 'support@itsm.it-novum.com'
-      })
-      }}
-    </c-alert>
-  }
+    @if (codename() === 'focal') {
+        <c-alert>
+            <h4>
+                <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+                {{ t('Ubuntu Focal 20.04 is end of life soon!') }}
+            </h4>
+            {{ t('Official end of life of Ubuntu Focal scheduled for April 2025.') }}
+            {{ t('Please update to Ubuntu Jammy to receive further updates.') }}
+            <br/>
+            {{
+                t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
+                    '0': 'support@itsm.it-novum.com'
+                })
+            }}
+        </c-alert>
+    }
 
-  @if (codename() === 'bullseye') {
-    <c-alert>
-      <h4>
-        <fa-icon [icon]="['fas', 'warning']"></fa-icon>
-        {{ t('Debian Bullseye 11 is end of life!') }}
-      </h4>
-      <!-- https://wiki.debian.org/DebianReleases -->
-      {{ t('Official end of life of Debian Bullseye scheduled for August 2024.') }}
-      {{ t('Please update to Debian Bookworm to receive further updates.') }}
-      <br/>
-      {{
-      t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
-      '0': 'support@itsm.it-novum.com'
-      })
-      }}
-    </c-alert>
-  }
+    @if (codename() === 'bullseye') {
+        <c-alert>
+            <h4>
+                <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+                {{ t('Debian Bullseye 11 is end of life!') }}
+            </h4>
+            <!-- https://wiki.debian.org/DebianReleases -->
+            {{ t('Official end of life of Debian Bullseye scheduled for August 2024.') }}
+            {{ t('Please update to Debian Bookworm to receive further updates.') }}
+            <br/>
+            {{
+                t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
+                    '0': 'support@itsm.it-novum.com'
+                })
+            }}
+        </c-alert>
+    }
 
 </ng-container>

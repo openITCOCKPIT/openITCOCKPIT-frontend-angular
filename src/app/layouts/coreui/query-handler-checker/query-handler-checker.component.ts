@@ -10,10 +10,10 @@ import { QueryHandlerService } from './query-handler.service';
 @Component({
     selector: 'oitc-query-handler-checker',
     imports: [
-    AlertComponent,
-    TranslocoDirective,
-    FaIconComponent
-],
+        AlertComponent,
+        TranslocoDirective,
+        FaIconComponent
+    ],
     templateUrl: './query-handler-checker.component.html',
     styleUrl: './query-handler-checker.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

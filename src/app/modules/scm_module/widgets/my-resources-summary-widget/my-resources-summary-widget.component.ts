@@ -20,19 +20,19 @@ import { PermissionDirective } from '../../../../permissions/permission.directiv
 @Component({
     selector: 'oitc-my-resources-summary-widget',
     imports: [
-    RowComponent,
-    ColComponent,
-    TranslocoDirective,
-    FaIconComponent,
-    AsyncPipe,
-    RouterLink,
-    BlockLoaderComponent,
-    PermissionDirective,
-    AccordionButtonDirective,
-    AccordionComponent,
-    AccordionItemComponent,
-    TemplateIdDirective
-],
+        RowComponent,
+        ColComponent,
+        TranslocoDirective,
+        FaIconComponent,
+        AsyncPipe,
+        RouterLink,
+        BlockLoaderComponent,
+        PermissionDirective,
+        AccordionButtonDirective,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective
+    ],
     templateUrl: './my-resources-summary-widget.component.html',
     styleUrl: './my-resources-summary-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

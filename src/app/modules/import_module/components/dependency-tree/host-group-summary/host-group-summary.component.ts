@@ -12,13 +12,13 @@ import { StatusSummaryState, SummaryStateHosts } from '../../../../../pages/host
 @Component({
     selector: 'oitc-host-group-summary',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    TranslocoDirective,
-    BadgeComponent,
-    TableDirective
-],
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        TranslocoDirective,
+        BadgeComponent,
+        TableDirective
+    ],
     templateUrl: './host-group-summary.component.html',
     styleUrl: './host-group-summary.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

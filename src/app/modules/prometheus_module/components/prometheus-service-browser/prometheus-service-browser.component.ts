@@ -20,12 +20,12 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 @Component({
     selector: 'oitc-prometheus-service-browser',
     imports: [
-    RowComponent,
-    ColComponent,
-    TranslocoDirective,
-    TableDirective,
-    FaIconComponent
-],
+        RowComponent,
+        ColComponent,
+        TranslocoDirective,
+        TableDirective,
+        FaIconComponent
+    ],
     templateUrl: './prometheus-service-browser.component.html',
     styleUrl: './prometheus-service-browser.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

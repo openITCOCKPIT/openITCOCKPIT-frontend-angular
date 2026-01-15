@@ -23,9 +23,9 @@ import { BackgroundItemComponent } from '../background-item/background-item.comp
     selector: 'oitc-map-canvas',
     standalone: true,
     imports: [
-    NgClass,
-    NgStyle
-],
+        NgClass,
+        NgStyle
+    ],
     templateUrl: './map-canvas.component.html',
     styleUrl: './map-canvas.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

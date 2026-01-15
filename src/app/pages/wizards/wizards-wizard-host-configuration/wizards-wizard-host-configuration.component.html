@@ -1,279 +1,279 @@
 <ng-container *transloco="let t">
 
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a [routerLink]="['/', 'wizards', 'index']">
-            <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-            {{ t('Wizards') }}
-          </a></li>
-          <li aria-current="page" class="breadcrumb-item active">
-            <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-            {{ title }}
-          </li>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'wizards', 'index']">
+                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    {{ t('Wizards') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                {{ title }}
+            </li>
         </ol>
-      </nav>
+    </nav>
 
-      <c-card>
+    <c-card>
         <c-card-header>
-          <h5 cCardTitle>
-            {{ t('Configuration Wizard:') }}
-            <small class="fw-300">
-              {{ title }}
-            </small>
-            @if (!this.WizardElement.active) {
-              <oitc-badge-outline color="warning"
-                class="ms-1">
-                <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
-                {{ t('Deprecated') }}
-              </oitc-badge-outline>
-            }
-          </h5>
+            <h5 cCardTitle>
+                {{ t('Configuration Wizard:') }}
+                <small class="fw-300">
+                    {{ title }}
+                </small>
+                @if (!this.WizardElement.active) {
+                    <oitc-badge-outline color="warning"
+                                        class="ms-1">
+                        <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                        {{ t('Deprecated') }}
+                    </oitc-badge-outline>
+                }
+            </h5>
         </c-card-header>
         <c-card-body class="p-0">
-          <div class="row m-0 text-end mb-3" style="min-height: 22px;">
-            <div
-              class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
-              <span>
-                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                {{ t('Host Information') }}
-              </span>
-            </div>
-            <div class="col-lg-8 wizard-bg-inactive d-inline-flex">
-            </div>
-            <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
-              <div class="btn-group btn-group-xs w-100 h-100">
-                <button type="button" class="btn btn-primary"
-                  [title]="'Back' | transloco"
-                  style="border-radius: 0;"
-                  [fallbackUrl]="['wizards', 'index']"
-                  oitcBackButton>
-                  <i class="fa fa-arrow-left"></i>
-                </button>
+            <div class="row m-0 text-end mb-3" style="min-height: 22px;">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Host Information') }}
+                    </span>
+                </div>
+                <div class="col-lg-8 wizard-bg-inactive d-inline-flex">
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+                    <div class="btn-group btn-group-xs w-100 h-100">
+                        <button type="button" class="btn btn-primary"
+                                [title]="'Back' | transloco"
+                                style="border-radius: 0;"
+                                [fallbackUrl]="['wizards', 'index']"
+                                oitcBackButton>
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
 
-                <button type="button" class="btn btn-success"
-                  style="border-radius: 0;"
-                  [title]="'Next' | transloco"
-                  (click)="submit()">
-                  {{ t('Next') }}
-                  <i class="fa fa-arrow-right"></i>
-                </button>
-              </div>
+                        <button type="button" class="btn btn-success"
+                                style="border-radius: 0;"
+                                [title]="'Next' | transloco"
+                                (click)="submit()">
+                            {{ t('Next') }}
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-          </div>
         </c-card-body>
         <c-card-body>
-          <c-card>
-            <c-card-header>
-              <h5 cCardTitle>
-                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                {{ t('Basic configuration') }}
-              </h5>
-            </c-card-header>
-            <c-card-body>
-              <div class="mb-3">
-                <c-form-check>
-                  <input cFormCheckInput
-                    name="useExistingHost"
-                    id="useExistingHost"
-                    type="checkbox"
-                    [disabled]="useExistingHostReadonly"
-                    [readonly]="useExistingHostReadonly"
-                    [(ngModel)]="useExistingHost"/>
-                  <label cFormCheckLabel for="useExistingHost">
-                    {{ t('Use existing Host') }}
-                  </label>
-                </c-form-check>
-              </div>
-
-              <div [hidden]="!useExistingHost">
-
-                <div class="mb-3">
-                  <label cLabel for="hostId">
-                    {{ t('Host') }}
-                    <oitc-required-icon/>
-                  </label>
-                  <oitc-select
-                    name="hostId"
-                    id="hostId"
-                    [(ngModel)]="hostId"
-                    optionValue="key"
-                    optionLabel="value"
-                    [searchCallback]="loadHosts"
-                    [options]="hosts"
-                    oitcFormError [errors]="errors" errorField="Host">
-                  </oitc-select>
-                  <oitc-form-feedback [errors]="errors" errorField="Host"></oitc-form-feedback>
-                </div>
-              </div>
-
-              <div [hidden]="useExistingHost">
-
-                <div class="mb-3">
-                  <label cLabel for="hostPost.container_id">
-                    {{ t('Container') }}
-                    <oitc-required-icon/>
-                  </label>
-                  <oitc-select
-                    name="hostPost.container_id"
-                    id="hostPost.container_id"
-                    [(ngModel)]="hostPost.container_id"
-                    optionValue="key"
-                    optionLabel="value"
-                    (onChange)="onContainerChange()"
-                    [options]="containers"
-                    oitcFormError [errors]="errors" errorField="container_id">
-                  </oitc-select>
-                  <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-                  @if (!hostPost.container_id) {
-                    <div class="text-warning-glow pt-1">
-                      {{ t('Please select a container.') }}
+            <c-card>
+                <c-card-header>
+                    <h5 cCardTitle>
+                        <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                        {{ t('Basic configuration') }}
+                    </h5>
+                </c-card-header>
+                <c-card-body>
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput
+                                   name="useExistingHost"
+                                   id="useExistingHost"
+                                   type="checkbox"
+                                   [disabled]="useExistingHostReadonly"
+                                   [readonly]="useExistingHostReadonly"
+                                   [(ngModel)]="useExistingHost"/>
+                            <label cFormCheckLabel for="useExistingHost">
+                                {{ t('Use existing Host') }}
+                            </label>
+                        </c-form-check>
                     </div>
-                  }
-                </div>
 
-                <div class="mb-3">
-                  <label cLabel for="hostPost.hosttemplate_id">
-                    {{ t('Host Template') }}
-                    <oitc-required-icon/>
-                  </label>
-                  <oitc-select
-                    name="hostPost.hosttemplate_id"
-                    id="hostPost.hosttemplate_id"
-                    [(ngModel)]="hostPost.hosttemplate_id"
-                    optionValue="key"
-                    optionLabel="value"
-                    (onChange)="onHosttemplateChange()"
-                    [options]="hosttemplates"
-                    oitcFormError [errors]="errors" errorField="hosttemplate_id">
-                  </oitc-select>
-                  <oitc-form-feedback [errors]="errors" errorField="hosttemplate_id"></oitc-form-feedback>
-                  @if (!hostPost.hosttemplate_id) {
-                    <div class="text-warning-glow pt-1">
-                      {{ t('Please select a host template.') }}
+                    <div [hidden]="!useExistingHost">
+
+                        <div class="mb-3">
+                            <label cLabel for="hostId">
+                                {{ t('Host') }}
+                                <oitc-required-icon/>
+                            </label>
+                            <oitc-select
+                                name="hostId"
+                                id="hostId"
+                                [(ngModel)]="hostId"
+                                optionValue="key"
+                                optionLabel="value"
+                                [searchCallback]="loadHosts"
+                                [options]="hosts"
+                                oitcFormError [errors]="errors" errorField="Host">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="Host"></oitc-form-feedback>
+                        </div>
                     </div>
-                  }
-                </div>
 
-                <div class="mb-2">
-                  <label cLabel for="HostName">
-                    {{ t('Host name') }}
-                    <oitc-required-icon></oitc-required-icon>
-                  </label>
-                  <input cFormControl id="HostName" required type="text"
-                    name="HostName"
-                    oitcFormError [errors]="errors" errorField="name"
-                    [(ngModel)]="hostPost.name"
-                    (blur)="checkForDuplicateHostname(); runDnsLookup(true)">
-                  <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                    <div [hidden]="useExistingHost">
 
-                  <c-form-check class="mb-3 ms-3 mt-1">
-                    <input cFormCheckInput
-                      name="dnsLookup"
-                      id="dnsLookup"
-                      type="checkbox"
-                      (change)="onDnsLookupChange()"
-                      [(ngModel)]="data.dnsLookUp"/>
-                    <label cFormCheckLabel for="dnsLookup">
-                      {{ t('DNS Lookup') }}
-                    </label>
-                  </c-form-check>
-                </div>
-                @if (data.dnsHostnameNotFound) {
-                  <div class="help-block text-info">
-                    <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
-                    {{ t('Could not resolve hostname.') }}
-                  </div>
-                }
+                        <div class="mb-3">
+                            <label cLabel for="hostPost.container_id">
+                                {{ t('Container') }}
+                                <oitc-required-icon/>
+                            </label>
+                            <oitc-select
+                                name="hostPost.container_id"
+                                id="hostPost.container_id"
+                                [(ngModel)]="hostPost.container_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                (onChange)="onContainerChange()"
+                                [options]="containers"
+                                oitcFormError [errors]="errors" errorField="container_id">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                            @if (!hostPost.container_id) {
+                                <div class="text-warning-glow pt-1">
+                                    {{ t('Please select a container.') }}
+                                </div>
+                            }
+                        </div>
 
-                @if (data.isHostnameInUse) {
-                  <c-alert color="warning">
-                    <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                    {{
-                    t('A host with the name {0} already exists. Duplicate host names could lead to confusion.', {
-                    '0': hostPost.name
-                    })
-                    }}
-                  </c-alert>
-                }
+                        <div class="mb-3">
+                            <label cLabel for="hostPost.hosttemplate_id">
+                                {{ t('Host Template') }}
+                                <oitc-required-icon/>
+                            </label>
+                            <oitc-select
+                                name="hostPost.hosttemplate_id"
+                                id="hostPost.hosttemplate_id"
+                                [(ngModel)]="hostPost.hosttemplate_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                (onChange)="onHosttemplateChange()"
+                                [options]="hosttemplates"
+                                oitcFormError [errors]="errors" errorField="hosttemplate_id">
+                            </oitc-select>
+                            <oitc-form-feedback [errors]="errors" errorField="hosttemplate_id"></oitc-form-feedback>
+                            @if (!hostPost.hosttemplate_id) {
+                                <div class="text-warning-glow pt-1">
+                                    {{ t('Please select a host template.') }}
+                                </div>
+                            }
+                        </div>
 
-                <div class="mb-3">
-                  <label cLabel for="HostAddress">
-                    {{ t('Host address') }}
-                    <oitc-required-icon></oitc-required-icon>
-                  </label>
-                  <input cFormControl id="HostAddress" type="text"
-                    name="HostAddress"
-                    [placeholder]="'IPv4/IPv6 address or FQDN' | transloco"
-                    oitcFormError [errors]="errors" errorField="address"
-                    [(ngModel)]="hostPost.address"
-                    (blur)="runDnsLookup(false)">
-                  <oitc-form-feedback [errors]="errors" errorField="address"></oitc-form-feedback>
-                </div>
-                @if (data.dnsAddressNotFound) {
-                  <div class="help-block text-info">
-                    <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
-                    {{ t('Could not resolve address.') }}
-                  </div>
-                }
+                        <div class="mb-2">
+                            <label cLabel for="HostName">
+                                {{ t('Host name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl id="HostName" required type="text"
+                                   name="HostName"
+                                   oitcFormError [errors]="errors" errorField="name"
+                                   [(ngModel)]="hostPost.name"
+                                   (blur)="checkForDuplicateHostname(); runDnsLookup(true)">
+                            <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+
+                            <c-form-check class="mb-3 ms-3 mt-1">
+                                <input cFormCheckInput
+                                       name="dnsLookup"
+                                       id="dnsLookup"
+                                       type="checkbox"
+                                       (change)="onDnsLookupChange()"
+                                       [(ngModel)]="data.dnsLookUp"/>
+                                <label cFormCheckLabel for="dnsLookup">
+                                    {{ t('DNS Lookup') }}
+                                </label>
+                            </c-form-check>
+                        </div>
+                        @if (data.dnsHostnameNotFound) {
+                            <div class="help-block text-info">
+                                <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
+                                {{ t('Could not resolve hostname.') }}
+                            </div>
+                        }
+
+                        @if (data.isHostnameInUse) {
+                            <c-alert color="warning">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                {{
+                                    t('A host with the name {0} already exists. Duplicate host names could lead to confusion.', {
+                                        '0': hostPost.name
+                                    })
+                                }}
+                            </c-alert>
+                        }
+
+                        <div class="mb-3">
+                            <label cLabel for="HostAddress">
+                                {{ t('Host address') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl id="HostAddress" type="text"
+                                   name="HostAddress"
+                                   [placeholder]="'IPv4/IPv6 address or FQDN' | transloco"
+                                   oitcFormError [errors]="errors" errorField="address"
+                                   [(ngModel)]="hostPost.address"
+                                   (blur)="runDnsLookup(false)">
+                            <oitc-form-feedback [errors]="errors" errorField="address"></oitc-form-feedback>
+                        </div>
+                        @if (data.dnsAddressNotFound) {
+                            <div class="help-block text-info">
+                                <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
+                                {{ t('Could not resolve address.') }}
+                            </div>
+                        }
 
 
-                @if (hostPost.hosttemplate_id) {
-                  <div class="mb-3">
-                    <label cLabel for="description">
-                      {{ t('Description') }}
-                    </label>
-                    <c-input-group>
-                      <input cFormControl id="description" type="text"
-                        name="description"
-                        oitcFormError [errors]="errors" errorField="description"
-                        [(ngModel)]="hostPost.description">
-                      @if (hosttemplate) {
-                        <oitc-template-diff cInputGroupText
-                          [templateValue]="hosttemplate.description"
-                          [(value)]="hostPost.description"
-                        class="bg-transparent p-0"></oitc-template-diff>
-                      }
-                    </c-input-group>
-                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-                  </div>
-                }
+                        @if (hostPost.hosttemplate_id) {
+                            <div class="mb-3">
+                                <label cLabel for="description">
+                                    {{ t('Description') }}
+                                </label>
+                                <c-input-group>
+                                    <input cFormControl id="description" type="text"
+                                           name="description"
+                                           oitcFormError [errors]="errors" errorField="description"
+                                           [(ngModel)]="hostPost.description">
+                                    @if (hosttemplate) {
+                                        <oitc-template-diff cInputGroupText
+                                                            [templateValue]="hosttemplate.description"
+                                                            [(value)]="hostPost.description"
+                                                            class="bg-transparent p-0"></oitc-template-diff>
+                                    }
+                                </c-input-group>
+                                <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                            </div>
+                        }
 
-                @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
-                  <div class="mb-3">
-                    <label cLabel for="SatellitesSelect">
-                      <oitc-label-link
-                        [objectId]="hostPost.satellite_id"
-                        [route]="'/distribute_module/satellites/edit'"
-                        [permissions]="'DistributeModule.satellites.edit'"
-                        >
-                        {{ t('Satellite') }}
-                      </oitc-label-link>
-                    </label>
+                        @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
+                            <div class="mb-3">
+                                <label cLabel for="SatellitesSelect">
+                                    <oitc-label-link
+                                        [objectId]="hostPost.satellite_id"
+                                        [route]="'/distribute_module/satellites/edit'"
+                                        [permissions]="'DistributeModule.satellites.edit'"
+                                    >
+                                        {{ t('Satellite') }}
+                                    </oitc-label-link>
+                                </label>
 
-                    <oitc-select
-                      name="SatellitesSelect"
-                      id="SatellitesSelect"
-                      optionValue="key"
-                      optionLabel="value"
-                      [(ngModel)]="hostPost.satellite_id"
-                      (onChange)="onSatelliteChange()"
-                      [options]="satellites"
-                      oitcFormError [errors]="errors" errorField="satellite_id">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors"
-                    errorField="satellite_id"></oitc-form-feedback>
-                  </div>
-                }
+                                <oitc-select
+                                    name="SatellitesSelect"
+                                    id="SatellitesSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="hostPost.satellite_id"
+                                    (onChange)="onSatelliteChange()"
+                                    [options]="satellites"
+                                    oitcFormError [errors]="errors" errorField="satellite_id">
+                                </oitc-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="satellite_id"></oitc-form-feedback>
+                            </div>
+                        }
 
-              </div>
-            </c-card-body>
-          </c-card>
+                    </div>
+                </c-card-body>
+            </c-card>
         </c-card-body>
-      </c-card>
-    </ng-container>
+    </c-card>
+</ng-container>

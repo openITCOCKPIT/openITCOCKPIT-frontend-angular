@@ -24,63 +24,63 @@
 -->
 
 <ng-container *transloco="let t">
-  <c-modal
-    #modal='cModal'
-    [keyboard]="true"
-    id="filterBookmarkSaveModal"
-    size="lg"
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="filterBookmarkSaveModal"
+        size="lg"
     >
-    <c-modal-header class="text-white" [ngClass]="actionType == 'create' ? 'bg-success' : 'bg-info'">
-      @if (actionType === 'create') {
-        <h5 cModalTitle class="text-white">
-          {{ t('Create bookmark') }}
-        </h5>
-      }
-      @if (actionType === 'edit') {
-        <h5 cModalTitle class="text-white">
-          {{ t('Edit bookmark') }}
-        </h5>
-      }
-      <button (click)="hideModal()" cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body>
-      <div>
-        <label class="bold">
-          {{ t('Name') }}
-        </label>
-        <input
-          cFormControl
-          [(ngModel)]="newBookmark.name">
-      </div>
-      @if (errors) {
-        <div class="help-block text-danger">{{ t(errors['name']['_empty']) }}</div>
-      }
-      <div class="mt-2">
-        <input type="checkbox"
-          name="checkbox"
+        <c-modal-header class="text-white" [ngClass]="actionType == 'create' ? 'bg-success' : 'bg-info'">
+            @if (actionType === 'create') {
+                <h5 cModalTitle class="text-white">
+                    {{ t('Create bookmark') }}
+                </h5>
+            }
+            @if (actionType === 'edit') {
+                <h5 cModalTitle class="text-white">
+                    {{ t('Edit bookmark') }}
+                </h5>
+            }
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <div>
+                <label class="bold">
+                    {{ t('Name') }}
+                </label>
+                <input
+                    cFormControl
+                    [(ngModel)]="newBookmark.name">
+            </div>
+            @if (errors) {
+                <div class="help-block text-danger">{{ t(errors['name']['_empty']) }}</div>
+            }
+            <div class="mt-2">
+                <input type="checkbox"
+                       name="checkbox"
 
-          [(ngModel)]="newBookmark.favorite"
-          id="isFavoriteAdd">
-        <label class=" ms-2" for="isFavoriteAdd">
-          {{ t('Add to favorites') }}
-        </label>
-      </div>
+                       [(ngModel)]="newBookmark.favorite"
+                       id="isFavoriteAdd">
+                <label class=" ms-2" for="isFavoriteAdd">
+                    {{ t('Add to favorites') }}
+                </label>
+            </div>
 
-    </c-modal-body>
-    <c-modal-footer>
-      @if (actionType === 'create') {
-        <button (click)="saveNewBookmark()" cButton class="ripple" color="success">
-          {{ t('Create bookmark') }}
-        </button>
-      }
-      @if (actionType === 'edit') {
-        <button (click)="updateBookmark()" cButton class="ripple" color="info">
-          {{ t('Update') }}
-        </button>
-      }
-      <button (click)="hideModal()" cButton class="ripple" color="default">
-        {{ t('Close') }}
-      </button>
-    </c-modal-footer>
-  </c-modal>
+        </c-modal-body>
+        <c-modal-footer>
+            @if (actionType === 'create') {
+                <button (click)="saveNewBookmark()" cButton class="ripple" color="success">
+                    {{ t('Create bookmark') }}
+                </button>
+            }
+            @if (actionType === 'edit') {
+                <button (click)="updateBookmark()" cButton class="ripple" color="info">
+                    {{ t('Update') }}
+                </button>
+            }
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
 </ng-container>

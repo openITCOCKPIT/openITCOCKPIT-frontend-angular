@@ -10,10 +10,10 @@ import { SystemnameService } from '../../../../../services/systemname.service';
 @Component({
     selector: 'oitc-not-in-monitoring',
     imports: [
-    FaIconComponent,
-    TranslocoDirective,
-    AsyncPipe
-],
+        FaIconComponent,
+        TranslocoDirective,
+        AsyncPipe
+    ],
     templateUrl: './not-in-monitoring.component.html',
     styleUrl: './not-in-monitoring.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

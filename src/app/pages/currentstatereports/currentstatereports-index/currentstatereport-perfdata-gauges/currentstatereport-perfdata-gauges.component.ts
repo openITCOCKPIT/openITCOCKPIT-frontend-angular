@@ -9,9 +9,9 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 @Component({
     selector: 'oitc-currentstatereport-perfdata-gauges',
     imports: [
-    CurrentstatereportPerfdataGaugeComponent,
-    FaIconComponent
-],
+        CurrentstatereportPerfdataGaugeComponent,
+        FaIconComponent
+    ],
     templateUrl: './currentstatereport-perfdata-gauges.component.html',
     styleUrl: './currentstatereport-perfdata-gauges.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

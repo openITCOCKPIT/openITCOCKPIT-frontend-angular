@@ -4,13 +4,12 @@ import { Downtime } from '../downtimes.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 
-
 @Component({
     selector: 'oitc-downtime-simple-icon',
     imports: [
-    FaIconComponent,
-    TranslocoDirective
-],
+        FaIconComponent,
+        TranslocoDirective
+    ],
     templateUrl: './downtime-simple-icon.component.html',
     styleUrl: './downtime-simple-icon.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

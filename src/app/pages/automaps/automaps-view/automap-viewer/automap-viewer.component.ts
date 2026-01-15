@@ -36,17 +36,17 @@ import {
 @Component({
     selector: 'oitc-automap-viewer',
     imports: [
-    ColComponent,
-    ContainerComponent,
-    PaginateOrScrollComponent,
-    RowComponent,
-    TranslocoDirective,
-    BadgeOutlineComponent,
-    ServicestatusIconAutomapComponent,
-    FaIconComponent,
-    LabelLinkComponent,
-    ServiceBrowserModalComponent
-],
+        ColComponent,
+        ContainerComponent,
+        PaginateOrScrollComponent,
+        RowComponent,
+        TranslocoDirective,
+        BadgeOutlineComponent,
+        ServicestatusIconAutomapComponent,
+        FaIconComponent,
+        LabelLinkComponent,
+        ServiceBrowserModalComponent
+    ],
     templateUrl: './automap-viewer.component.html',
     styleUrl: './automap-viewer.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

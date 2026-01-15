@@ -8,12 +8,12 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 @Component({
     selector: 'oitc-virtual-machine',
     imports: [
-    FaIconComponent,
-    FaLayersComponent,
-    TableDirective,
-    TranslocoDirective,
-    TranslocoPipe
-],
+        FaIconComponent,
+        FaLayersComponent,
+        TableDirective,
+        TranslocoDirective,
+        TranslocoPipe
+    ],
     templateUrl: './virtual-machine.component.html',
     styleUrl: './virtual-machine.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

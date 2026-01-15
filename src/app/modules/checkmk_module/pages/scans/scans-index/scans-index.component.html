@@ -1,580 +1,584 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-          {{ t('Checkmk Module') }}
-        </li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['CheckmkModule', 'scans', 'index']"
-            [routerLink]="['/', 'checkmk_module', 'scans', 'index', this.hostId]">
-            <fa-icon [icon]="['fas', 'share-nodes']"></fa-icon>
-            {{ t('Discovery') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'wand-magic-sparkles']"></fa-icon>
-          {{ t('Scan') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Checkmk Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['CheckmkModule', 'scans', 'index']"
+                   [routerLink]="['/', 'checkmk_module', 'scans', 'index', this.hostId]">
+                    <fa-icon [icon]="['fas', 'share-nodes']"></fa-icon>
+                    {{ t('Discovery') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'wand-magic-sparkles']"></fa-icon>
+                {{ t('Scan') }}
+            </li>
+        </ol>
     </nav>
 
     <form (ngSubmit)="submit()">
-      <c-card class="mb-3">
-        <c-card-header>
-          <h5 cCardTitle>{{ t('Scan device') }}
-            @if (host) {
-              <small class="fw-300">
-                {{ host.name }} ({{ host.address }})
-              </small>
-            }
-          </h5>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Scan device') }}
+                    @if (host) {
+                        <small class="fw-300">
+                            {{ host.name }} ({{ host.address }})
+                        </small>
+                    }
+                </h5>
 
-          @if (host) {
-            <c-nav class="card-toolbar card-header-pills">
-              <oitc-object-uuid [uuid]="host.uuid"></oitc-object-uuid>
-            </c-nav>
-          }
+                @if (host) {
+                    <c-nav class="card-toolbar card-header-pills">
+                        <oitc-object-uuid [uuid]="host.uuid"></oitc-object-uuid>
+                    </c-nav>
+                }
 
 
-        </c-card-header>
+            </c-card-header>
 
-        <c-card-body>
+            <c-card-body>
 
-          <!-- Checkmk discovery Agent and SNMP options form -->
-          @if (!executingDiscovery && !discoveryResult && !MkProcesses) {
-            <c-row>
-              <!-- Download Checkmk Agent -->
-              <c-col [xs]="12">
-                <div class="alert border-faded bg-transparent text-secondary">
-                  <div class="d-flex align-items-center">
-                    <div class="alert-icon me-2">
-                      <span class="icon-stack icon-stack-md">
-                        <i class="base-circle icon-stack-3x text-cyan-500"></i>
-                        <i class="fas fa-download icon-stack-1x text-white"></i>
-                      </span>
-                    </div>
-                    <div class="flex-1">
-                      <span class="h5 text-cyan-500">
-                        {{ t('Download and install the Checkmk Agent.') }}
-                      </span>
-                      <br>
-                        {{ t('If not already done, please download and install the Checkmk Agent now.') }}
-                      </div>
-                      <a class="btn btn-outline-info btn-sm ripple"
-                        *oitcPermission="['CheckmkModule', 'mkagents', 'download']"
-                        [routerLink]="['/', 'checkmk_module','mkagents', 'download']">
-                        <fa-icon [icon]="['fas', 'download']"></fa-icon>
-                        {{ t('Download Checkmk agent') }}
-                      </a>
-                    </div>
-                  </div>
-                </c-col>
-                <!-- End Download Checkmk Agent -->
                 <!-- Checkmk discovery Agent and SNMP options form -->
-                <c-col [xs]="12">
-                  <c-card>
-                    <c-card-body>
-                      <fieldset>
-                        <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                          <h4>
-                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                            {{ t('Checkmk agent') }}
-                          </h4>
-                        </legend>
-                        <div>
-                          <div class="mb-3">
-                            <c-form-check>
-                              <input cFormCheckInput
-                                name="enable_cmk_agent"
-                                id="enable_cmk_agent"
-                                type="checkbox"
-                                [(ngModel)]="post.Mksnmp.enable_agent"/>
-                              <label cFormCheckLabel for="enable_cmk_agent">
-                                {{ t('Enable Checkmk agent') }}
-                              </label>
-                            </c-form-check>
-                            <div class="help-block">
-                              {{ t('If enabled, openITCOCKPIT will query the Checkmk agent on the remote host.') }}
-                            </div>
-                          </div>
-                          <div class="mb-3">
-                            <label cLabel for="checkmk_agents">
-                              {{ t('Datasource') }}
-                              <oitc-required-icon></oitc-required-icon>
-                            </label>
-                            <oitc-select
-                              name="checkmk_agents"
-                              id="checkmk_agents"
-                              [disabled]="!post.Mksnmp.enable_agent"
-                              [optionValue]="'key'"
-                              [optionLabel]="'value'"
-                              [(ngModel)]="post.last_used_mkagents.agent_id"
-                              [options]="mkAgents">
-                            </oitc-select>
-                          </div>
-                        </div>
-                      </fieldset>
-                    </c-card-body>
-                  </c-card>
-                </c-col>
-                <!-- Address family -->
-                <c-col [xs]="12" class="mt-3">
-                  <c-card>
-                    <c-card-body>
-                      <fieldset>
-                        <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                          <h4>
-                            <fa-icon [icon]="['fas', 'wifi']"></fa-icon>
-                            {{ t('Address family') }}
-                          </h4>
-                        </legend>
-                        <div>
-                          <div class="mb-3">
-                            <c-form-check inline>
-                              <input cFormCheckInput checked
-                                [attr.id]="CheckmkAddressFamily.IPv4Only"
-                                [name]="CheckmkAddressFamily.IPv4Only"
-                                [value]="CheckmkAddressFamily.IPv4Only"
-                                [(ngModel)]="post.addressFamily"
-                                type="radio"/>
-                              <label cFormCheckLabel [for]="CheckmkAddressFamily.IPv4Only">
-                                {{ t('IPv4 only') }}
-                              </label>
-                            </c-form-check>
-                            <c-form-check inline>
-                              <input cFormCheckInput checked
-                                [attr.id]="CheckmkAddressFamily.IPv6Only"
-                                [name]="CheckmkAddressFamily.IPv6Only"
-                                [value]="CheckmkAddressFamily.IPv6Only"
-                                [(ngModel)]="post.addressFamily"
-                                type="radio"/>
-                              <label cFormCheckLabel [for]="CheckmkAddressFamily.IPv6Only">
-                                {{ t('IPv6 only') }}
-                              </label>
-                            </c-form-check>
-                            <c-form-check inline>
-                              <input cFormCheckInput checked
-                                [attr.id]="CheckmkAddressFamily.IPv4IPv6"
-                                [name]="CheckmkAddressFamily.IPv4IPv6"
-                                [value]="CheckmkAddressFamily.IPv4IPv6"
-                                [(ngModel)]="post.addressFamily"
-                                type="radio"/>
-                              <label cFormCheckLabel [for]="CheckmkAddressFamily.IPv4IPv6">
-                                {{ t('IPv4 / IPv6 Dual Stack') }}
-                              </label>
-                            </c-form-check>
-                            <div class="help-block">
-                              {{ t('Using IPv4 / IPv6 Dual Stack can result in poor configuration refresh performance if the device is not using IPv6') }}
-                            </div>
-                          </div>
-                        </div>
-                      </fieldset>
-                    </c-card-body>
-                  </c-card>
-                </c-col>
-                <!-- SNMP Settings -->
-                <c-col [xs]="12" class="mt-3">
-                  <c-card>
-                    <c-card-body>
-                      <fieldset>
-                        <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                          <h4>
-                            <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
-                            {{ t('SNMP') }}
-                          </h4>
-                        </legend>
-                        <div>
-                          <div class="mb-3">
-                            <c-form-check>
-                              <input cFormCheckInput
-                                name="enable_snmp"
-                                id="enable_snmp"
-                                type="checkbox"
-                                [(ngModel)]="post.Mksnmp.enable_snmp"/>
-                              <label cFormCheckLabel for="enable_snmp">
-                                {{ t('Enable SNMP') }}
-                              </label>
-                            </c-form-check>
-                            <div class="help-block">
-                              {{ t('If enabled, openITCOCKPIT will query the remote host through SNMP.') }}
-                            </div>
-                          </div>
-                          @if (post.Mksnmp.enable_snmp) {
-                            <div>
-                              <div class="mb-3">
-                                <label for="snmp_version">
-                                  {{ t('SNMP version') }}
-                                  <oitc-required-icon></oitc-required-icon>
-                                </label>
-                                <select
-                                  cSelect
-                                  name="snmp_version"
-                                  id="snmp_version"
-                                  [(ngModel)]="post.Mksnmp.version">
-                                  <option [ngValue]="1">{{ t('SNMP V 1') }}</option>
-                                  <option [ngValue]="2">{{ t('SNMP V 2c') }}</option>
-                                  <option [ngValue]="3">{{ t('SNMP V 3') }}</option>
-                                </select>
-                              </div>
-                              @if (post.Mksnmp.version != 3) {
-                                <div class="mb-3">
-                                  <label cLabel for="snmp_community">
-                                    {{ t('Community') }}
-                                    <oitc-required-icon></oitc-required-icon>
-                                  </label>
-                                  <input cFormControl
-                                    id="snmp_community" required type="text"
-                                    name="snmp_community"
-                                    placeholder="public"
-                                    oitcFormError [errors]="errors" errorField="community"
-                                    [(ngModel)]="post.Mksnmp.community">
-                                  <oitc-form-feedback [errors]="errors"
-                                  errorField="community"></oitc-form-feedback>
+                @if (!executingDiscovery && !discoveryResult && !MkProcesses) {
+                    <c-row>
+                        <!-- Download Checkmk Agent -->
+                        <c-col [xs]="12">
+                            <div class="alert border-faded bg-transparent text-secondary">
+                                <div class="d-flex align-items-center">
+                                    <div class="alert-icon me-2">
+                                        <span class="icon-stack icon-stack-md">
+                                            <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                            <i class="fas fa-download icon-stack-1x text-white"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <span class="h5 text-cyan-500">
+                                            {{ t('Download and install the Checkmk Agent.') }}
+                                        </span>
+                                        <br>
+                                        {{ t('If not already done, please download and install the Checkmk Agent now.') }}
+                                    </div>
+                                    <a class="btn btn-outline-info btn-sm ripple"
+                                       *oitcPermission="['CheckmkModule', 'mkagents', 'download']"
+                                       [routerLink]="['/', 'checkmk_module','mkagents', 'download']">
+                                        <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                                        {{ t('Download Checkmk agent') }}
+                                    </a>
                                 </div>
-                              }
-                              @if (post.Mksnmp.version == 3) {
-                                <div>
-                                  <div class="mb-3">
-                                    <label for="snmp_security_level">
-                                      {{ t('Security level') }}
-                                      <oitc-required-icon></oitc-required-icon>
-                                    </label>
-                                    <select
-                                      cSelect
-                                      name="snmp_security_level"
-                                      id="snmp_security_level"
-                                      [(ngModel)]="post.Mksnmp.security_level">
-                                      <option [ngValue]="1">authPriv</option>
-                                      <option [ngValue]="2">authNoPriv</option>
-                                      <option [ngValue]="3">noAuthnoPriv</option>
-                                    </select>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="snmp_hash_algorithm">
-                                      {{ t('Hash algorithm') }}
-                                      <oitc-required-icon></oitc-required-icon>
-                                    </label>
-                                    <select
-                                      cSelect
-                                      name="snmp_hash_algorithm"
-                                      id="snmp_hash_algorithm"
-                                      [(ngModel)]="post.Mksnmp.hash_algorithm">
-                                      <option [ngValue]="1">MD5</option>
-                                      <option [ngValue]="2">SHA</option>
-                                    </select>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label cLabel for="snmp_username">
-                                      {{ t('Username') }}
-                                      <oitc-required-icon></oitc-required-icon>
-                                    </label>
-                                    <input cFormControl
-                                      id="snmp_username" required type="text"
-                                      name="snmp_username"
-                                      oitcFormError [errors]="errors" errorField="username"
-                                      [(ngModel)]="post.Mksnmp.username">
-                                    <oitc-form-feedback [errors]="errors"
-                                    errorField="username"></oitc-form-feedback>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label cLabel for="snmp_password">
-                                      {{ t('Password') }}
-                                      <oitc-required-icon></oitc-required-icon>
-                                    </label>
-                                    <input cFormControl
-                                      id="snmp_password" required type="password"
-                                      name="snmp_password"
-                                      oitcFormError [errors]="errors" errorField="password"
-                                      [(ngModel)]="post.Mksnmp.password">
-                                    <oitc-form-feedback [errors]="errors"
-                                    errorField="password"></oitc-form-feedback>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="snmp_encryption_algorithm">
-                                      {{ t('Encryption algorithm') }}
-                                      <oitc-required-icon></oitc-required-icon>
-                                    </label>
-                                    <select
-                                      cSelect
-                                      name="snmp_encryption_algorithm"
-                                      id="snmp_encryption_algorithm"
-                                      [(ngModel)]="post.Mksnmp.encryption_algorithm">
-                                      <option [ngValue]="1">AES</option>
-                                      <option [ngValue]="2">DES</option>
-                                    </select>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label cLabel for="snmp_encryption_password">
-                                      {{ t('Encryption password') }}
-                                    </label>
-                                    <input cFormControl
-                                      id="snmp_encryption_password" required type="password"
-                                      name="snmp_encryption_password"
-                                      [(ngModel)]="post.Mksnmp.encryption_password">
-                                  </div>
-                                </div>
-                              }
                             </div>
-                          }
-                        </div>
-                      </fieldset>
-                    </c-card-body>
-                  </c-card>
-                </c-col>
+                        </c-col>
+                        <!-- End Download Checkmk Agent -->
+                        <!-- Checkmk discovery Agent and SNMP options form -->
+                        <c-col [xs]="12">
+                            <c-card>
+                                <c-card-body>
+                                    <fieldset>
+                                        <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                            <h4>
+                                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                {{ t('Checkmk agent') }}
+                                            </h4>
+                                        </legend>
+                                        <div>
+                                            <div class="mb-3">
+                                                <c-form-check>
+                                                    <input cFormCheckInput
+                                                           name="enable_cmk_agent"
+                                                           id="enable_cmk_agent"
+                                                           type="checkbox"
+                                                           [(ngModel)]="post.Mksnmp.enable_agent"/>
+                                                    <label cFormCheckLabel for="enable_cmk_agent">
+                                                        {{ t('Enable Checkmk agent') }}
+                                                    </label>
+                                                </c-form-check>
+                                                <div class="help-block">
+                                                    {{ t('If enabled, openITCOCKPIT will query the Checkmk agent on the remote host.') }}
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label cLabel for="checkmk_agents">
+                                                    {{ t('Datasource') }}
+                                                    <oitc-required-icon></oitc-required-icon>
+                                                </label>
+                                                <oitc-select
+                                                    name="checkmk_agents"
+                                                    id="checkmk_agents"
+                                                    [disabled]="!post.Mksnmp.enable_agent"
+                                                    [optionValue]="'key'"
+                                                    [optionLabel]="'value'"
+                                                    [(ngModel)]="post.last_used_mkagents.agent_id"
+                                                    [options]="mkAgents">
+                                                </oitc-select>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </c-card-body>
+                            </c-card>
+                        </c-col>
+                        <!-- Address family -->
+                        <c-col [xs]="12" class="mt-3">
+                            <c-card>
+                                <c-card-body>
+                                    <fieldset>
+                                        <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                            <h4>
+                                                <fa-icon [icon]="['fas', 'wifi']"></fa-icon>
+                                                {{ t('Address family') }}
+                                            </h4>
+                                        </legend>
+                                        <div>
+                                            <div class="mb-3">
+                                                <c-form-check inline>
+                                                    <input cFormCheckInput checked
+                                                           [attr.id]="CheckmkAddressFamily.IPv4Only"
+                                                           [name]="CheckmkAddressFamily.IPv4Only"
+                                                           [value]="CheckmkAddressFamily.IPv4Only"
+                                                           [(ngModel)]="post.addressFamily"
+                                                           type="radio"/>
+                                                    <label cFormCheckLabel [for]="CheckmkAddressFamily.IPv4Only">
+                                                        {{ t('IPv4 only') }}
+                                                    </label>
+                                                </c-form-check>
+                                                <c-form-check inline>
+                                                    <input cFormCheckInput checked
+                                                           [attr.id]="CheckmkAddressFamily.IPv6Only"
+                                                           [name]="CheckmkAddressFamily.IPv6Only"
+                                                           [value]="CheckmkAddressFamily.IPv6Only"
+                                                           [(ngModel)]="post.addressFamily"
+                                                           type="radio"/>
+                                                    <label cFormCheckLabel [for]="CheckmkAddressFamily.IPv6Only">
+                                                        {{ t('IPv6 only') }}
+                                                    </label>
+                                                </c-form-check>
+                                                <c-form-check inline>
+                                                    <input cFormCheckInput checked
+                                                           [attr.id]="CheckmkAddressFamily.IPv4IPv6"
+                                                           [name]="CheckmkAddressFamily.IPv4IPv6"
+                                                           [value]="CheckmkAddressFamily.IPv4IPv6"
+                                                           [(ngModel)]="post.addressFamily"
+                                                           type="radio"/>
+                                                    <label cFormCheckLabel [for]="CheckmkAddressFamily.IPv4IPv6">
+                                                        {{ t('IPv4 / IPv6 Dual Stack') }}
+                                                    </label>
+                                                </c-form-check>
+                                                <div class="help-block">
+                                                    {{ t('Using IPv4 / IPv6 Dual Stack can result in poor configuration refresh performance if the device is not using IPv6') }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </c-card-body>
+                            </c-card>
+                        </c-col>
+                        <!-- SNMP Settings -->
+                        <c-col [xs]="12" class="mt-3">
+                            <c-card>
+                                <c-card-body>
+                                    <fieldset>
+                                        <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                            <h4>
+                                                <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                                                {{ t('SNMP') }}
+                                            </h4>
+                                        </legend>
+                                        <div>
+                                            <div class="mb-3">
+                                                <c-form-check>
+                                                    <input cFormCheckInput
+                                                           name="enable_snmp"
+                                                           id="enable_snmp"
+                                                           type="checkbox"
+                                                           [(ngModel)]="post.Mksnmp.enable_snmp"/>
+                                                    <label cFormCheckLabel for="enable_snmp">
+                                                        {{ t('Enable SNMP') }}
+                                                    </label>
+                                                </c-form-check>
+                                                <div class="help-block">
+                                                    {{ t('If enabled, openITCOCKPIT will query the remote host through SNMP.') }}
+                                                </div>
+                                            </div>
+                                            @if (post.Mksnmp.enable_snmp) {
+                                                <div>
+                                                    <div class="mb-3">
+                                                        <label for="snmp_version">
+                                                            {{ t('SNMP version') }}
+                                                            <oitc-required-icon></oitc-required-icon>
+                                                        </label>
+                                                        <select
+                                                            cSelect
+                                                            name="snmp_version"
+                                                            id="snmp_version"
+                                                            [(ngModel)]="post.Mksnmp.version">
+                                                            <option [ngValue]="1">{{ t('SNMP V 1') }}</option>
+                                                            <option [ngValue]="2">{{ t('SNMP V 2c') }}</option>
+                                                            <option [ngValue]="3">{{ t('SNMP V 3') }}</option>
+                                                        </select>
+                                                    </div>
+                                                    @if (post.Mksnmp.version != 3) {
+                                                        <div class="mb-3">
+                                                            <label cLabel for="snmp_community">
+                                                                {{ t('Community') }}
+                                                                <oitc-required-icon></oitc-required-icon>
+                                                            </label>
+                                                            <input cFormControl
+                                                                   id="snmp_community" required type="text"
+                                                                   name="snmp_community"
+                                                                   placeholder="public"
+                                                                   oitcFormError [errors]="errors"
+                                                                   errorField="community"
+                                                                   [(ngModel)]="post.Mksnmp.community">
+                                                            <oitc-form-feedback [errors]="errors"
+                                                                                errorField="community"></oitc-form-feedback>
+                                                        </div>
+                                                    }
+                                                    @if (post.Mksnmp.version == 3) {
+                                                        <div>
+                                                            <div class="mb-3">
+                                                                <label for="snmp_security_level">
+                                                                    {{ t('Security level') }}
+                                                                    <oitc-required-icon></oitc-required-icon>
+                                                                </label>
+                                                                <select
+                                                                    cSelect
+                                                                    name="snmp_security_level"
+                                                                    id="snmp_security_level"
+                                                                    [(ngModel)]="post.Mksnmp.security_level">
+                                                                    <option [ngValue]="1">authPriv</option>
+                                                                    <option [ngValue]="2">authNoPriv</option>
+                                                                    <option [ngValue]="3">noAuthnoPriv</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="snmp_hash_algorithm">
+                                                                    {{ t('Hash algorithm') }}
+                                                                    <oitc-required-icon></oitc-required-icon>
+                                                                </label>
+                                                                <select
+                                                                    cSelect
+                                                                    name="snmp_hash_algorithm"
+                                                                    id="snmp_hash_algorithm"
+                                                                    [(ngModel)]="post.Mksnmp.hash_algorithm">
+                                                                    <option [ngValue]="1">MD5</option>
+                                                                    <option [ngValue]="2">SHA</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label cLabel for="snmp_username">
+                                                                    {{ t('Username') }}
+                                                                    <oitc-required-icon></oitc-required-icon>
+                                                                </label>
+                                                                <input cFormControl
+                                                                       id="snmp_username" required type="text"
+                                                                       name="snmp_username"
+                                                                       oitcFormError [errors]="errors"
+                                                                       errorField="username"
+                                                                       [(ngModel)]="post.Mksnmp.username">
+                                                                <oitc-form-feedback [errors]="errors"
+                                                                                    errorField="username"></oitc-form-feedback>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label cLabel for="snmp_password">
+                                                                    {{ t('Password') }}
+                                                                    <oitc-required-icon></oitc-required-icon>
+                                                                </label>
+                                                                <input cFormControl
+                                                                       id="snmp_password" required type="password"
+                                                                       name="snmp_password"
+                                                                       oitcFormError [errors]="errors"
+                                                                       errorField="password"
+                                                                       [(ngModel)]="post.Mksnmp.password">
+                                                                <oitc-form-feedback [errors]="errors"
+                                                                                    errorField="password"></oitc-form-feedback>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="snmp_encryption_algorithm">
+                                                                    {{ t('Encryption algorithm') }}
+                                                                    <oitc-required-icon></oitc-required-icon>
+                                                                </label>
+                                                                <select
+                                                                    cSelect
+                                                                    name="snmp_encryption_algorithm"
+                                                                    id="snmp_encryption_algorithm"
+                                                                    [(ngModel)]="post.Mksnmp.encryption_algorithm">
+                                                                    <option [ngValue]="1">AES</option>
+                                                                    <option [ngValue]="2">DES</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label cLabel for="snmp_encryption_password">
+                                                                    {{ t('Encryption password') }}
+                                                                </label>
+                                                                <input cFormControl
+                                                                       id="snmp_encryption_password" required
+                                                                       type="password"
+                                                                       name="snmp_encryption_password"
+                                                                       [(ngModel)]="post.Mksnmp.encryption_password">
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    </fieldset>
+                                </c-card-body>
+                            </c-card>
+                        </c-col>
+                        <!-- End Checkmk discovery Agent and SNMP options form -->
+                    </c-row>
+                }
                 <!-- End Checkmk discovery Agent and SNMP options form -->
-              </c-row>
-            }
-            <!-- End Checkmk discovery Agent and SNMP options form -->
 
-            <!-- Discovery progress bar -->
-            @if (executingDiscovery) {
-              <c-row>
-                <c-col [xs]="12">
-                  <div class="alert border-faded bg-transparent text-secondary">
-                    <div class="d-flex align-items-center">
-                      <div class="alert-icon me-2">
-                        <span class="icon-stack icon-stack-md">
-                          <i class="base-circle icon-stack-3x text-cyan-500"></i>
-                          <i class="fas fa-search icon-stack-1x text-white"></i>
-                        </span>
-                      </div>
-                      <div class="flex-1">
-                        <span class="h5 text-cyan-500">
-                          {{ t('Executing remote discovery...') }}
-                        </span>
-                        @if (isSatellite) {
-                          <span>
-                            {{ t('(via remote satellite system)') }}
-                          </span>
-                        }
-                        <div class="mt-2">
-                          <p-progressBar mode="indeterminate"
-                            [style]="{ height: '6px' }"/>
-                        </div>
-                      </div>
-                      @if (isSatellite) {
-                        <div class="ms-2">
-                          <button class="btn btn-outline-danger btn-sm ripple"
-                            (click)="cancelSatRequest()">
-                            <fa-icon [icon]="['fas', 'stop']"></fa-icon>
-                            {{ t('Cancel') }}
-                          </button>
-                        </div>
-                      }
-                    </div>
-                  </div>
-                </c-col>
-              </c-row>
-            }
-            <!-- End Discovery progress bar -->
-
-            <!-- Display any Satellite errors -->
-            @if (satelliteHealthError !== '' || satelliteProcessError !== '') {
-              <c-row>
-                <c-col [xs]="12">
-                  <div class="alert border-faded bg-transparent text-secondary">
-                    <div class="d-flex align-items-center">
-                      <div class="alert-icon me-2">
-                        <span class="icon-stack icon-stack-md">
-                          <i class="base-circle icon-stack-3x text-danger"></i>
-                          <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
-                        </span>
-                      </div>
-                      <div class="flex-1">
-                        <span class="h5 text-danger">
-                          {{ t('Error from Satellite!') }}
-                        </span>
-                        @if (satelliteHealthError != '') {
-                          <div>{{ satelliteHealthError }}</div>
-                        }
-                        @if (satelliteProcessError != '') {
-                          <div>{{ satelliteProcessError }}</div>
-                        }
-                      </div>
-                    </div>
-                  </div>
-                </c-col>
-              </c-row>
-            }
-            <!-- End Display any Satellite errors -->
-
-            <!-- Discovery results and service creation -->
-            @if (discoveryResult && MkProcesses) {
-              <c-row>
-                <c-col [xs]="12">
-                  <!-- Health checks -->
-                  <div class="mb-3">
-                    <label cLabel for="Health">
-                      {{ t('Health') }}
-                    </label>
-                    <oitc-multi-select
-                      name="Health"
-                      id="Health"
-                      optionValue="key"
-                      optionLabel="value"
-                      [(ngModel)]="healthSelectedHashes"
-                      [options]="healthSelect">
-                    </oitc-multi-select>
-                  </div>
-                  <!-- Processes checks -->
-                  @if (post.Mksnmp.enable_agent) {
-                    <div class="mb-3">
-                      <label cLabel for="Processes">
-                        {{ t('Processes') }}
-                      </label>
-                      <oitc-multi-select
-                        name="Processes"
-                        id="Processes"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="processSelectedHashes"
-                        [options]="processSelect">
-                      </oitc-multi-select>
-                    </div>
-                  }
-                  <!-- Windows Services -->
-                  @if (servicesSelect.length > 0) {
-                    <div class="mb-3">
-                      <label cLabel for="WindowsServices">
-                        <fa-icon [icon]="['fab', 'windows']"></fa-icon>
-                        {{ t('Windows Services') }}
-                      </label>
-                      <oitc-multi-select
-                        name="WindowsServices"
-                        id="WindowsServices"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="servicesSelectedHashes"
-                        [options]="servicesSelect">
-                      </oitc-multi-select>
-                    </div>
-                  }
-                  <!-- Linux Services -->
-                  @if (systemdSelect.length > 0) {
-                    <div class="mb-3">
-                      <label cLabel for="SystemdServices">
-                        <fa-icon [icon]="['fab', 'linux']"></fa-icon>
-                        {{ t('Systemd Services') }}
-                      </label>
-                      <oitc-multi-select
-                        name="SystemdServices"
-                        id="SystemdServices"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="systemdSelectedHashes"
-                        [options]="systemdSelect">
-                      </oitc-multi-select>
-                    </div>
-                  }
-                  <div class="mb-3">
-                    <c-form-check>
-                      <input cFormCheckInput
-                        name="overwrite_servicetemplate_arguments"
-                        id="overwrite_servicetemplate_arguments"
-                        type="checkbox"
-                        [(ngModel)]="overwriteServicetemplateArguments"/>
-                      <label cFormCheckLabel for="overwrite_servicetemplate_arguments">
-                        {{ t('Overwrite service template arguments') }}
-                      </label>
-                    </c-form-check>
-                    <div class="help-block">
-                      {{ t('Some services require own parameters, e.g. each interface can have a different speed. If enabled, each services will use its own recommended parameters, as long as they are different from the service template.') }}
-                    </div>
-                  </div>
-                  <!-- Missing Checkmk Templates -->
-                  @if (missingTemplates.length > 0) {
-                    <div class="mb-3">
-                      <div class="alert border-faded bg-transparent text-secondary">
-                        <div class="d-flex align-items-center">
-                          <div class="alert-icon me-2">
-                            <span class="icon-stack icon-stack-md">
-                              <i class="base-circle icon-stack-3x text-cyan-500"></i>
-                              <i class="fas fa-info icon-stack-1x text-white"></i>
-                            </span>
-                          </div>
-                          <div class="flex-1">
-                            <span class="h5 text-cyan-500">
-                              {{ t('More services available') }}
-                            </span>
-                            <br>
-                              <span>
-                                {{ t('Before you are able to monitor the following services, it is required that an appropriate service template has been created.') }}
-                              </span>
+                <!-- Discovery progress bar -->
+                @if (executingDiscovery) {
+                    <c-row>
+                        <c-col [xs]="12">
+                            <div class="alert border-faded bg-transparent text-secondary">
+                                <div class="d-flex align-items-center">
+                                    <div class="alert-icon me-2">
+                                        <span class="icon-stack icon-stack-md">
+                                            <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                            <i class="fas fa-search icon-stack-1x text-white"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <span class="h5 text-cyan-500">
+                                            {{ t('Executing remote discovery...') }}
+                                        </span>
+                                        @if (isSatellite) {
+                                            <span>
+                                                {{ t('(via remote satellite system)') }}
+                                            </span>
+                                        }
+                                        <div class="mt-2">
+                                            <p-progressBar mode="indeterminate"
+                                                           [style]="{ height: '6px' }"/>
+                                        </div>
+                                    </div>
+                                    @if (isSatellite) {
+                                        <div class="ms-2">
+                                            <button class="btn btn-outline-danger btn-sm ripple"
+                                                    (click)="cancelSatRequest()">
+                                                <fa-icon [icon]="['fas', 'stop']"></fa-icon>
+                                                {{ t('Cancel') }}
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
                             </div>
-                            <div class="btn-group ms-2" role="group">
-                              <a class="btn btn-outline-info btn-sm ripple"
-                                *oitcPermission="['servicetemplates', 'add']"
-                                [routerLink]="['/', 'servicetemplates', 'add']"
-                                [queryParams]="{'servicetemplatetype_id': ServicetemplateTypesEnum.MK_SERVICE}">
-                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                                {{ t('Go to "Service templates"') }}
-                              </a>
-                              <a class="btn btn-outline-info btn-sm ripple"
-                                *oitcPermission="['CheckmkModule', 'mkagents', 'index']"
-                                [routerLink]="['/', 'checkmk_module', 'mkagents', 'index']">
-                                <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-                                {{ t('Go to "Agent Checks"') }}
-                              </a>
+                        </c-col>
+                    </c-row>
+                }
+                <!-- End Discovery progress bar -->
+
+                <!-- Display any Satellite errors -->
+                @if (satelliteHealthError !== '' || satelliteProcessError !== '') {
+                    <c-row>
+                        <c-col [xs]="12">
+                            <div class="alert border-faded bg-transparent text-secondary">
+                                <div class="d-flex align-items-center">
+                                    <div class="alert-icon me-2">
+                                        <span class="icon-stack icon-stack-md">
+                                            <i class="base-circle icon-stack-3x text-danger"></i>
+                                            <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <span class="h5 text-danger">
+                                            {{ t('Error from Satellite!') }}
+                                        </span>
+                                        @if (satelliteHealthError != '') {
+                                            <div>{{ satelliteHealthError }}</div>
+                                        }
+                                        @if (satelliteProcessError != '') {
+                                            <div>{{ satelliteProcessError }}</div>
+                                        }
+                                    </div>
+                                </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    }
-                    @if (missingTemplates.length > 0) {
-                      <div class="mb-3">
-                        <table cTable bordered class="mt-2 mb-0" hover striped>
-                          <thead>
-                            <tr>
-                              <th>{{ t('Checkmk Check') }}</th>
-                              <th class="text-primary">{{ t('Item') }}</th>
-                              <th>{{ t('Parameters') }}</th>
-                              <th class="text-success">{{ t('Description') }}</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            @for (missingTemplate of missingTemplates; track missingTemplate) {
-                              <tr>
-                                <td>{{ missingTemplate.checktype }}</td>
-                                <td class="text-primary">{{ missingTemplate.item }}</td>
-                                <td><code>{{ missingTemplate.params }}</code></td>
-                                <td class="text-success">{{ missingTemplate.description }}</td>
-                              </tr>
+                        </c-col>
+                    </c-row>
+                }
+                <!-- End Display any Satellite errors -->
+
+                <!-- Discovery results and service creation -->
+                @if (discoveryResult && MkProcesses) {
+                    <c-row>
+                        <c-col [xs]="12">
+                            <!-- Health checks -->
+                            <div class="mb-3">
+                                <label cLabel for="Health">
+                                    {{ t('Health') }}
+                                </label>
+                                <oitc-multi-select
+                                    name="Health"
+                                    id="Health"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="healthSelectedHashes"
+                                    [options]="healthSelect">
+                                </oitc-multi-select>
+                            </div>
+                            <!-- Processes checks -->
+                            @if (post.Mksnmp.enable_agent) {
+                                <div class="mb-3">
+                                    <label cLabel for="Processes">
+                                        {{ t('Processes') }}
+                                    </label>
+                                    <oitc-multi-select
+                                        name="Processes"
+                                        id="Processes"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="processSelectedHashes"
+                                        [options]="processSelect">
+                                    </oitc-multi-select>
+                                </div>
                             }
-                          </tbody>
-                        </table>
-                      </div>
-                    }
-                  </c-col>
-                </c-row>
-              }
-              <!-- End Discovery results and service creation -->
+                            <!-- Windows Services -->
+                            @if (servicesSelect.length > 0) {
+                                <div class="mb-3">
+                                    <label cLabel for="WindowsServices">
+                                        <fa-icon [icon]="['fab', 'windows']"></fa-icon>
+                                        {{ t('Windows Services') }}
+                                    </label>
+                                    <oitc-multi-select
+                                        name="WindowsServices"
+                                        id="WindowsServices"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="servicesSelectedHashes"
+                                        [options]="servicesSelect">
+                                    </oitc-multi-select>
+                                </div>
+                            }
+                            <!-- Linux Services -->
+                            @if (systemdSelect.length > 0) {
+                                <div class="mb-3">
+                                    <label cLabel for="SystemdServices">
+                                        <fa-icon [icon]="['fab', 'linux']"></fa-icon>
+                                        {{ t('Systemd Services') }}
+                                    </label>
+                                    <oitc-multi-select
+                                        name="SystemdServices"
+                                        id="SystemdServices"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="systemdSelectedHashes"
+                                        [options]="systemdSelect">
+                                    </oitc-multi-select>
+                                </div>
+                            }
+                            <div class="mb-3">
+                                <c-form-check>
+                                    <input cFormCheckInput
+                                           name="overwrite_servicetemplate_arguments"
+                                           id="overwrite_servicetemplate_arguments"
+                                           type="checkbox"
+                                           [(ngModel)]="overwriteServicetemplateArguments"/>
+                                    <label cFormCheckLabel for="overwrite_servicetemplate_arguments">
+                                        {{ t('Overwrite service template arguments') }}
+                                    </label>
+                                </c-form-check>
+                                <div class="help-block">
+                                    {{ t('Some services require own parameters, e.g. each interface can have a different speed. If enabled, each services will use its own recommended parameters, as long as they are different from the service template.') }}
+                                </div>
+                            </div>
+                            <!-- Missing Checkmk Templates -->
+                            @if (missingTemplates.length > 0) {
+                                <div class="mb-3">
+                                    <div class="alert border-faded bg-transparent text-secondary">
+                                        <div class="d-flex align-items-center">
+                                            <div class="alert-icon me-2">
+                                                <span class="icon-stack icon-stack-md">
+                                                    <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                                    <i class="fas fa-info icon-stack-1x text-white"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <span class="h5 text-cyan-500">
+                                                    {{ t('More services available') }}
+                                                </span>
+                                                <br>
+                                                <span>
+                                                    {{ t('Before you are able to monitor the following services, it is required that an appropriate service template has been created.') }}
+                                                </span>
+                                            </div>
+                                            <div class="btn-group ms-2" role="group">
+                                                <a class="btn btn-outline-info btn-sm ripple"
+                                                   *oitcPermission="['servicetemplates', 'add']"
+                                                   [routerLink]="['/', 'servicetemplates', 'add']"
+                                                   [queryParams]="{'servicetemplatetype_id': ServicetemplateTypesEnum.MK_SERVICE}">
+                                                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                                    {{ t('Go to "Service templates"') }}
+                                                </a>
+                                                <a class="btn btn-outline-info btn-sm ripple"
+                                                   *oitcPermission="['CheckmkModule', 'mkagents', 'index']"
+                                                   [routerLink]="['/', 'checkmk_module', 'mkagents', 'index']">
+                                                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                                    {{ t('Go to "Agent Checks"') }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (missingTemplates.length > 0) {
+                                <div class="mb-3">
+                                    <table cTable bordered class="mt-2 mb-0" hover striped>
+                                        <thead>
+                                        <tr>
+                                            <th>{{ t('Checkmk Check') }}</th>
+                                            <th class="text-primary">{{ t('Item') }}</th>
+                                            <th>{{ t('Parameters') }}</th>
+                                            <th class="text-success">{{ t('Description') }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (missingTemplate of missingTemplates; track missingTemplate) {
+                                                <tr>
+                                                    <td>{{ missingTemplate.checktype }}</td>
+                                                    <td class="text-primary">{{ missingTemplate.item }}</td>
+                                                    <td><code>{{ missingTemplate.params }}</code></td>
+                                                    <td class="text-success">{{ missingTemplate.description }}</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </c-col>
+                    </c-row>
+                }
+                <!-- End Discovery results and service creation -->
 
             </c-card-body>
             <c-card-footer class="text-end">
-              @if (!discoveryResult && !MkProcesses) {
-                <button cButton class="ripple" color="primary" type="button"
-                  (click)="executeDiscovery()"
-                  [disabled]="(!post.Mksnmp.enable_agent && !post.Mksnmp.enable_snmp) || executingDiscovery">
-                  @if (executingDiscovery) {
-                    <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'"></fa-icon>
-                  }
-                  {{ t('Execute discovery') }}
-                </button>
-              }
-              @if (!executingDiscovery && (discoveryResult || MkProcesses)) {
-                <button cButton class="ripple" color="primary" type="submit"
-                  >
-                  {{ t('Create services') }}
-                </button>
-              }
+                @if (!discoveryResult && !MkProcesses) {
+                    <button cButton class="ripple" color="primary" type="button"
+                            (click)="executeDiscovery()"
+                            [disabled]="(!post.Mksnmp.enable_agent && !post.Mksnmp.enable_snmp) || executingDiscovery">
+                        @if (executingDiscovery) {
+                            <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'"></fa-icon>
+                        }
+                        {{ t('Execute discovery') }}
+                    </button>
+                }
+                @if (!executingDiscovery && ( discoveryResult || MkProcesses )) {
+                    <button cButton class="ripple" color="primary" type="submit"
+                    >
+                        {{ t('Create services') }}
+                    </button>
+                }
             </c-card-footer>
-          </c-card>
-        </form>
+        </c-card>
+    </form>
 
-      </ng-container>
+</ng-container>

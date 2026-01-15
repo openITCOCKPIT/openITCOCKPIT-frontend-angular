@@ -8,10 +8,10 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 @Component({
     selector: 'oitc-hoststatus-icon',
     imports: [
-    NgClass,
-    TooltipDirective,
-    FaIconComponent
-],
+        NgClass,
+        TooltipDirective,
+        FaIconComponent
+    ],
     templateUrl: './hoststatus-icon.component.html',
     styleUrl: './hoststatus-icon.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

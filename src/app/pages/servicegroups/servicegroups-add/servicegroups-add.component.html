@@ -1,190 +1,190 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['servicegroups', 'index']" [routerLink]="['/', 'servicegroups', 'index']">
-            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-            {{ t('Service group') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'add']"></fa-icon>
-          {{ t('Add') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['servicegroups', 'index']" [routerLink]="['/', 'servicegroups', 'index']">
+                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                    {{ t('Service group') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'add']"></fa-icon>
+                {{ t('Add') }}
+            </li>
+        </ol>
     </nav>
 
 
     <form cForm (ngSubmit)="submit()">
-      <c-card class="mb-3">
-        <c-card-header>
-          <h5 cCardTitle>
-            {{ t('Create new service group') }}
-          </h5>
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Create new service group') }}
+                </h5>
 
-          <c-nav class="card-toolbar card-header-pills">
-            <c-nav-item class="px-1">
-              <button [fallbackUrl]="['servicegroups', 'index']" cButton class="ripple" color="default"
-                oitcBackButton
-                size="xs">
-                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                {{ t('Back') }}
-              </button>
-            </c-nav-item>
-          </c-nav>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['servicegroups', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
 
-        </c-card-header>
-        <c-card-body>
+            </c-card-header>
+            <c-card-body>
 
-          <div class="mb-3">
-            <label cLabel for="post.container.parent_id">
-              {{ t('Container') }}
-              <oitc-required-icon></oitc-required-icon>
-            </label>
-            <oitc-select
-              name="post.container.parent_id"
-              id="post.container.parent_id"
-              [(ngModel)]="post.container.parent_id"
-              optionValue="key"
-              optionLabel="value"
-              [options]="containers"
-              (onChange)="onContainerChange()"
-              oitcFormError [errors]="errors" errorField="container.parent_id">
-            </oitc-select>
-            <oitc-form-feedback [errors]="errors" errorField="container.parent_id"></oitc-form-feedback>
-            @if (post.container.parent_id === 0) {
-              <div class="text-warning-glow pt-1">
-                {{ t('Please select a container.') }}
-              </div>
-            }
-          </div>
-
-
-          <div class="mb-3">
-            <label cLabel for="post.container.name">
-              {{ t('Name') }}
-              <oitc-required-icon></oitc-required-icon>
-            </label>
-            <input cFormControl
-              id="post.container.name"
-              required
-              type="text"
-              name="post.container.name"
-              oitcFormError [errors]="errors" errorField="container.name"
-              [(ngModel)]="post.container.name">
-            <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
-          </div>
-
-          <div class="mb-3">
-            <label cLabel for="description">
-              {{ t('Description') }}
-            </label>
-            <input cFormControl
-              id="description"
-              type="text"
-              name="description"
-              oitcFormError [errors]="errors" errorField="description"
-              [(ngModel)]="post.description">
-            <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-          </div>
-          <div class="mb-3">
-            <label cLabel for="description">
-              {{ t('Service group URL') }}
-            </label>
-            <input cFormControl
-              id="servicegroup_url"
-              type="text"
-              name="servicegroup_url"
-              oitcFormError [errors]="errors" errorField="servicegroup_url"
-              [(ngModel)]="post.servicegroup_url">
-            <oitc-form-feedback [errors]="errors" errorField="servicegroup_url"></oitc-form-feedback>
-          </div>
-
-          <div class="mb-3">
-            <label cLabel for="ServicegroupTags">
-              {{ t('Tags') }}
-            </label>
-
-            <c-input-group>
-              <ng-select
-                id="ServicegroupTags"
-                name="ServicegroupTags"
-                [items]="[]"
-                [(ngModel)]="tagsForSelect"
-                [addTag]="true"
-                [multiple]="true"
-                [selectOnTab]="true"
-                [placeholder]="'Add tags'|transloco"
-                [isOpen]="false"
-                oitcFormError [errors]="errors" errorField="tags">
-              </ng-select>
-            </c-input-group>
-            <oitc-form-feedback [errors]="errors"
-            errorField="tags"></oitc-form-feedback>
-            <div class="help-block">
-              {{ t('Press return to separate tags') }}
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label cLabel for="post.services._ids">
-              {{ t('Services') }}
-            </label>
-            <oitc-multi-select-optgroup
-              name="post.services._ids"
-              id="post.services._ids"
-              optionValue="value"
-              optionLabel="label"
-              [options]="services"
-              [(ngModel)]="post.services._ids"
-              [searchCallback]="loadServices"
-              class="flex-1"
-              oitcFormError [errors]="errors" errorField="services">
-            </oitc-multi-select-optgroup>
-            <oitc-form-feedback [errors]="errors" errorField="services"></oitc-form-feedback>
-          </div>
-
-          <div class="mb-3">
-            <label cLabel for="post.servicetemplates._ids">
-              {{ t('Service templates') }}
-            </label>
-            <oitc-multi-select
-              name="post.servicetemplates._ids"
-              id="post.servicetemplates._ids"
-              [(ngModel)]="post.servicetemplates._ids"
-              optionValue="key"
-              optionLabel="value"
-              [searchCallback]="loadServicetemplates"
-              [options]="servicetemplates"
-              oitcFormError [errors]="errors" errorField="servicetemplates">
-            </oitc-multi-select>
-            <oitc-form-feedback [errors]="errors" errorField="servicetemplates"></oitc-form-feedback>
-          </div>
-
-        </c-card-body>
-        <c-card-footer class="text-end">
-          <label class="me-2">
-            <input cFormCheckInput type="checkbox" name="createAnother"
-              [(ngModel)]="createAnother">
-            {{ t('Create another') }}
-          </label>
-
-          <button cButton class="ripple" color="primary" type="submit">
-            {{ t('Create service group') }}
-          </button>
-          <button [fallbackUrl]="['servicegroups', 'index']" cButton class="ms-1 ripple" color="default"
-            oitcBackButton
-            type="button">
-            {{ t('Cancel') }}
-          </button>
+                <div class="mb-3">
+                    <label cLabel for="post.container.parent_id">
+                        {{ t('Container') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-select
+                        name="post.container.parent_id"
+                        id="post.container.parent_id"
+                        [(ngModel)]="post.container.parent_id"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="containers"
+                        (onChange)="onContainerChange()"
+                        oitcFormError [errors]="errors" errorField="container.parent_id">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="container.parent_id"></oitc-form-feedback>
+                    @if (post.container.parent_id === 0) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
+                </div>
 
 
-        </c-card-footer>
-      </c-card>
+                <div class="mb-3">
+                    <label cLabel for="post.container.name">
+                        {{ t('Name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           id="post.container.name"
+                           required
+                           type="text"
+                           name="post.container.name"
+                           oitcFormError [errors]="errors" errorField="container.name"
+                           [(ngModel)]="post.container.name">
+                    <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="description">
+                        {{ t('Description') }}
+                    </label>
+                    <input cFormControl
+                           id="description"
+                           type="text"
+                           name="description"
+                           oitcFormError [errors]="errors" errorField="description"
+                           [(ngModel)]="post.description">
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                </div>
+                <div class="mb-3">
+                    <label cLabel for="description">
+                        {{ t('Service group URL') }}
+                    </label>
+                    <input cFormControl
+                           id="servicegroup_url"
+                           type="text"
+                           name="servicegroup_url"
+                           oitcFormError [errors]="errors" errorField="servicegroup_url"
+                           [(ngModel)]="post.servicegroup_url">
+                    <oitc-form-feedback [errors]="errors" errorField="servicegroup_url"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="ServicegroupTags">
+                        {{ t('Tags') }}
+                    </label>
+
+                    <c-input-group>
+                        <ng-select
+                            id="ServicegroupTags"
+                            name="ServicegroupTags"
+                            [items]="[]"
+                            [(ngModel)]="tagsForSelect"
+                            [addTag]="true"
+                            [multiple]="true"
+                            [selectOnTab]="true"
+                            [placeholder]="'Add tags'|transloco"
+                            [isOpen]="false"
+                            oitcFormError [errors]="errors" errorField="tags">
+                        </ng-select>
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="tags"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Press return to separate tags') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.services._ids">
+                        {{ t('Services') }}
+                    </label>
+                    <oitc-multi-select-optgroup
+                        name="post.services._ids"
+                        id="post.services._ids"
+                        optionValue="value"
+                        optionLabel="label"
+                        [options]="services"
+                        [(ngModel)]="post.services._ids"
+                        [searchCallback]="loadServices"
+                        class="flex-1"
+                        oitcFormError [errors]="errors" errorField="services">
+                    </oitc-multi-select-optgroup>
+                    <oitc-form-feedback [errors]="errors" errorField="services"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.servicetemplates._ids">
+                        {{ t('Service templates') }}
+                    </label>
+                    <oitc-multi-select
+                        name="post.servicetemplates._ids"
+                        id="post.servicetemplates._ids"
+                        [(ngModel)]="post.servicetemplates._ids"
+                        optionValue="key"
+                        optionLabel="value"
+                        [searchCallback]="loadServicetemplates"
+                        [options]="servicetemplates"
+                        oitcFormError [errors]="errors" errorField="servicetemplates">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors" errorField="servicetemplates"></oitc-form-feedback>
+                </div>
+
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <label class="me-2">
+                    <input cFormCheckInput type="checkbox" name="createAnother"
+                           [(ngModel)]="createAnother">
+                    {{ t('Create another') }}
+                </label>
+
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Create service group') }}
+                </button>
+                <button [fallbackUrl]="['servicegroups', 'index']" cButton class="ms-1 ripple" color="default"
+                        oitcBackButton
+                        type="button">
+                    {{ t('Cancel') }}
+                </button>
+
+
+            </c-card-footer>
+        </c-card>
     </form>
-  </ng-container>
+</ng-container>

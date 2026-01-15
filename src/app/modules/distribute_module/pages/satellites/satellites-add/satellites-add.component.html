@@ -1,497 +1,497 @@
 <ng-container *transloco="let t">
 
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-          {{ t('Distribute Module') }}
-        </li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['distributeModule', 'satellites', 'index']"
-            [routerLink]="['/', 'distribute_module', 'satellites', 'index']">
-            <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
-            {{ t('Satellites') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-          {{ t('Add') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Distribute Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['distributeModule', 'satellites', 'index']"
+                   [routerLink]="['/', 'distribute_module', 'satellites', 'index']">
+                    <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
+                    {{ t('Satellites') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                {{ t('Add') }}
+            </li>
+        </ol>
     </nav>
 
     <form cForm (ngSubmit)="addSatellite()">
-      <c-card class="mb-3">
-        <c-card-header>
-          <h5 cCardTitle>
-            {{ t('Create new Satellite') }}
-          </h5>
-          <c-nav class="card-toolbar card-header-pills">
-            <c-nav-item class="px-1">
-              <button [fallbackUrl]="['distributeModule', 'satellites', 'index']" cButton class="ripple"
-                color="default"
-                oitcBackButton
-                size="xs">
-                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                {{ t('Back') }}
-              </button>
-            </c-nav-item>
-          </c-nav>
-        </c-card-header>
-        <c-card-body>
-          <!-- Container -->
-          <div class="mb-3">
-            <label cLabel for="post.Satellite.container_id">
-              {{ t('Container') }}
-              <oitc-required-icon/>
-            </label>
-            <oitc-select
-              name="post.Satellite.container_id"
-              id="post.Satellite.container_id"
-              optionValue="key"
-              optionLabel="value"
-              [(ngModel)]="post.Satellite.container_id"
-              [options]="containers"
-              oitcFormError [errors]="errors" errorField="container_id">
-            </oitc-select>
-            <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-          </div>
-
-          <!-- Satellite Name -->
-          <div class="mb-3">
-            <label cLabel for="post.Satellite.name">
-              {{ t('Satellite Name') }}
-              <oitc-required-icon/>
-            </label>
-            <input cFormControl
-              required
-              id="post.Satellite.name"
-              type="text"
-              name="post.Satellite.name"
-              [(ngModel)]="post.Satellite.name"
-              oitcFormError [errors]="errors" errorField="name">
-            <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
-          </div>
-
-          <!-- IP Address -->
-          <div class="mb-3">
-            <label cLabel for="post.Satellite.address">
-              {{ t('IP address') }}
-              <oitc-required-icon/>
-            </label>
-            <input cFormControl
-              required
-              id="post.Satellite.address"
-              type="text"
-              name="post.Satellite.address"
-              [(ngModel)]="post.Satellite.address"
-              oitcFormError [errors]="errors" errorField="address">
-            <oitc-form-feedback [errors]="errors" errorField="address"></oitc-form-feedback>
-            <div class="help-block">
-              {{ t('This address will be used for all communications between the master instance and the satellite system.') }}
-            </div>
-          </div>
-
-          <!-- Description -->
-          <div class="mb-3">
-            <label cLabel for="post.Satellite.description">
-              {{ t('Description') }}
-            </label>
-            <input cFormControl
-              required
-              id="post.Satellite.description"
-              type="text"
-              name="post.Satellite.description"
-              [(ngModel)]="post.Satellite.description"
-              oitcFormError [errors]="errors" errorField="description">
-            <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-          </div>
-
-          <!-- Sync method Dropdown -->
-          <div class="mb-3">
-            <label cLabel for="post.Satellite.sync_method">
-              {{ t('Syncronisation method') }}
-              <oitc-required-icon/>
-            </label>
-            <oitc-select
-              name="post.Satellite.sync_method"
-              id="post.Satellite.sync_method"
-              optionValue="key"
-              optionLabel="value"
-              [(ngModel)]="post.Satellite.sync_method"
-              [options]="syncMethods"
-              >
-            </oitc-select>
-            <div class="help-block">
-              {{ t('HTTPS Push: The Satellite System will push check results to the Master system and frequently check for configuration changes.') }}
-              <br/>{{ t('HTTPS Pull: The Mastersystem will frequently pull check results from the Satellite and push configuration changes.') }}
-              <br/>{{ t('SSH: The Mastersystem will create an SSH tunnel to the Satellite system and pull check results and push configuration changes.') }}
-            </div>
-          </div>
-
-          @if (post.Satellite.sync_method === 'https_pull') {
-            <!-- URL -->
-            <div class="mb-3">
-              <label cLabel for="post.frontendUrl">
-                {{ t('URL') }}
-                <oitc-required-icon/>
-              </label>
-              <c-input-group>
-                <c-dropdown variant="btn-group">
-                  @if (post.protocol === 'http') {
-                    <button
-                      cButton cDropdownToggle color="primary">
-                      <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                      {{ t('HTTP') }}
-                    </button>
-                  }
-                  @if (post.protocol === 'https') {
-                    <button
-                      cButton cDropdownToggle color="primary">
-                      <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                      {{ t('HTTPS') }}
-                    </button>
-                  }
-                  <ul cDropdownMenu>
-                    <li cDropdownItem (click)="setUrlProtocol('http')">
-                      <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                      {{ t('HTTP') }}
-                    </li>
-                    <li cDropdownItem (click)="setUrlProtocol('https')">
-                      <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                      {{ t('HTTPS') }}
-                    </li>
-                  </ul>
-                </c-dropdown>
-                <span cInputGroupText>
-                  ://
-                </span>
-                <input cFormControl
-                  disabled
-                  id="post.Satellite.address_show"
-                  type="text"
-                  name="post.Satellite.address_show"
-                  [(ngModel)]="post.Satellite.address"/>
-                <span cInputGroupText>
-                  /
-                </span>
-                <input cFormControl
-                  id="post.frontendUrl"
-                  type="text"
-                  name="post.frontendUrl"
-                  [(ngModel)]="post.frontendUrl"
-                  oitcFormError [errors]="errors" errorField="url"/>
-              </c-input-group>
-              <oitc-form-feedback [errors]="errors" errorField="url"></oitc-form-feedback>
-            </div>
-            <!-- Verify Certificate -->
-            <div class="mb-3">
-              <c-form-check>
-                <input cFormCheckInput
-                  name="post.Satellite.verify_certificate"
-                  id="post.Satellite.verify_certificate"
-                  type="checkbox"
-                  trueFalseValue
-                  [trueValue]="1"
-                  [falseValue]="0"
-                  [(ngModel)]="post.Satellite.verify_certificate"
-                  oitcFormError [errors]="errors" errorField="verify_certificate"/>
-                <oitc-form-feedback [errors]="errors" errorField="verify_certificate"></oitc-form-feedback>
-                <label cFormCheckLabel for="post.Satellite.verify_certificate">
-                  {{ t('Verify certificate') }}
-                </label>
-              </c-form-check>
-            </div>
-            <!-- Use Proxy -->
-            <div class="mb-3">
-              <c-form-check>
-                <input cFormCheckInput
-                  name="post.Satellite.use_proxy"
-                  id="post.Satellite.use_proxy"
-                  type="checkbox"
-                  trueFalseValue
-                  [trueValue]="1"
-                  [falseValue]="0"
-                  [(ngModel)]="post.Satellite.use_proxy"
-                  oitcFormError [errors]="errors" errorField="use_proxy"/>
-                <oitc-form-feedback [errors]="errors" errorField="use_proxy"></oitc-form-feedback>
-                <label cFormCheckLabel for="post.Satellite.use_proxy">
-                  {{ t('Enable proxy') }}
-                </label>
-                <div class="help-block">
-                  {{ t('If enabled the proxy server will be used.') }}
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Create new Satellite') }}
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['distributeModule', 'satellites', 'index']" cButton class="ripple"
+                                color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <!-- Container -->
+                <div class="mb-3">
+                    <label cLabel for="post.Satellite.container_id">
+                        {{ t('Container') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <oitc-select
+                        name="post.Satellite.container_id"
+                        id="post.Satellite.container_id"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.Satellite.container_id"
+                        [options]="containers"
+                        oitcFormError [errors]="errors" errorField="container_id">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                 </div>
-              </c-form-check>
-            </div>
-            <!-- Proxy URL -->
-            <div class="mb-3">
-              <label cLabel for="this.post.proxyUrl">
-                {{ t('Proxy URL') }}
-                @if (post.Satellite.use_proxy) {
-                  <oitc-required-icon/>
+
+                <!-- Satellite Name -->
+                <div class="mb-3">
+                    <label cLabel for="post.Satellite.name">
+                        {{ t('Satellite Name') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           required
+                           id="post.Satellite.name"
+                           type="text"
+                           name="post.Satellite.name"
+                           [(ngModel)]="post.Satellite.name"
+                           oitcFormError [errors]="errors" errorField="name">
+                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                </div>
+
+                <!-- IP Address -->
+                <div class="mb-3">
+                    <label cLabel for="post.Satellite.address">
+                        {{ t('IP address') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           required
+                           id="post.Satellite.address"
+                           type="text"
+                           name="post.Satellite.address"
+                           [(ngModel)]="post.Satellite.address"
+                           oitcFormError [errors]="errors" errorField="address">
+                    <oitc-form-feedback [errors]="errors" errorField="address"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('This address will be used for all communications between the master instance and the satellite system.') }}
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                    <label cLabel for="post.Satellite.description">
+                        {{ t('Description') }}
+                    </label>
+                    <input cFormControl
+                           required
+                           id="post.Satellite.description"
+                           type="text"
+                           name="post.Satellite.description"
+                           [(ngModel)]="post.Satellite.description"
+                           oitcFormError [errors]="errors" errorField="description">
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                </div>
+
+                <!-- Sync method Dropdown -->
+                <div class="mb-3">
+                    <label cLabel for="post.Satellite.sync_method">
+                        {{ t('Syncronisation method') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <oitc-select
+                        name="post.Satellite.sync_method"
+                        id="post.Satellite.sync_method"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.Satellite.sync_method"
+                        [options]="syncMethods"
+                    >
+                    </oitc-select>
+                    <div class="help-block">
+                        {{ t('HTTPS Push: The Satellite System will push check results to the Master system and frequently check for configuration changes.') }}
+                        <br/>{{ t('HTTPS Pull: The Mastersystem will frequently pull check results from the Satellite and push configuration changes.') }}
+                        <br/>{{ t('SSH: The Mastersystem will create an SSH tunnel to the Satellite system and pull check results and push configuration changes.') }}
+                    </div>
+                </div>
+
+                @if (post.Satellite.sync_method === 'https_pull') {
+                    <!-- URL -->
+                    <div class="mb-3">
+                        <label cLabel for="post.frontendUrl">
+                            {{ t('URL') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <c-input-group>
+                            <c-dropdown variant="btn-group">
+                                @if (post.protocol === 'http') {
+                                    <button
+                                        cButton cDropdownToggle color="primary">
+                                        <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+                                        {{ t('HTTP') }}
+                                    </button>
+                                }
+                                @if (post.protocol === 'https') {
+                                    <button
+                                        cButton cDropdownToggle color="primary">
+                                        <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                                        {{ t('HTTPS') }}
+                                    </button>
+                                }
+                                <ul cDropdownMenu>
+                                    <li cDropdownItem (click)="setUrlProtocol('http')">
+                                        <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+                                        {{ t('HTTP') }}
+                                    </li>
+                                    <li cDropdownItem (click)="setUrlProtocol('https')">
+                                        <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                                        {{ t('HTTPS') }}
+                                    </li>
+                                </ul>
+                            </c-dropdown>
+                            <span cInputGroupText>
+                                ://
+                            </span>
+                            <input cFormControl
+                                   disabled
+                                   id="post.Satellite.address_show"
+                                   type="text"
+                                   name="post.Satellite.address_show"
+                                   [(ngModel)]="post.Satellite.address"/>
+                            <span cInputGroupText>
+                                /
+                            </span>
+                            <input cFormControl
+                                   id="post.frontendUrl"
+                                   type="text"
+                                   name="post.frontendUrl"
+                                   [(ngModel)]="post.frontendUrl"
+                                   oitcFormError [errors]="errors" errorField="url"/>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="url"></oitc-form-feedback>
+                    </div>
+                    <!-- Verify Certificate -->
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput
+                                   name="post.Satellite.verify_certificate"
+                                   id="post.Satellite.verify_certificate"
+                                   type="checkbox"
+                                   trueFalseValue
+                                   [trueValue]="1"
+                                   [falseValue]="0"
+                                   [(ngModel)]="post.Satellite.verify_certificate"
+                                   oitcFormError [errors]="errors" errorField="verify_certificate"/>
+                            <oitc-form-feedback [errors]="errors" errorField="verify_certificate"></oitc-form-feedback>
+                            <label cFormCheckLabel for="post.Satellite.verify_certificate">
+                                {{ t('Verify certificate') }}
+                            </label>
+                        </c-form-check>
+                    </div>
+                    <!-- Use Proxy -->
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput
+                                   name="post.Satellite.use_proxy"
+                                   id="post.Satellite.use_proxy"
+                                   type="checkbox"
+                                   trueFalseValue
+                                   [trueValue]="1"
+                                   [falseValue]="0"
+                                   [(ngModel)]="post.Satellite.use_proxy"
+                                   oitcFormError [errors]="errors" errorField="use_proxy"/>
+                            <oitc-form-feedback [errors]="errors" errorField="use_proxy"></oitc-form-feedback>
+                            <label cFormCheckLabel for="post.Satellite.use_proxy">
+                                {{ t('Enable proxy') }}
+                            </label>
+                            <div class="help-block">
+                                {{ t('If enabled the proxy server will be used.') }}
+                            </div>
+                        </c-form-check>
+                    </div>
+                    <!-- Proxy URL -->
+                    <div class="mb-3">
+                        <label cLabel for="this.post.proxyUrl">
+                            {{ t('Proxy URL') }}
+                            @if (post.Satellite.use_proxy) {
+                                <oitc-required-icon/>
+                            }
+                        </label>
+                        <c-input-group>
+                            <c-dropdown>
+                                @if (post.proxyProtocol === 'http') {
+                                    <button
+                                        cButton cDropdownToggle color="primary">
+                                        <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+                                        {{ t('HTTP') }}
+                                    </button>
+                                }
+                                @if (post.proxyProtocol === 'https') {
+                                    <button
+                                        cButton cDropdownToggle color="primary">
+                                        <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                                        {{ t('HTTPS') }}
+                                    </button>
+                                }
+                                <ul cDropdownMenu>
+                                    <li cDropdownItem (click)="setProxyProtocol('http')">
+                                        <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+                                        {{ t('HTTP') }}
+                                    </li>
+                                    <li cDropdownItem (click)="setProxyProtocol('https')">
+                                        <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                                        {{ t('HTTPS') }}
+                                    </li>
+                                </ul>
+                            </c-dropdown>
+                            <span cInputGroupText>
+                                ://
+                            </span>
+                            <input cFormControl
+                                   id="this.post.proxyUrl"
+                                   type="text"
+                                   name="this.post.proxyUrl"
+                                   [(ngModel)]="this.post.proxyUrl"
+                                   oitcFormError [errors]="errors" errorField="proxy_url"/>
+                            <span cInputGroupText>
+                                /
+                            </span>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="proxy_url"></oitc-form-feedback>
+                    </div>
                 }
-              </label>
-              <c-input-group>
-                <c-dropdown>
-                  @if (post.proxyProtocol === 'http') {
-                    <button
-                      cButton cDropdownToggle color="primary">
-                      <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                      {{ t('HTTP') }}
-                    </button>
-                  }
-                  @if (post.proxyProtocol === 'https') {
-                    <button
-                      cButton cDropdownToggle color="primary">
-                      <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                      {{ t('HTTPS') }}
-                    </button>
-                  }
-                  <ul cDropdownMenu>
-                    <li cDropdownItem (click)="setProxyProtocol('http')">
-                      <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                      {{ t('HTTP') }}
-                    </li>
-                    <li cDropdownItem (click)="setProxyProtocol('https')">
-                      <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                      {{ t('HTTPS') }}
-                    </li>
-                  </ul>
-                </c-dropdown>
-                <span cInputGroupText>
-                  ://
-                </span>
-                <input cFormControl
-                  id="this.post.proxyUrl"
-                  type="text"
-                  name="this.post.proxyUrl"
-                  [(ngModel)]="this.post.proxyUrl"
-                  oitcFormError [errors]="errors" errorField="proxy_url"/>
-                <span cInputGroupText>
-                  /
-                </span>
-              </c-input-group>
-              <oitc-form-feedback [errors]="errors" errorField="proxy_url"></oitc-form-feedback>
-            </div>
-          }
 
-          @if (post.Satellite.sync_method !== 'ssh') {
-            <!-- API Key -->
-            <div class="mb-3">
-              <label cLabel for="post.Satellite.api_key">
-                {{ t('API Key') }}
-                <oitc-required-icon/>
-              </label>
-              <c-input-group>
-                <input cFormControl
-                  required
-                  disabled
-                  id="post.Satellite.api_key"
-                  type="text"
-                  name="post.Satellite.api_key"
-                  [ngModelOptions]="{standalone: true}"
-                  [(ngModel)]="post.Satellite.api_key">
-                <button cButton color="success" (click)="refreshApiKey()">
-                  <fa-icon [icon]="['fas', 'key']"></fa-icon>
-                  {{ t('Generate new API key') }}
-                </button>
-              </c-input-group>
-              <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
-            </div>
-            @if (post.Satellite.sync_method === 'https_pull') {
-              <!-- interval -->
-              <div class="mb-3">
-                <label cLabel for="post.Satellite.interval">
-                  {{ t('Interval') }}
-                  <oitc-required-icon/>
-                </label>
-                <input cFormControl
-                  required
-                  id="post.Satellite.interval"
-                  type="text"
-                  name="post.Satellite.interval"
-                  [(ngModel)]="post.Satellite.interval"
-                  oitcFormError [errors]="errors" errorField="interval">
-                <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
-                <div class="help-block">
-                  {{ t('Time interval in seconds the master system will pickup check results') }}
+                @if (post.Satellite.sync_method !== 'ssh') {
+                    <!-- API Key -->
+                    <div class="mb-3">
+                        <label cLabel for="post.Satellite.api_key">
+                            {{ t('API Key') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <c-input-group>
+                            <input cFormControl
+                                   required
+                                   disabled
+                                   id="post.Satellite.api_key"
+                                   type="text"
+                                   name="post.Satellite.api_key"
+                                   [ngModelOptions]="{standalone: true}"
+                                   [(ngModel)]="post.Satellite.api_key">
+                            <button cButton color="success" (click)="refreshApiKey()">
+                                <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                                {{ t('Generate new API key') }}
+                            </button>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
+                    </div>
+                    @if (post.Satellite.sync_method === 'https_pull') {
+                        <!-- interval -->
+                        <div class="mb-3">
+                            <label cLabel for="post.Satellite.interval">
+                                {{ t('Interval') }}
+                                <oitc-required-icon/>
+                            </label>
+                            <input cFormControl
+                                   required
+                                   id="post.Satellite.interval"
+                                   type="text"
+                                   name="post.Satellite.interval"
+                                   [(ngModel)]="post.Satellite.interval"
+                                   oitcFormError [errors]="errors" errorField="interval">
+                            <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Time interval in seconds the master system will pickup check results') }}
+                            </div>
+                        </div>
+                    }
+                    <!-- Timeout -->
+                    <div class="mb-3">
+                        <label cLabel for="post.Satellite.timeout">
+                            {{ t('Timeout') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <input cFormControl
+                               required
+                               id="post.Satellite.timeout"
+                               type="text"
+                               name="post.Satellite.timeout"
+                               [(ngModel)]="post.Satellite.timeout"
+                               oitcFormError [errors]="errors" errorField="timeout">
+                        <oitc-form-feedback [errors]="errors" errorField="timeout"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Time limit in seconds which defines when the satellite should be marked as OFFLINE .') }}
+                        </div>
+                    </div>
+                }
+
+                @if (post.Satellite.sync_method === 'ssh') {
+                    <!-- Login -->
+                    <div class="mb-3">
+                        <label cLabel for="post.Satellite.login">
+                            {{ t('Login') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <input cFormControl
+                               required
+                               id="post.Satellite.login"
+                               type="text"
+                               name="post.Satellite.login"
+                               placeholder="nagios"
+                               [(ngModel)]="post.Satellite.login"
+                               oitcFormError [errors]="errors" errorField="login">
+                        <oitc-form-feedback [errors]="errors" errorField="login"></oitc-form-feedback>
+                    </div>
+                    <!-- Port -->
+                    <div class="mb-3">
+                        <label cLabel for="post.Satellite.port">
+                            {{ t('Port') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <input cFormControl
+                               required
+                               id="post.Satellite.port"
+                               type="number"
+                               name="post.Satellite.port"
+                               placeholder="22"
+                               [(ngModel)]="post.Satellite.port"
+                               oitcFormError [errors]="errors" errorField="port">
+                        <oitc-form-feedback [errors]="errors" errorField="port"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('SSH port of remote machine.') }}
+                        </div>
+                    </div>
+                    <!-- Private Key Path -->
+                    <div class="mb-3">
+                        <label cLabel for="post.Satellite.private_key_path">
+                            {{ t('PrivateKeyPath') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <input cFormControl
+                               required
+                               id="post.Satellite.private_key_path"
+                               type="text"
+                               name="post.Satellite.private_key_path"
+                               placeholder="/var/lib/nagios/.ssh/id_rsa"
+                               [(ngModel)]="post.Satellite.private_key_path"
+                               oitcFormError [errors]="errors" errorField="private_key_path">
+                        <oitc-form-feedback [errors]="errors" errorField="private_key_path"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('We will use a default path to private key if this field left empty') }}
+                        </div>
+                    </div>
+                    <!-- Remote Port -->
+                    <div class="mb-3">
+                        <label cLabel for="post.Satellite.remote_port">
+                            {{ t('RemotePort') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <input cFormControl
+                               required
+                               id="post.Satellite.remote_port"
+                               type="number"
+                               placeholder="4730"
+                               name="post.Satellite.remote_port"
+                               [(ngModel)]="post.Satellite.remote_port"
+                               oitcFormError [errors]="errors" errorField="remote_port">
+                        <oitc-form-feedback [errors]="errors" errorField="remote_port"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Gearman port of remote machine.') }}
+                        </div>
+                    </div>
+                }
+
+                <!-- Time zone -->
+                <div class="mb-3">
+                    <label cLabel for="post.Satellite.timezone">
+                        {{ t('Timezone') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <ng-select id="post.Satellite.timezone"
+                               name="post.Satellite.timezone"
+                               [items]="timezones"
+                               groupBy="group"
+                               bindLabel="name"
+                               bindValue="value"
+                               [clearable]="false"
+                               [(ngModel)]="post.Satellite.timezone"
+                               oitcFormError [errors]="errors" errorField="timezone">
+                        <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
+                            <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
+                        </ng-template>
+                    </ng-select>
+                    <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>
+                    <div class="help-block">
+                        {{ t('Server timezone is:') }}
+                        <b>
+                            {{ serverTimeZone }}
+                        </b>
+                        {{ t('Current server time:') }}
+                        <b>
+                            {{ serverTime }}
+                        </b>
+                    </div>
                 </div>
-              </div>
-            }
-            <!-- Timeout -->
-            <div class="mb-3">
-              <label cLabel for="post.Satellite.timeout">
-                {{ t('Timeout') }}
-                <oitc-required-icon/>
-              </label>
-              <input cFormControl
-                required
-                id="post.Satellite.timeout"
-                type="text"
-                name="post.Satellite.timeout"
-                [(ngModel)]="post.Satellite.timeout"
-                oitcFormError [errors]="errors" errorField="timeout">
-              <oitc-form-feedback [errors]="errors" errorField="timeout"></oitc-form-feedback>
-              <div class="help-block">
-                {{ t('Time limit in seconds which defines when the satellite should be marked as OFFLINE .') }}
-              </div>
-            </div>
-          }
 
-          @if (post.Satellite.sync_method === 'ssh') {
-            <!-- Login -->
-            <div class="mb-3">
-              <label cLabel for="post.Satellite.login">
-                {{ t('Login') }}
-                <oitc-required-icon/>
-              </label>
-              <input cFormControl
-                required
-                id="post.Satellite.login"
-                type="text"
-                name="post.Satellite.login"
-                placeholder="nagios"
-                [(ngModel)]="post.Satellite.login"
-                oitcFormError [errors]="errors" errorField="login">
-              <oitc-form-feedback [errors]="errors" errorField="login"></oitc-form-feedback>
-            </div>
-            <!-- Port -->
-            <div class="mb-3">
-              <label cLabel for="post.Satellite.port">
-                {{ t('Port') }}
-                <oitc-required-icon/>
-              </label>
-              <input cFormControl
-                required
-                id="post.Satellite.port"
-                type="number"
-                name="post.Satellite.port"
-                placeholder="22"
-                [(ngModel)]="post.Satellite.port"
-                oitcFormError [errors]="errors" errorField="port">
-              <oitc-form-feedback [errors]="errors" errorField="port"></oitc-form-feedback>
-              <div class="help-block">
-                {{ t('SSH port of remote machine.') }}
-              </div>
-            </div>
-            <!-- Private Key Path -->
-            <div class="mb-3">
-              <label cLabel for="post.Satellite.private_key_path">
-                {{ t('PrivateKeyPath') }}
-                <oitc-required-icon/>
-              </label>
-              <input cFormControl
-                required
-                id="post.Satellite.private_key_path"
-                type="text"
-                name="post.Satellite.private_key_path"
-                placeholder="/var/lib/nagios/.ssh/id_rsa"
-                [(ngModel)]="post.Satellite.private_key_path"
-                oitcFormError [errors]="errors" errorField="private_key_path">
-              <oitc-form-feedback [errors]="errors" errorField="private_key_path"></oitc-form-feedback>
-              <div class="help-block">
-                {{ t('We will use a default path to private key if this field left empty') }}
-              </div>
-            </div>
-            <!-- Remote Port -->
-            <div class="mb-3">
-              <label cLabel for="post.Satellite.remote_port">
-                {{ t('RemotePort') }}
-                <oitc-required-icon/>
-              </label>
-              <input cFormControl
-                required
-                id="post.Satellite.remote_port"
-                type="number"
-                placeholder="4730"
-                name="post.Satellite.remote_port"
-                [(ngModel)]="post.Satellite.remote_port"
-                oitcFormError [errors]="errors" errorField="remote_port">
-              <oitc-form-feedback [errors]="errors" errorField="remote_port"></oitc-form-feedback>
-              <div class="help-block">
-                {{ t('Gearman port of remote machine.') }}
-              </div>
-            </div>
-          }
+                <!-- Time Syncing -->
+                <div class="mb-3">
+                    <c-form-check>
+                        <input cFormCheckInput
+                               name="post.Satellite.use_timesync"
+                               id="post.Satellite.use_timesync"
+                               type="checkbox"
+                               trueFalseValue
+                               [trueValue]="1"
+                               [falseValue]="0"
+                               [(ngModel)]="post.Satellite.use_timesync"
+                               oitcFormError [errors]="errors" errorField="use_timesync"/>
+                        <oitc-form-feedback [errors]="errors" errorField="use_timesync"></oitc-form-feedback>
+                        <label cFormCheckLabel for="post.Satellite.use_timesync">
+                            {{ t('Time Syncing') }}
+                        </label>
+                    </c-form-check>
+                    <div class="help-block">
+                        {{ t('Determines if you want to synchronise the system clock of the master server to the satellite system. Notice: It is not recommended to enable this option. Please use a NTP server whenever possible.') }}
+                    </div>
+                </div>
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <label class="me-2">
+                    <input cFormCheckInput type="checkbox" name="createAnother"
+                           [(ngModel)]="createAnother">
+                    {{ t('Create another') }}
+                </label>
 
-          <!-- Time zone -->
-          <div class="mb-3">
-            <label cLabel for="post.Satellite.timezone">
-              {{ t('Timezone') }}
-              <oitc-required-icon/>
-            </label>
-            <ng-select id="post.Satellite.timezone"
-              name="post.Satellite.timezone"
-              [items]="timezones"
-              groupBy="group"
-              bindLabel="name"
-              bindValue="value"
-              [clearable]="false"
-              [(ngModel)]="post.Satellite.timezone"
-              oitcFormError [errors]="errors" errorField="timezone">
-              <ng-template ng-option-tmp let-timezone="item" let-search="searchTerm">
-                <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
-              </ng-template>
-            </ng-select>
-            <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>
-            <div class="help-block">
-              {{ t('Server timezone is:') }}
-              <b>
-                {{ serverTimeZone }}
-              </b>
-              {{ t('Current server time:') }}
-              <b>
-                {{ serverTime }}
-              </b>
-            </div>
-          </div>
-
-          <!-- Time Syncing -->
-          <div class="mb-3">
-            <c-form-check>
-              <input cFormCheckInput
-                name="post.Satellite.use_timesync"
-                id="post.Satellite.use_timesync"
-                type="checkbox"
-                trueFalseValue
-                [trueValue]="1"
-                [falseValue]="0"
-                [(ngModel)]="post.Satellite.use_timesync"
-                oitcFormError [errors]="errors" errorField="use_timesync"/>
-              <oitc-form-feedback [errors]="errors" errorField="use_timesync"></oitc-form-feedback>
-              <label cFormCheckLabel for="post.Satellite.use_timesync">
-                {{ t('Time Syncing') }}
-              </label>
-            </c-form-check>
-            <div class="help-block">
-              {{ t('Determines if you want to synchronise the system clock of the master server to the satellite system. Notice: It is not recommended to enable this option. Please use a NTP server whenever possible.') }}
-            </div>
-          </div>
-        </c-card-body>
-        <c-card-footer class="text-end">
-          <label class="me-2">
-            <input cFormCheckInput type="checkbox" name="createAnother"
-              [(ngModel)]="createAnother">
-            {{ t('Create another') }}
-          </label>
-
-          <button cButton class="ripple" color="primary" type="submit">
-            {{ t('Create satellite') }}
-          </button>
-          <button [fallbackUrl]="['distribute_module', 'satellites', 'index']" cButton class="ms-1 ripple"
-            color="default"
-            oitcBackButton
-            type="button">
-            {{ t('Cancel') }}
-          </button>
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Create satellite') }}
+                </button>
+                <button [fallbackUrl]="['distribute_module', 'satellites', 'index']" cButton class="ms-1 ripple"
+                        color="default"
+                        oitcBackButton
+                        type="button">
+                    {{ t('Cancel') }}
+                </button>
 
 
-        </c-card-footer>
-      </c-card>
+            </c-card-footer>
+        </c-card>
     </form>
-  </ng-container>
+</ng-container>

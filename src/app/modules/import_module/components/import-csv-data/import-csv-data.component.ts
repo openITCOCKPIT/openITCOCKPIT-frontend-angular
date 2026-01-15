@@ -1,15 +1,15 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-  DOCUMENT
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild,
+    DOCUMENT
 } from '@angular/core';
 import {
     ButtonCloseDirective,
@@ -53,25 +53,25 @@ import _ from 'lodash';
 @Component({
     selector: 'oitc-import-csv-data',
     imports: [
-    ButtonCloseDirective,
-    ColComponent,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    FaStackComponent,
-    FaStackItemSizeDirective,
-    PermissionDirective,
-    RouterLink,
-    FormsModule,
-    TableDirective,
-    NgClass
-],
+        ButtonCloseDirective,
+        ColComponent,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        FaStackComponent,
+        FaStackItemSizeDirective,
+        PermissionDirective,
+        RouterLink,
+        FormsModule,
+        TableDirective,
+        NgClass
+    ],
     templateUrl: './import-csv-data.component.html',
     styleUrl: './import-csv-data.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -186,9 +186,9 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
             return;
         }
 
-        if((this.importer?.data_source === 'csv_with_header' || this.importer?.data_source === 'csv_without_header')
+        if ((this.importer?.data_source === 'csv_with_header' || this.importer?.data_source === 'csv_without_header')
             && (!this.filenameOnServer && !this.uploadSuccessful)) {
-           return;
+            return;
 
         }
 

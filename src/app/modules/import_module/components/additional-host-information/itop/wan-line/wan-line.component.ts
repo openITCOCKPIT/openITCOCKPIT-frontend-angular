@@ -8,11 +8,11 @@ import { TranslocoDirective } from '@jsverse/transloco';
 @Component({
     selector: 'oitc-wan-line',
     imports: [
-    FaIconComponent,
-    FaLayersComponent,
-    TableDirective,
-    TranslocoDirective
-],
+        FaIconComponent,
+        FaLayersComponent,
+        TableDirective,
+        TranslocoDirective
+    ],
     templateUrl: './wan-line.component.html',
     styleUrl: './wan-line.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

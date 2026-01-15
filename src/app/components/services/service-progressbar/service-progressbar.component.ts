@@ -9,13 +9,13 @@ import { NgClass } from '@angular/common';
 @Component({
     selector: 'oitc-service-progressbar',
     imports: [
-    RowComponent,
-    ColComponent,
-    ProgressStackedComponent,
-    ProgressComponent,
-    FaIconComponent,
-    NgClass
-],
+        RowComponent,
+        ColComponent,
+        ProgressStackedComponent,
+        ProgressComponent,
+        FaIconComponent,
+        NgClass
+    ],
     templateUrl: './service-progressbar.component.html',
     styleUrl: './service-progressbar.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

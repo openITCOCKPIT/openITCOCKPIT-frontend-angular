@@ -1,138 +1,138 @@
 <ng-container *transloco="let t">
 
-  <fieldset>
-    <legend class="fs-md fieldset-legend-border-bottom">
-      <h4 [ngClass]="{'text-danger': titleErrorField() && errors.hasOwnProperty(titleErrorField())}">
-        {{ title() }}
-      </h4>
-      <span class="help-block italic text-primary small">
-        {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
-      </span>
-      <oitc-form-feedback [errors]="errors" errorField="services"></oitc-form-feedback>
+    <fieldset>
+        <legend class="fs-md fieldset-legend-border-bottom">
+            <h4 [ngClass]="{'text-danger': titleErrorField() && errors.hasOwnProperty(titleErrorField())}">
+                {{ title() }}
+            </h4>
+            <span class="help-block italic text-primary small">
+                {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
+            </span>
+            <oitc-form-feedback [errors]="errors" errorField="services"></oitc-form-feedback>
 
-    </legend>
+        </legend>
 
-    <c-row class="mb-3">
-      <c-col md="6">
-        <c-input-group>
-          <span cInputGroupText>
-            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-          </span>
-          <ng-select
-            id="tags"
-            name="tags"
-            [items]="[]"
-            [(ngModel)]="searchedTags"
-            [addTag]="true"
-            [multiple]="true"
-            [selectOnTab]="true"
-            [isOpen]="false"
-            [placeholder]="'Filter by service name'|transloco">
-          </ng-select>
-          <span cInputGroupText>
-            <c-form-check>
-              <input
-                cFormCheckInput
-                name="toggleCheckboxes"
-                id="toggleCheckboxes"
-                type="checkbox"
-
-                (ngModelChange)="toggleCheck($event)"
-                [(ngModel)]="checked"/>
-              <label cFormCheckLabel for="toggleCheckboxes">
-                {{ t('Toggle checkboxes') }}
-              </label>
-            </c-form-check>
-          </span>
-        </c-input-group>
-      </c-col>
-      <c-col md="2">
-        <button cButton
-          class="ripple"
-          color="primary"
-          (click)="toggleAccordionClose(!accordionClosed)">
-          @if (!accordionClosed) {
-            <fa-icon [icon]="['fas', 'down-left-and-up-right-to-center']"></fa-icon>
-          } @else {
-            <fa-icon [icon]="['fas', 'up-right-and-down-left-from-center']"></fa-icon>
-          }
-          {{ t('Collapse all') }}
-        </button>
-      </c-col>
-    </c-row>
-
-
-    <ul class="m-0 p-0">
-      @for (service of post; track service) {
-        <ol class="m-0 p-0">
-          @if (!service.servicecommandargumentvalues.length) {
-            @if (hasName(service.name)) {
-              <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
-                <div class="d-flex align-items-center">
-                  <input cFormCheckInput
-                    type="checkbox"
-                    [id]="service.name"
-                    class="alert-icon lg-checkbox"
-                    name="checkbox"
-                    [(ngModel)]="service.createService"/>
-                  <label class="custom-control-label custom-control-label-ok"
-                    [for]="service.name">
-                    {{ service.name }}
-                    <span class="help-block italic">
-                      {{ service.description }}
+        <c-row class="mb-3">
+            <c-col md="6">
+                <c-input-group>
+                    <span cInputGroupText>
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                     </span>
-                  </label>
-                </div>
-              </div>
+                    <ng-select
+                        id="tags"
+                        name="tags"
+                        [items]="[]"
+                        [(ngModel)]="searchedTags"
+                        [addTag]="true"
+                        [multiple]="true"
+                        [selectOnTab]="true"
+                        [isOpen]="false"
+                        [placeholder]="'Filter by service name'|transloco">
+                    </ng-select>
+                    <span cInputGroupText>
+                        <c-form-check>
+                            <input
+                                cFormCheckInput
+                                name="toggleCheckboxes"
+                                id="toggleCheckboxes"
+                                type="checkbox"
+
+                                (ngModelChange)="toggleCheck($event)"
+                                [(ngModel)]="checked"/>
+                            <label cFormCheckLabel for="toggleCheckboxes">
+                                {{ t('Toggle checkboxes') }}
+                            </label>
+                        </c-form-check>
+                    </span>
+                </c-input-group>
+            </c-col>
+            <c-col md="2">
+                <button cButton
+                        class="ripple"
+                        color="primary"
+                        (click)="toggleAccordionClose(!accordionClosed)">
+                    @if (!accordionClosed) {
+                        <fa-icon [icon]="['fas', 'down-left-and-up-right-to-center']"></fa-icon>
+                    } @else {
+                        <fa-icon [icon]="['fas', 'up-right-and-down-left-from-center']"></fa-icon>
+                    }
+                    {{ t('Collapse all') }}
+                </button>
+            </c-col>
+        </c-row>
+
+
+        <ul class="m-0 p-0">
+            @for (service of post; track service) {
+                <ol class="m-0 p-0">
+                    @if (!service.servicecommandargumentvalues.length) {
+                        @if (hasName(service.name)) {
+                            <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
+                                <div class="d-flex align-items-center">
+                                    <input cFormCheckInput
+                                           type="checkbox"
+                                           [id]="service.name"
+                                           class="alert-icon lg-checkbox"
+                                           name="checkbox"
+                                           [(ngModel)]="service.createService"/>
+                                    <label class="custom-control-label custom-control-label-ok"
+                                           [for]="service.name">
+                                        {{ service.name }}
+                                        <span class="help-block italic">
+                                            {{ service.description }}
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                    } @else {
+                        @if (hasName(service.name)) {
+                            <c-accordion class="mb-3">
+                                <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
+                                    <ng-template cTemplateId="accordionHeaderTemplate">
+                                        <div class="form-group wizard-accordion bg-info-subtle"
+                                             (click)="accordionItem.toggleItem()"
+                                             [collapsed]="!accordionItem.visible" cAccordionButton>
+                                            <div class="d-flex align-items-center">
+                                                <input cFormCheckInput
+                                                       type="checkbox"
+                                                       [id]="service.name"
+                                                       class="alert-icon lg-checkbox"
+                                                       name="checkbox"
+                                                       (click)="$event.stopPropagation()"
+                                                       [(ngModel)]="service.createService"/>
+                                                <label class="custom-control-label custom-control-label-ok"
+                                                       (click)="$event.stopPropagation()"
+                                                       [for]="service.name">
+                                                    {{ service.name }}
+                                                    <span class="help-block italic">
+                                                        {{ service.description }}
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template cTemplateId="accordionBodyTemplate">
+                                        <div class="accordion-body">
+                                            @for (commandArgument of service.servicecommandargumentvalues; track commandArgument) {
+                                                <div
+                                                    class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}"
+                                                >
+                                                    {{ commandArgument.commandargument.human_name }}
+                                                    <input class="form-control"
+                                                           type="text"
+                                                           [disabled]="!service.createService"
+                                                           [(ngModel)]="commandArgument.value">
+                                                </div>
+                                            }
+                                        </div>
+                                    </ng-template>
+                                </c-accordion-item>
+                            </c-accordion>
+                        }
+                    }
+                </ol>
             }
-          } @else {
-            @if (hasName(service.name)) {
-              <c-accordion class="mb-3">
-                <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
-                  <ng-template cTemplateId="accordionHeaderTemplate">
-                    <div class="form-group wizard-accordion bg-info-subtle"
-                      (click)="accordionItem.toggleItem()"
-                      [collapsed]="!accordionItem.visible" cAccordionButton>
-                      <div class="d-flex align-items-center">
-                        <input cFormCheckInput
-                          type="checkbox"
-                          [id]="service.name"
-                          class="alert-icon lg-checkbox"
-                          name="checkbox"
-                          (click)="$event.stopPropagation()"
-                          [(ngModel)]="service.createService"/>
-                        <label class="custom-control-label custom-control-label-ok"
-                          (click)="$event.stopPropagation()"
-                          [for]="service.name">
-                          {{ service.name }}
-                          <span class="help-block italic">
-                            {{ service.description }}
-                          </span>
-                        </label>
-                      </div>
-                    </div>
-                  </ng-template>
-                  <ng-template cTemplateId="accordionBodyTemplate">
-                    <div class="accordion-body">
-                      @for (commandArgument of service.servicecommandargumentvalues; track commandArgument) {
-                        <div
-                          class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}"
-                          >
-                          {{ commandArgument.commandargument.human_name }}
-                          <input class="form-control"
-                            type="text"
-                            [disabled]="!service.createService"
-                            [(ngModel)]="commandArgument.value">
-                        </div>
-                      }
-                    </div>
-                  </ng-template>
-                </c-accordion-item>
-              </c-accordion>
-            }
-          }
-        </ol>
-      }
-    </ul>
-  </fieldset>
+        </ul>
+    </fieldset>
 </ng-container>

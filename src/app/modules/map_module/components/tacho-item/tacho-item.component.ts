@@ -1,15 +1,15 @@
 import {
-  ChangeDetectionStrategy,
-  Component,
-  effect,
-  inject,
-  input,
-  InputSignal,
-  OnDestroy,
-  OnInit,
-  Renderer2,
-  ViewChild,
-  DOCUMENT
+    ChangeDetectionStrategy,
+    Component,
+    effect,
+    inject,
+    input,
+    InputSignal,
+    OnDestroy,
+    OnInit,
+    Renderer2,
+    ViewChild,
+    DOCUMENT
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';

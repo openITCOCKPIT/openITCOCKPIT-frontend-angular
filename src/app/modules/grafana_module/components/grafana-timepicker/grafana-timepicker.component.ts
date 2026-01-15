@@ -27,16 +27,16 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'oitc-grafana-timepicker',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    DropdownComponent,
-    XsButtonDirective,
-    DropdownToggleDirective,
-    DropdownMenuDirective,
-    RowComponent,
-    ColComponent,
-    NgClass
-],
+        TranslocoDirective,
+        FaIconComponent,
+        DropdownComponent,
+        XsButtonDirective,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        RowComponent,
+        ColComponent,
+        NgClass
+    ],
     templateUrl: './grafana-timepicker.component.html',
     styleUrl: './grafana-timepicker.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

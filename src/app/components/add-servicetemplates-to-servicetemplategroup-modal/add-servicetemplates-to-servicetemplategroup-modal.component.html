@@ -1,53 +1,53 @@
 <ng-container *transloco="let t">
-  <c-modal
-    #modal='cModal'
-    [keyboard]="true"
-    id="addServicetemplatesToServicetemplategroups"
-    size="lg"
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="addServicetemplatesToServicetemplategroups"
+        size="lg"
     >
-    <c-modal-header class="bg-primary">
-      <h5 cModalTitle class="text-white">
-        <fa-icon [icon]="['fas', 'link']"></fa-icon>
-        {{ t('Append service template/s to service template group') }}
-      </h5>
-      <button (click)="hideModal()" cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body>
-      <c-row>
-        <c-col xs="12">
-          <strong>{{ t('Selected service templates') }}:</strong>
-        </c-col>
-      </c-row>
+        <c-modal-header class="bg-primary">
+            <h5 cModalTitle class="text-white">
+                <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                {{ t('Append service template/s to service template group') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col xs="12">
+                    <strong>{{ t('Selected service templates') }}:</strong>
+                </c-col>
+            </c-row>
 
-      <c-row class="pt-2">
-        @for (item of items; track item) {
-          <c-col sm="12">
-            <ul class="mb-0">
-              <li>
-                {{ item.displayName }}
-              </li>
-            </ul>
-          </c-col>
-        }
-      </c-row>
+            <c-row class="pt-2">
+                @for (item of items; track item) {
+                    <c-col sm="12">
+                        <ul class="mb-0">
+                            <li>
+                                {{ item.displayName }}
+                            </li>
+                        </ul>
+                    </c-col>
+                }
+            </c-row>
 
-    </c-modal-body>
-    <c-modal-footer>
-      <button [routerLink]="['/', 'servicetemplategroups', 'add', servicetemplateIdsAsString]" cButton
-        class="ripple"
-        [disabled]="servicetemplateIds.length === 0"
-        color="success">
-        {{ t('Create new service template group') }}
-      </button>
-      <button [routerLink]="['/', 'servicetemplategroups', 'append', servicetemplateIdsAsString]" cButton
-        class="ripple"
-        [disabled]="servicetemplateIds.length === 0"
-        color="primary">
-        {{ t('Append existing service template group') }}
-      </button>
-      <button (click)="hideModal()" cButton class="ripple" color="default">
-        {{ t('Cancel') }}
-      </button>
-    </c-modal-footer>
-  </c-modal>
+        </c-modal-body>
+        <c-modal-footer>
+            <button [routerLink]="['/', 'servicetemplategroups', 'add', servicetemplateIdsAsString]" cButton
+                    class="ripple"
+                    [disabled]="servicetemplateIds.length === 0"
+                    color="success">
+                {{ t('Create new service template group') }}
+            </button>
+            <button [routerLink]="['/', 'servicetemplategroups', 'append', servicetemplateIdsAsString]" cButton
+                    class="ripple"
+                    [disabled]="servicetemplateIds.length === 0"
+                    color="primary">
+                {{ t('Append existing service template group') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
 </ng-container>

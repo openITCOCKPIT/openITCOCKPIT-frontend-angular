@@ -24,18 +24,18 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 @Component({
     selector: 'oitc-duration-input',
     imports: [
-    ButtonGroupComponent,
-    ColComponent,
-    FormControlDirective,
-    HumanTimeComponent,
-    InputGroupComponent,
-    ReactiveFormsModule,
-    RowComponent,
-    TranslocoPipe,
-    XsButtonDirective,
-    FormsModule,
-    NgClass
-],
+        ButtonGroupComponent,
+        ColComponent,
+        FormControlDirective,
+        HumanTimeComponent,
+        InputGroupComponent,
+        ReactiveFormsModule,
+        RowComponent,
+        TranslocoPipe,
+        XsButtonDirective,
+        FormsModule,
+        NgClass
+    ],
     templateUrl: './duration-input.component.html',
     styleUrl: './duration-input.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

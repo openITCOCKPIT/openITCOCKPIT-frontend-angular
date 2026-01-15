@@ -1,109 +1,109 @@
 @for (field of fields; track $index) {
-  @switch (field.type) {
-    @case (ConfigurationFilesFieldTypes.float) {
-      <div class="mb-3">
-        <label cLabel [for]="field.field">
-          {{ field.field }}
-          <oitc-required-icon></oitc-required-icon>
-        </label>
-        <input cFormControl
-          [attr.id]="field.field"
-          [name]="field.field"
-          type="number"
-          step="0.01"
-          [placeholder]="field.placeholder"
-          [(ngModel)]="field.value"
-          oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}">
-        <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
-        @if (field.help) {
-          <div class="help-block">
-            {{ field.help }}
-          </div>
+    @switch (field.type) {
+        @case (ConfigurationFilesFieldTypes.float) {
+            <div class="mb-3">
+                <label cLabel [for]="field.field">
+                    {{ field.field }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="field.field"
+                       [name]="field.field"
+                       type="number"
+                       step="0.01"
+                       [placeholder]="field.placeholder"
+                       [(ngModel)]="field.value"
+                       oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}">
+                <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
+                @if (field.help) {
+                    <div class="help-block">
+                        {{ field.help }}
+                    </div>
+                }
+            </div>
         }
-      </div>
-    }
-    @case (ConfigurationFilesFieldTypes.int) {
-      <div class="mb-3">
-        <label cLabel [for]="field.field">
-          {{ field.field }}
-          <oitc-required-icon></oitc-required-icon>
-        </label>
-        <input cFormControl
-          [attr.id]="field.field"
-          [name]="field.field"
-          type="number"
-          [placeholder]="field.placeholder"
-          [(ngModel)]="field.value"
-          oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}">
-        <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
-        @if (field.help) {
-          <div class="help-block">
-            {{ field.help }}
-          </div>
+        @case (ConfigurationFilesFieldTypes.int) {
+            <div class="mb-3">
+                <label cLabel [for]="field.field">
+                    {{ field.field }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="field.field"
+                       [name]="field.field"
+                       type="number"
+                       [placeholder]="field.placeholder"
+                       [(ngModel)]="field.value"
+                       oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}">
+                <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
+                @if (field.help) {
+                    <div class="help-block">
+                        {{ field.help }}
+                    </div>
+                }
+            </div>
         }
-      </div>
-    }
-    @case (ConfigurationFilesFieldTypes.bool) {
-      <div class="mb-3">
-        <c-form-check>
-          <input cFormCheckInput
-            [attr.id]="field.field"
-            [name]="field.field"
-            type="checkbox"
-            trueFalseValue
-            [trueValue]="1"
-            [falseValue]="0"
-            [(ngModel)]="field.value"
-            oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}"
-            />
-          <label cFormCheckLabel [for]="field.field">
-            {{ field.field }}
-          </label>
-        </c-form-check>
-        <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
-        @if (field.help) {
-          <div class="help-block">
-            {{ field.help }}
-          </div>
+        @case (ConfigurationFilesFieldTypes.bool) {
+            <div class="mb-3">
+                <c-form-check>
+                    <input cFormCheckInput
+                           [attr.id]="field.field"
+                           [name]="field.field"
+                           type="checkbox"
+                           trueFalseValue
+                           [trueValue]="1"
+                           [falseValue]="0"
+                           [(ngModel)]="field.value"
+                           oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}"
+                    />
+                    <label cFormCheckLabel [for]="field.field">
+                        {{ field.field }}
+                    </label>
+                </c-form-check>
+                <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
+                @if (field.help) {
+                    <div class="help-block">
+                        {{ field.help }}
+                    </div>
+                }
+            </div>
         }
-      </div>
-    }
-    @case (ConfigurationFilesFieldTypes.text) {
-      <div class="mb-3">
-        <label cLabel [for]="field.field">
-          {{ field.field }}
-          <oitc-required-icon></oitc-required-icon>
-        </label>
-        <textarea cFormControl
-          [attr.id]="field.field"
-          [name]="field.field"
-          class="code-font"
-          oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}"
-          [(ngModel)]="field.value"
-        rows="6"></textarea>
-        <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
-      </div>
-    }
-    @default {
-      <div class="mb-3">
-        <label cLabel [for]="field.field">
-          {{ field.field }}
-          <oitc-required-icon></oitc-required-icon>
-        </label>
-        <input cFormControl
-          [attr.id]="field.field"
-          [name]="field.field"
-          type="text"
-          [placeholder]="field.placeholder"
-          [(ngModel)]="field.value"
-          oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}">
-        <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
-        @if (field.help) {
-          <div class="help-block">
-            {{ field.help }}
-          </div>
+        @case (ConfigurationFilesFieldTypes.text) {
+            <div class="mb-3">
+                <label cLabel [for]="field.field">
+                    {{ field.field }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <textarea cFormControl
+                          [attr.id]="field.field"
+                          [name]="field.field"
+                          class="code-font"
+                          oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}"
+                          [(ngModel)]="field.value"
+                          rows="6"></textarea>
+                <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
+            </div>
         }
-      </div>
+        @default {
+            <div class="mb-3">
+                <label cLabel [for]="field.field">
+                    {{ field.field }}
+                    <oitc-required-icon></oitc-required-icon>
+                </label>
+                <input cFormControl
+                       [attr.id]="field.field"
+                       [name]="field.field"
+                       type="text"
+                       [placeholder]="field.placeholder"
+                       [(ngModel)]="field.value"
+                       oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}">
+                <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
+                @if (field.help) {
+                    <div class="help-block">
+                        {{ field.help }}
+                    </div>
+                }
+            </div>
+        }
     }
-  }
 }

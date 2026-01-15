@@ -4,8 +4,8 @@ import { NgClass } from '@angular/common';
 @Component({
     selector: 'oitc-custom-class-information',
     imports: [
-    NgClass
-],
+        NgClass
+    ],
     templateUrl: './custom-class-information.component.html',
     styleUrl: './custom-class-information.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

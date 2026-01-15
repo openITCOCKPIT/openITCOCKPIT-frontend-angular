@@ -1,15 +1,15 @@
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  DOCUMENT
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    DOCUMENT
 } from '@angular/core';
 import { HostsService } from '../../../pages/hosts/hosts.service';
 import { ServicesService } from '../../../pages/services/services.service';
@@ -17,7 +17,6 @@ import { Observable, Subscription } from 'rxjs';
 import { BrowserTimelineApiResult, VisTimelineRangechangedProperties } from './browser-timeline.interface';
 import { DataSet } from "vis-data/peer";
 import { DataItem, Timeline, TimelineGroup, TimelineItem, TimelineOptions } from "vis-timeline/peer";
-
 
 
 import "vis-timeline/styles/vis-timeline-graph2d.css";
@@ -28,9 +27,9 @@ import { GenericUnixtimerange } from '../../../generic.interfaces';
 @Component({
     selector: 'oitc-browser-timeline',
     imports: [
-    TranslocoDirective,
-    SkeletonModule
-],
+        TranslocoDirective,
+        SkeletonModule
+    ],
     templateUrl: './browser-timeline.component.html',
     styleUrl: './browser-timeline.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

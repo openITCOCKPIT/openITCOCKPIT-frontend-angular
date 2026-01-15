@@ -1,115 +1,115 @@
 <ng-container *transloco="let t">
-  @if (type === 'host') {
-    <div class="mb-3">
-      @if (hostBrowserConfig) {
-        <oitc-hosts-browser-menu
-        [config]="hostBrowserConfig"></oitc-hosts-browser-menu>
-      }
-    </div>
-  } @else if (type === 'service') {
-    <div class="mb-3">
-      @if (serviceBrowserConfig) {
-        <oitc-services-browser-menu
-        [config]="serviceBrowserConfig"></oitc-services-browser-menu>
-      }
-    </div>
-  } @else {
-    <nav aria-label="breadcrumb" class="mt-3">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a [routerLink]="['/']">
-            <fa-icon [icon]="['fas', 'home']"></fa-icon>
-            {{ t('Home') }}
-          </a></li>
-          <li class="breadcrumb-item">
-            <fa-icon [icon]="['fas', 'book']"></fa-icon>
-            {{ t('Documentation') }}
-          </li>
-          <li aria-current="page" class="breadcrumb-item active">
-            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-            {{ t('View') }}
-          </li>
-          @if (documentation) {
-            <li aria-current="page" class="breadcrumb-item active">
-              {{ documentation.objectName }}
-            </li>
-          }
-        </ol>
-      </nav>
+    @if (type === 'host') {
+        <div class="mb-3">
+            @if (hostBrowserConfig) {
+                <oitc-hosts-browser-menu
+                    [config]="hostBrowserConfig"></oitc-hosts-browser-menu>
+            }
+        </div>
+    } @else if (type === 'service') {
+        <div class="mb-3">
+            @if (serviceBrowserConfig) {
+                <oitc-services-browser-menu
+                    [config]="serviceBrowserConfig"></oitc-services-browser-menu>
+            }
+        </div>
+    } @else {
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/']">
+                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                        {{ t('Home') }}
+                    </a></li>
+                <li class="breadcrumb-item">
+                    <fa-icon [icon]="['fas', 'book']"></fa-icon>
+                    {{ t('Documentation') }}
+                </li>
+                <li aria-current="page" class="breadcrumb-item active">
+                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                    {{ t('View') }}
+                </li>
+                @if (documentation) {
+                    <li aria-current="page" class="breadcrumb-item active">
+                        {{ documentation.objectName }}
+                    </li>
+                }
+            </ol>
+        </nav>
     }
 
     <oitc-form-loader [isVisible]="!documentation"></oitc-form-loader>
 
     @if (documentation) {
-      <c-card class="mb-3">
-        <c-card-header>
-          @switch (type) {
-            @case ('servicetemplate') {
-              <h5 cCardTitle>
-                {{ t('Service template:') }}
-                <small class="fw-300">
-                  {{ documentation.objectName }}
-                </small>
-              </h5>
-            }
-            @case ('hosttemplate') {
-              <h5 cCardTitle>
-                {{ t('Host template:') }}
-                <small class="fw-300">
-                  {{ documentation.objectName }}
-                </small>
-              </h5>
-            }
-            @default {
-              <h5 cCardTitle>
-                {{ t('Object:') }}
-                <small class="fw-300">
-                  {{ t('documentation') }}
-                </small>
-              </h5>
-            }
-          }
-          <c-nav class="card-toolbar card-header-pills">
-            <c-nav-item class="px-1">
-              <div class="me-3 text-muted">
-                {{ t('Last update') }}: {{ documentation.lastUpdate }}
-              </div>
-            </c-nav-item>
-            <c-nav-item class="px-1">
-              <button [fallbackUrl]="['dashboards', 'index']" cButton class="ripple" color="default"
-                oitcBackButton
-                size="xs">
-                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                {{ t('Back') }}
-              </button>
-            </c-nav-item>
-            <c-nav-item class="px-1">
-              @if (documentation.allowEdit) {
-                <button [routerLink]="['/', 'documentations', 'edit', uuid, type]" cButton
-                  class="ripple"
-                  color="success"
-                  size="xs">
-                  <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
-                  {{ t('Edit') }}
-                </button>
-              }
-            </c-nav-item>
-          </c-nav>
-        </c-card-header>
-        <c-card-body>
-          <c-row>
-            <c-col xs="12" class="fst-italic" [hidden]="documentation.docuExists">
-              <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"></fa-icon>
-              {{ t('No documentation has been written yet for this object. Click on "Edit" to start writing.') }}
-            </c-col>
-            <c-col xs="12" class="doku-view" [hidden]="!documentation.docuExists">
-              @if (html) {
-                <div [innerHTML]="html | trustAsHtml "></div>
-              }
-            </c-col>
-          </c-row>
-        </c-card-body>
-      </c-card>
+        <c-card class="mb-3">
+            <c-card-header>
+                @switch (type) {
+                    @case ('servicetemplate') {
+                        <h5 cCardTitle>
+                            {{ t('Service template:') }}
+                            <small class="fw-300">
+                                {{ documentation.objectName }}
+                            </small>
+                        </h5>
+                    }
+                    @case ('hosttemplate') {
+                        <h5 cCardTitle>
+                            {{ t('Host template:') }}
+                            <small class="fw-300">
+                                {{ documentation.objectName }}
+                            </small>
+                        </h5>
+                    }
+                    @default {
+                        <h5 cCardTitle>
+                            {{ t('Object:') }}
+                            <small class="fw-300">
+                                {{ t('documentation') }}
+                            </small>
+                        </h5>
+                    }
+                }
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <div class="me-3 text-muted">
+                            {{ t('Last update') }}: {{ documentation.lastUpdate }}
+                        </div>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['dashboards', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        @if (documentation.allowEdit) {
+                            <button [routerLink]="['/', 'documentations', 'edit', uuid, type]" cButton
+                                    class="ripple"
+                                    color="success"
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
+                                {{ t('Edit') }}
+                            </button>
+                        }
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <c-row>
+                    <c-col xs="12" class="fst-italic" [hidden]="documentation.docuExists">
+                        <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"></fa-icon>
+                        {{ t('No documentation has been written yet for this object. Click on "Edit" to start writing.') }}
+                    </c-col>
+                    <c-col xs="12" class="doku-view" [hidden]="!documentation.docuExists">
+                        @if (html) {
+                            <div [innerHTML]="html | trustAsHtml "></div>
+                        }
+                    </c-col>
+                </c-row>
+            </c-card-body>
+        </c-card>
     }
-  </ng-container>
+</ng-container>
 

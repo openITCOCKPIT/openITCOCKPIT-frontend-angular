@@ -1,16 +1,16 @@
 <ng-container *transloco="let t">
-  @if (isOnline) {
-    <c-badge
-      textColor="success"
-      class="badge-border margin-left-5 fw-lighter">
-      {{ t('Online') }}
-    </c-badge>
-  }
-  @if (!isOnline) {
-    <c-badge
-      textColor="danger"
-      class="badge-border margin-left-5 fw-lighter">
-      {{ t('Offline') }}
-    </c-badge>
-  }
+    @if (isOnline) {
+        <c-badge
+            textColor="success"
+            class="badge-border margin-left-5 fw-lighter">
+            {{ t('Online') }}
+        </c-badge>
+    }
+    @if (!isOnline) {
+        <c-badge
+            textColor="danger"
+            class="badge-border margin-left-5 fw-lighter">
+            {{ t('Offline') }}
+        </c-badge>
+    }
 </ng-container>

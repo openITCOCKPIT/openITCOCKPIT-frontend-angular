@@ -27,17 +27,18 @@ import { Popover } from 'primeng/popover';
 import { PrimeTemplate } from 'primeng/api';
 
 const uPlot: any = (_uPlot as any)?.default;
+
 @Component({
     selector: 'oitc-prometheus-popover-graph',
     standalone: true,
     imports: [
-    NgClass,
-    ChartLoaderComponent,
-    FaIconComponent,
-    TranslocoDirective,
-    Popover,
-    PrimeTemplate
-],
+        NgClass,
+        ChartLoaderComponent,
+        FaIconComponent,
+        TranslocoDirective,
+        Popover,
+        PrimeTemplate
+    ],
     templateUrl: './prometheus-popover-graph.component.html',
     styleUrl: './prometheus-popover-graph.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -113,7 +114,7 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
         host_uuid: '',
         jsTimestamp: 0,
         metric: 'process_cpu_seconds_total',
-        promql : '',
+        promql: '',
         start: 0
     } as PrometheusPerformanceDataParams;
 
@@ -128,7 +129,7 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
         this._metric = metric;
     }
 
-    protected _promql : string = '';
+    protected _promql: string = '';
 
     get promql() {
         return this._promql;

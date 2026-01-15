@@ -34,36 +34,36 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Component({
-  selector: 'oitc-autoreport-host-used-by',
-  imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    BackButtonDirective,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    TableLoaderComponent,
-    MatSort,
-    TableDirective,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    DropdownDividerDirective,
-    DeleteAllModalComponent
-],
-  templateUrl: './autoreport-host-used-by.component.html',
-  styleUrl: './autoreport-host-used-by.component.css',
+    selector: 'oitc-autoreport-host-used-by',
+    imports: [
+        TranslocoDirective,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        BackButtonDirective,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        TableLoaderComponent,
+        MatSort,
+        TableDirective,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        DropdownDividerDirective,
+        DeleteAllModalComponent
+    ],
+    templateUrl: './autoreport-host-used-by.component.html',
+    styleUrl: './autoreport-host-used-by.component.css',
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: AutoreportsService} // Inject the CommandsService into the DeleteAllModalComponent
     ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AutoreportHostUsedByComponent implements OnInit, OnDestroy  {
+export class AutoreportHostUsedByComponent implements OnInit, OnDestroy {
 
     private route = inject(ActivatedRoute);
     private subscriptions: Subscription = new Subscription();

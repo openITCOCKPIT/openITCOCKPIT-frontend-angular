@@ -1,154 +1,154 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a>
-            <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-            {{ t('PagerDuty Module') }}
-          </a>
-        </li>
-        <li class="breadcrumb-item">
-          <a [routerLink]="['/', 'pagerduty_module', 'settings', 'edit']"
-            *oitcPermission="['pagerdutymodule', 'settings', 'edit']">
-            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-            {{ t('PagerDuty Settings') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-          {{ t('Settings') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('PagerDuty Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'pagerduty_module', 'settings', 'edit']"
+                   *oitcPermission="['pagerdutymodule', 'settings', 'edit']">
+                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                    {{ t('PagerDuty Settings') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                {{ t('Settings') }}
+            </li>
+        </ol>
     </nav>
 
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
     <form cForm (ngSubmit)="updatePagerdutySettings()">
-      @if (post) {
-        <c-card class="mb-3">
-          <c-card-header>
-            <h5 cCardTitle>
-              {{ t('Edit PagerDuty Settings') }}
-            </h5>
-          </c-card-header>
-          <c-card-body>
-            <div class="mb-3">
-              <label cLabel for="post.api_key">
-                {{ t('API Key') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <input cFormControl
-                name="post.api_key"
-                id="post.api_key"
-                [(ngModel)]="post.api_key"
-                oitcFormError [errors]="errors" errorField="api_key"/>
-              <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
-              <div class="help-block">
-                {{ t('The API Key you got from PagerDuty') }}
-              </div>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="post.api_key">
-                {{ t('Integration Key') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <input cFormControl
-                name="post.integration_key"
-                id="post.integration_key"
-                [(ngModel)]="post.integration_key"
-                oitcFormError [errors]="errors" errorField="integration_key"/>
-              <oitc-form-feedback [errors]="errors" errorField="integration_key"></oitc-form-feedback>
-              <div class="help-block">
-                {{ t('The Integration Key you got from PagerDuty after you created the Service') }}
-              </div>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="post.api_url">
-                {{ t('API URL') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <input cFormControl
-                name="post.api_url"
-                id="post.api_url"
-                [(ngModel)]="post.api_url"
-                oitcFormError [errors]="errors" errorField="api_url"/>
-              <oitc-form-feedback [errors]="errors" errorField="api_url"></oitc-form-feedback>
-              <div class="help-block">
-                {{ t('API URL of the PagerDuty service.') }}
-              </div>
-            </div>
-            <div class="mb-3">
-              <c-form-check>
-                <input cFormCheckInput
-                  name="post.two_way"
-                  id="post.two_way"
-                  type="checkbox"
-                  trueFalseValue
-                  [(ngModel)]="post.two_way"
-                  oitcFormError [errors]="errors" errorField="two_way"/>
-                <oitc-form-feedback [errors]="errors" errorField="two_way"></oitc-form-feedback>
-                <label cFormCheckLabel for="post.two_way">
-                  {{ t('Enable Two-Way Integration') }}
-                </label>
-              </c-form-check>
-              <div class="help-block">
-              </div>
-              <div class="help-block">
-                {{ t('Via the Two-Way Integration PagerDuty is able, to acknowledge host and service problems.') }}
-                <br/>
-                {{ t('For this it is required, that your openITCOCKPIT Server is accessible from the Internet.') }}
-              </div>
-            </div>
-            <div class="mb-3">
-              <label cLabel for="post.webhook_url">
-                {{ t('Webhook URL') }}
-                <oitc-required-icon></oitc-required-icon>
-              </label>
-              <input cFormControl
-                name="post.webhook_url"
-                id="post.webhook_url"
-                [(ngModel)]="currentCommandAsPostRequest"
-                disabled
-                />
-              <span class="help-block">
-                {{ t('Webhook URL for PagerDuty. You need to create an openITCOCKPIT user defined API key first.') }}
-                <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
-              </span>
-            </div>
-            <div class="mb-3">
-              <c-form-check>
-                <input cFormCheckInput
-                  name="post.use_proxy"
-                  id="post.use_proxy"
-                  type="checkbox"
-                  trueFalseValue
-                  [(ngModel)]="post.use_proxy"
-                  oitcFormError [errors]="errors" errorField="use_proxy"/>
-                <oitc-form-feedback [errors]="errors" errorField="use_proxy"></oitc-form-feedback>
-                <label cFormCheckLabel for="post.use_proxy">
-                  {{ t('Use Proxy Server') }}
-                </label>
-              </c-form-check>
-              <div class="help-block">
-                <span *oitcPermission="['proxy', 'index'];negate:true">
-                  {{ t('Determine if the configured proxy should be used.') }}
-                </span>
-                <a *oitcPermission="['proxy', 'index']" [routerLink]="['/', 'proxy', 'index']">
-                  {{ t('Determine if the configured proxy should be used.') }}
-                </a>
-              </div>
-            </div>
-          </c-card-body>
-          <c-card-footer class="text-end">
-            <button cButton class="ripple" color="primary" type="submit">
-              {{ t('Save') }}
-            </button>
-          </c-card-footer>
-        </c-card>
-      }
+        @if (post) {
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Edit PagerDuty Settings') }}
+                    </h5>
+                </c-card-header>
+                <c-card-body>
+                    <div class="mb-3">
+                        <label cLabel for="post.api_key">
+                            {{ t('API Key') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               name="post.api_key"
+                               id="post.api_key"
+                               [(ngModel)]="post.api_key"
+                               oitcFormError [errors]="errors" errorField="api_key"/>
+                        <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('The API Key you got from PagerDuty') }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="post.api_key">
+                            {{ t('Integration Key') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               name="post.integration_key"
+                               id="post.integration_key"
+                               [(ngModel)]="post.integration_key"
+                               oitcFormError [errors]="errors" errorField="integration_key"/>
+                        <oitc-form-feedback [errors]="errors" errorField="integration_key"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('The Integration Key you got from PagerDuty after you created the Service') }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="post.api_url">
+                            {{ t('API URL') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               name="post.api_url"
+                               id="post.api_url"
+                               [(ngModel)]="post.api_url"
+                               oitcFormError [errors]="errors" errorField="api_url"/>
+                        <oitc-form-feedback [errors]="errors" errorField="api_url"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('API URL of the PagerDuty service.') }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput
+                                   name="post.two_way"
+                                   id="post.two_way"
+                                   type="checkbox"
+                                   trueFalseValue
+                                   [(ngModel)]="post.two_way"
+                                   oitcFormError [errors]="errors" errorField="two_way"/>
+                            <oitc-form-feedback [errors]="errors" errorField="two_way"></oitc-form-feedback>
+                            <label cFormCheckLabel for="post.two_way">
+                                {{ t('Enable Two-Way Integration') }}
+                            </label>
+                        </c-form-check>
+                        <div class="help-block">
+                        </div>
+                        <div class="help-block">
+                            {{ t('Via the Two-Way Integration PagerDuty is able, to acknowledge host and service problems.') }}
+                            <br/>
+                            {{ t('For this it is required, that your openITCOCKPIT Server is accessible from the Internet.') }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="post.webhook_url">
+                            {{ t('Webhook URL') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl
+                               name="post.webhook_url"
+                               id="post.webhook_url"
+                               [(ngModel)]="currentCommandAsPostRequest"
+                               disabled
+                        />
+                        <span class="help-block">
+                            {{ t('Webhook URL for PagerDuty. You need to create an openITCOCKPIT user defined API key first.') }}
+                            <oitc-apikey-doc-modal></oitc-apikey-doc-modal>
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput
+                                   name="post.use_proxy"
+                                   id="post.use_proxy"
+                                   type="checkbox"
+                                   trueFalseValue
+                                   [(ngModel)]="post.use_proxy"
+                                   oitcFormError [errors]="errors" errorField="use_proxy"/>
+                            <oitc-form-feedback [errors]="errors" errorField="use_proxy"></oitc-form-feedback>
+                            <label cFormCheckLabel for="post.use_proxy">
+                                {{ t('Use Proxy Server') }}
+                            </label>
+                        </c-form-check>
+                        <div class="help-block">
+                            <span *oitcPermission="['proxy', 'index'];negate:true">
+                                {{ t('Determine if the configured proxy should be used.') }}
+                            </span>
+                            <a *oitcPermission="['proxy', 'index']" [routerLink]="['/', 'proxy', 'index']">
+                                {{ t('Determine if the configured proxy should be used.') }}
+                            </a>
+                        </div>
+                    </div>
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Save') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        }
     </form>
-  </ng-container>
+</ng-container>

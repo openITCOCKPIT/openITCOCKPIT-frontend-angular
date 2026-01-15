@@ -1,112 +1,112 @@
 <ng-container *transloco="let t">
 
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['commands', 'index']" [routerLink]="['/', 'commands', 'index']">
-            <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
-            {{ t('Commands') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-          {{ t('Copy') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['commands', 'index']" [routerLink]="['/', 'commands', 'index']">
+                    <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                    {{ t('Commands') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                {{ t('Copy') }}
+            </li>
+        </ol>
     </nav>
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>{{ t('Commands') }}
-          <small class="fw-300">
-            {{ t('Copy command/s') }}
-          </small>
-        </h5>
-        <c-nav class="card-toolbar card-header-pills">
-          <button [fallbackUrl]="['commands', 'index']" cButton class="ripple" color="default"
-            oitcBackButton
-            size="xs">
-            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-            {{ t('Back') }}
-          </button>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Commands') }}
+                <small class="fw-300">
+                    {{ t('Copy command/s') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <button [fallbackUrl]="['commands', 'index']" cButton class="ripple" color="default"
+                        oitcBackButton
+                        size="xs">
+                    <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                    {{ t('Back') }}
+                </button>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
 
-        <oitc-form-loader [isVisible]="commands.length === 0"></oitc-form-loader>
+            <oitc-form-loader [isVisible]="commands.length === 0"></oitc-form-loader>
 
-        @for (command of commands; track command; let i = $index) {
-          <c-card class="mb-3">
-            <c-card-header>
-              <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-              <span class="ms-1">
-                {{ t('Source command:') }}
-                {{ command.Source.name }}
-              </span>
-            </c-card-header>
-            <c-card-body>
-              <div class="mb-3">
-                <label cLabel for="name{{i}}">
-                  {{ t('Name') }}
-                  <oitc-required-icon></oitc-required-icon>
-                </label>
-                <input cFormControl required type="text"
-                  name="name{{i}}"
-                  id="name{{i}}"
-                  [(ngModel)]="command.Command.name"
-                  oitcFormError [errors]="command.Error" errorField="name">
-                <oitc-form-feedback [errors]="command.Error" errorField="name"></oitc-form-feedback>
-                <div class="help-block">
-                  {{ t('Name of the new command') }}
-                </div>
-              </div>
-              <div class="mb-3">
-                <label cLabel for="commandLine{{i}}">
-                  {{ t('Command line') }}
-                  <oitc-required-icon></oitc-required-icon>
-                </label>
-                <textarea cFormControl required
-                  cols="30"
-                  rows="6"
-                  name="commandLine{{i}}"
-                  id="commandLine{{i}}"
-                  [(ngModel)]="command.Command.command_line"
-                oitcFormError [errors]="command.Error" errorField="command_line"></textarea>
-                <oitc-form-feedback [errors]="command.Error" errorField="command_line"></oitc-form-feedback>
-              </div>
-              <div class="mb-3">
-                <label cLabel for="description{{i}}">
-                  {{ t('Description') }}
-                </label>
-                <textarea cFormControl required
-                  cols="30"
-                  rows="6"
-                  name="description{{i}}"
-                  id="description{{i}}"
-                  [(ngModel)]="command.Command.description"
-                oitcFormError [errors]="command.Error" errorField="description"></textarea>
-                <oitc-form-feedback [errors]="command.Error" errorField="description"></oitc-form-feedback>
-              </div>
-            </c-card-body>
-          </c-card>
-        }
+            @for (command of commands; track command; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source command:') }}
+                            {{ command.Source.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('Name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="name{{i}}"
+                                   id="name{{i}}"
+                                   [(ngModel)]="command.Command.name"
+                                   oitcFormError [errors]="command.Error" errorField="name">
+                            <oitc-form-feedback [errors]="command.Error" errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new command') }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="commandLine{{i}}">
+                                {{ t('Command line') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <textarea cFormControl required
+                                      cols="30"
+                                      rows="6"
+                                      name="commandLine{{i}}"
+                                      id="commandLine{{i}}"
+                                      [(ngModel)]="command.Command.command_line"
+                                      oitcFormError [errors]="command.Error" errorField="command_line"></textarea>
+                            <oitc-form-feedback [errors]="command.Error" errorField="command_line"></oitc-form-feedback>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="description{{i}}">
+                                {{ t('Description') }}
+                            </label>
+                            <textarea cFormControl required
+                                      cols="30"
+                                      rows="6"
+                                      name="description{{i}}"
+                                      id="description{{i}}"
+                                      [(ngModel)]="command.Command.description"
+                                      oitcFormError [errors]="command.Error" errorField="description"></textarea>
+                            <oitc-form-feedback [errors]="command.Error" errorField="description"></oitc-form-feedback>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            }
 
-      </c-card-body>
-      <c-card-footer class="text-end">
-        <button cButton class="ripple" color="primary" type="button" (click)="copy()">
-          {{ t('Copy commands') }}
-        </button>
-        <button [fallbackUrl]="['commands', 'index']" cButton class="ms-1 ripple" color="default"
-          oitcBackButton>
-          {{ t('Cancel') }}
-        </button>
-      </c-card-footer>
+        </c-card-body>
+        <c-card-footer class="text-end">
+            <button cButton class="ripple" color="primary" type="button" (click)="copy()">
+                {{ t('Copy commands') }}
+            </button>
+            <button [fallbackUrl]="['commands', 'index']" cButton class="ms-1 ripple" color="default"
+                    oitcBackButton>
+                {{ t('Cancel') }}
+            </button>
+        </c-card-footer>
 
     </c-card>
 
-  </ng-container>
+</ng-container>
 

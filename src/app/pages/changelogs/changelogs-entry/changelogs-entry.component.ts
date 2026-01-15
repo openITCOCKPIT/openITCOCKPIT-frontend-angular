@@ -24,12 +24,12 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'oitc-changelogs-entry',
     imports: [
-    NgClass,
-    PermissionDirective,
-    TranslocoDirective,
-    FaIconComponent,
-    RouterLink
-],
+        NgClass,
+        PermissionDirective,
+        TranslocoDirective,
+        FaIconComponent,
+        RouterLink
+    ],
     templateUrl: './changelogs-entry.component.html',
     styleUrl: './changelogs-entry.component.css',
     encapsulation: ViewEncapsulation.None, //https://angular.io/guide/view-encapsulation

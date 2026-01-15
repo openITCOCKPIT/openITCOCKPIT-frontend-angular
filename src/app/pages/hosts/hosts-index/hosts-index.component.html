@@ -1,1387 +1,1392 @@
 <ng-container *transloco="let t">
-  <nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/']">
-          <fa-icon [icon]="['fas', 'home']"></fa-icon>
-          {{ t('Home') }}
-        </a></li>
-        <li class="breadcrumb-item">
-          <a *oitcPermission="['hosts', 'index']" [routerLink]="['/', 'hosts', 'index']">
-            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-            {{ t('Hosts') }}
-          </a>
-        </li>
-        <li aria-current="page" class="breadcrumb-item active">
-          <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
-          {{ t('Monitored') }}
-        </li>
-      </ol>
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['hosts', 'index']" [routerLink]="['/', 'hosts', 'index']">
+                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                    {{ t('Hosts') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
+                {{ t('Monitored') }}
+            </li>
+        </ol>
     </nav>
 
     <oitc-query-handler-checker></oitc-query-handler-checker>
 
     <c-card class="mb-3">
-      <c-card-header>
-        <h5 cCardTitle>{{ t('Hosts') }}
-          <small class="fw-300">
-            {{ t('overview') }}
-          </small>
-        </h5>
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Hosts') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
 
-        <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
-          <c-nav-item>
-            <a [routerLink]="['/', 'hosts', 'index']"
-              *oitcPermission="['hosts', 'index']" class="nav-link active">
-              <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
-              {{ t('Monitored') }}
-            </a>
-          </c-nav-item>
-          <c-nav-item>
-            <a [routerLink]="['/', 'hosts', 'notMonitored']"
-              *oitcPermission="['hosts', 'notMonitored']" class="nav-link">
-              <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
-              {{ t('Not monitored') }}
-            </a>
-          </c-nav-item>
-          <c-nav-item>
-            <a [routerLink]="['/', 'hosts', 'disabled']"
-              *oitcPermission="['hosts', 'disabled']" class="nav-link">
-              <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-              {{ t('Disabled') }}
-            </a>
-          </c-nav-item>
-          <c-nav-item>
-            <a [routerLink]="['/', 'deletedHosts', 'index']"
-              *oitcPermission="['deletedHosts', 'index']" class="nav-link">
-              <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-              {{ t('Deleted') }}
-            </a>
-          </c-nav-item>
-        </c-nav>
-
-        <c-nav class="card-toolbar card-header-pills">
-          <c-nav-item class="px-1">
-            <button (click)="loadHosts()" cButton class="ripple" color="default" size="xs">
-              <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-              {{ t('Refresh') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button *oitcPermission="['hosts', 'add']" [routerLink]="['/', 'hosts', 'add']"
-              cButton
-              class="ripple"
-              color="success"
-              size="xs">
-              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-              {{ t('New') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button (click)="problemsOnly()" cButton class="ripple" color="danger" size="xs">
-              <fa-icon [icon]="['fas', 'filter-circle-xmark']"></fa-icon>
-              {{ t('Unhandled only') }}
-            </button>
-          </c-nav-item>
-          <c-nav-item class="px-1">
-            <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
-              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-              {{ t('Filter') }}
-            </button>
-          </c-nav-item>
-        </c-nav>
-      </c-card-header>
-      <c-card-body>
-        <c-card>
-          <!--<c-card-header>-->
-          <oitc-filter-bookmark [plugin]="''" [controller]="'Hosts'" [action]="'index'"
-            [filter]="filter"
-          (selected)="onSelectedBookmark($event)"></oitc-filter-bookmark>
-        <!--</c-card-header>-->
-
-        <c-card-body [hidden]="hideFilter">
-          <!-- <c-row>
-          <c-col>
-            <h6 class="pb-2 mb-3 border-bottom">
-              <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-              {{ t('Filter') }}
-            </h6>
-          </c-col>
-        </c-row>-->
-        <form cForm>
-
-          <c-row class="mb-2">
-            <c-col [xs]="12" [lg]="6">
-              <c-input-group>
-                <span cInputGroupText>
-                  <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                </span>
-                <input (debouncedValue)="onFilterChange($event)"
-                  [(ngModel)]="filter['Hosts.name']"
-                  [placeholder]="'Filter by host name' | transloco"
-                  cFormControl
-                  name="Hosts.name"
-                  oitcDebounce
-                  type="text"
-                  />
-                <span cInputGroupText>
-                  <label>
-                    {{ t('Enable RegEx') }}
-                    <input type="checkbox"
-                      cFormCheckInput
-                      name="filter.Host.name_regex"
-                      oitcDebounce
-                      (debouncedValue)="onFilterChange($event)"
-                      [(ngModel)]="filter['Hosts.name_regex']"
-                      />
-                    <oitc-regex-helper-tooltip/>
-                  </label>
-                </span>
-              </c-input-group>
-            </c-col>
-
-            <c-col [xs]="12" [lg]="6">
-              <c-input-group>
-                <span cInputGroupText>
-                  <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                </span>
-                <input (debouncedValue)="onFilterChange($event)"
-                  [(ngModel)]="filter['hostdescription']"
-                  [placeholder]="'Filter by host description' | transloco"
-                  cFormControl
-                  name="Hosts.hostdescription"
-                  oitcDebounce
-                  type="text"
-                  />
-              </c-input-group>
-            </c-col>
-          </c-row>
-
-          <c-row class="mb-2">
-            <c-col [xs]="12" [lg]="6">
-              <c-input-group>
-                <span cInputGroupText>
-                  <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                </span>
-                <input (debouncedValue)="onFilterChange($event)"
-                  [(ngModel)]="filter['Hosts.address']"
-                  [placeholder]="'Filter by IP address' | transloco"
-                  cFormControl
-                  name="Hosts.address"
-                  oitcDebounce
-                  type="text"
-                  />
-                <span cInputGroupText>
-                  <label>
-                    {{ t('Enable RegEx') }}
-                    <input type="checkbox"
-                      cFormCheckInput
-                      name="filter.Host.address_regex"
-                      oitcDebounce
-                      (debouncedValue)="onFilterChange($event)"
-                      [(ngModel)]="filter['Hosts.address_regex']"
-                      />
-                    <oitc-regex-helper-tooltip/>
-                  </label>
-                </span>
-              </c-input-group>
-            </c-col>
-
-            <c-col [xs]="12" [lg]="6">
-              <c-input-group>
-                <span cInputGroupText>
-                  <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                </span>
-                <input (debouncedValue)="onFilterChange($event)"
-                  [(ngModel)]="filter['Hoststatus.output']"
-                  [placeholder]="'Filter by output' | transloco"
-                  cFormControl
-                  name="Hosts.output"
-                  oitcDebounce
-                  type="text"
-                  />
-              </c-input-group>
-            </c-col>
-
-          </c-row>
-
-          <c-row class="mb-2">
-            <c-col [xs]="12" [lg]="6">
-              <c-input-group>
-                <span cInputGroupText class="p-1">
-                  <fa-stack>
-                    <fa-icon [icon]="['fas', 'desktop']" stackItemSize="1x"></fa-icon>
-                    <fa-icon [icon]="['fas', 'tags']" class="text-success"
-                      stackItemSize="1x"
-                    transform="shrink-6 right-8 down-8"></fa-icon>
-                  </fa-stack>
-                </span>
-                <ng-select
-                  id="HostKeywordsInput"
-                  name="HostKeywordsInput"
-                  [items]="[]"
-                  [(ngModel)]="filter['Hosts.keywords']"
-                  [addTag]="true"
-                  [multiple]="true"
-                  [selectOnTab]="true"
-                  [placeholder]="'Filter by tags'|transloco"
-                  oitcDebounce
-                  (debouncedValue)="onFilterChange($event)"
-                  [isOpen]="false">
-                </ng-select>
-              </c-input-group>
-            </c-col>
-
-            <c-col [xs]="12" [lg]="6">
-              <c-input-group>
-                <span cInputGroupText class="p-1">
-                  <fa-stack>
-                    <fa-icon [icon]="['fas', 'desktop']" stackItemSize="1x"></fa-icon>
-                    <fa-icon [icon]="['fas', 'tags']" class="text-danger"
-                      stackItemSize="1x"
-                    transform="shrink-6 right-8 down-8"></fa-icon>
-                  </fa-stack>
-                </span>
-                <ng-select
-                  id="HostNotKeywordsInput"
-                  name="HostNotKeywordsInput"
-                  [items]="[]"
-                  [(ngModel)]="filter['Hosts.not_keywords']"
-                  [addTag]="true"
-                  [multiple]="true"
-                  [selectOnTab]="true"
-                  [placeholder]="'Filter by excluded tags'|transloco"
-                  oitcDebounce
-                  (debouncedValue)="onFilterChange($event)"
-                  [isOpen]="false">
-                </ng-select>
-              </c-input-group>
-            </c-col>
-          </c-row>
-
-          <c-row class="mb-2">
-            <c-col [xs]="12" [lg]="6" class="ui-fluid">
-              <c-input-group>
-                <span cInputGroupText>
-                  <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                </span>
-
-                <oitc-multi-select
-                  name="hosttemplatetype_id"
-                  id="hosttemplatetype_id"
-                  optionValue="id"
-                  optionLabel="name"
-                  [(ngModel)]="filter['Hosts.host_type']"
-                  [options]="hostTypes"
-                  [debounce]="true"
-                  [placeholder]="'Filter by host types' | transloco"
-                  (onChange)="onFilterChange(null)">
-                </oitc-multi-select>
-              </c-input-group>
-            </c-col>
-            <c-col [xs]="12" [lg]="6" class="ui-fluid">
-              <c-input-group>
-                <span cInputGroupText>
-                  <fa-icon [icon]="['fas', 'server']"></fa-icon>
-                </span>
-
-                <oitc-multi-select
-                  name="hostgroups_ids"
-                  id="hostgroups_ids"
-                  optionValue="key"
-                  optionLabel="value"
-                  [(ngModel)]="filter['Hostgroups.id']"
-                  [options]="hostgroups"
-                  [debounce]="true"
-                  [placeholder]="'Filter by host groups' | transloco"
-                  (onChange)="onFilterChange(null)"
-                  [searchCallback]="loadHostgroups">
-                </oitc-multi-select>
-              </c-input-group>
-            </c-col>
-          </c-row>
-
-          <c-row class="mb-2">
-            <c-col [xs]="12" lg="2">
-              <fieldset>
-                <h5>
-                  {{ t('Host status') }}
-                </h5>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-success"
-                    name="Hosts.currentStateUp"
-                    id="Hosts.currentStateUp"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="currentStateFilter.up"/>
-
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="Hosts.currentStateUp">{{ t('Up') }}</label>
-                </c-form-check>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-danger"
-                    name="Hosts.currentStateDown"
-                    id="Hosts.currentStateDown"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="currentStateFilter.down"/>
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="Hosts.currentStateDown">{{ t('Down') }}</label>
-                </c-form-check>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-secondary"
-                    name="Hosts.currentStateUnreachable"
-                    id="Hosts.currentStateUnreachable"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="currentStateFilter.unreachable"/>
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="Hosts.currentStateUnreachable">{{ t('Unreachable') }}</label>
-                </c-form-check>
-              </fieldset>
-            </c-col>
-
-            <c-col [xs]="12" lg="2">
-              <fieldset>
-                <h5>
-                  {{ t('State Types') }}
-                </h5>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-primary"
-                    name="Hosts.soft"
-                    id="Hosts.soft"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="state_typesFilter.soft"/>
-
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="Hosts.soft">{{ t('Soft') }}</label>
-                </c-form-check>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-primary"
-                    name="Hosts.hard"
-                    id="Hosts.hard"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="state_typesFilter.hard"/>
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="Hosts.hard">{{ t('Hard') }}</label>
-                </c-form-check>
-              </fieldset>
-            </c-col>
-
-            <c-col [xs]="12" lg="2">
-              <fieldset>
-                <h5>
-                  {{ t('Acknowledgements') }}
-                </h5>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-primary"
-                    name="Hosts.acknowledged"
-                    id="Hosts.acknowledged"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="acknowledgementsFilter.acknowledged"/>
-
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="Hosts.acknowledged">{{ t('Acknowledged') }}</label>
-                </c-form-check>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-primary"
-                    name="Hosts.not_acknowledged"
-                    id="Hosts.not_acknowledged"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="acknowledgementsFilter.not_acknowledged"/>
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="Hosts.not_acknowledged">{{ t('Not acknowledged') }}</label>
-                </c-form-check>
-              </fieldset>
-            </c-col>
-
-            <c-col [xs]="12" lg="2">
-              <fieldset>
-                <h5>
-                  {{ t('Downtimes') }}
-                </h5>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-primary"
-                    name="Hosts.in_downtime"
-                    id="Hosts.in_downtime"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="downtimeFilter.in_downtime"/>
-
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="Hosts.in_downtime">{{ t('In downtime') }}</label>
-                </c-form-check>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-primary"
-                    name="Hosts.not_in_downtime"
-                    id="Hosts.not_in_downtime"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="downtimeFilter.not_in_downtime"/>
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="Hosts.not_in_downtime">{{ t('Not in downtime') }}</label>
-                </c-form-check>
-              </fieldset>
-            </c-col>
-
-            <c-col [xs]="12" lg="2">
-              <fieldset>
-                <h5>
-                  {{ t('Notifications') }}
-                </h5>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-primary"
-                    name="Hosts.noty_enabled"
-                    id="Hosts.noty_enabled"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="notificationsFilter.enabled"/>
-
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="Hosts.noty_enabled">{{ t('Enabled') }}</label>
-                </c-form-check>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-primary"
-                    name="Hosts.noty_not_enabled"
-                    id="Hosts.noty_not_enabled"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="notificationsFilter.not_enabled"/>
-                  <label cFormCheckLabel class="ms-1 mt-1"
-                  for="Hosts.noty_not_enabled">{{ t('Not enabled') }}</label>
-                </c-form-check>
-              </fieldset>
-            </c-col>
-
-            <c-col [xs]="12" lg="2">
-              <fieldset>
-                <h5>
-                  {{ t('Priority') }}
-                </h5>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-primary"
-                    name="Hosts.Priority_1"
-                    id="Hosts.Priority_1"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="priorityFilter['1']"/>
-
-                  <label cFormCheckLabel
-                    for="Hosts.Priority_1" class="ms-1 mt-1 ok-soft">
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                  </label>
-                </c-form-check>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-primary"
-                    name="Hosts.Priority_2"
-                    id="Hosts.Priority_2"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="priorityFilter['2']"/>
-
-                  <label cFormCheckLabel
-                    for="Hosts.Priority_2" class="ms-1 mt-1 ok">
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                  </label>
-                </c-form-check>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-primary"
-                    name="Hosts.Priority_3"
-                    id="Hosts.Priority_3"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="priorityFilter['3']"/>
-
-                  <label cFormCheckLabel
-                    for="Hosts.Priority_3" class="ms-1 mt-1 warning">
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                  </label>
-                </c-form-check>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-primary"
-                    name="Hosts.Priority_4"
-                    id="Hosts.Priority_4"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="priorityFilter['4']"/>
-
-                  <label cFormCheckLabel
-                    for="Hosts.Priority_4" class="ms-1 mt-1 critical-soft">
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                  </label>
-                </c-form-check>
-                <c-form-check>
-                  <input
-                    (debouncedValue)="onFilterChange($event)"
-                    cFormCheckInput
-                    class="checkbox-lg checkbox-primary"
-                    name="Hosts.Priority_5"
-                    id="Hosts.Priority_5"
-                    type="checkbox"
-                    trueFalseValue
-                    oitcDebounce
-                    [(ngModel)]="priorityFilter['5']"/>
-
-                  <label cFormCheckLabel
-                    for="Hosts.Priority_5" class="ms-1 mt-1 critical">
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                  </label>
-                </c-form-check>
-              </fieldset>
-            </c-col>
-
-          </c-row>
-
-          <c-row class="mb-2">
-            <c-col [xs]="12" [lg]="6" class="ui-fluid">
-              <fieldset>
-                <h5>
-                  {{ t('Instance') }}
-                </h5>
-                <c-form-check class="d-flex">
-                  <c-input-group>
-                    <span cInputGroupText>
-                      <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
-                    </span>
-
-                    <oitc-multi-select
-                      class="flex-1"
-                      name="satellite_id"
-                      id="satellite_id"
-                      optionValue="key"
-                      optionLabel="value"
-                      [(ngModel)]="filter['Hosts.satellite_id']"
-                      [options]="satellites"
-                      [debounce]="true"
-                      [placeholder]="'Filter by instance' | transloco"
-                      (onChange)="onFilterChange(null)">
-                    </oitc-multi-select>
-                  </c-input-group>
-                </c-form-check>
-              </fieldset>
-            </c-col>
-
-          </c-row>
-
-          <c-row class="mt-2">
-            <c-col class="text-end">
-              <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
-                {{ t('Reset filter') }}
-              </button>
-            </c-col>
-          </c-row>
-
-        </form>
-      </c-card-body>
-      <c-card-footer [hidden]="hideFilter">
-        <c-row class="mt-2">
-          <c-col>
-            <fa-icon [icon]="['fas', 'list']" size="lg" class="ms-1"></fa-icon>
-            {{ t('Column configuration') }}
-          </c-col>
-          <c-col>
-            <div class="float-end">
-              <button class="btn btn-xs btn-secondary dropdown-toggle" type="button"
-                data-toggle="dropdown" aria-expanded="false"
-                (click)="togglecolumnConfiguration()">
-                <fa-icon [icon]="['fas', 'columns']" size="lg" class="ms-1"></fa-icon>
-                {{ t('Columns') }}
-              </button>
-            </div>
-          </c-col>
-        </c-row>
-        @if (showColumnConfig) {
-          <c-row class="mt-2">
-            <c-col [xs]="12" lg="3">
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-0" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[0]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-0">{{ t(fieldNames[0]) }}</label>
-              </c-form-check>
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-1" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[1]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-1">{{ t(fieldNames[1]) }}</label>
-              </c-form-check>
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-2" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[2]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-2">{{ t(fieldNames[2]) }}</label>
-              </c-form-check>
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-3" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[3]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-3">{{ t(fieldNames[3]) }}</label>
-              </c-form-check>
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-4" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[4]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-4">{{ t(fieldNames[4]) }}</label>
-              </c-form-check>
-            </c-col>
-            <c-col [xs]="12" lg="3">
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-5" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[5]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-5">{{ t(fieldNames[5]) }}</label>
-              </c-form-check>
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-6" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[6]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-6">{{ t(fieldNames[6]) }}</label>
-              </c-form-check>
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-7" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[7]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-7">{{ t(fieldNames[7]) }}</label>
-              </c-form-check>
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-8" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[8]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-8">{{ t(fieldNames[8]) }}</label>
-              </c-form-check>
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-9" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[9]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-9">{{ t(fieldNames[9]) }}</label>
-              </c-form-check>
-            </c-col>
-            <c-col [xs]="12" lg="2">
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-10" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[10]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-10">{{ t(fieldNames[10]) }}</label>
-              </c-form-check>
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-11" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[11]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-11">{{ t(fieldNames[11]) }}</label>
-              </c-form-check>
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-12" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[12]">
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-12">{{ t(fieldNames[12]) }}</label>
-              </c-form-check>
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-13" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[13]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-13">{{ t(fieldNames[13]) }}</label>
-              </c-form-check>
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-14" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[14]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-14">{{ t(fieldNames[14]) }}</label>
-              </c-form-check>
-            </c-col>
-            <c-col [xs]="12" lg="2">
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-15" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[15]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-15">{{ t(fieldNames[15]) }}</label>
-              </c-form-check>
-              <c-form-check class="mb-2">
-                <input cFormCheckInput id="field-16" type="checkbox"
-                  class="checkbox-lg custom-check-default"
-                  [(ngModel)]="fields[16]"/>
-                <label cFormCheckLabel class="ms-1 mt-1"
-                for="field-16">{{ t(fieldNames[16]) }}</label>
-              </c-form-check>
-            </c-col>
-            <c-col [xs]="12" lg="2">
-              <c-row class="mt-2 me-0">
-                <button class="btn btn-xs btn-primary float-end" type="button"
-                  (click)="toggleColumnsConfigExport()">
-                  <fa-icon [icon]="['fas', 'share-alt']" size="lg" class="ms-1"></fa-icon>
-                  {{ t('Share') }}
-                </button>
-              </c-row>
-              <c-row class="mt-2 me-0">
-                <button class="btn btn-secondary btn-xs float-end" type="button"
-                  (click)="toggleColumnsConfigImport()"
-                  >
-                  <fa-icon [icon]="['fas', 'file-import']" size="lg" class="ms-1"></fa-icon>
-                  {{ t('Import') }}
-                </button>
-              </c-row>
-              <c-row class="mt-2 me-0">
-                <button class="btn btn-default btn-xs float-end" type="button"
-                  (click)="getDefaultColumns()"
-                  >
-                  <fa-icon [icon]="['fas', 'recycle']" size="lg" class="ms-1"></fa-icon>
-                  {{ t('Reset to default') }}
-                </button>
-              </c-row>
-              <c-row class="mt-2 me-0">
-                <button class="btn btn-success btn-xs float-end" type="button"
-                  (click)="saveColumnsConfig()"
-                  > {{ t('Save') }}
-                </button>
-              </c-row>
-            </c-col>
-          </c-row>
-        }
-      </c-card-footer>
-    </c-card>
-    <!-- End Filter -->
-
-    @if (!hosts) {
-      <oitc-table-loader></oitc-table-loader>
-    }
-    @if (hosts) {
-      <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-        (matSortChange)="onSortChange($event)"
-        [matSortActive]="params.sort" [matSortDirection]="params.direction">
-        <thead>
-          <tr>
-            @if (fields[0]) {
-              <th colspan="2" class="width-90"
-                mat-sort-header="Hoststatus.current_state">
-                {{ t('Hoststatus') }}
-              </th>
-            }
-            @if (!fields[0]) {
-              <th>
-                <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-              </th>
-            }
-            @if (fields[1]) {
-              <th class="text-center"
-                mat-sort-header="Hoststatus.acknowledgement_type"
-                [cTooltip]="'is acknowledged' | transloco" cTooltipPlacement="top">
-                <fa-icon [icon]="['fas', 'user']"></fa-icon>
-              </th>
-            }
-            @if (fields[2]) {
-              <th class="text-center"
-                mat-sort-header="Hoststatus.scheduled_downtime_depth"
-                [cTooltip]="'is in downtime' | transloco" cTooltipPlacement="top">
-                <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-              </th>
-            }
-            @if (fields[3]) {
-              <th class="text-center"
-                mat-sort-header="Hoststatus.notifications_enabled"
-                [cTooltip]="'Notifications enabled' | transloco" cTooltipPlacement="top">
-                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-              </th>
-            }
-            @if (fields[4]) {
-              <th class="text-center"
-                [cTooltip]="'Shared' | transloco" cTooltipPlacement="top">
-                <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
-              </th>
-            }
-            @if (fields[5]) {
-              <th class="text-center"
-                [cTooltip]="'Passively transferred host' | transloco" cTooltipPlacement="top">
-                <strong>P</strong>
-              </th>
-            }
-            @if (fields[6]) {
-              <th class="text-center"
-                mat-sort-header="hostpriority"
-                [cTooltip]="'Priority' | transloco" cTooltipPlacement="top">
-                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-              </th>
-            }
-            @if (fields[7]) {
-              <th
-                mat-sort-header="Hosts.name">
-                {{ t('Host name') }}
-              </th>
-            }
-            @if (fields[8]) {
-              <th>
-                {{ t('Host description') }}
-              </th>
-            }
-            @if (fields[9]) {
-              <th
-                mat-sort-header="Hosts.address">
-                {{ t('IP address') }}
-              </th>
-            }
-            @if (fields[10]) {
-              <th class="tableStatewidth"
-                mat-sort-header="Hoststatus.last_state_change">
-                {{ t('Last state change') }}
-              </th>
-            }
-            @if (fields[11]) {
-              <th class="tableStatewidth"
-                mat-sort-header="Hoststatus.last_check">
-                {{ t('Last check') }}
-              </th>
-            }
-            @if (fields[12]) {
-              <th
-                mat-sort-header="Hoststatus.output">
-                {{ t('Host output') }}
-              </th>
-            }
-            @if (fields[13]) {
-              <th class="col-1"
-                mat-sort-header="Hosts.satellite_id">
-                {{ t('Instance') }}
-              </th>
-            }
-            @if (fields[14]) {
-              <th *oitcPermission="['services', 'serviceList']">
-                {{ t('Service Summary ') }}
-              </th>
-            }
-            @if (fields[15]) {
-              <th>
-                {{ t('Host notes') }}
-              </th>
-            }
-            @if (fields[16]) {
-              <th>
-                {{ t('Host type') }}
-              </th>
-            }
-            <th class="text-center editItemWidth" scope="col">
-              <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (host of hosts.all_hosts; track host) {
-            <tr>
-              <td class="text-center">
-                <oitc-item-select
-                  [disabled]="!host.Host.allow_edit"
-                [item]="host"></oitc-item-select>
-              </td>
-              @if (fields[0]) {
-                <td class="text-center">
-                  <oitc-hoststatus-icon [hoststatus]="host.Hoststatus"></oitc-hoststatus-icon>
-                </td>
-              }
-              @if (fields[1]) {
-                <td class="text-center">
-                  @if (host.Hoststatus.problemHasBeenAcknowledged) {
-                    <oitc-acknowledgement-icon
-                      type="hosts"
-                      [objectId]="host.Host.id"
-                    [acknowledgement_type]="host.Hoststatus.acknowledgement_type"></oitc-acknowledgement-icon>
-                  }
-                </td>
-              }
-              @if (fields[2]) {
-                <td class="text-center">
-                  @if (host.Hoststatus.scheduledDowntimeDepth && host.Hoststatus.scheduledDowntimeDepth > 0) {
-                    <oitc-downtime-icon
-                      type="hosts"
-                    [objectId]="host.Host.id"></oitc-downtime-icon>
-                  }
-                </td>
-              }
-              @if (fields[3]) {
-                <td class="text-center">
-                  @if (host.Hoststatus.notifications_enabled) {
-                    <fa-stack
-                      [cTooltip]="'Notifications enabled' | transloco" cTooltipPlacement="right">
-                      <fa-icon [icon]="['fas', 'envelope']"
-                      stackItemSize="1x" pull="right"></fa-icon>
-                      <fa-icon [icon]="['fas', 'check']" class="text-success"
-                        stackItemSize="1x"
-                      transform="shrink-3 right-3 down-7"></fa-icon>
-                    </fa-stack>
-                  } @else {
-                    <fa-stack
-                      [cTooltip]="'Notifications disabled' | transloco" cTooltipPlacement="right">
-                      <fa-icon [icon]="['fas', 'envelope']"
-                      stackItemSize="1x" pull="right"></fa-icon>
-                      <fa-icon [icon]="['fas', 'times']" class="text-danger"
-                        stackItemSize="1x"
-                      transform="shrink-3 right-3 down-7"></fa-icon>
-                    </fa-stack>
-                  }
-                </td>
-              }
-              @if (fields[4]) {
-                <td class="text-center">
-                  @if (host.Host.allow_sharing === true && host.Host.containerIds && host.Host.containerIds.length > 1) {
-                    <a [routerLink]="['/', 'hosts', 'sharing', host.Host.id]"
-                      [cTooltip]="'Shared' | transloco" cTooltipPlacement="right">
-                      <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                <c-nav-item>
+                    <a [routerLink]="['/', 'hosts', 'index']"
+                       *oitcPermission="['hosts', 'index']" class="nav-link active">
+                        <fa-icon [icon]="['fas', 'stethoscope']"></fa-icon>
+                        {{ t('Monitored') }}
                     </a>
-                  } @else if (host.Host.allow_sharing === false && host.Host.containerIds && host.Host.containerIds.length > 1) {
-                    <fa-icon [icon]="['fas', 'low-vision']"
-                    [cTooltip]="'Restricted view' | transloco" cTooltipPlacement="right"></fa-icon>
-                  }
-                </td>
-              }
-              @if (fields[5]) {
-                <td class="text-center">
-                  @if (host.Host.active_checks_enabled === false || host.Host.is_satellite_host === true) {
-                    <strong
-                      [cTooltip]="'Passively transferred host' | transloco" cTooltipPlacement="right">
-                      P
-                    </strong>
-                  }
-                </td>
-              }
-              @if (fields[6]) {
-                <td class="text-center">
-                        <fa-icon [icon]="['fas', 'fire']" [ngClass]="{'ok-soft' : host.Host.priority==1,
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'hosts', 'notMonitored']"
+                       *oitcPermission="['hosts', 'notMonitored']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
+                        {{ t('Not monitored') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'hosts', 'disabled']"
+                       *oitcPermission="['hosts', 'disabled']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                        {{ t('Disabled') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'deletedHosts', 'index']"
+                       *oitcPermission="['deletedHosts', 'index']" class="nav-link">
+                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                        {{ t('Deleted') }}
+                    </a>
+                </c-nav-item>
+            </c-nav>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadHosts()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['hosts', 'add']" [routerLink]="['/', 'hosts', 'add']"
+                            cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="problemsOnly()" cButton class="ripple" color="danger" size="xs">
+                        <fa-icon [icon]="['fas', 'filter-circle-xmark']"></fa-icon>
+                        {{ t('Unhandled only') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <c-card>
+                <!--<c-card-header>-->
+                <oitc-filter-bookmark [plugin]="''" [controller]="'Hosts'" [action]="'index'"
+                                      [filter]="filter"
+                                      (selected)="onSelectedBookmark($event)"></oitc-filter-bookmark>
+                <!--</c-card-header>-->
+
+                <c-card-body [hidden]="hideFilter">
+                    <!-- <c-row>
+                    <c-col>
+                      <h6 class="pb-2 mb-3 border-bottom">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                      </h6>
+                    </c-col>
+                  </c-row>-->
+                    <form cForm>
+
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="filter['Hosts.name']"
+                                           [placeholder]="'Filter by host name' | transloco"
+                                           cFormControl
+                                           name="Hosts.name"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                    <span cInputGroupText>
+                                        <label>
+                                            {{ t('Enable RegEx') }}
+                                            <input type="checkbox"
+                                                   cFormCheckInput
+                                                   name="filter.Host.name_regex"
+                                                   oitcDebounce
+                                                   (debouncedValue)="onFilterChange($event)"
+                                                   [(ngModel)]="filter['Hosts.name_regex']"
+                                            />
+                                            <oitc-regex-helper-tooltip/>
+                                        </label>
+                                    </span>
+                                </c-input-group>
+                            </c-col>
+
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="filter['hostdescription']"
+                                           [placeholder]="'Filter by host description' | transloco"
+                                           cFormControl
+                                           name="Hosts.hostdescription"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="filter['Hosts.address']"
+                                           [placeholder]="'Filter by IP address' | transloco"
+                                           cFormControl
+                                           name="Hosts.address"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                    <span cInputGroupText>
+                                        <label>
+                                            {{ t('Enable RegEx') }}
+                                            <input type="checkbox"
+                                                   cFormCheckInput
+                                                   name="filter.Host.address_regex"
+                                                   oitcDebounce
+                                                   (debouncedValue)="onFilterChange($event)"
+                                                   [(ngModel)]="filter['Hosts.address_regex']"
+                                            />
+                                            <oitc-regex-helper-tooltip/>
+                                        </label>
+                                    </span>
+                                </c-input-group>
+                            </c-col>
+
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="filter['Hoststatus.output']"
+                                           [placeholder]="'Filter by output' | transloco"
+                                           cFormControl
+                                           name="Hosts.output"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+
+                        </c-row>
+
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group>
+                                    <span cInputGroupText class="p-1">
+                                        <fa-stack>
+                                            <fa-icon [icon]="['fas', 'desktop']" stackItemSize="1x"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']" class="text-success"
+                                                     stackItemSize="1x"
+                                                     transform="shrink-6 right-8 down-8"></fa-icon>
+                                        </fa-stack>
+                                    </span>
+                                    <ng-select
+                                        id="HostKeywordsInput"
+                                        name="HostKeywordsInput"
+                                        [items]="[]"
+                                        [(ngModel)]="filter['Hosts.keywords']"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by tags'|transloco"
+                                        oitcDebounce
+                                        (debouncedValue)="onFilterChange($event)"
+                                        [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+
+                            <c-col [xs]="12" [lg]="6">
+                                <c-input-group>
+                                    <span cInputGroupText class="p-1">
+                                        <fa-stack>
+                                            <fa-icon [icon]="['fas', 'desktop']" stackItemSize="1x"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']" class="text-danger"
+                                                     stackItemSize="1x"
+                                                     transform="shrink-6 right-8 down-8"></fa-icon>
+                                        </fa-stack>
+                                    </span>
+                                    <ng-select
+                                        id="HostNotKeywordsInput"
+                                        name="HostNotKeywordsInput"
+                                        [items]="[]"
+                                        [(ngModel)]="filter['Hosts.not_keywords']"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by excluded tags'|transloco"
+                                        oitcDebounce
+                                        (debouncedValue)="onFilterChange($event)"
+                                        [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    </span>
+
+                                    <oitc-multi-select
+                                        name="hosttemplatetype_id"
+                                        id="hosttemplatetype_id"
+                                        optionValue="id"
+                                        optionLabel="name"
+                                        [(ngModel)]="filter['Hosts.host_type']"
+                                        [options]="hostTypes"
+                                        [debounce]="true"
+                                        [placeholder]="'Filter by host types' | transloco"
+                                        (onChange)="onFilterChange(null)">
+                                    </oitc-multi-select>
+                                </c-input-group>
+                            </c-col>
+                            <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                    </span>
+
+                                    <oitc-multi-select
+                                        name="hostgroups_ids"
+                                        id="hostgroups_ids"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="filter['Hostgroups.id']"
+                                        [options]="hostgroups"
+                                        [debounce]="true"
+                                        [placeholder]="'Filter by host groups' | transloco"
+                                        (onChange)="onFilterChange(null)"
+                                        [searchCallback]="loadHostgroups">
+                                    </oitc-multi-select>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" lg="2">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Host status') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-success"
+                                            name="Hosts.currentStateUp"
+                                            id="Hosts.currentStateUp"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="currentStateFilter.up"/>
+
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="Hosts.currentStateUp">{{ t('Up') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-danger"
+                                            name="Hosts.currentStateDown"
+                                            id="Hosts.currentStateDown"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="currentStateFilter.down"/>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="Hosts.currentStateDown">{{ t('Down') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-secondary"
+                                            name="Hosts.currentStateUnreachable"
+                                            id="Hosts.currentStateUnreachable"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="currentStateFilter.unreachable"/>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="Hosts.currentStateUnreachable">{{ t('Unreachable') }}</label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+
+                            <c-col [xs]="12" lg="2">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('State Types') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="Hosts.soft"
+                                            id="Hosts.soft"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="state_typesFilter.soft"/>
+
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="Hosts.soft">{{ t('Soft') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="Hosts.hard"
+                                            id="Hosts.hard"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="state_typesFilter.hard"/>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="Hosts.hard">{{ t('Hard') }}</label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+
+                            <c-col [xs]="12" lg="2">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Acknowledgements') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="Hosts.acknowledged"
+                                            id="Hosts.acknowledged"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="acknowledgementsFilter.acknowledged"/>
+
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="Hosts.acknowledged">{{ t('Acknowledged') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="Hosts.not_acknowledged"
+                                            id="Hosts.not_acknowledged"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="acknowledgementsFilter.not_acknowledged"/>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="Hosts.not_acknowledged">{{ t('Not acknowledged') }}</label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+
+                            <c-col [xs]="12" lg="2">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Downtimes') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="Hosts.in_downtime"
+                                            id="Hosts.in_downtime"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="downtimeFilter.in_downtime"/>
+
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="Hosts.in_downtime">{{ t('In downtime') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="Hosts.not_in_downtime"
+                                            id="Hosts.not_in_downtime"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="downtimeFilter.not_in_downtime"/>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="Hosts.not_in_downtime">{{ t('Not in downtime') }}</label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+
+                            <c-col [xs]="12" lg="2">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Notifications') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="Hosts.noty_enabled"
+                                            id="Hosts.noty_enabled"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="notificationsFilter.enabled"/>
+
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="Hosts.noty_enabled">{{ t('Enabled') }}</label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="Hosts.noty_not_enabled"
+                                            id="Hosts.noty_not_enabled"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="notificationsFilter.not_enabled"/>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="Hosts.noty_not_enabled">{{ t('Not enabled') }}</label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+
+                            <c-col [xs]="12" lg="2">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Priority') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="Hosts.Priority_1"
+                                            id="Hosts.Priority_1"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="priorityFilter['1']"/>
+
+                                        <label cFormCheckLabel
+                                               for="Hosts.Priority_1" class="ms-1 mt-1 ok-soft">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="Hosts.Priority_2"
+                                            id="Hosts.Priority_2"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="priorityFilter['2']"/>
+
+                                        <label cFormCheckLabel
+                                               for="Hosts.Priority_2" class="ms-1 mt-1 ok">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="Hosts.Priority_3"
+                                            id="Hosts.Priority_3"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="priorityFilter['3']"/>
+
+                                        <label cFormCheckLabel
+                                               for="Hosts.Priority_3" class="ms-1 mt-1 warning">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="Hosts.Priority_4"
+                                            id="Hosts.Priority_4"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="priorityFilter['4']"/>
+
+                                        <label cFormCheckLabel
+                                               for="Hosts.Priority_4" class="ms-1 mt-1 critical-soft">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="Hosts.Priority_5"
+                                            id="Hosts.Priority_5"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="priorityFilter['5']"/>
+
+                                        <label cFormCheckLabel
+                                               for="Hosts.Priority_5" class="ms-1 mt-1 critical">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+
+                        </c-row>
+
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Instance') }}
+                                    </h5>
+                                    <c-form-check class="d-flex">
+                                        <c-input-group>
+                                            <span cInputGroupText>
+                                                <fa-icon [icon]="['fas', 'satellite']"></fa-icon>
+                                            </span>
+
+                                            <oitc-multi-select
+                                                class="flex-1"
+                                                name="satellite_id"
+                                                id="satellite_id"
+                                                optionValue="key"
+                                                optionLabel="value"
+                                                [(ngModel)]="filter['Hosts.satellite_id']"
+                                                [options]="satellites"
+                                                [debounce]="true"
+                                                [placeholder]="'Filter by instance' | transloco"
+                                                (onChange)="onFilterChange(null)">
+                                            </oitc-multi-select>
+                                        </c-input-group>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+
+                        </c-row>
+
+                        <c-row class="mt-2">
+                            <c-col class="text-end">
+                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                    {{ t('Reset filter') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+
+                    </form>
+                </c-card-body>
+                <c-card-footer [hidden]="hideFilter">
+                    <c-row class="mt-2">
+                        <c-col>
+                            <fa-icon [icon]="['fas', 'list']" size="lg" class="ms-1"></fa-icon>
+                            {{ t('Column configuration') }}
+                        </c-col>
+                        <c-col>
+                            <div class="float-end">
+                                <button class="btn btn-xs btn-secondary dropdown-toggle" type="button"
+                                        data-toggle="dropdown" aria-expanded="false"
+                                        (click)="togglecolumnConfiguration()">
+                                    <fa-icon [icon]="['fas', 'columns']" size="lg" class="ms-1"></fa-icon>
+                                    {{ t('Columns') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                    @if (showColumnConfig) {
+                        <c-row class="mt-2">
+                            <c-col [xs]="12" lg="3">
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-0" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[0]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-0">{{ t(fieldNames[0]) }}</label>
+                                </c-form-check>
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-1" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[1]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-1">{{ t(fieldNames[1]) }}</label>
+                                </c-form-check>
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-2" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[2]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-2">{{ t(fieldNames[2]) }}</label>
+                                </c-form-check>
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-3" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[3]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-3">{{ t(fieldNames[3]) }}</label>
+                                </c-form-check>
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-4" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[4]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-4">{{ t(fieldNames[4]) }}</label>
+                                </c-form-check>
+                            </c-col>
+                            <c-col [xs]="12" lg="3">
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-5" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[5]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-5">{{ t(fieldNames[5]) }}</label>
+                                </c-form-check>
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-6" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[6]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-6">{{ t(fieldNames[6]) }}</label>
+                                </c-form-check>
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-7" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[7]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-7">{{ t(fieldNames[7]) }}</label>
+                                </c-form-check>
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-8" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[8]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-8">{{ t(fieldNames[8]) }}</label>
+                                </c-form-check>
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-9" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[9]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-9">{{ t(fieldNames[9]) }}</label>
+                                </c-form-check>
+                            </c-col>
+                            <c-col [xs]="12" lg="2">
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-10" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[10]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-10">{{ t(fieldNames[10]) }}</label>
+                                </c-form-check>
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-11" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[11]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-11">{{ t(fieldNames[11]) }}</label>
+                                </c-form-check>
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-12" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[12]">
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-12">{{ t(fieldNames[12]) }}</label>
+                                </c-form-check>
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-13" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[13]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-13">{{ t(fieldNames[13]) }}</label>
+                                </c-form-check>
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-14" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[14]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-14">{{ t(fieldNames[14]) }}</label>
+                                </c-form-check>
+                            </c-col>
+                            <c-col [xs]="12" lg="2">
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-15" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[15]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-15">{{ t(fieldNames[15]) }}</label>
+                                </c-form-check>
+                                <c-form-check class="mb-2">
+                                    <input cFormCheckInput id="field-16" type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [(ngModel)]="fields[16]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="field-16">{{ t(fieldNames[16]) }}</label>
+                                </c-form-check>
+                            </c-col>
+                            <c-col [xs]="12" lg="2">
+                                <c-row class="mt-2 me-0">
+                                    <button class="btn btn-xs btn-primary float-end" type="button"
+                                            (click)="toggleColumnsConfigExport()">
+                                        <fa-icon [icon]="['fas', 'share-alt']" size="lg" class="ms-1"></fa-icon>
+                                        {{ t('Share') }}
+                                    </button>
+                                </c-row>
+                                <c-row class="mt-2 me-0">
+                                    <button class="btn btn-secondary btn-xs float-end" type="button"
+                                            (click)="toggleColumnsConfigImport()"
+                                    >
+                                        <fa-icon [icon]="['fas', 'file-import']" size="lg" class="ms-1"></fa-icon>
+                                        {{ t('Import') }}
+                                    </button>
+                                </c-row>
+                                <c-row class="mt-2 me-0">
+                                    <button class="btn btn-default btn-xs float-end" type="button"
+                                            (click)="getDefaultColumns()"
+                                    >
+                                        <fa-icon [icon]="['fas', 'recycle']" size="lg" class="ms-1"></fa-icon>
+                                        {{ t('Reset to default') }}
+                                    </button>
+                                </c-row>
+                                <c-row class="mt-2 me-0">
+                                    <button class="btn btn-success btn-xs float-end" type="button"
+                                            (click)="saveColumnsConfig()"
+                                    > {{ t('Save') }}
+                                    </button>
+                                </c-row>
+                            </c-col>
+                        </c-row>
+                    }
+                </c-card-footer>
+            </c-card>
+            <!-- End Filter -->
+
+            @if (!hosts) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (hosts) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        @if (fields[0]) {
+                            <th colspan="2" class="width-90"
+                                mat-sort-header="Hoststatus.current_state">
+                                {{ t('Hoststatus') }}
+                            </th>
+                        }
+                        @if (!fields[0]) {
+                            <th>
+                                <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                            </th>
+                        }
+                        @if (fields[1]) {
+                            <th class="text-center"
+                                mat-sort-header="Hoststatus.acknowledgement_type"
+                                [cTooltip]="'is acknowledged' | transloco" cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                            </th>
+                        }
+                        @if (fields[2]) {
+                            <th class="text-center"
+                                mat-sort-header="Hoststatus.scheduled_downtime_depth"
+                                [cTooltip]="'is in downtime' | transloco" cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                            </th>
+                        }
+                        @if (fields[3]) {
+                            <th class="text-center"
+                                mat-sort-header="Hoststatus.notifications_enabled"
+                                [cTooltip]="'Notifications enabled' | transloco" cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                            </th>
+                        }
+                        @if (fields[4]) {
+                            <th class="text-center"
+                                [cTooltip]="'Shared' | transloco" cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                            </th>
+                        }
+                        @if (fields[5]) {
+                            <th class="text-center"
+                                [cTooltip]="'Passively transferred host' | transloco" cTooltipPlacement="top">
+                                <strong>P</strong>
+                            </th>
+                        }
+                        @if (fields[6]) {
+                            <th class="text-center"
+                                mat-sort-header="hostpriority"
+                                [cTooltip]="'Priority' | transloco" cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                            </th>
+                        }
+                        @if (fields[7]) {
+                            <th
+                                mat-sort-header="Hosts.name">
+                                {{ t('Host name') }}
+                            </th>
+                        }
+                        @if (fields[8]) {
+                            <th>
+                                {{ t('Host description') }}
+                            </th>
+                        }
+                        @if (fields[9]) {
+                            <th
+                                mat-sort-header="Hosts.address">
+                                {{ t('IP address') }}
+                            </th>
+                        }
+                        @if (fields[10]) {
+                            <th class="tableStatewidth"
+                                mat-sort-header="Hoststatus.last_state_change">
+                                {{ t('Last state change') }}
+                            </th>
+                        }
+                        @if (fields[11]) {
+                            <th class="tableStatewidth"
+                                mat-sort-header="Hoststatus.last_check">
+                                {{ t('Last check') }}
+                            </th>
+                        }
+                        @if (fields[12]) {
+                            <th
+                                mat-sort-header="Hoststatus.output">
+                                {{ t('Host output') }}
+                            </th>
+                        }
+                        @if (fields[13]) {
+                            <th class="col-1"
+                                mat-sort-header="Hosts.satellite_id">
+                                {{ t('Instance') }}
+                            </th>
+                        }
+                        @if (fields[14]) {
+                            <th *oitcPermission="['services', 'serviceList']">
+                                {{ t('Service Summary ') }}
+                            </th>
+                        }
+                        @if (fields[15]) {
+                            <th>
+                                {{ t('Host notes') }}
+                            </th>
+                        }
+                        @if (fields[16]) {
+                            <th>
+                                {{ t('Host type') }}
+                            </th>
+                        }
+                        <th class="text-center editItemWidth" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (host of hosts.all_hosts; track host) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        [disabled]="!host.Host.allow_edit"
+                                        [item]="host"></oitc-item-select>
+                                </td>
+                                @if (fields[0]) {
+                                    <td class="text-center">
+                                        <oitc-hoststatus-icon [hoststatus]="host.Hoststatus"></oitc-hoststatus-icon>
+                                    </td>
+                                }
+                                @if (fields[1]) {
+                                    <td class="text-center">
+                                        @if (host.Hoststatus.problemHasBeenAcknowledged) {
+                                            <oitc-acknowledgement-icon
+                                                type="hosts"
+                                                [objectId]="host.Host.id"
+                                                [acknowledgement_type]="host.Hoststatus.acknowledgement_type"></oitc-acknowledgement-icon>
+                                        }
+                                    </td>
+                                }
+                                @if (fields[2]) {
+                                    <td class="text-center">
+                                        @if (host.Hoststatus.scheduledDowntimeDepth && host.Hoststatus.scheduledDowntimeDepth > 0) {
+                                            <oitc-downtime-icon
+                                                type="hosts"
+                                                [objectId]="host.Host.id"></oitc-downtime-icon>
+                                        }
+                                    </td>
+                                }
+                                @if (fields[3]) {
+                                    <td class="text-center">
+                                        @if (host.Hoststatus.notifications_enabled) {
+                                            <fa-stack
+                                                [cTooltip]="'Notifications enabled' | transloco"
+                                                cTooltipPlacement="right">
+                                                <fa-icon [icon]="['fas', 'envelope']"
+                                                         stackItemSize="1x" pull="right"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'check']" class="text-success"
+                                                         stackItemSize="1x"
+                                                         transform="shrink-3 right-3 down-7"></fa-icon>
+                                            </fa-stack>
+                                        } @else {
+                                            <fa-stack
+                                                [cTooltip]="'Notifications disabled' | transloco"
+                                                cTooltipPlacement="right">
+                                                <fa-icon [icon]="['fas', 'envelope']"
+                                                         stackItemSize="1x" pull="right"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'times']" class="text-danger"
+                                                         stackItemSize="1x"
+                                                         transform="shrink-3 right-3 down-7"></fa-icon>
+                                            </fa-stack>
+                                        }
+                                    </td>
+                                }
+                                @if (fields[4]) {
+                                    <td class="text-center">
+                                        @if (host.Host.allow_sharing === true && host.Host.containerIds && host.Host.containerIds.length > 1) {
+                                            <a [routerLink]="['/', 'hosts', 'sharing', host.Host.id]"
+                                               [cTooltip]="'Shared' | transloco" cTooltipPlacement="right">
+                                                <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                            </a>
+                                        } @else if (host.Host.allow_sharing === false && host.Host.containerIds && host.Host.containerIds.length > 1) {
+                                            <fa-icon [icon]="['fas', 'low-vision']"
+                                                     [cTooltip]="'Restricted view' | transloco"
+                                                     cTooltipPlacement="right"></fa-icon>
+                                        }
+                                    </td>
+                                }
+                                @if (fields[5]) {
+                                    <td class="text-center">
+                                        @if (host.Host.active_checks_enabled === false || host.Host.is_satellite_host === true) {
+                                            <strong
+                                                [cTooltip]="'Passively transferred host' | transloco"
+                                                cTooltipPlacement="right">
+                                                P
+                                            </strong>
+                                        }
+                                    </td>
+                                }
+                                @if (fields[6]) {
+                                    <td class="text-center">
+                                        <fa-icon [icon]="['fas', 'fire']" [ngClass]="{'ok-soft' : host.Host.priority==1,
                                         'ok' : host.Host.priority==2, 'warning' : host.Host.priority==3,
                                         'critical-soft' : host.Host.priority==4, 'critical' : host.Host.priority==5}"></fa-icon>
-                </td>
-              }
-              @if (fields[7]) {
-                <td class="word-break">
-                  @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                    <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
-                      {{ host.Host.name }}
-                    </a>
-                  } @else {
-                    {{ host.Host.name }}
-                  }
-                  @if (( this.PermissionsService.hasModuleObservable('ImportModule')|async ) && ( this.PermissionsService.hasPermissionObservable(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])|async )) {
-                    <span class="badge border border-info"
-                      [hidden]="!host.Host.additionalInformationExists">
-                      <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]"
-                        [queryParams]="{selectedTab: HostBrowserTabs.CMDB}"
-                        class="text-info">
-                        <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                        {{ t('CMDB') }}
-                      </a>
-                    </span>
-                  }
-                </td>
-              }
-              @if (fields[8]) {
-                <td>
-                  {{ host.Host.description }}
-                </td>
-              }
-              @if (fields[9]) {
-                <td>
-                  <oitc-copy-to-clipboard [data]="host.Host.address">
-                    {{ host.Host.address }}
-                  </oitc-copy-to-clipboard>
-                </td>
-              }
-              @if (fields[10]) {
-                <td>
-                  {{ host.Hoststatus.last_state_change }}
-                </td>
-              }
-              @if (fields[11]) {
-                <td>
-                  {{ host.Hoststatus.lastCheck }}
-                </td>
-              }
-              @if (fields[12]) {
-                <td>
-                  <div class="word-break"
-                  [innerHTML]="String(host.Hoststatus.outputHtml) | trustAsHtml "></div>
-                </td>
-              }
-              @if (fields[13]) {
-                <td>
-                  @if (host.Host.satelliteRestricted) {
-                    <fa-icon [icon]="['fas', 'eye-low-vision']"></fa-icon>
-                    {{ t('Restricted view') }}
-                  } @else {
-                    {{ host.Host.satelliteName }}
-                  }
-                </td>
-              }
-              @if (this.PermissionsService.hasPermissionObservable(['services', 'serviceList'])|async) {
-                @if (fields[14]) {
-                  <td class="width-160">
-                    <div class="btn-group btn-group-justified w-100" role="group">
-                      @if (this.PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
-                        <a class="btn btn-success state-button-small"
-                          [routerLink]="['/', 'services', 'index']"
-                          [queryParams]="{servicestate:0,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}">
-                          {{ host.ServicestatusSummary.state.ok }}
-                        </a>
-                        <a class="btn btn-warning state-button-small"
-                          [routerLink]="['/', 'services', 'index']"
-                          [queryParams]="{servicestate:1,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}">
-                          {{ host.ServicestatusSummary.state.warning }}
-                        </a>
-                        <a class="btn btn-danger state-button-small"
-                          [routerLink]="['/', 'services', 'index']"
-                          [queryParams]="{servicestate:2,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}">
-                          {{ host.ServicestatusSummary.state.critical }}
-                        </a>
-                        <a class="btn btn-secondary state-button-small"
-                          [routerLink]="['/', 'services', 'index']"
-                          [queryParams]="{servicestate:3,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}">
-                          {{ host.ServicestatusSummary.state.unknown }}
-                        </a>
-                      } @else {
-                        <a class="btn btn-success state-button-small">
-                          {{ host.ServicestatusSummary.state.ok }}
-                        </a>
-                        <a class="btn btn-warning state-button-small">
-                          {{ host.ServicestatusSummary.state.warning }}
-                        </a>
-                        <a class="btn btn-danger state-button-small">
-                          {{ host.ServicestatusSummary.state.critical }}
-                        </a>
-                        <a class="btn btn-secondary state-button-small">
-                          {{ host.ServicestatusSummary.state.unknown }}
-                        </a>
-                      }
-                    </div>
-                  </td>
-                }
-              }
-              @if (fields[15]) {
-                <td>
-                  {{ host.Host.notes }}
-                </td>
-              }
-              @if (fields[16]) {
-                <td>
-                  @if (host.Host.type) {
-                    <span
-                      class="badge border"
-                      [ngClass]="[host.Host.type.class, host.Host.type.color]">
-                      <fa-icon [icon]="host.Host.type.icon"
-                      [rotate]="host.Host.type.rotate"></fa-icon>
-                      {{ host.Host.type.title }}
-                    </span>
-                  }
-                </td>
-              }
-              <td class="width-50">
-                <oitc-actions-button [permission]="'hosts.edit'"
-                  [url]="'/hosts/edit/' + host.Host.id"
-                  [allowEdit]="host.Host.allow_edit">
-                  @if (host.Host.allow_edit) {
-                    <oitc-actions-button-element [permission]="'hosts.edit'"
-                      [url]="'/hosts/edit/' + host.Host.id">
-                      <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                      {{ t('Edit') }}
-                    </oitc-actions-button-element>
-                  }
-                  @if (host.Host.allow_sharing) {
-                    <oitc-actions-button-element [permission]="'hosts.sharing'"
-                      [url]="'/hosts/sharing/' + host.Host.id">
-                      <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
-                      {{ t('Sharing') }}
-                    </oitc-actions-button-element>
-                  }
-                  @if (host.Host.allow_edit) {
-                    <oitc-actions-button-element [permission]="'hosts.deactivate'"
-                      (click)="toggleDisableModal(host.Host)">
-                      <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                      {{ t('Disable') }}
-                    </oitc-actions-button-element>
-                  }
-                  <oitc-actions-button-element [permission]="'changelogs.index'"
-                    [url]="'/changelogs/entity/host/' + host.Host.id">
-                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                    {{ t('Changelog') }}
-                  </oitc-actions-button-element>
-                  @if (( this.PermissionsService.hasModuleObservable('ImportModule')|async ) && ( this.PermissionsService.hasPermissionObservable(['ImportModule', 'ExternalSystems', 'additionalHostInformation']) |async ) && host.Host.additionalInformationExists) {
-                    <li><a cDropdownItem [routerLink]="'/hosts/browser/' + host.Host.id"
-                      [queryParams]="{selectedTab: HostBrowserTabs.CMDB}"
-                      *oitcPermission="['hosts', 'browser']">
-                      <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                      {{ t('CMDB') }}
-                    </a></li>
-                  }
-                  <oitc-actions-button-element [permission]="'services.serviceList'"
-                    [url]="'/services/serviceList/' + host.Host.id">
-                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
-                    {{ t('Service list') }}
-                  </oitc-actions-button-element>
-                  <oitc-actions-button-element [permission]="'servicetemplategroups.allocateToHost'"
-                    [url]="'/servicetemplategroups/allocateToHost/0/' + host.Host.id">
-                    <fa-icon [icon]="['fas', 'external-link-square-alt']"></fa-icon>
-                    {{ t('Allocate service template group') }}
-                  </oitc-actions-button-element>
-                  <oitc-actions-button-element [permission]="'hostgroups.add'"
-                    (click)="confirmAddHostsToHostgroup(host.Host)">
-                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
-                    {{ t('Add to host group') }}
-                  </oitc-actions-button-element>
-                  <oitc-actions-button-element [permission]="'agentconnector.wizard'"
-                    [url]="'/agentconnector/wizard'"
-                    [queryParams]="{hostId: host.Host.id}">
-                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-                    {{ t('openITCOCKPIT Agent discovery') }}
-                  </oitc-actions-button-element>
-                  @if (this.PermissionsService.hasModuleObservable('CheckmkModule')|async) {
-                    <oitc-actions-button-element [permission]="'CheckmkModule.scans.index'"
-                      [url]="'/checkmk_module/scans/index/' + host.Host.id">
-                      <fa-icon [icon]="['fas', 'share-alt']"></fa-icon>
-                      {{ t('Checkmk discovery') }}
-                    </oitc-actions-button-element>
-                  }
-                  <oitc-actions-button-element [permission]="'hosts.usedBy'"
-                    [url]="'/hosts/usedBy/' + host.Host.id">
-                    <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                    {{ t('Used By') }}
-                  </oitc-actions-button-element>
-                  <oitc-actions-button-element [permission]="'documentations.view'"
-                    [url]="'/documentations/view/' + host.Host.uuid+'/host'">
-                    <fa-icon [icon]="['fas', 'book']"></fa-icon>
-                    {{ t('Documentation') }}
-                  </oitc-actions-button-element>
-                  <li cDropdownDivider></li>
-                  <oitc-actions-button-element [permission]="'hosts.copy'"
-                    [url]="'/hosts/copy/' + host.Host.id">
-                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                    {{ t('Copy') }}
-                  </oitc-actions-button-element>
-                  @if (host.Host.allow_edit && ( PermissionsService.hasPermissionObservable(['hosts', 'delete'])|async )) {
-                    <li cDropdownDivider></li>
-                    <oitc-actions-button-element (click)="toggleDeleteAllModal(host.Host)"
-                      [permission]="'hosts.delete'">
-                      <span class="text-danger">
-                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                        {{ t('Delete') }}
-                      </span>
-                    </oitc-actions-button-element>
-                  }
-                </oitc-actions-button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    }
+                                    </td>
+                                }
+                                @if (fields[7]) {
+                                    <td class="word-break">
+                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                            <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
+                                                {{ host.Host.name }}
+                                            </a>
+                                        } @else {
+                                            {{ host.Host.name }}
+                                        }
+                                        @if (( this.PermissionsService.hasModuleObservable('ImportModule')|async ) && ( this.PermissionsService.hasPermissionObservable(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])|async )) {
+                                            <span class="badge border border-info"
+                                                  [hidden]="!host.Host.additionalInformationExists">
+                                                <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]"
+                                                   [queryParams]="{selectedTab: HostBrowserTabs.CMDB}"
+                                                   class="text-info">
+                                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                                    {{ t('CMDB') }}
+                                                </a>
+                                            </span>
+                                        }
+                                    </td>
+                                }
+                                @if (fields[8]) {
+                                    <td>
+                                        {{ host.Host.description }}
+                                    </td>
+                                }
+                                @if (fields[9]) {
+                                    <td>
+                                        <oitc-copy-to-clipboard [data]="host.Host.address">
+                                            {{ host.Host.address }}
+                                        </oitc-copy-to-clipboard>
+                                    </td>
+                                }
+                                @if (fields[10]) {
+                                    <td>
+                                        {{ host.Hoststatus.last_state_change }}
+                                    </td>
+                                }
+                                @if (fields[11]) {
+                                    <td>
+                                        {{ host.Hoststatus.lastCheck }}
+                                    </td>
+                                }
+                                @if (fields[12]) {
+                                    <td>
+                                        <div class="word-break"
+                                             [innerHTML]="String(host.Hoststatus.outputHtml) | trustAsHtml "></div>
+                                    </td>
+                                }
+                                @if (fields[13]) {
+                                    <td>
+                                        @if (host.Host.satelliteRestricted) {
+                                            <fa-icon [icon]="['fas', 'eye-low-vision']"></fa-icon>
+                                            {{ t('Restricted view') }}
+                                        } @else {
+                                            {{ host.Host.satelliteName }}
+                                        }
+                                    </td>
+                                }
+                                @if (this.PermissionsService.hasPermissionObservable(['services', 'serviceList'])|async) {
+                                    @if (fields[14]) {
+                                        <td class="width-160">
+                                            <div class="btn-group btn-group-justified w-100" role="group">
+                                                @if (this.PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
+                                                    <a class="btn btn-success state-button-small"
+                                                       [routerLink]="['/', 'services', 'index']"
+                                                       [queryParams]="{servicestate:0,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}">
+                                                        {{ host.ServicestatusSummary.state.ok }}
+                                                    </a>
+                                                    <a class="btn btn-warning state-button-small"
+                                                       [routerLink]="['/', 'services', 'index']"
+                                                       [queryParams]="{servicestate:1,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}">
+                                                        {{ host.ServicestatusSummary.state.warning }}
+                                                    </a>
+                                                    <a class="btn btn-danger state-button-small"
+                                                       [routerLink]="['/', 'services', 'index']"
+                                                       [queryParams]="{servicestate:2,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}">
+                                                        {{ host.ServicestatusSummary.state.critical }}
+                                                    </a>
+                                                    <a class="btn btn-secondary state-button-small"
+                                                       [routerLink]="['/', 'services', 'index']"
+                                                       [queryParams]="{servicestate:3,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}">
+                                                        {{ host.ServicestatusSummary.state.unknown }}
+                                                    </a>
+                                                } @else {
+                                                    <a class="btn btn-success state-button-small">
+                                                        {{ host.ServicestatusSummary.state.ok }}
+                                                    </a>
+                                                    <a class="btn btn-warning state-button-small">
+                                                        {{ host.ServicestatusSummary.state.warning }}
+                                                    </a>
+                                                    <a class="btn btn-danger state-button-small">
+                                                        {{ host.ServicestatusSummary.state.critical }}
+                                                    </a>
+                                                    <a class="btn btn-secondary state-button-small">
+                                                        {{ host.ServicestatusSummary.state.unknown }}
+                                                    </a>
+                                                }
+                                            </div>
+                                        </td>
+                                    }
+                                }
+                                @if (fields[15]) {
+                                    <td>
+                                        {{ host.Host.notes }}
+                                    </td>
+                                }
+                                @if (fields[16]) {
+                                    <td>
+                                        @if (host.Host.type) {
+                                            <span
+                                                class="badge border"
+                                                [ngClass]="[host.Host.type.class, host.Host.type.color]">
+                                                <fa-icon [icon]="host.Host.type.icon"
+                                                         [rotate]="host.Host.type.rotate"></fa-icon>
+                                                {{ host.Host.type.title }}
+                                            </span>
+                                        }
+                                    </td>
+                                }
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'hosts.edit'"
+                                                         [url]="'/hosts/edit/' + host.Host.id"
+                                                         [allowEdit]="host.Host.allow_edit">
+                                        @if (host.Host.allow_edit) {
+                                            <oitc-actions-button-element [permission]="'hosts.edit'"
+                                                                         [url]="'/hosts/edit/' + host.Host.id">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        @if (host.Host.allow_sharing) {
+                                            <oitc-actions-button-element [permission]="'hosts.sharing'"
+                                                                         [url]="'/hosts/sharing/' + host.Host.id">
+                                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
+                                                {{ t('Sharing') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        @if (host.Host.allow_edit) {
+                                            <oitc-actions-button-element [permission]="'hosts.deactivate'"
+                                                                         (click)="toggleDisableModal(host.Host)">
+                                                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                                {{ t('Disable') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/host/' + host.Host.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        @if (( this.PermissionsService.hasModuleObservable('ImportModule')|async ) && ( this.PermissionsService.hasPermissionObservable(['ImportModule', 'ExternalSystems', 'additionalHostInformation']) |async ) && host.Host.additionalInformationExists) {
+                                            <li><a cDropdownItem [routerLink]="'/hosts/browser/' + host.Host.id"
+                                                   [queryParams]="{selectedTab: HostBrowserTabs.CMDB}"
+                                                   *oitcPermission="['hosts', 'browser']">
+                                                <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                                {{ t('CMDB') }}
+                                            </a></li>
+                                        }
+                                        <oitc-actions-button-element [permission]="'services.serviceList'"
+                                                                     [url]="'/services/serviceList/' + host.Host.id">
+                                            <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
+                                            {{ t('Service list') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element
+                                            [permission]="'servicetemplategroups.allocateToHost'"
+                                            [url]="'/servicetemplategroups/allocateToHost/0/' + host.Host.id">
+                                            <fa-icon [icon]="['fas', 'external-link-square-alt']"></fa-icon>
+                                            {{ t('Allocate service template group') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'hostgroups.add'"
+                                                                     (click)="confirmAddHostsToHostgroup(host.Host)">
+                                            <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                            {{ t('Add to host group') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'agentconnector.wizard'"
+                                                                     [url]="'/agentconnector/wizard'"
+                                                                     [queryParams]="{hostId: host.Host.id}">
+                                            <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                            {{ t('openITCOCKPIT Agent discovery') }}
+                                        </oitc-actions-button-element>
+                                        @if (this.PermissionsService.hasModuleObservable('CheckmkModule')|async) {
+                                            <oitc-actions-button-element [permission]="'CheckmkModule.scans.index'"
+                                                                         [url]="'/checkmk_module/scans/index/' + host.Host.id">
+                                                <fa-icon [icon]="['fas', 'share-alt']"></fa-icon>
+                                                {{ t('Checkmk discovery') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element [permission]="'hosts.usedBy'"
+                                                                     [url]="'/hosts/usedBy/' + host.Host.id">
+                                            <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                            {{ t('Used By') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'documentations.view'"
+                                                                     [url]="'/documentations/view/' + host.Host.uuid+'/host'">
+                                            <fa-icon [icon]="['fas', 'book']"></fa-icon>
+                                            {{ t('Documentation') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        <oitc-actions-button-element [permission]="'hosts.copy'"
+                                                                     [url]="'/hosts/copy/' + host.Host.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                        @if (host.Host.allow_edit && ( PermissionsService.hasPermissionObservable(['hosts', 'delete'])|async )) {
+                                            <li cDropdownDivider></li>
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(host.Host)"
+                                                                         [permission]="'hosts.delete'">
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-    @if (hosts && hosts.all_hosts.length === 0) {
-      <oitc-no-records
-      ></oitc-no-records>
-    }
-    @if (hosts && hosts.all_hosts) {
-      <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-        [fluid]="true">
-        <c-row>
-          <c-col>
-            <oitc-select-all
-            [itemsCount]="hosts.all_hosts.length"></oitc-select-all>
-          </c-col>
-          <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-            <div class="btn-group d-flex flex-row" role="group">
-              <button class="btn btn-outline-primary col-3 border-0" type="button"
-                (click)="navigateCopy()">
-                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                {{ t('Copy') }}
-              </button>
-              <button (click)="toggleDeleteAllModal()"
-                class="btn btn-outline-danger col-3 border-0"
-                type="button">
-                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                {{ t('Delete selected') }}
-              </button>
-              <c-dropdown>
-                <button cButton cDropdownToggle color="default">
-                  {{ t('More actions') }}
-                </button>
-                <ul cDropdownMenu>
-                  <li><a href="{{linkFor('pdf')}}" cDropdownItem>
-                    <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
-                  {{ t('List as pdf') }}</a></li>
-                  <li><a href="{{linkFor('csv')}}" cDropdownItem>
-                    <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
-                  {{ t('List as csv') }}</a></li>
-                  <li *oitcPermission="['hosts', 'edit_details']">
-                    <a
-                      href="javascript:void(0);" cDropdownItem
-                      (click)="linkForEditDetails()">
-                      <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                      {{ t('Edit details') }}
-                    </a>
-                  </li>
-                  <li *oitcPermission="['services', 'deactivate']">
-                    <a
-                      href="javascript:void(0);" cDropdownItem
-                      (click)="toggleDisableModal()">
-                      <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                      {{ t('Disable') }}
-                    </a>
-                  </li>
-                  <li *oitcPermission="['hostgroups', 'add']">
-                    <a href="javascript:void(0);" cDropdownItem
-                      (click)="confirmAddHostsToHostgroup()"
-                      >
-                      <fa-icon [icon]="['fas', 'folder-plus']"></fa-icon>
-                    {{ t('Add to host group') }}</a>
-                  </li>
-                  <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
-                    <a
-                      href="javascript:void(0);" cDropdownItem
-                      (click)="resetChecktime()">
-                      <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                      {{ t('Reset check time') }}
-                    </a>
-                  </li>
-                  <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
-                    <a
-                      href="javascript:void(0);" cDropdownItem
-                      (click)="disableNotifications()">
-                      <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                      {{ t('Disable notification') }}
-                    </a>
-                  </li>
-                  <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
-                    <a
-                      href="javascript:void(0);" cDropdownItem
-                      (click)="enableNotifications()">
-                      <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                      {{ t('Enable notification') }}
-                    </a>
-                  </li>
-                  <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
-                    <a
-                      href="javascript:void(0);" cDropdownItem
-                      (click)="toggleDowntimeModal()">
-                      <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                      {{ t('Set planned maintenance times') }}
-                    </a>
-                  </li>
-                  <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
-                    <a
-                      href="javascript:void(0);" cDropdownItem
-                      (click)="acknowledgeStatus()">
-                      <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                      {{ t('Acknowledge status') }}
-                    </a>
-                  </li>
-                </ul>
-              </c-dropdown>
-            </div>
-          </c-col>
-        </c-row>
-      </c-container>
-    }
+            @if (hosts && hosts.all_hosts.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (hosts && hosts.all_hosts) {
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="hosts.all_hosts.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button class="btn btn-outline-primary col-3 border-0" type="button"
+                                        (click)="navigateCopy()">
+                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                    {{ t('Copy') }}
+                                </button>
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                                <c-dropdown>
+                                    <button cButton cDropdownToggle color="default">
+                                        {{ t('More actions') }}
+                                    </button>
+                                    <ul cDropdownMenu>
+                                        <li><a href="{{linkFor('pdf')}}" cDropdownItem>
+                                            <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
+                                            {{ t('List as pdf') }}</a></li>
+                                        <li><a href="{{linkFor('csv')}}" cDropdownItem>
+                                            <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                            {{ t('List as csv') }}</a></li>
+                                        <li *oitcPermission="['hosts', 'edit_details']">
+                                            <a
+                                                href="javascript:void(0);" cDropdownItem
+                                                (click)="linkForEditDetails()">
+                                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                {{ t('Edit details') }}
+                                            </a>
+                                        </li>
+                                        <li *oitcPermission="['services', 'deactivate']">
+                                            <a
+                                                href="javascript:void(0);" cDropdownItem
+                                                (click)="toggleDisableModal()">
+                                                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                                {{ t('Disable') }}
+                                            </a>
+                                        </li>
+                                        <li *oitcPermission="['hostgroups', 'add']">
+                                            <a href="javascript:void(0);" cDropdownItem
+                                               (click)="confirmAddHostsToHostgroup()"
+                                            >
+                                                <fa-icon [icon]="['fas', 'folder-plus']"></fa-icon>
+                                                {{ t('Add to host group') }}</a>
+                                        </li>
+                                        <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                                            <a
+                                                href="javascript:void(0);" cDropdownItem
+                                                (click)="resetChecktime()">
+                                                <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                                {{ t('Reset check time') }}
+                                            </a>
+                                        </li>
+                                        <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                                            <a
+                                                href="javascript:void(0);" cDropdownItem
+                                                (click)="disableNotifications()">
+                                                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                {{ t('Disable notification') }}
+                                            </a>
+                                        </li>
+                                        <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                                            <a
+                                                href="javascript:void(0);" cDropdownItem
+                                                (click)="enableNotifications()">
+                                                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                {{ t('Enable notification') }}
+                                            </a>
+                                        </li>
+                                        <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                                            <a
+                                                href="javascript:void(0);" cDropdownItem
+                                                (click)="toggleDowntimeModal()">
+                                                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                                {{ t('Set planned maintenance times') }}
+                                            </a>
+                                        </li>
+                                        <li *oitcPermission="['nagiosmodule', 'cmd', 'submit']">
+                                            <a
+                                                href="javascript:void(0);" cDropdownItem
+                                                (click)="acknowledgeStatus()">
+                                                <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                                {{ t('Acknowledge status') }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </c-dropdown>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
 
-    <c-container
-      [fluid]="true">
-      <c-row>
-        <c-col>
-          @if (hosts) {
-            <oitc-paginate-or-scroll
-              (paginatorChange)="onPaginatorChange($event)"
-            [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
-          }
-        </c-col>
-      </c-row>
-    </c-container>
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        @if (hosts) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
+                        }
+                    </c-col>
+                </c-row>
+            </c-container>
 
-  </c-card-body>
-  <c-card-footer>
-    &nbsp;
-  </c-card-footer>
-</c-card>
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
+    </c-card>
 </ng-container>
 
 
@@ -1390,22 +1395,22 @@
 
 
 <oitc-service-reset-checktime-modal [items]="selectedItems"
-(completed)="onMassActionComplete($event)"></oitc-service-reset-checktime-modal>
+                                    (completed)="onMassActionComplete($event)"></oitc-service-reset-checktime-modal>
 
 <oitc-host-acknowledge-modal (completed)="onMassActionComplete($event)"
-[items]="selectedItems"></oitc-host-acknowledge-modal>
+                             [items]="selectedItems"></oitc-host-acknowledge-modal>
 
 <oitc-hosts-maintenance-modal [items]="selectedItems"
-(completed)="onMassActionComplete($event)"></oitc-hosts-maintenance-modal>
+                              (completed)="onMassActionComplete($event)"></oitc-hosts-maintenance-modal>
 
 <oitc-hosts-enable-notifications-modal [items]="selectedItems"
-(completed)="onMassActionComplete($event)"></oitc-hosts-enable-notifications-modal>
+                                       (completed)="onMassActionComplete($event)"></oitc-hosts-enable-notifications-modal>
 
 <oitc-hosts-disable-notifications-modal [items]="selectedItems"
-(completed)="onMassActionComplete($event)"></oitc-hosts-disable-notifications-modal>
+                                        (completed)="onMassActionComplete($event)"></oitc-hosts-disable-notifications-modal>
 
 <oitc-hosts-add-to-hostgroup-modal [items]="selectedItems"
-(completed)="onMassActionComplete($event)"></oitc-hosts-add-to-hostgroup-modal>
+                                   (completed)="onMassActionComplete($event)"></oitc-hosts-add-to-hostgroup-modal>
 <oitc-columns-config-export-modal [configString]="configString"></oitc-columns-config-export-modal>
 <oitc-columns-config-import-modal (toImport)="setColumnConfig($event)"
-[columnsTableKey]="columnsTableKey"></oitc-columns-config-import-modal>
+                                  [columnsTableKey]="columnsTableKey"></oitc-columns-config-import-modal>
