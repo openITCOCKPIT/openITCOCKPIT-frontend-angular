@@ -258,7 +258,7 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
                             description: '',
                             host_id: this.post.host_id,
                             name: humiditySensorName,
-                            servicecommandargumentvalues: servicetemplatecommandargumentvaluesTemp,
+                            servicecommandargumentvalues: servicetemplatecommandargumentvaluesHumidity,
                             servicetemplate_id: this.sensorsServicetemplateHumidity.id
                         });
                 }
