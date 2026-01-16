@@ -3,21 +3,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HostdefaultsEditComponent } from './hostdefaults-edit.component';
 
 describe('HostdefaultsEditComponent', () => {
-  let component: HostdefaultsEditComponent;
-  let fixture: ComponentFixture<HostdefaultsEditComponent>;
+    let component: HostdefaultsEditComponent;
+    let fixture: ComponentFixture<HostdefaultsEditComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [HostdefaultsEditComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [HostdefaultsEditComponent]
+        })
+            .compileComponents();
 
-    fixture = TestBed.createComponent(HostdefaultsEditComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(HostdefaultsEditComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

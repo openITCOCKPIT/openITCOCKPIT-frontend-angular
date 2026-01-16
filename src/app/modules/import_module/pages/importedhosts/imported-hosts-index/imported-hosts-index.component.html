@@ -67,53 +67,54 @@
                                 {{ t('Start import') }}
                             </button>
                             <ul cDropdownMenu>
-                                <li *ngFor="let importer of importers">
-                                    <button (click)="loadImporter(importer)"
-                                            cDropdownItem
-                                            class="ripple"
-                                            [disabled]="showSpinner">
-                                        @switch (importer.data_source) {
-                                            @case ("csv_with_header") {
-                                                <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
-                                            }
-                                            @case ("csv_without_header") {
-                                                <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
-                                            }
-                                            @case ("itop") {
-                                                <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                            }
-                                            @case ("idoit") {
-                                                <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                            }
-                                            @case ("openitcockpit_agent") {
-                                                <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-                                            }
-                                            @case ("external_monitoring") {
-                                                <fa-icon [icon]="['fas', 'tower-observation']"></fa-icon>
-                                            }
-                                            @default {
-                                                <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
-                                            }
-                                        }
-                                        {{ importer.name }}
-                                        @if (importer.connected !== null) {
-                                            <span>
-                                                @if (importer.connected) {
-                                                    <sup
-                                                        class="badge rounded-pill border border-success text-success connect-badge">
-                                                        {{ t('ONLINE') }}
-                                                    </sup>
-                                                } @else {
-                                                    <sup
-                                                        class="badge rounded-pill border border-danger text-danger connect-badge">
-                                                        {{ t('OFFLINE') }}
-                                                    </sup>
+                                @for (importer of importers; track importer) {
+                                    <li>
+                                        <button (click)="loadImporter(importer)"
+                                                cDropdownItem
+                                                class="ripple"
+                                                [disabled]="showSpinner">
+                                            @switch (importer.data_source) {
+                                                @case ("csv_with_header") {
+                                                    <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
                                                 }
-                                            </span>
-                                        }
-
-                                    </button>
-                                </li>
+                                                @case ("csv_without_header") {
+                                                    <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                                }
+                                                @case ("itop") {
+                                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                                }
+                                                @case ("idoit") {
+                                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                                }
+                                                @case ("openitcockpit_agent") {
+                                                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                                }
+                                                @case ("external_monitoring") {
+                                                    <fa-icon [icon]="['fas', 'tower-observation']"></fa-icon>
+                                                }
+                                                @default {
+                                                    <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                                                }
+                                            }
+                                            {{ importer.name }}
+                                            @if (importer.connected !== null) {
+                                                <span>
+                                                    @if (importer.connected) {
+                                                        <sup
+                                                            class="badge rounded-pill border border-success text-success connect-badge">
+                                                            {{ t('ONLINE') }}
+                                                        </sup>
+                                                    } @else {
+                                                        <sup
+                                                            class="badge rounded-pill border border-danger text-danger connect-badge">
+                                                            {{ t('OFFLINE') }}
+                                                        </sup>
+                                                    }
+                                                </span>
+                                            }
+                                        </button>
+                                    </li>
+                                }
                             </ul>
                         </c-dropdown>
                     }
@@ -139,8 +140,10 @@
                             size="xs"
                             (click)="synchronizeWithMonitoring()"
                             [disabled]="showSynchronizingSpinner || showSpinner">
-                        <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'" class="pe-1"
-                                 *ngIf="showSynchronizingSpinner"></fa-icon>
+                        @if (showSynchronizingSpinner) {
+                            <fa-icon [icon]="['fas', 'spinner']" [animation]="'spin'" class="pe-1"
+                            ></fa-icon>
+                        }
                         <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
                         {{ t('Synchronize with monitoring') }}
                     </button>
@@ -441,490 +444,549 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!allImportedHosts"></oitc-table-loader>
-            <table *ngIf="allImportedHosts && importedhosts" bordered cTable class="mt-2 mb-0 table table-fit" hover
-                   striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th></th>
-                    <th scope="col" mat-sort-header="ImportedHosts.name">
-                        {{ t('Name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="ImportedHosts.address">
-                        {{ t('Address') }}
-                    </th>
-                    <th scope="col" mat-sort-header="ImportedHosts.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Importers.name">
-                        {{ t('Importer') }}
-                    </th>
-                    <th scope="col" mat-sort-header="full_name">
-                        {{ t('User') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Reserved settings') }}
-                    </th>
-                    <th scope="col" mat-sort-header="ImportedHosts.created">
-                        {{ t('Import date') }}
-                    </th>
-                    <th scope="col" mat-sort-header="ImportedHosts.modified">
-                        {{ t('Last modified') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Imported file') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Progress') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let importedhost of importedhosts"
-                    [ngClass]="{'bg-host-marked-for-disable':  ((importedhost.host && importedhost.host.disabled==0) || importedhost.host_id == null ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE),
+            @if (!allImportedHosts) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (allImportedHosts && importedhosts) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover
+                       striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th></th>
+                        <th scope="col" mat-sort-header="ImportedHosts.name">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="ImportedHosts.address">
+                            {{ t('Address') }}
+                        </th>
+                        <th scope="col" mat-sort-header="ImportedHosts.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Importers.name">
+                            {{ t('Importer') }}
+                        </th>
+                        <th scope="col" mat-sort-header="full_name">
+                            {{ t('User') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Reserved settings') }}
+                        </th>
+                        <th scope="col" mat-sort-header="ImportedHosts.created">
+                            {{ t('Import date') }}
+                        </th>
+                        <th scope="col" mat-sort-header="ImportedHosts.modified">
+                            {{ t('Last modified') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Imported file') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Progress') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (importedhost of importedhosts; track importedhost) {
+                            <tr
+                                [ngClass]="{'bg-host-marked-for-disable':  ((importedhost.host && importedhost.host.disabled==0) || importedhost.host_id == null ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE),
                                 'bg-host-marked-for-re-enable':  (importedhost.host && importedhost.host.disabled==1) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)}">
-                    <td>
-                        <oitc-item-select
-                            *oitcPermission="['ImportModule','importedhosts', 'delete']"
-                            [disabled]="!importedhost.allowEdit"
-                            [item]="importedhost"></oitc-item-select>
-                    </td>
-                    <td>
-                        <span *ngIf="importedhost.progress.state === 100">
-                            <i class="fas fa-sun sun"></i>
-                        </span>
-                        <span *ngIf="importedhost.progress.state == 80">
-                            <i class="fas fa-cloud-sun sun-cloud-gradient"></i>
-                        </span>
-                        <span *ngIf="importedhost.progress.state < 80">
-                            <i class="fas fa-cloud-sun-rain sun-cloud-gradient-rain"></i>
-                        </span>
-                    </td>
-                    <td class="position-relative"
-                        [ngClass]="{'bg-host-to-disable': ((importedhost.host && importedhost.host.disabled==0) || importedhost.host_id == null ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE),
+                                <td>
+                                    <oitc-item-select
+                                        *oitcPermission="['ImportModule','importedhosts', 'delete']"
+                                        [disabled]="!importedhost.allowEdit"
+                                        [item]="importedhost"></oitc-item-select>
+                                </td>
+                                <td>
+                                    @if (importedhost.progress.state === 100) {
+                                        <span>
+                                            <i class="fas fa-sun sun"></i>
+                                        </span>
+                                    }
+                                    @if (importedhost.progress.state == 80) {
+                                        <span>
+                                            <i class="fas fa-cloud-sun sun-cloud-gradient"></i>
+                                        </span>
+                                    }
+                                    @if (importedhost.progress.state < 80) {
+                                        <span>
+                                            <i class="fas fa-cloud-sun-rain sun-cloud-gradient-rain"></i>
+                                        </span>
+                                    }
+                                </td>
+                                <td class="position-relative"
+                                    [ngClass]="{'bg-host-to-disable': ((importedhost.host && importedhost.host.disabled==0) || importedhost.host_id == null ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE),
                                 'bg-host-to-change': (importedhost.host && importedhost.host.disabled==0) && (hasFlag(importedhost.flags,  ImportedHostFlagsEnum.FLAG_MARKED_CHANGED) && !hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)),
                                 'bg-host-to-re-enable':  (importedhost.host && importedhost.host.disabled==1) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)}">
-                        <div class="h-100">
-                            <a *oitcPermission="['ImportModule', 'ImportedHosts', 'edit']"
-                               [routerLink]="['/', 'import_module', 'ImportedHosts', 'edit', importedhost.id]">
-                                {{ importedhost.name }}
-                            </a>
-                            <span *oitcPermission="['ImportModule', 'ImportedHosts', 'edit']; negate: true">
-                                {{ importedhost.name }}
-                            </span>
-                            <c-badge color="success" class="mx-1" *ngIf="importedhost.imported !== 1">
-                                <fa-icon [icon]="['fas', 'star']"></fa-icon>
-                                {{ t('NEW') }}
-                            </c-badge>
-                            @if (importedhost.imported === 1 && ( importedhost.host && importedhost.host.disabled === 0 )) {
-                                <a [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]"
-                                   *oitcPermission="['hosts', 'browser']">
-                                    <c-badge color="info">
-                                        <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
-                                        {{ t('In monitoring') }}
-                                    </c-badge>
-                                </a>
-                                <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                    <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
-                                    {{ t('In monitoring') }}
-                                </span>
-                            }
-                            @if (( ( importedhost.host && importedhost.host.disabled === 0 ) || importedhost.host_id === null ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)) {
-                                <c-badge color="danger" class="cursor-help mx-1" [title]="t('Marked for disable')">
-                                    <fa-icon [icon]="['fas', 'box-archive']"></fa-icon>
-                                </c-badge>
-                            }
-                            @if (( importedhost.host && importedhost.host.disabled === 0 ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_CHANGED)) {
-                                <c-badge color="primary" class="cursor-help mx-1"
-                                         [title]="t('Imported host with changes')">
-                                    <fa-icon [icon]="['fas', 'person-digging']"></fa-icon>
-                                </c-badge>
-                            }
-                            @if (importedhost.host && importedhost.host.disabled === 1) {
-                                <a *oitcPermission="['hosts', 'browser']"
-                                   [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]">
-                                    <c-badge color="warning"
-                                             class="text-white">
-                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                        {{ t('In monitoring (disabled)') }}
-                                    </c-badge>
-                                </a>
-                                <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                    {{ t('In monitoring (disabled)') }}
-                                </span>
-                            }
-                            @if (( importedhost.host && importedhost.host.disabled === 1 ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)) {
-                                <c-badge color="success" class="cursor-help mx-1" [title]="t('Marked for re-enable')">
-                                    <fa-icon [icon]="['fas', 'boxes-packing']"></fa-icon>
-                                </c-badge>
-                            }
-                        </div>
-                        @if (( ( importedhost.host && importedhost.host.disabled === 0 ) || importedhost.host_id === null )
-                        && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)) {
-                            <fa-icon [icon]="['fas', 'plug-circle-xmark']" class="power-off text-white"></fa-icon>
-                        }
-                        @if (( importedhost.host
-                            && importedhost.host.disabled === 0 )
-                        && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_CHANGED)) {
-                            <fa-icon [icon]="['fas', 'screwdriver-wrench']" class="with-changes text-white"></fa-icon>
-                        }
-                        @if (( importedhost.host && importedhost.host.disabled === 1 )
-                        && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)) {
-                            <fa-icon [icon]="['fas', 'plug-circle-plus']" class="power-on text-white"></fa-icon>
-                        }
-                    </td>
-                    <td>{{ importedhost.address }}</td>
-                    <td>{{ importedhost.description }}</td>
-                    <td>
-                        <a *oitcPermission="['importmodule','importers', 'edit']"
-                           [routerLink]="['/', 'import_module', 'importers', 'edit', importedhost.importer.id]">
-                            {{ importedhost.importer.name }}
-                        </a>
-                        <span *oitcPermission="['importmodule','importers', 'edit']; negate: true">
-                            {{ importedhost.importer.name }}
-                        </span>
-                        <span class="text-primary">
-                            @switch (importedhost.importer.data_source) {
-                                @case ("itop") {
-                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                }
-                                @case ("idoit") {
-                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                }
-                                @case ("csv_with_header") {
-                                    <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
-                                }
-                                @case ("csv_without_header") {
-                                    <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
-                                }
-                                @case ("openitcockpit_agent") {
-                                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-                                }
-                                @case ("external_monitoring") {
-                                    <fa-icon [icon]="['fas', 'tower-observation']"></fa-icon>
-                                }
-                                @default {
-                                    <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
-                                }
-                            }
-                        </span>
-                    </td>
-                    <td>
-                        <span *ngIf="importedhost.user">
-                            <a *oitcPermission="['users', 'edit']"
-                               [routerLink]="['/', 'users', 'edit', importedhost.user.id]">
-                                {{ importedhost.full_name }}
-                            </a>
-                        </span>
-                        <span *oitcPermission="['users', 'edit']; negate: true">
-                            {{ importedhost.full_name }}
-                        </span>
-                    </td>
-                    <td [ngClass]="{'opacity-25': (importedhost.host && importedhost.host.disabled === 1) ||  hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)}">
-                        <b>{{ t('Host template:') }}</b>
-                        <div *ngIf="importedhost.hosttemplate.name">
-                            <a *oitcPermission="['hosttemplates', 'edit']"
-                               [routerLink]="['/', 'hosttemplates', 'edit', importedhost.hosttemplate.id]">
-                                {{ importedhost.hosttemplate.name }}
-                            </a>
-                            <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
-                                {{ importedhost.hosttemplate.name }}
-                            </span>
-                        </div>
-                        <div *ngIf="!importedhost.hosttemplate.name" class="text-danger italic">
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                            {{ t('missing data') }}
-                        </div>
-                        <hr class="my-2">
-                        <div>
-                            <b>{{ t('Container:') }}</b>
-                            <div *ngIf="importedhost.container">
-                                {{ importedhost.container }}
-                            </div>
-                            <div *ngIf="!importedhost.container" class="text-danger italic">
-                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                {{ t('missing data') }}
-                            </div>
-                            <div *ngIf="importedhost.imported_hosts_to_containers_sharing.length > 0">
-                                <b>{{ t('Shared containers:') }}</b>
-                            </div>
-                            <ul class="mb-2 p-0">
-                                <li *ngFor="let sharedcontainer of importedhost.imported_hosts_to_containers_sharing"
-                                    class="ms-3">
-                                    {{ sharedcontainer.name }}
-                                </li>
-                            </ul>
-                        </div>
-                        <div *ngIf="importedhost.satellite">
-                            <a *oitcPermission="['distributemodule','satellites', 'edit']"
-                               [routerLink]="['/', 'distribute_module', 'satellites', 'edit', importedhost.satellite.id]">
-                                {{ importedhost.satellite.name }}
-                            </a>
-                            <span *oitcPermission="['distributemodule','satellites', 'edit']; negate: true">
-                                {{ importedhost.satellite.name }}
-                            </span>
-                        </div>
-                        <div>
-                            <hr class="my-2">
-                            <b>{{ t('Service templates:') }}</b>
-                            <ul class="mb-2 p-0">
-                                <li *ngFor="let servicetemplate of importedhost.imported_hosts_to_servicetemplates"
-                                    class="ms-3">
-                                    <a *oitcPermission="['servicetemplates', 'edit']"
-                                       [routerLink]="['/', 'servicetemplates', 'edit', servicetemplate.id]">
-                                        {{ servicetemplate.template_name }}
-                                    </a>
-                                    <span *oitcPermission="['servicetemplates', 'edit']; negate: true">
-                                        {{ servicetemplate.template_name }}
-                                    </span>
-                                </li>
-                            </ul>
-                            <div *ngIf="importedhost.imported_hosts_to_servicetemplates.length === 0"
-                                 class="italic text-warning">
-                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                {{ t('No service templates defined') }}
-                            </div>
-                        </div>
-                        <div>
-                            <hr class="my-2">
-                            <b>{{ t('Service template groups:') }}</b>
-                            <ul class="mb-2 p-0">
-                                <li *ngFor="let servicetemplategroup of importedhost.imported_hosts_to_servicetemplategroups"
-                                    class="ms-3">
-                                    <a *oitcPermission="['servicetemplategroups', 'edit']"
-                                       [routerLink]="['/', 'servicetemplategroups', 'edit', servicetemplategroup.id]">
-                                        {{ servicetemplategroup.container.name }}
-                                    </a>
-                                    <span *oitcPermission="['servicetemplategroups', 'edit']; negate: true">
-                                        {{ servicetemplategroup.container.name }}
-                                    </span>
-                                </li>
-                            </ul>
-                            <div *ngIf="importedhost.imported_hosts_to_servicetemplategroups.length === 0"
-                                 class="italic text-warning">
-                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                {{ t('No service template groups defined') }}
-                            </div>
-                        </div>
-                        <div *ngIf="Object.keys(importedhost.services_overview).length > 0">
-                            <hr class="my-2">
-                            <b>{{ t('Services:') }}</b>
-                            <ul class="mb-2 p-0">
-                                @for (service of importedhost.services_overview.new|keyvalue; track $index) {
-                                    <li class="ms-3">
-                                        {{ service.value }}
-                                        <c-badge color="success">
-                                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                        </c-badge>
-                                    </li>
-                                }
-                                @for (service of importedhost.services_overview.to_delete; track $index) {
-                                    <li class="text-decoration-line-through ms-3">
-                                        <a *oitcPermission="['services', 'browser']"
-                                           [routerLink]="['/', 'services', 'browser', service.id]">
-                                            {{ service.servicename }}
+                                    <div class="h-100">
+                                        <a *oitcPermission="['ImportModule', 'ImportedHosts', 'edit']"
+                                           [routerLink]="['/', 'import_module', 'ImportedHosts', 'edit', importedhost.id]">
+                                            {{ importedhost.name }}
                                         </a>
-                                        <span *oitcPermission="['services', 'edit']; negate: true">
-                                            {{ service.servicename }}
+                                        <span *oitcPermission="['ImportModule', 'ImportedHosts', 'edit']; negate: true">
+                                            {{ importedhost.name }}
                                         </span>
-                                        <c-badge color="danger">
-                                            <fa-icon [icon]="['fas', 'minus']"></fa-icon>
-                                        </c-badge>
-                                    </li>
-                                }
-                                @for (service of importedhost.services_overview.not_deletable; track $index) {
-                                    <li class="ms-3"
-                                        [title]="' Service used by other objects.'|transloco">
-                                        <a *oitcPermission="['services', 'browser']"
-                                           [routerLink]="['/', 'services', 'browser', service.id]">
-                                            {{ service.servicename }}
-                                        </a>
-                                        <span *oitcPermission="['services', 'edit']; negate: true">
-                                            {{ service.servicename }}
-                                        </span>
-                                        <c-badge color="warning">
-                                            <fa-icon [icon]="['fas', 'ban']"></fa-icon>
-                                        </c-badge>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                        <div *ngIf="importedhost.importer.data_source === 'openitcockpit_agent'
-                            && importedhost.imported_hosts_to_agentchecks.length > 0">
-                            <hr class="my-2">
-                            <b>{{ t('Agent Checks:') }}</b>
-                            <ul class="mb-2 p-0">
-                                <li *ngFor="let agentcheck of importedhost.imported_hosts_to_agentchecks" class="ms-3">
-                                    <a *oitcPermission="['agentchecks', 'edit']"
-                                       [routerLink]="['/', 'agentchecks', 'edit', agentcheck.agentcheck.id]">
-                                        {{ agentcheck.agentcheck.name }}
-                                    </a>
-                                    <span *oitcPermission="['agentchecks', 'edit']; negate: true">
-                                        {{ agentcheck.agentcheck.name }}
-                                    </span>
-                                    <ul>
-                                        <li class="font-xs">
-                                            <span>
-                                                <u>{{ t('RegEx') }}:</u>
+                                        @if (importedhost.imported !== 1) {
+                                            <c-badge color="success" class="mx-1">
+                                                <fa-icon [icon]="['fas', 'star']"></fa-icon>
+                                                {{ t('NEW') }}
+                                            </c-badge>
+                                        }
+                                        @if (importedhost.imported === 1 && ( importedhost.host && importedhost.host.disabled === 0 )) {
+                                            <a [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]"
+                                               *oitcPermission="['hosts', 'browser']">
+                                                <c-badge color="info">
+                                                    <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
+                                                    {{ t('In monitoring') }}
+                                                </c-badge>
+                                            </a>
+                                            <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                                <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
+                                                {{ t('In monitoring') }}
                                             </span>
-                                            <span class="word-break cursor-help"
-                                                  title="{{ t('Regular expression used to create the agent check') }}">
-                                                {{ agentcheck.regex }}
+                                        }
+                                        @if (( ( importedhost.host && importedhost.host.disabled === 0 ) || importedhost.host_id === null ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)) {
+                                            <c-badge color="danger" class="cursor-help mx-1"
+                                                     [title]="t('Marked for disable')">
+                                                <fa-icon [icon]="['fas', 'box-archive']"></fa-icon>
+                                            </c-badge>
+                                        }
+                                        @if (( importedhost.host && importedhost.host.disabled === 0 ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_CHANGED)) {
+                                            <c-badge color="primary" class="cursor-help mx-1"
+                                                     [title]="t('Imported host with changes')">
+                                                <fa-icon [icon]="['fas', 'person-digging']"></fa-icon>
+                                            </c-badge>
+                                        }
+                                        @if (importedhost.host && importedhost.host.disabled === 1) {
+                                            <a *oitcPermission="['hosts', 'browser']"
+                                               [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]">
+                                                <c-badge color="warning"
+                                                         class="text-white">
+                                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                                    {{ t('In monitoring (disabled)') }}
+                                                </c-badge>
+                                            </a>
+                                            <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                                {{ t('In monitoring (disabled)') }}
                                             </span>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div *ngIf="Object.keys(importedhost.oitc_agent_services_overview).length > 0">
-                            <hr class="my-2">
-                            <b>{{ t('openITCOCKPIT Agent Services:') }}</b>
-                            <ul class="mb-2 p-0">
-                                @for (service of importedhost.oitc_agent_services_overview.new; track $index) {
-                                    <li class="ms-3">
-                                        {{ service.value }}
-                                        <c-badge color="success">
-                                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                        </c-badge>
-                                    </li>
-                                }
-                                @for (service of importedhost.oitc_agent_services_overview.to_delete; track $index) {
-                                    <li class="text-decoration-line-through ms-3">
-                                        <a *oitcPermission="['services', 'browser']"
-                                           [routerLink]="['/', 'services', 'browser', service.id]">
-                                            {{ service.servicename }}
-                                        </a>
-                                        <span *oitcPermission="['services', 'edit']; negate: true">
-                                            {{ service.servicename }}
+                                        }
+                                        @if (( importedhost.host && importedhost.host.disabled === 1 ) && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)) {
+                                            <c-badge color="success" class="cursor-help mx-1"
+                                                     [title]="t('Marked for re-enable')">
+                                                <fa-icon [icon]="['fas', 'boxes-packing']"></fa-icon>
+                                            </c-badge>
+                                        }
+                                    </div>
+                                    @if (( ( importedhost.host && importedhost.host.disabled === 0 ) || importedhost.host_id === null )
+                                    && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)) {
+                                        <fa-icon [icon]="['fas', 'plug-circle-xmark']"
+                                                 class="power-off text-white"></fa-icon>
+                                    }
+                                    @if (( importedhost.host
+                                        && importedhost.host.disabled === 0 )
+                                    && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_CHANGED)) {
+                                        <fa-icon [icon]="['fas', 'screwdriver-wrench']"
+                                                 class="with-changes text-white"></fa-icon>
+                                    }
+                                    @if (( importedhost.host && importedhost.host.disabled === 1 )
+                                    && hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_ENABLE)) {
+                                        <fa-icon [icon]="['fas', 'plug-circle-plus']"
+                                                 class="power-on text-white"></fa-icon>
+                                    }
+                                </td>
+                                <td>{{ importedhost.address }}</td>
+                                <td>{{ importedhost.description }}</td>
+                                <td>
+                                    <a *oitcPermission="['importmodule','importers', 'edit']"
+                                       [routerLink]="['/', 'import_module', 'importers', 'edit', importedhost.importer.id]">
+                                        {{ importedhost.importer.name }}
+                                    </a>
+                                    <span *oitcPermission="['importmodule','importers', 'edit']; negate: true">
+                                        {{ importedhost.importer.name }}
+                                    </span>
+                                    <span class="text-primary">
+                                        @switch (importedhost.importer.data_source) {
+                                            @case ("itop") {
+                                                <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                            }
+                                            @case ("idoit") {
+                                                <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                            }
+                                            @case ("csv_with_header") {
+                                                <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                            }
+                                            @case ("csv_without_header") {
+                                                <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                            }
+                                            @case ("openitcockpit_agent") {
+                                                <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                            }
+                                            @case ("external_monitoring") {
+                                                <fa-icon [icon]="['fas', 'tower-observation']"></fa-icon>
+                                            }
+                                            @default {
+                                                <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                                            }
+                                        }
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (importedhost.user) {
+                                        <span>
+                                            <a *oitcPermission="['users', 'edit']"
+                                               [routerLink]="['/', 'users', 'edit', importedhost.user.id]">
+                                                {{ importedhost.full_name }}
+                                            </a>
                                         </span>
-                                        <c-badge color="danger">
-                                            <fa-icon [icon]="['fas', 'minus']"></fa-icon>
-                                        </c-badge>
-                                    </li>
-                                }
-                                @for (
-                                    service of importedhost.oitc_agent_services_overview.not_deletable; track $index) {
-                                    <li class="ms-3"
-                                        [title]="' Service used by other objects.'|transloco">
-                                        <a *oitcPermission="['services', 'browser']"
-                                           [routerLink]="['/', 'services', 'browser', service.id]">
-                                            {{ service.servicename }}
-                                        </a>
-                                        <span *oitcPermission="['services', 'edit']; negate: true">
-                                            {{ service.servicename }}
+                                    }
+                                    <span *oitcPermission="['users', 'edit']; negate: true">
+                                        {{ importedhost.full_name }}
+                                    </span>
+                                </td>
+                                <td [ngClass]="{'opacity-25': (importedhost.host && importedhost.host.disabled === 1) ||  hasFlag(importedhost.flags, ImportedHostFlagsEnum.FLAG_MARKED_FOR_DISABLE)}">
+                                    <b>{{ t('Host template:') }}</b>
+                                    @if (importedhost.hosttemplate.name) {
+                                        <div>
+                                            <a *oitcPermission="['hosttemplates', 'edit']"
+                                               [routerLink]="['/', 'hosttemplates', 'edit', importedhost.hosttemplate.id]">
+                                                {{ importedhost.hosttemplate.name }}
+                                            </a>
+                                            <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
+                                                {{ importedhost.hosttemplate.name }}
+                                            </span>
+                                        </div>
+                                    }
+                                    @if (!importedhost.hosttemplate.name) {
+                                        <div class="text-danger italic">
+                                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                            {{ t('missing data') }}
+                                        </div>
+                                    }
+                                    <hr class="my-2">
+                                    <div>
+                                        <b>{{ t('Container:') }}</b>
+                                        @if (importedhost.container) {
+                                            <div>
+                                                {{ importedhost.container }}
+                                            </div>
+                                        }
+                                        @if (!importedhost.container) {
+                                            <div class="text-danger italic">
+                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                {{ t('missing data') }}
+                                            </div>
+                                        }
+                                        @if (importedhost.imported_hosts_to_containers_sharing.length > 0) {
+                                            <div>
+                                                <b>{{ t('Shared containers:') }}</b>
+                                            </div>
+                                        }
+                                        <ul class="mb-2 p-0">
+                                            @for (sharedcontainer of importedhost.imported_hosts_to_containers_sharing; track sharedcontainer) {
+                                                <li
+                                                    class="ms-3">
+                                                    {{ sharedcontainer.name }}
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                    @if (importedhost.satellite) {
+                                        <div>
+                                            <a *oitcPermission="['distributemodule','satellites', 'edit']"
+                                               [routerLink]="['/', 'distribute_module', 'satellites', 'edit', importedhost.satellite.id]">
+                                                {{ importedhost.satellite.name }}
+                                            </a>
+                                            <span
+                                                *oitcPermission="['distributemodule','satellites', 'edit']; negate: true">
+                                                {{ importedhost.satellite.name }}
+                                            </span>
+                                        </div>
+                                    }
+                                    <div>
+                                        <hr class="my-2">
+                                        <b>{{ t('Service templates:') }}</b>
+                                        <ul class="mb-2 p-0">
+                                            @for (servicetemplate of importedhost.imported_hosts_to_servicetemplates; track servicetemplate) {
+                                                <li
+                                                    class="ms-3">
+                                                    <a *oitcPermission="['servicetemplates', 'edit']"
+                                                       [routerLink]="['/', 'servicetemplates', 'edit', servicetemplate.id]">
+                                                        {{ servicetemplate.template_name }}
+                                                    </a>
+                                                    <span *oitcPermission="['servicetemplates', 'edit']; negate: true">
+                                                        {{ servicetemplate.template_name }}
+                                                    </span>
+                                                </li>
+                                            }
+                                        </ul>
+                                        @if (importedhost.imported_hosts_to_servicetemplates.length === 0) {
+                                            <div
+                                                class="italic text-warning">
+                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                {{ t('No service templates defined') }}
+                                            </div>
+                                        }
+                                    </div>
+                                    <div>
+                                        <hr class="my-2">
+                                        <b>{{ t('Service template groups:') }}</b>
+                                        <ul class="mb-2 p-0">
+                                            @for (servicetemplategroup of importedhost.imported_hosts_to_servicetemplategroups; track servicetemplategroup) {
+                                                <li
+                                                    class="ms-3">
+                                                    <a *oitcPermission="['servicetemplategroups', 'edit']"
+                                                       [routerLink]="['/', 'servicetemplategroups', 'edit', servicetemplategroup.id]">
+                                                        {{ servicetemplategroup.container.name }}
+                                                    </a>
+                                                    <span
+                                                        *oitcPermission="['servicetemplategroups', 'edit']; negate: true">
+                                                        {{ servicetemplategroup.container.name }}
+                                                    </span>
+                                                </li>
+                                            }
+                                        </ul>
+                                        @if (importedhost.imported_hosts_to_servicetemplategroups.length === 0) {
+                                            <div
+                                                class="italic text-warning">
+                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                {{ t('No service template groups defined') }}
+                                            </div>
+                                        }
+                                    </div>
+                                    @if (Object.keys(importedhost.services_overview).length > 0) {
+                                        <div>
+                                            <hr class="my-2">
+                                            <b>{{ t('Services:') }}</b>
+                                            <ul class="mb-2 p-0">
+                                                @for (service of importedhost.services_overview.new|keyvalue; track $index) {
+                                                    <li class="ms-3">
+                                                        {{ service.value }}
+                                                        <c-badge color="success">
+                                                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                                        </c-badge>
+                                                    </li>
+                                                }
+                                                @for (service of importedhost.services_overview.to_delete; track $index) {
+                                                    <li class="text-decoration-line-through ms-3">
+                                                        <a *oitcPermission="['services', 'browser']"
+                                                           [routerLink]="['/', 'services', 'browser', service.id]">
+                                                            {{ service.servicename }}
+                                                        </a>
+                                                        <span *oitcPermission="['services', 'edit']; negate: true">
+                                                            {{ service.servicename }}
+                                                        </span>
+                                                        <c-badge color="danger">
+                                                            <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+                                                        </c-badge>
+                                                    </li>
+                                                }
+                                                @for (service of importedhost.services_overview.not_deletable; track $index) {
+                                                    <li class="ms-3"
+                                                        [title]="' Service used by other objects.'|transloco">
+                                                        <a *oitcPermission="['services', 'browser']"
+                                                           [routerLink]="['/', 'services', 'browser', service.id]">
+                                                            {{ service.servicename }}
+                                                        </a>
+                                                        <span *oitcPermission="['services', 'edit']; negate: true">
+                                                            {{ service.servicename }}
+                                                        </span>
+                                                        <c-badge color="warning">
+                                                            <fa-icon [icon]="['fas', 'ban']"></fa-icon>
+                                                        </c-badge>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
+                                    @if (importedhost.importer.data_source === 'openitcockpit_agent'
+                                    && importedhost.imported_hosts_to_agentchecks.length > 0) {
+                                        <div>
+                                            <hr class="my-2">
+                                            <b>{{ t('Agent Checks:') }}</b>
+                                            <ul class="mb-2 p-0">
+                                                @for (agentcheck of importedhost.imported_hosts_to_agentchecks; track agentcheck) {
+                                                    <li class="ms-3">
+                                                        <a *oitcPermission="['agentchecks', 'edit']"
+                                                           [routerLink]="['/', 'agentchecks', 'edit', agentcheck.agentcheck.id]">
+                                                            {{ agentcheck.agentcheck.name }}
+                                                        </a>
+                                                        <span *oitcPermission="['agentchecks', 'edit']; negate: true">
+                                                            {{ agentcheck.agentcheck.name }}
+                                                        </span>
+                                                        <ul>
+                                                            <li class="font-xs">
+                                                                <span>
+                                                                    <u>{{ t('RegEx') }}:</u>
+                                                                </span>
+                                                                <span class="word-break cursor-help"
+                                                                      title="{{ t('Regular expression used to create the agent check') }}">
+                                                                    {{ agentcheck.regex }}
+                                                                </span>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
+                                    @if (Object.keys(importedhost.oitc_agent_services_overview).length > 0) {
+                                        <div>
+                                            <hr class="my-2">
+                                            <b>{{ t('openITCOCKPIT Agent Services:') }}</b>
+                                            <ul class="mb-2 p-0">
+                                                @for (service of importedhost.oitc_agent_services_overview.new; track $index) {
+                                                    <li class="ms-3">
+                                                        {{ service.value }}
+                                                        <c-badge color="success">
+                                                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                                        </c-badge>
+                                                    </li>
+                                                }
+                                                @for (service of importedhost.oitc_agent_services_overview.to_delete; track $index) {
+                                                    <li class="text-decoration-line-through ms-3">
+                                                        <a *oitcPermission="['services', 'browser']"
+                                                           [routerLink]="['/', 'services', 'browser', service.id]">
+                                                            {{ service.servicename }}
+                                                        </a>
+                                                        <span *oitcPermission="['services', 'edit']; negate: true">
+                                                            {{ service.servicename }}
+                                                        </span>
+                                                        <c-badge color="danger">
+                                                            <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+                                                        </c-badge>
+                                                    </li>
+                                                }
+                                                @for (service of importedhost.oitc_agent_services_overview.not_deletable; track $index) {
+                                                    <li class="ms-3"
+                                                        [title]="' Service used by other objects.'|transloco">
+                                                        <a *oitcPermission="['services', 'browser']"
+                                                           [routerLink]="['/', 'services', 'browser', service.id]">
+                                                            {{ service.servicename }}
+                                                        </a>
+                                                        <span *oitcPermission="['services', 'edit']; negate: true">
+                                                            {{ service.servicename }}
+                                                        </span>
+                                                        <c-badge color="warning">
+                                                            <fa-icon [icon]="['fas', 'ban']"></fa-icon>
+                                                        </c-badge>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
+                                    @if (Object.keys(importedhost.external_services_overview).length > 0) {
+                                        <div>
+                                            <hr class="my-2">
+                                            <b>{{ t('Services:') }}</b>
+                                            <ul class="mb-2 p-0">
+                                                @for (service of importedhost.external_services_overview.new; track $index) {
+                                                    <li class="ms-3">
+                                                        {{ service.value }}
+                                                        <c-badge color="success">
+                                                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                                        </c-badge>
+                                                    </li>
+                                                }
+                                                @for (service of importedhost.external_services_overview.to_delete; track $index) {
+                                                    <li class="text-decoration-line-through ms-3">
+                                                        <a *oitcPermission="['services', 'browser']"
+                                                           [routerLink]="['/', 'services', 'browser', service.id]">
+                                                            {{ service.servicename }}
+                                                        </a>
+                                                        <span *oitcPermission="['services', 'edit']; negate: true">
+                                                            {{ service.servicename }}
+                                                        </span>
+                                                        <c-badge color="danger">
+                                                            <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+                                                        </c-badge>
+                                                    </li>
+                                                }
+                                                @for (service of importedhost.external_services_overview.not_deletable; track $index) {
+                                                    <li class="ms-3"
+                                                        [title]="' Service used by other objects.'|transloco">
+                                                        <a *oitcPermission="['services', 'browser']"
+                                                           [routerLink]="['/', 'services', 'browser', service.id]">
+                                                            {{ service.servicename }}
+                                                        </a>
+                                                        <span *oitcPermission="['services', 'edit']; negate: true">
+                                                            {{ service.servicename }}
+                                                        </span>
+                                                        <c-badge color="warning">
+                                                            <fa-icon [icon]="['fas', 'ban']"></fa-icon>
+                                                        </c-badge>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
+                                </td>
+                                <td>{{ importedhost.created }}</td>
+                                <td>{{ importedhost.modified }}</td>
+                                <td>
+                                    @if (importedhost.imported_file) {
+                                        <span>
+                                            {{ importedhost.imported_file.filename }}
                                         </span>
-                                        <c-badge color="warning">
-                                            <fa-icon [icon]="['fas', 'ban']"></fa-icon>
-                                        </c-badge>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="progress progress-striped active"
+                                         [title]="importedhost.progress.comments.length > 0?importedhost.progress.comments.join(', '): t('Services:')">
+                                        <div class="progress-bar progress-{{importedhost.progress.state}}"
+                                             [style.width.%]="importedhost.progress.state"
+                                             [style.cursor]="'help'">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'ImportModule.ImportedHosts.edit'"
+                                                         [url]="'/import_module/ImportedHosts/edit/' + importedhost.id"
+                                                         [allowEdit]="(importedhost.allowEdit && !importedhost.readonly)">
+                                        @if (( importedhost.allowEdit && !importedhost.readonly )) {
+                                            <oitc-actions-button-element
+                                                [permission]="'ImportModule.ImportedHosts.edit'"
+                                                [url]="'/import_module/ImportedHosts/edit/' + importedhost.id">
+                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element
+                                            [permission]="'ImportModule.importchangelogs.index'"
+                                            [url]="'/import_module/import_changelogs/entity/importedHost/' + importedhost.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        @if (importedhost.allowEdit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(importedhost)"
+                                                                         [permission]="'ImportModule.ImportedHosts.delete'">
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-
-                        <div *ngIf="Object.keys(importedhost.external_services_overview).length > 0">
-                            <hr class="my-2">
-                            <b>{{ t('Services:') }}</b>
-                            <ul class="mb-2 p-0">
-                                @for (service of importedhost.external_services_overview.new; track $index) {
-                                    <li class="ms-3">
-                                        {{ service.value }}
-                                        <c-badge color="success">
-                                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                        </c-badge>
-                                    </li>
-                                }
-                                @for (service of importedhost.external_services_overview.to_delete; track $index) {
-                                    <li class="text-decoration-line-through ms-3">
-                                        <a *oitcPermission="['services', 'browser']"
-                                           [routerLink]="['/', 'services', 'browser', service.id]">
-                                            {{ service.servicename }}
-                                        </a>
-                                        <span *oitcPermission="['services', 'edit']; negate: true">
-                                            {{ service.servicename }}
-                                        </span>
-                                        <c-badge color="danger">
-                                            <fa-icon [icon]="['fas', 'minus']"></fa-icon>
-                                        </c-badge>
-                                    </li>
-                                }
-                                @for (service of importedhost.external_services_overview.not_deletable; track $index) {
-                                    <li class="ms-3"
-                                        [title]="' Service used by other objects.'|transloco">
-                                        <a *oitcPermission="['services', 'browser']"
-                                           [routerLink]="['/', 'services', 'browser', service.id]">
-                                            {{ service.servicename }}
-                                        </a>
-                                        <span *oitcPermission="['services', 'edit']; negate: true">
-                                            {{ service.servicename }}
-                                        </span>
-                                        <c-badge color="warning">
-                                            <fa-icon [icon]="['fas', 'ban']"></fa-icon>
-                                        </c-badge>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    </td>
-                    <td>{{ importedhost.created }}</td>
-                    <td>{{ importedhost.modified }}</td>
-                    <td>
-                        <span *ngIf="importedhost.imported_file">
-                            {{ importedhost.imported_file.filename }}
-                        </span>
-                    </td>
-                    <td>
-                        <div class="progress progress-striped active"
-                             [title]="importedhost.progress.comments.length > 0?importedhost.progress.comments.join(', '): t('Services:')">
-                            <div class="progress-bar progress-{{importedhost.progress.state}}"
-                                 [style.width.%]="importedhost.progress.state"
-                                 [style.cursor]="'help'">
-                            </div>
-                        </div>
-                    </td>
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'ImportModule.ImportedHosts.edit'"
-                                             [url]="'/import_module/ImportedHosts/edit/' + importedhost.id"
-                                             [allowEdit]="(importedhost.allowEdit && !importedhost.readonly)">
-                            <oitc-actions-button-element [permission]="'ImportModule.ImportedHosts.edit'"
-                                                         *ngIf="(importedhost.allowEdit && !importedhost.readonly)"
-                                                         [url]="'/import_module/ImportedHosts/edit/' + importedhost.id">
-                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'ImportModule.importchangelogs.index'"
-                                                         [url]="'/import_module/import_changelogs/entity/importedHost/' + importedhost.id">
-                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                {{ t('Changelog') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(importedhost)"
-                                                         *ngIf="importedhost.allowEdit"
-                                                         [permission]="'ImportModule.ImportedHosts.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records
-                *ngIf="importedhosts && importedhosts.length === 0"></oitc-no-records>
-            <ng-container *ngIf="allImportedHosts && importedhosts">
+            @if (importedhosts && importedhosts.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (allImportedHosts && importedhosts) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -944,7 +1006,7 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">

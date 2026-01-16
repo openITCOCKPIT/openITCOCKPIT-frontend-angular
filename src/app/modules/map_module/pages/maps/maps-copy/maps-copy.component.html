@@ -46,72 +46,70 @@
 
             <oitc-form-loader [isVisible]="sourceMaps.length === 0"></oitc-form-loader>
 
-            <c-card class="mb-3" *ngFor="let map of sourceMaps; let i = index">
-                <c-card-header>
-                    <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
-                    <span class="ms-1">
-                        {{ t('Source map:') }}
-                        {{ map.Source.name }}
-                    </span>
-                </c-card-header>
-                <c-card-body>
-
-                    <div class="mb-3">
-                        <label cLabel for="Map{{i}}Name">
-                            {{ t('Map name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl
-                               id="Map{{i}}Name"
-                               required
-                               type="text"
-                               name="Map{{i}}Name"
-                               oitcFormError [errors]="map.Error" errorField="name"
-                               [(ngModel)]="map.Map.name">
-                        <oitc-form-feedback [errors]="map.Error" errorField="name"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Name of the new map') }}
+            @for (map of sourceMaps; track map; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'map-marker']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source map:') }}
+                            {{ map.Source.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="Map{{i}}Name">
+                                {{ t('Map name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   id="Map{{i}}Name"
+                                   required
+                                   type="text"
+                                   name="Map{{i}}Name"
+                                   oitcFormError [errors]="map.Error" errorField="name"
+                                   [(ngModel)]="map.Map.name">
+                            <oitc-form-feedback [errors]="map.Error" errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new map') }}
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="Map{{i}}Title">
-                            {{ t('Map title') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl
-                               id="Map{{i}}Title"
-                               type="text"
-                               name="Map{{i}}Title"
-                               oitcFormError [errors]="map.Error" errorField="title"
-                               [(ngModel)]="map.Map.title">
-                        <oitc-form-feedback [errors]="map.Error" errorField="title"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Title of the new map') }}
+                        <div class="mb-3">
+                            <label cLabel for="Map{{i}}Title">
+                                {{ t('Map title') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   id="Map{{i}}Title"
+                                   type="text"
+                                   name="Map{{i}}Title"
+                                   oitcFormError [errors]="map.Error" errorField="title"
+                                   [(ngModel)]="map.Map.title">
+                            <oitc-form-feedback [errors]="map.Error" errorField="title"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Title of the new map') }}
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="Map{{i}}RefreshInterval">
-                            {{ t('Refresh Interval') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl
-                               id="Map{{i}}RefreshInterval"
-                               type="number"
-                               name="Map{{i}}RefreshInterval"
-                               min="5"
-                               max="180"
-                               [(ngModel)]="map.Map.refresh_interval"
-                               oitcFormError [errors]="map.Error" errorField="refresh_interval">
-                        <oitc-form-feedback [errors]="map.Error" errorField="refresh_interval"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Automatic maps update interval in seconds') }}
+                        <div class="mb-3">
+                            <label cLabel for="Map{{i}}RefreshInterval">
+                                {{ t('Refresh Interval') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   id="Map{{i}}RefreshInterval"
+                                   type="number"
+                                   name="Map{{i}}RefreshInterval"
+                                   min="5"
+                                   max="180"
+                                   [(ngModel)]="map.Map.refresh_interval"
+                                   oitcFormError [errors]="map.Error" errorField="refresh_interval">
+                            <oitc-form-feedback [errors]="map.Error" errorField="refresh_interval"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Automatic maps update interval in seconds') }}
+                            </div>
                         </div>
-                    </div>
-
-                </c-card-body>
-            </c-card>
+                    </c-card-body>
+                </c-card>
+            }
 
         </c-card-body>
         <c-card-footer class="text-end">

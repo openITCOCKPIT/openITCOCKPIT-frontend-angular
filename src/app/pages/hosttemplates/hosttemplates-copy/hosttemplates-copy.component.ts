@@ -14,7 +14,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -46,7 +46,6 @@ import { HistoryService } from '../../../history.service';
         FormFeedbackComponent,
         FormLabelDirective,
         NavComponent,
-        NgForOf,
         PermissionDirective,
         ReactiveFormsModule,
         RequiredIconComponent,

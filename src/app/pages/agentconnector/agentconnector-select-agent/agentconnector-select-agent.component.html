@@ -22,9 +22,11 @@
     <c-card class="mb-3">
         <c-card-header>
             <h5 cCardTitle>{{ t('openITCOCKPIT Agent Configuration for:') }}
-                <small class="fw-300" *ngIf="host">
-                    {{ host.name }} ({{ host.address }})
-                </small>
+                @if (host) {
+                    <small class="fw-300">
+                        {{ host.name }} ({{ host.address }})
+                    </small>
+                }
             </h5>
 
         </c-card-header>
@@ -56,52 +58,55 @@
                                 <div class="pt-3">
 
                                     <!-- Loading box -->
-                                    <div class="alert border-faded bg-transparent text-secondary" *ngIf="isLoading">
-                                        <div class="d-flex align-items-center">
-                                            <div class="alert-icon me-2">
-                                                <span class="icon-stack icon-stack-md">
-                                                    <i class="base-circle icon-stack-3x text-cyan-500"></i>
-                                                    <i class="fas fa-hourglass-start icon-stack-1x text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <span class="h5 text-cyan-500">
-                                                    {{ t('Waiting for Agent data.') }}
-                                                </span>
-
-                                                <div class="mt-2">
-                                                    <p-progressBar mode="indeterminate"
-                                                                   [style]="{ height: '6px' }"/>
+                                    @if (isLoading) {
+                                        <div class="alert border-faded bg-transparent text-secondary">
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon me-2">
+                                                    <span class="icon-stack icon-stack-md">
+                                                        <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                                        <i class="fas fa-hourglass-start icon-stack-1x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <span class="h5 text-cyan-500">
+                                                        {{ t('Waiting for Agent data.') }}
+                                                    </span>
+                                                    <div class="mt-2">
+                                                        <p-progressBar mode="indeterminate"
+                                                                       [style]="{ height: '6px' }"/>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
 
                                     <!-- Info box -->
-                                    <div class="alert border-faded bg-transparent text-secondary" *ngIf="!isLoading">
-                                        <div class="d-flex align-items-center">
-                                            <div class="alert-icon me-2">
-                                                <span class="icon-stack icon-stack-md">
-                                                    <i class="base-circle icon-stack-3x text-cyan-500"></i>
-                                                    <i class="fas fa-hourglass-start icon-stack-1x text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <span class="h5 text-cyan-500">
-                                                    {{ t('Agent not in list?') }}
-                                                </span>
-                                                <br>
-                                                {{ t('Most likely the Agent did not send any data to the openITCOCKPIT Server yet. Please check the log file of the Agent and refresh the list.') }}
-                                            </div>
-                                            <div class="ms-2">
-                                                <button class="btn btn-outline-info btn-sm ripple"
-                                                        (click)="loadAgents()">
-                                                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                                                    {{ t('Refresh list') }}
-                                                </button>
+                                    @if (!isLoading) {
+                                        <div class="alert border-faded bg-transparent text-secondary">
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon me-2">
+                                                    <span class="icon-stack icon-stack-md">
+                                                        <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                                        <i class="fas fa-hourglass-start icon-stack-1x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <span class="h5 text-cyan-500">
+                                                        {{ t('Agent not in list?') }}
+                                                    </span>
+                                                    <br>
+                                                    {{ t('Most likely the Agent did not send any data to the openITCOCKPIT Server yet. Please check the log file of the Agent and refresh the list.') }}
+                                                </div>
+                                                <div class="ms-2">
+                                                    <button class="btn btn-outline-info btn-sm ripple"
+                                                            (click)="loadAgents()">
+                                                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                                        {{ t('Refresh list') }}
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
                                 </div>
 
                                 <div class="pt-3">

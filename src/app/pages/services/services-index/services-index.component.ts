@@ -84,7 +84,7 @@ import {
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -163,7 +163,6 @@ import { HostgroupsLoadHostgroupsByStringParams } from '../../hostgroups/hostgro
         MatSort,
         MatSortHeader,
         TableDirective,
-        NgIf,
         ItemSelectComponent,
         RowComponent,
         NoRecordsComponent,

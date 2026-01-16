@@ -1,8 +1,9 @@
 <ng-container *transloco="let t">
 
-    <oitc-services-browser-menu
-        *ngIf="serviceBrowserConfig"
-        [config]="serviceBrowserConfig"></oitc-services-browser-menu>
+    @if (serviceBrowserConfig) {
+        <oitc-services-browser-menu
+            [config]="serviceBrowserConfig"></oitc-services-browser-menu>
+    }
 
     <c-card class="mb-3 mt-3">
         <c-card-header>
@@ -168,70 +169,81 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!serviceAcknowledgements"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="serviceAcknowledgements"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col" mat-sort-header="AcknowledgementServices.state">
-                        {{ t('State') }}
-                    </th>
-                    <th scope="col" mat-sort-header="AcknowledgementServices.entry_time">
-                        {{ t('Date') }}
-                    </th>
-                    <th scope="col" mat-sort-header="AcknowledgementServices.author_name">
-                        {{ t('Author') }}
-                    </th>
-                    <th scope="col" mat-sort-header="AcknowledgementServices.comment_data">
-                        {{ t('Comment') }}
-                    </th>
-                    <th scope="col" mat-sort-header="AcknowledgementServices.is_sticky">
-                        {{ t('Sticky') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let acknowledgement of serviceAcknowledgements.all_acknowledgements">
-                    <td class="text-center">
-                        <oitc-servicestatus-simple-icon
-                            [servicestatus]="acknowledgement.AcknowledgedService.state"></oitc-servicestatus-simple-icon>
-                    </td>
-                    <td>
-                        {{ acknowledgement.AcknowledgedService.entry_time }}
-                    </td>
-                    <td>
-                        {{ acknowledgement.AcknowledgedService.author_name }}
-                    </td>
-                    <td>
-                        <div class="word-break"
-                             [innerHTML]="acknowledgement.AcknowledgedService.comment_data | trustAsHtml "></div>
-                    </td>
-                    <td class="text-center">
-                        <span class="badge bg-primary"
-                              *ngIf="acknowledgement.AcknowledgedService.is_sticky">
-                            {{ 'True' | transloco }}
-                        </span>
-                        <span class="badge bg-secondary"
-                              *ngIf="!acknowledgement.AcknowledgedService.is_sticky">
-                            {{ 'False' | transloco }}
-                        </span>
-                    </td>
-
-                </tr>
-                </tbody>
-            </table>
-            <oitc-no-records
-                *ngIf="serviceAcknowledgements && serviceAcknowledgements.all_acknowledgements.length === 0"></oitc-no-records>
+            @if (!serviceAcknowledgements) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (serviceAcknowledgements) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col" mat-sort-header="AcknowledgementServices.state">
+                            {{ t('State') }}
+                        </th>
+                        <th scope="col" mat-sort-header="AcknowledgementServices.entry_time">
+                            {{ t('Date') }}
+                        </th>
+                        <th scope="col" mat-sort-header="AcknowledgementServices.author_name">
+                            {{ t('Author') }}
+                        </th>
+                        <th scope="col" mat-sort-header="AcknowledgementServices.comment_data">
+                            {{ t('Comment') }}
+                        </th>
+                        <th scope="col" mat-sort-header="AcknowledgementServices.is_sticky">
+                            {{ t('Sticky') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (acknowledgement of serviceAcknowledgements.all_acknowledgements; track acknowledgement) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-servicestatus-simple-icon
+                                        [servicestatus]="acknowledgement.AcknowledgedService.state"></oitc-servicestatus-simple-icon>
+                                </td>
+                                <td>
+                                    {{ acknowledgement.AcknowledgedService.entry_time }}
+                                </td>
+                                <td>
+                                    {{ acknowledgement.AcknowledgedService.author_name }}
+                                </td>
+                                <td>
+                                    <div class="word-break"
+                                         [innerHTML]="acknowledgement.AcknowledgedService.comment_data | trustAsHtml "></div>
+                                </td>
+                                <td class="text-center">
+                                    @if (acknowledgement.AcknowledgedService.is_sticky) {
+                                        <span class="badge bg-primary"
+                                        >
+                                            {{ 'True' | transloco }}
+                                        </span>
+                                    }
+                                    @if (!acknowledgement.AcknowledgedService.is_sticky) {
+                                        <span class="badge bg-secondary"
+                                        >
+                                            {{ 'False' | transloco }}
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @if (serviceAcknowledgements && serviceAcknowledgements.all_acknowledgements.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
             <c-container
                 [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="serviceAcknowledgements"
-                            [paginateOrScroll]="serviceAcknowledgements"></oitc-paginate-or-scroll>
+                        @if (serviceAcknowledgements) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="serviceAcknowledgements"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

@@ -1,347 +1,350 @@
 <ng-container *transloco="let t">
-    <div class="d-flex h-100 flex-column" *ngIf="widget">
-        <div>
-            <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-                    *ngIf="!isReadonly()">
-                @if (flipped()) {
-                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                } @else {
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+    @if (widget) {
+        <div class="d-flex h-100 flex-column">
+            <div>
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())"
+                    >
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        }
+                    </button>
                 }
-            </button>
-        </div>
-
-        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
-             class="box-container">
-            <div class="box-x">
-                <ng-container *ngIf="animationStateShowContent">
-                    <ng-container *ngIf="hoststatusSummary">
-                        <div class="d-flex justify-content-end fs-5">
-                            {{ t('Total hosts') }}: {{ hoststatusSummary.total }}
-                        </div>
-                        <div class="d-flex text-center border border-secondary border-opacity-25 border-bottom-0">
-                            <div
-                                class="p1 bg-dark text-white tactical-overview-first-flex-item">
-                                <fa-icon [icon]="['fas', 'desktop']" class="px-1"></fa-icon>
+            </div>
+            <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+                 class="box-container">
+                <div class="box-x">
+                    @if (animationStateShowContent) {
+                        @if (hoststatusSummary) {
+                            <div class="d-flex justify-content-end fs-5">
+                                {{ t('Total hosts') }}: {{ hoststatusSummary.total }}
                             </div>
-                            <div class="p1 bg-success text-white tactical-overview-flex-item py-5 display-6"
-                                 [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+hoststatusCountPercentage[0]+'%, transparent '+hoststatusCountPercentage[0]+'%)'"
-                                 [title]="hoststatusCountPercentage[0]+'%'">
-                                @if (hoststatusSummary.state[0] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                                    <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
-                                       [queryParams]="{id: hoststatusSummary.state.hostIds[0], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                            <div class="d-flex text-center border border-secondary border-opacity-25 border-bottom-0">
+                                <div
+                                    class="p1 bg-dark text-white tactical-overview-first-flex-item">
+                                    <fa-icon [icon]="['fas', 'desktop']" class="px-1"></fa-icon>
+                                </div>
+                                <div class="p1 bg-success text-white tactical-overview-flex-item py-5 display-6"
+                                     [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+hoststatusCountPercentage[0]+'%, transparent '+hoststatusCountPercentage[0]+'%)'"
+                                     [title]="hoststatusCountPercentage[0]+'%'">
+                                    @if (hoststatusSummary.state[0] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                        <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
+                                           [queryParams]="{id: hoststatusSummary.state.hostIds[0], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                            {{ hoststatusSummary.state[0] }}
+                                        </a>
+                                    } @else {
                                         {{ hoststatusSummary.state[0] }}
-                                    </a>
-                                } @else {
-                                    {{ hoststatusSummary.state[0] }}
-                                }
-                            </div>
-                            <div class="bg-danger text-white tactical-overview-flex-item py-5 display-6"
-                                 [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+hoststatusCountPercentage[1]+'%, transparent '+hoststatusCountPercentage[1]+'%)'"
-                                 [title]="hoststatusCountPercentage[1]+'%'">
-                                @if (hoststatusSummary.state[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                                    <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
-                                       [queryParams]="{id: hoststatusSummary.state.hostIds[1], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                    }
+                                </div>
+                                <div class="bg-danger text-white tactical-overview-flex-item py-5 display-6"
+                                     [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+hoststatusCountPercentage[1]+'%, transparent '+hoststatusCountPercentage[1]+'%)'"
+                                     [title]="hoststatusCountPercentage[1]+'%'">
+                                    @if (hoststatusSummary.state[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                        <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
+                                           [queryParams]="{id: hoststatusSummary.state.hostIds[1], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                            {{ hoststatusSummary.state[1] }}
+                                        </a>
+                                    } @else {
                                         {{ hoststatusSummary.state[1] }}
-                                    </a>
-                                } @else {
-                                    {{ hoststatusSummary.state[1] }}
-                                }
-                            </div>
-                            <div class="bg-secondary text-white tactical-overview-flex-item py-5 display-6"
-                                 [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+hoststatusCountPercentage[2]+'%, transparent '+hoststatusCountPercentage[2]+'%)'"
-                                 [title]="hoststatusCountPercentage[2]+'%'">
-                                @if (hoststatusSummary.state[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                                    <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
-                                       [queryParams]="{id: hoststatusSummary.state.hostIds[2], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                    }
+                                </div>
+                                <div class="bg-secondary text-white tactical-overview-flex-item py-5 display-6"
+                                     [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+hoststatusCountPercentage[2]+'%, transparent '+hoststatusCountPercentage[2]+'%)'"
+                                     [title]="hoststatusCountPercentage[2]+'%'">
+                                    @if (hoststatusSummary.state[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                        <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
+                                           [queryParams]="{id: hoststatusSummary.state.hostIds[2], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                            {{ hoststatusSummary.state[2] }}
+                                        </a>
+                                    } @else {
                                         {{ hoststatusSummary.state[2] }}
-                                    </a>
-                                } @else {
-                                    {{ hoststatusSummary.state[2] }}
-                                }
+                                    }
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex border border-secondary border-opacity-25 border-start border-top-0">
-                            <div class="p1 ps-1 bg-dark text-white tactical-overview-first-flex-item">
-                                ⚠️
-                            </div>
-                            <div class="bg-dark tactical-overview-flex-item text-white fs-5">
-                                {{ t('Unhandled Hosts') }}
-                            </div>
-                            <div class="bg-down-soft tactical-overview-flex-item text-white text-center fs-5">
-                                @if (hoststatusSummary.not_handled[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                                    <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
-                                       [queryParams]="{id: hoststatusSummary.not_handled.hostIds[1], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                            <div class="d-flex border border-secondary border-opacity-25 border-start border-top-0">
+                                <div class="p1 ps-1 bg-dark text-white tactical-overview-first-flex-item">
+                                    ⚠️
+                                </div>
+                                <div class="bg-dark tactical-overview-flex-item text-white fs-5">
+                                    {{ t('Unhandled Hosts') }}
+                                </div>
+                                <div class="bg-down-soft tactical-overview-flex-item text-white text-center fs-5">
+                                    @if (hoststatusSummary.not_handled[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                        <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
+                                           [queryParams]="{id: hoststatusSummary.not_handled.hostIds[1], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                            {{ hoststatusSummary.not_handled[1] }}
+                                        </a>
+                                    } @else {
                                         {{ hoststatusSummary.not_handled[1] }}
-                                    </a>
-                                } @else {
-                                    {{ hoststatusSummary.not_handled[1] }}
-                                }
-                            </div>
-                            <div class="bg-unreachable-soft tactical-overview-flex-item text-white text-center fs-5">
-                                @if (hoststatusSummary.not_handled[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                                    <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
-                                       [queryParams]="{id: hoststatusSummary.not_handled.hostIds[2], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                    }
+                                </div>
+                                <div
+                                    class="bg-unreachable-soft tactical-overview-flex-item text-white text-center fs-5">
+                                    @if (hoststatusSummary.not_handled[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                        <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
+                                           [queryParams]="{id: hoststatusSummary.not_handled.hostIds[2], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                            {{ hoststatusSummary.not_handled[2] }}
+                                        </a>
+                                    } @else {
                                         {{ hoststatusSummary.not_handled[2] }}
-                                    </a>
-                                } @else {
-                                    {{ hoststatusSummary.not_handled[2] }}
-                                }
+                                    }
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex flex-row  fs-5">
-                            <div class="p-1 tactical-overview-first-flex-item">
-                                <fa-icon [icon]="['fas', 'user']" class="text-primary"
-                                         title="{{ t('is acknowledged') }}"></fa-icon>
-                            </div>
-                            <div class="tactical-overview-flex-item">
-                                {{ t('Acknowledgments') }}
-                            </div>
-                            <div class="down tactical-overview-flex-item text-center">
-                                @if (hoststatusSummary.acknowledged[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                                    <a [routerLink]="['/', 'hosts', 'index']" class="text-danger"
-                                       [queryParams]="{id: hoststatusSummary.acknowledged.hostIds[1], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                            <div class="d-flex flex-row  fs-5">
+                                <div class="p-1 tactical-overview-first-flex-item">
+                                    <fa-icon [icon]="['fas', 'user']" class="text-primary"
+                                             title="{{ t('is acknowledged') }}"></fa-icon>
+                                </div>
+                                <div class="tactical-overview-flex-item">
+                                    {{ t('Acknowledgments') }}
+                                </div>
+                                <div class="down tactical-overview-flex-item text-center">
+                                    @if (hoststatusSummary.acknowledged[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                        <a [routerLink]="['/', 'hosts', 'index']" class="text-danger"
+                                           [queryParams]="{id: hoststatusSummary.acknowledged.hostIds[1], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                            {{ hoststatusSummary.acknowledged[1] }}
+                                        </a>
+                                    } @else {
                                         {{ hoststatusSummary.acknowledged[1] }}
-                                    </a>
-                                } @else {
-                                    {{ hoststatusSummary.acknowledged[1] }}
-                                }
-                            </div>
-                            <div class="unreachable tactical-overview-flex-item text-center">
-                                @if (hoststatusSummary.acknowledged[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                                    <a [routerLink]="['/', 'hosts', 'index']" class="text-danger"
-                                       [queryParams]="{id: hoststatusSummary.acknowledged.hostIds[2], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                    }
+                                </div>
+                                <div class="unreachable tactical-overview-flex-item text-center">
+                                    @if (hoststatusSummary.acknowledged[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                        <a [routerLink]="['/', 'hosts', 'index']" class="text-danger"
+                                           [queryParams]="{id: hoststatusSummary.acknowledged.hostIds[2], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                            {{ hoststatusSummary.acknowledged[2] }}
+                                        </a>
+                                    } @else {
                                         {{ hoststatusSummary.acknowledged[2] }}
-                                    </a>
-                                } @else {
-                                    {{ hoststatusSummary.acknowledged[2] }}
-                                }
+                                    }
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex flex-row fs-5">
-                            <div class="p-1 tactical-overview-first-flex-item">
-                                <fa-icon [icon]="['fas', 'power-off']" class="text-primary"
-                                         title="{{ t('is in downtime') }}"></fa-icon>
-                            </div>
-                            <div class="tactical-overview-flex-item">
-                                {{ t('Downtimes') }}
-                            </div>
-                            <div class="down tactical-overview-flex-item text-center">
-                                @if (hoststatusSummary.in_downtime[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                                    <a [routerLink]="['/', 'hosts', 'index']" class="text-danger"
-                                       [queryParams]="{id: hoststatusSummary.in_downtime.hostIds[1], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                            <div class="d-flex flex-row fs-5">
+                                <div class="p-1 tactical-overview-first-flex-item">
+                                    <fa-icon [icon]="['fas', 'power-off']" class="text-primary"
+                                             title="{{ t('is in downtime') }}"></fa-icon>
+                                </div>
+                                <div class="tactical-overview-flex-item">
+                                    {{ t('Downtimes') }}
+                                </div>
+                                <div class="down tactical-overview-flex-item text-center">
+                                    @if (hoststatusSummary.in_downtime[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                        <a [routerLink]="['/', 'hosts', 'index']" class="text-danger"
+                                           [queryParams]="{id: hoststatusSummary.in_downtime.hostIds[1], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                            {{ hoststatusSummary.in_downtime[1] }}
+                                        </a>
+                                    } @else {
                                         {{ hoststatusSummary.in_downtime[1] }}
-                                    </a>
-                                } @else {
-                                    {{ hoststatusSummary.in_downtime[1] }}
-                                }
-                            </div>
-                            <div class="unreachable tactical-overview-flex-item text-center">
-                                @if (hoststatusSummary.in_downtime[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
-                                    <a [routerLink]="['/', 'hosts', 'index']" class="text-secondary"
-                                       [queryParams]="{id: hoststatusSummary.in_downtime.hostIds[2], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                    }
+                                </div>
+                                <div class="unreachable tactical-overview-flex-item text-center">
+                                    @if (hoststatusSummary.in_downtime[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
+                                        <a [routerLink]="['/', 'hosts', 'index']" class="text-secondary"
+                                           [queryParams]="{id: hoststatusSummary.in_downtime.hostIds[2], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                                            {{ hoststatusSummary.in_downtime[2] }}
+                                        </a>
+                                    } @else {
                                         {{ hoststatusSummary.in_downtime[2] }}
-                                    </a>
-                                } @else {
-                                    {{ hoststatusSummary.in_downtime[2] }}
-                                }
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    </ng-container>
-                </ng-container>
-            </div>
-            <div class="box-x">
-                <ng-container *ngIf="animationStateShowConfig && config">
-                    <c-row class="mb-1">
-                        <c-col [xs]="12" [lg]="12">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                </span>
-                                <input [(ngModel)]="config['Host']['name']"
-                                       [placeholder]="'Filter by host name' | transloco"
-                                       cFormControl
-                                       [id]="'Hosts.name-'+widget.id"
-                                       [name]="'Hosts.name-'+widget.id"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                                <span cInputGroupText>
-                                    <label>
-                                        {{ t('Enable RegEx') }}
-                                        <input type="checkbox"
-                                               cFormCheckInput
-                                               [id]="'filter.Host.name_regex-'+widget.id"
-                                               [name]="'filter.Host.name_regex-'+widget.id"
-                                               [(ngModel)]="config['Host']['name_regex']"
-                                        />
-                                        <oitc-regex-helper-tooltip/>
-                                    </label>
-                                </span>
-                            </c-input-group>
-                        </c-col>
-                    </c-row>
-                    <c-row class="mb-1">
-                        <c-col [xs]="12" [lg]="12">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                </span>
-                                <input [(ngModel)]="config['Host']['address']"
-                                       [placeholder]="'Filter by IP address' | transloco"
-                                       cFormControl
-                                       [id]="'Hosts.address-'+widget.id"
-                                       [name]="'Hosts.address-'+widget.id"
-                                       type="text"
-                                />
-                                <span cInputGroupText>
-                                    <label>
-                                        {{ t('Enable RegEx') }}
-                                        <input type="checkbox"
-                                               cFormCheckInput
-                                               [id]="'Hosts.address_regex-'+widget.id"
-                                               [name]="'Hosts.address_regex-'+widget.id"
-                                               [(ngModel)]="config['Host']['address_regex']"
-                                        />
-                                        <oitc-regex-helper-tooltip/>
-                                    </label>
-                                </span>
-                            </c-input-group>
-                        </c-col>
-                    </c-row>
-                    <c-row class="mb-1">
-                        <c-col [xs]="12" [lg]="12">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <div class="icon-stack">
-                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'tags']"
-                                                 class="text-success cornered cornered-lr"></fa-icon>
-                                    </div>
-                                </span>
-                                <ng-select
-                                    [id]="'HostKeywordsInput-'+widget.id"
-                                    [name]="'HostKeywordsInput-'+widget.id"
-                                    [items]="[]"
-                                    [(ngModel)]="keywords"
-                                    [addTag]="true"
-                                    [multiple]="true"
-                                    [selectOnTab]="true"
-                                    [placeholder]="'Filter by tags'|transloco"
-                                    [isOpen]="false">
-                                </ng-select>
-                            </c-input-group>
-                        </c-col>
-                    </c-row>
-                    <c-row class="mb-1">
-                        <c-col [xs]="12" [lg]="12">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <div class="icon-stack">
-                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'tags']"
-                                                 class="text-danger cornered cornered-lr"></fa-icon>
-                                    </div>
-                                </span>
-                                <ng-select
-                                    [id]="'HostNotKeywordsInput-'+widget.id"
-                                    [name]="'HostNotKeywordsInput-'+widget.id"
-                                    [items]="[]"
-                                    [(ngModel)]="notKeywords"
-                                    [addTag]="true"
-                                    [multiple]="true"
-                                    [selectOnTab]="true"
-                                    [placeholder]="'Filter by excluded tags'|transloco"
-                                    [isOpen]="false">
-                                </ng-select>
-                            </c-input-group>
-                        </c-col>
-                    </c-row>
-                    <c-row>
-                        <c-col>
-                            <fieldset class="mt-2">
-                                <legend class="fs-5">
-                                    {{ t('Host groups') }}
-                                </legend>
+                        }
+                    }
+                </div>
+                <div class="box-x">
+                    @if (animationStateShowConfig && config) {
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
                                 <c-input-group>
-                                    <oitc-multi-select
-                                        [id]="'Hostgroups-'+widget.id"
-                                        [name]="'Hostgroups-'+widget.id"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        [options]="hostgroups"
-                                        [(ngModel)]="config['Hostgroup']['_ids']"
-                                        [searchCallback]="loadHostgroups"
-                                        [appendTo]="'body'"
-                                        class="flex-1">
-                                    </oitc-multi-select>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    </span>
+                                    <input [(ngModel)]="config['Host']['name']"
+                                           [placeholder]="'Filter by host name' | transloco"
+                                           cFormControl
+                                           [id]="'Hosts.name-'+widget.id"
+                                           [name]="'Hosts.name-'+widget.id"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                    <span cInputGroupText>
+                                        <label>
+                                            {{ t('Enable RegEx') }}
+                                            <input type="checkbox"
+                                                   cFormCheckInput
+                                                   [id]="'filter.Host.name_regex-'+widget.id"
+                                                   [name]="'filter.Host.name_regex-'+widget.id"
+                                                   [(ngModel)]="config['Host']['name_regex']"
+                                            />
+                                            <oitc-regex-helper-tooltip/>
+                                        </label>
+                                    </span>
                                 </c-input-group>
-
-                                <c-row class="my-1">
-                                    <c-col [xs]="12" [lg]="12">
-                                        <c-input-group>
-                                            <span cInputGroupText class="pe-0 ps-2">
-                                                <fa-stack>
-                                                    <fa-icon [icon]="['fas', 'server']"
-                                                             stackItemSize="1x" pull="right"></fa-icon>
-                                                    <fa-icon [icon]="['fas', 'tags']" class="text-success"
-                                                             stackItemSize="1x"
-                                                             transform="shrink-5 right-10 down-7"></fa-icon>
-                                                </fa-stack>
-                                            </span>
-                                            <ng-select
-                                                [id]="'HostgroupKeywordsInput-'+widget.id"
-                                                [name]="'HostgroupKeywordsInput-'+widget.id"
-                                                [items]="[]"
-                                                [(ngModel)]="hostgroupKeywords"
-                                                [addTag]="true"
-                                                [multiple]="true"
-                                                [selectOnTab]="true"
-                                                [placeholder]="'Filter by host group tags'|transloco"
-                                                [isOpen]="false">
-                                            </ng-select>
-                                        </c-input-group>
-                                    </c-col>
-                                </c-row>
-                                <c-row>
-                                    <c-col [xs]="12" [lg]="12">
-                                        <c-input-group>
-                                            <span cInputGroupText class="pe-0 ps-2">
-                                                <fa-stack>
-                                                    <fa-icon [icon]="['fas', 'server']"
-                                                             stackItemSize="1x" pull="right"></fa-icon>
-                                                    <fa-icon [icon]="['fas', 'tags']" class="text-danger"
-                                                             stackItemSize="1x"
-                                                             transform="shrink-5 right-10 down-7"></fa-icon>
-                                                </fa-stack>
-                                            </span>
-                                            <ng-select
-                                                [id]="'HostgroupNotKeywordsInput-'+widget.id"
-                                                [name]="'HostgroupNotKeywordsInput-'+widget.id"
-                                                [items]="[]"
-                                                [(ngModel)]="hostgroupNotKeywords"
-                                                [addTag]="true"
-                                                [multiple]="true"
-                                                [selectOnTab]="true"
-                                                [placeholder]="'Filter by excluded host group tags'|transloco"
-                                                [isOpen]="false">
-                                            </ng-select>
-                                        </c-input-group>
-                                    </c-col>
-                                </c-row>
-
-                            </fieldset>
-                        </c-col>
-                    </c-row>
-                    <c-row class="my-2">
-                        <c-col class="text-end">
-                            <button cButton class="ripple" color="primary" (click)="submit()">
-                                {{ t('Save') }}
-                            </button>
-                        </c-col>
-                    </c-row>
-                </ng-container>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input [(ngModel)]="config['Host']['address']"
+                                           [placeholder]="'Filter by IP address' | transloco"
+                                           cFormControl
+                                           [id]="'Hosts.address-'+widget.id"
+                                           [name]="'Hosts.address-'+widget.id"
+                                           type="text"
+                                    />
+                                    <span cInputGroupText>
+                                        <label>
+                                            {{ t('Enable RegEx') }}
+                                            <input type="checkbox"
+                                                   cFormCheckInput
+                                                   [id]="'Hosts.address_regex-'+widget.id"
+                                                   [name]="'Hosts.address_regex-'+widget.id"
+                                                   [(ngModel)]="config['Host']['address_regex']"
+                                            />
+                                            <oitc-regex-helper-tooltip/>
+                                        </label>
+                                    </span>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <div class="icon-stack">
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']"
+                                                     class="text-success cornered cornered-lr"></fa-icon>
+                                        </div>
+                                    </span>
+                                    <ng-select
+                                        [id]="'HostKeywordsInput-'+widget.id"
+                                        [name]="'HostKeywordsInput-'+widget.id"
+                                        [items]="[]"
+                                        [(ngModel)]="keywords"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by tags'|transloco"
+                                        [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <div class="icon-stack">
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']"
+                                                     class="text-danger cornered cornered-lr"></fa-icon>
+                                        </div>
+                                    </span>
+                                    <ng-select
+                                        [id]="'HostNotKeywordsInput-'+widget.id"
+                                        [name]="'HostNotKeywordsInput-'+widget.id"
+                                        [items]="[]"
+                                        [(ngModel)]="notKeywords"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Filter by excluded tags'|transloco"
+                                        [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row>
+                            <c-col>
+                                <fieldset class="mt-2">
+                                    <legend class="fs-5">
+                                        {{ t('Host groups') }}
+                                    </legend>
+                                    <c-input-group>
+                                        <oitc-multi-select
+                                            [id]="'Hostgroups-'+widget.id"
+                                            [name]="'Hostgroups-'+widget.id"
+                                            optionValue="key"
+                                            optionLabel="value"
+                                            [options]="hostgroups"
+                                            [(ngModel)]="config['Hostgroup']['_ids']"
+                                            [searchCallback]="loadHostgroups"
+                                            [appendTo]="'body'"
+                                            class="flex-1">
+                                        </oitc-multi-select>
+                                    </c-input-group>
+                                    <c-row class="my-1">
+                                        <c-col [xs]="12" [lg]="12">
+                                            <c-input-group>
+                                                <span cInputGroupText class="pe-0 ps-2">
+                                                    <fa-stack>
+                                                        <fa-icon [icon]="['fas', 'server']"
+                                                                 stackItemSize="1x" pull="right"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'tags']" class="text-success"
+                                                                 stackItemSize="1x"
+                                                                 transform="shrink-5 right-10 down-7"></fa-icon>
+                                                    </fa-stack>
+                                                </span>
+                                                <ng-select
+                                                    [id]="'HostgroupKeywordsInput-'+widget.id"
+                                                    [name]="'HostgroupKeywordsInput-'+widget.id"
+                                                    [items]="[]"
+                                                    [(ngModel)]="hostgroupKeywords"
+                                                    [addTag]="true"
+                                                    [multiple]="true"
+                                                    [selectOnTab]="true"
+                                                    [placeholder]="'Filter by host group tags'|transloco"
+                                                    [isOpen]="false">
+                                                </ng-select>
+                                            </c-input-group>
+                                        </c-col>
+                                    </c-row>
+                                    <c-row>
+                                        <c-col [xs]="12" [lg]="12">
+                                            <c-input-group>
+                                                <span cInputGroupText class="pe-0 ps-2">
+                                                    <fa-stack>
+                                                        <fa-icon [icon]="['fas', 'server']"
+                                                                 stackItemSize="1x" pull="right"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'tags']" class="text-danger"
+                                                                 stackItemSize="1x"
+                                                                 transform="shrink-5 right-10 down-7"></fa-icon>
+                                                    </fa-stack>
+                                                </span>
+                                                <ng-select
+                                                    [id]="'HostgroupNotKeywordsInput-'+widget.id"
+                                                    [name]="'HostgroupNotKeywordsInput-'+widget.id"
+                                                    [items]="[]"
+                                                    [(ngModel)]="hostgroupNotKeywords"
+                                                    [addTag]="true"
+                                                    [multiple]="true"
+                                                    [selectOnTab]="true"
+                                                    [placeholder]="'Filter by excluded host group tags'|transloco"
+                                                    [isOpen]="false">
+                                                </ng-select>
+                                            </c-input-group>
+                                        </c-col>
+                                    </c-row>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+                        <c-row class="my-2">
+                            <c-col class="text-end">
+                                <button cButton class="ripple" color="primary" (click)="submit()">
+                                    {{ t('Save') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    }
+                </div>
             </div>
         </div>
-    </div>
+    }
 </ng-container>

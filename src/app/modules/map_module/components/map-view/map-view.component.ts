@@ -28,7 +28,7 @@ import { MapLineComponent } from '../map-line/map-line.component';
 import { MapTextComponent } from '../map-text/map-text.component';
 import { MapItemComponent } from '../map-item/map-item.component';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { MapSummaryToasterService } from '../map-summary-toaster/map-summary-toaster.service';
 import { MapSummaryToasterComponent } from '../map-summary-toaster/map-summary-toaster.component';
 
@@ -49,8 +49,6 @@ import { MapSummaryToasterComponent } from '../map-summary-toaster/map-summary-t
         MapTextComponent,
         MapItemComponent,
         MapCanvasComponent,
-        NgForOf,
-        NgIf,
         MapSummaryToasterComponent
     ],
     templateUrl: './map-view.component.html',

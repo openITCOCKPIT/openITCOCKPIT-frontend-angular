@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
-import { NgIf } from '@angular/common';
+
 import { Subscription } from 'rxjs';
 import { SatellitesService } from '../../pages/satellites/satellites.service';
 import { SatelliteEntityCake2 } from '../../pages/satellites/satellites.interface';
@@ -10,7 +10,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 @Component({
     selector: 'oitc-satellite-name',
     imports: [
-        NgIf,
         SkeletonModule,
         TranslocoDirective,
         FaIconComponent

@@ -8,7 +8,8 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['usercontainerroles', 'index']" [routerLink]="['/', 'usercontainerroles', 'index']">
+                <a *oitcPermission="['usercontainerroles', 'index']"
+                   [routerLink]="['/', 'usercontainerroles', 'index']">
                     <fa-icon [icon]="['fas', 'users']"></fa-icon>
                     {{ t('User container roles') }}
                 </a>
@@ -39,37 +40,37 @@
 
             <oitc-form-loader [isVisible]="userContainerRoles.length === 0"></oitc-form-loader>
 
-            <c-card class="mb-3" *ngFor="let userContainerRole of userContainerRoles; let i = index">
-                <c-card-header>
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    <span class="ms-1">
-                        {{ t('Source user container role:') }}
-                        {{ userContainerRole.Source.name }}
-                    </span>
-                </c-card-header>
-                <c-card-body>
-
-                    <div class="mb-3">
-                        <label cLabel for="name{{i}}">
-                            {{ t('Service template group name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl
-                               required
-                               type="text"
-                               name="name{{i}}"
-                               id="name{{i}}"
-                               [(ngModel)]="userContainerRole.Usercontainerrole.name"
-                               oitcFormError [errors]="userContainerRole.Error" errorField="name">
-                        <oitc-form-feedback [errors]="userContainerRole.Error"
-                                            errorField="name"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Name of the new user container role') }}
+            @for (userContainerRole of userContainerRoles; track userContainerRole; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source user container role:') }}
+                            {{ userContainerRole.Source.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('Service template group name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   required
+                                   type="text"
+                                   name="name{{i}}"
+                                   id="name{{i}}"
+                                   [(ngModel)]="userContainerRole.Usercontainerrole.name"
+                                   oitcFormError [errors]="userContainerRole.Error" errorField="name">
+                            <oitc-form-feedback [errors]="userContainerRole.Error"
+                                                errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new user container role') }}
+                            </div>
                         </div>
-                    </div>
-
-                </c-card-body>
-            </c-card>
+                    </c-card-body>
+                </c-card>
+            }
 
         </c-card-body>
         <c-card-footer class="text-end">

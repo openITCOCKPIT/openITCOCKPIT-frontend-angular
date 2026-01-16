@@ -22,9 +22,11 @@
     <c-card class="mb-3">
         <c-card-header>
             <h5 cCardTitle>{{ t('openITCOCKPIT Agent Configuration for:') }}
-                <small class="fw-300" *ngIf="host">
-                    {{ host.name }} ({{ host.address }})
-                </small>
+                @if (host) {
+                    <small class="fw-300">
+                        {{ host.name }} ({{ host.address }})
+                    </small>
+                }
             </h5>
 
         </c-card-header>
@@ -57,568 +59,584 @@
                                 <div class="pt-3">
 
                                     <!-- Loading box -->
-                                    <div class="alert border-faded bg-transparent text-secondary" *ngIf="isLoading">
-                                        <div class="d-flex align-items-center">
-                                            <div class="alert-icon me-2">
-                                                <span class="icon-stack icon-stack-md">
-                                                    <i class="base-circle icon-stack-3x text-cyan-500"></i>
-                                                    <i class="fas fa-hourglass-start icon-stack-1x text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <span class="h5 text-cyan-500">
-                                                    {{ t('Waiting for Agent data.') }}
-                                                </span>
-
-                                                <div class="mt-2">
-                                                    <p-progressBar mode="indeterminate"
-                                                                   [style]="{ height: '6px' }"/>
+                                    @if (isLoading) {
+                                        <div class="alert border-faded bg-transparent text-secondary">
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon me-2">
+                                                    <span class="icon-stack icon-stack-md">
+                                                        <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                                        <i class="fas fa-hourglass-start icon-stack-1x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <span class="h5 text-cyan-500">
+                                                        {{ t('Waiting for Agent data.') }}
+                                                    </span>
+                                                    <div class="mt-2">
+                                                        <p-progressBar mode="indeterminate"
+                                                                       [style]="{ height: '6px' }"/>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
 
                                     <!-- Connection error -->
-                                    <div class="alert border-faded bg-transparent text-secondary"
-                                         *ngIf="connection_test && connection_test.status !== 'success'">
-                                        <div class="d-flex align-items-center">
-                                            <div class="alert-icon me-2">
-                                                <span class="icon-stack icon-stack-md">
-                                                    <i class="base-circle icon-stack-3x text-danger"></i>
-                                                    <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <span class="h5 text-danger">
-                                                    {{ t('Error') }}
-                                                </span>
-                                                <br>
-                                                {{ connection_test.error }}
-                                                <div *ngIf="connection_test?.guzzle_error">
-                                                    {{ connection_test.guzzle_error }}
+                                    @if (connection_test && connection_test.status !== 'success') {
+                                        <div class="alert border-faded bg-transparent text-secondary"
+                                        >
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon me-2">
+                                                    <span class="icon-stack icon-stack-md">
+                                                        <i class="base-circle icon-stack-3x text-danger"></i>
+                                                        <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <span class="h5 text-danger">
+                                                        {{ t('Error') }}
+                                                    </span>
+                                                    <br>
+                                                    {{ connection_test.error }}
+                                                    @if (connection_test.guzzle_error) {
+                                                        <div>
+                                                            {{ connection_test.guzzle_error }}
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
 
                                     <!-- No Services available -->
-                                    <div class="alert border-faded bg-transparent text-secondary"
-                                         *ngIf="!servicesAvailable && !isLoading">
-                                        <div class="d-flex align-items-center">
-                                            <div class="alert-icon me-2">
-                                                <span class="icon-stack icon-stack-md">
-                                                    <i class="base-circle icon-stack-3x text-warning"></i>
-                                                    <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <span class="h5 text-warning">
-                                                    {{ t('There are no new services available') }}
-                                                </span>
-                                                <br>
-                                                {{ t('Please verify your Agent Configuration.') }}
-                                            </div>
-                                            <div class="ms-2">
-                                                <button class="btn btn-outline-warning btn-sm ripple"
-                                                        [routerLink]="['/', 'agentconnector', 'config', this.hostId]">
-                                                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                                                    {{ t('Go to "Configure Agent"') }}
-                                                </button>
+                                    @if (!servicesAvailable && !isLoading) {
+                                        <div class="alert border-faded bg-transparent text-secondary"
+                                        >
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon me-2">
+                                                    <span class="icon-stack icon-stack-md">
+                                                        <i class="base-circle icon-stack-3x text-warning"></i>
+                                                        <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <span class="h5 text-warning">
+                                                        {{ t('There are no new services available') }}
+                                                    </span>
+                                                    <br>
+                                                    {{ t('Please verify your Agent Configuration.') }}
+                                                </div>
+                                                <div class="ms-2">
+                                                    <button class="btn btn-outline-warning btn-sm ripple"
+                                                            [routerLink]="['/', 'agentconnector', 'config', this.hostId]">
+                                                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                        {{ t('Go to "Configure Agent"') }}
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
 
                                     <!-- Saving box -->
-                                    <div class="alert border-faded bg-transparent text-secondary" *ngIf="isSaving">
-                                        <div class="d-flex align-items-center">
-                                            <div class="alert-icon me-2">
-                                                <span class="icon-stack icon-stack-md">
-                                                    <i class="base-circle icon-stack-3x text-cyan-500"></i>
-                                                    <i class="fas fa-hourglass-start icon-stack-1x text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <span class="h5 text-cyan-500">
-                                                    {{ t('Creating new services...') }}
-                                                </span>
-
-                                                <div class="mt-2">
-                                                    <p-progressBar mode="indeterminate"
-                                                                   [style]="{ height: '6px' }"/>
+                                    @if (isSaving) {
+                                        <div class="alert border-faded bg-transparent text-secondary">
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon me-2">
+                                                    <span class="icon-stack icon-stack-md">
+                                                        <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                                        <i class="fas fa-hourglass-start icon-stack-1x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <span class="h5 text-cyan-500">
+                                                        {{ t('Creating new services...') }}
+                                                    </span>
+                                                    <div class="mt-2">
+                                                        <p-progressBar mode="indeterminate"
+                                                                       [style]="{ height: '6px' }"/>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
 
                                     <!-- Successful -->
-                                    <div class="alert border-faded bg-transparent text-secondary"
-                                         *ngIf="showSuccessful">
-                                        <div class="d-flex align-items-center">
-                                            <div class="alert-icon me-2">
-                                                <span class="icon-stack icon-stack-md">
-                                                    <i class="base-circle icon-stack-3x text-success"></i>
-                                                    <i class="fas fa-check icon-stack-1x text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <span class="h5 text-success">
-                                                    {{ t('Services created successfully!') }}
-                                                </span>
-                                                <br>
-                                                {{ t('To apply the changes, please refresh your monitoring configuration.') }}
-                                            </div>
-                                            <div class="ms-2" *oitcPermission="['exports', 'index']">
-                                                <button class="btn btn-outline-success btn-sm ripple"
-                                                        [routerLink]="['/', 'exports', 'index']">
-                                                    <fa-icon [icon]="['fas', 'retweet']"></fa-icon>
-                                                    {{ t('Go to "Refresh monitoring configuration"') }}
-                                                </button>
+                                    @if (showSuccessful) {
+                                        <div class="alert border-faded bg-transparent text-secondary"
+                                        >
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon me-2">
+                                                    <span class="icon-stack icon-stack-md">
+                                                        <i class="base-circle icon-stack-3x text-success"></i>
+                                                        <i class="fas fa-check icon-stack-1x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <span class="h5 text-success">
+                                                        {{ t('Services created successfully!') }}
+                                                    </span>
+                                                    <br>
+                                                    {{ t('To apply the changes, please refresh your monitoring configuration.') }}
+                                                </div>
+                                                <div class="ms-2" *oitcPermission="['exports', 'index']">
+                                                    <button class="btn btn-outline-success btn-sm ripple"
+                                                            [routerLink]="['/', 'exports', 'index']">
+                                                        <fa-icon [icon]="['fas', 'retweet']"></fa-icon>
+                                                        {{ t('Go to "Refresh monitoring configuration"') }}
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
 
 
-                                    <oitc-ui-blocker [blocked]="isSaving" *ngIf="!hideConfig">
-                                        <c-row>
-                                            <!-- System (Checkboxes) -->
-                                            <c-col [xs]="12" *ngIf="newServicesAsCheckbox.length > 0" class="mb-3">
-                                                <div class="hr-separator pt-3">
-                                                    <span class="h5">
-                                                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                                                        {{ t('System') }}
-                                                    </span>
-                                                </div>
-
-                                                @for (service of newServicesAsCheckbox; track $index) {
-                                                    <div class="mt-3">
-                                                        <c-form-check>
-                                                            <input
-                                                                cFormCheckInput
-                                                                [attr.id]="service.service_key+'_'+$index"
-                                                                [name]="service.service_key+'_'+$index"
-                                                                class="checkbox-lg checkbox-primary"
-                                                                type="checkbox"
-                                                                [(ngModel)]="service.checkboxValue"/>
-
-                                                            <label cFormCheckLabel class="ms-1 mt-1"
-                                                                   [for]="service.service_key+'_'+$index">
-                                                                {{ service.service.name }}
-                                                            </label>
-                                                        </c-form-check>
-                                                    </div>
+                                    @if (!hideConfig) {
+                                        <oitc-ui-blocker [blocked]="isSaving">
+                                            <c-row>
+                                                <!-- System (Checkboxes) -->
+                                                @if (newServicesAsCheckbox.length > 0) {
+                                                    <c-col [xs]="12" class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                                {{ t('System') }}
+                                                            </span>
+                                                        </div>
+                                                        @for (service of newServicesAsCheckbox; track $index) {
+                                                            <div class="mt-3">
+                                                                <c-form-check>
+                                                                    <input
+                                                                        cFormCheckInput
+                                                                        [attr.id]="service.service_key+'_'+$index"
+                                                                        [name]="service.service_key+'_'+$index"
+                                                                        class="checkbox-lg checkbox-primary"
+                                                                        type="checkbox"
+                                                                        [(ngModel)]="service.checkboxValue"/>
+                                                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                                                           [for]="service.service_key+'_'+$index">
+                                                                        {{ service.service.name }}
+                                                                    </label>
+                                                                </c-form-check>
+                                                            </div>
+                                                        }
+                                                    </c-col>
                                                 }
-                                            </c-col>
-
-                                            <!-- Disk information -->
-                                            <c-col [xs]="12"
-                                                   *ngIf="newServicesAsSelect.disks || newServicesAsSelect.disks_free || newServicesAsSelect.disk_io"
-                                                   class="mb-3">
-                                                <div class="hr-separator pt-3">
-                                                    <span class="h5">
-                                                        <fa-icon [icon]="['fas', 'hard-drive']"></fa-icon>
-                                                        {{ t('Disk information') }}
-                                                    </span>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.disks">
-                                                    <label cLabel for="disks">
-                                                        {{ t('Disk usage') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.disks.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="disks"
-                                                        id="disks"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.disks.selectedIndicies"
-                                                        [options]="newServicesAsSelect.disks.options">
-                                                    </oitc-multi-select>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.disks_free">
-                                                    <label cLabel for="disks_free">
-                                                        {{ t('Disk space free') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.disks_free.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="disks_free"
-                                                        id="disks_free"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.disks_free.selectedIndicies"
-                                                        [options]="newServicesAsSelect.disks_free.options">
-                                                    </oitc-multi-select>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.disk_io">
-                                                    <label cLabel for="disk_io">
-                                                        {{ t('Disk IO') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.disk_io.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="disk_io"
-                                                        id="disk_io"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.disk_io.selectedIndicies"
-                                                        [options]="newServicesAsSelect.disk_io.options">
-                                                    </oitc-multi-select>
-                                                </div>
-
-                                            </c-col>
-
-                                            <!-- Network information -->
-                                            <c-col [xs]="12"
-                                                   *ngIf="newServicesAsSelect.net_stats || newServicesAsSelect.net_io"
-                                                   class="mb-3">
-                                                <div class="hr-separator pt-3">
-                                                    <span class="h5">
-                                                        <fa-icon [icon]="['fas', 'network-wired']"></fa-icon>
-                                                        {{ t('Networking') }}
-                                                    </span>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.net_stats">
-                                                    <label cLabel for="net_stats">
-                                                        {{ t('Link status') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.net_stats.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="net_stats"
-                                                        id="net_stats"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.net_stats.selectedIndicies"
-                                                        [options]="newServicesAsSelect.net_stats.options">
-                                                    </oitc-multi-select>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.net_io">
-                                                    <label cLabel for="net_io">
-                                                        {{ t('Network IO') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.net_io.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="net_io"
-                                                        id="net_io"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.net_io.selectedIndicies"
-                                                        [options]="newServicesAsSelect.net_io.options">
-                                                    </oitc-multi-select>
-                                                </div>
-                                            </c-col>
-
-                                            <!-- Docker information -->
-                                            <c-col [xs]="12"
-                                                   *ngIf="newServicesAsSelect.docker_running || newServicesAsSelect.docker_cpu || newServicesAsSelect.docker_memory"
-                                                   class="mb-3">
-                                                <div class="hr-separator pt-3">
-                                                    <span class="h5">
-                                                        <fa-icon [icon]="['fab', 'docker']"></fa-icon>
-                                                        {{ t('Docker') }}
-                                                    </span>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.docker_running">
-                                                    <label cLabel for="docker_running">
-                                                        {{ t('Docker status') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.docker_running.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="docker_running"
-                                                        id="docker_running"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.docker_running.selectedIndicies"
-                                                        [options]="newServicesAsSelect.docker_running.options">
-                                                    </oitc-multi-select>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.docker_cpu">
-                                                    <label cLabel for="docker_cpu">
-                                                        {{ t('Container CPU percentage') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.docker_cpu.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="docker_cpu"
-                                                        id="docker_cpu"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.docker_cpu.selectedIndicies"
-                                                        [options]="newServicesAsSelect.docker_cpu.options">
-                                                    </oitc-multi-select>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.docker_memory">
-                                                    <label cLabel for="docker_memory">
-                                                        {{ t('Container Memory usage') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.docker_memory.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="docker_memory"
-                                                        id="docker_memory"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.docker_memory.selectedIndicies"
-                                                        [options]="newServicesAsSelect.docker_memory.options">
-                                                    </oitc-multi-select>
-                                                </div>
-                                            </c-col>
-
-                                            <!-- Process information -->
-                                            <c-col [xs]="12"
-                                                   *ngIf="newServicesAsSelect.processes"
-                                                   class="mb-3">
-                                                <div class="hr-separator pt-3">
-                                                    <span class="h5">
-                                                        <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                                                        {{ t('Running processes') }}
-                                                    </span>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.processes">
-                                                    <label cLabel for="processes">
-                                                        {{ t('Processes') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.processes.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="processes"
-                                                        id="processes"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.processes.selectedIndicies"
-                                                        [options]="newServicesAsSelect.processes.options">
-                                                    </oitc-multi-select>
-                                                </div>
-                                            </c-col>
-
-                                            <!-- Windows -->
-                                            <c-col [xs]="12"
-                                                   *ngIf="newServicesAsSelect.windows_services || newServicesAsSelect.windows_eventlog"
-                                                   class="mb-3">
-                                                <div class="hr-separator pt-3">
-                                                    <span class="h5">
-                                                        <fa-icon [icon]="['fab', 'windows']"></fa-icon>
-                                                        {{ t('Windows') }}
-                                                    </span>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.windows_services">
-                                                    <label cLabel for="windows_services">
-                                                        {{ t('Windows services') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.windows_services.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="windows_services"
-                                                        id="windows_services"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.windows_services.selectedIndicies"
-                                                        [options]="newServicesAsSelect.windows_services.options">
-                                                    </oitc-multi-select>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.windows_eventlog">
-                                                    <label cLabel for="windows_eventlog">
-                                                        {{ t('Windows event logs') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.windows_eventlog.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="windows_eventlog"
-                                                        id="windows_eventlog"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.windows_eventlog.selectedIndicies"
-                                                        [options]="newServicesAsSelect.windows_eventlog.options">
-                                                    </oitc-multi-select>
-                                                </div>
-                                            </c-col>
-
-                                            <!-- macOS -->
-                                            <c-col [xs]="12"
-                                                   *ngIf="newServicesAsSelect.launchd_services"
-                                                   class="mb-3">
-                                                <div class="hr-separator pt-3">
-                                                    <span class="h5">
-                                                        <fa-icon [icon]="['fab', 'apple']"></fa-icon>
-                                                        {{ t('macOS') }}
-                                                    </span>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.launchd_services">
-                                                    <label cLabel for="launchd_services">
-                                                        {{ t('Launchd services') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.launchd_services.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="launchd_services"
-                                                        id="launchd_services"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.launchd_services.selectedIndicies"
-                                                        [options]="newServicesAsSelect.launchd_services.options">
-                                                    </oitc-multi-select>
-                                                </div>
-                                            </c-col>
-
-                                            <!-- Linux -->
-                                            <c-col [xs]="12"
-                                                   *ngIf="newServicesAsSelect.systemd_services"
-                                                   class="mb-3">
-                                                <div class="hr-separator pt-3">
-                                                    <span class="h5">
-                                                        <fa-icon [icon]="['fab', 'linux']"></fa-icon>
-                                                        {{ t('Linux') }}
-                                                    </span>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.systemd_services">
-                                                    <label cLabel for="systemd_services">
-                                                        {{ t('Systemd services') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.systemd_services.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="systemd_services"
-                                                        id="systemd_services"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.systemd_services.selectedIndicies"
-                                                        [options]="newServicesAsSelect.systemd_services.options">
-                                                    </oitc-multi-select>
-                                                </div>
-                                            </c-col>
-
-                                            <!-- Sensors -->
-                                            <c-col [xs]="12"
-                                                   *ngIf="newServicesAsSelect.sensors"
-                                                   class="mb-3">
-                                                <div class="hr-separator pt-3">
-                                                    <span class="h5">
-                                                        <fa-icon [icon]="['fas', 'temperature-half']"></fa-icon>
-                                                        {{ t('Sensors') }}
-                                                    </span>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.sensors">
-                                                    <label cLabel for="sensors">
-                                                        {{ t('Sensors') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.sensors.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="sensors"
-                                                        id="sensors"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.sensors.selectedIndicies"
-                                                        [options]="newServicesAsSelect.sensors.options">
-                                                    </oitc-multi-select>
-                                                </div>
-                                            </c-col>
-
-                                            <!-- libvirt / KVM -->
-                                            <c-col [xs]="12"
-                                                   *ngIf="newServicesAsSelect.libvirt"
-                                                   class="mb-3">
-                                                <div class="hr-separator pt-3">
-                                                    <span class="h5">
-                                                        <fa-icon [icon]="['fas', 'cloud']"></fa-icon>
-                                                        {{ t('Libvirt') }}
-                                                    </span>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.libvirt">
-                                                    <label cLabel for="libvirt">
-                                                        {{ t('Libvirt (KVM)') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.libvirt.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="libvirt"
-                                                        id="libvirt"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.libvirt.selectedIndicies"
-                                                        [options]="newServicesAsSelect.libvirt.options">
-                                                    </oitc-multi-select>
-                                                </div>
-                                            </c-col>
-
-                                            <!-- custom checks -->
-                                            <c-col [xs]="12"
-                                                   *ngIf="newServicesAsSelect.customchecks"
-                                                   class="mb-3">
-                                                <div class="hr-separator pt-3">
-                                                    <span class="h5">
-                                                        <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
-                                                        {{ t('Custom checks') }}
-                                                    </span>
-                                                </div>
-
-                                                <div class="mb-3" *ngIf="newServicesAsSelect.customchecks">
-                                                    <label cLabel for="customchecks">
-                                                        {{ t('Custom checks') }}
-                                                        <span class="help-block">
-                                                            ({{ newServicesAsSelect.customchecks.length }})
-                                                        </span>
-                                                    </label>
-
-                                                    <oitc-multi-select
-                                                        name="customchecks"
-                                                        id="customchecks"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="newServicesAsSelect.customchecks.selectedIndicies"
-                                                        [options]="newServicesAsSelect.customchecks.options">
-                                                    </oitc-multi-select>
-                                                </div>
-                                            </c-col>
-                                        </c-row>
-                                    </oitc-ui-blocker>
+                                                <!-- Disk information -->
+                                                @if (newServicesAsSelect.disks || newServicesAsSelect.disks_free || newServicesAsSelect.disk_io) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'hard-drive']"></fa-icon>
+                                                                {{ t('Disk information') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.disks) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="disks">
+                                                                    {{ t('Disk usage') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.disks.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="disks"
+                                                                    id="disks"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.disks.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.disks.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.disks_free) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="disks_free">
+                                                                    {{ t('Disk space free') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.disks_free.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="disks_free"
+                                                                    id="disks_free"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.disks_free.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.disks_free.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.disk_io) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="disk_io">
+                                                                    {{ t('Disk IO') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.disk_io.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="disk_io"
+                                                                    id="disk_io"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.disk_io.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.disk_io.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                                <!-- Network information -->
+                                                @if (newServicesAsSelect.net_stats || newServicesAsSelect.net_io) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'network-wired']"></fa-icon>
+                                                                {{ t('Networking') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.net_stats) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="net_stats">
+                                                                    {{ t('Link status') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.net_stats.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="net_stats"
+                                                                    id="net_stats"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.net_stats.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.net_stats.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.net_io) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="net_io">
+                                                                    {{ t('Network IO') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.net_io.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="net_io"
+                                                                    id="net_io"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.net_io.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.net_io.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                                <!-- Docker information -->
+                                                @if (newServicesAsSelect.docker_running || newServicesAsSelect.docker_cpu || newServicesAsSelect.docker_memory) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fab', 'docker']"></fa-icon>
+                                                                {{ t('Docker') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.docker_running) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="docker_running">
+                                                                    {{ t('Docker status') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.docker_running.length }}
+                                                                        )
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="docker_running"
+                                                                    id="docker_running"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.docker_running.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.docker_running.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.docker_cpu) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="docker_cpu">
+                                                                    {{ t('Container CPU percentage') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.docker_cpu.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="docker_cpu"
+                                                                    id="docker_cpu"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.docker_cpu.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.docker_cpu.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.docker_memory) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="docker_memory">
+                                                                    {{ t('Container Memory usage') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.docker_memory.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="docker_memory"
+                                                                    id="docker_memory"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.docker_memory.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.docker_memory.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                                <!-- Process information -->
+                                                @if (newServicesAsSelect.processes) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                                                {{ t('Running processes') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.processes) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="processes">
+                                                                    {{ t('Processes') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.processes.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="processes"
+                                                                    id="processes"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.processes.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.processes.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                                <!-- Windows -->
+                                                @if (newServicesAsSelect.windows_services || newServicesAsSelect.windows_eventlog) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fab', 'windows']"></fa-icon>
+                                                                {{ t('Windows') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.windows_services) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="windows_services">
+                                                                    {{ t('Windows services') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.windows_services.length }}
+                                                                        )
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="windows_services"
+                                                                    id="windows_services"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.windows_services.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.windows_services.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.windows_eventlog) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="windows_eventlog">
+                                                                    {{ t('Windows event logs') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.windows_eventlog.length }}
+                                                                        )
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="windows_eventlog"
+                                                                    id="windows_eventlog"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.windows_eventlog.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.windows_eventlog.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                                <!-- macOS -->
+                                                @if (newServicesAsSelect.launchd_services) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fab', 'apple']"></fa-icon>
+                                                                {{ t('macOS') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.launchd_services) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="launchd_services">
+                                                                    {{ t('Launchd services') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.launchd_services.length }}
+                                                                        )
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="launchd_services"
+                                                                    id="launchd_services"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.launchd_services.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.launchd_services.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                                <!-- Linux -->
+                                                @if (newServicesAsSelect.systemd_services) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fab', 'linux']"></fa-icon>
+                                                                {{ t('Linux') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.systemd_services) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="systemd_services">
+                                                                    {{ t('Systemd services') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.systemd_services.length }}
+                                                                        )
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="systemd_services"
+                                                                    id="systemd_services"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.systemd_services.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.systemd_services.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                                <!-- Sensors -->
+                                                @if (newServicesAsSelect.sensors) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'temperature-half']"></fa-icon>
+                                                                {{ t('Sensors') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.sensors) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="sensors">
+                                                                    {{ t('Sensors') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.sensors.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="sensors"
+                                                                    id="sensors"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.sensors.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.sensors.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                                <!-- libvirt / KVM -->
+                                                @if (newServicesAsSelect.libvirt) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'cloud']"></fa-icon>
+                                                                {{ t('Libvirt') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.libvirt) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="libvirt">
+                                                                    {{ t('Libvirt (KVM)') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.libvirt.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="libvirt"
+                                                                    id="libvirt"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.libvirt.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.libvirt.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                                <!-- custom checks -->
+                                                @if (newServicesAsSelect.customchecks) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                                                                {{ t('Custom checks') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.customchecks) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="customchecks">
+                                                                    {{ t('Custom checks') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.customchecks.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="customchecks"
+                                                                    id="customchecks"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.customchecks.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.customchecks.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                            </c-row>
+                                        </oitc-ui-blocker>
+                                    }
 
                                 </div>
                             </fieldset>

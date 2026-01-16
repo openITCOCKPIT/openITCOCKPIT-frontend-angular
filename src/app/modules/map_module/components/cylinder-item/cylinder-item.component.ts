@@ -18,7 +18,7 @@ import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { NgClass, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import {
     HostForMapItem,
     MapItemRoot,
@@ -31,7 +31,7 @@ import {
 @Component({
     selector: 'oitc-cylinder-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgStyle, NgIf, NgClass],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgStyle, NgClass],
     templateUrl: './cylinder-item.component.html',
     styleUrl: './cylinder-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -21,7 +21,7 @@ import {
 } from '@coreui/angular';
 import { WizardsService } from '../wizards.service';
 import { DeprecatedWizards, WizardElement, WizardsIndex } from '../wizards.interface';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
@@ -34,8 +34,6 @@ import { FormsModule } from '@angular/forms';
     imports: [
         RowComponent,
         ColComponent,
-        NgIf,
-        NgForOf,
         KeyValuePipe,
         CardComponent,
         CardBodyComponent,
@@ -80,7 +78,8 @@ export class WizardsIndexComponent implements OnInit, OnDestroy {
             docker: true,
             macos: true,
             virtualization: true,
-            hardware: true
+            hardware: true,
+            webserver: true
         }
     }
 

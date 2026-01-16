@@ -20,13 +20,15 @@
             </c-row>
 
             <c-row class="pt-2">
-                <c-col *ngFor="let item of items" sm="12">
-                    <ul class="mb-0">
-                        <li>
-                            {{ item.displayName }}
-                        </li>
-                    </ul>
-                </c-col>
+                @for (item of items; track item) {
+                    <c-col sm="12">
+                        <ul class="mb-0">
+                            <li>
+                                {{ item.displayName }}
+                            </li>
+                        </ul>
+                    </c-col>
+                }
             </c-row>
 
         </c-modal-body>

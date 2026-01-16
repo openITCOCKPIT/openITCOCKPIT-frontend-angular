@@ -8,16 +8,16 @@ import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -35,41 +35,40 @@ import { LocationsService } from '../locations.service';
 import { UsersService } from '../../users/users.service';
 import { HistoryService } from '../../../history.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
+
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 
 @Component({
     selector: 'oitc-locations-edit',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgOptionTemplateDirective,
-    NgSelectComponent,
-    PermissionDirective,
-    RequiredIconComponent,
-    SelectComponent,
-    TranslocoDirective,
-    VectormapComponent,
-    XsButtonDirective,
-    FormLoaderComponent,
-    NgIf,
-    RouterLink,
-    NgOptionHighlightDirective
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgOptionTemplateDirective,
+        NgSelectComponent,
+        PermissionDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        TranslocoDirective,
+        VectormapComponent,
+        XsButtonDirective,
+        FormLoaderComponent,
+        RouterLink,
+        NgOptionHighlightDirective
+    ],
     templateUrl: './locations-edit.component.html',
     styleUrl: './locations-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

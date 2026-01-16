@@ -32,7 +32,7 @@ import {
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
-import { AsyncPipe, NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
@@ -61,7 +61,6 @@ export interface ServiceBrowserMenuConfig {
         DropdownMenuDirective,
         DropdownToggleDirective,
         FaIconComponent,
-        NgIf,
         PermissionDirective,
         RowComponent,
         TitleCasePipe,

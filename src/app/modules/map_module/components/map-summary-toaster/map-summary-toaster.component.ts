@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, ViewChild } from '@angular/core';
 
-import { NgForOf, NgIf } from '@angular/common';
+
 import {
     ColComponent,
     ProgressBarComponent,
@@ -28,8 +28,6 @@ import { PermissionDirective } from '../../../../permissions/permission.directiv
 @Component({
     selector: 'oitc-map-summary-toaster',
     imports: [
-        NgIf,
-        NgForOf,
         ProgressBarComponent,
         ProgressComponent,
         ToastBodyComponent,

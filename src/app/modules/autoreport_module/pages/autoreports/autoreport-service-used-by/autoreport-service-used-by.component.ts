@@ -20,7 +20,7 @@ import {
     TableDirective,
     ModalService
 } from '@coreui/angular';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -43,7 +43,6 @@ import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/de
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        NgIf,
         NavComponent,
         BackButtonDirective,
         NavItemComponent,
@@ -52,7 +51,6 @@ import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/de
         TableLoaderComponent,
         MatSort,
         TableDirective,
-        NgForOf,
         ActionsButtonComponent,
         ActionsButtonElementComponent,
         DropdownDividerDirective,

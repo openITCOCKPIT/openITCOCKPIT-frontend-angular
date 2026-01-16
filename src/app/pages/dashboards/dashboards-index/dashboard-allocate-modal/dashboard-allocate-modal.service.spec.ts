@@ -3,14 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { DashboardAllocateModalService } from './dashboard-allocate-modal.service';
 
 describe('DashboardAllocateModalService', () => {
-  let service: DashboardAllocateModalService;
+    let service: DashboardAllocateModalService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(DashboardAllocateModalService);
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(DashboardAllocateModalService);
+    });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 });
