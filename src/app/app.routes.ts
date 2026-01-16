@@ -47,6 +47,7 @@ import { broadcomProxyModuleRoutes } from './modules/broadcomproxy_module/broadc
 import { nutanixModuleRoutes } from './modules/nutanix_module/nutanix_module.routes';
 import { nginxModuleRoutes } from './modules/nginx_module/nginx_module.routes';
 import { citrixModuleRoutes } from './modules/citrix_module/citrix_module.routes';
+import { arubaModuleRoutes } from './modules/aruba_module/aruba_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -115,7 +116,8 @@ const moduleRoutes: Routes = [
     ...nutanixModuleRoutes,
     ...networkModuleRoutes,
     ...nginxModuleRoutes,
-    ...citrixModuleRoutes
+    ...citrixModuleRoutes,
+    ...arubaModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
