@@ -13,7 +13,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PopoverGraphService } from './popover-graph.service';
 import { Subscription } from 'rxjs';
 import { PerformanceData } from './popover-graph.interface';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { PopoverConfigBuilder } from './popover-config-builder';
 import * as _uPlot from 'uplot';
 import { debounce } from '../debounce.decorator';
@@ -40,7 +40,6 @@ type PerfParams = {
         TranslocoDirective,
         FaIconComponent,
         NgClass,
-        NgIf,
         ChartLoaderComponent,
         Popover,
         PopoverModule

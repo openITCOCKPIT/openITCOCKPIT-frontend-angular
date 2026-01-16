@@ -6,13 +6,14 @@ import { SlaCalendarWidgetResponse, SlaWidgetResponse } from '../sla-widget.inte
 import { GenericResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class SlaCalendarWidgetService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
-  constructor() { }
+    constructor() {
+    }
 
     public loadWidgetConfig(widgetId: string): Observable<SlaCalendarWidgetResponse> {
         const proxyPath = this.proxyPath;

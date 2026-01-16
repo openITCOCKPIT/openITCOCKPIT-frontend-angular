@@ -1,5 +1,6 @@
 .color-white {
-    color: #fff; }
+    color: #fff;
+}
 
 .list-unstyled {
     padding-left: 0;
@@ -12,7 +13,8 @@
 }
 
 .fs-sm {
-    font-size: 0.78125rem !important; }
+    font-size: 0.78125rem !important;
+}
 
 .text-right {
     text-align: right;

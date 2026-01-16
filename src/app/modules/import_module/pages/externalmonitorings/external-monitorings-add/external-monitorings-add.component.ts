@@ -24,7 +24,7 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
@@ -81,10 +81,8 @@ import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        NgIf,
         SelectComponent,
         ContainerComponent,
-        NgForOf,
         DynamicalFormFieldsComponent
     ],
     templateUrl: './external-monitorings-add.component.html',

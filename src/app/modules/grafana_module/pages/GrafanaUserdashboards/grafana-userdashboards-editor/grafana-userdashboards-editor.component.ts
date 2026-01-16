@@ -13,7 +13,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -47,7 +47,6 @@ import {
         FaIconComponent,
         FormDirective,
         FormsModule,
-        NgIf,
         OitcAlertComponent,
         PermissionDirective,
         ReactiveFormsModule,

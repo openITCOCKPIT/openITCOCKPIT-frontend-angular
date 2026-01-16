@@ -164,126 +164,127 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!services"></oitc-table-loader>
-            <table *ngIf="services" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-
-                    <th class="width-90">
-                        {{ t('Servicestatus') }}
-                    </th>
-
-                    <th
-                        mat-sort-header="servicename">
-                        {{ t('Service name') }}
-                    </th>
-
-                    <th class="text-center editItemWidth" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                    @for (service of services.all_services; track index; let index = $index) {
-                        <tr *ngIf="index === 0 || (index > 0 && services.all_services[index -1].Host.uuid !== service.Host.uuid)">
-                            <td colspan="4">
-                                <oitc-hoststatus-icon [hoststatus]="service.Hoststatus" class="pe-1"/>
-                                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                                    <a [routerLink]="['/', 'hosts', 'browser', service.Host.id]">
-                                        {{ service.Service.hostname }}
-                                    </a>
-                                    (
-                                    <oitc-copy-to-clipboard [data]="service.Host.address">
-                                        {{ service.Host.address }}
-                                    </oitc-copy-to-clipboard>)
-                                } @else {
-                                    {{ service.Service.hostname }}({{ service.Host.address }})
-                                }
-                                @if (this.PermissionsService.hasPermissionObservable(['services', 'serviceList'])|async) {
-                                    <span class="fa-pull-right">
-                                        <a [routerLink]="['/', 'services', 'serviceList', service.Host.id]">
-                                            <fa-icon [icon]="['fas', 'list']"></fa-icon>
+            @if (!services) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (services) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th class="width-90">
+                            {{ t('Servicestatus') }}
+                        </th>
+                        <th
+                            mat-sort-header="servicename">
+                            {{ t('Service name') }}
+                        </th>
+                        <th class="text-center editItemWidth" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (service of services.all_services; track index; let index = $index) {
+                            @if (index === 0 || ( index > 0 && services.all_services[index - 1].Host.uuid !== service.Host.uuid )) {
+                                <tr>
+                                    <td colspan="4">
+                                        <oitc-hoststatus-icon [hoststatus]="service.Hoststatus" class="pe-1"/>
+                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                            <a [routerLink]="['/', 'hosts', 'browser', service.Host.id]">
+                                                {{ service.Service.hostname }}
+                                            </a>
+                                            (
+                                            <oitc-copy-to-clipboard [data]="service.Host.address">
+                                                {{ service.Host.address }}
+                                            </oitc-copy-to-clipboard>)
+                                        } @else {
+                                            {{ service.Service.hostname }}({{ service.Host.address }})
+                                        }
+                                        @if (this.PermissionsService.hasPermissionObservable(['services', 'serviceList'])|async) {
+                                            <span class="fa-pull-right">
+                                                <a [routerLink]="['/', 'services', 'serviceList', service.Host.id]">
+                                                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                                                </a>
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        [disabled]="!service.Service.allow_edit"
+                                        [item]="service"></oitc-item-select>
+                                </td>
+                                <td class="text-center">
+                                    <oitc-servicestatus-simple-icon></oitc-servicestatus-simple-icon>
+                                </td>
+                                <td class="word-break">
+                                    @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                        <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
+                                            {{ service.Service.servicename }}
                                         </a>
-                                    </span>
-                                }
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-center">
-                                <oitc-item-select
-                                    [disabled]="!service.Service.allow_edit"
-                                    [item]="service"></oitc-item-select>
-                            </td>
-                            <td class="text-center">
-                                <oitc-servicestatus-simple-icon></oitc-servicestatus-simple-icon>
-                            </td>
-
-                            <td class="word-break">
-                                @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
-                                    <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
+                                    } @else {
                                         {{ service.Service.servicename }}
-                                    </a>
-                                } @else {
-                                    {{ service.Service.servicename }}
-                                }
-                            </td>
+                                    }
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'services.edit'"
+                                                         [url]="'/services/edit/' + service.Service.id"
+                                                         [allowEdit]="service.Service.allow_edit">
+                                        @if (service.Service.allow_edit) {
+                                            <oitc-actions-button-element [permission]="'services.edit'"
+                                                                         [url]="'/services/edit/' + service.Service.id">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        @if (service.Service.allow_edit) {
+                                            <oitc-actions-button-element [permission]="'services.enable'"
+                                                                         (click)="toggleEnableModal(service.Service)">
+                                                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                                {{ t('Enable') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/service/' + service.Service.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *oitcPermission="['services', 'copy']"></li>
+                                        <oitc-actions-button-element [permission]="'services.copy'"
+                                                                     [url]="'/services/copy/' + service.Service.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                        @if (service.Service.allow_edit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(service.Service)"
+                                                                     [permission]="'services.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                            <td class="width-50">
-                                <oitc-actions-button [permission]="'services.edit'"
-                                                     [url]="'/services/edit/' + service.Service.id"
-                                                     [allowEdit]="service.Service.allow_edit">
-                                    <oitc-actions-button-element [permission]="'services.edit'"
-                                                                 *ngIf="service.Service.allow_edit"
-                                                                 [url]="'/services/edit/' + service.Service.id">
-                                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                        {{ t('Edit') }}
-                                    </oitc-actions-button-element>
-
-                                    <oitc-actions-button-element [permission]="'services.enable'"
-                                                                 *ngIf="service.Service.allow_edit"
-                                                                 (click)="toggleEnableModal(service.Service)">
-                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                        {{ t('Enable') }}
-                                    </oitc-actions-button-element>
-
-                                    <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                                 [url]="'/changelogs/entity/service/' + service.Service.id">
-                                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                        {{ t('Changelog') }}
-                                    </oitc-actions-button-element>
-
-                                    <li cDropdownDivider *oitcPermission="['services', 'copy']"></li>
-                                    <oitc-actions-button-element [permission]="'services.copy'"
-                                                                 [url]="'/services/copy/' + service.Service.id">
-                                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                        {{ t('Copy') }}
-                                    </oitc-actions-button-element>
-
-                                    <li cDropdownDivider *ngIf="service.Service.allow_edit"></li>
-                                    <oitc-actions-button-element (click)="toggleDeleteAllModal(service.Service)"
-                                                                 [permission]="'services.delete'">
-                                        <span class="text-danger">
-                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                            {{ t('Delete') }}
-                                        </span>
-                                    </oitc-actions-button-element>
-
-                                </oitc-actions-button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-            <oitc-no-records
-                *ngIf="services && services.all_services.length === 0"></oitc-no-records>
-            <ng-container *ngIf="services && services.all_services">
+            @if (services && services.all_services.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (services && services.all_services) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -312,21 +313,21 @@
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete selected') }}
                                 </button>
-
                             </div>
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="services"
-                            [paginateOrScroll]="services"></oitc-paginate-or-scroll>
+                        @if (services) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="services"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

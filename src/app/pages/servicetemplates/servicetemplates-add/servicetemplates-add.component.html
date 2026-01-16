@@ -26,13 +26,15 @@
 
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <span *ngIf="typeDetails"
-                              class="badge border margin-right-10"
-                              [ngClass]="[typeDetails.class, typeDetails.color]">
-                            <fa-icon [icon]="typeDetails.icon"
-                                     [rotate]="typeDetails.rotate"></fa-icon>
-                            {{ typeDetails.title }}
-                        </span>
+                        @if (typeDetails) {
+                            <span
+                                class="badge border margin-right-10"
+                                [ngClass]="[typeDetails.class, typeDetails.color]">
+                                <fa-icon [icon]="typeDetails.icon"
+                                         [rotate]="typeDetails.rotate"></fa-icon>
+                                {{ typeDetails.title }}
+                            </span>
+                        }
                     </c-nav-item>
 
                     <c-nav-item class="px-1">
@@ -75,9 +77,11 @@
                                 oitcFormError [errors]="errors" errorField="container_id">
                             </oitc-select>
 
-                            <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
-                                {{ t('Please select a container.') }}
-                            </div>
+                            @if (!post.container_id) {
+                                <div class="text-warning-glow pt-1">
+                                    {{ t('Please select a container.') }}
+                                </div>
+                            }
                             <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                         </div>
 
@@ -284,21 +288,23 @@
                             </div>
                         </div>
 
-                        <div class="mb-3"
-                             *ngIf="post.active_checks_enabled == 0 && post.freshness_checks_enabled == 1">
-                            <label cFormCheckLabel for="freshness_threshold">
-                                {{ t('Freshness threshold') }}
-                                <oitc-required-icon></oitc-required-icon>
-                            </label>
-                            <oitc-interval-input
-                                id="freshness_threshold"
-                                name="freshness_threshold"
-                                [selectedInterval]="post.freshness_threshold"
-                                (selectedIntervalChange)="post.freshness_threshold = $event"
-                            ></oitc-interval-input>
-                            <oitc-form-feedback [errors]="errors"
-                                                errorField="freshness_threshold"></oitc-form-feedback>
-                        </div>
+                        @if (post.active_checks_enabled == 0 && post.freshness_checks_enabled == 1) {
+                            <div class="mb-3"
+                            >
+                                <label cFormCheckLabel for="freshness_threshold">
+                                    {{ t('Freshness threshold') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <oitc-interval-input
+                                    id="freshness_threshold"
+                                    name="freshness_threshold"
+                                    [selectedInterval]="post.freshness_threshold"
+                                    (selectedIntervalChange)="post.freshness_threshold = $event"
+                                ></oitc-interval-input>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="freshness_threshold"></oitc-form-feedback>
+                            </div>
+                        }
 
 
                         <div class="mb-3">
@@ -338,22 +344,24 @@
                             </c-alert>
                         </div>
 
-                        <div class="mb-3 ms-4"
-                             *ngFor="let servicetemplatecommandargumentvalue of post.servicetemplatecommandargumentvalues; index as i">
-                            <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
-                                {{ servicetemplatecommandargumentvalue.commandargument.human_name }}
-                            </label>
-                            <div class="col-xs-12 col-lg-8">
-                                <input
-                                    class="form-control"
-                                    type="text"
-                                    [name]="'servicetemplatecommandargumentvalue_'+i"
-                                    [(ngModel)]="servicetemplatecommandargumentvalue.value">
-                                <div class="help-block">
-                                    {{ servicetemplatecommandargumentvalue.commandargument.name }}
+                        @for (servicetemplatecommandargumentvalue of post.servicetemplatecommandargumentvalues; track servicetemplatecommandargumentvalue; let i = $index) {
+                            <div class="mb-3 ms-4"
+                            >
+                                <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
+                                    {{ servicetemplatecommandargumentvalue.commandargument.human_name }}
+                                </label>
+                                <div class="col-xs-12 col-lg-8">
+                                    <input
+                                        class="form-control"
+                                        type="text"
+                                        [name]="'servicetemplatecommandargumentvalue_'+i"
+                                        [(ngModel)]="servicetemplatecommandargumentvalue.value">
+                                    <div class="help-block">
+                                        {{ servicetemplatecommandargumentvalue.commandargument.name }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        }
 
                         <div class="mb-3">
                             <label cFormCheckLabel for="check_interval">
@@ -711,87 +719,86 @@
                                                 errorField="flap_detection_enabled"></oitc-form-feedback>
                         </div>
 
-                        <div class="mb-3 d-inline-flex w-100" *ngIf="post.flap_detection_enabled">
-                            <div class="input-group mx-1">
-                                <span class="input-group-text">
-                                    <input
-                                        cFormCheckInput
-                                        class="checkbox-success"
-                                        name="flap_detection_on_ok"
-                                        id="flap_detection_on_ok"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        [(ngModel)]="post.flap_detection_on_ok"/>
-                                </span>
-                                <div class="form-control bg-success text-white text-center">
-                                    <label for="flap_detection_on_ok">
-                                        {{ t('Recovery') }}
-                                    </label>
+                        @if (post.flap_detection_enabled) {
+                            <div class="mb-3 d-inline-flex w-100">
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-success"
+                                            name="flap_detection_on_ok"
+                                            id="flap_detection_on_ok"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.flap_detection_on_ok"/>
+                                    </span>
+                                    <div class="form-control bg-success text-white text-center">
+                                        <label for="flap_detection_on_ok">
+                                            {{ t('Recovery') }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-warning"
+                                            name="flap_detection_on_warning"
+                                            id="flap_detection_on_warning"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.flap_detection_on_warning"/>
+                                    </span>
+                                    <div class="form-control bg-warning text-center">
+                                        <label for="flap_detection_on_warning">
+                                            {{ t('Warning') }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-danger"
+                                            name="flap_detection_on_critical"
+                                            id="flap_detection_on_critical"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.flap_detection_on_critical"/>
+                                    </span>
+                                    <div class="form-control bg-danger text-white text-center">
+                                        <label for="flap_detection_on_critical">
+                                            {{ t('Critical') }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-secondary"
+                                            name="flap_detection_on_unknown"
+                                            id="flap_detection_on_unknown"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.flap_detection_on_unknown"/>
+                                    </span>
+                                    <div class="form-control bg-unknown text-white text-center">
+                                        <label for="flap_detection_on_unknown">
+                                            {{ t('Unknown') }}
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="input-group mx-1">
-                                <span class="input-group-text">
-                                    <input
-                                        cFormCheckInput
-                                        class="checkbox-warning"
-                                        name="flap_detection_on_warning"
-                                        id="flap_detection_on_warning"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        [(ngModel)]="post.flap_detection_on_warning"/>
-                                </span>
-                                <div class="form-control bg-warning text-center">
-                                    <label for="flap_detection_on_warning">
-                                        {{ t('Warning') }}
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="input-group mx-1">
-                                <span class="input-group-text">
-                                    <input
-                                        cFormCheckInput
-                                        class="checkbox-danger"
-                                        name="flap_detection_on_critical"
-                                        id="flap_detection_on_critical"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        [(ngModel)]="post.flap_detection_on_critical"/>
-                                </span>
-                                <div class="form-control bg-danger text-white text-center">
-                                    <label for="flap_detection_on_critical">
-                                        {{ t('Critical') }}
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="input-group mx-1">
-                                <span class="input-group-text">
-                                    <input
-                                        cFormCheckInput
-                                        class="checkbox-secondary"
-                                        name="flap_detection_on_unknown"
-                                        id="flap_detection_on_unknown"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        [(ngModel)]="post.flap_detection_on_unknown"/>
-                                </span>
-                                <div class="form-control bg-unknown text-white text-center">
-                                    <label for="flap_detection_on_unknown">
-                                        {{ t('Unknown') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                        }
 
                         <div class="mb-3">
                             <c-form-check>
@@ -867,22 +874,24 @@
                             </c-alert>
                         </div>
 
-                        <div class="mb-3 ms-4"
-                             *ngFor="let servicetemplateeventcommandargumentvalue of post.servicetemplateeventcommandargumentvalues; index as i">
-                            <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
-                                {{ servicetemplateeventcommandargumentvalue.commandargument.human_name }}
-                            </label>
-                            <div class="col-xs-12 col-lg-8">
-                                <input
-                                    class="form-control"
-                                    type="text"
-                                    [name]="'servicetemplateeventcommandargumentvalue_'+i"
-                                    [(ngModel)]="servicetemplateeventcommandargumentvalue.value">
-                                <div class="help-block">
-                                    {{ servicetemplateeventcommandargumentvalue.commandargument.name }}
+                        @for (servicetemplateeventcommandargumentvalue of post.servicetemplateeventcommandargumentvalues; track servicetemplateeventcommandargumentvalue; let i = $index) {
+                            <div class="mb-3 ms-4"
+                            >
+                                <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
+                                    {{ servicetemplateeventcommandargumentvalue.commandargument.human_name }}
+                                </label>
+                                <div class="col-xs-12 col-lg-8">
+                                    <input
+                                        class="form-control"
+                                        type="text"
+                                        [name]="'servicetemplateeventcommandargumentvalue_'+i"
+                                        [(ngModel)]="servicetemplateeventcommandargumentvalue.value">
+                                    <div class="help-block">
+                                        {{ servicetemplateeventcommandargumentvalue.commandargument.name }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        }
 
                     </c-card-body>
                 </c-card>
@@ -900,23 +909,26 @@
 
                         <div class="row">
                             <div class="col-12">
-                                <oitc-form-feedback [errors]="errors" errorField="customvariables"
-                                                    *ngIf="hasMacroErrors"></oitc-form-feedback>
+                                @if (hasMacroErrors) {
+                                    <oitc-form-feedback [errors]="errors" errorField="customvariables"
+                                    ></oitc-form-feedback>
+                                }
                             </div>
                         </div>
 
-                        <div class="row"
-                             *ngFor="let customVariable of post.customvariables;let i = index;">
-                            <oitc-macros
-                                [macro]="customVariable"
-                                [macroName]="'SERVICE'"
-                                [index]="i"
-                                [deleteMacroCallback]="deleteMacro"
-                                [errors]="errors"
-                                class="col-lg-12"
-                            />
-
-                        </div>
+                        @for (customVariable of post.customvariables; track customVariable; let i = $index) {
+                            <div class="row"
+                            >
+                                <oitc-macros
+                                    [macro]="customVariable"
+                                    [macroName]="'SERVICE'"
+                                    [index]="i"
+                                    [deleteMacroCallback]="deleteMacro"
+                                    [errors]="errors"
+                                    class="col-lg-12"
+                                />
+                            </div>
+                        }
 
                         <div class="row mt-3">
                             <div class="col-12 text-end">
@@ -933,42 +945,42 @@
                 <!-- SERVICE MACRO CONFIGURATION END -->
 
                 <!-- SLA CONFIGURATION START -->
-                <c-card class="mb-3" *ngIf="PermissionsService.hasModuleObservable('SLAModule')|async">
-                    <c-card-header>
-                        <fa-icon [icon]="['fas', 'award']"></fa-icon>
-                        <span class="ms-1">
-                            {{ t('Service Level Agreement') }}
-                        </span>
-                    </c-card-header>
-                    <c-card-body>
-
-                        <div class="mb-3">
-                            <c-form-check>
-                                <input cFormCheckInput
-                                       name="isSlaRelevant"
-                                       id="isSlaRelevant"
-                                       type="checkbox"
-                                       trueFalseValue
-                                       [falseValue]="0"
-                                       [trueValue]="1"
-                                       [(ngModel)]="post.sla_relevant"/>
-                                <label cFormCheckLabel for="isSlaRelevant">
-                                    {{ t('SLA relevant') }}
-                                </label>
-                            </c-form-check>
-                            <oitc-form-feedback [errors]="errors"
-                                                errorField="sla_relevant"></oitc-form-feedback>
-                            <div class="help-block text-danger">
-                                <span class="font-lg">⚠️</span>
-                                {{
-                                    t('This setting affects all services, which are using this service template. If deactivated, all SLA related data will be removed permanently.\n' +
-                                        'To exclude single services, please edit the service configuration directly instead.')
-                                }}
+                @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
+                    <c-card class="mb-3">
+                        <c-card-header>
+                            <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                            <span class="ms-1">
+                                {{ t('Service Level Agreement') }}
+                            </span>
+                        </c-card-header>
+                        <c-card-body>
+                            <div class="mb-3">
+                                <c-form-check>
+                                    <input cFormCheckInput
+                                           name="isSlaRelevant"
+                                           id="isSlaRelevant"
+                                           type="checkbox"
+                                           trueFalseValue
+                                           [falseValue]="0"
+                                           [trueValue]="1"
+                                           [(ngModel)]="post.sla_relevant"/>
+                                    <label cFormCheckLabel for="isSlaRelevant">
+                                        {{ t('SLA relevant') }}
+                                    </label>
+                                </c-form-check>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="sla_relevant"></oitc-form-feedback>
+                                <div class="help-block text-danger">
+                                    <span class="font-lg">⚠️</span>
+                                    {{
+                                        t('This setting affects all services, which are using this service template. If deactivated, all SLA related data will be removed permanently.\n' +
+                                            'To exclude single services, please edit the service configuration directly instead.')
+                                    }}
+                                </div>
                             </div>
-                        </div>
-
-                    </c-card-body>
-                </c-card>
+                        </c-card-body>
+                    </c-card>
+                }
                 <!-- SLA CONFIGURATION END -->
 
 

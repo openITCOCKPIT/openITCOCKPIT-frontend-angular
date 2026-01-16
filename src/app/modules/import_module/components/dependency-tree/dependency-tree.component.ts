@@ -1,31 +1,31 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  HostListener,
-  inject,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChanges,
-  DOCUMENT
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    HostListener,
+    inject,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
+    DOCUMENT
 } from '@angular/core';
 import {
-  ColComponent,
-  ProgressBarComponent,
-  ProgressComponent,
-  RowComponent,
-  ToastBodyComponent,
-  ToastComponent,
-  ToasterComponent,
-  ToastHeaderComponent
+    ColComponent,
+    ProgressBarComponent,
+    ProgressComponent,
+    RowComponent,
+    ToastBodyComponent,
+    ToastComponent,
+    ToasterComponent,
+    ToastHeaderComponent
 } from '@coreui/angular';
 import { OnlineOfflineComponent } from '../additional-host-information/online-offline/online-offline.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { DecimalPipe, NgIf } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ExternalSystemsService } from '../../pages/externalsystems/external-systems.service';
 import {
@@ -73,25 +73,24 @@ export interface NodeExtended extends Node {
 @Component({
     selector: 'oitc-dependency-tree',
     imports: [
-    ColComponent,
-    OnlineOfflineComponent,
-    RowComponent,
-    TranslocoDirective,
-    NgIf,
-    XsButtonDirective,
-    FaIconComponent,
-    TranslocoPipe,
-    ProgressComponent,
-    DecimalPipe,
-    ToastComponent,
-    ToastBodyComponent,
-    ToasterComponent,
-    ToastHeaderComponent,
-    ProgressBarComponent,
-    HostSummaryComponent,
-    NotInMonitoringComponent,
-    HostGroupSummaryComponent
-],
+        ColComponent,
+        OnlineOfflineComponent,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        FaIconComponent,
+        TranslocoPipe,
+        ProgressComponent,
+        DecimalPipe,
+        ToastComponent,
+        ToastBodyComponent,
+        ToasterComponent,
+        ToastHeaderComponent,
+        ProgressBarComponent,
+        HostSummaryComponent,
+        NotInMonitoringComponent,
+        HostGroupSummaryComponent
+    ],
     templateUrl: './dependency-tree.component.html',
     styleUrl: './dependency-tree.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

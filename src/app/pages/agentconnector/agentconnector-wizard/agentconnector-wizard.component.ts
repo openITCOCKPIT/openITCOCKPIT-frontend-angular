@@ -2,24 +2,20 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 
 
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTextDirective,
-  CardTitleDirective,
-  ColComponent,
-  FormLabelDirective,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTextDirective,
+    CardTitleDirective,
+    ColComponent,
+    FormLabelDirective,
+    RowComponent
 } from '@coreui/angular';
 
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-
-
-
-import { NgIf } from '@angular/common';
 
 
 import { PaginatorModule } from 'primeng/paginator';
@@ -45,27 +41,26 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'oitc-agentconnector-wizard',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FaIconComponent,
-    FormsModule,
-    NgIf,
-    PaginatorModule,
-    PermissionDirective,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    AgentconnectorWizardProgressbarComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    SelectComponent,
-    CardTextDirective
-],
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        FaIconComponent,
+        FormsModule,
+        PaginatorModule,
+        PermissionDirective,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        AgentconnectorWizardProgressbarComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        CardTextDirective
+    ],
     templateUrl: './agentconnector-wizard.component.html',
     styleUrl: './agentconnector-wizard.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

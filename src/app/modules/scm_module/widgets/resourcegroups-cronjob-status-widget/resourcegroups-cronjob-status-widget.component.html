@@ -206,8 +206,7 @@
                                             <div class="accordion-body">
                                                 @if (!deadlineItem.exceeded && !deadlineItem.timerangeArrives) {
                                                     <ul class="list-inline">
-                                                        @for (
-                                                            resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                                        @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
                                                             @if (cronjobStatus.pendingIds.includes(resourcegroup.id)) {
                                                                 <li class="list-inline-item pe-1">
                                                                     •<a
@@ -222,8 +221,7 @@
 
                                                 } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending > 0 )) {
                                                     <ul class="list-inline">
-                                                        @for (
-                                                            resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                                        @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
                                                             <li class="list-inline-item pe-1">
                                                                 •<a
                                                                 *oitcPermission="['scmmodule','resourcegroups', 'edit']"
@@ -236,8 +234,7 @@
 
                                                 } @else if (!deadlineItem.exceeded && ( deadlineItem.timerangeArrives && cronjobStatus.pending === 0 )) {
                                                     <ul class="list-inline">
-                                                        @for (
-                                                            resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                                        @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
                                                             @if (cronjobStatus.successIds.includes(resourcegroup.id)) {
                                                                 <li class="list-inline-item pe-1">
                                                                     •<a
@@ -253,8 +250,7 @@
                                                 } @else if (deadlineItem.exceeded) {
                                                     @if (cronjobStatus.failed > 0) {
                                                         <ul class="list-inline">
-                                                            @for (
-                                                                resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                                            @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
                                                                 @if (cronjobStatus.failedIds.includes(resourcegroup.id)) {
                                                                     <li class="list-inline-item pe-1">
                                                                         •<a
@@ -268,8 +264,7 @@
                                                         </ul>
                                                     } @else {
                                                         <ul class="list-inline">
-                                                            @for (
-                                                                resourcegroup of deadlineItem.resourcegroups; track $index) {
+                                                            @for (resourcegroup of deadlineItem.resourcegroups; track $index) {
                                                                 @if (cronjobStatus.successIds.includes(resourcegroup.id)) {
                                                                     <li class="list-inline-item pe-1">
                                                                         •<a

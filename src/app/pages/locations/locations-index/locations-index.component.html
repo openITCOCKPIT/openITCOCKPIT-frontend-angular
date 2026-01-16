@@ -111,77 +111,86 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!locations"></oitc-table-loader>
-            <table *ngIf="locations" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Containers.name">
-                        {{ t('Location name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Locations.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let location of locations.all_locations">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['locations', 'delete']"
-                            [disabled]="!Boolean(location.Location.allowEdit)"
-                            [item]="location"></oitc-item-select>
-                    </td>
+            @if (!locations) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (locations) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Containers.name">
+                            {{ t('Location name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Locations.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (location of locations.all_locations; track location) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['locations', 'delete']"
+                                        [disabled]="!Boolean(location.Location.allowEdit)"
+                                        [item]="location"></oitc-item-select>
+                                </td>
+                                <td>{{ location.Container.name }}</td>
+                                <td>{{ location.Location.description }}</td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'locations.edit'"
+                                                         [url]="'/locations/edit/' + location.Location.id"
+                                                         [allowEdit]="location.Location.allowEdit">
+                                        <oitc-actions-button-element [permission]="'locations.edit'"
+                                                                     [url]="'/locations/edit/' + location.Location.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/location/' + location.Location.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'containers.showDetails'"
+                                                                     [url]="'/containers/showDetails/' + location.Location.container_id">
+                                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                            {{ t('Show details') }}
+                                        </oitc-actions-button-element>
+                                        @if (location.Location.allowEdit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        @if (location.Location.allowEdit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(location)"
+                                                                         [permission]="'locations.delete'"
+                                            >
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                    <td>{{ location.Container.name }}</td>
 
-                    <td>{{ location.Location.description }}</td>
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'locations.edit'"
-                                             [url]="'/locations/edit/' + location.Location.id"
-                                             [allowEdit]="location.Location.allowEdit">
-                            <oitc-actions-button-element [permission]="'locations.edit'"
-                                                         [url]="'/locations/edit/' + location.Location.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                         [url]="'/changelogs/entity/location/' + location.Location.id">
-                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                {{ t('Changelog') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'containers.showDetails'"
-                                                         [url]="'/containers/showDetails/' + location.Location.container_id">
-                                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                                {{ t('Show details') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *ngIf="location.Location.allowEdit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(location)"
-                                                         [permission]="'locations.delete'"
-                                                         *ngIf="location.Location.allowEdit">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-
-            <oitc-no-records
-                *ngIf="locations && locations.all_locations.length === 0"></oitc-no-records>
-            <ng-container *ngIf="locations && locations.all_locations">
+            @if (locations && locations.all_locations.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (locations && locations.all_locations) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -201,19 +210,19 @@
                         </c-col>
                     </c-row>
                 </c-container>
-
                 <c-container
                     [fluid]="true">
                     <c-row>
                         <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="locations"
-                                [paginateOrScroll]="locations"></oitc-paginate-or-scroll>
+                            @if (locations) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="locations"></oitc-paginate-or-scroll>
+                            }
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
         </c-card-body>
 

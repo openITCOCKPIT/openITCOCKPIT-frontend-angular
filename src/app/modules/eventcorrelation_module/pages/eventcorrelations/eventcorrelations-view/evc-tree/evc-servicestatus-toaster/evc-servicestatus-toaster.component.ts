@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, ViewChild } from '@angular/core';
 
-import { NgIf, TitleCasePipe } from '@angular/common';
+import { TitleCasePipe } from '@angular/common';
 import {
     ColComponent,
     ProgressBarComponent,
@@ -34,26 +34,25 @@ import { TrustAsHtmlPipe } from '../../../../../../../pipes/trust-as-html.pipe';
 @Component({
     selector: 'oitc-evc-servicestatus-toaster',
     imports: [
-    NgIf,
-    ProgressBarComponent,
-    ProgressComponent,
-    ToastBodyComponent,
-    ToastComponent,
-    ToastHeaderComponent,
-    ToasterComponent,
-    TableDirective,
-    FaIconComponent,
-    TranslocoDirective,
-    SkeletonModule,
-    ToasterLoaderComponent,
-    RowComponent,
-    ColComponent,
-    LabelLinkComponent,
-    HoststatusIconComponent,
-    TitleCasePipe,
-    ServicestatusIconComponent,
-    TrustAsHtmlPipe
-],
+        ProgressBarComponent,
+        ProgressComponent,
+        ToastBodyComponent,
+        ToastComponent,
+        ToastHeaderComponent,
+        ToasterComponent,
+        TableDirective,
+        FaIconComponent,
+        TranslocoDirective,
+        SkeletonModule,
+        ToasterLoaderComponent,
+        RowComponent,
+        ColComponent,
+        LabelLinkComponent,
+        HoststatusIconComponent,
+        TitleCasePipe,
+        ServicestatusIconComponent,
+        TrustAsHtmlPipe
+    ],
     templateUrl: './evc-servicestatus-toaster.component.html',
     styleUrl: './evc-servicestatus-toaster.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -75,36 +75,38 @@
                         </label>
 
                         <oitc-select
-                                name="file_to_restore"
-                                id="file_to_restore"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="selectedBackup"
-                                [options]="backupFiles"
-                                [disabled]="restoreIsRunning">
+                            name="file_to_restore"
+                            id="file_to_restore"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="selectedBackup"
+                            [options]="backupFiles"
+                            [disabled]="restoreIsRunning">
                         </oitc-select>
                     </div>
 
                 </c-col>
 
-                <c-col [xs]="12" *ngIf="restoreIsRunning">
-                    <ng-template #contentTemplate let-data>
-                        <span class="h5" [ngClass]="['text-'+data.color]" *ngIf="data">
-                            {{ t('Restore in progress...') }}
-                        </span>
-                        <div class="mt-2">
-                            <p-progressBar mode="indeterminate"
-                                           [style]="{ height: '6px' }"/>
-                        </div>
-
-                    </ng-template>
-
-                    <oitc-alert
+                @if (restoreIsRunning) {
+                    <c-col [xs]="12">
+                        <ng-template #contentTemplate let-data>
+                            @if (data) {
+                                <span class="h5" [ngClass]="['text-'+data.color]">
+                                    {{ t('Restore in progress...') }}
+                                </span>
+                            }
+                            <div class="mt-2">
+                                <p-progressBar mode="indeterminate"
+                                               [style]="{ height: '6px' }"/>
+                            </div>
+                        </ng-template>
+                        <oitc-alert
                             baseIcon="circle"
                             color="primary"
                             [icon]="['fas', 'hourglass']"
                             [contentTemplate]="contentTemplate"></oitc-alert>
-                </c-col>
+                    </c-col>
+                }
             </c-row>
         </c-card-body>
 

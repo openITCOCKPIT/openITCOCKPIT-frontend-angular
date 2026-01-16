@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
-import { NgIf } from '@angular/common';
+
 import {
     ColComponent,
     ContainerComponent,
@@ -57,7 +57,6 @@ import { SliderTimeComponent } from '../../../../components/slider-time/slider-t
         InputGroupTextDirective,
         MatSort,
         MatSortHeader,
-        NgIf,
         NoRecordsComponent,
         ReactiveFormsModule,
         RowComponent,

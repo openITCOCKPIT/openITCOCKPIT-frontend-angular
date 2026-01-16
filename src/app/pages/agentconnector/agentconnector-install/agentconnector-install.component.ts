@@ -14,7 +14,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -35,7 +35,6 @@ import { FormsModule } from '@angular/forms';
         CardHeaderComponent,
         CardTitleDirective,
         FaIconComponent,
-        NgIf,
         PermissionDirective,
         TranslocoDirective,
         RouterLink,
