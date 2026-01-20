@@ -57,10 +57,12 @@
                             <span class="h4 text-primary">
                                 {{ t('Service level Agreement: ') }}
                                 @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'edit'])|async) {
-                                    <a [routerLink]="['/', 'sla_module', 'slas', 'edit', sla.id]"
-                                       *ngIf="sla.allowEdit">
-                                        "{{ sla.name }}"
-                                    </a>
+                                    @if (sla.allowEdit) {
+                                        <a [routerLink]="['/', 'sla_module', 'slas', 'edit', sla.id]"
+                                        >
+                                            "{{ sla.name }}"
+                                        </a>
+                                    }
                                 } @else {
                                     "{{ sla.name }}"
                                 }
@@ -347,133 +349,146 @@
                             </div>
                         </c-alert>
 
-                        <table *ngIf="hosts.hosts" bordered cTable class="mt-2 mb-2 table-sm" hover striped
-                               matSort
-                               (matSortChange)="onSortChange($event)"
-                               [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                            <thead>
-                            <tr>
-                                <th scope="col" mat-sort-header="Hosts.name">
-                                    {{ t('Name') }}
-                                </th>
-                                <th scope="col" mat-sort-header="Hosts.address">
-                                    {{ t('Address') }}
-                                </th>
-                                <th scope="col" mat-sort-header="hostdescription">
-                                    {{ t('Description') }}
-                                </th>
-                                <th scope="col">
-                                    {{ t('Host tags') }}
-                                </th>
-                                <th scope="col">
-                                    {{ t('Container') }}
-                                </th>
-                                <th scope="col" colspan="2">
-                                    {{ t('SLA') }}
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <ng-container *ngFor="let host of hosts.hosts; let i = index">
-                                <tr [ngClass]="{'table-header-bg-primary-light': i % 2 === 0, 'table-header-bg-primary-dark': i % 2 !== 0}">
-                                    <td>
-                                        <fa-icon [icon]="['fas', 'desktop']" class="text-white"></fa-icon>
-                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                                            <a [routerLink]="['/', 'hosts', 'browser', host.id]" class="text-white">
-                                                {{ host.name }}
-                                            </a>
-                                        } @else {
-                                            {{ host.name }}
-                                        }
-                                    </td>
-                                    <td>
-                                        {{ host.address }}
-                                    </td>
-                                    <td>
-                                        {{ host.hostdescription }}
-                                    </td>
-                                    <td>
-                                        <c-badge color="primary" [hidden]="!host.hosttags" class="me-1"
-                                                 *ngFor="let tag of host.hosttags.split(',')">
-                                            {{ tag }}
-                                        </c-badge>
-                                    </td>
-                                    <td>
-                                        {{ host.primary_container }}
-                                    </td>
-                                    <td class="text-white">
-                                        <div [hidden]="host.sla !== null" class="text-center">
-                                            <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
-                                        </div>
-                                        @if (( this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'edit'])|async ) && host.sla !== null) {
-                                            <a [routerLink]="['/', 'sla_module', 'slas', 'edit', host.sla.id]"
-                                               class="text-white" *ngIf="sla.allowEdit">
-                                                {{ host.sla.name }}
-                                            </a>
-                                            <span [hidden]="sla.allowEdit">
-                                                {{ host.sla.name }}
-                                            </span>
-                                        }
-                                    </td>
+                        @if (hosts.hosts) {
+                            <table bordered cTable class="mt-2 mb-2 table-sm" hover striped
+                                   matSort
+                                   (matSortChange)="onSortChange($event)"
+                                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                                <thead>
+                                <tr>
+                                    <th scope="col" mat-sort-header="Hosts.name">
+                                        {{ t('Name') }}
+                                    </th>
+                                    <th scope="col" mat-sort-header="Hosts.address">
+                                        {{ t('Address') }}
+                                    </th>
+                                    <th scope="col" mat-sort-header="hostdescription">
+                                        {{ t('Description') }}
+                                    </th>
+                                    <th scope="col">
+                                        {{ t('Host tags') }}
+                                    </th>
+                                    <th scope="col">
+                                        {{ t('Container') }}
+                                    </th>
+                                    <th scope="col" colspan="2">
+                                        {{ t('SLA') }}
+                                    </th>
                                 </tr>
-                                <ng-container *ngIf="host.services.length > 0">
-                                    <tr>
-                                        <th colspan="2">
-                                            {{ t('Service') }}
-                                        </th>
-                                        <th>
-                                            {{ t('Description') }}
-                                        </th>
-                                        <th>
-                                            {{ t('Service tags') }}
-                                        </th>
-                                        <th class="no-sort">
-                                            {{ t('Container') }}
-                                        </th>
-                                        <th class="no-sort">
-                                            {{ t('SLA relevant') }}
-                                        </th>
-                                    </tr>
-                                    <tr *ngFor="let service of host.services">
-                                        <td colspan="2">
-                                            <fa-icon [icon]="['fas', 'gear']" class="text-primary"></fa-icon>
-                                            @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
-                                                <a [routerLink]="['/', 'services', 'browser', service.id]">
-                                                    {{ service.servicename }}
-                                                </a>
-                                            } @else {
-                                                {{ service.servicename }}
+                                </thead>
+                                <tbody>
+                                    @for (host of hosts.hosts; track host; let i = $index) {
+                                        <tr [ngClass]="{'table-header-bg-primary-light': i % 2 === 0, 'table-header-bg-primary-dark': i % 2 !== 0}">
+                                            <td>
+                                                <fa-icon [icon]="['fas', 'desktop']" class="text-white"></fa-icon>
+                                                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                                    <a [routerLink]="['/', 'hosts', 'browser', host.id]"
+                                                       class="text-white">
+                                                        {{ host.name }}
+                                                    </a>
+                                                } @else {
+                                                    {{ host.name }}
+                                                }
+                                            </td>
+                                            <td>
+                                                {{ host.address }}
+                                            </td>
+                                            <td>
+                                                {{ host.hostdescription }}
+                                            </td>
+                                            <td>
+                                                @for (tag of host.hosttags.split(','); track tag) {
+                                                    <c-badge color="primary" [hidden]="!host.hosttags" class="me-1"
+                                                    >
+                                                        {{ tag }}
+                                                    </c-badge>
+                                                }
+                                            </td>
+                                            <td>
+                                                {{ host.primary_container }}
+                                            </td>
+                                            <td class="text-white">
+                                                <div [hidden]="host.sla !== null" class="text-center">
+                                                    <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
+                                                </div>
+                                                @if (( this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'edit'])|async ) && host.sla !== null) {
+                                                    @if (sla.allowEdit) {
+                                                        <a [routerLink]="['/', 'sla_module', 'slas', 'edit', host.sla.id]"
+                                                           class="text-white">
+                                                            {{ host.sla.name }}
+                                                        </a>
+                                                    }
+                                                    <span [hidden]="sla.allowEdit">
+                                                        {{ host.sla.name }}
+                                                    </span>
+                                                }
+                                            </td>
+                                        </tr>
+                                        @if (host.services.length > 0) {
+                                            <tr>
+                                                <th colspan="2">
+                                                    {{ t('Service') }}
+                                                </th>
+                                                <th>
+                                                    {{ t('Description') }}
+                                                </th>
+                                                <th>
+                                                    {{ t('Service tags') }}
+                                                </th>
+                                                <th class="no-sort">
+                                                    {{ t('Container') }}
+                                                </th>
+                                                <th class="no-sort">
+                                                    {{ t('SLA relevant') }}
+                                                </th>
+                                            </tr>
+                                            @for (service of host.services; track service) {
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <fa-icon [icon]="['fas', 'gear']"
+                                                                 class="text-primary"></fa-icon>
+                                                        @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                                            <a [routerLink]="['/', 'services', 'browser', service.id]">
+                                                                {{ service.servicename }}
+                                                            </a>
+                                                        } @else {
+                                                            {{ service.servicename }}
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        {{ service.description }}
+                                                    </td>
+                                                    <td>
+                                                        @for (tag of service.servicetags.split(','); track tag) {
+                                                            <c-badge color="primary" [hidden]="!service.servicetags"
+                                                                     class="me-1"
+                                                            >
+                                                                {{ tag }}
+                                                            </c-badge>
+                                                        }
+                                                    </td>
+                                                    <th class="italic text-muted font-weight-light">
+                                                        [{{ t('Inherit from host') }}]
+                                                    </th>
+                                                    <td class="text-center">
+                                                        <fa-icon [icon]="['fas', 'minus']" [hidden]="host.sla !== null"
+                                                                 class="text-danger text-grayscale-50 opacity-30"></fa-icon>
+                                                        <span [hidden]="host.sla === null">
+                                                            <fa-icon [icon]="['fas', 'check']"
+                                                                     [hidden]="service.is_sla_relevant != 1"
+                                                                     class="text-success"></fa-icon>
+                                                            <fa-icon [icon]="['fas', 'xmark']"
+                                                                     [hidden]="service.is_sla_relevant == 1"
+                                                                     class="text-danger"></fa-icon>
+                                                        </span>
+                                                    </td>
+                                                </tr>
                                             }
-                                        </td>
-                                        <td>
-                                            {{ service.description }}
-                                        </td>
-                                        <td>
-                                            <c-badge color="primary" [hidden]="!service.servicetags" class="me-1"
-                                                     *ngFor="let tag of service.servicetags.split(',')">
-                                                {{ tag }}
-                                            </c-badge>
-                                        </td>
-                                        <th class="italic text-muted font-weight-light">
-                                            [{{ t('Inherit from host') }}]
-                                        </th>
-                                        <td class="text-center">
-                                            <fa-icon [icon]="['fas', 'minus']" [hidden]="host.sla !== null"
-                                                     class="text-danger text-grayscale-50 opacity-30"></fa-icon>
-                                            <span [hidden]="host.sla === null">
-                                                <fa-icon [icon]="['fas', 'check']"
-                                                         [hidden]="service.is_sla_relevant != 1"
-                                                         class="text-success"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'xmark']"
-                                                         [hidden]="service.is_sla_relevant == 1"
-                                                         class="text-danger"></fa-icon>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </ng-container>
-                            </ng-container>
-                            </tbody>
-                        </table>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        }
                     </c-col>
                 </c-row>
 
@@ -481,10 +496,11 @@
                     [fluid]="true">
                     <c-row>
                         <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="hosts"
-                                [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
+                            @if (hosts) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
+                            }
                         </c-col>
                     </c-row>
                 </c-container>

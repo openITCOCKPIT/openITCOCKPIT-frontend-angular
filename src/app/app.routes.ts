@@ -46,6 +46,11 @@ import { networkModuleRoutes } from './modules/network_module/network_module.rou
 import { broadcomProxyModuleRoutes } from './modules/broadcomproxy_module/broadcomproxy_module.routes';
 import { nutanixModuleRoutes } from './modules/nutanix_module/nutanix_module.routes';
 import { paloAltoModuleRoutes } from './modules/palo_alto_module/palo_alto_module.routes';
+import { nginxModuleRoutes } from './modules/nginx_module/nginx_module.routes';
+import { citrixModuleRoutes } from './modules/citrix_module/citrix_module.routes';
+import { arubaModuleRoutes } from './modules/aruba_module/aruba_module.routes';
+import { fortinetModuleRoutes } from './modules/fortinet_module/fortinet_module.routes';
+import { fujitsuModuleRoutes } from './modules/fujitsu_module/fujitsu_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -113,7 +118,12 @@ const moduleRoutes: Routes = [
     ...broadcomProxyModuleRoutes,
     ...nutanixModuleRoutes,
     ...networkModuleRoutes,
-    ...paloAltoModuleRoutes
+    ...paloAltoModuleRoutes,
+    ...nginxModuleRoutes,
+    ...citrixModuleRoutes,
+    ...arubaModuleRoutes,
+    ...fortinetModuleRoutes,
+    ...fujitsuModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{

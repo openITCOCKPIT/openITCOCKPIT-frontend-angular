@@ -21,7 +21,7 @@ import {
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { NgIf } from '@angular/common';
+
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -39,7 +39,6 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
         SelectComponent,
         FormLabelDirective,
         FormControlDirective,
-        NgIf,
         WizardsDynamicfieldsComponent,
         TranslocoDirective,
         ProgressBarModule,

@@ -57,14 +57,16 @@
                 <c-col md="12">
                     <fieldset>
                         <h5>{{ t('Available metrics') }}</h5>
-                        <button *ngFor="let metricSelected of selectedMetrics"
+                        @for (metricSelected of selectedMetrics; track metricSelected) {
+                            <button
                                 cButton
                                 color="primary"
                                 [size]="'xs'"
                                 class="m-1"
                                 (click)="addMetricString(metricSelected)">
-                            {{ metricSelected }}
-                        </button>
+                                {{ metricSelected }}
+                            </button>
+                        }
                     </fieldset>
                 </c-col>
             </c-row>
@@ -184,12 +186,16 @@
 
                     <h5 class="text-info">
                         {{ t('Query result:') }}
-                        <span *ngIf="executeResult" class="ng-binding ng-hide">
-                            {{ executeResult }}
-                        </span>
-                        <span class="italic" *ngIf="! executeResult">
-                            {{ t('no data') }}
-                        </span>
+                        @if (executeResult) {
+                            <span class="ng-binding ng-hide">
+                                {{ executeResult }}
+                            </span>
+                        }
+                        @if (!executeResult) {
+                            <span class="italic">
+                                {{ t('no data') }}
+                            </span>
+                        }
                     </h5>
                 </c-col>
                 <c-col md="2" class=" text-end">
@@ -231,7 +237,7 @@
                         <label cLabel for="ValidateService.warning_operator" class="text-warning">
                             {{ t('Operator') }}
                         </label>
-                        <ng-container *ngIf="ValidateService.threshold_type === PrometheusThresholdType.scalar">
+                        @if (ValidateService.threshold_type === PrometheusThresholdType.scalar) {
                             <oitc-select
                                 name="ValidateService.warning_operator"
                                 id="ValidateService.warning_operator"
@@ -242,8 +248,8 @@
                                 oitcFormError [errors]="errors" errorField="warning_operator">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="warning_operator"></oitc-form-feedback>
-                        </ng-container>
-                        <ng-container *ngIf="ValidateService.threshold_type !== PrometheusThresholdType.scalar">
+                        }
+                        @if (ValidateService.threshold_type !== PrometheusThresholdType.scalar) {
                             <oitc-select
                                 name="ValidateService.warning_operatorOnlyAuto"
                                 id="ValidateService.warning_operatorOnlyAuto"
@@ -255,7 +261,7 @@
                                 oitcFormError [errors]="errors" errorField="warning_operator">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="warning_operator"></oitc-form-feedback>
-                        </ng-container>
+                        }
                     </div>
                 </c-col>
                 <c-col>
@@ -309,12 +315,13 @@
                     </div>
                 </c-col>
                 <c-col>
-                    <oitc-prometheus-thresholds
-                        *ngIf="ValidateService.threshold_type !== PrometheusThresholdType.scalar"
-                        [inclusive]="(ValidateService.threshold_type === PrometheusThresholdType.range_inclusive)"
-                        [min]="ValidateService.warning_min"
-                        [max]="ValidateService.warning_max"
-                        [type]="'warning'"></oitc-prometheus-thresholds>
+                    @if (ValidateService.threshold_type !== PrometheusThresholdType.scalar) {
+                        <oitc-prometheus-thresholds
+                            [inclusive]="(ValidateService.threshold_type === PrometheusThresholdType.range_inclusive)"
+                            [min]="ValidateService.warning_min"
+                            [max]="ValidateService.warning_max"
+                            [type]="'warning'"></oitc-prometheus-thresholds>
+                    }
                 </c-col>
             </c-row>
             <c-row>
@@ -331,7 +338,7 @@
                         <label cLabel for="ValidateService.critical_operator" class="text-danger">
                             {{ t('Operator') }}
                         </label>
-                        <ng-container *ngIf="ValidateService.threshold_type == PrometheusThresholdType.scalar">
+                        @if (ValidateService.threshold_type == PrometheusThresholdType.scalar) {
                             <oitc-select
                                 name="ValidateService.critical_operator"
                                 id="ValidateService.critical_operator"
@@ -342,8 +349,8 @@
                                 oitcFormError [errors]="errors" errorField="critical_operator">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="critical_operator"></oitc-form-feedback>
-                        </ng-container>
-                        <ng-container *ngIf="ValidateService.threshold_type !== PrometheusThresholdType.scalar">
+                        }
+                        @if (ValidateService.threshold_type !== PrometheusThresholdType.scalar) {
                             <oitc-select
                                 name="ValidateService.critical_operatorOnlyAuto"
                                 id="ValidateService.critical_operatorOnlyAuto"
@@ -355,7 +362,7 @@
                                 oitcFormError [errors]="errors" errorField="critical_operator">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="critical_operator"></oitc-form-feedback>
-                        </ng-container>
+                        }
                     </div>
                 </c-col>
                 <c-col>
@@ -409,12 +416,13 @@
                     </div>
                 </c-col>
                 <c-col>
-                    <oitc-prometheus-thresholds
-                        *ngIf="ValidateService.threshold_type !== PrometheusThresholdType.scalar"
-                        [inclusive]="(ValidateService.threshold_type === PrometheusThresholdType.range_inclusive)"
-                        [min]="ValidateService.critical_min"
-                        [max]="ValidateService.critical_max"
-                        [type]="'critical'"></oitc-prometheus-thresholds>
+                    @if (ValidateService.threshold_type !== PrometheusThresholdType.scalar) {
+                        <oitc-prometheus-thresholds
+                            [inclusive]="(ValidateService.threshold_type === PrometheusThresholdType.range_inclusive)"
+                            [min]="ValidateService.critical_min"
+                            [max]="ValidateService.critical_max"
+                            [type]="'critical'"></oitc-prometheus-thresholds>
+                    }
                 </c-col>
             </c-row>
 
@@ -497,51 +505,56 @@
             </div>
 
 
-            <c-card class="mb-3" *ngIf="createServicesArray.length > 0">
-                <c-card-header>
-                    <h5 cCardTitle>
-                        {{ t('Services') }}
-                    </h5>
-                </c-card-header>
-                <c-card-body class="p-0">
-                    <table bordered cTable hover class="mb-0">
-                        <thead>
-                        <tr>
-                            <th>{{ t('Name') }}</th>
-                            <th>{{ t('PromQL Query') }}</th>
-                            <th class="width-50 text-center" scope="col">{{ t('Unit') }}</th>
-                            <th class="width-50 text-center" scope="col" colspan="2">{{ t('Warning') }}</th>
-                            <th class="width-50 text-center" scope="col" colspan="2">{{ t('Critical') }}</th>
-                            <th class="width-50 text-center" scope="col">
-                                {{ t('Remove') }}
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr *ngFor="let service of createServicesArray; let i = index">
-                            <td>{{ service.name }}</td>
-                            <td>{{ service.prometheus_alert_rule.promql }}</td>
-                            <td class="width-50 text-center">{{ service.prometheus_alert_rule.unit }}</td>
-                            <td class="width-50 text-center">{{ service.prometheus_alert_rule.warning_min }}</td>
-                            <td class="width-50 text-center">{{ service.prometheus_alert_rule.warning_max }}</td>
-                            <td class="width-50 text-center">{{ service.prometheus_alert_rule.critical_min }}</td>
-                            <td class="width-50 text-center">{{ service.prometheus_alert_rule.critical_max }}</td>
-                            <td class="width-50 text-center">
-                                <button cButton type="button" color="danger" size="xs" (click)="removeService(i)">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+            @if (createServicesArray.length > 0) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <h5 cCardTitle>
+                            {{ t('Services') }}
+                        </h5>
+                    </c-card-header>
+                    <c-card-body class="p-0">
+                        <table bordered cTable hover class="mb-0">
+                            <thead>
+                            <tr>
+                                <th>{{ t('Name') }}</th>
+                                <th>{{ t('PromQL Query') }}</th>
+                                <th class="width-50 text-center" scope="col">{{ t('Unit') }}</th>
+                                <th class="width-50 text-center" scope="col" colspan="2">{{ t('Warning') }}</th>
+                                <th class="width-50 text-center" scope="col" colspan="2">{{ t('Critical') }}</th>
+                                <th class="width-50 text-center" scope="col">
                                     {{ t('Remove') }}
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </c-card-body>
-                <c-card-footer class="text-end">
-                    <button cButton type="button" color="success" (click)="createServices()">
-                        {{ t('Create services') }}
-                    </button>
-                </c-card-footer>
-            </c-card>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @for (service of createServicesArray; track service; let i = $index) {
+                                    <tr>
+                                        <td>{{ service.name }}</td>
+                                        <td>{{ service.prometheus_alert_rule.promql }}</td>
+                                        <td class="width-50 text-center">{{ service.prometheus_alert_rule.unit }}</td>
+                                        <td class="width-50 text-center">{{ service.prometheus_alert_rule.warning_min }}</td>
+                                        <td class="width-50 text-center">{{ service.prometheus_alert_rule.warning_max }}</td>
+                                        <td class="width-50 text-center">{{ service.prometheus_alert_rule.critical_min }}</td>
+                                        <td class="width-50 text-center">{{ service.prometheus_alert_rule.critical_max }}</td>
+                                        <td class="width-50 text-center">
+                                            <button cButton type="button" color="danger" size="xs"
+                                                    (click)="removeService(i)">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Remove') }}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </c-card-body>
+                    <c-card-footer class="text-end">
+                        <button cButton type="button" color="success" (click)="createServices()">
+                            {{ t('Create services') }}
+                        </button>
+                    </c-card-footer>
+                </c-card>
+            }
 
             <hr class="border-dashed my-3"/>
 
@@ -555,27 +568,31 @@
                 </tr>
                 </thead>
                 <tbody>
-                <ng-container *ngFor="let metric of selectedMetrics">
-                    <ng-container *ngIf="typeof(metrics[metric]) !== 'undefined'">
-                        <tr *ngFor="let datum of metrics[metric].metricDetails.data.result">
-                            <td>
-                                <span class="no-padding bold ng-binding">{{ datum.metric.__name__ }}</span>
-                                {{ '{' }}
-                                <code class="no-padding ng-binding ng-scope">
-                                    <ng-container *ngFor="let a of datum.metric | keyvalue; let last = last">
-                                        <ng-container *ngIf="a.key !== '__name__'">
-                                            {{ a.key }}="{{ a.value }}"<span *ngIf="!last">, </span>
-                                        </ng-container>
-                                    </ng-container>
-                                </code>
-                                {{ '}' }}
-                            </td>
-                            <td>
-                                {{ datum.value[1] }}
-                            </td>
-                        </tr>
-                    </ng-container>
-                </ng-container>
+                    @for (metric of selectedMetrics; track metric) {
+                        @if (typeof ( metrics[metric] ) !== 'undefined') {
+                            @for (datum of metrics[metric].metricDetails.data.result; track datum) {
+                                <tr>
+                                    <td>
+                                        <span class="no-padding bold ng-binding">{{ datum.metric.__name__ }}</span>
+                                        {{ '{' }}
+                                        <code class="no-padding ng-binding ng-scope">
+                                            @for (a of datum.metric | keyvalue; track a; let last = $last) {
+                                                @if (a.key !== '__name__') {
+                                                    {{ a.key }}="{{ a.value }}"@if (!last) {
+                                                        <span>, </span>
+                                                    }
+                                                }
+                                            }
+                                        </code>
+                                        {{ '}' }}
+                                    </td>
+                                    <td>
+                                        {{ datum.value[1] }}
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
                 </tbody>
             </table>
         </c-card-body>

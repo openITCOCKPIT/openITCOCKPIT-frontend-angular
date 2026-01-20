@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enable-modal.component';
@@ -132,7 +132,6 @@ import { ENABLE_SERVICE_TOKEN } from '../../../tokens/enable-injection.token';
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PaginatorModule,
         PermissionDirective,
         SelectComponent,
@@ -149,7 +148,6 @@ import { ENABLE_SERVICE_TOKEN } from '../../../tokens/enable-injection.token';
         HostsEnableNotificationsModalComponent,
         DebounceDirective,
         TableDirective,
-        NgForOf,
         HoststatusIconComponent,
         TranslocoPipe,
         ServiceCumulatedStatusIconComponent,

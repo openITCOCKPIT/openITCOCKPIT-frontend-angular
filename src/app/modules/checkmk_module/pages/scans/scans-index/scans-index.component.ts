@@ -34,7 +34,7 @@ import {
 } from '../scans.interface';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
@@ -53,38 +53,36 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-scans-index',
     imports: [
-    RouterLink,
-    FaIconComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    ObjectUuidComponent,
-    CardBodyComponent,
-    TranslocoDirective,
-    PermissionDirective,
-    NgIf,
-    ColComponent,
-    RowComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    PaginatorModule,
-    FormLabelDirective,
-    RequiredIconComponent,
-    SelectComponent,
-    CardFooterComponent,
-    FormSelectDirective,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    XsButtonDirective,
-    ProgressBarModule,
-    TableDirective,
-    NgForOf,
-    MultiSelectComponent,
-    FormsModule
-],
+        RouterLink,
+        FaIconComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        ObjectUuidComponent,
+        CardBodyComponent,
+        TranslocoDirective,
+        PermissionDirective,
+        ColComponent,
+        RowComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        PaginatorModule,
+        FormLabelDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        CardFooterComponent,
+        FormSelectDirective,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        XsButtonDirective,
+        ProgressBarModule,
+        TableDirective,
+        MultiSelectComponent,
+        FormsModule
+    ],
     templateUrl: './scans-index.component.html',
     styleUrl: './scans-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,3 +1,7 @@
-<div class="pt-1 text-invalid" *ngIf="hasError">
-    <div *ngFor="let error of errorMessages">{{ error }}</div>
-</div>
+@if (hasError) {
+    <div class="pt-1 text-invalid">
+        @for (error of errorMessages; track error) {
+            <div>{{ error }}</div>
+        }
+    </div>
+}

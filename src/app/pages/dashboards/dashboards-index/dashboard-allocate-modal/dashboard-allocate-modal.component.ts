@@ -19,7 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PermissionsService } from '../../../../permissions/permissions.service';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { DashboardAllocateModalService } from './dashboard-allocate-modal.service';
 import { DashboardTab, DashboardTabAllocation } from '../../dashboards.interface';
@@ -48,7 +48,6 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
         XsButtonDirective,
         ModalToggleDirective,
         AsyncPipe,
-        NgIf,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
@@ -97,7 +96,7 @@ export class DashboardAllocateModalComponent implements OnDestroy {
             this.tab = tab;
 
             this.mode = 'add';
-            
+
             if (tab.dashboard_tab_allocation?.id) {
                 // Edit
                 this.mode = 'edit';

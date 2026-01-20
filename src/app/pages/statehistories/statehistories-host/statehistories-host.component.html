@@ -1,8 +1,9 @@
 <ng-container *transloco="let t">
 
-    <oitc-hosts-browser-menu
-        *ngIf="hostBrowserConfig"
-        [config]="hostBrowserConfig"></oitc-hosts-browser-menu>
+    @if (hostBrowserConfig) {
+        <oitc-hosts-browser-menu
+            [config]="hostBrowserConfig"></oitc-hosts-browser-menu>
+    }
 
     <c-card class="mb-3 mt-3">
         <c-card-header>
@@ -188,82 +189,93 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!hoststatehistories"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="hoststatehistories"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col" mat-sort-header="StatehistoryHosts.state">
-                        {{ t('State') }}
-                    </th>
-                    <th scope="col" mat-sort-header="StatehistoryHosts.state_time">
-                        {{ t('Date') }}
-                    </th>
-                    <th scope="col" mat-sort-header="StatehistoryHosts.current_check_attempt">
-                        {{ t('Check attempt') }}
-                    </th>
-                    <th scope="col" mat-sort-header="StatehistoryHosts.is_hardstate">
-                        {{ t('State type') }}
-                    </th>
-                    <th scope="col" mat-sort-header="StatehistoryHosts.output">
-                        {{ t('Host output') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let statehistory of hoststatehistories.all_statehistories">
-                    <td class="text-center">
-                        <oitc-hoststatus-simple-icon
-                            [hoststatus]="statehistory.StatehistoryHost.state"
-                            [hardstate]="statehistory.StatehistoryHost.is_hardstate"></oitc-hoststatus-simple-icon>
-                    </td>
-                    <td>
-                        {{ statehistory.StatehistoryHost.state_time }}
-                    </td>
-                    <td class="text-center">
-                        {{ statehistory.StatehistoryHost.current_check_attempt }}/
-                        {{ statehistory.StatehistoryHost.max_check_attempts }}
-                    </td>
-                    <td class="text-center">
-                        <span class="badge text-uppercase"
-                              [ngClass]="{
+            @if (!hoststatehistories) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (hoststatehistories) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col" mat-sort-header="StatehistoryHosts.state">
+                            {{ t('State') }}
+                        </th>
+                        <th scope="col" mat-sort-header="StatehistoryHosts.state_time">
+                            {{ t('Date') }}
+                        </th>
+                        <th scope="col" mat-sort-header="StatehistoryHosts.current_check_attempt">
+                            {{ t('Check attempt') }}
+                        </th>
+                        <th scope="col" mat-sort-header="StatehistoryHosts.is_hardstate">
+                            {{ t('State type') }}
+                        </th>
+                        <th scope="col" mat-sort-header="StatehistoryHosts.output">
+                            {{ t('Host output') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (statehistory of hoststatehistories.all_statehistories; track statehistory) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-hoststatus-simple-icon
+                                        [hoststatus]="statehistory.StatehistoryHost.state"
+                                        [hardstate]="statehistory.StatehistoryHost.is_hardstate"></oitc-hoststatus-simple-icon>
+                                </td>
+                                <td>
+                                    {{ statehistory.StatehistoryHost.state_time }}
+                                </td>
+                                <td class="text-center">
+                                    {{ statehistory.StatehistoryHost.current_check_attempt }}/
+                                    {{ statehistory.StatehistoryHost.max_check_attempts }}
+                                </td>
+                                <td class="text-center">
+                                    @if (statehistory.StatehistoryHost.is_hardstate) {
+                                        <span class="badge text-uppercase"
+                                              [ngClass]="{
                                     'bg-up': statehistory.StatehistoryHost.state == 0,
                                     'bg-down': statehistory.StatehistoryHost.state == 1,
                                     'bg-unreachable': statehistory.StatehistoryHost.state == 2
                                     }"
-                              *ngIf="statehistory.StatehistoryHost.is_hardstate">
-                            {{ 'Hard' | transloco }}
-                        </span>
-                        <span class="badge text-uppercase opacity-50"
-                              [ngClass]="{
+                                        >
+                                            {{ 'Hard' | transloco }}
+                                        </span>
+                                    }
+                                    @if (!statehistory.StatehistoryHost.is_hardstate) {
+                                        <span class="badge text-uppercase opacity-50"
+                                              [ngClass]="{
                                     'bg-up': statehistory.StatehistoryHost.state == 0,
                                     'bg-down': statehistory.StatehistoryHost.state == 1,
                                     'bg-unreachable': statehistory.StatehistoryHost.state == 2
                                     }"
-                              *ngIf="!statehistory.StatehistoryHost.is_hardstate">
-                            {{ 'Soft' | transloco }}
-                        </span>
-                    </td>
-                    <td>
-                        <div class="word-break"
-                             [innerHTML]="statehistory.StatehistoryHost.outputHtml | trustAsHtml "></div>
-                    </td>
-
-                </tr>
-                </tbody>
-            </table>
-            <oitc-no-records
-                *ngIf="hoststatehistories && hoststatehistories.all_statehistories.length === 0"></oitc-no-records>
+                                        >
+                                            {{ 'Soft' | transloco }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="word-break"
+                                         [innerHTML]="statehistory.StatehistoryHost.outputHtml | trustAsHtml "></div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @if (hoststatehistories && hoststatehistories.all_statehistories.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
             <c-container
                 [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="hoststatehistories"
-                            [paginateOrScroll]="hoststatehistories"></oitc-paginate-or-scroll>
+                        @if (hoststatehistories) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="hoststatehistories"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

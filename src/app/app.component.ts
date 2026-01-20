@@ -59,7 +59,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
-    
+
     // Inject HistoryService to keep track of the previous URLs
     private historyService: HistoryService = inject(HistoryService);
 

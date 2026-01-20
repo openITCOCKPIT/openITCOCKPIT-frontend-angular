@@ -137,58 +137,69 @@
             <!-- End Filter -->
 
 
-            <oitc-table-loader *ngIf="!deletedHosts"></oitc-table-loader>
-            <table *ngIf="deletedHosts" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th scope="col" mat-sort-header="DeletedHosts.name">
-                        {{ t('Host name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="DeletedHosts.uuid">
-                        {{ t('UUID') }}
-                    </th>
-                    <th scope="col" mat-sort-header="DeletedHosts.created">
-                        {{ t('Date') }}
-                    </th>
-                    <th scope="col" mat-sort-header="DeletedHosts.deleted_perfdata">
-                        {{ t('Performance data deleted') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let deletedHost of deletedHosts.deletedHosts">
-                    <td class="word-break">{{ deletedHost.DeletedHost.name }}</td>
-                    <td>{{ deletedHost.DeletedHost.uuid }}</td>
-                    <td>{{ deletedHost.DeletedHost.created }}</td>
-                    <td class="text-center">
-                        <span
-                            *ngIf="!deletedHost.DeletedHost.perfdataDeleted"
-                            class="badge border border-info text-info">
-                            {{ t('Pending') }}
-                        </span>
-                        <span
-                            *ngIf="deletedHost.DeletedHost.perfdataDeleted"
-                            class="badge border border-success text-success">
-                            {{ t('Yes') }}
-                        </span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            @if (!deletedHosts) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (deletedHosts) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="DeletedHosts.name">
+                            {{ t('Host name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="DeletedHosts.uuid">
+                            {{ t('UUID') }}
+                        </th>
+                        <th scope="col" mat-sort-header="DeletedHosts.created">
+                            {{ t('Date') }}
+                        </th>
+                        <th scope="col" mat-sort-header="DeletedHosts.deleted_perfdata">
+                            {{ t('Performance data deleted') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (deletedHost of deletedHosts.deletedHosts; track deletedHost) {
+                            <tr>
+                                <td class="word-break">{{ deletedHost.DeletedHost.name }}</td>
+                                <td>{{ deletedHost.DeletedHost.uuid }}</td>
+                                <td>{{ deletedHost.DeletedHost.created }}</td>
+                                <td class="text-center">
+                                    @if (!deletedHost.DeletedHost.perfdataDeleted) {
+                                        <span
+                                            class="badge border border-info text-info">
+                                            {{ t('Pending') }}
+                                        </span>
+                                    }
+                                    @if (deletedHost.DeletedHost.perfdataDeleted) {
+                                        <span
+                                            class="badge border border-success text-success">
+                                            {{ t('Yes') }}
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-            <oitc-no-records
-                *ngIf="deletedHosts && deletedHosts.deletedHosts.length === 0"></oitc-no-records>
+            @if (deletedHosts && deletedHosts.deletedHosts.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
 
             <c-container
                 [fluid]="true" class="mt-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="deletedHosts"
-                            [paginateOrScroll]="deletedHosts"></oitc-paginate-or-scroll>
+                        @if (deletedHosts) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="deletedHosts"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

@@ -30,12 +30,12 @@ import {
     OpenstreetmapRequestSettings
 } from '../openstreetmap.interface';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
-import { NotyService } from  '../../../../layouts/coreui/noty.service';
+import { NotyService } from '../../../../layouts/coreui/noty.service';
 import { FormFeedbackComponent } from '../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormErrorDirective } from '../../../../layouts/coreui/form-error.directive';
 
 @Component({
-  selector: 'oitc-openstreetmap-settings',
+    selector: 'oitc-openstreetmap-settings',
     imports: [
         TranslocoDirective,
         FaIconComponent,
@@ -62,11 +62,11 @@ import { FormErrorDirective } from '../../../../layouts/coreui/form-error.direct
         FormFeedbackComponent,
         FormErrorDirective
     ],
-  templateUrl: './openstreetmap-settings.component.html',
-  styleUrl: './openstreetmap-settings.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './openstreetmap-settings.component.html',
+    styleUrl: './openstreetmap-settings.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OpenstreetmapSettingsComponent implements OnInit, OnDestroy  {
+export class OpenstreetmapSettingsComponent implements OnInit, OnDestroy {
 
     private cdr = inject(ChangeDetectorRef);
     private readonly OpenstreetmapService = inject(OpenstreetmapService);
@@ -99,18 +99,18 @@ export class OpenstreetmapSettingsComponent implements OnInit, OnDestroy  {
     public ngOnInit(): void {
         this.subscriptions.add(
             this.OpenstreetmapService.getSettings().subscribe((settings: OpenstreetmapRequestSettings): void => {
-                this.post.id = settings.settings.id;
-                this.post.server_url = settings.settings.server_url;
-                this.post.reload_interval = settings.settings.reload_interval;
-                this.post.state_filter = Number(settings.settings.state_filter);
-                this.post.hide_empty_locations = Number(settings.settings.hide_empty_locations);
-                this.post.hide_not_monitored_locations = Number(settings.settings.hide_not_monitored_locations);
-                this.post.highlight_down_ack = Number(settings.settings.highlight_down_ack);
-                this.post.filter.up_ok = this.post.state_filter & this.filter.up_ok;
-                this.post.filter.warning = this.post.state_filter & this.filter.warning;
-                this.post.filter.down_critical = this.post.state_filter & this.filter.down_critical;
-                this.post.filter.unreachable_unknown = this.post.state_filter & this.filter.unreachable_unknown;
-                this.cdr.markForCheck();
+                    this.post.id = settings.settings.id;
+                    this.post.server_url = settings.settings.server_url;
+                    this.post.reload_interval = settings.settings.reload_interval;
+                    this.post.state_filter = Number(settings.settings.state_filter);
+                    this.post.hide_empty_locations = Number(settings.settings.hide_empty_locations);
+                    this.post.hide_not_monitored_locations = Number(settings.settings.hide_not_monitored_locations);
+                    this.post.highlight_down_ack = Number(settings.settings.highlight_down_ack);
+                    this.post.filter.up_ok = this.post.state_filter & this.filter.up_ok;
+                    this.post.filter.warning = this.post.state_filter & this.filter.warning;
+                    this.post.filter.down_critical = this.post.state_filter & this.filter.down_critical;
+                    this.post.filter.unreachable_unknown = this.post.state_filter & this.filter.unreachable_unknown;
+                    this.cdr.markForCheck();
                 }
             )
         );
@@ -135,7 +135,7 @@ export class OpenstreetmapSettingsComponent implements OnInit, OnDestroy  {
                     }
                     this.errors = result.data as GenericValidationError;
                     this.notyService.genericError();
-                this.cdr.markForCheck();
+                    this.cdr.markForCheck();
                 }
             )
         );

@@ -142,82 +142,97 @@
             </c-container>
 
 
-            <oitc-table-loader *ngIf="!result"></oitc-table-loader>
+            @if (!result) {
+                <oitc-table-loader></oitc-table-loader>
+            }
 
-            <table *ngIf="result" bordered cTable class="mt-2 mb-2" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th scope="col" mat-sort-header="PrometheusExporters.name">
-                        {{ t('Name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="PrometheusExporters.service">
-                        {{ t('Service') }}
-                    </th>
-                    <th scope="col" mat-sort-header="PrometheusExporters.scrape_interval">
-                        {{ t('Scrape interval') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Container') }}
-                    </th>
-                    <th class="text-center col-1 width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let exporter of result.all_exporters">
-                    <td>
-                        {{ exporter.name }}
-                    </td>
-                    <td>
-                        {{ exporter.service }}
-                    </td>
-                    <td>
-                        {{ exporter.scrape_interval }}
-                    </td>
-                    <td>
-                        {{ exporter.container }}
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'PrometheusModule.PrometheusExporters.edit'"
-                                             [url]="'/prometheus_module/PrometheusExporters/edit/' + exporter.id"
-                                             [allowEdit]="exporter.allow_edit">
-                            <oitc-actions-button-element [permission]="'PrometheusModule.PrometheusExporters.edit'"
+            @if (result) {
+                <table bordered cTable class="mt-2 mb-2" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="PrometheusExporters.name">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PrometheusExporters.service">
+                            {{ t('Service') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PrometheusExporters.scrape_interval">
+                            {{ t('Scrape interval') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Container') }}
+                        </th>
+                        <th class="text-center col-1 width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (exporter of result.all_exporters; track exporter) {
+                            <tr>
+                                <td>
+                                    {{ exporter.name }}
+                                </td>
+                                <td>
+                                    {{ exporter.service }}
+                                </td>
+                                <td>
+                                    {{ exporter.scrape_interval }}
+                                </td>
+                                <td>
+                                    {{ exporter.container }}
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'PrometheusModule.PrometheusExporters.edit'"
                                                          [url]="'/prometheus_module/PrometheusExporters/edit/' + exporter.id"
-                                                         *ngIf="exporter.allow_edit">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider
-                                *ngIf="exporter.allow_edit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(exporter)"
-                                                         *ngIf="exporter.allow_edit"
-                                                         [permission]="'PrometheusModule.PrometheusExporters.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                                                         [allowEdit]="exporter.allow_edit">
+                                        @if (exporter.allow_edit) {
+                                            <oitc-actions-button-element
+                                                [permission]="'PrometheusModule.PrometheusExporters.edit'"
+                                                [url]="'/prometheus_module/PrometheusExporters/edit/' + exporter.id"
+                                            >
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        @if (exporter.allow_edit) {
+                                            <li cDropdownDivider
+                                            ></li>
+                                        }
+                                        @if (exporter.allow_edit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(exporter)"
+                                                                         [permission]="'PrometheusModule.PrometheusExporters.delete'">
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-            <oitc-no-records
-                *ngIf="result && result.all_exporters.length === 0"></oitc-no-records>
+            @if (result && result.all_exporters.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
 
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="result"
-                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        @if (result) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

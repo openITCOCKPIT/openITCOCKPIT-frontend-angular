@@ -92,116 +92,136 @@
                     <oitc-form-feedback [errors]="errors" errorField="snmpVersion"></oitc-form-feedback>
                 </div>
 
-                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
-                    <label cLabel for="post.securityLevel">
-                        {{ t('Security level') }}
-                    </label>
-                    <oitc-select
-                        name="post.securityLevel"
-                        id="post.securityLevel"
-                        [(ngModel)]="post.securityLevel"
-                        [options]="securityLevels"
-                        optionValue="value"
-                        optionLabel="key"
-                        oitcFormError [errors]="errors" errorField="securityLevel">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors" errorField="securityLevel"></oitc-form-feedback>
-                    <div class="help-block text-primary-light">
-                        <span
-                            *ngIf="post.securityLevel === '1'">{{ t('Communication with authentication and privacy. The protocols used for Authentication are MD5 and SHA and for Privacy, DES (Data Encryption Standard) and AES (Advanced Encryption Standard).') }}</span>
-                        <span
-                            *ngIf="post.securityLevel === '2'">{{ t('Communication with authentication and without privacy. The protocols used for Authentication are MD5 and SHA (Secure Hash Algorithm).') }}</span>
-                        <span
-                            *ngIf="post.securityLevel === '3'">{{ t('Communication without authentication and privacy.') }}</span>
+                @if (post.snmpVersion === '3') {
+                    <div class="mb-3">
+                        <label cLabel for="post.securityLevel">
+                            {{ t('Security level') }}
+                        </label>
+                        <oitc-select
+                            name="post.securityLevel"
+                            id="post.securityLevel"
+                            [(ngModel)]="post.securityLevel"
+                            [options]="securityLevels"
+                            optionValue="value"
+                            optionLabel="key"
+                            oitcFormError [errors]="errors" errorField="securityLevel">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="securityLevel"></oitc-form-feedback>
+                        <div class="help-block text-primary-light">
+                            @if (post.securityLevel === '1') {
+                                <span
+                                >{{ t('Communication with authentication and privacy. The protocols used for Authentication are MD5 and SHA and for Privacy, DES (Data Encryption Standard) and AES (Advanced Encryption Standard).') }}</span>
+                            }
+                            @if (post.securityLevel === '2') {
+                                <span
+                                >{{ t('Communication with authentication and without privacy. The protocols used for Authentication are MD5 and SHA (Secure Hash Algorithm).') }}</span>
+                            }
+                            @if (post.securityLevel === '3') {
+                                <span
+                                >{{ t('Communication without authentication and privacy.') }}</span>
+                            }
+                        </div>
                     </div>
-                </div>
+                }
 
 
-                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
-                    <label cLabel for="post.authProtocol">
-                        {{ t('Auth Protocol') }}
-                    </label>
-                    <oitc-select
-                        name="post.authProtocol"
-                        id="post.authProtocol"
-                        [(ngModel)]="post.authProtocol"
-                        [options]="authProtocols"
-                        optionValue="value"
-                        optionLabel="key"
-                        oitcFormError [errors]="errors" errorField="authProtocol">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors" errorField="authProtocol"></oitc-form-feedback>
-                </div>
+                @if (post.snmpVersion === '3') {
+                    <div class="mb-3">
+                        <label cLabel for="post.authProtocol">
+                            {{ t('Auth Protocol') }}
+                        </label>
+                        <oitc-select
+                            name="post.authProtocol"
+                            id="post.authProtocol"
+                            [(ngModel)]="post.authProtocol"
+                            [options]="authProtocols"
+                            optionValue="value"
+                            optionLabel="key"
+                            oitcFormError [errors]="errors" errorField="authProtocol">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="authProtocol"></oitc-form-feedback>
+                    </div>
+                }
 
-                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
-                    <label cLabel for="post.securityName">
-                        {{ t('Security name') }}
-                    </label>
-                    <input cFormControl
-                           id="post.securityName"
-                           type="text"
-                           name="post.securityName"
-                           oitcFormError [errors]="errors" errorField="securityName"
-                           [(ngModel)]="post.securityName">
-                    <oitc-form-feedback [errors]="errors" errorField="securityName"></oitc-form-feedback>
-                </div>
+                @if (post.snmpVersion === '3') {
+                    <div class="mb-3">
+                        <label cLabel for="post.securityName">
+                            {{ t('Security name') }}
+                        </label>
+                        <input cFormControl
+                               id="post.securityName"
+                               type="text"
+                               name="post.securityName"
+                               oitcFormError [errors]="errors" errorField="securityName"
+                               [(ngModel)]="post.securityName">
+                        <oitc-form-feedback [errors]="errors" errorField="securityName"></oitc-form-feedback>
+                    </div>
+                }
 
-                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
-                    <label cLabel for="post.authPassword">
-                        {{ t('Auth password') }}
-                    </label>
-                    <input cFormControl
-                           id="post.authPassword"
-                           type="password"
-                           name="post.authPassword"
-                           oitcFormError [errors]="errors" errorField="authPassword"
-                           [(ngModel)]="post.authPassword">
-                    <oitc-form-feedback [errors]="errors" errorField="authPassword"></oitc-form-feedback>
-                </div>
+                @if (post.snmpVersion === '3') {
+                    <div class="mb-3">
+                        <label cLabel for="post.authPassword">
+                            {{ t('Auth password') }}
+                        </label>
+                        <input cFormControl
+                               id="post.authPassword"
+                               type="password"
+                               name="post.authPassword"
+                               oitcFormError [errors]="errors" errorField="authPassword"
+                               [(ngModel)]="post.authPassword">
+                        <oitc-form-feedback [errors]="errors" errorField="authPassword"></oitc-form-feedback>
+                    </div>
+                }
 
-                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
-                    <label cLabel for="post.privacyProtocol">
-                        {{ t('Privacy Protocol') }}
-                    </label>
-                    <oitc-select
-                        name="post.privacyProtocol"
-                        id="post.privacyProtocol"
-                        [(ngModel)]="post.privacyProtocol"
-                        [options]="privacyProtocols"
-                        optionValue="value"
-                        optionLabel="key"
-                        oitcFormError [errors]="errors" errorField="privacyProtocol">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors" errorField="privacyProtocol"></oitc-form-feedback>
-                </div>
+                @if (post.snmpVersion === '3') {
+                    <div class="mb-3">
+                        <label cLabel for="post.privacyProtocol">
+                            {{ t('Privacy Protocol') }}
+                        </label>
+                        <oitc-select
+                            name="post.privacyProtocol"
+                            id="post.privacyProtocol"
+                            [(ngModel)]="post.privacyProtocol"
+                            [options]="privacyProtocols"
+                            optionValue="value"
+                            optionLabel="key"
+                            oitcFormError [errors]="errors" errorField="privacyProtocol">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="privacyProtocol"></oitc-form-feedback>
+                    </div>
+                }
 
-                <div class="mb-3" *ngIf="post.snmpVersion === '3'">
-                    <label cLabel for="post.privacyPassword">
-                        {{ t('Privacy password') }}
-                    </label>
-                    <input cFormControl
-                           id="post.privacyPassword"
-                           type="password"
-                           name="post.privacyPassword"
-                           oitcFormError [errors]="errors" errorField="privacyPassword"
-                           [(ngModel)]="post.privacyPassword">
-                    <oitc-form-feedback [errors]="errors" errorField="privacyPassword"></oitc-form-feedback>
-                </div>
+                @if (post.snmpVersion === '3') {
+                    <div class="mb-3">
+                        <label cLabel for="post.privacyPassword">
+                            {{ t('Privacy password') }}
+                        </label>
+                        <input cFormControl
+                               id="post.privacyPassword"
+                               type="password"
+                               name="post.privacyPassword"
+                               oitcFormError [errors]="errors" errorField="privacyPassword"
+                               [(ngModel)]="post.privacyPassword">
+                        <oitc-form-feedback [errors]="errors" errorField="privacyPassword"></oitc-form-feedback>
+                    </div>
+                }
 
-                <div class="mb-3" *ngIf="post.snmpVersion !== '3'">
-                    <label cLabel for="post.snmpCommunity">
-                        {{ t('Community') }}
-                        <oitc-required-icon/>
-                    </label>
-                    <input cFormControl
-                           id="post.snmpCommunity"
-                           type="text"
-                           name="post.snmpCommunity"
-                           oitcFormError [errors]="errors" errorField="snmpCommunity"
-                           placeholder="public"
-                           [(ngModel)]="post.snmpCommunity">
-                    <oitc-form-feedback [errors]="errors" errorField="snmpCommunity"></oitc-form-feedback>
-                </div>
+                @if (post.snmpVersion !== '3') {
+                    <div class="mb-3">
+                        <label cLabel for="post.snmpCommunity">
+                            {{ t('Community') }}
+                            <oitc-required-icon/>
+                        </label>
+                        <input cFormControl
+                               id="post.snmpCommunity"
+                               type="text"
+                               name="post.snmpCommunity"
+                               oitcFormError [errors]="errors" errorField="snmpCommunity"
+                               placeholder="public"
+                               [(ngModel)]="post.snmpCommunity">
+                        <oitc-form-feedback [errors]="errors" errorField="snmpCommunity"></oitc-form-feedback>
+                    </div>
+                }
             </fieldset>
 
             <oitc-wizards-dynamicfields
@@ -224,16 +244,29 @@
 
                 <div>
                     <ng-template #contentTemplate let-data>
-                        <span class="h5 text-info" *ngIf="data">
-                            {{ t('Discovering Interfaces for SNMP Services') }}
-                        </span>
+                        @if (data) {
+                            <span class="h5 text-info">
+                                {{ t('Discovering Interfaces for SNMP Services') }}
+                            </span>
+                        }
                         <br>
                         {{ t('Scan this device and locate all of the interfaces that reside on the device. Only possible with valid SNMP configuration') }}
                     </ng-template>
 
                     <ng-template #buttonTemplate let-data>
                         <div class="ms-2">
-                            <button class="ripple" (click)="runSnmpDiscovery()" cButton color="info">
+                            <button
+                                cButton
+                                class="ripple"
+                                color="primary"
+                                type="button"
+                                [disabled]="DiscoveryIsRunning"
+                                (click)="runSnmpDiscovery()">
+                                @if (DiscoveryIsRunning) {
+                                    <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                                } @else {
+                                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                                }
                                 {{ t('Start SNMP interface discovery') }}
                             </button>
                         </div>
@@ -304,75 +337,75 @@
 
 
                 <ul class="m-0 p-0">
-                    <ol class="m-0 p-0" *ngFor="let interface of post.interfaces">
-                        @if (!interface.servicecommandargumentvalues.length) {
-                            <ng-container *ngIf="hasName(interface.name)">
-
-                                <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
-                                    <div class="d-flex align-items-center">
-                                        <input cFormCheckInput
-                                               type="checkbox"
-                                               [id]="interface.name"
-                                               class="alert-icon lg-checkbox"
-                                               name="checkbox"
-                                               [(ngModel)]="interface.createService"/>
-                                        <label class="custom-control-label custom-control-label-ok"
-                                               [for]="interface.name">
-                                            {{ interface.name }}
-                                            <span class="help-block italic">
-                                                {{ interface.description }}
-                                            </span>
-                                        </label>
+                    @for (interface of post.interfaces; track interface) {
+                        <ol class="m-0 p-0">
+                            @if (!interface.servicecommandargumentvalues.length) {
+                                @if (hasName(interface.name)) {
+                                    <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
+                                        <div class="d-flex align-items-center">
+                                            <input cFormCheckInput
+                                                   type="checkbox"
+                                                   [id]="interface.name"
+                                                   class="alert-icon lg-checkbox"
+                                                   name="checkbox"
+                                                   [(ngModel)]="interface.createService"/>
+                                            <label class="custom-control-label custom-control-label-ok"
+                                                   [for]="interface.name">
+                                                {{ interface.name }}
+                                                <span class="help-block italic">
+                                                    {{ interface.description }}
+                                                </span>
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
-                            </ng-container>
-                        } @else {
-                            <ng-container *ngIf="hasName(interface.name)">
-                                <c-accordion class="mb-3">
-                                    <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
-                                        <ng-template cTemplateId="accordionHeaderTemplate">
-                                            <div class="form-group bg-primary-subtle"
-                                                 (click)="accordionItem.toggleItem()"
-                                                 [collapsed]="!accordionItem.visible" cAccordionButton>
-                                                <div class="d-flex align-items-center">
-                                                    <input cFormCheckInput
-                                                           type="checkbox"
-                                                           [id]="interface.name"
-                                                           class="alert-icon lg-checkbox"
-                                                           name="checkbox"
-                                                           (click)="$event.stopPropagation()"
-                                                           [(ngModel)]="interface.createService"/>
-                                                    <label class="custom-control-label custom-control-label-ok"
-                                                           (click)="$event.stopPropagation()"
-                                                           [for]="interface.name">
-                                                        {{ interface.name }}
-                                                        <span class="help-block italic">
-                                                            {{ interface.description }}
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </ng-template>
-                                        <ng-template cTemplateId="accordionBodyTemplate">
-                                            <div class="accordion-body">
-                                                @for (
-                                                    commandArgument of interface.servicecommandargumentvalues; track $index) {
-                                                    <div
-                                                        class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
-                                                        {{ commandArgument.commandargument.human_name }}
-                                                        <input class="form-control"
-                                                               type="text"
-                                                               [disabled]="!interface.createService || $index === 0"
-                                                               [(ngModel)]="commandArgument.value">
+                                }
+                            } @else {
+                                @if (hasName(interface.name)) {
+                                    <c-accordion class="mb-3">
+                                        <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
+                                            <ng-template cTemplateId="accordionHeaderTemplate">
+                                                <div class="form-group wizard-accordion bg-info-subtle"
+                                                     (click)="accordionItem.toggleItem()"
+                                                     [collapsed]="!accordionItem.visible" cAccordionButton>
+                                                    <div class="d-flex align-items-center">
+                                                        <input cFormCheckInput
+                                                               type="checkbox"
+                                                               [id]="interface.name"
+                                                               class="alert-icon lg-checkbox"
+                                                               name="checkbox"
+                                                               (click)="$event.stopPropagation()"
+                                                               [(ngModel)]="interface.createService"/>
+                                                        <label class="custom-control-label custom-control-label-ok"
+                                                               (click)="$event.stopPropagation()"
+                                                               [for]="interface.name">
+                                                            {{ interface.name }}
+                                                            <span class="help-block italic">
+                                                                {{ interface.description }}
+                                                            </span>
+                                                        </label>
                                                     </div>
-                                                }
-                                            </div>
-                                        </ng-template>
-                                    </c-accordion-item>
-                                </c-accordion>
-                            </ng-container>
-                        }
-                    </ol>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template cTemplateId="accordionBodyTemplate">
+                                                <div class="accordion-body">
+                                                    @for (commandArgument of interface.servicecommandargumentvalues; track $index) {
+                                                        <div
+                                                            class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
+                                                            {{ commandArgument.commandargument.human_name }}
+                                                            <input class="form-control"
+                                                                   type="text"
+                                                                   [disabled]="!interface.createService || $index === 0"
+                                                                   [(ngModel)]="commandArgument.value">
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </ng-template>
+                                        </c-accordion-item>
+                                    </c-accordion>
+                                }
+                            }
+                        </ol>
+                    }
                 </ul>
             </fieldset>
 

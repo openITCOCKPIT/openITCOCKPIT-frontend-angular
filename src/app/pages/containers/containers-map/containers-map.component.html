@@ -91,12 +91,16 @@
         </c-card-header>
 
         <c-card-body id="fullscreenContainerMap">
-            <oitc-block-loader *ngIf="isLoading"></oitc-block-loader>
+            @if (isLoading) {
+                <oitc-block-loader></oitc-block-loader>
+            }
 
             <c-row>
-                <c-col xs="12" *ngIf="showProgressbar">
-                    <c-progress [value]="progress" class="m-3">{{ progress | number: '1.0-0' }}%</c-progress>
-                </c-col>
+                @if (showProgressbar) {
+                    <c-col xs="12">
+                        <c-progress [value]="progress" class="m-3">{{ progress | number: '1.0-0' }}%</c-progress>
+                    </c-col>
+                }
                 <c-col xs="12" id="containerNetwork"></c-col>
             </c-row>
 

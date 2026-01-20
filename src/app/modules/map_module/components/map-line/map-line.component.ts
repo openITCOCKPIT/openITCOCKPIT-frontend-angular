@@ -2,7 +2,7 @@ import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { ChangeDetectionStrategy, Component, effect, input, InputSignal, OnDestroy, OnInit } from '@angular/core';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { interval, Subscription } from 'rxjs';
 import { Mapline } from '../../pages/mapeditors/mapeditors.interface';
@@ -12,7 +12,7 @@ import { DataForMapItem, MapItemRoot, MapItemRootParams } from '../map-item-base
 @Component({
     selector: 'oitc-map-line',
     standalone: true,
-    imports: [CdkDrag, NgClass, ContextMenuModule, NgIf],
+    imports: [CdkDrag, NgClass, ContextMenuModule],
     templateUrl: './map-line.component.html',
     styleUrl: './map-line.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

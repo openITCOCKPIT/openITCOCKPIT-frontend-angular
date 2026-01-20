@@ -24,7 +24,7 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
@@ -54,8 +54,6 @@ import _ from 'lodash';
         ModalFooterComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
-        NgForOf,
-        NgIf,
         RowComponent,
         TranslocoDirective,
         XsButtonDirective,

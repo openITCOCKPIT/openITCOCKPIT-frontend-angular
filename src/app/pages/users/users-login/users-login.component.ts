@@ -13,7 +13,7 @@ import {
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 
 import { UsersService } from '../users.service';
@@ -40,14 +40,12 @@ import { LocalStorageService } from '../../../services/local-storage.service';
         AlertComponent,
         FormsModule,
         TranslocoDirective,
-        NgIf,
         FormControlDirective,
         FormLabelDirective,
         FormCheckComponent,
         RowComponent,
         ColComponent,
         NgxParticlesModule,
-        NgForOf,
         FormCheckInputDirective,
         FormCheckLabelDirective,
         XsButtonDirective,

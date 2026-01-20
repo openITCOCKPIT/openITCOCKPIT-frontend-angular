@@ -6,16 +6,16 @@ import { map, Observable } from 'rxjs';
 
 export interface MenuStatsRoot {
     hoststatusCount: {
-        [key:number]: number,
+        [key: number]: number,
     },
     servicestatusCount: {
-        [key:number]: number,
+        [key: number]: number,
     },
     showstatsinmenu: boolean
 }
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class HeaderStatsService {
 
@@ -23,7 +23,8 @@ export class HeaderStatsService {
     private readonly document = inject(DOCUMENT);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    constructor() { }
+    constructor() {
+    }
 
     public getMenustats(): Observable<MenuStatsRoot> {
         const proxyPath = this.proxyPath;

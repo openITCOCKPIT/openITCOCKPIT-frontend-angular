@@ -11,21 +11,21 @@ import {
     Output
 } from '@angular/core';
 import {
-  ButtonCloseDirective,
-  ColComponent,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective,
-  ProgressComponent,
-  RowComponent
+    ButtonCloseDirective,
+    ColComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    ProgressComponent,
+    RowComponent
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { CancelAllItem, CancelAllResponse } from './cancel-servicedowntime.interface';
-import { NgIf } from '@angular/common';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -39,21 +39,20 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 @Component({
     selector: 'oitc-cancel-servicedowntime-modal',
     imports: [
-    ModalComponent,
-    ModalHeaderComponent,
-    ModalBodyComponent,
-    ModalTitleDirective,
-    ButtonCloseDirective,
-    ModalFooterComponent,
-    TranslocoDirective,
-    RowComponent,
-    ColComponent,
-    FaIconComponent,
-    ProgressComponent,
-    NgIf,
-    FormsModule,
-    XsButtonDirective
-],
+        ModalComponent,
+        ModalHeaderComponent,
+        ModalBodyComponent,
+        ModalTitleDirective,
+        ButtonCloseDirective,
+        ModalFooterComponent,
+        TranslocoDirective,
+        RowComponent,
+        ColComponent,
+        FaIconComponent,
+        ProgressComponent,
+        FormsModule,
+        XsButtonDirective
+    ],
     templateUrl: './cancel-servicedowntime-modal.component.html',
     styleUrl: './cancel-servicedowntime-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

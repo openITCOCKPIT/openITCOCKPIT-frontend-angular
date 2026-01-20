@@ -24,7 +24,7 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { ConfigurationEditorConfig, ConfigurationEditorField } from '../../../configuration-files.interface';
-import { NgIf } from '@angular/common';
+
 
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
@@ -41,19 +41,18 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-dynamic-configuration-file',
     imports: [
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    PaginatorModule,
-    RequiredIconComponent,
-    NgIf,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    TrueFalseDirective,
-    FormsModule
-],
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        PaginatorModule,
+        RequiredIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        FormsModule
+    ],
     templateUrl: './dynamic-configuration-file.component.html',
     styleUrl: './dynamic-configuration-file.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

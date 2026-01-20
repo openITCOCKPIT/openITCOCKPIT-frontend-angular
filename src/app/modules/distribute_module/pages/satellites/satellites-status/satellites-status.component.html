@@ -35,13 +35,19 @@
             </h5>
 
             <c-nav variant="underline" class="card-toolbar card-header-pills mR-3" style="margin-right:15px;">
-                <c-nav-item>
+                <c-nav-item *oitcPermission="['distributeModule', 'satellites', 'status']">
                     <button class="active nav-link" [routerLink]="['/', 'distribute_module', 'satellites', 'status']">
                         <fa-icon [icon]="['fas', 'satellite-dish']"></fa-icon>
                         {{ t('Satellites Status') }}
                     </button>
                 </c-nav-item>
-                <c-nav-item>
+                <c-nav-item *oitcPermission="['distributeModule', 'satellites', 'info']">
+                    <button class="nav-link" [routerLink]="['/', 'distribute_module', 'satellites', 'info']">
+                        <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                        {{ t('Satellites Information') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item *oitcPermission="['distributeModule', 'satellites', 'tasks']">
                     <button class="nav-link" [routerLink]="['/', 'distribute_module', 'satellites', 'tasks']">
                         <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
                         {{ t('Satellite Tasks') }}
@@ -178,92 +184,100 @@
             <!-- End Filter -->
 
 
-            <oitc-table-loader *ngIf="! result"></oitc-table-loader>
+            @if (!result) {
+                <oitc-table-loader></oitc-table-loader>
+            }
 
 
-            <table *ngIf="result" bordered cTable class="mt-2 mb-0" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th scope="col" mat-sort-header="Satellites.name">
-                        {{ t('Instance name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Satellites.address">
-                        {{ t('IP address') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Satellites.sync_method">
-                        {{ t('Sync method') }}
-                    </th>
-                    <th scope="col" mat-sort-header="status">
-                        {{ t('Sync status') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatelliteStatus.last_export">
-                        {{ t('Last sync') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatelliteStatus.last_seen">
-                        {{ t('Last seen') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatelliteStatus.last_error">
-                        {{ t('Last error') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let satellite of result.all_satellites">
-                    <td>
-                        {{ satellite.name }}
-                    </td>
-                    <td>
-                        {{ satellite.address }}
-                    </td>
-                    <td>
-                        {{ satellite.sync_method_name }}
-                    </td>
-                    <td>
-                        <c-badge
-                            [title]="satellite.satellite_status.status_human"
-                            class="mr-5"
-                            [ngClass]="{
+            @if (result) {
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="Satellites.name">
+                            {{ t('Instance name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Satellites.address">
+                            {{ t('IP address') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Satellites.sync_method">
+                            {{ t('Sync method') }}
+                        </th>
+                        <th scope="col" mat-sort-header="status">
+                            {{ t('Sync status') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatelliteStatus.last_export">
+                            {{ t('Last sync') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatelliteStatus.last_seen">
+                            {{ t('Last seen') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatelliteStatus.last_error">
+                            {{ t('Last error') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (satellite of result.all_satellites; track satellite) {
+                            <tr>
+                                <td>
+                                    {{ satellite.name }}
+                                </td>
+                                <td>
+                                    {{ satellite.address }}
+                                </td>
+                                <td>
+                                    {{ satellite.sync_method_name }}
+                                </td>
+                                <td>
+                                    <c-badge
+                                        [title]="satellite.satellite_status.status_human"
+                                        class="mr-5"
+                                        [ngClass]="{
                                     'bg-success': satellite.satellite_status.status === 1,
                                     'bg-secondary': satellite.satellite_status.status === 0,
                                     'bg-danger': satellite.satellite_status.status === 2
                                 }"
-                        >{{ satellite.satellite_status.status_human }}
-                        </c-badge>
-
-                    </td>
-                    <td>
-                        {{ satellite.satellite_status.last_export }}
-                    </td>
-                    <td>
-                        {{ satellite.satellite_status.last_seen }}
-                    </td>
-                    <td class="text-danger">
-                        {{ satellite.satellite_status.last_error }}
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-
-            <oitc-no-records
-                *ngIf="result && result.all_satellites.length === 0"></oitc-no-records>
+                                    >{{ satellite.satellite_status.status_human }}
+                                    </c-badge>
+                                </td>
+                                <td>
+                                    {{ satellite.satellite_status.last_export }}
+                                </td>
+                                <td>
+                                    {{ satellite.satellite_status.last_seen }}
+                                </td>
+                                <td class="text-danger">
+                                    {{ satellite.satellite_status.last_error }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
 
-            <ng-container *ngIf="result && result.all_satellites">
+            @if (result && result.all_satellites.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+
+
+            @if (result && result.all_satellites) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                 </c-container>
-            </ng-container>
+            }
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="result"
-                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        @if (result) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

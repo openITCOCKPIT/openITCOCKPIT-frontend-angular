@@ -110,7 +110,9 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!systemHealthUsers"></oitc-table-loader>
+            @if (!systemHealthUsers) {
+                <oitc-table-loader></oitc-table-loader>
+            }
 
             <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
@@ -134,61 +136,70 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="systemHealthUsers">
-                <tr *ngFor="let systemHealthUser of systemHealthUsers.all_users">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['systemhealthusers', 'delete']"
-                            [disabled]="false"
-                            [item]="systemHealthUser"></oitc-item-select>
-                    </td>
-                    <td>
-                        {{ systemHealthUser.full_name }}
-                    </td>
-                    <td>
-                        {{ systemHealthUser.email }}
-                    </td>
-                    <td>
-                        <c-badge class="margin-right-5"
-                                 *ngIf="systemHealthUser.system_health_user.notify_on_recovery === 1"
-                                 [title]="'recovery' | transloco" color="success">R
-                        </c-badge>
-                        <c-badge class="margin-right-5 text-dark"
-                                 *ngIf="systemHealthUser.system_health_user.notify_on_warning === 1"
-                                 [title]="'warning' | transloco" color="warning">W
-                        </c-badge>
-                        <c-badge class="margin-right-5"
-                                 *ngIf="systemHealthUser.system_health_user.notify_on_critical === 1"
-                                 [title]="'critical' | transloco" color="danger">C
-                        </c-badge>
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [allowEdit]="systemHealthUser.allow_edit"
-                                             [permission]="'systemhealthusers.edit'"
-                                             [url]="'/systemHealthUsers/edit/' + systemHealthUser.system_health_user.id">
-                            <oitc-actions-button-element [permission]="'systemhealthusers.edit'"
+                @if (systemHealthUsers) {
+                    <tbody>
+                        @for (systemHealthUser of systemHealthUsers.all_users; track systemHealthUser) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['systemhealthusers', 'delete']"
+                                        [disabled]="false"
+                                        [item]="systemHealthUser"></oitc-item-select>
+                                </td>
+                                <td>
+                                    {{ systemHealthUser.full_name }}
+                                </td>
+                                <td>
+                                    {{ systemHealthUser.email }}
+                                </td>
+                                <td>
+                                    @if (systemHealthUser.system_health_user.notify_on_recovery === 1) {
+                                        <c-badge class="margin-right-5"
+                                                 [title]="'recovery' | transloco" color="success">R
+                                        </c-badge>
+                                    }
+                                    @if (systemHealthUser.system_health_user.notify_on_warning === 1) {
+                                        <c-badge class="margin-right-5 text-dark"
+                                                 [title]="'warning' | transloco" color="warning">W
+                                        </c-badge>
+                                    }
+                                    @if (systemHealthUser.system_health_user.notify_on_critical === 1) {
+                                        <c-badge class="margin-right-5"
+                                                 [title]="'critical' | transloco" color="danger">C
+                                        </c-badge>
+                                    }
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [allowEdit]="systemHealthUser.allow_edit"
+                                                         [permission]="'systemhealthusers.edit'"
                                                          [url]="'/systemHealthUsers/edit/' + systemHealthUser.system_health_user.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(systemHealthUser)"
-                                                         [permission]="'systemhealthusers.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
+                                        <oitc-actions-button-element [permission]="'systemhealthusers.edit'"
+                                                                     [url]="'/systemHealthUsers/edit/' + systemHealthUser.system_health_user.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(systemHealthUser)"
+                                                                     [permission]="'systemhealthusers.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
             </table>
 
-            <oitc-no-records
-                *ngIf="systemHealthUsers && systemHealthUsers.all_users.length === 0"></oitc-no-records>
+            @if (systemHealthUsers && systemHealthUsers.all_users.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
 
-            <ng-container *ngIf="systemHealthUsers && systemHealthUsers.all_users">
+            @if (systemHealthUsers && systemHealthUsers.all_users) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -209,15 +220,16 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
             <c-container
                 [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="systemHealthUsers"
-                            [paginateOrScroll]="systemHealthUsers"></oitc-paginate-or-scroll>
+                        @if (systemHealthUsers) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="systemHealthUsers"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

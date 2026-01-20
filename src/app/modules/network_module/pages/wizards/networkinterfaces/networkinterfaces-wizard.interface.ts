@@ -98,7 +98,6 @@ export interface Commandargument {
 }
 
 
-
 // WIZARD POST
 export interface NetworkinterfacesWizardPost extends WizardPost {
     authPassword: string
