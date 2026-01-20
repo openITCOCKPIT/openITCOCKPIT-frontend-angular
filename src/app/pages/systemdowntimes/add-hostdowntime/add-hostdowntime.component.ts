@@ -35,7 +35,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { HostsService } from '../../hosts/hosts.service';
 import { SystemdowntimesService } from '../systemdowntimes.service';
-import { NgIf } from '@angular/common';
+
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import _ from 'lodash';
@@ -45,35 +45,34 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-add-hostdowntime',
     imports: [
-    CardComponent,
-    FaIconComponent,
-    FormDirective,
-    FormsModule,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    BackButtonDirective,
-    CardBodyComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    InputGroupComponent,
-    MultiSelectComponent,
-    RequiredIconComponent,
-    FormCheckComponent,
-    FormCheckLabelDirective,
-    FormCheckInputDirective,
-    FormControlDirective,
-    TrueFalseDirective,
-    CardFooterComponent,
-    NgIf,
-    DurationInputComponent
-],
+        CardComponent,
+        FaIconComponent,
+        FormDirective,
+        FormsModule,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        BackButtonDirective,
+        CardBodyComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        InputGroupComponent,
+        MultiSelectComponent,
+        RequiredIconComponent,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        FormCheckInputDirective,
+        FormControlDirective,
+        TrueFalseDirective,
+        CardFooterComponent,
+        DurationInputComponent
+    ],
     templateUrl: './add-hostdowntime.component.html',
     styleUrl: './add-hostdowntime.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

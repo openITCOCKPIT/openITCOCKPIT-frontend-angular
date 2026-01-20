@@ -12,13 +12,15 @@
                         <fieldset>
                             <h4>{{ t('Time ranges') }}</h4>
                             <hr class="border-dashed">
-                            <div *ngFor="let interval of timeranges"
-                                 class="no-padding cursor-pointer"
-                                 style="line-height: 25px;"
-                                 [ngClass]="{'text-primary': interval.duration === selectedDuration}"
-                                 (click)="changeDuration(interval.duration, interval.name)">
-                                {{ interval.name }}
-                            </div>
+                            @for (interval of timeranges; track interval) {
+                                <div
+                                    class="no-padding cursor-pointer"
+                                    style="line-height: 25px;"
+                                    [ngClass]="{'text-primary': interval.duration === selectedDuration}"
+                                    (click)="changeDuration(interval.duration, interval.name)">
+                                    {{ interval.name }}
+                                </div>
+                            }
                         </fieldset>
                     </c-col>
 

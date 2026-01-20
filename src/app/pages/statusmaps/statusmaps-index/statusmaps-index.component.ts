@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, DOCUMENT } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+    DOCUMENT
+} from '@angular/core';
 
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
@@ -21,7 +29,7 @@ import {
     ToasterComponent,
     ToastHeaderComponent
 } from '@coreui/angular';
-import { DecimalPipe, NgIf } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -62,7 +70,6 @@ import { LayoutService } from '../../../layouts/coreui/layout.service';
         InputGroupTextDirective,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         ProgressComponent,
         RowComponent,

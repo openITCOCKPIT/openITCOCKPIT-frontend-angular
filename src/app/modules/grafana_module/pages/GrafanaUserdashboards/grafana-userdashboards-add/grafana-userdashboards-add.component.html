@@ -26,13 +26,14 @@
         </ol>
     </nav>
 
-    <oitc-alert
-        *ngIf="!hasGrafanaConfig"
-        color="danger"
-        [errorHeadline]="'No Grafana configuration found!' | transloco"
-        [errorText]="'A valid is required, before this feature can be used' | transloco"
-        [baseIcon]="'square'"
-        [icon]="['fas', 'exclamation-triangle']"></oitc-alert>
+    @if (!hasGrafanaConfig) {
+        <oitc-alert
+            color="danger"
+            [errorHeadline]="'No Grafana configuration found!' | transloco"
+            [errorText]="'A valid is required, before this feature can be used' | transloco"
+            [baseIcon]="'square'"
+            [icon]="['fas', 'exclamation-triangle']"></oitc-alert>
+    }
 
     <form cForm (ngSubmit)="submit()">
         <c-card class="mb-3">
@@ -70,9 +71,11 @@
                         oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
 
-                    <div *ngIf="post.GrafanaUserdashboard.container_id < 1" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
+                    @if (post.GrafanaUserdashboard.container_id < 1) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
 
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                 </div>

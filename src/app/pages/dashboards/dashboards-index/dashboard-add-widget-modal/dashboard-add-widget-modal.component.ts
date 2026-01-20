@@ -31,7 +31,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-dashboard-add-widget-modal',
@@ -55,8 +55,7 @@ import { NgIf } from '@angular/common';
         InputGroupTextDirective,
         TranslocoPipe,
         FormsModule,
-        FormCheckInputDirective,
-        NgIf
+        FormCheckInputDirective
     ],
     templateUrl: './dashboard-add-widget-modal.component.html',
     styleUrl: './dashboard-add-widget-modal.component.scss',

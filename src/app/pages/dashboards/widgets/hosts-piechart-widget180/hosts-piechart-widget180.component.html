@@ -1,56 +1,56 @@
 <ng-container *transloco="let t">
 
-    <oitc-block-loader *ngIf="!statusCounts" height="5rem"></oitc-block-loader>
+    @if (!statusCounts) {
+        <oitc-block-loader height="5rem"></oitc-block-loader>
+    }
 
-    <div class="w-100 text-center"
-         *ngIf="statusCounts && statusCounts.hoststatusCount.length === 3">
-
-        <oitc-host-pie-chart
-            [statusDataPercentage]="statusCounts.hoststatusCountPercentage"
-            [triggerUpdate]="triggerChartUpdate"></oitc-host-pie-chart>
-
-        <div class="row text-center font-xs">
-            <div class="col-xs-12 col-md-4 no-padding">
-                @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
-                    <a [routerLink]="['/', 'hosts', 'index']"
-                       [queryParams]="{hoststate: 0, sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+    @if (statusCounts && statusCounts.hoststatusCount.length === 3) {
+        <div class="w-100 text-center"
+        >
+            <oitc-host-pie-chart
+                [statusDataPercentage]="statusCounts.hoststatusCountPercentage"
+                [triggerUpdate]="triggerChartUpdate"></oitc-host-pie-chart>
+            <div class="row text-center font-xs">
+                <div class="col-xs-12 col-md-4 no-padding">
+                    @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
+                        <a [routerLink]="['/', 'hosts', 'index']"
+                           [queryParams]="{hoststate: 0, sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                            <fa-icon [icon]="['fas', 'square']" class="up"></fa-icon>
+                            {{ statusCounts.hoststatusCount[0] }}
+                            ({{ statusCounts.hoststatusCountPercentage[0] }} %)
+                        </a>
+                    } @else {
                         <fa-icon [icon]="['fas', 'square']" class="up"></fa-icon>
-                        {{ statusCounts.hoststatusCount[0] }}
-                        ({{ statusCounts.hoststatusCountPercentage[0] }} %)
-                    </a>
-                } @else {
-                    <fa-icon [icon]="['fas', 'square']" class="up"></fa-icon>
-                    {{ statusCounts.hoststatusCount[0] }} ({{ statusCounts.hoststatusCountPercentage[0] }} %)
-                }
-            </div>
-
-            <div class="col-xs-12 col-md-4 no-padding">
-                @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
-                    <a [routerLink]="['/', 'hosts', 'index']"
-                       [queryParams]="{hoststate: 1, sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                        {{ statusCounts.hoststatusCount[0] }} ({{ statusCounts.hoststatusCountPercentage[0] }} %)
+                    }
+                </div>
+                <div class="col-xs-12 col-md-4 no-padding">
+                    @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
+                        <a [routerLink]="['/', 'hosts', 'index']"
+                           [queryParams]="{hoststate: 1, sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                            <fa-icon [icon]="['fas', 'square']" class="down"></fa-icon>
+                            {{ statusCounts.hoststatusCount[1] }}
+                            ({{ statusCounts.hoststatusCountPercentage[1] }} %)
+                        </a>
+                    } @else {
                         <fa-icon [icon]="['fas', 'square']" class="down"></fa-icon>
-                        {{ statusCounts.hoststatusCount[1] }}
-                        ({{ statusCounts.hoststatusCountPercentage[1] }} %)
-                    </a>
-                } @else {
-                    <fa-icon [icon]="['fas', 'square']" class="down"></fa-icon>
-                    {{ statusCounts.hoststatusCount[1] }} ({{ statusCounts.hoststatusCountPercentage[1] }} %)
-                }
-            </div>
-
-            <div class="col-xs-12 col-md-4 no-padding">
-                @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
-                    <a [routerLink]="['/', 'hosts', 'index']"
-                       [queryParams]="{hoststate: 2, sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                        {{ statusCounts.hoststatusCount[1] }} ({{ statusCounts.hoststatusCountPercentage[1] }} %)
+                    }
+                </div>
+                <div class="col-xs-12 col-md-4 no-padding">
+                    @if (PermissionsService.hasPermissionObservable(['hosts', 'index'])|async) {
+                        <a [routerLink]="['/', 'hosts', 'index']"
+                           [queryParams]="{hoststate: 2, sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
+                            <fa-icon [icon]="['fas', 'square']" class="unreachable"></fa-icon>
+                            {{ statusCounts.hoststatusCount[2] }}
+                            ({{ statusCounts.hoststatusCountPercentage[2] }} %)
+                        </a>
+                    } @else {
                         <fa-icon [icon]="['fas', 'square']" class="unreachable"></fa-icon>
-                        {{ statusCounts.hoststatusCount[2] }}
-                        ({{ statusCounts.hoststatusCountPercentage[2] }} %)
-                    </a>
-                } @else {
-                    <fa-icon [icon]="['fas', 'square']" class="unreachable"></fa-icon>
-                    {{ statusCounts.hoststatusCount[2] }} ({{ statusCounts.hoststatusCountPercentage[2] }} %)
-                }
+                        {{ statusCounts.hoststatusCount[2] }} ({{ statusCounts.hoststatusCountPercentage[2] }} %)
+                    }
+                </div>
             </div>
         </div>
-    </div>
+    }
 </ng-container>

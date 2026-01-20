@@ -4,10 +4,12 @@
             <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
             {{ 'Reset scale' | transloco }}
         </button>
-        <button cButton *ngIf="!isWidget()" color="default" [size]="'xs'" class="me-2" (click)="fit2screen()">
-            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-            {{ 'Fit to screen' | transloco }}
-        </button>
+        @if (!isWidget()) {
+            <button cButton color="default" [size]="'xs'" class="me-2" (click)="fit2screen()">
+                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                {{ 'Fit to screen' | transloco }}
+            </button>
+        }
 
         <c-button-group aria-label="Rotation" role="group">
             <button cButton [size]="'xs'" color="default" [active]="EvcTreeDirection.RIGHT_TO_LEFT === direction"
@@ -72,14 +74,15 @@
                         <!-- vService container -->
 
                         <!-- Downtime overwrites current state badge -->
-                        <span
-                            *ngIf="Number(node.evcNode.service?.servicestatus?.scheduledDowntimeDepth) > 0 && downtimedServices() > 0 && !node.evcNode.service?.disabled && stateForDowntimedService() != node.evcNode.service?.servicestatus?.currentState"
-                            class="position-absolute top-0 start-0 translate-middle badge rounded-circle"
-                            [ngClass]="{'bg-ok':stateForDowntimedService() == 0,'bg-warning':stateForDowntimedService() == 1,'bg-critical':stateForDowntimedService() == 2,'bg-unknown':stateForDowntimedService() == 3}"
-                            [cTooltip]="downtimeStateTitle"
-                            cTooltipPlacement="top">
-                            &nbsp; <!-- important be not empty -->
-                        </span>
+                        @if (Number(node.evcNode.service?.servicestatus?.scheduledDowntimeDepth) > 0 && downtimedServices() > 0 && !node.evcNode.service?.disabled && stateForDowntimedService() != node.evcNode.service?.servicestatus?.currentState) {
+                            <span
+                                class="position-absolute top-0 start-0 translate-middle badge rounded-circle"
+                                [ngClass]="{'bg-ok':stateForDowntimedService() == 0,'bg-warning':stateForDowntimedService() == 1,'bg-critical':stateForDowntimedService() == 2,'bg-unknown':stateForDowntimedService() == 3}"
+                                [cTooltip]="downtimeStateTitle"
+                                cTooltipPlacement="top">
+                                &nbsp; <!-- important be not empty -->
+                            </span>
+                        }
 
 
                         <!-- Disable Badge -->
@@ -109,57 +112,65 @@
 
                                 @if (node.evcNode.service?.servicestatus?.problemHasBeenAcknowledged) {
                                     @if (PermissionsService.hasPermissionObservable(['services', 'browser']) | async) {
-                                        <oitc-acknowledgement-icon
-                                            *ngIf="node.evcNode.service?.servicestatus"
-                                            type="services"
-                                            [objectId]="Number(node.evcNode.service?.id)"
-                                            [acknowledgement_type]="node.evcNode.service?.servicestatus?.acknowledgement_type"></oitc-acknowledgement-icon>
+                                        @if (node.evcNode.service?.servicestatus) {
+                                            <oitc-acknowledgement-icon
+                                                type="services"
+                                                [objectId]="Number(node.evcNode.service?.id)"
+                                                [acknowledgement_type]="node.evcNode.service?.servicestatus?.acknowledgement_type"></oitc-acknowledgement-icon>
+                                        }
                                     } @else {
-                                        <fa-icon [icon]="['far', 'user']"
-                                                 *ngIf="node.evcNode.service?.servicestatus?.acknowledgement_type == AcknowledgementTypes.Normal"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'user']"
-                                                 *ngIf="node.evcNode.service?.servicestatus?.acknowledgement_type == AcknowledgementTypes.Sticky"
-                                                 [title]="'Sticky Acknowledgement' |transloco"></fa-icon>
+                                        @if (node.evcNode.service?.servicestatus?.acknowledgement_type == AcknowledgementTypes.Normal) {
+                                            <fa-icon [icon]="['far', 'user']"
+                                            ></fa-icon>
+                                        }
+                                        @if (node.evcNode.service?.servicestatus?.acknowledgement_type == AcknowledgementTypes.Sticky) {
+                                            <fa-icon [icon]="['fas', 'user']"
+                                                     [title]="'Sticky Acknowledgement' |transloco"></fa-icon>
+                                        }
                                     }
                                 }
                             </span>
                         }
 
-                        <c-row *ngIf="node.evcNode.service" class="m-0">
-                            <c-col [xs]="12" class="text-truncate p-0 ps-1 evc-tree-hostname"
-                                   [ngClass]="{'text-muted':node.evcNode.service.disabled}"
-                                   [cTooltip]="node.evcNode.service.host.name" cTooltipPlacement="top">
-                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                                    <a [routerLink]="['/', 'hosts', 'browser', node.evcNode.service.host.id]"
-                                       class="link-default"
-                                       [ngClass]="{'text-muted':node.evcNode.service.disabled}">
+                        @if (node.evcNode.service) {
+                            <c-row class="m-0">
+                                <c-col [xs]="12" class="text-truncate p-0 ps-1 evc-tree-hostname"
+                                       [ngClass]="{'text-muted':node.evcNode.service.disabled}"
+                                       [cTooltip]="node.evcNode.service.host.name" cTooltipPlacement="top">
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                        <a [routerLink]="['/', 'hosts', 'browser', node.evcNode.service.host.id]"
+                                           class="link-default"
+                                           [ngClass]="{'text-muted':node.evcNode.service.disabled}">
+                                            {{ node.evcNode.service.host.name }}
+                                        </a>
+                                    } @else {
                                         {{ node.evcNode.service.host.name }}
-                                    </a>
-                                } @else {
-                                    {{ node.evcNode.service.host.name }}
-                                }
-                            </c-col>
-                            <c-col [xs]="12" class="text-truncate p-0 ps-1"
-                                   [cTooltip]="node.evcNode.service.servicename " cTooltipPlacement="top"
-                                   [ngClass]="{'text-muted':node.evcNode.service.disabled}">
-                                <fa-icon [icon]="['fas', 'cog']"
-                                         *ngIf="node.evcNode.service.service_type !== ServiceTypesEnum.EVK_SERVICE"></fa-icon>
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
-                                         *ngIf="node.evcNode.service.service_type === ServiceTypesEnum.EVK_SERVICE"
-                                         class="text-primary"></fa-icon>
-                                @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
-                                    <a [routerLink]="['/', 'services', 'browser', node.evcNode.service.id]"
-                                       class="link-default"
+                                    }
+                                </c-col>
+                                <c-col [xs]="12" class="text-truncate p-0 ps-1"
+                                       [cTooltip]="node.evcNode.service.servicename " cTooltipPlacement="top"
                                        [ngClass]="{'text-muted':node.evcNode.service.disabled}">
+                                    @if (node.evcNode.service.service_type !== ServiceTypesEnum.EVK_SERVICE) {
+                                        <fa-icon [icon]="['fas', 'cog']"
+                                        ></fa-icon>
+                                    }
+                                    @if (node.evcNode.service.service_type === ServiceTypesEnum.EVK_SERVICE) {
+                                        <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
+                                                 class="text-primary"></fa-icon>
+                                    }
+                                    @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                        <a [routerLink]="['/', 'services', 'browser', node.evcNode.service.id]"
+                                           class="link-default"
+                                           [ngClass]="{'text-muted':node.evcNode.service.disabled}">
+                                            {{ node.evcNode.service.servicename }}
+                                        </a>
+                                    } @else {
                                         {{ node.evcNode.service.servicename }}
-                                    </a>
-                                } @else {
-                                    {{ node.evcNode.service.servicename }}
-                                }
-
-                            </c-col>
-                        </c-row>
+                                    }
+                                </c-col>
+                            </c-row>
+                        }
                     </div>
                 }
 
@@ -181,7 +192,6 @@
     </f-canvas>
     <f-minimap [fMinSize]="2000" [title]="'Navigator' | transloco" class="cursor-grab"></f-minimap>
 </f-flow>
-
 
 
 <oitc-evc-servicestatus-toaster></oitc-evc-servicestatus-toaster>

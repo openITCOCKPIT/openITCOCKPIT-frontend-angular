@@ -14,7 +14,7 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgForOf } from '@angular/common';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -51,7 +51,6 @@ import { FormsModule } from '@angular/forms';
         FormFeedbackComponent,
         FormLabelDirective,
         NavComponent,
-        NgForOf,
         PaginatorModule,
         PermissionDirective,
         RequiredIconComponent,

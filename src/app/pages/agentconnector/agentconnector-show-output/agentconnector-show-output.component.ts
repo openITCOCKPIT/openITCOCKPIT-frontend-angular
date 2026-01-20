@@ -30,7 +30,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 
 
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -64,7 +64,6 @@ import {
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         ReactiveFormsModule,
         RowComponent,

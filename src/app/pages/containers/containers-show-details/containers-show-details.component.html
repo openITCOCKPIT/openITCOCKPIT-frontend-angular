@@ -81,69 +81,83 @@
         </c-card-header>
 
         <c-card-body>
-            <oitc-block-loader *ngIf="!containerDetails"></oitc-block-loader>
+            @if (!containerDetails) {
+                <oitc-block-loader></oitc-block-loader>
+            }
 
-            <c-row *ngIf="containerDetails">
-                <c-col *ngFor="let container of containerDetails; index as i" [xs]="12">
-                    <c-card [cBorder]="{top: {color: 'primary', width: 3}}" [textColor]="'primary'" class="mb-3">
-                        <c-card-header>
-                            {{ container.name }}
-                            <span class="badge border border-primary text-primary ms-2"
-                                  *ngIf="container.containertype_id === ContainerTypesEnum.CT_TENANT">
-                                <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                                {{ t('Tenant') }}
-                            </span>
-                            <span class="badge border border-primary text-primary ms-2"
-                                  *ngIf="container.containertype_id === ContainerTypesEnum.CT_LOCATION">
-                                <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
-                                {{ t('Location') }}
-                            </span>
-                            <span class="badge border border-primary text-primary ms-2"
-                                  *ngIf="container.containertype_id === ContainerTypesEnum.CT_NODE">
-                                <fa-icon [icon]="['fas', 'link']"></fa-icon>
-                                {{ t('Node') }}
-                            </span>
-                        </c-card-header>
-                        <c-card-body>
-                            <table cTable bordered *ngIf="container.childsElements">
-                                <tbody>
-                                    @for (details of objectDetails; track $index) {
-                                        @if (hasChildElementsForObjectDetails(container.childsElements, details)) {
-                                            <tr>
-                                                <td class="width-30 text-center">
-                                                    <fa-icon [icon]="details.icon"></fa-icon>
-                                                </td>
-                                                <td class="col-3">
-                                                    {{ details.label }}
-                                                </td>
-                                                <td>
-                                                    @for (element of this.getChildElementsByTypeAsIterator(container.childsElements, details); track $index) {
-                                                        <div>
-                                                            @if (PermissionsService.hasPermissionObservable(details.rights)|async) {
-                                                                <a [routerLink]="details.baseRoute+element.key">
-                                                                    {{ element.value }}
-                                                                </a>
-                                                            } @else {
-                                                                {{ element.value }}
-                                                            }
-                                                        </div>
-                                                    }
-                                                </td>
-                                            </tr>
-                                        }
+            @if (containerDetails) {
+                <c-row>
+                    @for (container of containerDetails; track container; let i = $index) {
+                        <c-col [xs]="12">
+                            <c-card [cBorder]="{top: {color: 'primary', width: 3}}" [textColor]="'primary'"
+                                    class="mb-3">
+                                <c-card-header>
+                                    {{ container.name }}
+                                    @if (container.containertype_id === ContainerTypesEnum.CT_TENANT) {
+                                        <span class="badge border border-primary text-primary ms-2"
+                                        >
+                                            <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                                            {{ t('Tenant') }}
+                                        </span>
                                     }
-
-                                </tbody>
-                            </table>
-
-                            <div class="w-100 italic text-info text-center" *ngIf="!container.childsElements">
-                                {{ t('Container has no child elements') }}
-                            </div>
-
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-            </c-row>
+                                    @if (container.containertype_id === ContainerTypesEnum.CT_LOCATION) {
+                                        <span class="badge border border-primary text-primary ms-2"
+                                        >
+                                            <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                                            {{ t('Location') }}
+                                        </span>
+                                    }
+                                    @if (container.containertype_id === ContainerTypesEnum.CT_NODE) {
+                                        <span class="badge border border-primary text-primary ms-2"
+                                        >
+                                            <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                                            {{ t('Node') }}
+                                        </span>
+                                    }
+                                </c-card-header>
+                                <c-card-body>
+                                    @if (container.childsElements) {
+                                        <table cTable bordered>
+                                            <tbody>
+                                                @for (details of objectDetails; track $index) {
+                                                    @if (hasChildElementsForObjectDetails(container.childsElements, details)) {
+                                                        <tr>
+                                                            <td class="width-30 text-center">
+                                                                <fa-icon [icon]="details.icon"></fa-icon>
+                                                            </td>
+                                                            <td class="col-3">
+                                                                {{ details.label }}
+                                                            </td>
+                                                            <td>
+                                                                @for (element of this.getChildElementsByTypeAsIterator(container.childsElements, details); track $index) {
+                                                                    <div>
+                                                                        @if (PermissionsService.hasPermissionObservable(details.rights)|async) {
+                                                                            <a [routerLink]="details.baseRoute+element.key">
+                                                                                {{ element.value }}
+                                                                            </a>
+                                                                        } @else {
+                                                                            {{ element.value }}
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                    @if (!container.childsElements) {
+                                        <div class="w-100 italic text-info text-center">
+                                            {{ t('Container has no child elements') }}
+                                        </div>
+                                    }
+                                </c-card-body>
+                            </c-card>
+                        </c-col>
+                    }
+                </c-row>
+            }
 
         </c-card-body>
 

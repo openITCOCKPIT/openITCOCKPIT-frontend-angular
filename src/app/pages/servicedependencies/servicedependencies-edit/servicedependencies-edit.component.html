@@ -21,436 +21,421 @@
     </nav>
 
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
-    <form cForm (ngSubmit)="submit()" *ngIf="post">
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('Edit service dependency') }}</h5>
-
-                <c-nav class="card-toolbar card-header-pills">
-                    <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
-                </c-nav>
-
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['servicedependencies', 'index']" cButton class="ripple"
-                                color="default"
-                                oitcBackButton
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                            {{ t('Back') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-            </c-card-header>
-            <c-card-body>
-                <div class="mb-3">
-                    <label cLabel for="container">
-                        {{ t('Container') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-
-                    <oitc-select
-                        name="container"
-                        id="container"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.container_id"
-                        [options]="containers?.containers"
-                        (onChange)="onContainerChange()"
-                        oitcFormError [errors]="errors" errorField="container_id">
-                    </oitc-select>
-
-                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
-                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-                </div>
-                <div class="form-text">
-                    {{
-                        t('Service dependencies are an advanced feature that allow you to suppress notifications for services based on the status of one or more other services.')
-                    }}
-                </div>
-                <div class="border-start border-primary border-4 rounded-top rounded-bottom px-2 py-1 my-2">
+    @if (post) {
+        <form cForm (ngSubmit)="submit()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>{{ t('Edit service dependency') }}</h5>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <oitc-object-uuid [uuid]="post.uuid"></oitc-object-uuid>
+                    </c-nav>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['servicedependencies', 'index']" cButton class="ripple"
+                                    color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
                     <div class="mb-3">
-                        <label cLabel for="ServicedependenciesServices">
-                            <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
-                            {{ t('Services') }}
+                        <label cLabel for="container">
+                            {{ t('Container') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
-                        <c-input-group>
-                            <oitc-multi-select-optgroup
-                                name="ServicedependenciesServices"
-                                id="ServicedependenciesServices"
-                                optionLabel="label"
-                                optionValue="value"
-                                [(ngModel)]="post.services._ids"
-                                [options]="services"
-                                [searchCallback]="loadServices"
-                                (ngModelChange)="processChosenDependentServices()"
-                                [group]="true"
-                                class="flex-1"
-                                oitcFormError [errors]="errors" errorField="services">
-                            </oitc-multi-select-optgroup>
-                        </c-input-group>
+                        <oitc-select
+                            name="container"
+                            id="container"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.container_id"
+                            [options]="containers?.containers"
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container_id">
+                        </oitc-select>
+                        @if (!post.container_id) {
+                            <div class="text-warning-glow pt-1">
+                                {{ t('Please select a container.') }}
+                            </div>
+                        }
+                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                    </div>
+                    <div class="form-text">
+                        {{
+                            t('Service dependencies are an advanced feature that allow you to suppress notifications for services based on the status of one or more other services.')
+                        }}
+                    </div>
+                    <div class="border-start border-primary border-4 rounded-top rounded-bottom px-2 py-1 my-2">
+                        <div class="mb-3">
+                            <label cLabel for="ServicedependenciesServices">
+                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
+                                {{ t('Services') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <c-input-group>
+                                <oitc-multi-select-optgroup
+                                    name="ServicedependenciesServices"
+                                    id="ServicedependenciesServices"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    [(ngModel)]="post.services._ids"
+                                    [options]="services"
+                                    [searchCallback]="loadServices"
+                                    (ngModelChange)="processChosenDependentServices()"
+                                    [group]="true"
+                                    class="flex-1"
+                                    oitcFormError [errors]="errors" errorField="services">
+                                </oitc-multi-select-optgroup>
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="services"></oitc-form-feedback>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="ServicedependenciesDependentServices">
+                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90" class="text-primary"></fa-icon>
+                                {{ t('Dependent services') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <c-input-group>
+                                <oitc-multi-select-optgroup
+                                    name="ServicedependenciesDependentServices"
+                                    id="ServicedependenciesDependentServices"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    [(ngModel)]="post.services_dependent._ids"
+                                    [options]="services_dependent"
+                                    [searchCallback]="loadDependentServices"
+                                    (ngModelChange)="processChosenServices()"
+                                    [group]="true"
+                                    class="flex-1"
+                                    oitcFormError [errors]="errors" errorField="services_dependent">
+                                </oitc-multi-select-optgroup>
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="services_dependent"></oitc-form-feedback>
+                        </div>
+                    </div>
+                    <div class="border-start border-primary border-4 rounded-top rounded-bottom px-2 py-1 my-2">
+                        <div class="mb-3">
+                            <label cLabel for="ServicedependencyServicegroups">
+                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
+                                {{ t('Service groups') }}
+                            </label>
+                            <c-input-group>
+                                <oitc-multi-select
+                                    name="ServicedependencyServicegroups"
+                                    id="ServicedependencyServicegroups"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.servicegroups._ids"
+                                    [options]="servicegroups"
+                                    (ngModelChange)="processChosenDependentServicegroups()"
+                                    class="flex-1"
+                                    oitcFormError [errors]="errors" errorField="servicegroups">
+                                </oitc-multi-select>
+                            </c-input-group>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="ServiceedependenciesDependentServicegroups">
+                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90" class="text-primary"></fa-icon>
+                                {{ t('Dependent service groups') }}
+                            </label>
+                            <c-input-group>
+                                <oitc-multi-select
+                                    name="ServiceedependenciesDependentServicegroups"
+                                    id="ServiceedependenciesDependentServicegroups"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.servicegroups_dependent._ids"
+                                    [options]="servicegroups_dependent"
+                                    (ngModelChange)="processChosenServicegroups()"
+                                    class="flex-1"
+                                    oitcFormError [errors]="errors" errorField="servicegroups_dependent">
+                                </oitc-multi-select>
+                            </c-input-group>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="ServiceedependenciesTimeperiod">
+                            <oitc-label-link
+                                [objectId]="post.timeperiod_id"
+                                [route]="'/timeperiods/edit'"
+                                [permissions]="'timeperiods.edit'"
+                            >
+                                {{ t('Timeperiod') }}
+                            </oitc-label-link>
+                        </label>
+                        <oitc-select
+                            name="ServiceedependenciesTimeperiod"
+                            id="ServiceedependenciesTimeperiod"
+                            optionValue="key"
+                            optionLabel="value"
+                            [showClear]="true"
+                            [(ngModel)]="post.timeperiod_id"
+                            [options]="timeperiods"
+                            oitcFormError [errors]="errors" errorField="timeperiod_id">
+                        </oitc-select>
                         <oitc-form-feedback [errors]="errors"
-                                            errorField="services"></oitc-form-feedback>
+                                            errorField="timeperiod_id"></oitc-form-feedback>
                     </div>
                     <div class="mb-3">
-                        <label cLabel for="ServicedependenciesDependentServices">
-                            <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90" class="text-primary"></fa-icon>
-                            {{ t('Dependent services') }}
-                            <oitc-required-icon></oitc-required-icon>
+                        <c-form-check>
+                            <input
+                                cFormCheckInput
+                                id="inherits_parent"
+                                type="checkbox"
+                                [(ngModel)]="post.inherits_parent"
+                                trueFalseValue
+                                [falseValue]="0"
+                                [trueValue]="1"
+                                name="inherits_parent"
+                            />
+                            <label
+                                cFormCheckLabel
+                                for="inherits_parent">{{ t('Inherits parent') }}</label>
+                        </c-form-check>
+                    </div>
+                    <div>
+                        <label cLabel>
+                            {{ t('Execution failure criteria') }}
                         </label>
-                        <c-input-group>
-                            <oitc-multi-select-optgroup
-                                name="ServicedependenciesDependentServices"
-                                id="ServicedependenciesDependentServices"
-                                optionLabel="label"
-                                optionValue="value"
-                                [(ngModel)]="post.services_dependent._ids"
-                                [options]="services_dependent"
-                                [searchCallback]="loadDependentServices"
-                                (ngModelChange)="processChosenServices()"
-                                [group]="true"
-                                class="flex-1"
-                                oitcFormError [errors]="errors" errorField="services_dependent">
-                            </oitc-multi-select-optgroup>
-                        </c-input-group>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="services_dependent"></oitc-form-feedback>
                     </div>
-                </div>
-                <div class="border-start border-primary border-4 rounded-top rounded-bottom px-2 py-1 my-2">
-                    <div class="mb-3">
-                        <label cLabel for="ServicedependencyServicegroups">
-                            <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
-                            {{ t('Service groups') }}
+                    <div class="form-text">
+                        {{
+                            t('Disable active service checking of dependend service/s, if master service state is one of the selected states.')
+                        }}
+                    </div>
+                    <div class="mb-3 d-inline-flex col-lg-9 col-xs-12 mt-2">
+                        <div class="input-group mx-1">
+                            <span class="input-group-text">
+                                <input
+                                    cFormCheckInput
+                                    class="checkbox-success"
+                                    name="execution_fail_on_ok"
+                                    id="execution_fail_on_ok"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.execution_fail_on_ok"
+                                    (ngModelChange)="checkExecutionFailureCriteria()"/>
+                            </span>
+                            <div class="form-control bg-success text-white text-center">
+                                <label for="execution_fail_on_ok">
+                                    {{ t('Up') }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group mx-1">
+                            <span class="input-group-text">
+                                <input
+                                    cFormCheckInput
+                                    class="checkbox-danger"
+                                    name="execution_fail_on_critical"
+                                    id="execution_fail_on_critical"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.execution_fail_on_critical"
+                                    (ngModelChange)="checkExecutionFailureCriteria()"/>
+                            </span>
+                            <div class="form-control bg-danger text-white text-center">
+                                <label for="execution_fail_on_critical">
+                                    {{ t('Down') }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group mx-1">
+                            <span class="input-group-text">
+                                <input
+                                    cFormCheckInput
+                                    class="checkbox-secondary"
+                                    name="execution_fail_on_unknown"
+                                    id="execution_fail_on_unknown"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.execution_fail_on_unknown"
+                                    (ngModelChange)="checkExecutionFailureCriteria()"/>
+                            </span>
+                            <div class="form-control bg-unknown text-white text-center">
+                                <label for="execution_fail_on_unknown">
+                                    {{ t('Unknown') }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group mx-1">
+                            <span class="input-group-text">
+                                <input
+                                    cFormCheckInput
+                                    class="checkbox-primary"
+                                    name="execution_fail_on_pending"
+                                    id="execution_fail_on_pending"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.execution_fail_on_pending"
+                                    (ngModelChange)="checkExecutionFailureCriteria()"/>
+                            </span>
+                            <div class="form-control bg-primary text-white text-center">
+                                <label for="execution_fail_on_pending">
+                                    {{ t('Pending') }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group mx-1">
+                            <span class="input-group-text">
+                                <input
+                                    cFormCheckInput
+                                    class="checkbox-primary"
+                                    name="execution_none"
+                                    id="execution_none"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.execution_none"
+                                    (ngModelChange)="resetExecutionOnFailureCriteria()"/>
+                            </span>
+                            <div class="form-control bg-primary text-white text-center">
+                                <label for="execution_none">
+                                    {{ t('Execution none') }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label cLabel>
+                            {{ t('Notification failure criteria') }}
                         </label>
-                        <c-input-group>
-                            <oitc-multi-select
-                                name="ServicedependencyServicegroups"
-                                id="ServicedependencyServicegroups"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="post.servicegroups._ids"
-                                [options]="servicegroups"
-                                (ngModelChange)="processChosenDependentServicegroups()"
-                                class="flex-1"
-                                oitcFormError [errors]="errors" errorField="servicegroups">
-                            </oitc-multi-select>
-                        </c-input-group>
-
                     </div>
-                    <div class="mb-3">
-                        <label cLabel for="ServiceedependenciesDependentServicegroups">
-                            <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90" class="text-primary"></fa-icon>
-                            {{ t('Dependent service groups') }}
-                        </label>
-                        <c-input-group>
-                            <oitc-multi-select
-                                name="ServiceedependenciesDependentServicegroups"
-                                id="ServiceedependenciesDependentServicegroups"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="post.servicegroups_dependent._ids"
-                                [options]="servicegroups_dependent"
-                                (ngModelChange)="processChosenServicegroups()"
-                                class="flex-1"
-                                oitcFormError [errors]="errors" errorField="servicegroups_dependent">
-                            </oitc-multi-select>
-                        </c-input-group>
+                    <div class="form-text">
+                        {{
+                            t('Disable service notifications of dependend service/s, if master service state is one of the selected states.')
+                        }}
                     </div>
-                </div>
-                <div class="mb-3">
-                    <label cLabel for="ServiceedependenciesTimeperiod">
-                        <oitc-label-link
-                            [objectId]="post.timeperiod_id"
-                            [route]="'/timeperiods/edit'"
-                            [permissions]="'timeperiods.edit'"
-                        >
-                            {{ t('Timeperiod') }}
-                        </oitc-label-link>
-                    </label>
-                    <oitc-select
-                        name="ServiceedependenciesTimeperiod"
-                        id="ServiceedependenciesTimeperiod"
-                        optionValue="key"
-                        optionLabel="value"
-                        [showClear]="true"
-                        [(ngModel)]="post.timeperiod_id"
-                        [options]="timeperiods"
-                        oitcFormError [errors]="errors" errorField="timeperiod_id">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors"
-                                        errorField="timeperiod_id"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <c-form-check>
-                        <input
-                            cFormCheckInput
-                            id="inherits_parent"
-                            type="checkbox"
-                            [(ngModel)]="post.inherits_parent"
-                            trueFalseValue
-                            [falseValue]="0"
-                            [trueValue]="1"
-                            name="inherits_parent"
-                        />
-                        <label
-                            cFormCheckLabel
-                            for="inherits_parent">{{ t('Inherits parent') }}</label>
-                    </c-form-check>
-                </div>
-
-                <div>
-                    <label cLabel>
-                        {{ t('Execution failure criteria') }}
-                    </label>
-                </div>
-                <div class="form-text">
-                    {{
-                        t('Disable active service checking of dependend service/s, if master service state is one of the selected states.')
-                    }}
-                </div>
-
-                <div class="mb-3 d-inline-flex col-lg-9 col-xs-12 mt-2">
-                    <div class="input-group mx-1">
-                        <span class="input-group-text">
-                            <input
-                                cFormCheckInput
-                                class="checkbox-success"
-                                name="execution_fail_on_ok"
-                                id="execution_fail_on_ok"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.execution_fail_on_ok"
-                                (ngModelChange)="checkExecutionFailureCriteria()"/>
-                        </span>
-                        <div class="form-control bg-success text-white text-center">
-                            <label for="execution_fail_on_ok">
-                                {{ t('Up') }}
-                            </label>
+                    <div class="mb-3 d-inline-flex col-lg-9 col-xs-12 mt-2">
+                        <div class="input-group mx-1">
+                            <span class="input-group-text">
+                                <input
+                                    cFormCheckInput
+                                    class="checkbox-success"
+                                    name="notification_fail_on_ok"
+                                    id="notification_fail_on_ok"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.notification_fail_on_ok"
+                                    (ngModelChange)="checkNotificationFailureCriteria()"/>
+                            </span>
+                            <div class="form-control bg-success text-white text-center">
+                                <label for="notification_fail_on_ok">
+                                    {{ t('Up') }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group mx-1">
+                            <span class="input-group-text">
+                                <input
+                                    cFormCheckInput
+                                    class="checkbox-danger"
+                                    name="notification_fail_on_critical"
+                                    id="notification_fail_on_critical"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.notification_fail_on_critical"
+                                    (ngModelChange)="checkNotificationFailureCriteria()"/>
+                            </span>
+                            <div class="form-control bg-danger text-white text-center">
+                                <label for="notification_fail_on_critical">
+                                    {{ t('Down') }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group mx-1">
+                            <span class="input-group-text">
+                                <input
+                                    cFormCheckInput
+                                    class="checkbox-secondary"
+                                    name="notification_fail_on_unknown"
+                                    id="notification_fail_on_unknown"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.notification_fail_on_unknown"
+                                    (ngModelChange)="checkNotificationFailureCriteria()"/>
+                            </span>
+                            <div class="form-control bg-unknown text-white text-center">
+                                <label for="notification_fail_on_unknown">
+                                    {{ t('Unknown') }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group mx-1">
+                            <span class="input-group-text">
+                                <input
+                                    cFormCheckInput
+                                    class="checkbox-primary"
+                                    name="notification_fail_on_pending"
+                                    id="notification_fail_on_pending"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.notification_fail_on_pending"
+                                    (ngModelChange)="checkNotificationFailureCriteria()"/>
+                            </span>
+                            <div class="form-control bg-primary text-white text-center">
+                                <label for="notification_fail_on_pending">
+                                    {{ t('Pending') }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group mx-1">
+                            <span class="input-group-text">
+                                <input
+                                    cFormCheckInput
+                                    class="checkbox-primary"
+                                    name="notification_none"
+                                    id="notification_none"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.notification_none"
+                                    (ngModelChange)="resetNotificationOnFailureCriteria()"/>
+                            </span>
+                            <div class="form-control bg-primary text-white text-center">
+                                <label for="notification_none">
+                                    {{ t('Notification none') }}
+                                </label>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="input-group mx-1">
-                        <span class="input-group-text">
-                            <input
-                                cFormCheckInput
-                                class="checkbox-danger"
-                                name="execution_fail_on_critical"
-                                id="execution_fail_on_critical"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.execution_fail_on_critical"
-                                (ngModelChange)="checkExecutionFailureCriteria()"/>
-
-                        </span>
-                        <div class="form-control bg-danger text-white text-center">
-                            <label for="execution_fail_on_critical">
-                                {{ t('Down') }}
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="input-group mx-1">
-                        <span class="input-group-text">
-                            <input
-                                cFormCheckInput
-                                class="checkbox-secondary"
-                                name="execution_fail_on_unknown"
-                                id="execution_fail_on_unknown"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.execution_fail_on_unknown"
-                                (ngModelChange)="checkExecutionFailureCriteria()"/>
-                        </span>
-                        <div class="form-control bg-unknown text-white text-center">
-                            <label for="execution_fail_on_unknown">
-                                {{ t('Unknown') }}
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="input-group mx-1">
-                        <span class="input-group-text">
-                            <input
-                                cFormCheckInput
-                                class="checkbox-primary"
-                                name="execution_fail_on_pending"
-                                id="execution_fail_on_pending"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.execution_fail_on_pending"
-                                (ngModelChange)="checkExecutionFailureCriteria()"/>
-                        </span>
-                        <div class="form-control bg-primary text-white text-center">
-                            <label for="execution_fail_on_pending">
-                                {{ t('Pending') }}
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="input-group mx-1">
-                        <span class="input-group-text">
-                            <input
-                                cFormCheckInput
-                                class="checkbox-primary"
-                                name="execution_none"
-                                id="execution_none"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.execution_none"
-                                (ngModelChange)="resetExecutionOnFailureCriteria()"/>
-                        </span>
-                        <div class="form-control bg-primary text-white text-center">
-                            <label for="execution_none">
-                                {{ t('Execution none') }}
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <label cLabel>
-                        {{ t('Notification failure criteria') }}
-                    </label>
-                </div>
-                <div class="form-text">
-                    {{
-                        t('Disable service notifications of dependend service/s, if master service state is one of the selected states.')
-                    }}
-                </div>
-
-                <div class="mb-3 d-inline-flex col-lg-9 col-xs-12 mt-2">
-                    <div class="input-group mx-1">
-                        <span class="input-group-text">
-                            <input
-                                cFormCheckInput
-                                class="checkbox-success"
-                                name="notification_fail_on_ok"
-                                id="notification_fail_on_ok"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.notification_fail_on_ok"
-                                (ngModelChange)="checkNotificationFailureCriteria()"/>
-
-                        </span>
-                        <div class="form-control bg-success text-white text-center">
-                            <label for="notification_fail_on_ok">
-                                {{ t('Up') }}
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="input-group mx-1">
-                        <span class="input-group-text">
-                            <input
-                                cFormCheckInput
-                                class="checkbox-danger"
-                                name="notification_fail_on_critical"
-                                id="notification_fail_on_critical"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.notification_fail_on_critical"
-                                (ngModelChange)="checkNotificationFailureCriteria()"/>
-                        </span>
-                        <div class="form-control bg-danger text-white text-center">
-                            <label for="notification_fail_on_critical">
-                                {{ t('Down') }}
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="input-group mx-1">
-                        <span class="input-group-text">
-                            <input
-                                cFormCheckInput
-                                class="checkbox-secondary"
-                                name="notification_fail_on_unknown"
-                                id="notification_fail_on_unknown"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.notification_fail_on_unknown"
-                                (ngModelChange)="checkNotificationFailureCriteria()"/>
-                        </span>
-                        <div class="form-control bg-unknown text-white text-center">
-                            <label for="notification_fail_on_unknown">
-                                {{ t('Unknown') }}
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="input-group mx-1">
-                        <span class="input-group-text">
-                            <input
-                                cFormCheckInput
-                                class="checkbox-primary"
-                                name="notification_fail_on_pending"
-                                id="notification_fail_on_pending"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.notification_fail_on_pending"
-                                (ngModelChange)="checkNotificationFailureCriteria()"/>
-                        </span>
-                        <div class="form-control bg-primary text-white text-center">
-                            <label for="notification_fail_on_pending">
-                                {{ t('Pending') }}
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="input-group mx-1">
-                        <span class="input-group-text">
-                            <input
-                                cFormCheckInput
-                                class="checkbox-primary"
-                                name="notification_none"
-                                id="notification_none"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.notification_none"
-                                (ngModelChange)="resetNotificationOnFailureCriteria()"/>
-                        </span>
-                        <div class="form-control bg-primary text-white text-center">
-                            <label for="notification_none">
-                                {{ t('Notification none') }}
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </c-card-body>
-            <c-card-footer class="text-end">
-                <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Update service dependency') }}
-                </button>
-                <button [fallbackUrl]="['servicedependencies', 'index']" cButton class="ms-1 ripple" color="default"
-                        oitcBackButton
-                        type="button">
-                    {{ t('Cancel') }}
-                </button>
-            </c-card-footer>
-        </c-card>
-    </form>
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Update service dependency') }}
+                    </button>
+                    <button [fallbackUrl]="['servicedependencies', 'index']" cButton class="ms-1 ripple" color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        </form>
+    }
 </ng-container>
 

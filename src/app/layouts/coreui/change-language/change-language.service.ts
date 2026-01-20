@@ -14,7 +14,7 @@ export class ChangeLanguageService {
     private readonly document = inject(DOCUMENT);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    public  changeBackendLanguage(i18n: string): Observable<any> {
+    public changeBackendLanguage(i18n: string): Observable<any> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/profile/updateI18n.json?angular=true`, {
             i18n: i18n

@@ -14,7 +14,7 @@ import {
     FormCheckLabelDirective,
     FormLabelDirective
 } from '@coreui/angular';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SelectOptgroupComponent } from '../../../../layouts/primeng/select/select-optgroup/select-optgroup.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -43,7 +43,6 @@ import { ServiceTypesEnum } from '../../../services/services.enum';
         FormCheckInputDirective,
         FormCheckLabelDirective,
         FormLabelDirective,
-        NgIf,
         FormsModule,
         SelectOptgroupComponent,
         TranslocoDirective,

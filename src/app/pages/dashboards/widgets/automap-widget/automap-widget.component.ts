@@ -30,7 +30,7 @@ import {
     AutomapsViewParams,
     AutomapsViewRoot
 } from '../../../automaps/automaps.interface';
-import { NgIf } from '@angular/common';
+
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { FormsModule } from '@angular/forms';
 import { AutomapViewerComponent } from '../../../automaps/automaps-view/automap-viewer/automap-viewer.component';
@@ -45,7 +45,6 @@ import { SliderTimeComponent } from '../../../../components/slider-time/slider-t
         RequiredIconComponent,
         XsButtonDirective,
         FaIconComponent,
-        NgIf,
         TranslocoDirective,
         FormControlDirective,
         FormsModule,

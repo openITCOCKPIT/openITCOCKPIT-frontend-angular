@@ -20,7 +20,7 @@ import { ServiceStatusNames } from '../../../services/services.enum';
 import {
     AcknowledgementIconComponent
 } from '../../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
     ColComponent,
     ContainerComponent,
@@ -81,7 +81,6 @@ import { RouterLink } from '@angular/router';
         InputGroupTextDirective,
         MatSort,
         MatSortHeader,
-        NgIf,
         NgSelectComponent,
         NoRecordsComponent,
         ReactiveFormsModule,

@@ -27,7 +27,7 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -70,7 +70,6 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         ReactiveFormsModule,
         RequiredIconComponent,
         RowComponent,

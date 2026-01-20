@@ -1,17 +1,21 @@
 <ng-container *transloco="let t">
-    <header *ngIf="selectedNode">
-        <h4 class="border-bottom border-primary border-3">
-            {{ t('External ID') }}
-            <span class="text-primary">
-                {{ selectedNode.key }}
-            </span>
-            <span *ngIf="selectedNode.external_link" class="ng-scope">
-                <a target="_blank" [href]="selectedNode.external_link">
-                    <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
-                </a>
-            </span>
-        </h4>
-    </header>
+    @if (selectedNode) {
+        <header>
+            <h4 class="border-bottom border-primary border-3">
+                {{ t('External ID') }}
+                <span class="text-primary">
+                    {{ selectedNode.key }}
+                </span>
+                @if (selectedNode.external_link) {
+                    <span class="ng-scope">
+                        <a target="_blank" [href]="selectedNode.external_link">
+                            <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
+                        </a>
+                    </span>
+                }
+            </h4>
+        </header>
+    }
 
     <div class="row">
         <div class="col-xs-12">

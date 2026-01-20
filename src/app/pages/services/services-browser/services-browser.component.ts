@@ -23,7 +23,7 @@ import {
     TooltipDirective
 } from '@coreui/angular';
 
-import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgClass } from '@angular/common';
 import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
@@ -139,7 +139,6 @@ import { TitleService } from '../../../services/title.service';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        NgIf,
         QueryHandlerCheckerComponent,
         TranslocoDirective,
         ServicesBrowserMenuComponent,
@@ -177,7 +176,6 @@ import { TitleService } from '../../../services/title.service';
         TableDirective,
         PrometheusServiceBrowserComponent,
         HoststatusSimpleIconComponent,
-        NgForOf,
         BrowserTimelineComponent,
         ServiceTimelineLegendComponent,
         FormCheckComponent,
