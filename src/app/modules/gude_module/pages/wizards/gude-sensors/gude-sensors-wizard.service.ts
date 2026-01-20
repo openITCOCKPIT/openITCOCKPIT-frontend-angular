@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { WizardsService } from '../../../../../pages/wizards/wizards.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { GudeSensorsWizardPost, GudeSeonsorsWizardGet, SnmpDiscovery } from './gude-sensors-wizard.interface';
+import { GudeSensorsWizardGet, GudeSensorsWizardPost, SnmpDiscovery } from './gude-sensors-wizard.interface';
 
 @Injectable({
     providedIn: 'root'
 })
 export class GudeSensorsWizardService extends WizardsService {
 
-    public fetch(hostId: number): Observable<GudeSeonsorsWizardGet> {
-        return this.http.get<GudeSeonsorsWizardGet>(`${this.proxyPath}/gude_module/wizards/gudeSensors/${hostId}.json?angular=true`).pipe(
-            map((data: GudeSeonsorsWizardGet): GudeSeonsorsWizardGet => {
+    public fetch(hostId: number): Observable<GudeSensorsWizardGet> {
+        return this.http.get<GudeSensorsWizardGet>(`${this.proxyPath}/gude_module/wizards/gudeSensors/${hostId}.json?angular=true`).pipe(
+            map((data: GudeSensorsWizardGet): GudeSensorsWizardGet => {
                 return data;
             })
         );

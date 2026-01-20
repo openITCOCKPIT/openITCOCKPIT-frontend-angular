@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewChildren } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { GudeSensorsWizardService } from './gude-sensors-wizard.service';
 import {
+    GudeSensorsWizardGet,
     GudeSensorsWizardPost,
-    GudeSeonsorsWizardGet,
     InterfaceServicetemplate,
-    N0
+    SensorService
 } from './gude-sensors-wizard.interface';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -35,16 +35,12 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
-import {
-    WizardsDynamicfieldsComponent
-} from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
+import { NgClass } from '@angular/common';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { Service } from '../../../../../pages/wizards/wizards.interface';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
@@ -60,8 +56,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         SelectComponent,
         FormLabelDirective,
         FormControlDirective,
-        NgIf,
-        WizardsDynamicfieldsComponent,
         TranslocoDirective,
         OitcAlertComponent,
         ProgressBarModule,
@@ -71,7 +65,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         FormCheckInputDirective,
         InputGroupComponent,
         InputGroupTextDirective,
-        NgForOf,
         NgSelectComponent,
         RowComponent,
         BackButtonDirective,
@@ -92,7 +85,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 })
 export class GudeSensorsComponent extends WizardsAbstractComponent {
     @ViewChildren('accordionItem') accordionItems: AccordionItemComponent[] = [];
-    @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
     protected override WizardService: GudeSensorsWizardService = inject(GudeSensorsWizardService);
     public checked: boolean = false;
     public accordionClosed: boolean = true;
@@ -101,6 +93,7 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
+        sensorServices: [],
 // Fields for the wizard
         authPassword: '',
         authProtocol: 'md5',
@@ -139,7 +132,7 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
     protected sensorsServicetemplateTemp: InterfaceServicetemplate = {} as InterfaceServicetemplate;
     protected sensorsServicetemplateHumidity: InterfaceServicetemplate = {} as InterfaceServicetemplate;
 
-    protected override wizardLoad(result: GudeSeonsorsWizardGet): void {
+    protected override wizardLoad(result: GudeSensorsWizardGet): void {
         this.sensorsServicetemplateTemp = result.sensorsServicetemplateTemp;
         this.sensorsServicetemplateHumidity = result.sensorsServicetemplateHumidity;
 
@@ -150,13 +143,9 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
         // let request = this.post; // Clone the original post object here!
         let request: GudeSensorsWizardPost = JSON.parse(JSON.stringify(this.post));
 
-        // Remove all services from request where createService is false.
-        request.services = request.services.filter((service: Service) => {
-            return service.createService && this.childComponent.hasName(service.name);
-        });
         // Remove all sensors from request where createService is false.
-        request.sensors = request.sensors.filter(
-            (networkInterface: N0) => networkInterface.createService && this.hasName(networkInterface.name)
+        request.sensorServices = request.sensorServices.filter(
+            (sensorService: SensorService) => sensorService.createService && this.hasName(sensorService.name)
         );
 
         this.subscriptions.add(this.WizardService.submit(request)
@@ -186,7 +175,7 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
 
     protected toggleCheck(checked: boolean): void {
         this.checked = checked;
-        this.post.sensors.forEach((service: N0) => {
+        this.post.sensorServices.forEach((service: SensorService) => {
             if (!this.hasName(service.name)) {
                 return;
             }
@@ -227,7 +216,7 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
     }
 
     protected runGudeSensorsDiscovery(): void {
-        this.post.sensors = [];
+        this.post.sensorServices = [];
         this.beginDiscovery();
         this.cdr.markForCheck();
         this.WizardService.executeGudeSensorsDiscovery(this.post).subscribe((data: any) => {
@@ -243,7 +232,7 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
                     servicetemplatecommandargumentvaluesHumidity[3].value = data.sensors[2].value[key].name;
                     let tempSensorName = "Temperature " + String(data.sensors[2].value[key].name);
                     let humiditySensorName = "Humidity " + String(data.sensors[2].value[key].name);
-                    this.post.sensors.push(
+                    this.post.sensorServices.push(
                         {
                             createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, tempSensorName),
                             description: '',
@@ -252,7 +241,7 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
                             servicecommandargumentvalues: servicetemplatecommandargumentvaluesTemp,
                             servicetemplate_id: this.sensorsServicetemplateTemp.id
                         });
-                    this.post.sensors.push(
+                    this.post.sensorServices.push(
                         {
                             createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, humiditySensorName),
                             description: '',

@@ -2,7 +2,7 @@ import { WizardGet, WizardPost } from '../../../../../pages/wizards/wizards.inte
 import { GenericValidationError } from '../../../../../generic-responses';
 
 // WIZARD GET
-export interface GudeSeonsorsWizardGet extends WizardGet {
+export interface GudeSensorsWizardGet extends WizardGet {
     sensorsServicetemplateTemp: InterfaceServicetemplate
     sensorsServicetemplateHumidity: InterfaceServicetemplate
 }
@@ -103,7 +103,7 @@ export interface Commandargument {
 export interface GudeSensorsWizardPost extends WizardPost {
     authPassword: string
     authProtocol: string
-    sensors: N0[]
+    sensorServices: SensorService[]
     privacyPassword: string
     privacyProtocol: string
     securityLevel: string
@@ -112,7 +112,7 @@ export interface GudeSensorsWizardPost extends WizardPost {
     snmpVersion: string
 }
 
-export interface N0 {
+export interface SensorService {
     createService: boolean
     description: string
     host_id: number
