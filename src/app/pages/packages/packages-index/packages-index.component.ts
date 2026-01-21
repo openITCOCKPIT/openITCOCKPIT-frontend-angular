@@ -24,7 +24,8 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
 import { IndexPage } from '../../../pages.interface';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { Sort } from '@angular/material/sort';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
+import { PackagesService } from '../packages.service';
 
 @Component({
     selector: 'oitc-packages-index',
@@ -59,11 +60,30 @@ export class PackagesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly TranslocoService = inject(TranslocoService);
+    private readonly PackagesService = inject(PackagesService);
     protected hideFilter: boolean = true;
+    public isLoading: boolean = true;
 
     ngOnInit(): void {
-        throw new Error('Method not implemented.');
+        this.load();
     }
+
+    public load() {
+        let request = {
+            //packages: this.PackagesService.getPackages(this.params),
+            //summary: this.PackagesService.getSummary()
+        };
+
+        forkJoin(request).subscribe(
+            (result) => {
+                //this. packages = result. packages;
+                //this.summary = result.summary
+                this.isLoading = false;
+                this.cdr.markForCheck();
+            });
+
+    }
+
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
