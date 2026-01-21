@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
     CardBodyComponent,
@@ -9,15 +9,22 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    RowComponent, TabDirective, TableDirective,
-    TabPanelComponent, TabsComponent, TabsContentComponent, TabsListComponent,
+    RowComponent,
+    TabDirective,
+    TableDirective,
+    TabPanelComponent,
+    TabsComponent,
+    TabsContentComponent,
+    TabsListComponent,
     TemplateIdDirective,
     TextColorDirective,
     WidgetStatFComponent
 } from '@coreui/angular';
-
-import { cil3d, cilList, cilShieldAlt } from '@coreui/icons';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
+import { IndexPage } from '../../../pages.interface';
+import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+import { Sort } from '@angular/material/sort';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'oitc-packages-index',
@@ -48,6 +55,56 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
     styleUrl: './packages-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PackagesIndexComponent {
-    icons = {cilList, cilShieldAlt, cil3d};
+export class PackagesIndexComponent implements OnInit, OnDestroy, IndexPage {
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+    private readonly TranslocoService = inject(TranslocoService);
+    protected hideFilter: boolean = true;
+
+    ngOnInit(): void {
+        throw new Error('Method not implemented.');
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
+    public onMassActionComplete(success: boolean): void {
+    }
+
+
+    public toggleFilter() {
+        this.hideFilter = !this.hideFilter;
+    }
+
+    // Callback when a filter has changed
+    public onFilterChange(event: any) {
+        //this.params.page = 1;
+        //this.refresh();
+    }
+
+    // Callback for Paginator or Scroll Index Component
+    public onPaginatorChange(change: PaginatorChangeEvent): void {
+        //this.params.page = change.page;
+        //this.params.scroll = change.scroll;
+        //this.refresh();
+    }
+
+    public resetFilter() {
+        //this.filter = getDefaultCustomAlertsIndexFilter();
+        this.refresh();
+    }
+
+    // Callback when sort has changed
+    public onSortChange(sort: Sort) {
+        if (sort.direction) {
+            //this.params.sort = sort.active;
+            //this.params.direction = sort.direction;
+            this.refresh();
+        }
+    }
+
+    protected refresh(): void {
+        this.cdr.markForCheck();
+    }
 }

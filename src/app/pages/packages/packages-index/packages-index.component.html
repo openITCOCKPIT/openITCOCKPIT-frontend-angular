@@ -110,12 +110,12 @@
                 </c-col>
                 <c-col [xs]="12" [md]="6" [lg]="3" [xl]="2">
                     <c-widget-stat-f
-                        [value]="'Affected Hosts' | transloco"
+                        [value]="'Outdated Hosts' | transloco"
                         [title]="'1234'"
                         class="mb-3"
                         padding>
                         <ng-template cTemplateId="widgetIconTemplate">
-                            <fa-icon [icon]="['fas', 'server']" [cTextColor]="'info'" [size]="'2xl'"></fa-icon>
+                            <fa-icon [icon]="['fas', 'server']" [cTextColor]="'warning'" [size]="'2xl'"></fa-icon>
                         </ng-template>
                         <ng-template cTemplateId="widgetFooterTemplate">
                             <c-row>
