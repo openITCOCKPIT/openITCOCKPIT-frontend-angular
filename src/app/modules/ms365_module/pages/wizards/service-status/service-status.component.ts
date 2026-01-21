@@ -22,7 +22,7 @@ import {
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
+
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
@@ -48,7 +48,6 @@ import { Servicetemplate } from '../../../../../pages/wizards/wizards.interface'
         TranslocoPipe,
         WizardsDynamicfieldsComponent,
         RouterLink,
-        NgIf,
         OitcAlertComponent,
         XsButtonDirective,
         AccordionButtonDirective,

@@ -31,7 +31,7 @@ import {
 } from '@coreui/angular';
 import { DashboardTab } from '../../dashboards.interface';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { Skeleton } from 'primeng/skeleton';
@@ -54,7 +54,6 @@ import { DashboardAllocateModalService } from '../dashboard-allocate-modal/dashb
         CdkDropList,
         CdkDrag,
         FaIconComponent,
-        NgIf,
         Skeleton,
         DropdownComponent,
         DropdownMenuDirective,

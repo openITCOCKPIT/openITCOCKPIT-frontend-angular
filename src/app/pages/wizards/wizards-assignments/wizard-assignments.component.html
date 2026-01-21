@@ -90,6 +90,12 @@
                             <fa-icon [icon]="['fas', 'server']"></fa-icon>
                             {{ t('Hardware') }}
                         </button>
+                        <button cButton color="primary" size="xs"
+                                [ngClass]="{'btn-primary': filter.Category.webserver, 'btn-default': !filter.Category.webserver}"
+                                (click)="filter.Category.webserver=!filter.Category.webserver">
+                            <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                            {{ t('Webserver') }}
+                        </button>
 
                     </c-button-group>
                 </c-nav-item>
@@ -97,7 +103,9 @@
         </c-card-header>
         <c-card-body>
 
-            <oitc-table-loader *ngIf="! result"></oitc-table-loader>
+            @if (!result) {
+                <oitc-table-loader></oitc-table-loader>
+            }
 
             <table bordered cTable class="mt-2 mb-0" hover striped>
                 <thead>
@@ -118,48 +126,60 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="result">
-                <tr *ngFor="let wizard of result.wizards | keyvalue"
-                    [hidden]="! filterByCategory(wizard.value.category)">
-                    <td class="text-center">
-                        <div class="wizard-logo-image-small">
-                            <img [src]="'./assets/images/wizards/'+wizard.value.image" [alt]="wizard.value.title">
-                        </div>
-                    </td>
-                    <td>
-                        {{ wizard.value.title }}
-                        @if (!wizard.value.active) {
-                            <oitc-badge-outline color="warning" class="mx-1"
-                                                [cTooltip]="'Please use new VMWareV2Module'|transloco">
-                                {{ t('obsolete') }}
-                            </oitc-badge-outline>
+                @if (result) {
+                    <tbody>
+                        @for (wizard of result.wizards | keyvalue; track wizard) {
+                            <tr
+                                [hidden]="! filterByCategory(wizard.value.category)">
+                                <td class="text-center">
+                                    <div class="wizard-logo-image-small">
+                                        <img [src]="'./assets/images/wizards/'+wizard.value.image"
+                                             [alt]="wizard.value.title">
+                                    </div>
+                                </td>
+                                <td>
+                                    {{ wizard.value.title }}
+                                    @if (!wizard.value.active) {
+                                        <oitc-badge-outline color="warning" class="mx-1"
+                                                            [cTooltip]="'Please use new VMWareV2Module'|transloco">
+                                            {{ t('obsolete') }}
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+                                <td>
+                                    {{ wizard.value.description }}
+                                </td>
+                                <td>
+                                    @if (!wizard.value.necessity_of_assignment) {
+                                        <c-badge color="danger">{{ t('No') }}</c-badge>
+                                    }
+                                    @if (wizard.value.necessity_of_assignment) {
+                                        <c-badge color="success">{{ t('Yes') }}</c-badge>
+                                    }
+                                </td>
+                                <td class="width-50">
+                                    @if (wizard.value.necessity_of_assignment) {
+                                        <oitc-actions-button [permission]="'wizards.edit'"
+                                                             [url]="'/wizards/edit/' + wizard.value.uuid + '/' + wizard.value.title"
+                                        >
+                                            <oitc-actions-button-element [permission]="'wizards.edit'"
+                                                                         [url]="'/wizards/edit/' + wizard.value.uuid + '/' + wizard.value.title">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        </oitc-actions-button>
+                                    }
+                                </td>
+                            </tr>
                         }
-
-                    </td>
-                    <td>
-                        {{ wizard.value.description }}
-                    </td>
-                    <td>
-                        <c-badge color="danger" *ngIf="! wizard.value.necessity_of_assignment">{{ t('No') }}</c-badge>
-                        <c-badge color="success" *ngIf="  wizard.value.necessity_of_assignment">{{ t('Yes') }}</c-badge>
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'wizards.edit'"
-                                             [url]="'/wizards/edit/' + wizard.value.uuid + '/' + wizard.value.title"
-                                             *ngIf="  wizard.value.necessity_of_assignment">
-                            <oitc-actions-button-element [permission]="'wizards.edit'"
-                                                         [url]="'/wizards/edit/' + wizard.value.uuid + '/' + wizard.value.title">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
+                    </tbody>
+                }
             </table>
 
-            <oitc-no-records
-                *ngIf="result && Object.keys(result.wizards).length === 0"></oitc-no-records>
+            @if (result && Object.keys(result.wizards).length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
 
         </c-card-body>
     </c-card>

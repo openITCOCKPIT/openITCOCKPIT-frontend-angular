@@ -38,7 +38,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -76,7 +76,6 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PaginatorModule,
         PermissionDirective,
         RequiredIconComponent,
@@ -87,7 +86,6 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         FormCheckComponent,
         FormCheckLabelDirective,
         RouterLink,
-        NgForOf,
         NgClass,
         InputGroupComponent,
         InputGroupTextDirective,

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, output } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AgentconnectorWizardStepsEnum } from '../agentconnector.enums';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { AgentModes } from '../agentconnector.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -11,7 +11,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
         TranslocoDirective,
         NgClass,
         FaIconComponent,
-        NgIf,
         TranslocoPipe
     ],
     templateUrl: './agentconnector-wizard-progressbar.component.html',

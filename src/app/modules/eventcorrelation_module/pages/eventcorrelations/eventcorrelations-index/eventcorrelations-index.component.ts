@@ -47,7 +47,7 @@ import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -60,50 +60,48 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 @Component({
     selector: 'oitc-eventcorrelations-index',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    RowComponent,
-    TranslocoPipe,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    CardFooterComponent,
-    DropdownDividerDirective,
-    ItemSelectComponent,
-    MatSort,
-    MatSortHeader,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    SelectAllComponent,
-    TableDirective,
-    TableLoaderComponent,
-    DropdownItemDirective,
-    AsyncPipe,
-    TooltipDirective,
-    DeleteAllModalComponent
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        RowComponent,
+        TranslocoPipe,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardFooterComponent,
+        DropdownDividerDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        SelectAllComponent,
+        TableDirective,
+        TableLoaderComponent,
+        DropdownItemDirective,
+        AsyncPipe,
+        TooltipDirective,
+        DeleteAllModalComponent
+    ],
     templateUrl: './eventcorrelations-index.component.html',
     styleUrl: './eventcorrelations-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: EventcorrelationsService } // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: EventcorrelationsService} // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

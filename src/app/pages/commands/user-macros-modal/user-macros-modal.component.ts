@@ -16,28 +16,26 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 
 import { Subscription } from 'rxjs';
 import { MacroIndex } from '../../macros/macros.interface';
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MacrosService } from '../../macros/macros.service';
 
 @Component({
     selector: 'oitc-user-macros-modal',
     imports: [
-    ModalToggleDirective,
-    ModalComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ModalBodyComponent,
-    FaIconComponent,
-    XsButtonDirective,
-    ButtonCloseDirective,
-    TranslocoDirective,
-    TableDirective,
-    NgIf,
-    TranslocoPipe,
-    NgFor,
-    NgClass,
-    ModalFooterComponent
-],
+        ModalToggleDirective,
+        ModalComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ModalBodyComponent,
+        FaIconComponent,
+        XsButtonDirective,
+        ButtonCloseDirective,
+        TranslocoDirective,
+        TableDirective,
+        TranslocoPipe,
+        NgClass,
+        ModalFooterComponent
+    ],
     templateUrl: './user-macros-modal.component.html',
     styleUrl: './user-macros-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

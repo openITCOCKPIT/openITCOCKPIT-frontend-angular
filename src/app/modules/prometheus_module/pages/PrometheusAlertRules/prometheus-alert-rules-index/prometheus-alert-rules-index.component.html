@@ -133,7 +133,9 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!result"></oitc-table-loader>
+            @if (!result) {
+                <oitc-table-loader></oitc-table-loader>
+            }
 
             <table bordered cTable class="mt-2 mb-0" hover striped matSort (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -159,69 +161,83 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="result">
-                <tr *ngFor="let alertRule of result.all_alert_rules">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['users', 'delete']"
-                            [disabled]="false"
-                            [item]="alertRule"></oitc-item-select>
-                    </td>
-                    <td class="text-center">
-                        <oitc-prometheus-popover-graph
-                            [timezone]="timezone"
-                            [promql]="alertRule._matchingData.PrometheusAlertRules.promql"
-                        />
-                    </td>
-                    <td>
-
-                        <a *oitcPermission="['services', 'browser']"
-                           [routerLink]="['/', 'services', 'browser', alertRule.id]">
-                            {{ alertRule.servicename }}
-                        </a>
-                    </td>
-                    <td>
-                        <code>{{ alertRule._matchingData.PrometheusAlertRules.promql }}</code>
-                    </td>
-                    <td>
-                        {{ alertRule._matchingData.PrometheusAlertRules.unit }}
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'PrometheusModule.PrometheusQuery.editService'"
-                                             [url]="'/prometheus_module/PrometheusQuery/editService/' + alertRule.id"
-                                             [allowEdit]="alertRule.allow_edit">
-                            <oitc-actions-button-element [permission]="'PrometheusModule.PrometheusQuery.editService'"
+                @if (result) {
+                    <tbody>
+                        @for (alertRule of result.all_alert_rules; track alertRule) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['users', 'delete']"
+                                        [disabled]="false"
+                                        [item]="alertRule"></oitc-item-select>
+                                </td>
+                                <td class="text-center">
+                                    <oitc-prometheus-popover-graph
+                                        [timezone]="timezone"
+                                        [promql]="alertRule._matchingData.PrometheusAlertRules.promql"
+                                    />
+                                </td>
+                                <td>
+                                    <a *oitcPermission="['services', 'browser']"
+                                       [routerLink]="['/', 'services', 'browser', alertRule.id]">
+                                        {{ alertRule.servicename }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <code>{{ alertRule._matchingData.PrometheusAlertRules.promql }}</code>
+                                </td>
+                                <td>
+                                    {{ alertRule._matchingData.PrometheusAlertRules.unit }}
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'PrometheusModule.PrometheusQuery.editService'"
                                                          [url]="'/prometheus_module/PrometheusQuery/editService/' + alertRule.id"
-                                                         *ngIf="alertRule.allow_edit">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'PrometheusModule.PrometheusQuery.editService'"
-                                                         *ngIf="!alertRule.allow_edit">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider
-                                *ngIf="alertRule.allow_edit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(alertRule)"
-                                                         *ngIf="alertRule.allow_edit"
-                                                         [permission]="'PrometheusModule.PrometheusAlertRules.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
+                                                         [allowEdit]="alertRule.allow_edit">
+                                        @if (alertRule.allow_edit) {
+                                            <oitc-actions-button-element
+                                                [permission]="'PrometheusModule.PrometheusQuery.editService'"
+                                                [url]="'/prometheus_module/PrometheusQuery/editService/' + alertRule.id"
+                                            >
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        @if (!alertRule.allow_edit) {
+                                            <oitc-actions-button-element
+                                                [permission]="'PrometheusModule.PrometheusQuery.editService'"
+                                            >
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        @if (alertRule.allow_edit) {
+                                            <li cDropdownDivider
+                                            ></li>
+                                        }
+                                        @if (alertRule.allow_edit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(alertRule)"
+                                                                         [permission]="'PrometheusModule.PrometheusAlertRules.delete'">
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
             </table>
 
-            <oitc-no-records
-                *ngIf="result && result.all_alert_rules.length === 0"></oitc-no-records>
+            @if (result && result.all_alert_rules.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
 
 
-            <ng-container *ngIf="result && result.all_alert_rules">
+            @if (result && result.all_alert_rules) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -241,16 +257,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="result"
-                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        @if (result) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

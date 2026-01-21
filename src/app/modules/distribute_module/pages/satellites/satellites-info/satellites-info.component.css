@@ -1,0 +1,5 @@
+.bg-no-data {
+    background-image: linear-gradient(135deg, #d6d6d626 25%, transparent 25%, transparent 50%, #d6d6d626 50%, #d6d6d626 75%, transparent 75%, transparent 100%);
+    background-size: 61px 61px;
+    --cui-table-bg: linear-gradient(135deg, #d6d6d626 25%, transparent 25%, transparent 50%, #d6d6d626 50%, #d6d6d626 75%, transparent 75%, transparent 100%);
+}

@@ -89,117 +89,120 @@
                             for="is_recurring">{{ t('Recurring downtime') }}</label>
                     </c-form-check>
                 </div>
-                <div *ngIf="post.is_recurring == 0">
-                    <div class="mb-3">
-                        <label cLabel for="from_date">
-                            {{ t('From') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
-                            </span>
-                            <input cFormControl id="from_date" required type="date"
-                                   name="from_date" placeholder="{{ t('DD.MM.YYYY') }}"
-                                   oitcFormError [errors]="errors" errorField="from"
-                                   [(ngModel)]="post.from_date">
-                            <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
-                            <span class="input-group-text">
-                                <fa-icon [icon]="['far', 'clock']"></fa-icon>
-                            </span>
-                            <input cFormControl id="from_time" required type="time"
-                                   name="from_time" placeholder="{{ t('hh:mm') }}"
-                                   oitcFormError [errors]="errors" errorField="from_time"
-                                   [(ngModel)]="post.from_time">
-                            <oitc-form-feedback [errors]="errors" errorField="from_time"></oitc-form-feedback>
+                @if (post.is_recurring == 0) {
+                    <div>
+                        <div class="mb-3">
+                            <label cLabel for="from_date">
+                                {{ t('From') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl id="from_date" required type="date"
+                                       name="from_date" placeholder="{{ t('DD.MM.YYYY') }}"
+                                       oitcFormError [errors]="errors" errorField="from"
+                                       [(ngModel)]="post.from_date">
+                                <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
+                                <span class="input-group-text">
+                                    <fa-icon [icon]="['far', 'clock']"></fa-icon>
+                                </span>
+                                <input cFormControl id="from_time" required type="time"
+                                       name="from_time" placeholder="{{ t('hh:mm') }}"
+                                       oitcFormError [errors]="errors" errorField="from_time"
+                                       [(ngModel)]="post.from_time">
+                                <oitc-form-feedback [errors]="errors" errorField="from_time"></oitc-form-feedback>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="to_date">
+                                {{ t('To') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+                                </span>
+                                <input cFormControl id="to_date" required type="date"
+                                       name="to_date" placeholder="{{ t('DD.MM.YYYY') }}"
+                                       oitcFormError [errors]="errors" errorField="to"
+                                       [(ngModel)]="post.to_date">
+                                <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
+                                <span class="input-group-text">
+                                    <fa-icon [icon]="['far', 'clock']"></fa-icon>
+                                </span>
+                                <input cFormControl id="to_time" required type="time"
+                                       name="to_time" placeholder="{{ t('hh:mm') }}"
+                                       oitcFormError [errors]="errors" errorField="to_time"
+                                       [(ngModel)]="post.to_time">
+                                <oitc-form-feedback [errors]="errors" errorField="to_time"></oitc-form-feedback>
+                            </div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label cLabel for="to_date">
-                            {{ t('To') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
-                            </span>
-                            <input cFormControl id="to_date" required type="date"
-                                   name="to_date" placeholder="{{ t('DD.MM.YYYY') }}"
-                                   oitcFormError [errors]="errors" errorField="to"
-                                   [(ngModel)]="post.to_date">
-                            <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
-                            <span class="input-group-text">
-                                <fa-icon [icon]="['far', 'clock']"></fa-icon>
-                            </span>
-                            <input cFormControl id="to_time" required type="time"
-                                   name="to_time" placeholder="{{ t('hh:mm') }}"
-                                   oitcFormError [errors]="errors" errorField="to_time"
-                                   [(ngModel)]="post.to_time">
-                            <oitc-form-feedback [errors]="errors" errorField="to_time"></oitc-form-feedback>
+                }
+                @if (post.is_recurring == 1) {
+                    <div>
+                        <div class="mb-3">
+                            <label cLabel for="from_date">
+                                {{ t('From') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <fa-icon [icon]="['far', 'clock']"></fa-icon>
+                                </span>
+                                <input cFormControl id="from_time" required type="time"
+                                       name="from_time" placeholder="{{ t('hh:mm') }}"
+                                       oitcFormError [errors]="errors" errorField="from_time"
+                                       [(ngModel)]="post.from_time">
+                                <oitc-form-feedback [errors]="errors" errorField="from_time"></oitc-form-feedback>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label cFormCheckLabel for="duration">
+                                {{ t('Duration') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <oitc-duration-input
+                                id="duration"
+                                name="duration"
+                                [selectedInterval]="post.duration"
+                                (selectedIntervalChange)="post.duration = $event"
+                            ></oitc-duration-input>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="duration"></oitc-form-feedback>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="weekdays">
+                                {{ t('Weekdays') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <oitc-multi-select
+                                name="weekdays"
+                                id="weekdays"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="post.weekdays"
+                                [options]="weekdaysForSelect"
+                                [debounce]="true"
+                                oitcFormError [errors]="errors" errorField="weekdays">
+                            </oitc-multi-select>
+                            <oitc-form-feedback [errors]="errors" errorField="weekdays"></oitc-form-feedback>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="day_of_month">
+                                {{ t('Days of month') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl id="day_of_month" required type="text"
+                                   name="day_of_month" placeholder="{{ t('1,2,3,4,5 or <blank>') }}"
+                                   oitcFormError [errors]="errors" errorField="day_of_month"
+                                   [(ngModel)]="post.day_of_month">
+                            <oitc-form-feedback [errors]="errors" errorField="day_of_month"></oitc-form-feedback>
                         </div>
                     </div>
-                </div>
-                <div *ngIf="post.is_recurring == 1">
-                    <div class="mb-3">
-                        <label cLabel for="from_date">
-                            {{ t('From') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <fa-icon [icon]="['far', 'clock']"></fa-icon>
-                            </span>
-                            <input cFormControl id="from_time" required type="time"
-                                   name="from_time" placeholder="{{ t('hh:mm') }}"
-                                   oitcFormError [errors]="errors" errorField="from_time"
-                                   [(ngModel)]="post.from_time">
-                            <oitc-form-feedback [errors]="errors" errorField="from_time"></oitc-form-feedback>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label cFormCheckLabel for="duration">
-                            {{ t('Duration') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <oitc-duration-input
-                            id="duration"
-                            name="duration"
-                            [selectedInterval]="post.duration"
-                            (selectedIntervalChange)="post.duration = $event"
-                        ></oitc-duration-input>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="duration"></oitc-form-feedback>
-                    </div>
-                    <div class="mb-3">
-                        <label cLabel for="weekdays">
-                            {{ t('Weekdays') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <oitc-multi-select
-                            name="weekdays"
-                            id="weekdays"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.weekdays"
-                            [options]="weekdaysForSelect"
-                            [debounce]="true"
-                            oitcFormError [errors]="errors" errorField="weekdays">
-                        </oitc-multi-select>
-
-                        <oitc-form-feedback [errors]="errors" errorField="weekdays"></oitc-form-feedback>
-                    </div>
-                    <div class="mb-3">
-                        <label cLabel for="day_of_month">
-                            {{ t('Days of month') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl id="day_of_month" required type="text"
-                               name="day_of_month" placeholder="{{ t('1,2,3,4,5 or <blank>') }}"
-                               oitcFormError [errors]="errors" errorField="day_of_month"
-                               [(ngModel)]="post.day_of_month">
-                        <oitc-form-feedback [errors]="errors" errorField="day_of_month"></oitc-form-feedback>
-                    </div>
-                </div>
+                }
             </c-card-body>
             <c-card-footer class="text-end">
                 <label class="me-2">

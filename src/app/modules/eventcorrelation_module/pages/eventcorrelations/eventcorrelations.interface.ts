@@ -190,8 +190,6 @@ export interface UsedByEvcObject {
 }
 
 
-
-
 export interface EvcUsedByEntity {
     id: number
     name: string
