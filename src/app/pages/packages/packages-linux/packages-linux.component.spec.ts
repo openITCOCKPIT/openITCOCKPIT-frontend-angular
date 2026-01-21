@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PackagesIndexComponent } from './packages-index.component';
+import { PackagesLinuxComponent } from './packages-linux.component';
 
 describe('PackagesIndexComponent', () => {
-  let component: PackagesIndexComponent;
-  let fixture: ComponentFixture<PackagesIndexComponent>;
+  let component: PackagesLinuxComponent;
+  let fixture: ComponentFixture<PackagesLinuxComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PackagesIndexComponent]
+      imports: [PackagesLinuxComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PackagesIndexComponent);
+    fixture = TestBed.createComponent(PackagesLinuxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

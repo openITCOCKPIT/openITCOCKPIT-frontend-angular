@@ -777,8 +777,8 @@ const coreRoutes: Routes = [{
     path: 'statuspagegroups/index',
     loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-index/statuspagegroups-index.component').then(m => m.StatuspagegroupsIndexComponent)
 }, {
-    path: 'packages/index',
-    loadComponent: () => import('./pages/packages/packages-index/packages-index.component').then(m => m.PackagesIndexComponent)
+    path: 'packages/linux',
+    loadComponent: () => import('./pages/packages/packages-linux/packages-linux.component').then(m => m.PackagesLinuxComponent)
 }, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)

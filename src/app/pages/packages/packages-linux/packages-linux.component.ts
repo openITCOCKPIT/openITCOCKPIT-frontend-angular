@@ -52,11 +52,11 @@ import { PackagesService } from '../packages.service';
         TabsContentComponent,
         TabPanelComponent
     ],
-    templateUrl: './packages-index.component.html',
-    styleUrl: './packages-index.component.css',
+    templateUrl: './packages-linux.component.html',
+    styleUrl: './packages-linux.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PackagesIndexComponent implements OnInit, OnDestroy, IndexPage {
+export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly TranslocoService = inject(TranslocoService);
