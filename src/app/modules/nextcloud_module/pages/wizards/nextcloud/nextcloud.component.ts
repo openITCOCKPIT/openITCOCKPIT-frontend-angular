@@ -85,16 +85,15 @@ export class NextcloudComponent extends WizardsAbstractComponent {
     protected useSslChanged(): void {
         // Traverse this.post.services and do the same for all array positions.
         this.post.services.forEach((service: Service): void => {
+            let lastKey: number = service.servicecommandargumentvalues.length - 1;
 
             if (this.useSsl) {
-                service.servicecommandargumentvalues[2].value = service.servicecommandargumentvalues[2].value + ' --ssl';
+                service.servicecommandargumentvalues[lastKey].value = service.servicecommandargumentvalues[lastKey].value + ' --ssl';
             } else {
-                service.servicecommandargumentvalues[2].value = service.servicecommandargumentvalues[2].value.replace('--ssl', '');
+                service.servicecommandargumentvalues[lastKey].value = service.servicecommandargumentvalues[lastKey].value.replace('--ssl', '');
             }
-
         });
-
-
+        
         this.cdr.markForCheck();
         this.childComponent.cdr.markForCheck();
     }
