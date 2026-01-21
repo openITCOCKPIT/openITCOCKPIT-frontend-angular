@@ -1,0 +1,246 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['packages', 'index']" [routerLink]="['/', 'patchstatus', 'index']">
+                    <fa-icon [icon]="['fas', 'bandage']"></fa-icon>
+                    {{ t('Patch status') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Patch status') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+        </c-card-header>
+        <c-card-body>
+
+            @if (!patchstatus) {
+                <c-row>
+                    <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3" [offset]="{xl: 3, lg: 0, md:0, xs:0}">
+                        <oitc-block-loader [height]="'8rem'"></oitc-block-loader>
+                    </c-col>
+                    <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3">
+                        <oitc-block-loader [height]="'8rem'"></oitc-block-loader>
+                    </c-col>
+                    <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3">
+                        <oitc-block-loader [height]="'8rem'"></oitc-block-loader>
+                    </c-col>
+                </c-row>
+            } @else {
+
+
+                <c-row>
+                    <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3" [offset]="{xl: 3, lg: 0, md:0, xs:0}">
+                        <c-widget-stat-f
+                            [value]="'Outdated Packages' | transloco"
+                            [title]="'5'"
+                            class="mb-3"
+                            padding>
+                            <ng-template cTemplateId="widgetIconTemplate">
+                                <fa-icon [icon]="['fas', 'triangle-exclamation']" [cTextColor]="'warning'"
+                                         [size]="'2xl'"></fa-icon>
+                            </ng-template>
+                            <ng-template cTemplateId="widgetFooterTemplate">
+                                <c-row>
+                                    <c-col class="text-center">
+                                        <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
+                                        1
+                                    </c-col>
+                                    <c-col class="text-center">
+                                        <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
+                                        2
+                                    </c-col>
+                                    <c-col class="text-center">
+                                        <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
+                                        2
+                                    </c-col>
+                                </c-row>
+                            </ng-template>
+                        </c-widget-stat-f>
+                    </c-col>
+                    <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3">
+                        <c-widget-stat-f
+                            [value]="'Reboot required' | transloco"
+                            [title]="String(patchstatus.summary.totalRebootRequired | localNumber)"
+                            class="mb-3"
+                            padding>
+                            <ng-template cTemplateId="widgetIconTemplate" class="me-0">
+                                <fa-icon [icon]="['fas', 'arrow-rotate-left']" [cTextColor]="'danger'"
+                                         [size]="'2xl'"></fa-icon>
+                            </ng-template>
+                            <ng-template cTemplateId="widgetFooterTemplate">
+                                <c-row>
+                                    <c-col class="text-center">
+                                        <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ patchstatus.summary.linuxRebootRequired | localNumber }}
+                                    </c-col>
+                                    <c-col class="text-center">
+                                        <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ patchstatus.summary.windowsRebootRequired | localNumber }}
+                                    </c-col>
+                                    <c-col class="text-center">
+                                        <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ patchstatus.summary.macosRebootRequired | localNumber }}
+                                    </c-col>
+                                </c-row>
+                            </ng-template>
+                        </c-widget-stat-f>
+                    </c-col>
+                    <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3">
+                        <c-widget-stat-f
+                            [value]="'Total Hosts' | transloco"
+                            [title]="String(patchstatus.summary.totalHosts | localNumber)"
+                            class="mb-3"
+                            padding>
+                            <ng-template cTemplateId="widgetIconTemplate">
+                                <fa-icon [icon]="['fas', 'server']" [cTextColor]="'primary'" [size]="'2xl'"></fa-icon>
+                            </ng-template>
+                            <ng-template cTemplateId="widgetFooterTemplate">
+                                <c-row>
+                                    <c-col class="text-center">
+                                        <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ patchstatus.summary.linuxHosts | localNumber }}
+                                    </c-col>
+                                    <c-col class="text-center">
+                                        <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ patchstatus.summary.windowsHosts | localNumber }}
+                                    </c-col>
+                                    <c-col class="text-center">
+                                        <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ patchstatus.summary.macosHosts | localNumber }}
+                                    </c-col>
+                                </c-row>
+                            </ng-template>
+                        </c-widget-stat-f>
+                    </c-col>
+                </c-row>
+            }
+
+            @if (!patchstatus) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (patchstatus) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Host name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PackagesHostDetails.os_type">
+                            {{ t('OS type') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PackagesHostDetails.os_name">
+                            {{ t('Operating system') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PackagesHostDetails.reboot_required">
+                            {{ t('Reboot required') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PackagesHostDetails.system_uptime">
+                            {{ t('Uptime') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PackagesHostDetails.agent_version">
+                            {{ t('Agent version') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PackagesHostDetails.last_update">
+                            {{ t('Last update') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PackagesHostDetails.last_error">
+                            {{ t('Last error') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (host of patchstatus.all_patchstatus; track host) {
+                            <tr>
+                                <td class="word-break">
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                        <a [routerLink]="['/', 'hosts', 'browser', host.host.id]">
+                                            {{ host.host.name }}
+                                        </a>
+                                    } @else {
+                                        {{ host.host.name }}
+                                    }
+                                </td>
+                                <td>
+                                    <oitc-patchstatus-icon
+                                        [type]="host.os_type"
+                                        [platform]="host.os_name"
+                                        [version]="host.os_version"
+                                        [family]="host.os_family"
+                                    ></oitc-patchstatus-icon>
+                                </td>
+                                <td>{{ host.os_name }}</td>
+                                <td>
+                                    @if (host.reboot_required) {
+                                        <oitc-badge-outline color="danger" class="me-1">
+                                            <fa-icon [icon]="['fas', 'arrow-rotate-left']"
+                                                     [cTextColor]="'danger'"></fa-icon>
+                                            {{ t('Reboot required') }}
+                                        </oitc-badge-outline>
+                                    } @else {
+                                        <oitc-badge-outline color="success" class="me-1">
+                                            {{ t('No') }}
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+                                <td>
+                                    {{ host.uptime_in_words }}
+                                </td>
+                                <td>
+                                    {{ host.agent_version }}
+                                </td>
+                                <td>
+                                    {{ host.last_update_user }}
+                                </td>
+                                <td class="text-danger word-break">
+                                    {{ host.last_error }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+
+            @if (patchstatus && patchstatus.all_patchstatus.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (patchstatus && patchstatus.all_patchstatus) {
+                <c-container
+                    class="mb-3 py-2"
+                    [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            @if (patchstatus) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="patchstatus"></oitc-paginate-or-scroll>
+                            }
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
+
+        </c-card-body>
+
+    </c-card>
+
+</ng-container>

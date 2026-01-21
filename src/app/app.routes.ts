@@ -780,6 +780,9 @@ const coreRoutes: Routes = [{
     path: 'packages/index',
     loadComponent: () => import('./pages/packages/packages-index/packages-index.component').then(m => m.PackagesIndexComponent)
 }, {
+    path: 'patchstatus/index',
+    loadComponent: () => import('./pages/patchstatus/patchstatus-index/patchstatus-index.component').then(m => m.PatchstatusIndexComponent)
+}, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)
 }, {

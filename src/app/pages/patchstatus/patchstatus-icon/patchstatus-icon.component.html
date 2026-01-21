@@ -1,0 +1,7 @@
+@if (this.type() === 'windows') {
+    <fa-icon [icon]="['fab', 'windows']" class="color-windows"></fa-icon>
+} @else {
+    <span [class]="colorClass">
+        <i [class]="icon()"></i> {{ prettyName }}
+    </span>
+}
