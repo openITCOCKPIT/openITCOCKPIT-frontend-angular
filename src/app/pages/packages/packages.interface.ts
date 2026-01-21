@@ -12,7 +12,7 @@ export interface PackagesLinuxSummary {
 
 export interface PackagesSummary {
     windows: any[]
-    mac: any[]
+    macos: any[]
     linux: PackagesLinux
 }
 
