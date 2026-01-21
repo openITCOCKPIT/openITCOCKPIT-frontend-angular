@@ -80,7 +80,7 @@
         "ngx-color-picker": "^20.1.1",
         "ngx-cookie-service": "^21.1.0",
         "ngx-echarts": "^21.0.0",
-        "ngx-resize-observer": "^3.2.0",
+        "ngx-resize-observer": "^3.3.0",
         "ngx-scrollbar": "^19.1.1",
         "ngx-toastr": "^19.1.0",
         "prettier": "^3.7.4",
@@ -102,10 +102,6 @@
         "@rollup/rollup-linux-arm64-gnu": "^4.55.1"
     },
     "overrides": {
-        "ngx-resize-observer": {
-            "@angular/core": "21.0.8",
-            "@angular/common": "21.0.8"
-        },
         "sass": "^1.97.0"
     },
     "devDependencies": {
