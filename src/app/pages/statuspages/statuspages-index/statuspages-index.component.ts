@@ -58,7 +58,7 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -102,8 +102,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         NavItemComponent,
         XsButtonDirective,
         TableLoaderComponent,
-        NgIf,
-        NgForOf,
         CardBodyComponent,
         MatSort,
         TableDirective,

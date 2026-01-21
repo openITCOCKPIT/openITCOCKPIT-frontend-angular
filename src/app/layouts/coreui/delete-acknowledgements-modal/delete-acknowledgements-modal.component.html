@@ -16,19 +16,23 @@
                 <c-col xs="12">
                     <strong>{{ t('Do you really want to delete the acknowledgements?') }}</strong>
                 </c-col>
-                <c-col *ngIf="helpMessage" class="help-block" xs="12">
-                    {{ helpMessage }}
-                </c-col>
+                @if (helpMessage) {
+                    <c-col class="help-block" xs="12">
+                        {{ helpMessage }}
+                    </c-col>
+                }
             </c-row>
 
             <c-row class="pt-2">
-                <c-col *ngFor="let item of items" sm="12">
-                    <ul class="mb-0">
-                        <li>
-                            {{ item.displayName }}
-                        </li>
-                    </ul>
-                </c-col>
+                @for (item of items; track item) {
+                    <c-col sm="12">
+                        <ul class="mb-0">
+                            <li>
+                                {{ item.displayName }}
+                            </li>
+                        </ul>
+                    </c-col>
+                }
             </c-row>
 
             <c-row [hidden]="!isDeleting" class="pt-4 pb-2">

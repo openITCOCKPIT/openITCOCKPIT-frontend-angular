@@ -7,13 +7,15 @@ import {
     ButtonGroupComponent,
     CardBodyComponent,
     CardComponent,
-    CardHeaderComponent, CardTitleDirective,
+    CardHeaderComponent,
+    CardTitleDirective,
     NavComponent,
     NavItemComponent,
-    TableDirective, TooltipDirective
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { WizardsService } from '../wizards.service';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
@@ -22,9 +24,7 @@ import {
 } from '../../../components/actions-button-element/actions-button-element.component';
 
 
-
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-
 
 
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -48,8 +48,6 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
         NgClass,
         ActionsButtonComponent,
         ActionsButtonElementComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         TableDirective,
         TableLoaderComponent,
@@ -80,7 +78,8 @@ export class WizardAssignmentsComponent implements OnInit, OnDestroy {
             docker: true,
             macos: true,
             virtualization: true,
-            hardware: true
+            hardware: true,
+            webserver: true
         }
     }
 

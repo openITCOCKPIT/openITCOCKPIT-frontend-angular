@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 import {
@@ -95,7 +95,6 @@ import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.co
         NgOptionHighlightDirective,
         RowComponent,
         ColComponent,
-        NgIf,
         InputGroupComponent,
         NgClass,
         BadgeOutlineComponent,

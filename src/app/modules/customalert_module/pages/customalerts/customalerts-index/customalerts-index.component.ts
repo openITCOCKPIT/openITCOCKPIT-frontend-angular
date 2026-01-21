@@ -56,7 +56,7 @@ import {
     ActionsButtonElementComponent
 } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -103,8 +103,6 @@ import { IntervalPickerComponent } from '../../../../../components/interval-pick
         ItemSelectComponent,
         MatSort,
         MatSortHeader,
-        NgForOf,
-        NgIf,
         TableDirective,
         TableLoaderComponent,
         TextColorDirective,

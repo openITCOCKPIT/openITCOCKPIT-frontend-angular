@@ -36,7 +36,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -79,8 +79,6 @@ import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipbo
         InputGroupTextDirective,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PermissionDirective,
         ReactiveFormsModule,

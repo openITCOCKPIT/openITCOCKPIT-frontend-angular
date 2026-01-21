@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  NavComponent,
-  NavItemComponent,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -29,25 +29,21 @@ import { BbCodeEditorComponent } from '../bb-code-editor/bb-code-editor.componen
 @Component({
     selector: 'oitc-documentations-edit',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FaIconComponent,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    NgSwitchCase,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    NgSwitch,
-    RouterLink,
-    BbCodeEditorComponent,
-    NgSwitchDefault
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        BbCodeEditorComponent
+    ],
     templateUrl: './documentations-edit.component.html',
     styleUrl: './documentations-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

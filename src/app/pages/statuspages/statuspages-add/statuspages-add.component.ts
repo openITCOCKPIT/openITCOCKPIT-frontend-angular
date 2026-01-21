@@ -59,7 +59,7 @@ import { SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit } from 
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { intersection } from 'lodash';
@@ -87,7 +87,6 @@ import { intersection } from 'lodash';
         FormDirective,
         FormsModule,
         PaginatorModule,
-        NgIf,
         FormFeedbackComponent,
         FormCheckInputDirective,
         FormControlDirective,

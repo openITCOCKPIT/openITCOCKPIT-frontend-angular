@@ -43,7 +43,7 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { AutocompleteItem } from '../../../../../components/code-mirror-container/code-mirror-container.interface';
 import { PrometheusAutocompleteService } from '../prometheus-autocomplete.service';
@@ -82,8 +82,6 @@ import { PrometheusThresholdType } from '../prometheus.enum';
         ReactiveFormsModule,
         RowComponent,
         TranslocoPipe,
-        NgIf,
-        NgForOf,
         TableDirective,
         RequiredIconComponent,
         FormErrorDirective,

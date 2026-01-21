@@ -4,7 +4,7 @@ import { ChartAbsolutValue } from '../../charts/charts.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ServiceProgressbarGauge } from './service-progressbar.interface';
 import { getDefaultAutomapsViewParams } from '../../../pages/automaps/automaps.interface';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-service-progressbar',
@@ -14,8 +14,7 @@ import { NgClass, NgIf } from '@angular/common';
         ProgressStackedComponent,
         ProgressComponent,
         FaIconComponent,
-        NgClass,
-        NgIf
+        NgClass
     ],
     templateUrl: './service-progressbar.component.html',
     styleUrl: './service-progressbar.component.css',

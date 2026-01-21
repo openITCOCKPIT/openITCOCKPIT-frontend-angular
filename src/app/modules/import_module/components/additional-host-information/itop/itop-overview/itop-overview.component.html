@@ -12,68 +12,86 @@
         </c-col>
     </c-row>
 
-    <c-row *ngIf="result.response.status">
-        <c-col [xs]="12">
-
-            <c-card class="mb-3">
-                <c-card-header>
-                    <h5 cCardTitle>{{ t('Configuration item') }}
-                        <small class="fw-300">
-                            {{ t('details') }}
-                        </small>
-                    </h5>
-
-                    <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
-                        <c-nav-item>
-                            <a
-                                (click)="setSelectedTab('information')"
-                                *oitcPermission="['ImportModule', 'ExternalSystems', 'additionalHostInformation']"
-                                class="nav-link"
-                                [ngClass]="{'active': selectedTab == 'information'}">
-                                <fa-icon [icon]="['fas', 'list-ul']"></fa-icon>
-                                {{ t('Information') }}
-                            </a>
-                        </c-nav-item>
-                        <c-nav-item>
-                            <a
-                                (click)="setSelectedTab('dependencyTree')"
-                                *oitcPermission="['ImportModule', 'ExternalSystems', 'dependencyTree']"
-                                class="nav-link"
-                                [ngClass]="{'active': selectedTab == 'dependencyTree'}">
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
-                                {{ t('iTop Dependency tree') }}
-                            </a>
-                        </c-nav-item>
-                    </c-nav>
-                </c-card-header>
-                <c-card-body *ngIf="selectedTab == 'information'">
-
-                    <c-row *ngIf="!result.response.customClass"
-                           [ngSwitch]="result.response.general_information?.finalclass?.value">
-                        <oitc-virtual-machine *ngSwitchCase="'VirtualMachine'" [result]="result"></oitc-virtual-machine>
-                        <oitc-network-device *ngSwitchCase="'NetworkDevice'" [result]="result"></oitc-network-device>
-                        <oitc-server *ngSwitchCase="'Server'" [result]="result"></oitc-server>
-                        <oitc-default *ngSwitchDefault [result]="result"></oitc-default>
-                    </c-row>
-
-                    <c-row *ngIf="result.response.customClass"
-                           [ngSwitch]="result.response.general_information?.finalclass">
-                        <oitc-wan-line *ngSwitchCase="'WANLine'" [result]="result"></oitc-wan-line>
-                        <oitc-custom-class *ngSwitchDefault [result]="result"></oitc-custom-class>
-                    </c-row>
-
-                </c-card-body>
-
-                <c-card-body *ngIf="selectedTab == 'dependencyTree'">
-                    <oitc-dependency-tree
-                        [objectId]="hostId"
-                        [type]="'host'"
-                        [name]="hostname"></oitc-dependency-tree>
-                </c-card-body>
-
-            </c-card>
-
-        </c-col>
-    </c-row>
+    @if (result.response.status) {
+        <c-row>
+            <c-col [xs]="12">
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <h5 cCardTitle>{{ t('Configuration item') }}
+                            <small class="fw-300">
+                                {{ t('details') }}
+                            </small>
+                        </h5>
+                        <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                            <c-nav-item>
+                                <a
+                                    (click)="setSelectedTab('information')"
+                                    *oitcPermission="['ImportModule', 'ExternalSystems', 'additionalHostInformation']"
+                                    class="nav-link"
+                                    [ngClass]="{'active': selectedTab == 'information'}">
+                                    <fa-icon [icon]="['fas', 'list-ul']"></fa-icon>
+                                    {{ t('Information') }}
+                                </a>
+                            </c-nav-item>
+                            <c-nav-item>
+                                <a
+                                    (click)="setSelectedTab('dependencyTree')"
+                                    *oitcPermission="['ImportModule', 'ExternalSystems', 'dependencyTree']"
+                                    class="nav-link"
+                                    [ngClass]="{'active': selectedTab == 'dependencyTree'}">
+                                    <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"></fa-icon>
+                                    {{ t('iTop Dependency tree') }}
+                                </a>
+                            </c-nav-item>
+                        </c-nav>
+                    </c-card-header>
+                    @if (selectedTab == 'information') {
+                        <c-card-body>
+                            @if (!result.response.customClass) {
+                                <c-row
+                                >
+                                    @switch (result.response.general_information?.finalclass?.value) {
+                                        @case ('VirtualMachine') {
+                                            <oitc-virtual-machine [result]="result"></oitc-virtual-machine>
+                                        }
+                                        @case ('NetworkDevice') {
+                                            <oitc-network-device [result]="result"></oitc-network-device>
+                                        }
+                                        @case ('Server') {
+                                            <oitc-server [result]="result"></oitc-server>
+                                        }
+                                        @default {
+                                            <oitc-default [result]="result"></oitc-default>
+                                        }
+                                    }
+                                </c-row>
+                            }
+                            @if (result.response.customClass) {
+                                <c-row
+                                >
+                                    @switch (result.response.general_information?.finalclass?.value) {
+                                        @case ('WANLine') {
+                                            <oitc-wan-line [result]="result"></oitc-wan-line>
+                                        }
+                                        @default {
+                                            <oitc-custom-class [result]="result"></oitc-custom-class>
+                                        }
+                                    }
+                                </c-row>
+                            }
+                        </c-card-body>
+                    }
+                    @if (selectedTab == 'dependencyTree') {
+                        <c-card-body>
+                            <oitc-dependency-tree
+                                [objectId]="hostId"
+                                [type]="'host'"
+                                [name]="hostname"></oitc-dependency-tree>
+                        </c-card-body>
+                    }
+                </c-card>
+            </c-col>
+        </c-row>
+    }
 
 </ng-container>

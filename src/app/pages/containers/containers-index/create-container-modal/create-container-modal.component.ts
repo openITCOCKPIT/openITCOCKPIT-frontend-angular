@@ -13,20 +13,20 @@ import {
 } from '@angular/core';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 import {
-  ButtonCloseDirective,
-  FormControlDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective
+    ButtonCloseDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { LocationPost } from '../../../locations/locations.interface';
@@ -53,30 +53,29 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-create-container-modal',
     imports: [
-    ButtonCloseDirective,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    NgIf,
-    TranslocoDirective,
-    XsButtonDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    PaginatorModule,
-    TranslocoPipe,
-    FormLabelDirective,
-    RequiredIconComponent,
-    NgOptionTemplateDirective,
-    NgSelectComponent,
-    NgOptionHighlightDirective,
-    FormsModule
-],
+        ButtonCloseDirective,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        PaginatorModule,
+        TranslocoPipe,
+        FormLabelDirective,
+        RequiredIconComponent,
+        NgOptionTemplateDirective,
+        NgSelectComponent,
+        NgOptionHighlightDirective,
+        FormsModule
+    ],
     templateUrl: './create-container-modal.component.html',
     styleUrl: './create-container-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

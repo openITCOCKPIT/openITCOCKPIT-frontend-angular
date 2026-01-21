@@ -16,7 +16,7 @@ import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { LinearGauge } from 'canvas-gauges';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 import {
@@ -31,7 +31,7 @@ import {
 @Component({
     selector: 'oitc-temperature-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf, NgClass],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgClass],
     templateUrl: './temperature-item.component.html',
     styleUrl: './temperature-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

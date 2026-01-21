@@ -172,9 +172,11 @@
 
             <div>
                 <ng-template #contentTemplate let-data>
-                    <span class="h5 text-info" *ngIf="data">
-                        {{ t('Discovering Services for Services') }}
-                    </span>
+                    @if (data) {
+                        <span class="h5 text-info">
+                            {{ t('Discovering Services for Services') }}
+                        </span>
+                    }
                     <br>
                     {{ t('Scan Services. Only possible with valid Microsoft 365 credentials.') }}
                 </ng-template>

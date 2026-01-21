@@ -13,7 +13,9 @@
                 <c-col xs="3">
                     <fa-icon [icon]="['fas', 'square']" [ngClass]="'text-'+value.color"></fa-icon>
                     {{ value.name }}
-                    <span *ngIf="showPercentage()">({{ value.percentage }})</span>
+                    @if (showPercentage()) {
+                        <span>({{ value.percentage }})</span>
+                    }
                 </c-col>
             }
         </c-row>

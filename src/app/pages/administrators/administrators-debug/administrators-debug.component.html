@@ -29,42 +29,52 @@
         </c-card-header>
         <c-card-body>
 
-            <c-row *ngIf="response && response.interfaceInformation.oitc_is_debugging_mode">
-                <c-col [xs]="12">
+            @if (response && response.interfaceInformation.oitc_is_debugging_mode) {
+                <c-row>
+                    <c-col [xs]="12">
+                        <ng-template #contentTemplate let-data>
+                            @if (data) {
+                                <span class="h5" [ngClass]="['text-'+data.color]">
+                                    {{ SystemnameService.systemName$ | async }} is running in debug mode!
+                                </span>
+                            }
+                            <br>
+                            This can be a potential security issue as you error messages will contain detailed
+                            information
+                            and stack traces. To disable debug mode, execute the command
+                            <code>openitcockpit-update</code>.
+                        </ng-template>
+                        <ng-template #buttonTemplate let-data>
+                            @if (data) {
+                                <div class="ms-2">
+                                    @if (!hasXdebugCookie) {
+                                        <button class="btn btn-sm ripple" [ngClass]="'btn-outline-primary'"
+                                                (click)="setXdebugCookie()">
+                                            <fa-icon [icon]="['fas', 'bug']"></fa-icon>
+                                            {{ t('Set XDEBUG_TRIGGER cookie') }}
+                                        </button>
+                                    }
+                                    @if (hasXdebugCookie) {
+                                        <button class="btn btn-sm ripple" [ngClass]="'btn-outline-danger'"
+                                                (click)="removeXdebugCookie()">
+                                            <fa-icon [icon]="['fas', 'bug-slash']"></fa-icon>
+                                            {{ t('Remove XDEBUG_TRIGGER cookie') }}
+                                        </button>
+                                    }
+                                </div>
+                            }
+                        </ng-template>
+                        <oitc-alert baseIcon="shield" color="danger"
+                                    [icon]="['fas', 'bug']"
+                                    [contentTemplate]="contentTemplate" [buttonTemplate]="buttonTemplate"></oitc-alert>
+                    </c-col>
+                </c-row>
+            }
 
-                    <ng-template #contentTemplate let-data>
-                        <span class="h5" [ngClass]="['text-'+data.color]" *ngIf="data">
-                            {{ SystemnameService.systemName$ | async }} is running in debug mode!
-                        </span>
-                        <br>
-                        This can be a potential security issue as you error messages will contain detailed information
-                        and stack traces. To disable debug mode, execute the command <code>openitcockpit-update</code>.
-                    </ng-template>
-                    <ng-template #buttonTemplate let-data>
-                        <div class="ms-2" *ngIf="data">
-                            <button class="btn btn-sm ripple" [ngClass]="'btn-outline-primary'"
-                                    *ngIf="!hasXdebugCookie"
-                                    (click)="setXdebugCookie()">
-                                <fa-icon [icon]="['fas', 'bug']"></fa-icon>
-                                {{ t('Set XDEBUG_TRIGGER cookie') }}
-                            </button>
-                            <button class="btn btn-sm ripple" [ngClass]="'btn-outline-danger'"
-                                    *ngIf="hasXdebugCookie"
-                                    (click)="removeXdebugCookie()">
-                                <fa-icon [icon]="['fas', 'bug-slash']"></fa-icon>
-                                {{ t('Remove XDEBUG_TRIGGER cookie') }}
-                            </button>
-                        </div>
-                    </ng-template>
-                    <oitc-alert baseIcon="shield" color="danger"
-                                [icon]="['fas', 'bug']"
-                                [contentTemplate]="contentTemplate" [buttonTemplate]="buttonTemplate"></oitc-alert>
-
-                </c-col>
-            </c-row>
-
-            <oitc-eol-alerts *ngIf="response && !response.serverInformation.isContainer"
-                             [codename]="response.serverInformation.LsbRelease"></oitc-eol-alerts>
+            @if (response && !response.serverInformation.isContainer) {
+                <oitc-eol-alerts
+                    [codename]="response.serverInformation.LsbRelease"></oitc-eol-alerts>
+            }
 
             <c-row>
                 <c-col [xs]="12" [sm]="12" [lg]="6" class="mb-3">
@@ -132,239 +142,259 @@
                             }
                             @if (response) {
 
-                                <c-alert color="danger" class="mb-3"
-                                         *ngIf="!response.processInformation.gearmanReachable">
-                                    <h4 cAlertHeading>
-                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                        {{ t('Error') }}
-                                    </h4>
-                                    <p>
-                                        {{ t('Gearman-Job-Server is not running, openITCOCKPIT could not check the state of background daemons') }}
-                                        <br>
-                                        {{ t('Please start Gearman-Job-Server first') }}
-                                    </p>
-                                </c-alert>
+                                @if (!response.processInformation.gearmanReachable) {
+                                    <c-alert color="danger" class="mb-3"
+                                    >
+                                        <h4 cAlertHeading>
+                                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                            {{ t('Error') }}
+                                        </h4>
+                                        <p>
+                                            {{ t('Gearman-Job-Server is not running, openITCOCKPIT could not check the state of background daemons') }}
+                                            <br>
+                                            {{ t('Please start Gearman-Job-Server first') }}
+                                        </p>
+                                    </c-alert>
+                                }
 
-                                <c-alert color="danger" class="mb-3"
-                                         *ngIf="!response.processInformation.isGearmanWorkerRunning">
-                                    <h4 cAlertHeading>
-                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                        {{ t('Error') }}
-                                    </h4>
-                                    <p>
-                                        {{ t('gearman_worker is not running, openITCOCKPIT could not check the state of background daemons') }}
-                                        <br>
-                                        {{ t('Please start gearman_worker first') }}
-                                    </p>
-                                </c-alert>
+                                @if (!response.processInformation.isGearmanWorkerRunning) {
+                                    <c-alert color="danger" class="mb-3"
+                                    >
+                                        <h4 cAlertHeading>
+                                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                            {{ t('Error') }}
+                                        </h4>
+                                        <p>
+                                            {{ t('gearman_worker is not running, openITCOCKPIT could not check the state of background daemons') }}
+                                            <br>
+                                            {{ t('Please start gearman_worker first') }}
+                                        </p>
+                                    </c-alert>
+                                }
 
-                                <table
-                                    *ngIf="response.processInformation.gearmanReachable && response.processInformation.isGearmanWorkerRunning"
-                                    bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
-                                    <thead>
-                                    <tr>
-                                        <th>{{ t('Process') }}</th>
-                                        <th>{{ t('State') }}</th>
-                                        <th class="text-center">
-                                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>{{ t('Monitoring engine') }}</td>
-                                        <td>
-                                            <oitc-badge-outline color="success"
-                                                                *ngIf="response.processInformation.backgroundProcesses.isNagiosRunning">
-                                                {{ t('Running') }}
-                                            </oitc-badge-outline>
-
-                                            <oitc-badge-outline color="danger"
-                                                                *ngIf="!response.processInformation.backgroundProcesses.isNagiosRunning">
-                                                {{ t('Stopped') }}
-                                            </oitc-badge-outline>
-                                        </td>
-                                        <td class="text-center">
-                                            <fa-icon [icon]="['fas', 'info-circle']"
-                                                     class="text-info"
-                                                     [cTooltip]="response.interfaceInformation.monitoring_engine"
-                                                     cTooltipPlacement="left"
-                                            ></fa-icon>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('Database connector') }}</td>
-                                        <td>
-                                            <oitc-badge-outline color="success"
-                                                                *ngIf="response.processInformation.backgroundProcesses.isStatusengineRunning">
-                                                {{ t('Running') }}
-                                            </oitc-badge-outline>
-
-                                            <oitc-badge-outline color="danger"
-                                                                *ngIf="!response.processInformation.backgroundProcesses.isStatusengineRunning">
-                                                {{ t('Stopped') }}
-                                            </oitc-badge-outline>
-                                        </td>
-                                        <td class="text-center">
-                                            <fa-icon [icon]="['fas', 'info-circle']"
-                                                     class="text-info"
-                                                     [cTooltip]="'Statusengine' | transloco"
-                                                     cTooltipPlacement="left"
-                                            ></fa-icon>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('Perfdata processor') }}</td>
-                                        <td>
-                                            <oitc-badge-outline color="success"
-                                                                *ngIf="response.processInformation.backgroundProcesses.isStatusengineRunning">
-                                                {{ t('Running') }}
-                                            </oitc-badge-outline>
-
-                                            <oitc-badge-outline color="danger"
-                                                                *ngIf="!response.processInformation.backgroundProcesses.isStatusengineRunning">
-                                                {{ t('Stopped') }}
-                                            </oitc-badge-outline>
-                                        </td>
-                                        <td class="text-center">
-                                            <fa-icon [icon]="['fas', 'info-circle']"
-                                                     class="text-info"
-                                                     [cTooltip]="'Statusengine' | transloco"
-                                                     cTooltipPlacement="left"
-                                            ></fa-icon>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('Queuing engine') }}</td>
-                                        <td>
-                                            <span class="badge border border-success text-success">
-                                                {{ t('Running') }}
-                                            </span>
-                                        </td>
-                                        <td class="text-center">
-                                            <fa-icon [icon]="['fas', 'info-circle']"
-                                                     class="text-info"
-                                                     [cTooltip]="'openITCOCKPIT uses the Gearman Job Server to run different background tasks' | transloco"
-                                                     cTooltipPlacement="left"
-                                            ></fa-icon>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('Gearman Worker') }}</td>
-                                        <td>
-                                            <oitc-badge-outline color="success"
-                                                                *ngIf="response.processInformation.backgroundProcesses.isGearmanWorkerRunning">
-                                                {{ t('Running') }}
-                                            </oitc-badge-outline>
-
-                                            <oitc-badge-outline color="danger"
-                                                                *ngIf="!response.processInformation.backgroundProcesses.isGearmanWorkerRunning">
-                                                {{ t('Stopped') }}
-                                            </oitc-badge-outline>
-                                        </td>
-                                        <td class="text-center">
-                                            <fa-icon [icon]="['fas', 'info-circle']"
-                                                     class="text-info"
-                                                     [cTooltip]="'Execute background jobs like refresh of monitoring configuration.' | transloco"
-                                                     cTooltipPlacement="left"
-                                            ></fa-icon>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('OITC Cmd') }}</td>
-                                        <td>
-                                            <oitc-badge-outline color="success"
-                                                                *ngIf="response.processInformation.backgroundProcesses.isOitcCmdRunning">
-                                                {{ t('Running') }}
-                                            </oitc-badge-outline>
-
-                                            <oitc-badge-outline color="danger"
-                                                                *ngIf="!response.processInformation.backgroundProcesses.isOitcCmdRunning">
-                                                {{ t('Stopped') }}
-                                            </oitc-badge-outline>
-                                        </td>
-                                        <td class="text-center">
-                                            <fa-icon [icon]="['fas', 'info-circle']"
-                                                     class="text-info"
-                                                     [cTooltip]="'External command interface used by Check_MK to pass check results.' | transloco"
-                                                     cTooltipPlacement="left"
-                                            ></fa-icon>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('NSTA') }}</td>
-                                        <td>
-                                            <oitc-badge-outline color="success"
-                                                                *ngIf="response.processInformation.backgroundProcesses.isNstaRunning">
-                                                {{ t('Running') }}
-                                            </oitc-badge-outline>
-
-                                            <oitc-badge-outline color="danger"
-                                                                *ngIf="!response.processInformation.backgroundProcesses.isNstaRunning">
-                                                {{ t('Stopped') }}
-                                            </oitc-badge-outline>
-                                        </td>
-                                        <td class="text-center">
-                                            <fa-icon [icon]="['fas', 'info-circle']"
-                                                     class="text-info"
-                                                     [cTooltip]="'NSTA is only installed and running if you are using Distributed Monitoring.' | transloco"
-                                                     cTooltipPlacement="left"
-                                            ></fa-icon>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('Push notification service') }}</td>
-                                        <td>
-                                            <oitc-badge-outline color="success"
-                                                                *ngIf="response.processInformation.backgroundProcesses.isPushNotificationRunning">
-                                                {{ t('Running') }}
-                                            </oitc-badge-outline>
-
-                                            <oitc-badge-outline color="danger"
-                                                                *ngIf="!response.processInformation.backgroundProcesses.isPushNotificationRunning">
-                                                {{ t('Stopped') }}
-                                            </oitc-badge-outline>
-                                        </td>
-                                        <td class="text-center">
-                                            <fa-icon [icon]="['fas', 'info-circle']"
-                                                     class="text-info"
-                                                     [cTooltip]="'Service required to send push notifications to your browser window.' | transloco"
-                                                     cTooltipPlacement="left"
-                                            ></fa-icon>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>{{ t('Nodejs Backend') }}</td>
-                                        <td>
-                                            <oitc-badge-outline color="success"
-                                                                *ngIf="response.processInformation.backgroundProcesses.isNodeJsServerRunning">
-                                                {{ t('Running') }}
-                                            </oitc-badge-outline>
-
-                                            <oitc-badge-outline color="danger"
-                                                                *ngIf="!response.processInformation.backgroundProcesses.isNodeJsServerRunning">
-                                                {{ t('Stopped') }}
-                                            </oitc-badge-outline>
-                                        </td>
-                                        <td class="text-center">
-                                            <fa-icon [icon]="['fas', 'info-circle']"
-                                                     class="text-info"
-                                                     [cTooltip]="'Service required to run server side JavaScript to render PDF files and charts for email notifications.' | transloco"
-                                                     cTooltipPlacement="left"
-                                            ></fa-icon>
-                                        </td>
-                                    </tr>
-
-                                    </tbody>
-                                </table>
+                                @if (response.processInformation.gearmanReachable && response.processInformation.isGearmanWorkerRunning) {
+                                    <table
+                                        bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                        <thead>
+                                        <tr>
+                                            <th>{{ t('Process') }}</th>
+                                            <th>{{ t('State') }}</th>
+                                            <th class="text-center">
+                                                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>{{ t('Monitoring engine') }}</td>
+                                            <td>
+                                                @if (response.processInformation.backgroundProcesses.isNagiosRunning) {
+                                                    <oitc-badge-outline color="success"
+                                                    >
+                                                        {{ t('Running') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                                @if (!response.processInformation.backgroundProcesses.isNagiosRunning) {
+                                                    <oitc-badge-outline color="danger"
+                                                    >
+                                                        {{ t('Stopped') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'info-circle']"
+                                                         class="text-info"
+                                                         [cTooltip]="response.interfaceInformation.monitoring_engine"
+                                                         cTooltipPlacement="left"
+                                                ></fa-icon>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ t('Database connector') }}</td>
+                                            <td>
+                                                @if (response.processInformation.backgroundProcesses.isStatusengineRunning) {
+                                                    <oitc-badge-outline color="success"
+                                                    >
+                                                        {{ t('Running') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                                @if (!response.processInformation.backgroundProcesses.isStatusengineRunning) {
+                                                    <oitc-badge-outline color="danger"
+                                                    >
+                                                        {{ t('Stopped') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'info-circle']"
+                                                         class="text-info"
+                                                         [cTooltip]="'Statusengine' | transloco"
+                                                         cTooltipPlacement="left"
+                                                ></fa-icon>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ t('Perfdata processor') }}</td>
+                                            <td>
+                                                @if (response.processInformation.backgroundProcesses.isStatusengineRunning) {
+                                                    <oitc-badge-outline color="success"
+                                                    >
+                                                        {{ t('Running') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                                @if (!response.processInformation.backgroundProcesses.isStatusengineRunning) {
+                                                    <oitc-badge-outline color="danger"
+                                                    >
+                                                        {{ t('Stopped') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'info-circle']"
+                                                         class="text-info"
+                                                         [cTooltip]="'Statusengine' | transloco"
+                                                         cTooltipPlacement="left"
+                                                ></fa-icon>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ t('Queuing engine') }}</td>
+                                            <td>
+                                                <span class="badge border border-success text-success">
+                                                    {{ t('Running') }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'info-circle']"
+                                                         class="text-info"
+                                                         [cTooltip]="'openITCOCKPIT uses the Gearman Job Server to run different background tasks' | transloco"
+                                                         cTooltipPlacement="left"
+                                                ></fa-icon>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ t('Gearman Worker') }}</td>
+                                            <td>
+                                                @if (response.processInformation.backgroundProcesses.isGearmanWorkerRunning) {
+                                                    <oitc-badge-outline color="success"
+                                                    >
+                                                        {{ t('Running') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                                @if (!response.processInformation.backgroundProcesses.isGearmanWorkerRunning) {
+                                                    <oitc-badge-outline color="danger"
+                                                    >
+                                                        {{ t('Stopped') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'info-circle']"
+                                                         class="text-info"
+                                                         [cTooltip]="'Execute background jobs like refresh of monitoring configuration.' | transloco"
+                                                         cTooltipPlacement="left"
+                                                ></fa-icon>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ t('OITC Cmd') }}</td>
+                                            <td>
+                                                @if (response.processInformation.backgroundProcesses.isOitcCmdRunning) {
+                                                    <oitc-badge-outline color="success"
+                                                    >
+                                                        {{ t('Running') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                                @if (!response.processInformation.backgroundProcesses.isOitcCmdRunning) {
+                                                    <oitc-badge-outline color="danger"
+                                                    >
+                                                        {{ t('Stopped') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'info-circle']"
+                                                         class="text-info"
+                                                         [cTooltip]="'External command interface used by Check_MK to pass check results.' | transloco"
+                                                         cTooltipPlacement="left"
+                                                ></fa-icon>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ t('NSTA') }}</td>
+                                            <td>
+                                                @if (response.processInformation.backgroundProcesses.isNstaRunning) {
+                                                    <oitc-badge-outline color="success"
+                                                    >
+                                                        {{ t('Running') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                                @if (!response.processInformation.backgroundProcesses.isNstaRunning) {
+                                                    <oitc-badge-outline color="danger"
+                                                    >
+                                                        {{ t('Stopped') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'info-circle']"
+                                                         class="text-info"
+                                                         [cTooltip]="'NSTA is only installed and running if you are using Distributed Monitoring.' | transloco"
+                                                         cTooltipPlacement="left"
+                                                ></fa-icon>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ t('Push notification service') }}</td>
+                                            <td>
+                                                @if (response.processInformation.backgroundProcesses.isPushNotificationRunning) {
+                                                    <oitc-badge-outline color="success"
+                                                    >
+                                                        {{ t('Running') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                                @if (!response.processInformation.backgroundProcesses.isPushNotificationRunning) {
+                                                    <oitc-badge-outline color="danger"
+                                                    >
+                                                        {{ t('Stopped') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'info-circle']"
+                                                         class="text-info"
+                                                         [cTooltip]="'Service required to send push notifications to your browser window.' | transloco"
+                                                         cTooltipPlacement="left"
+                                                ></fa-icon>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ t('Nodejs Backend') }}</td>
+                                            <td>
+                                                @if (response.processInformation.backgroundProcesses.isNodeJsServerRunning) {
+                                                    <oitc-badge-outline color="success"
+                                                    >
+                                                        {{ t('Running') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                                @if (!response.processInformation.backgroundProcesses.isNodeJsServerRunning) {
+                                                    <oitc-badge-outline color="danger"
+                                                    >
+                                                        {{ t('Stopped') }}
+                                                    </oitc-badge-outline>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <fa-icon [icon]="['fas', 'info-circle']"
+                                                         class="text-info"
+                                                         [cTooltip]="'Service required to run server side JavaScript to render PDF files and charts for email notifications.' | transloco"
+                                                         cTooltipPlacement="left"
+                                                ></fa-icon>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                }
 
                             }
                         </c-card-body>
@@ -445,11 +475,13 @@
                             <h5 cCardTitle>
                                 <fa-icon [icon]="['fas', 'line-chart']"></fa-icon>
                                 {{ t('CPU load') }}
-                                <small class="fw-300" *ngIf="response">
-                                    {{ t('Current load:') }}
-                                    {{ response.currentCpuLoad['1'] }}, {{ response.currentCpuLoad['5'] }},
-                                    {{ response.currentCpuLoad['15'] }}
-                                </small>
+                                @if (response) {
+                                    <small class="fw-300">
+                                        {{ t('Current load:') }}
+                                        {{ response.currentCpuLoad['1'] }}, {{ response.currentCpuLoad['5'] }},
+                                        {{ response.currentCpuLoad['15'] }}
+                                    </small>
+                                }
                             </h5>
                             <c-nav class="card-toolbar card-header-pills">
                                 <c-nav-item class="px-1">

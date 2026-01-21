@@ -41,42 +41,45 @@
                 </c-col>
             </c-row>
 
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped *ngIf="Apikeys.length > 0">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'hashtag']"></fa-icon>
-                        {{ t('ID') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Last used') }}
-                    </th>
-                    <th scope="col" class="width-130">
-                        {{ t('Show') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let apikey of Apikeys">
-                    <td>{{ apikey.id }}</td>
-                    <td>{{ apikey.description }}</td>
-                    <td>{{ apikey.last_use }}</td>
-                    <td>
-                        <div class="d-grid">
-                            <button cButton size="xs" class="ripple"
-                                    (click)="editApiKey(apikey.id)">
-                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                                {{ t('Show') }}
-                            </button>
-                        </div>
-
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            @if (Apikeys.length > 0) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'hashtag']"></fa-icon>
+                            {{ t('ID') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Last used') }}
+                        </th>
+                        <th scope="col" class="width-130">
+                            {{ t('Show') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (apikey of Apikeys; track apikey) {
+                            <tr>
+                                <td>{{ apikey.id }}</td>
+                                <td>{{ apikey.description }}</td>
+                                <td>{{ apikey.last_use }}</td>
+                                <td>
+                                    <div class="d-grid">
+                                        <button cButton size="xs" class="ripple"
+                                                (click)="editApiKey(apikey.id)">
+                                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                            {{ t('Show') }}
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
         </c-card-body>
     </c-card>
@@ -135,7 +138,7 @@
                                 </span>
                             </c-col>
                             <c-col xs="12">
-                                    <pre>curl -H \
+                  <pre>curl -H \
 "Authorization: X-OITC-API {{ ApikeyCreatePost.apikey }}" \
 "https://{{ hostname }}/hosts/index.json?angular=true"</pre>
                             </c-col>
@@ -153,7 +156,7 @@
                                 </span>
                             </c-col>
                             <c-col xs="12">
-                                    <pre>curl -k -s -H \
+                  <pre>curl -k -s -H \
 "Authorization: X-OITC-API {{ ApikeyCreatePost.apikey }}" \
 "https://{{ hostname }}/hosts/index.json?angular=true" |jq .</pre>
                             </c-col>
@@ -199,105 +202,99 @@
             </h5>
             <button [cModalToggle]="editApiKeyModal.id" cButtonClose></button>
         </c-modal-header>
-        <c-modal-body *ngIf="ApiKeyEditPost">
-            <c-row>
-                <c-col>
-                    <div class="mb-3">
-                        <label cLabel for="ApiKeyEditDesc">
-                            {{ t('Description') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl
-                               id="ApiKeyEditDesc" required type="text"
-                               name="ApiKeyEditDesc"
-                               oitcFormError [errors]="ApikeyEditErrors" errorField="description"
-                               [(ngModel)]="ApiKeyEditPost.description">
-                        <oitc-form-feedback [errors]="ApikeyEditErrors"
-                                            errorField="description"></oitc-form-feedback>
-
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="ApiKeyEditKey">
-                            {{ t('API key (read-only)') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-
-
-                        <c-input-group>
+        @if (ApiKeyEditPost) {
+            <c-modal-body>
+                <c-row>
+                    <c-col>
+                        <div class="mb-3">
+                            <label cLabel for="ApiKeyEditDesc">
+                                {{ t('Description') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
                             <input cFormControl
-                                   id="ApiKeyEditKey" required type="text"
-                                   name="ApiKeyEditKey"
-                                   readonly
-                                   oitcFormError [errors]="ApikeyEditErrors" errorField="apikey"
-                                   [(ngModel)]="ApiKeyEditPost.apikey">
+                                   id="ApiKeyEditDesc" required type="text"
+                                   name="ApiKeyEditDesc"
+                                   oitcFormError [errors]="ApikeyEditErrors" errorField="description"
+                                   [(ngModel)]="ApiKeyEditPost.description">
                             <oitc-form-feedback [errors]="ApikeyEditErrors"
-                                                errorField="apikey"></oitc-form-feedback>
-                            <oitc-input-copy [copyText]="ApiKeyEditPost.apikey"></oitc-input-copy>
-                        </c-input-group>
-
-                    </div>
-
-                    <div class="mb-3">
-                        <c-row>
-                            <c-col xs="12">
-                                <span class="fw-bold">
-                                    <code>curl</code> {{ t('example') }}:
-                                </span>
-                            </c-col>
-                            <c-col xs="12">
-                                    <pre>curl -H \
+                                                errorField="description"></oitc-form-feedback>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="ApiKeyEditKey">
+                                {{ t('API key (read-only)') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <c-input-group>
+                                <input cFormControl
+                                       id="ApiKeyEditKey" required type="text"
+                                       name="ApiKeyEditKey"
+                                       readonly
+                                       oitcFormError [errors]="ApikeyEditErrors" errorField="apikey"
+                                       [(ngModel)]="ApiKeyEditPost.apikey">
+                                <oitc-form-feedback [errors]="ApikeyEditErrors"
+                                                    errorField="apikey"></oitc-form-feedback>
+                                <oitc-input-copy [copyText]="ApiKeyEditPost.apikey"></oitc-input-copy>
+                            </c-input-group>
+                        </div>
+                        <div class="mb-3">
+                            <c-row>
+                                <c-col xs="12">
+                                    <span class="fw-bold">
+                                        <code>curl</code> {{ t('example') }}:
+                                    </span>
+                                </c-col>
+                                <c-col xs="12">
+                    <pre>curl -H \
 "Authorization: X-OITC-API {{ ApiKeyEditPost.apikey }}" \
 "https://{{ hostname }}/hosts/index.json?angular=true"</pre>
-                            </c-col>
-                            <c-col xs="12">
-                                {{ t('For self-signed certificates, add') }}<code>-k</code>.
-                            </c-col>
-                        </c-row>
-                    </div>
-
-                    <div class="mb-3">
-                        <c-row>
-                            <c-col xs="12">
-                                <span class="fw-bold">
-                                    <code>curl</code> {{ t('example with JSON processor') }}:
-                                </span>
-                            </c-col>
-                            <c-col xs="12">
-                                    <pre>curl -k -s -H \
+                                </c-col>
+                                <c-col xs="12">
+                                    {{ t('For self-signed certificates, add') }}<code>-k</code>.
+                                </c-col>
+                            </c-row>
+                        </div>
+                        <div class="mb-3">
+                            <c-row>
+                                <c-col xs="12">
+                                    <span class="fw-bold">
+                                        <code>curl</code> {{ t('example with JSON processor') }}:
+                                    </span>
+                                </c-col>
+                                <c-col xs="12">
+                    <pre>curl -k -s -H \
 "Authorization: X-OITC-API {{ ApiKeyEditPost.apikey }}" \
 "https://{{ hostname }}/hosts/index.json?angular=true" |jq .</pre>
-                            </c-col>
-                        </c-row>
-                    </div>
-
-                    <div class="mb-3">
-                        <c-row>
-                            <c-col xs="12">
-                                {{ t('To transfer the API key to your mobile device, scan the QR code.') }}
-                            </c-col>
-                            <c-col xs="12" class="text-center">
-                                <img [src]="ApiKeyEditQrCode" alt="qrcode">
-                            </c-col>
-                        </c-row>
-                    </div>
-
-                </c-col>
-            </c-row>
-        </c-modal-body>
-        <c-modal-footer class="justify-content-start" *ngIf="ApiKeyEditPost">
-            <button cButton color="danger" class="ripple" (click)="deleteApiKey(ApiKeyEditPost.id)">
-                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                {{ t('Delete') }}
-            </button>
-
-            <button cButton color="primary" class="ripple ms-auto" (click)="submitEditApiKey()">
-                {{ t('Save') }}
-            </button>
-            <button cButton color="secondary" class="ripple" [cModalToggle]="editApiKeyModal.id">
-                {{ t('Cancel') }}
-            </button>
-        </c-modal-footer>
+                                </c-col>
+                            </c-row>
+                        </div>
+                        <div class="mb-3">
+                            <c-row>
+                                <c-col xs="12">
+                                    {{ t('To transfer the API key to your mobile device, scan the QR code.') }}
+                                </c-col>
+                                <c-col xs="12" class="text-center">
+                                    <img [src]="ApiKeyEditQrCode" alt="qrcode">
+                                </c-col>
+                            </c-row>
+                        </div>
+                    </c-col>
+                </c-row>
+            </c-modal-body>
+        }
+        @if (ApiKeyEditPost) {
+            <c-modal-footer class="justify-content-start">
+                <button cButton color="danger" class="ripple" (click)="deleteApiKey(ApiKeyEditPost.id)">
+                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    {{ t('Delete') }}
+                </button>
+                <button cButton color="primary" class="ripple ms-auto" (click)="submitEditApiKey()">
+                    {{ t('Save') }}
+                </button>
+                <button cButton color="secondary" class="ripple" [cModalToggle]="editApiKeyModal.id">
+                    {{ t('Cancel') }}
+                </button>
+            </c-modal-footer>
+        }
     </c-modal>
 
 </ng-container>

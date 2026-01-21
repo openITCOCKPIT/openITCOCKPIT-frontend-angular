@@ -148,102 +148,107 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!servicetemplates"></oitc-table-loader>
-            <table *ngIf="servicetemplates" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Servicetemplates.template_name">
-                        {{ t('Service template name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicetemplates.name">
-                        {{ t('Service name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicetemplates.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicetemplates.servicetemplatetype_id">
-                        {{ t('Type') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let servicetemplate of servicetemplates.all_servicetemplates">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['servicetemplates', 'delete']"
-                            [disabled]="!servicetemplate.Servicetemplate.allow_edit"
-                            [item]="servicetemplate"></oitc-item-select>
+            @if (!servicetemplates) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (servicetemplates) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Servicetemplates.template_name">
+                            {{ t('Service template name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicetemplates.name">
+                            {{ t('Service name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicetemplates.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicetemplates.servicetemplatetype_id">
+                            {{ t('Type') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (servicetemplate of servicetemplates.all_servicetemplates; track servicetemplate) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['servicetemplates', 'delete']"
+                                        [disabled]="!servicetemplate.Servicetemplate.allow_edit"
+                                        [item]="servicetemplate"></oitc-item-select>
+                                </td>
+                                <td>{{ servicetemplate.Servicetemplate.template_name }}</td>
+                                <td>{{ servicetemplate.Servicetemplate.name }}</td>
+                                <td>{{ servicetemplate.Servicetemplate.description }}</td>
+                                <td>
+                                    <span
+                                        class="badge border"
+                                        [ngClass]="[servicetemplate.Servicetemplate.type.class, servicetemplate.Servicetemplate.type.color]">
+                                        <fa-icon [icon]="servicetemplate.Servicetemplate.type.icon"
+                                                 [rotate]="servicetemplate.Servicetemplate.type.rotate"></fa-icon>
+                                        {{ servicetemplate.Servicetemplate.type.title }}
+                                    </span>
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'servicetemplates.edit'"
+                                                         [url]="'/servicetemplates/edit/' + servicetemplate.Servicetemplate.id"
+                                                         [allowEdit]="servicetemplate.Servicetemplate.allow_edit">
+                                        <oitc-actions-button-element [permission]="'servicetemplates.edit'"
+                                                                     [url]="'/servicetemplates/edit/' + servicetemplate.Servicetemplate.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/servicetemplate/' + servicetemplate.Servicetemplate.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'servicetemplates.usedBy'"
+                                                                     [url]="'/servicetemplates/usedBy/' + servicetemplate.Servicetemplate.id">
+                                            <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                            {{ t('Used By') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'documentations.view'"
+                                                                     [url]="'/documentations/view/' + servicetemplate.Servicetemplate.uuid+'/servicetemplate'">
+                                            <fa-icon [icon]="['fas', 'book']"></fa-icon>
+                                            {{ t('Documentation') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *oitcPermission="['servicetemplates', 'copy']"></li>
+                                        <oitc-actions-button-element [permission]="'servicetemplates.copy'"
+                                                                     [url]="'/servicetemplates/copy/' + servicetemplate.Servicetemplate.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *oitcPermission="['servicetemplates', 'delete']"></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(servicetemplate)"
+                                                                     [permission]="'servicetemplates.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                    </td>
-                    <td>{{ servicetemplate.Servicetemplate.template_name }}</td>
-                    <td>{{ servicetemplate.Servicetemplate.name }}</td>
-                    <td>{{ servicetemplate.Servicetemplate.description }}</td>
-                    <td>
-                        <span
-                            class="badge border"
-                            [ngClass]="[servicetemplate.Servicetemplate.type.class, servicetemplate.Servicetemplate.type.color]">
-                            <fa-icon [icon]="servicetemplate.Servicetemplate.type.icon"
-                                     [rotate]="servicetemplate.Servicetemplate.type.rotate"></fa-icon>
-                            {{ servicetemplate.Servicetemplate.type.title }}
-                        </span>
-                    </td>
-
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'servicetemplates.edit'"
-                                             [url]="'/servicetemplates/edit/' + servicetemplate.Servicetemplate.id"
-                                             [allowEdit]="servicetemplate.Servicetemplate.allow_edit">
-                            <oitc-actions-button-element [permission]="'servicetemplates.edit'"
-                                                         [url]="'/servicetemplates/edit/' + servicetemplate.Servicetemplate.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                         [url]="'/changelogs/entity/servicetemplate/' + servicetemplate.Servicetemplate.id">
-                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                {{ t('Changelog') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'servicetemplates.usedBy'"
-                                                         [url]="'/servicetemplates/usedBy/' + servicetemplate.Servicetemplate.id">
-                                <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                                {{ t('Used By') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'documentations.view'"
-                                                         [url]="'/documentations/view/' + servicetemplate.Servicetemplate.uuid+'/servicetemplate'">
-                                <fa-icon [icon]="['fas', 'book']"></fa-icon>
-                                {{ t('Documentation') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *oitcPermission="['servicetemplates', 'copy']"></li>
-                            <oitc-actions-button-element [permission]="'servicetemplates.copy'"
-                                                         [url]="'/servicetemplates/copy/' + servicetemplate.Servicetemplate.id">
-                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                {{ t('Copy') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *oitcPermission="['servicetemplates', 'delete']"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(servicetemplate)"
-                                                         [permission]="'servicetemplates.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records
-                *ngIf="servicetemplates && servicetemplates.all_servicetemplates.length === 0"></oitc-no-records>
-            <ng-container *ngIf="servicetemplates && servicetemplates.all_servicetemplates">
+            @if (servicetemplates && servicetemplates.all_servicetemplates.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (servicetemplates && servicetemplates.all_servicetemplates) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -266,7 +271,6 @@
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete selected') }}
                                 </button>
-
                                 <c-dropdown>
                                     <button cButton cDropdownToggle color="default">
                                         {{ t('More actions') }}
@@ -282,16 +286,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="servicetemplates"
-                            [paginateOrScroll]="servicetemplates"></oitc-paginate-or-scroll>
+                        @if (servicetemplates) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="servicetemplates"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>
