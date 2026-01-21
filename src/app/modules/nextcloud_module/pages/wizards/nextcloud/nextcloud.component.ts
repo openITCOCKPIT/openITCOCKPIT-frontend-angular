@@ -77,7 +77,6 @@ export class NextcloudComponent extends WizardsAbstractComponent {
     } as NextcloudWizardPost;
 
     protected override wizardLoad(result: NextcloudWizardGet): void {
-        console.warn(result);
         this.post.NEXTCLOUD_TOKEN = result.NEXTCLOUD_TOKEN;
         super.wizardLoad(result);
     }
@@ -93,7 +92,7 @@ export class NextcloudComponent extends WizardsAbstractComponent {
                 service.servicecommandargumentvalues[lastKey].value = service.servicecommandargumentvalues[lastKey].value.replace('--ssl', '');
             }
         });
-        
+
         this.cdr.markForCheck();
         this.childComponent.cdr.markForCheck();
     }
