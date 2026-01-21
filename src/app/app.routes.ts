@@ -50,6 +50,7 @@ import { citrixModuleRoutes } from './modules/citrix_module/citrix_module.routes
 import { arubaModuleRoutes } from './modules/aruba_module/aruba_module.routes';
 import { fortinetModuleRoutes } from './modules/fortinet_module/fortinet_module.routes';
 import { fujitsuModuleRoutes } from './modules/fujitsu_module/fujitsu_module.routes';
+import { netAppModuleRoutes } from './modules/netapp_module/netapp_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -121,7 +122,8 @@ const moduleRoutes: Routes = [
     ...citrixModuleRoutes,
     ...arubaModuleRoutes,
     ...fortinetModuleRoutes,
-    ...fujitsuModuleRoutes
+    ...fujitsuModuleRoutes,
+    ...netAppModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
