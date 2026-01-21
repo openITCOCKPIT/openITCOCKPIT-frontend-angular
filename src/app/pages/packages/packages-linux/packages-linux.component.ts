@@ -26,6 +26,13 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
 import { Sort } from '@angular/material/sort';
 import { forkJoin, Subscription } from 'rxjs';
 import { PackagesService } from '../packages.service';
+import {
+    getDefaultPackagesLinuxParams,
+    PackagesLinuxParams,
+    PackagesLinuxRoot,
+    PackagesLinuxSummary
+} from '../packages.interface';
+import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 
 @Component({
     selector: 'oitc-packages-index',
@@ -50,19 +57,23 @@ import { PackagesService } from '../packages.service';
         TabsListComponent,
         TabDirective,
         TabsContentComponent,
-        TabPanelComponent
+        TabPanelComponent,
+        BlockLoaderComponent
     ],
-    templateUrl: './packages-index.component.html',
-    styleUrl: './packages-index.component.css',
+    templateUrl: './packages-linux.component.html',
+    styleUrl: './packages-linux.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PackagesIndexComponent implements OnInit, OnDestroy, IndexPage {
+export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly PackagesService = inject(PackagesService);
     protected hideFilter: boolean = true;
     public isLoading: boolean = true;
+    public params: PackagesLinuxParams = getDefaultPackagesLinuxParams();
+    public packages?: PackagesLinuxRoot;
+    public summary?: PackagesLinuxSummary;
 
     ngOnInit(): void {
         this.load();
@@ -70,18 +81,17 @@ export class PackagesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public load() {
         let request = {
-            //packages: this.PackagesService.getPackages(this.params),
-            //summary: this.PackagesService.getSummary()
+            packages: this.PackagesService.getPackages(this.params),
+            summary: this.PackagesService.getSummary()
         };
 
         forkJoin(request).subscribe(
             (result) => {
-                //this. packages = result. packages;
-                //this.summary = result.summary
+                this.packages = result.packages;
+                this.summary = result.summary
                 this.isLoading = false;
                 this.cdr.markForCheck();
             });
-
     }
 
 

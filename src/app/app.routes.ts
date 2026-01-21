@@ -777,8 +777,8 @@ const coreRoutes: Routes = [{
     path: 'statuspagegroups/index',
     loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-index/statuspagegroups-index.component').then(m => m.StatuspagegroupsIndexComponent)
 }, {
-    path: 'packages/index',
-    loadComponent: () => import('./pages/packages/packages-index/packages-index.component').then(m => m.PackagesIndexComponent)
+    path: 'packages/linux',
+    loadComponent: () => import('./pages/packages/packages-linux/packages-linux.component').then(m => m.PackagesLinuxComponent)
 }, {
     path: 'patchstatus/index',
     loadComponent: () => import('./pages/patchstatus/patchstatus-index/patchstatus-index.component').then(m => m.PatchstatusIndexComponent)
