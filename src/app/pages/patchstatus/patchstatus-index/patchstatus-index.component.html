@@ -64,7 +64,7 @@
                     <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3" [offset]="{xl: 3, lg: 0, md:0, xs:0}">
                         <c-widget-stat-f
                             [value]="'Outdated Packages' | transloco"
-                            [title]="'5'"
+                            [title]="String(patchstatus.summary.totalOutdatedPackages | localNumber)"
                             class="mb-3"
                             padding>
                             <ng-template cTemplateId="widgetIconTemplate">
@@ -75,15 +75,15 @@
                                 <c-row>
                                     <c-col class="text-center">
                                         <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
-                                        1
+                                        {{ patchstatus.summary.linuxOutdatedPackages | localNumber }}
                                     </c-col>
                                     <c-col class="text-center">
                                         <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
-                                        2
+                                        {{ patchstatus.summary.windowsOutdatedPackages | localNumber }}
                                     </c-col>
                                     <c-col class="text-center">
                                         <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
-                                        2
+                                        {{ patchstatus.summary.macosOutdatedPackages | localNumber }}
                                     </c-col>
                                 </c-row>
                             </ng-template>
