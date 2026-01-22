@@ -24,7 +24,6 @@ import {
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 import { IndexPage } from '../../../pages.interface';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { Sort } from '@angular/material/sort';
 import { forkJoin, Subscription } from 'rxjs';
 import { PackagesService } from '../packages.service';
 import { LocalNumberPipe } from '../../../pipes/local-number.pipe';
@@ -39,6 +38,7 @@ import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-record
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 
 @Component({
     selector: 'oitc-packages-index',
@@ -68,7 +68,9 @@ import {
         LocalNumberPipe,
         NoRecordsComponent,
         ContainerComponent,
-        PaginateOrScrollComponent
+        PaginateOrScrollComponent,
+        MatSort,
+        MatSortHeader
     ],
     templateUrl: './packages-linux.component.html',
     styleUrl: './packages-linux.component.css',
@@ -145,8 +147,8 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     // Callback when sort has changed
     public onSortChange(sort: Sort) {
         if (sort.direction) {
-            //this.params.sort = sort.active;
-            //this.params.direction = sort.direction;
+            this.params.sort = sort.active;
+            this.params.direction = sort.direction;
             this.refresh();
         }
     }

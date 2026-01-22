@@ -190,7 +190,9 @@
                                         <thead>
                                         <tr>
                                             <th class="width-15 text-center"></th>
-                                            <th>{{ t('Package') }}</th>
+                                            <th scope="col" mat-sort-header="PackagesLinux.name">
+                                                {{ t('Package') }}
+                                            </th>
                                             <th>{{ t('Installed on') }}</th>
                                             <th>{{ t('Status') }}</th>
                                         </thead>
