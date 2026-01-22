@@ -780,6 +780,9 @@ const coreRoutes: Routes = [{
     path: 'packages/linux',
     loadComponent: () => import('./pages/packages/packages-linux/packages-linux.component').then(m => m.PackagesLinuxComponent)
 }, {
+    path: 'packages/view_linux/:id',
+    loadComponent: () => import('./pages/packages/packages-view-linux/packages-view-linux.component').then(m => m.PackagesViewLinuxComponent)
+}, {
     path: 'packages/windows',
     loadComponent: () => import('./pages/packages/packages-windows/packages-windows.component').then(m => m.PackagesWindowsComponent)
 }, {

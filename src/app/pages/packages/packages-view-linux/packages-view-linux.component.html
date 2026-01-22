@@ -1,0 +1,152 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['packages', 'linux']" [routerLink]="['/', 'packages', 'linux']">
+                    <fa-icon [icon]="['fas', 'cubes']"></fa-icon>
+                    {{ t('Package') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'cube']"></fa-icon>
+                {{ t('Details') }}
+            </li>
+        </ol>
+    </nav>
+
+    @if (!package) {
+        <oitc-block-loader [height]="'25rem'"></oitc-block-loader>
+    }
+
+    @if (package) {
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Packages details:') }}
+                    <small class="fw-300">
+                        {{ package.package.name }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['packages', 'linux']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="loadPackageLinuxView()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+
+            <c-card-body>
+                <c-row class="equal-height-row d-flex flex-wrap">
+                    <c-col [xs]="12" [md]="12" [lg]="6" [xl]="6">
+                        <c-widget-stat-f
+                            [value]="package.package.name"
+                            [title]="package.package.description"
+                            class="mb-3"
+                            padding>
+                            <ng-template cTemplateId="widgetIconTemplate">
+                                <fa-icon [icon]="['fas', 'cube']" [cTextColor]="'primary'" [size]="'2xl'"></fa-icon>
+                            </ng-template>
+                        </c-widget-stat-f>
+                    </c-col>
+                </c-row>
+
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Host name') }}
+                        </th>
+                        <th mat-sort-header="PackagesLinuxHosts.current_version">
+                            {{ t('Installed version') }}
+                        </th>
+                        <th mat-sort-header="PackagesLinuxHosts.available_version">
+                            {{ t('Available version') }}
+                        </th>
+                        <th mat-sort-header="PackagesLinuxHosts.needs_update">
+                            {{ t('Status') }}
+                        </th>
+                    </thead>
+                    <tbody>
+                        @for (host of package.all_host_packages; track host) {
+                            <tr>
+                                <td class="word-break">
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                        <a [routerLink]="['/', 'hosts', 'browser', host.host.id]">
+                                            {{ host.host.name }}
+                                        </a>
+                                    } @else {
+                                        {{ host.host.name }}
+                                    }
+                                </td>
+                                <td>
+                                    {{ host.current_version }}
+                                </td>
+                                <td>
+                                    @if (host.needs_update) {
+                                        {{ host.available_version }}
+                                    }
+                                </td>
+                                <td>
+                                    @if (host.needs_update) {
+                                        @if (host.is_security_update) {
+                                            <oitc-badge-outline color="danger" class="me-1">
+                                                {{ t('Security Update Available') }}
+                                            </oitc-badge-outline>
+                                        } @else {
+                                            <oitc-badge-outline color="warning" class="me-1">
+                                                {{ t('Update Available') }}
+                                            </oitc-badge-outline>
+                                        }
+                                    } @else {
+                                        <oitc-badge-outline color="success" class="me-1">
+                                            {{ t('Up to Date') }}
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                @if (package && package.all_host_packages.length === 0) {
+                    <oitc-no-records></oitc-no-records>
+                }
+                @if (package && package.all_host_packages) {
+                    <c-container
+                        class="mb-3 py-2"
+                        [fluid]="true">
+                        <c-row>
+                            <c-col>
+                                @if (package) {
+                                    <oitc-paginate-or-scroll
+                                        (paginatorChange)="onPaginatorChange($event)"
+                                        [paginateOrScroll]="package"></oitc-paginate-or-scroll>
+                                }
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                }
+
+            </c-card-body>
+        </c-card>
+    }
+
+
+</ng-container>

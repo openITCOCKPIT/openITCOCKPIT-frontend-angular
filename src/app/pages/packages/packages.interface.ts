@@ -1,5 +1,8 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 
+/**********************
+ *    Index action    *
+ **********************/
 export interface PackagesLinuxRoot extends PaginateOrScroll {
     all_packages_linux: AllPackagesLinux[]
     _csrfToken: string
@@ -64,5 +67,57 @@ export function getDefaultPackagesLinuxParams(): PackagesLinuxParams {
         'filter[PackagesLinux.id][]': [],
         'filter[PackagesLinux.name]': '',
         'filter[PackagesLinux.description]': ''
+    }
+}
+
+/***************************
+ *    view_linux action    *
+ ***************************/
+export interface PackagesViewLinuxRoot extends PaginateOrScroll {
+    package: ViewLinuxPackage
+    all_host_packages: ViewLinuxPackageHost[]
+}
+
+export interface ViewLinuxPackage {
+    id: number
+    name: string
+    description: string
+    is_patch: boolean
+    created: string
+    modified: string
+}
+
+export interface ViewLinuxPackageHost {
+    id: number
+    package_linux_id: number
+    host_id: number
+    current_version: string
+    available_version: string
+    needs_update: boolean
+    is_security_update: boolean
+    is_patch: boolean
+    created: string
+    modified: string
+    host: {
+        id: number
+        name: string
+        uuid: string
+        container_id: number
+    }
+}
+
+export interface PackagesViewLinuxParams {
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+}
+
+export function getDefaultPackagesViewLinuxParams(): PackagesViewLinuxParams {
+    return {
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
     }
 }

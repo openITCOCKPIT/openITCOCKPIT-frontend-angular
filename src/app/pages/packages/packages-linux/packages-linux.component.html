@@ -295,7 +295,15 @@
                                     <fa-icon [icon]="['fas', 'cube']"
                                              [cTextColor]="packageLinuxStatus[package.cumulated_status]"></fa-icon>
                                 </td>
-                                <td>{{ package.name }}</td>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'view_linux'])|async) {
+                                        <a [routerLink]="['/', 'packages', 'view_linux', package.id]">
+                                            {{ package.name }}
+                                        </a>
+                                    } @else {
+                                        {{ package.name }}
+                                    }
+                                </td>
                                 <td>
                                     @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
                                         <a [routerLink]="['/', 'patchstatus', 'index']"
