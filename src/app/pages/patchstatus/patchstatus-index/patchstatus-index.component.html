@@ -7,7 +7,7 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['packages', 'index']" [routerLink]="['/', 'patchstatus', 'index']">
+                <a *oitcPermission="['patchstatus', 'index']" [routerLink]="['/', 'patchstatus', 'index']">
                     <fa-icon [icon]="['fas', 'bandage']"></fa-icon>
                     {{ t('Patch status') }}
                 </a>
