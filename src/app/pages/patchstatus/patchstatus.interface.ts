@@ -8,6 +8,7 @@ export interface PatchstatusIndexParams {
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
     'filter[Hosts.name]': string
+    'filter[Hosts.id][]': number[] | string[]
     'filter[PackagesHostDetails.reboot_required]': string
     'filter[PackagesHostDetails.available_updates]': number | string
     'filter[PackagesHostDetails.available_security_updates]': number | string
@@ -23,6 +24,7 @@ export function getDefaultPatchstatusIndexParams(): PatchstatusIndexParams {
         page: 1,
         direction: 'asc',
         'filter[Hosts.name]': '',
+        'filter[Hosts.id][]': [],
         'filter[PackagesHostDetails.reboot_required]': '',
         'filter[PackagesHostDetails.available_updates]': 0,
         'filter[PackagesHostDetails.available_security_updates]': '',

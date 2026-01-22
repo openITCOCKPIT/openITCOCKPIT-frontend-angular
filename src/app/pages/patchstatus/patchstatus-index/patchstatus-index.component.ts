@@ -141,6 +141,12 @@ export class PatchstatusIndexComponent implements OnInit, OnDestroy, IndexPage {
             // You can do something with these parameters here.
             //console.log(params);
 
+            // /a/patchstatus/index?host_id=161&host_id=162
+            let hostId = params['host_id']
+            if (hostId) {
+                this.params['filter[Hosts.id][]'] = [].concat(hostId); // make sure we always get an array
+            }
+
             this.loadPatchstatus();
         }));
     }
@@ -208,7 +214,7 @@ export class PatchstatusIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.params = getDefaultPatchstatusIndexParams();
         this.filterAvailableUpdates = false;
         this.filterAvailableSecurityUpdates = false;
-        
+
         this.loadPatchstatus();
     }
 
