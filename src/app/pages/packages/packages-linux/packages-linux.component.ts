@@ -9,6 +9,7 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    ContainerComponent,
     RowComponent,
     TabDirective,
     TableDirective,
@@ -34,6 +35,10 @@ import {
     PackagesTotalSummary
 } from '../packages.interface';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
+import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 
 @Component({
     selector: 'oitc-packages-index',
@@ -60,7 +65,10 @@ import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loa
         TabsContentComponent,
         TabPanelComponent,
         BlockLoaderComponent,
-        LocalNumberPipe
+        LocalNumberPipe,
+        NoRecordsComponent,
+        ContainerComponent,
+        PaginateOrScrollComponent
     ],
     templateUrl: './packages-linux.component.html',
     styleUrl: './packages-linux.component.css',
@@ -76,6 +84,12 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     public params: PackagesLinuxParams = getDefaultPackagesLinuxParams();
     public packages?: PackagesLinuxRoot;
     public summary?: PackagesTotalSummary;
+
+    public packageLinuxStatus: string[] = [
+        'success',
+        'warning',
+        'danger'
+    ];
 
     ngOnInit(): void {
         this.load();
@@ -112,15 +126,15 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
 
     // Callback when a filter has changed
     public onFilterChange(event: any) {
-        //this.params.page = 1;
-        //this.refresh();
+        this.params.page = 1;
+        this.refresh();
     }
 
     // Callback for Paginator or Scroll Index Component
     public onPaginatorChange(change: PaginatorChangeEvent): void {
-        //this.params.page = change.page;
-        //this.params.scroll = change.scroll;
-        //this.refresh();
+        this.params.page = change.page;
+        this.params.scroll = change.scroll;
+        this.refresh();
     }
 
     public resetFilter() {
