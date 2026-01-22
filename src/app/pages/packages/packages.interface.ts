@@ -111,6 +111,11 @@ export interface PackagesViewLinuxParams {
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string
+    'filter[PackagesLinuxHosts.current_version]': string
+    'filter[PackagesLinuxHosts.available_version]': string
+    'filter[PackagesLinuxHosts.needs_update]': string | boolean
+    'filter[PackagesLinuxHosts.is_security_update]': string | boolean
 }
 
 export function getDefaultPackagesViewLinuxParams(): PackagesViewLinuxParams {
@@ -119,5 +124,10 @@ export function getDefaultPackagesViewLinuxParams(): PackagesViewLinuxParams {
         sort: 'Hosts.name',
         page: 1,
         direction: 'asc',
+        'filter[Hosts.name]': '',
+        'filter[PackagesLinuxHosts.current_version]': '',
+        'filter[PackagesLinuxHosts.available_version]': '',
+        'filter[PackagesLinuxHosts.needs_update]': '',
+        'filter[PackagesLinuxHosts.is_security_update]': '',
     }
 }

@@ -47,6 +47,12 @@
                             {{ t('Refresh') }}
                         </button>
                     </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
                 </c-nav>
             </c-card-header>
 
@@ -65,6 +71,119 @@
                     </c-col>
                 </c-row>
 
+                <!-- Filter -->
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <h6 class="pb-2 mb-3 border-bottom">
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                {{ t('Filter') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                    <form cForm>
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" [md]="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[Hosts.name]']"
+                                           [placeholder]="'Filter by host name' | transloco"
+                                           aria-label="Host name"
+                                           cFormControl
+                                           name="'Host.name"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                            <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'arrow-down']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[PackagesLinuxHosts.current_version]']"
+                                           [placeholder]="'Filter by installed version' | transloco"
+                                           aria-label="Install version"
+                                           cFormControl
+                                           name="'PackagesLinuxHosts.current_version"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" [md]="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'star-of-life']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[PackagesLinuxHosts.available_version]']"
+                                           [placeholder]="'Filter by available version' | transloco"
+                                           aria-label="Available version"
+                                           cFormControl
+                                           name="'PackagesLinuxHosts.available_version"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" lg="2">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Patch status') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="has_updates"
+                                            id="has_updates"
+                                            type="checkbox"
+                                            oitcDebounce
+                                            [(ngModel)]="filterAvailableUpdates"/>
+
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="has_updates">{{ t('Updates available') }}</label>
+                                    </c-form-check>
+
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="has_security_updates"
+                                            id="has_security_updates"
+                                            type="checkbox"
+                                            oitcDebounce
+                                            [(ngModel)]="filterAvailableSecurityUpdates"/>
+
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="has_security_updates">{{ t('Security updates available') }}</label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+
+                        <c-row class="mt-2">
+                            <c-col class="text-end">
+                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                    {{ t('Reset filter') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    </form>
+                </c-container>
+                <!-- End Filter -->
+
                 <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -73,6 +192,11 @@
                         <th scope="col" mat-sort-header="Hosts.name">
                             {{ t('Host name') }}
                         </th>
+                        @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                            <td>
+                                {{ t('Patch status') }}
+                            </td>
+                        }
                         <th mat-sort-header="PackagesLinuxHosts.current_version">
                             {{ t('Installed version') }}
                         </th>
@@ -84,7 +208,7 @@
                         </th>
                     </thead>
                     <tbody>
-                        @for (host of package.all_host_packages; track host) {
+                        @for (host of package.all_host_packages; track $index) {
                             <tr>
                                 <td class="word-break">
                                     @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
@@ -95,12 +219,26 @@
                                         {{ host.host.name }}
                                     }
                                 </td>
+
+                                @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                    <td>
+                                        <a [routerLink]="['/', 'patchstatus', 'index']"
+                                           [queryParams]="{host_id: host.host.id}">
+                                            {{ t('Show Patch status') }}
+                                        </a>
+                                    </td>
+                                }
+
                                 <td>
-                                    {{ host.current_version }}
+                                    <oitc-copy-to-clipboard [data]="host.current_version">
+                                        {{ host.current_version }}
+                                    </oitc-copy-to-clipboard>
                                 </td>
                                 <td>
                                     @if (host.needs_update) {
-                                        {{ host.available_version }}
+                                        <oitc-copy-to-clipboard [data]="host.available_version">
+                                            {{ host.available_version }}
+                                        </oitc-copy-to-clipboard>
                                     }
                                 </td>
                                 <td>
