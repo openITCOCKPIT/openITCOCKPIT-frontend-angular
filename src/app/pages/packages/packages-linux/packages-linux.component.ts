@@ -26,11 +26,12 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
 import { Sort } from '@angular/material/sort';
 import { forkJoin, Subscription } from 'rxjs';
 import { PackagesService } from '../packages.service';
+import { LocalNumberPipe } from '../../../pipes/local-number.pipe';
 import {
     getDefaultPackagesLinuxParams,
     PackagesLinuxParams,
     PackagesLinuxRoot,
-    PackagesLinuxSummary
+    PackagesTotalSummary
 } from '../packages.interface';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 
@@ -58,7 +59,8 @@ import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loa
         TabDirective,
         TabsContentComponent,
         TabPanelComponent,
-        BlockLoaderComponent
+        BlockLoaderComponent,
+        LocalNumberPipe
     ],
     templateUrl: './packages-linux.component.html',
     styleUrl: './packages-linux.component.css',
@@ -73,7 +75,7 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     public isLoading: boolean = true;
     public params: PackagesLinuxParams = getDefaultPackagesLinuxParams();
     public packages?: PackagesLinuxRoot;
-    public summary?: PackagesLinuxSummary;
+    public summary?: PackagesTotalSummary;
 
     ngOnInit(): void {
         this.load();
@@ -88,7 +90,8 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
         forkJoin(request).subscribe(
             (result) => {
                 this.packages = result.packages;
-                this.summary = result.summary
+                this.summary = result.summary;
+
                 this.isLoading = false;
                 this.cdr.markForCheck();
             });
@@ -137,4 +140,6 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     protected refresh(): void {
         this.cdr.markForCheck();
     }
+
+    protected readonly String = String;
 }

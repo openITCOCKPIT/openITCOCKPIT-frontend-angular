@@ -5,19 +5,19 @@ export interface PackagesLinuxRoot extends PaginateOrScroll {
     _csrfToken: string
 }
 
-export interface PackagesLinuxSummary {
-    summary: PackagesSummary
-    _csrfToken: string
+export interface PackagesTotalSummary {
+    total: number
+    outdated: number
+    security: number
+    outdated_hosts: number
+    security_hosts: number
+    windows: PackagesSummary
+    macos: PackagesSummary
+    linux: PackagesSummary
 }
+
 
 export interface PackagesSummary {
-    windows: any[]
-    macos: any[]
-    linux: PackagesLinux
-}
-
-
-export interface PackagesLinux {
     totalPackages: number
     upToDate: number
     updatesAvailable: number
