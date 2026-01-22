@@ -56,20 +56,20 @@ export interface PackagesLinuxParams {
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
-    'filter[Packages.id][]': [],
-    'filter[Packages.name]': string
-    'filter[Packages.description]': string
+    'filter[PackagesLinux.id][]': [],
+    'filter[PackagesLinux.name]': string
+    'filter[PackagesLinux.description]': string
 }
 
 export function getDefaultPackagesLinuxParams(): PackagesLinuxParams {
     return {
         angular: true,
         scroll: true,
-        sort: 'Packages.name',
+        sort: 'PackagesLinux.name',
         page: 1,
         direction: 'asc',
-        'filter[Packages.id][]': [],
-        'filter[Packages.name]': '',
-        'filter[Packages.description]': ''
+        'filter[PackagesLinux.id][]': [],
+        'filter[PackagesLinux.name]': '',
+        'filter[PackagesLinux.description]': ''
     }
 }
