@@ -69,8 +69,14 @@ export interface PatchstatusSummary {
     linuxHosts: number
     windowsHosts: number
     macosHosts: number
+
     totalRebootRequired: number
     linuxRebootRequired: number
     windowsRebootRequired: number
     macosRebootRequired: number
+
+    totalOutdatedPackages: number
+    linuxOutdatedPackages: number
+    windowsOutdatedPackages: number
+    macosOutdatedPackages: number
 }
