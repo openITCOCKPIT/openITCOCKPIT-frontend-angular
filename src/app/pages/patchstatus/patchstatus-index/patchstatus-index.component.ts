@@ -10,6 +10,8 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    NavComponent,
+    NavItemComponent,
     RowComponent,
     TableDirective,
     TemplateIdDirective,
@@ -37,6 +39,7 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
 import { AsyncPipe } from '@angular/common';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { PatchstatusIconComponent } from '../patchstatus-icon/patchstatus-icon.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-patchstatus-index',
@@ -66,7 +69,10 @@ import { PatchstatusIconComponent } from '../patchstatus-icon/patchstatus-icon.c
         TableLoaderComponent,
         BadgeOutlineComponent,
         AsyncPipe,
-        PatchstatusIconComponent
+        PatchstatusIconComponent,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective
     ],
     templateUrl: './patchstatus-index.component.html',
     styleUrl: './patchstatus-index.component.css',

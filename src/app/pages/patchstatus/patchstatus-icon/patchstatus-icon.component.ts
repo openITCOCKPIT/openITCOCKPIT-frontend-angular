@@ -127,7 +127,7 @@ export class PatchstatusIconComponent {
 
             case 'arch':
                 this.prettyName = 'Arch Linux';
-                this.colorClass = 'color-archlinux';
+                this.colorClass = 'color-arch';
                 return ['fl-archlinux'];
 
             default:

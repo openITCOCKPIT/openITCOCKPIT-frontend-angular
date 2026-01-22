@@ -1,5 +1,10 @@
 @if (this.type() === 'windows') {
-    <fa-icon [icon]="['fab', 'windows']" class="color-windows"></fa-icon>
+    <span class="color-windows">
+        <!-- The linux icons font does not have a windows icon, so we use fontawesome for that case -->
+        <fa-icon [icon]="['fab', 'windows']"></fa-icon>
+        <!-- windows provides us with a pretty name -->
+        {{ platform() }}
+    </span>
 } @else {
     <span [class]="colorClass">
         <i [class]="icon()"></i> {{ prettyName }}
