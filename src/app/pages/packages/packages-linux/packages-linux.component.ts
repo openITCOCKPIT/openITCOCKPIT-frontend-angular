@@ -38,6 +38,8 @@ import {
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { AsyncPipe } from '@angular/common';
+import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-packages-index',
@@ -68,7 +70,8 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         TableLoaderComponent,
         NavItemComponent,
         NavComponent,
-        XsButtonDirective
+        XsButtonDirective,
+        AsyncPipe
     ],
     templateUrl: './packages-linux.component.html',
     styleUrl: './packages-linux.component.css',
@@ -79,6 +82,8 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly PackagesService = inject(PackagesService);
+    public readonly PermissionsService = inject(PermissionsService);
+
     protected hideFilter: boolean = true;
     public isLoading: boolean = true;
     public params: PackagesLinuxParams = getDefaultPackagesLinuxParams();

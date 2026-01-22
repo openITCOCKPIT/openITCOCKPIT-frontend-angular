@@ -254,20 +254,49 @@
                                              [cTextColor]="packageLinuxStatus[package.cumulated_status]"></fa-icon>
                                 </td>
                                 <td>{{ package.name }}</td>
-                                <td>{{ package.all_hosts.length }}</td>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                        <a [routerLink]="['/', 'patchstatus', 'index']"
+                                           [queryParams]="{host_id: package.all_hosts}">
+                                            {{ package.all_hosts.length }}
+                                        </a>
+                                    } @else {
+                                        {{ package.all_hosts.length }}
+                                    }
+                                </td>
                                 <td>
                                     @if (package.hosts_needs_update.length > 0) {
-                                        <oitc-badge-outline color="warning" class="me-1">
-                                            <b>{{ package.hosts_needs_update.length }}</b>
-                                            {{ t('Update Available') }}
-                                        </oitc-badge-outline>
+                                        @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                            <a [routerLink]="['/', 'patchstatus', 'index']"
+                                               [queryParams]="{host_id: package.hosts_needs_update}">
+                                                <oitc-badge-outline color="warning" class="me-1">
+                                                    <b>{{ package.hosts_needs_update.length }}</b>
+                                                    {{ t('Update Available') }}
+                                                </oitc-badge-outline>
+                                            </a>
+                                        } @else {
+                                            <oitc-badge-outline color="warning" class="me-1">
+                                                <b>{{ package.hosts_needs_update.length }}</b>
+                                                {{ t('Update Available') }}
+                                            </oitc-badge-outline>
+                                        }
                                     }
 
                                     @if (package.hosts_needs_security_update.length > 0) {
-                                        <oitc-badge-outline color="danger" class="me-1">
-                                            <b>{{ package.hosts_needs_security_update.length }}</b>
-                                            {{ t('Security Update Available') }}
-                                        </oitc-badge-outline>
+                                        @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                            <a [routerLink]="['/', 'patchstatus', 'index']"
+                                               [queryParams]="{host_id: package.hosts_needs_update}">
+                                                <oitc-badge-outline color="danger" class="me-1">
+                                                    <b>{{ package.hosts_needs_security_update.length }}</b>
+                                                    {{ t('Security Update Available') }}
+                                                </oitc-badge-outline>
+                                            </a>
+                                        } @else {
+                                            <oitc-badge-outline color="danger" class="me-1">
+                                                <b>{{ package.hosts_needs_security_update.length }}</b>
+                                                {{ t('Security Update Available') }}
+                                            </oitc-badge-outline>
+                                        }
                                     }
                                 </td>
                             </tr>
