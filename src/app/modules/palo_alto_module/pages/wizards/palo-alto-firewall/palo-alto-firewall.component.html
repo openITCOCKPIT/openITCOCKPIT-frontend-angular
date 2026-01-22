@@ -14,7 +14,7 @@
                 </a></li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                {{ t('Citrix Netscaler') }}
+                {{ t('Palo Alto Firewall') }}
             </li>
         </ol>
     </nav>
@@ -22,7 +22,7 @@
     <c-card>
         <c-card-header>
             <h5 cCardTitle>
-                {{ t('Configuration Wizard: Citrix Netscaler') }}
+                {{ t('Configuration Wizard: Palo Alto Firewall') }}
             </h5>
         </c-card-header>
         <c-card-body class="p-0">
@@ -39,7 +39,7 @@
                     class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Configure SNMP for Citrix Netscaler Monitoring') }}
+                        {{ t('Configure SNMP for Palo Alto Firewall Monitoring') }}
                     </span>
                 </div>
                 <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
@@ -120,6 +120,7 @@
                         </div>
                     </div>
                 }
+
 
                 @if (post.snmpVersion === '3') {
                     <div class="mb-3">
@@ -224,7 +225,7 @@
                 [(post)]="post.services"
                 [errors]="errors"
                 [titleErrorField]="'services'"
-                [title]="'Citrix Netscaler services'|transloco"
+                [title]="'SNMP services'|transloco"
             />
 
 

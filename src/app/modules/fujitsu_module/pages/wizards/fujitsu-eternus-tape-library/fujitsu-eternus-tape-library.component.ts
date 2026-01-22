@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
-import { CitrixNetscalerWizardService } from './citrix-netscaler-wizard.service';
-import { CitrixNetscalerWizardPost } from './citrix-netscaler-wizard.interface';
+import { FujitsuEternusTapeLibraryWizardService } from './fujitsu-eternus-tape-library-wizard.service';
+import { FujitsuEternusTapeLibraryWizardPost } from './fujitsu-eternus-tape-library-wizard.interface';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -26,7 +26,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
-    selector: 'oitc-citrix-netscaler',
+    selector: 'oitc-fujitsu-eternus-tape-library',
     imports: [
         RouterLink,
         FaIconComponent,
@@ -47,37 +47,36 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         FormErrorDirective,
         FormsModule
     ],
-    templateUrl: './citrix-netscaler.component.html',
-    styleUrl: './citrix-netscaler.component.css',
+    templateUrl: './fujitsu-eternus-tape-library.component.html',
+    styleUrl: './fujitsu-eternus-tape-library.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CitrixNetscalerComponent extends WizardsAbstractComponent {
+export class FujitsuEternusTapeLibraryComponent extends WizardsAbstractComponent {
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
-    protected override WizardService: CitrixNetscalerWizardService = inject(CitrixNetscalerWizardService);
+    protected override WizardService: FujitsuEternusTapeLibraryWizardService = inject(FujitsuEternusTapeLibraryWizardService);
     public checked: boolean = false;
     public accordionClosed: boolean = true;
 
-    protected override post: CitrixNetscalerWizardPost = {
+    protected override post: FujitsuEternusTapeLibraryWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
 // Fields for the wizard
         authPassword: '',
         authProtocol: 'md5',
+        interfaces: [],
         privacyPassword: '',
         privacyProtocol: 'des',
         securityLevel: '1',
         securityName: '',
         snmpCommunity: '',
         snmpVersion: '2'
-    } as CitrixNetscalerWizardPost;
+    } as FujitsuEternusTapeLibraryWizardPost;
     protected snmpVersions: SelectKeyValueString[] = [
         {value: '1', key: 'SNMP V 1'},
         {value: '2', key: 'SNMP V 2c'},
         {value: '3', key: 'SNMP V 3'},
-    ]
-    protected searchedTags: string[] = [];
-
+    ];
 
     protected securityLevels: SelectKeyValueString[] = [
         {key: 'authPriv', value: '1'},
