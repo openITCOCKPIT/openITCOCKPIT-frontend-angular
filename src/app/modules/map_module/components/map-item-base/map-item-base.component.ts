@@ -20,13 +20,13 @@ import { MenuItem } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
 import { Mapitem, Mapline } from '../../pages/mapeditors/mapeditors.interface';
 import { ContextActionType, MapItemType } from './map-item-base.enum';
-import { NgIf } from '@angular/common';
+
 import { MapItemBaseService } from './map-item-base.service';
 
 @Component({
     selector: 'oitc-map-item-base',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, NgIf],
+    imports: [CdkDrag, ContextMenuModule],
     templateUrl: './map-item-base.component.html',
     styleUrl: './map-item-base.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -352,6 +352,18 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
             itemType: itemType
         });
         this.cdr.markForCheck();
+    }
+
+    protected shortenLabel(text: string, maxLength: number, shortenEnd: boolean = false): string {
+        if (text.length <= maxLength) {
+            return text;
+        }
+
+        if (shortenEnd) {
+            return '...' + text.substring(text.length - (maxLength - 3));
+        }
+
+        return text.substring(0, maxLength - 3) + '...';
     }
 
 }

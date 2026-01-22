@@ -37,7 +37,7 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -72,8 +72,6 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         FormCheckLabelDirective,
         InputGroupComponent,
         InputGroupTextDirective,
-        NgForOf,
-        NgIf,
         NgSelectComponent,
         OitcAlertComponent,
         RowComponent,
@@ -191,6 +189,7 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
 
     protected runDatastoreDiscovery(): void {
         this.post.dataStoreServices = [];
+        this.beginDiscovery();
         this.cdr.markForCheck();
         this.WizardService.executeDatastoreDiscovery(this.post).subscribe((data: any) => {
             this.errors = {} as GenericValidationError;
@@ -212,6 +211,7 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
                             servicetemplate_id: this.datastoreServicetemplate.id
                         });
                 }
+                this.endDiscovery();
                 this.cdr.markForCheck();
                 return;
             }
@@ -224,6 +224,7 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
                     this.notyService.scrollContentDivToTop();
                 }
             }
+            this.endDiscovery();
             this.cdr.markForCheck();
         });
     }

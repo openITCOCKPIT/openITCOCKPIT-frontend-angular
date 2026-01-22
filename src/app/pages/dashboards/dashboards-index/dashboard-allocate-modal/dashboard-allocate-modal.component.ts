@@ -19,7 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PermissionsService } from '../../../../permissions/permissions.service';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { DashboardAllocateModalService } from './dashboard-allocate-modal.service';
 import { DashboardTab, DashboardTabAllocation } from '../../dashboards.interface';
@@ -48,7 +48,6 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
         XsButtonDirective,
         ModalToggleDirective,
         AsyncPipe,
-        NgIf,
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
@@ -69,6 +68,7 @@ export class DashboardAllocateModalComponent implements OnDestroy {
     public triggerReloadEvent = output<boolean>();
 
     public tab?: DashboardTab;
+    public originalTab?: DashboardTab;
     public errors: GenericValidationError | null = null;
 
     public mode: 'add' | 'edit' = 'add';
@@ -96,7 +96,7 @@ export class DashboardAllocateModalComponent implements OnDestroy {
             this.tab = tab;
 
             this.mode = 'add';
-            
+
             if (tab.dashboard_tab_allocation?.id) {
                 // Edit
                 this.mode = 'edit';
@@ -121,6 +121,7 @@ export class DashboardAllocateModalComponent implements OnDestroy {
                 // Load containers if not already loaded
                 this.loadContainers();
             }
+            this.originalTab = JSON.parse(JSON.stringify(this.tab)) as DashboardTab;
 
             // Open the modal
             this.modalService.toggle({
@@ -129,6 +130,14 @@ export class DashboardAllocateModalComponent implements OnDestroy {
             });
 
         }));
+
+        this.subscriptions.add(
+            this.modalService.modalState$.subscribe((event: any) => {
+                if (event.show === false) {
+                    this.cleanup();
+                }
+            })
+        )
 
         this.cdr.markForCheck();
     }
@@ -264,6 +273,13 @@ export class DashboardAllocateModalComponent implements OnDestroy {
                 this.errors = errorResponse;
             }
         }));
+    }
+
+    protected cleanup(): void {
+        if (!this.tab || !this.originalTab) {
+            return;
+        }
+        this.tab.dashboard_tab_allocation = this.originalTab.dashboard_tab_allocation;
     }
 
 }

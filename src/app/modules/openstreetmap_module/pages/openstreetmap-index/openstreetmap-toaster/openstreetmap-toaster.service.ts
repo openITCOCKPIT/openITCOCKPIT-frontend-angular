@@ -14,6 +14,7 @@ export class OpenstreetmapToasterService {
 
     constructor() {
     }
+
     private containerIds$$: Subject<number[]> = new Subject<number[]>();
     public containerIds$: Observable<number[]> = this.containerIds$$.asObservable();
 

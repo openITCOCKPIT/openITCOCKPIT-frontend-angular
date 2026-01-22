@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
@@ -30,7 +30,7 @@ import {
 @Component({
     selector: 'oitc-map-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, NgIf, NgClass],
+    imports: [CdkDrag, ContextMenuModule, NgClass],
     templateUrl: './map-item.component.html',
     styleUrl: './map-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -133,22 +133,27 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         switch (this.item()!.type) {
             case 'host':
                 this.label = data.Host.hostname;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'service':
                 this.label = data.Host.hostname + '/' + data.Service.servicename;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'hostgroup':
                 this.label = data.Hostgroup!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'servicegroup':
                 this.label = data.Servicegroup!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'map':
                 this.label = data.Map!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
         }
         this.cdr.markForCheck();

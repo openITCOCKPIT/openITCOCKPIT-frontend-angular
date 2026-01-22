@@ -150,19 +150,19 @@
                                        for="filter.hEmpty">{{ t('Hide empty locations') }}</label>
                             </c-form-check>
                             <c-form-check>
-                            <input
-                                cFormCheckInput
-                                class="checkbox-lg checkbox-primary"
-                                name="filter.hNML"
-                                id="filter.hNML"
-                                type="checkbox"
-                                trueFalseValue
-                                [trueValue]=1
-                                [falseValue]=0
-                                [(ngModel)]="post.hide_not_monitored_locations"/>
-                            <label cFormCheckLabel class="ms-1 mt-1"
-                                   for="filter.hNML">{{ t('Hide not monitored locations') }}</label>
-                        </c-form-check>
+                                <input
+                                    cFormCheckInput
+                                    class="checkbox-lg checkbox-primary"
+                                    name="filter.hNML"
+                                    id="filter.hNML"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [trueValue]=1
+                                    [falseValue]=0
+                                    [(ngModel)]="post.hide_not_monitored_locations"/>
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="filter.hNML">{{ t('Hide not monitored locations') }}</label>
+                            </c-form-check>
                         </fieldset>
                     </c-col>
                     <c-col [xs]="12" [lg]="4">

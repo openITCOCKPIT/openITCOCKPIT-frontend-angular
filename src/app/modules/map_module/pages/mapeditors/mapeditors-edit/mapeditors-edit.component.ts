@@ -52,7 +52,7 @@ import {
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { FCanvasComponent, FFlowModule } from '@foblex/flow';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MapItemComponent } from '../../../components/map-item/map-item.component';
 import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.component';
@@ -131,8 +131,6 @@ import { BackgroundItemComponent } from '../../../components/background-item/bac
         DropdownToggleDirective,
         DropdownMenuDirective,
         DropdownItemDirective,
-        NgForOf,
-        NgIf,
         MapItemComponent,
         MapCanvasComponent,
         NgClass,

@@ -20,7 +20,7 @@ import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-dir
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ChartTypeIconComponent } from './chart-type-icon/chart-type-icon.component';
 import { DashboardRowMetric, GrafanaEditorDashboardRow, GrafanaUnits } from '../grafana-editor.interface';
-import { NgIf } from '@angular/common';
+
 import { LabelLinkComponent } from '../../../../../../layouts/coreui/label-link/label-link.component';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
@@ -73,7 +73,6 @@ export interface MetricUpdatedEvent {
         FaIconComponent,
         TranslocoPipe,
         ChartTypeIconComponent,
-        NgIf,
         LabelLinkComponent,
         BreadcrumbComponent,
         BreadcrumbItemComponent

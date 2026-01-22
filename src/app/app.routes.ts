@@ -42,8 +42,16 @@ import { proxmoxModuleRoutes } from './modules/proxmox_module/proxmox_module.rou
 import { ms365ModuleRoutes } from './modules/ms365_module/ms365_module.routes';
 import { mshypervModuleRoutes } from './modules/mshyperv_module/mshyperv_module.routes';
 import { ciscoModuleRoutes } from './modules/cisco_module/cisco_module.routes';
+import { networkModuleRoutes } from './modules/network_module/network_module.routes';
 import { broadcomProxyModuleRoutes } from './modules/broadcomproxy_module/broadcomproxy_module.routes';
 import { apacheModuleRoutes } from './modules/apache_module/apache_module.routes';
+import { nutanixModuleRoutes } from './modules/nutanix_module/nutanix_module.routes';
+import { nginxModuleRoutes } from './modules/nginx_module/nginx_module.routes';
+import { citrixModuleRoutes } from './modules/citrix_module/citrix_module.routes';
+import { arubaModuleRoutes } from './modules/aruba_module/aruba_module.routes';
+import { fortinetModuleRoutes } from './modules/fortinet_module/fortinet_module.routes';
+import { fujitsuModuleRoutes } from './modules/fujitsu_module/fujitsu_module.routes';
+import { netAppModuleRoutes } from './modules/netapp_module/netapp_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -109,7 +117,15 @@ const moduleRoutes: Routes = [
     ...mshypervModuleRoutes,
     ...ciscoModuleRoutes,
     ...broadcomProxyModuleRoutes,
-    ...apacheModuleRoutes
+    ...apacheModuleRoutes,
+    ...nutanixModuleRoutes,
+    ...networkModuleRoutes,
+    ...nginxModuleRoutes,
+    ...citrixModuleRoutes,
+    ...arubaModuleRoutes,
+    ...fortinetModuleRoutes,
+    ...fujitsuModuleRoutes,
+    ...netAppModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{

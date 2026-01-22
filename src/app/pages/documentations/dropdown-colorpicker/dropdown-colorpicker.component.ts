@@ -13,7 +13,7 @@ import {
     DropdownMenuDirective,
     DropdownToggleDirective
 } from '@coreui/angular';
-import { NgForOf, NgStyle } from '@angular/common';
+import { NgStyle } from '@angular/common';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -24,7 +24,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
         DropdownItemDirective,
         DropdownMenuDirective,
         DropdownToggleDirective,
-        NgForOf,
         XsButtonDirective,
         NgStyle,
         FaIconComponent

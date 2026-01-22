@@ -16,12 +16,12 @@ import { Mapbackgrounditem } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { Subscription } from 'rxjs';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { NgIf, NgStyle } from '@angular/common';
+import { NgStyle } from '@angular/common';
 
 @Component({
     selector: 'oitc-background-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf, NgStyle],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgStyle],
     templateUrl: './background-item.component.html',
     styleUrl: './background-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

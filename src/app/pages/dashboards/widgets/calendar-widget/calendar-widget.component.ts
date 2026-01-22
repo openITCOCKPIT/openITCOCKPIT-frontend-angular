@@ -12,7 +12,7 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { CalendarWidgetService } from './calendar-widget.service';
 import { CalendarDateDetails } from './calendar-widget.interface';
@@ -26,10 +26,8 @@ import { CalendarDateDetails } from './calendar-widget.interface';
         CardHeaderComponent,
         CardBodyComponent,
         BgColorDirective,
-        NgIf,
         CardFooterComponent,
         TableDirective,
-        NgForOf,
         BadgeComponent,
         NgClass
     ],

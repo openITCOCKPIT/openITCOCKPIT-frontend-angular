@@ -41,7 +41,7 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { NgIf } from '@angular/common';
+
 import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
@@ -76,7 +76,6 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         DropdownToggleDirective,
         DropdownMenuDirective,
         DropdownItemDirective,
-        NgIf,
         InputGroupTextDirective,
         NgSelectComponent,
         NgOptionTemplateDirective,

@@ -77,6 +77,14 @@ export interface SlaConfig {
     }
 }
 
+export interface SlasConfig {
+    Slas: {
+        name?: string
+        description?: string
+    }
+}
+
+
 export interface SlaHostsAndServicesOverview {
     [key: string]: SlaHostsAndServicesWithContainer
 }
@@ -132,4 +140,64 @@ export interface SlaCalendarStatusLog {
         lowestValue: number
         class: string
     }
+}
+
+
+export interface SlasSummaryWidgetResponse {
+    slas: SlaOverviewExtended[]
+    config: SlasConfig
+    ACL: {
+        sla: {
+            viewDetails: boolean
+        }
+    }
+    _csrfToken: any
+}
+
+export interface SlaOverviewExtended {
+    key: number
+    value: {
+        slaDetails: SlaDetails
+        fulfill: boolean
+        status_percent: number
+        human_last_updated: string
+        hostsAndServicesOverview: SlaHostsAndServices
+    }
+}
+
+
+export interface SlaDetails {
+    id: number
+    name: string
+    description: string
+    warning_threshold: number
+    minimal_availability: number
+    status_log: {
+        [key: number]: number
+    }
+}
+
+
+export interface SlaOverview {
+    key: number
+    hostsAndServicesOverview: HostsAndServicesOverview
+}
+
+export interface HostsAndServicesOverview {
+    hosts: SlaObjectsSummary
+    services: SlaObjectsSummary
+}
+
+export interface SlaObjectsSummary {
+    total: number
+    failed: SlaSummaryStatus
+    warning: SlaSummaryStatus
+    passed: SlaSummaryStatus
+    not_calculated: SlaSummaryStatus
+}
+
+export interface SlaSummaryStatus {
+    count: number
+    percentage: any
+    ids: number[]
 }

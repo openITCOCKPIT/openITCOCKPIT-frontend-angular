@@ -254,13 +254,13 @@ This document describes how to upgrade the underlying Angular version.
 1. Update CoreUI
    Please see the official CoreUI documentation on how to update the Angular
    version: https://coreui.io/angular/docs/migration/angular-version/ first.
-   Copy and modify the shown upgrade command. This example upgrades from Angular 19 to Angular 20.
+   Copy and modify the shown upgrade command. This example upgrades from Angular 20 to Angular 21.
 
    Probably it's a good idea to also add `angular-fontawesome`, `@fullcalendar/angular`, `ng-select` and
    `ng-option-highlight` to this list as well. We can test this with the next Angular upgrade.
 
     ```
-    ng update @angular/core@20 @angular/cli@20 @angular/cdk@20 @coreui/angular@~5.5 @coreui/icons-angular@~5.5 primeng@20.0.1 @primeng/themes@20.0.1
+    ng update @angular/core@21 @angular/cli@21 @angular/cdk@21 @coreui/angular@~5.6 @coreui/icons-angular@~5.6 primeng@21.0.2 @primeng/themes@21.0.2 @fortawesome/angular-fontawesome@4.0.0 @fullcalendar/angular@6.1.20 @ng-select/ng-select@21.1.4 @ng-select/ng-option-highlight@21.1.4 
     ```
 
 Check the terminal for any errors.
@@ -285,7 +285,7 @@ Check the terminal for any errors.
    version.
 
 ```
-npm install --save typescript@~5.5.3
+npm install --save typescript@~5.9.3
 ```
 
 ### How to Upgrade Font Awesome

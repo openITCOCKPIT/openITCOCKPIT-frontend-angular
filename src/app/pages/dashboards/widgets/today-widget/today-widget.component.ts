@@ -8,7 +8,7 @@ import {
     ColComponent,
     RowComponent
 } from '@coreui/angular';
-import { NgIf } from '@angular/common';
+
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { TodayWidgetResponse } from '../widgets.interface';
@@ -22,7 +22,6 @@ import { TodayWidgetResponse } from '../widgets.interface';
         CardFooterComponent,
         CardHeaderComponent,
         ColComponent,
-        NgIf,
         RowComponent
     ],
     templateUrl: './today-widget.component.html',

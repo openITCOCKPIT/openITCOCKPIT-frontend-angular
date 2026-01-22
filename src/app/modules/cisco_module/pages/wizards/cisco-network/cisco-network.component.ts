@@ -23,7 +23,7 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-cisco-network',
@@ -44,8 +44,7 @@ import { NgIf } from '@angular/common';
         FormControlDirective,
         WizardsDynamicfieldsComponent,
         TranslocoDirective,
-        CardTitleDirective,
-        NgIf
+        CardTitleDirective
     ],
     templateUrl: './cisco-network.component.html',
     styleUrl: './cisco-network.component.css',

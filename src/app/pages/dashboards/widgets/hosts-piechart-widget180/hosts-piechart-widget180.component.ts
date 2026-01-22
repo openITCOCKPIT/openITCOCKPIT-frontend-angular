@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { HostPieChartComponent } from '../../../../components/charts/host-pie-chart/host-pie-chart.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -15,7 +15,6 @@ import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-
         AsyncPipe,
         FaIconComponent,
         HostPieChartComponent,
-        NgIf,
         TranslocoDirective,
         RouterLink,
         BlockLoaderComponent

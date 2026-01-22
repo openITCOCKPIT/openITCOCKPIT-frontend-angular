@@ -38,7 +38,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -76,7 +76,6 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PaginatorModule,
         PermissionDirective,
         RequiredIconComponent,
@@ -87,7 +86,6 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         FormCheckComponent,
         FormCheckLabelDirective,
         RouterLink,
-        NgForOf,
         NgClass,
         InputGroupComponent,
         InputGroupTextDirective,
@@ -156,7 +154,11 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
     }
 
     protected loadLdapGroups = (search: string = '') => {
-        this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search).subscribe((ldapgroups: LoadLdapgroups) => {
+        let selected: number[] = [];
+        if (this.post.Usergroup.ldapgroups && this.post.Usergroup.ldapgroups._ids) {
+            selected = this.post.Usergroup.ldapgroups._ids;
+        }
+        this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search, selected).subscribe((ldapgroups: LoadLdapgroups) => {
             this.ldapGroups = ldapgroups.ldapgroups;
             this.cdr.markForCheck();
         }));

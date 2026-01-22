@@ -31,7 +31,7 @@ import {
     TooltipDirective
 } from '@coreui/angular';
 import { HostBrowserMenuConfig, HostsBrowserMenuComponent } from '../hosts-browser-menu/hosts-browser-menu.component';
-import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgClass } from '@angular/common';
 import { BrowserLoaderComponent } from '../../../layouts/primeng/loading/browser-loader/browser-loader.component';
 import { HostBrowserResult, HostBrowserSlaOverview, MergedHost } from '../hosts.interface';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -131,7 +131,6 @@ import { TitleService } from '../../../services/title.service';
         RowComponent,
         ColComponent,
         HostsBrowserMenuComponent,
-        NgIf,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
@@ -165,7 +164,6 @@ import { TitleService } from '../../../services/title.service';
         TableDirective,
         CopyToClipboardComponent,
         BadgeComponent,
-        NgForOf,
         HoststatusSimpleIconComponent,
         LabelLinkComponent,
         KeyValuePipe,

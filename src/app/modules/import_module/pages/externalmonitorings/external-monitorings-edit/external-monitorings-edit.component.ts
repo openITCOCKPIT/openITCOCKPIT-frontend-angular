@@ -23,7 +23,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -67,8 +67,6 @@ import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         PaginatorModule,
         PermissionDirective,
         RequiredIconComponent,
@@ -117,6 +115,10 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
         {
             key: ExternalMonitoringSystems.PRTG,
             value: this.TranslocoService.translate('Paessler PRTG System')
+        },
+        {
+            key: ExternalMonitoringSystems.LibreNMS,
+            value: this.TranslocoService.translate('LibreNMS')
         }
     ];
     protected readonly Object = Object;

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
@@ -43,7 +43,6 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
     imports: [
         FaIconComponent,
         FormLoaderComponent,
-        NgIf,
         PermissionDirective,
         TranslocoDirective,
         RouterLink,
@@ -69,7 +68,6 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         InputGroupComponent,
         RowComponent,
         ColComponent,
-        NgForOf,
         CardTextDirective,
         TranslocoPipe
     ],

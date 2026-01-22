@@ -30,7 +30,7 @@ import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { formatDate } from '@angular/common';
 
 
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
@@ -75,9 +75,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         TranslocoPipe,
         MatSort,
         MatSortHeader,
-        NgIf,
         TableDirective,
-        NgForOf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         ContainerComponent,

@@ -34,7 +34,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-records.component';
 import { ScrollIndexComponent } from '../../../../layouts/coreui/paginator/scroll-index/scroll-index.component';
 import { SliderTimeComponent } from '../../../../components/slider-time/slider-time.component';
@@ -67,7 +67,6 @@ import { NgSelectComponent } from '@ng-select/ng-select';
         InputGroupTextDirective,
         MatSort,
         MatSortHeader,
-        NgIf,
         NoRecordsComponent,
         ReactiveFormsModule,
         RowComponent,

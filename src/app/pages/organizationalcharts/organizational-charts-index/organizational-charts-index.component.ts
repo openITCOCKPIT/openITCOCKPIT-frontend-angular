@@ -40,7 +40,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
@@ -81,7 +81,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         InputGroupTextDirective,
         FormControlDirective,
         TableLoaderComponent,
-        NgIf,
         TableDirective,
         MatSort,
         MatSortHeader,
@@ -94,7 +93,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         PaginateOrScrollComponent,
         CardFooterComponent,
         DeleteAllModalComponent,
-        NgForOf,
         TooltipDirective,
         AsyncPipe
     ],

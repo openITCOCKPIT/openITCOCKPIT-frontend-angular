@@ -2,46 +2,48 @@
     <div class="d-flex h-100 flex-column" #boxContainer>
         <div>
             <div>
-                <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-                        *ngIf="!isReadonly()">
-                    @if (flipped()) {
-                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                    } @else {
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    }
-                </button>
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())"
+                    >
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        }
+                    </button>
+                }
             </div>
         </div>
 
         <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
              class="box-container">
             <div class="box-x">
-                <ng-container *ngIf="animationStateShowContent">
+                @if (animationStateShowContent) {
                     <!-- Widget Content -->
-                    <div class="ps-2 text-info" *ngIf="!service_id">
-                        {{ t('No element selected') }}
-                    </div>
-
+                    @if (!service_id) {
+                        <div class="ps-2 text-info">
+                            {{ t('No element selected') }}
+                        </div>
+                    }
                     @if (service_id && widget) {
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-center"
+                             (click)="naviagteToBrowser()" [ngClass]="{'cursor-pointer': isLink}">
                             <canvas [id]="'tachometer-widget-canvas-' + widget.id"></canvas>
                         </div>
                     }
-
                     <!-- End Widget Content -->
-                </ng-container>
+                }
             </div>
 
             <div class="box-x">
-                <ng-container *ngIf="animationStateShowConfig">
+                @if (animationStateShowConfig) {
                     <!-- Config area -->
                     @if (widget) {
-
                         <div class="mb-3">
                             <label cLabel [for]="'tachometer_service_id_'+widget.id">
                                 {{ t('Service') }}
                             </label>
-
                             <oitc-select-optgroup
                                 [attr.id]="'tachometer_service_id_'+widget.id"
                                 [name]="'tachometer_service_id_'+widget.id"
@@ -54,14 +56,11 @@
                                 [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
                                 class="flex-1">
                             </oitc-select-optgroup>
-
                         </div>
-
                         <div class="mb-3">
                             <label cLabel [for]="'tachometer_metric_'+widget.id">
                                 {{ t('Metric') }}
                             </label>
-
                             <oitc-select
                                 [attr.id]="'tachometer_metric_'+widget.id"
                                 [name]="'tachometer_metric_'+widget.id"
@@ -71,9 +70,7 @@
                                 [(ngModel)]="metric"
                                 class="flex-1">
                             </oitc-select>
-
                         </div>
-
                         <div class="mb-3">
                             <c-form-check>
                                 <input
@@ -84,24 +81,20 @@
                                     type="checkbox"
                                     trueFalseValue
                                     [(ngModel)]="showLabel"/>
-
                                 <label cFormCheckLabel class="ms-1 mt-1"
                                        [for]="'tm-show-label-'+widget.id">
                                     {{ t('Show label') }}
                                 </label>
                             </c-form-check>
                         </div>
-
-
                         <div class="mt-1 text-end">
                             <button cButton type="button" class="ripple" (click)="saveConfig()">
                                 {{ t('Save') }}
                             </button>
                         </div>
-
                     }
                     <!-- End Config area -->
-                </ng-container>
+                }
             </div>
         </div>
     </div>

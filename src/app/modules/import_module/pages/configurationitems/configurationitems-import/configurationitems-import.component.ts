@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, DOCUMENT } from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    DOCUMENT,
+    inject,
+    OnDestroy
+} from '@angular/core';
 import {
     AlertComponent,
     CalloutComponent,
@@ -17,7 +25,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 import { FormsModule } from '@angular/forms';
 
-import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgClass } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 
@@ -58,7 +66,6 @@ import { HttpErrorResponse } from '@angular/common/http';
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         TranslocoDirective,
         NgClass,
@@ -71,7 +78,6 @@ import { HttpErrorResponse } from '@angular/common/http';
         CalloutComponent,
         LabelLinkComponent,
         AlertComponent,
-        NgForOf,
         KeyValuePipe
     ],
     templateUrl: './configurationitems-import.component.html',

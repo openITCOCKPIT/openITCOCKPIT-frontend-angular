@@ -16,7 +16,7 @@ import { Mapsummaryitem } from '../../pages/mapeditors/mapeditors.interface';
 import { ContextActionType, LabelPosition, MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { MapSummaryItemService } from './map-summary-item.service';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { DataForMapItem, MapItemRoot, MapItemRootParams } from '../map-item-base/map-item-base.interface';
@@ -24,7 +24,7 @@ import { DataForMapItem, MapItemRoot, MapItemRootParams } from '../map-item-base
 @Component({
     selector: 'oitc-map-summary-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, NgIf, CdkDragHandle, ResizableDirective, NgClass],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgClass],
     templateUrl: './map-summary-item.component.html',
     styleUrl: './map-summary-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -100,22 +100,27 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
         switch (this.item()!.type) {
             case 'host':
                 this.label = data.Host.hostname;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'service':
                 this.label = data.Host.hostname + '/' + data.Service.servicename;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'hostgroup':
                 this.label = data.Hostgroup!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'servicegroup':
                 this.label = data.Servicegroup!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'map':
                 this.label = data.Map!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
         }
         this.cdr.markForCheck();
