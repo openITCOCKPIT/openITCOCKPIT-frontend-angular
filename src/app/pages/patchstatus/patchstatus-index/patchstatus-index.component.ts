@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
     CardBodyComponent,
@@ -10,6 +10,13 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
     RowComponent,
@@ -40,6 +47,11 @@ import { AsyncPipe } from '@angular/common';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { PatchstatusIconComponent } from '../patchstatus-icon/patchstatus-icon.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { PatchstatusOsTypeEnum } from '../PatchstatusOsType.enum';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-patchstatus-index',
@@ -72,7 +84,19 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         PatchstatusIconComponent,
         NavComponent,
         NavItemComponent,
-        XsButtonDirective
+        XsButtonDirective,
+        DebounceDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ReactiveFormsModule,
+        MultiSelectComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective
     ],
     templateUrl: './patchstatus-index.component.html',
     styleUrl: './patchstatus-index.component.css',
@@ -84,6 +108,25 @@ export class PatchstatusIndexComponent implements OnInit, OnDestroy, IndexPage {
     public patchstatus?: PatchstatusIndexRoot;
     public hideFilter: boolean = true;
     public readonly PermissionsService = inject(PermissionsService);
+    private TranslocoService = inject(TranslocoService);
+
+    public filterAvailableUpdates = false;
+    public filterAvailableSecurityUpdates = false;
+
+    public osTypes = [
+        {
+            id: PatchstatusOsTypeEnum.linux,
+            name: this.TranslocoService.translate('Linux'),
+        },
+        {
+            id: PatchstatusOsTypeEnum.windows,
+            name: this.TranslocoService.translate('Windows'),
+        },
+        {
+            id: PatchstatusOsTypeEnum.macos,
+            name: this.TranslocoService.translate('macOS'),
+        },
+    ];
 
     private subscriptions: Subscription = new Subscription();
     private readonly PatchstatusService = inject(PatchstatusService);
@@ -107,6 +150,15 @@ export class PatchstatusIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public loadPatchstatus(): void {
+
+        this.params['filter[PackagesHostDetails.available_updates]'] = '';
+        this.params['filter[PackagesHostDetails.available_security_updates]'] = '';
+        if (this.filterAvailableUpdates) {
+            this.params['filter[PackagesHostDetails.available_updates]'] = 1;
+        }
+        if (this.filterAvailableSecurityUpdates) {
+            this.params['filter[PackagesHostDetails.available_security_updates]'] = 1;
+        }
 
         this.subscriptions.add(
             this.PatchstatusService.getIndex(this.params).subscribe((patchstatus) => {
@@ -154,6 +206,9 @@ export class PatchstatusIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public resetFilter() {
         this.params = getDefaultPatchstatusIndexParams();
+        this.filterAvailableUpdates = false;
+        this.filterAvailableSecurityUpdates = false;
+        
         this.loadPatchstatus();
     }
 

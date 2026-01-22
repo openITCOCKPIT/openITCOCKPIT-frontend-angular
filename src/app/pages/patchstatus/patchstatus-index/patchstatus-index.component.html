@@ -147,6 +147,141 @@
                 </c-row>
             }
 
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Hosts.name]']"
+                                       [placeholder]="'Filter by host name' | transloco"
+                                       aria-label="Host name"
+                                       cFormControl
+                                       name="'Host.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [lg]="6" class="ui-fluid">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fab', 'linux']"></fa-icon>
+                                </span>
+
+                                <oitc-multi-select
+                                    name="os_types"
+                                    id="os_types"
+                                    optionValue="id"
+                                    optionLabel="name"
+                                    [(ngModel)]="params['filter[PackagesHostDetails.os_type][]']"
+                                    [options]="osTypes"
+                                    [debounce]="true"
+                                    [placeholder]="'Filter by operating system type' | transloco"
+                                    (onChange)="onFilterChange(null)">
+                                </oitc-multi-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[PackagesHostDetails.os_version]']"
+                                       [placeholder]="'Filter by operating system version' | transloco"
+                                       aria-label="PackagesHostDetails os_version"
+                                       cFormControl
+                                       name="'PackagesHostDetails.os_version"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" lg="2">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Patch status') }}
+                                </h5>
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="PackagesHostDetails.reboot_required"
+                                        id="PackagesHostDetails.reboot_required"
+                                        type="checkbox"
+                                        trueFalseValue
+                                        [trueValue]="'true'"
+                                        [falseValue]="''"
+                                        oitcDebounce
+                                        [(ngModel)]="params['filter[PackagesHostDetails.reboot_required]']"/>
+
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="PackagesHostDetails.reboot_required">{{ t('Reboot required') }}</label>
+                                </c-form-check>
+
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="has_updates"
+                                        id="has_updates"
+                                        type="checkbox"
+                                        oitcDebounce
+                                        [(ngModel)]="filterAvailableUpdates"/>
+
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="has_updates">{{ t('Updates available') }}</label>
+                                </c-form-check>
+
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="has_security_updates"
+                                        id="has_security_updates"
+                                        type="checkbox"
+                                        oitcDebounce
+                                        [(ngModel)]="filterAvailableSecurityUpdates"/>
+
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="has_security_updates">{{ t('Security updates available') }}</label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
             @if (!patchstatus) {
                 <oitc-table-loader></oitc-table-loader>
             }

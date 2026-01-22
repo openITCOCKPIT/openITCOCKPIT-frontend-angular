@@ -9,7 +9,10 @@ export interface PatchstatusIndexParams {
     direction: 'asc' | 'desc' | '', // asc or desc
     'filter[Hosts.name]': string
     'filter[PackagesHostDetails.reboot_required]': string
+    'filter[PackagesHostDetails.available_updates]': number | string
+    'filter[PackagesHostDetails.available_security_updates]': number | string
     'filter[PackagesHostDetails.os_name]': string
+    'filter[PackagesHostDetails.os_version]': string
     'filter[PackagesHostDetails.os_type][]': PatchstatusOsTypeEnum[]
 }
 
@@ -21,7 +24,10 @@ export function getDefaultPatchstatusIndexParams(): PatchstatusIndexParams {
         direction: 'asc',
         'filter[Hosts.name]': '',
         'filter[PackagesHostDetails.reboot_required]': '',
+        'filter[PackagesHostDetails.available_updates]': 0,
+        'filter[PackagesHostDetails.available_security_updates]': '',
         'filter[PackagesHostDetails.os_name]': '',
+        'filter[PackagesHostDetails.os_version]': '',
         'filter[PackagesHostDetails.os_type][]': []
     }
 }
