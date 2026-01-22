@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { PackagesLinuxParams, PackagesLinuxRoot, PackagesLinuxSummary } from './packages.interface';
+import { PackagesLinuxParams, PackagesLinuxRoot, PackagesTotalSummary } from './packages.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -22,9 +22,9 @@ export class PackagesService {
         )
     }
 
-    public getSummary(): Observable<PackagesLinuxSummary> {
+    public getSummary(): Observable<PackagesTotalSummary> {
         const proxyPath = this.proxyPath;
-        return this.http.get<PackagesLinuxSummary>(`${proxyPath}/packages/summary.json`, {
+        return this.http.get<PackagesTotalSummary>(`${proxyPath}/packages/summary.json`, {
             params: {
                 angular: true
             }

@@ -18,10 +18,10 @@
             </li>
         </ol>
     </nav>
-    @if (isLoading) {
+    @if (!summary) {
         <oitc-block-loader [height]="'25rem'"></oitc-block-loader>
     }
-    @if (!isLoading) {
+    @if (summary) {
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>
@@ -32,7 +32,7 @@
                 <c-row class="equal-height-row d-flex flex-wrap">
                     <c-col [xs]="12" [md]="6" [lg]="3" [xl]="2" [offset]="{xl: 4, lg: 0, md:0, xs:0}">
                         <c-widget-stat-f
-                            [title]="'1234'"
+                            [title]="'12345'"
                             [value]="'Packages' | transloco"
                             class="mb-3"
                             padding>
@@ -181,7 +181,17 @@
                                                 </oitc-badge-outline>
                                             </td>
                                             <td class="text-center">
-                                                <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
+                                                @if (true) {
+                                                    <oitc-badge-outline color="danger" class="me-1">
+                                                        <fa-icon [icon]="['fas', 'arrow-rotate-left']"
+                                                                 [cTextColor]="'danger'"></fa-icon>
+                                                        {{ t('Reboot required') }}
+                                                    </oitc-badge-outline>
+                                                } @else {
+                                                    <oitc-badge-outline color="success" class="me-1">
+                                                        {{ t('No') }}
+                                                    </oitc-badge-outline>
+                                                }
                                             </td>
                                         </tr>
                                         <tr>
@@ -198,7 +208,17 @@
                                                     2
                                                 </oitc-badge-outline>
                                             <td class="text-center">
-                                                <fa-icon [icon]="['fas', 'times']" class="text-danger"></fa-icon>
+                                                @if (false) {
+                                                    <oitc-badge-outline color="danger" class="me-1">
+                                                        <fa-icon [icon]="['fas', 'arrow-rotate-left']"
+                                                                 [cTextColor]="'danger'"></fa-icon>
+                                                        {{ t('Reboot required') }}
+                                                    </oitc-badge-outline>
+                                                } @else {
+                                                    <oitc-badge-outline color="success" class="me-1">
+                                                        {{ t('No') }}
+                                                    </oitc-badge-outline>
+                                                }
                                             </td>
                                         </tr>
                                         <tr>
@@ -213,7 +233,17 @@
                                                 </oitc-badge-outline>
                                             </td>
                                             <td class="text-center">
-                                                <fa-icon [icon]="['fas', 'times']" class="text-danger"></fa-icon>
+                                                @if (true) {
+                                                    <oitc-badge-outline color="danger" class="me-1">
+                                                        <fa-icon [icon]="['fas', 'arrow-rotate-left']"
+                                                                 [cTextColor]="'danger'"></fa-icon>
+                                                        {{ t('Reboot required') }}
+                                                    </oitc-badge-outline>
+                                                } @else {
+                                                    <oitc-badge-outline color="success" class="me-1">
+                                                        {{ t('No') }}
+                                                    </oitc-badge-outline>
+                                                }
                                             </td>
                                         </tr>
                                         </tbody>

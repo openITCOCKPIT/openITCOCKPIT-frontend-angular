@@ -30,7 +30,7 @@ import {
     getDefaultPackagesLinuxParams,
     PackagesLinuxParams,
     PackagesLinuxRoot,
-    PackagesLinuxSummary
+    PackagesTotalSummary
 } from '../packages.interface';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 
@@ -73,7 +73,7 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     public isLoading: boolean = true;
     public params: PackagesLinuxParams = getDefaultPackagesLinuxParams();
     public packages?: PackagesLinuxRoot;
-    public summary?: PackagesLinuxSummary;
+    public summary?: PackagesTotalSummary;
 
     ngOnInit(): void {
         this.load();
