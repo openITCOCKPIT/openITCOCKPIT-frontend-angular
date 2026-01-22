@@ -161,15 +161,36 @@
                                 <c-row>
                                     <c-col class="text-center px-0">
                                         <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
-                                        {{ summary.linux.hostsWithUpdates.length | localNumber }}
+                                        @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                            <a [routerLink]="['/', 'patchstatus', 'index']"
+                                               [queryParams]="{host_id: summary.linux.hostsWithUpdates}">
+                                                {{ summary.linux.hostsWithUpdates.length | localNumber }}
+                                            </a>
+                                        } @else {
+                                            {{ summary.linux.hostsWithUpdates.length | localNumber }}
+                                        }
                                     </c-col>
                                     <c-col class="text-center px-0">
                                         <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
-                                        {{ summary.windows.hostsWithUpdates.length | localNumber }}
+                                        @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                            <a [routerLink]="['/', 'patchstatus', 'index']"
+                                               [queryParams]="{host_id: summary.windows.hostsWithUpdates}">
+                                                {{ summary.windows.hostsWithUpdates.length | localNumber }}
+                                            </a>
+                                        } @else {
+                                            {{ summary.windows.hostsWithUpdates.length | localNumber }}
+                                        }
                                     </c-col>
                                     <c-col class="text-center px-0">
                                         <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
-                                        {{ summary.macos.hostsWithUpdates.length | localNumber }}
+                                        @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                            <a [routerLink]="['/', 'patchstatus', 'index']"
+                                               [queryParams]="{host_id: summary.macos.hostsWithUpdates}">
+                                                {{ summary.macos.hostsWithUpdates.length | localNumber }}
+                                            </a>
+                                        } @else {
+                                            {{ summary.macos.hostsWithUpdates.length | localNumber }}
+                                        }
                                     </c-col>
                                 </c-row>
                             </ng-template>
@@ -177,7 +198,7 @@
                     </c-col>
                     <c-col [xs]="12" [md]="6" [lg]="3" [xl]="2">
                         <c-widget-stat-f
-                            [value]="'Outdated Hosts' | transloco"
+                            [value]="'Security relevant Hosts' | transloco"
                             [title]="String(summary.security_hosts | localNumber)"
                             class="mb-3"
                             padding>
@@ -188,15 +209,36 @@
                                 <c-row>
                                     <c-col class="text-center px-0">
                                         <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
-                                        {{ summary.linux.hostsWithSecurityUpdates.length | localNumber }}
+                                        @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                            <a [routerLink]="['/', 'patchstatus', 'index']"
+                                               [queryParams]="{host_id: summary.linux.hostsWithSecurityUpdates}">
+                                                {{ summary.linux.hostsWithSecurityUpdates.length | localNumber }}
+                                            </a>
+                                        } @else {
+                                            {{ summary.linux.hostsWithSecurityUpdates.length | localNumber }}
+                                        }
                                     </c-col>
                                     <c-col class="text-center px-0">
                                         <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
-                                        {{ summary.windows.hostsWithSecurityUpdates.length| localNumber }}
+                                        @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                            <a [routerLink]="['/', 'patchstatus', 'index']"
+                                               [queryParams]="{host_id: summary.windows.hostsWithSecurityUpdates}">
+                                                {{ summary.windows.hostsWithSecurityUpdates.length | localNumber }}
+                                            </a>
+                                        } @else {
+                                            {{ summary.windows.hostsWithSecurityUpdates.length | localNumber }}
+                                        }
                                     </c-col>
                                     <c-col class="text-center px-0">
                                         <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
-                                        {{ summary.macos.hostsWithSecurityUpdates.length | localNumber }}
+                                        @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                            <a [routerLink]="['/', 'patchstatus', 'index']"
+                                               [queryParams]="{host_id: summary.macos.hostsWithSecurityUpdates}">
+                                                {{ summary.macos.hostsWithSecurityUpdates.length | localNumber }}
+                                            </a>
+                                        } @else {
+                                            {{ summary.macos.hostsWithSecurityUpdates.length | localNumber }}
+                                        }
                                     </c-col>
                                 </c-row>
                             </ng-template>
