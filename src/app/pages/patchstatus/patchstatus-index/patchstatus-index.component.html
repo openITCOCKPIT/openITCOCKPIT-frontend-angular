@@ -7,7 +7,7 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['packages', 'index']" [routerLink]="['/', 'patchstatus', 'index']">
+                <a *oitcPermission="['patchstatus', 'index']" [routerLink]="['/', 'patchstatus', 'index']">
                     <fa-icon [icon]="['fas', 'bandage']"></fa-icon>
                     {{ t('Patch status') }}
                 </a>
@@ -27,6 +27,21 @@
                     {{ t('overview') }}
                 </small>
             </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadPatchstatus()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
         </c-card-header>
         <c-card-body>
 
@@ -145,10 +160,10 @@
                             {{ t('Host name') }}
                         </th>
                         <th scope="col" mat-sort-header="PackagesHostDetails.os_type">
-                            {{ t('OS type') }}
+                            {{ t('OS') }}
                         </th>
-                        <th scope="col" mat-sort-header="PackagesHostDetails.os_name">
-                            {{ t('Operating system') }}
+                        <th scope="col" mat-sort-header="PackagesHostDetails.os_version">
+                            {{ t('OS version') }}
                         </th>
                         <th scope="col" mat-sort-header="PackagesHostDetails.reboot_required">
                             {{ t('Reboot required') }}
@@ -187,7 +202,7 @@
                                         [family]="host.os_family"
                                     ></oitc-patchstatus-icon>
                                 </td>
-                                <td>{{ host.os_name }}</td>
+                                <td>{{ host.os_version }}</td>
                                 <td>
                                     @if (host.reboot_required) {
                                         <oitc-badge-outline color="danger" class="me-1">
