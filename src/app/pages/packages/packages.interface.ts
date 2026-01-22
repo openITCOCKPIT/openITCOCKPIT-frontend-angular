@@ -37,17 +37,10 @@ export interface AllPackagesLinux {
     is_patch: boolean
     created: string
     modified: string
-    package_linux_hosts: PackageLinuxHost[]
     cumulated_status: number
-}
-
-export interface PackageLinuxHost {
-    package_linux_id: number
-    needs_update: boolean
-    is_security_update: boolean
-    is_patch: boolean
-    id: number
-    name: string
+    all_hosts: number[]
+    hosts_needs_update: number[]
+    hosts_needs_security_update: number[]
 }
 
 export interface PackagesLinuxParams {
