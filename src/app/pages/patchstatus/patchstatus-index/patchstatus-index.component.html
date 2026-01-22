@@ -165,6 +165,13 @@
                         <th scope="col" mat-sort-header="PackagesHostDetails.os_version">
                             {{ t('OS version') }}
                         </th>
+                        <th scope="col" mat-sort-header="PackagesHostDetails.available_updates">
+                            {{ t('Updates') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PackagesHostDetails.available_security_updates">
+                            <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
+                            {{ t('Security updates') }}
+                        </th>
                         <th scope="col" mat-sort-header="PackagesHostDetails.reboot_required">
                             {{ t('Reboot required') }}
                         </th>
@@ -203,6 +210,12 @@
                                     ></oitc-patchstatus-icon>
                                 </td>
                                 <td>{{ host.os_version }}</td>
+                                <td [class.text-primary]="host.available_updates > 0">
+                                    {{ host.available_updates }}
+                                </td>
+                                <td [class.text-danger]="host.available_security_updates > 0">
+                                    {{ host.available_security_updates }}
+                                </td>
                                 <td>
                                     @if (host.reboot_required) {
                                         <oitc-badge-outline color="danger" class="me-1">

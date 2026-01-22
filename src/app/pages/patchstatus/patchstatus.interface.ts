@@ -45,7 +45,9 @@ export interface Patchstatus {
     uptime_in_words: string // update in words
     last_update: string
     last_update_user: string // user formatted
-    last_error: any
+    available_updates: number
+    available_security_updates: number
+    last_error: null | string
     created: string
     modified: string
     host: {
