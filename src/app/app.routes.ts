@@ -780,6 +780,12 @@ const coreRoutes: Routes = [{
     path: 'packages/linux',
     loadComponent: () => import('./pages/packages/packages-linux/packages-linux.component').then(m => m.PackagesLinuxComponent)
 }, {
+    path: 'packages/windows',
+    loadComponent: () => import('./pages/packages/packages-windows/packages-windows.component').then(m => m.PackagesWindowsComponent)
+}, {
+    path: 'packages/macos',
+    loadComponent: () => import('./pages/packages/packages-macos/packages-macos.component').then(m => m.PackagesMacosComponent)
+}, {
     path: 'patchstatus/index',
     loadComponent: () => import('./pages/patchstatus/patchstatus-index/patchstatus-index.component').then(m => m.PatchstatusIndexComponent)
 }, {

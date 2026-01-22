@@ -10,13 +10,10 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    NavComponent,
+    NavItemComponent,
     RowComponent,
-    TabDirective,
     TableDirective,
-    TabPanelComponent,
-    TabsComponent,
-    TabsContentComponent,
-    TabsListComponent,
     TemplateIdDirective,
     TextColorDirective,
     WidgetStatFComponent
@@ -39,6 +36,8 @@ import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-packages-index',
@@ -59,18 +58,17 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
         TranslocoPipe,
         TableDirective,
         BadgeOutlineComponent,
-        TabsComponent,
-        TabsListComponent,
-        TabDirective,
-        TabsContentComponent,
-        TabPanelComponent,
         BlockLoaderComponent,
         LocalNumberPipe,
         NoRecordsComponent,
         ContainerComponent,
         PaginateOrScrollComponent,
         MatSort,
-        MatSortHeader
+        MatSortHeader,
+        TableLoaderComponent,
+        NavItemComponent,
+        NavComponent,
+        XsButtonDirective
     ],
     templateUrl: './packages-linux.component.html',
     styleUrl: './packages-linux.component.css',
@@ -129,19 +127,19 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     // Callback when a filter has changed
     public onFilterChange(event: any) {
         this.params.page = 1;
-        this.refresh();
+        this.load();
     }
 
     // Callback for Paginator or Scroll Index Component
     public onPaginatorChange(change: PaginatorChangeEvent): void {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
-        this.refresh();
+        this.load();
     }
 
     public resetFilter() {
-        //this.filter = getDefaultCustomAlertsIndexFilter();
-        this.refresh();
+        this.params = getDefaultPackagesLinuxParams();
+        this.load();
     }
 
     // Callback when sort has changed
@@ -149,12 +147,8 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
         if (sort.direction) {
             this.params.sort = sort.active;
             this.params.direction = sort.direction;
-            this.refresh();
+            this.load();
         }
-    }
-
-    protected refresh(): void {
-        this.cdr.markForCheck();
     }
 
     protected readonly String = String;
