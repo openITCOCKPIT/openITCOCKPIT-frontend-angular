@@ -7,11 +7,13 @@ export interface PackagesLinuxRoot extends PaginateOrScroll {
 
 export interface PackagesTotalSummary {
     total: number
+    outdated: number
+    security: number
+    outdated_hosts: number
+    security_hosts: number
     windows: PackagesSummary
     macos: PackagesSummary
     linux: PackagesSummary
-    _csrfToken: string
-
 }
 
 

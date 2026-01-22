@@ -24,13 +24,13 @@ export class PackagesService {
 
     public getSummary(): Observable<PackagesTotalSummary> {
         const proxyPath = this.proxyPath;
-        return this.http.get<PackagesTotalSummary>(`${proxyPath}/packages/summary.json`, {
+        return this.http.get<{ summary: PackagesTotalSummary }>(`${proxyPath}/packages/summary.json`, {
             params: {
                 angular: true
             }
         }).pipe(
             map(data => {
-                return data;
+                return data.summary;
             })
         )
     }
