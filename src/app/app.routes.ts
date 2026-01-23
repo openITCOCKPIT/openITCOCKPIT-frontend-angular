@@ -789,6 +789,9 @@ const coreRoutes: Routes = [{
     path: 'packages/windows',
     loadComponent: () => import('./pages/packages/packages-windows/packages-windows.component').then(m => m.PackagesWindowsComponent)
 }, {
+    path: 'packages/view_windows/:id',
+    loadComponent: () => import('./pages/packages/packages-view-windows-app/packages-view-windows-app.component').then(m => m.PackagesViewWindowsAppComponent)
+}, {
     path: 'packages/macos_updates',
     loadComponent: () => import('./pages/packages/packages-macos-updates/packages-macos-updates.component').then(m => m.PackagesMacosUpdatesComponent)
 }, {

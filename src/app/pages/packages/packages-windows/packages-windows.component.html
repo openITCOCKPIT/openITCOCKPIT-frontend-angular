@@ -14,7 +14,7 @@
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fab', 'windows']"></fa-icon>
-                {{ t('Windows Updates') }}
+                {{ t('Windows Apps') }}
             </li>
         </ol>
     </nav>
@@ -129,7 +129,13 @@
                         @for (app of result.all_windows_apps; track $index) {
                             <tr>
                                 <td>
-                                    {{ app.name }}
+                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'view_windows'])|async) {
+                                        <a [routerLink]="['/', 'packages', 'view_windows', app.id]">
+                                            {{ app.name }}
+                                        </a>
+                                    } @else {
+                                        {{ app.name }}
+                                    }
                                 </td>
                                 <td>
                                     {{ app.publisher }}

@@ -8,6 +8,8 @@ import {
     PackagesTotalSummary,
     PackagesViewLinuxParams,
     PackagesViewLinuxRoot,
+    PackagesViewWindowAppRoot,
+    PackagesWindowsAppParams,
     PackagesWindowsAppsParams,
     PackagesWindowsAppsRoot
 } from './packages.interface';
@@ -57,6 +59,17 @@ export class PackagesService {
     public getWindowsApps(params: PackagesWindowsAppsParams): Observable<PackagesWindowsAppsRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<PackagesWindowsAppsRoot>(`${proxyPath}/packages/windows.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getViewWindowsApp(id: number, params: PackagesWindowsAppParams): Observable<PackagesViewWindowAppRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<PackagesViewWindowAppRoot>(`${proxyPath}/packages/view_windows/${id}.json`, {
             params: params as {}
         }).pipe(
             map(data => {
