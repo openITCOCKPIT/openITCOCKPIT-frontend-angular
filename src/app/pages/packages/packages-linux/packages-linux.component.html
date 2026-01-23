@@ -246,6 +246,89 @@
                     </c-col>
                 </c-row>
             }
+
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[PackagesLinux.name]']"
+                                       [placeholder]="'Filter by package name' | transloco"
+                                       aria-label="Packages linux name"
+                                       cFormControl
+                                       name="'PackagesLinux.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" lg="2">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Package status') }}
+                                </h5>
+
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="has_updates"
+                                        id="has_updates"
+                                        type="checkbox"
+                                        oitcDebounce
+                                        [(ngModel)]="filterAvailableUpdates"/>
+
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="has_updates">{{ t('Updates available') }}</label>
+                                </c-form-check>
+
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="has_security_updates"
+                                        id="has_security_updates"
+                                        type="checkbox"
+                                        oitcDebounce
+                                        [(ngModel)]="filterAvailableSecurityUpdates"/>
+
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="has_security_updates">{{ t('Security updates available') }}</label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
             <c-nav variant="underline-border" class="card-toolbar card-header-pills me-3 justify-content-end mt-1">
                 <c-nav-item>
                     <a [routerLink]="['/', 'packages', 'linux']"
