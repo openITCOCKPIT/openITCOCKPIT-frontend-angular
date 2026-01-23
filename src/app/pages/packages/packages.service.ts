@@ -7,7 +7,9 @@ import {
     PackagesLinuxRoot,
     PackagesTotalSummary,
     PackagesViewLinuxParams,
-    PackagesViewLinuxRoot
+    PackagesViewLinuxRoot,
+    PackagesWindowsAppsParams,
+    PackagesWindowsAppsRoot
 } from './packages.interface';
 
 @Injectable({
@@ -44,6 +46,17 @@ export class PackagesService {
     public getViewLinux(id: number, params: PackagesViewLinuxParams): Observable<PackagesViewLinuxRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<PackagesViewLinuxRoot>(`${proxyPath}/packages/view_linux/${id}.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getWindowsApps(params: PackagesWindowsAppsParams): Observable<PackagesWindowsAppsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<PackagesWindowsAppsRoot>(`${proxyPath}/packages/windows.json`, {
             params: params as {}
         }).pipe(
             map(data => {
