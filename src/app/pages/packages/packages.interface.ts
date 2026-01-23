@@ -55,19 +55,8 @@ export interface PackagesLinuxParams {
     'filter[PackagesLinux.id][]': [],
     'filter[PackagesLinux.name]': string
     'filter[PackagesLinux.description]': string
-}
-
-export function getDefaultPackagesLinuxParams(): PackagesLinuxParams {
-    return {
-        angular: true,
-        scroll: true,
-        sort: 'PackagesLinux.name',
-        page: 1,
-        direction: 'asc',
-        'filter[PackagesLinux.id][]': [],
-        'filter[PackagesLinux.name]': '',
-        'filter[PackagesLinux.description]': ''
-    }
+    'filter[available_updates]': number | string
+    'filter[available_security_updates]': number | string
 }
 
 /***************************

@@ -10,6 +10,13 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
     RowComponent,
@@ -24,12 +31,7 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
 import { forkJoin, Subscription } from 'rxjs';
 import { PackagesService } from '../packages.service';
 import { LocalNumberPipe } from '../../../pipes/local-number.pipe';
-import {
-    getDefaultPackagesLinuxParams,
-    PackagesLinuxParams,
-    PackagesLinuxRoot,
-    PackagesTotalSummary
-} from '../packages.interface';
+import { PackagesLinuxParams, PackagesLinuxRoot, PackagesTotalSummary } from '../packages.interface';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -40,6 +42,8 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { AsyncPipe } from '@angular/common';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { DebounceDirective } from '../../../directives/debounce.directive';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
     selector: 'oitc-packages-index',
@@ -71,7 +75,17 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         NavItemComponent,
         NavComponent,
         XsButtonDirective,
-        AsyncPipe
+        AsyncPipe,
+        DebounceDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ReactiveFormsModule
     ],
     templateUrl: './packages-linux.component.html',
     styleUrl: './packages-linux.component.css',
@@ -86,9 +100,12 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
 
     protected hideFilter: boolean = true;
     public isLoading: boolean = true;
-    public params: PackagesLinuxParams = getDefaultPackagesLinuxParams();
+    public params: PackagesLinuxParams = this.getDefaultPackagesLinuxParams();
     public packages?: PackagesLinuxRoot;
     public summary?: PackagesTotalSummary;
+
+    public filterAvailableUpdates = false;
+    public filterAvailableSecurityUpdates = false;
 
     public packageLinuxStatus: string[] = [
         'success',
@@ -101,6 +118,17 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public load() {
+
+        this.params['filter[available_updates]'] = '';
+        this.params['filter[available_security_updates]'] = '';
+        if (this.filterAvailableUpdates) {
+            this.params['filter[available_updates]'] = 1;
+        }
+        if (this.filterAvailableSecurityUpdates) {
+            this.params['filter[available_security_updates]'] = 1;
+        }
+
+
         let request = {
             packages: this.PackagesService.getPackages(this.params),
             summary: this.PackagesService.getSummary()
@@ -143,7 +171,7 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public resetFilter() {
-        this.params = getDefaultPackagesLinuxParams();
+        this.params = this.getDefaultPackagesLinuxParams();
         this.load();
     }
 
@@ -155,6 +183,24 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
             this.load();
         }
     }
+
+    public getDefaultPackagesLinuxParams(): PackagesLinuxParams {
+        this.filterAvailableUpdates = false;
+        this.filterAvailableSecurityUpdates = false;
+        return {
+            angular: true,
+            scroll: true,
+            sort: 'PackagesLinux.name',
+            page: 1,
+            direction: 'asc',
+            'filter[PackagesLinux.id][]': [],
+            'filter[PackagesLinux.name]': '',
+            'filter[PackagesLinux.description]': '',
+            'filter[available_updates]': '',
+            'filter[available_security_updates]': ''
+        }
+    }
+
 
     protected readonly String = String;
 }
