@@ -17,9 +17,7 @@ import {
     NavItemComponent,
     RowComponent,
     TableDirective,
-    TemplateIdDirective,
-    TextColorDirective,
-    WidgetStatFComponent
+    TextColorDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -61,8 +59,6 @@ import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipbo
         CardBodyComponent,
         ColComponent,
         RowComponent,
-        TemplateIdDirective,
-        WidgetStatFComponent,
         TextColorDirective,
         MatSort,
         MatSortHeader,

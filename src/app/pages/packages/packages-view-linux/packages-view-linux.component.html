@@ -59,15 +59,23 @@
             <c-card-body>
                 <c-row class="equal-height-row d-flex flex-wrap">
                     <c-col [xs]="12" [md]="12" [lg]="6" [xl]="6">
-                        <c-widget-stat-f
-                            [value]="package.package.name"
-                            [title]="package.package.description"
-                            class="mb-3"
-                            padding>
-                            <ng-template cTemplateId="widgetIconTemplate">
-                                <fa-icon [icon]="['fas', 'cube']" [cTextColor]="'primary'" [size]="'2xl'"></fa-icon>
-                            </ng-template>
-                        </c-widget-stat-f>
+
+                        <div class="card mb-3">
+                            <c-card-body class="card-body align-items-center d-flex">
+                                <div class="me-3 p-3 text-white">
+                                    <fa-icon [icon]="['fas', 'cube']" [cTextColor]="'primary'" [size]="'2xl'"></fa-icon>
+                                </div>
+                                <div>
+                                    <div class="fs-6 fw-semibold">
+                                        {{ package.package.name }}
+                                    </div>
+                                    <div class="fw-semibold small text-body-secondary">
+                                        {{ package.package.description }}
+                                    </div>
+                                </div>
+                            </c-card-body>
+                        </div>
+
                     </c-col>
                 </c-row>
 
