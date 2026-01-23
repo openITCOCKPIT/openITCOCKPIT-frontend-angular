@@ -220,4 +220,5 @@ export class PatchstatusIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     protected readonly String = String;
     protected readonly Boolean = Boolean;
+    protected readonly PatchstatusOsTypeEnum = PatchstatusOsTypeEnum;
 }

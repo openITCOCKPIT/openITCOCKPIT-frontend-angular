@@ -52,7 +52,7 @@ export interface PackagesLinuxParams {
     sort: string,
     page: number,
     direction: 'asc' | 'desc' | '', // asc or desc
-    'filter[PackagesLinux.id][]': [],
+    'filter[PackagesLinux.id][]': number[],
     'filter[PackagesLinux.name]': string
     'filter[PackagesLinux.description]': string
     'filter[available_updates]': number | string

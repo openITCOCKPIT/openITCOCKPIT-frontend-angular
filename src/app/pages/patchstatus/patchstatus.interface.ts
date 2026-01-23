@@ -58,6 +58,10 @@ export interface Patchstatus {
     last_error: null | string
     created: string
     modified: string
+    linux_update_ids: number[]
+    macos_update_ids: number[]
+    windows_update_ids: number[]
+
     host: {
         id: number
         name: string

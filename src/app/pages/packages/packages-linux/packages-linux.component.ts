@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
     CardBodyComponent,
     CardComponent,
@@ -98,6 +98,9 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     private readonly PackagesService = inject(PackagesService);
     public readonly PermissionsService = inject(PermissionsService);
 
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
+
     protected hideFilter: boolean = true;
     public isLoading: boolean = true;
     public params: PackagesLinuxParams = this.getDefaultPackagesLinuxParams();
@@ -113,8 +116,20 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
         'danger'
     ];
 
-    ngOnInit(): void {
-        this.load();
+    public ngOnInit(): void {
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            //console.log(params);
+
+            // //a/packages/linux?lpid=161&lpid=162
+            let linuxPackageId = params['lpid']
+            if (linuxPackageId) {
+                this.params['filter[PackagesLinux.id][]'] = [].concat(linuxPackageId); // make sure we always get an array
+            }
+
+            this.load();
+        }));
     }
 
     public load() {
