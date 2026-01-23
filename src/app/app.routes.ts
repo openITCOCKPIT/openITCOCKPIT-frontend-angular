@@ -44,7 +44,9 @@ import { mshypervModuleRoutes } from './modules/mshyperv_module/mshyperv_module.
 import { ciscoModuleRoutes } from './modules/cisco_module/cisco_module.routes';
 import { networkModuleRoutes } from './modules/network_module/network_module.routes';
 import { broadcomProxyModuleRoutes } from './modules/broadcomproxy_module/broadcomproxy_module.routes';
+import { apacheModuleRoutes } from './modules/apache_module/apache_module.routes';
 import { nutanixModuleRoutes } from './modules/nutanix_module/nutanix_module.routes';
+import { gudeModuleRoutes } from './modules/gude_module/gude_module.routes';
 import { nginxModuleRoutes } from './modules/nginx_module/nginx_module.routes';
 import { citrixModuleRoutes } from './modules/citrix_module/citrix_module.routes';
 import { arubaModuleRoutes } from './modules/aruba_module/aruba_module.routes';
@@ -52,6 +54,7 @@ import { fortinetModuleRoutes } from './modules/fortinet_module/fortinet_module.
 import { fujitsuModuleRoutes } from './modules/fujitsu_module/fujitsu_module.routes';
 import { netAppModuleRoutes } from './modules/netapp_module/netapp_module.routes';
 import { nextcloudModuleRoutes } from './modules/nextcloud_module/nextcloud_module.routes';
+import { paloAltoModuleRoutes } from './modules/palo_alto_module/palo_alto_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -117,15 +120,18 @@ const moduleRoutes: Routes = [
     ...mshypervModuleRoutes,
     ...ciscoModuleRoutes,
     ...broadcomProxyModuleRoutes,
+    ...apacheModuleRoutes,
     ...nutanixModuleRoutes,
     ...networkModuleRoutes,
+    ...gudeModuleRoutes,
     ...nginxModuleRoutes,
     ...citrixModuleRoutes,
     ...arubaModuleRoutes,
     ...fortinetModuleRoutes,
     ...fujitsuModuleRoutes,
     ...netAppModuleRoutes,
-    ...nextcloudModuleRoutes
+    ...nextcloudModuleRoutes,
+    ...paloAltoModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
