@@ -53,6 +53,7 @@ import { arubaModuleRoutes } from './modules/aruba_module/aruba_module.routes';
 import { fortinetModuleRoutes } from './modules/fortinet_module/fortinet_module.routes';
 import { fujitsuModuleRoutes } from './modules/fujitsu_module/fujitsu_module.routes';
 import { netAppModuleRoutes } from './modules/netapp_module/netapp_module.routes';
+import { nextcloudModuleRoutes } from './modules/nextcloud_module/nextcloud_module.routes';
 import { paloAltoModuleRoutes } from './modules/palo_alto_module/palo_alto_module.routes';
 
 @Component({
@@ -129,6 +130,7 @@ const moduleRoutes: Routes = [
     ...fortinetModuleRoutes,
     ...fujitsuModuleRoutes,
     ...netAppModuleRoutes,
+    ...nextcloudModuleRoutes,
     ...paloAltoModuleRoutes
 ];
 /***    Core routes   ***/
