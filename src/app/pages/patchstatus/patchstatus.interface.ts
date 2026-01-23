@@ -59,8 +59,10 @@ export interface Patchstatus {
     created: string
     modified: string
     linux_update_ids: number[]
+    linux_security_update_ids: number[]
     macos_update_ids: number[]
     windows_update_ids: number[]
+    windows_security_update_ids: number[]
 
     host: {
         id: number

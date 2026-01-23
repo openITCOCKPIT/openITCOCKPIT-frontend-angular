@@ -348,7 +348,7 @@
                                 <td [class.text-primary]="host.available_updates > 0">
                                     @switch (host.os_type) {
                                         @case (PatchstatusOsTypeEnum.linux) {
-                                            @if (this.PermissionsService.hasPermissionObservable(['packages', 'linux'])|async) {
+                                            @if (host.linux_update_ids.length > 0 && ( this.PermissionsService.hasPermissionObservable(['packages', 'linux'])|async )) {
                                                 <a [routerLink]="['/', 'packages', 'linux']"
                                                    [queryParams]="{lpid: host.linux_update_ids}">
                                                     {{ host.available_updates }}
@@ -358,9 +358,9 @@
                                             }
                                         }
                                         @case (PatchstatusOsTypeEnum.macos) {
-                                            @if (this.PermissionsService.hasPermissionObservable(['packages', 'macos_updates'])|async) {
+                                            @if (host.macos_update_ids.length > 0 && ( this.PermissionsService.hasPermissionObservable(['packages', 'macos_updates'])|async )) {
                                                 <a [routerLink]="['/', 'packages', 'macos_updates']"
-                                                   [queryParams]="{lpid: host.macos_update_ids}">
+                                                   [queryParams]="{uid: host.macos_update_ids}">
                                                     {{ host.available_updates }}
                                                 </a>
                                             } @else {
@@ -368,9 +368,9 @@
                                             }
                                         }
                                         @case (PatchstatusOsTypeEnum.windows) {
-                                            @if (this.PermissionsService.hasPermissionObservable(['packages', 'windows_updates'])|async) {
+                                            @if (host.windows_update_ids.length > 0 && ( this.PermissionsService.hasPermissionObservable(['packages', 'windows_updates'])|async )) {
                                                 <a [routerLink]="['/', 'packages', 'windows_updates']"
-                                                   [queryParams]="{lpid: host.windows_update_ids}">
+                                                   [queryParams]="{uid: host.windows_update_ids}">
                                                     {{ host.available_updates }}
                                                 </a>
                                             } @else {
@@ -380,7 +380,41 @@
                                     }
                                 </td>
                                 <td [class.text-danger]="host.available_security_updates > 0">
-                                    {{ host.available_security_updates }}
+                                    @switch (host.os_type) {
+                                        @case (PatchstatusOsTypeEnum.linux) {
+                                            @if (host.linux_security_update_ids.length > 0 && ( this.PermissionsService.hasPermissionObservable(['packages', 'linux'])|async )) {
+                                                <a [routerLink]="['/', 'packages', 'linux']"
+                                                   [queryParams]="{lpid: host.linux_security_update_ids}"
+                                                   class="text-danger">
+                                                    {{ host.available_security_updates }}
+                                                </a>
+                                            } @else {
+                                                {{ host.available_security_updates }}
+                                            }
+                                        }
+                                        @case (PatchstatusOsTypeEnum.macos) {
+                                            @if (host.macos_update_ids.length > 0 && ( this.PermissionsService.hasPermissionObservable(['packages', 'macos_updates'])|async )) {
+                                                <a [routerLink]="['/', 'packages', 'macos_updates']"
+                                                   [queryParams]="{uid: host.macos_update_ids}"
+                                                   class="text-danger">
+                                                    {{ host.available_updates }}
+                                                </a>
+                                            } @else {
+                                                {{ host.available_updates }}
+                                            }
+                                        }
+                                        @case (PatchstatusOsTypeEnum.windows) {
+                                            @if (host.windows_security_update_ids.length > 0 && ( this.PermissionsService.hasPermissionObservable(['packages', 'windows_updates'])|async )) {
+                                                <a [routerLink]="['/', 'packages', 'windows_updates']"
+                                                   [queryParams]="{uid: host.windows_security_update_ids}"
+                                                   class="text-danger">
+                                                    {{ host.available_security_updates }}
+                                                </a>
+                                            } @else {
+                                                {{ host.available_security_updates }}
+                                            }
+                                        }
+                                    }
                                 </td>
                                 <td>
                                     @if (host.reboot_required) {
