@@ -76,6 +76,22 @@
                                 />
                             </c-input-group>
                         </c-col>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[PackagesLinux.description]']"
+                                       [placeholder]="'Filter by package description' | transloco"
+                                       aria-label="Packages linux description"
+                                       cFormControl
+                                       name="'PackagesLinux.description"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
                     </c-row>
 
                     <c-row class="mb-2">
@@ -145,6 +161,9 @@
                         <th scope="col" mat-sort-header="PackagesLinux.name">
                             {{ t('Package') }}
                         </th>
+                        <th>
+                            {{ t('Description') }}
+                        </th>
                         <th>{{ t('Installed on') }}</th>
                         <th>{{ t('Status') }}</th>
                     </thead>
@@ -164,6 +183,9 @@
                                     } @else {
                                         {{ package.name }}
                                     }
+                                </td>
+                                <td>
+                                    {{ package.description }}
                                 </td>
                                 <td>
                                     @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
