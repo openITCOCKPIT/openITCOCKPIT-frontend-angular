@@ -806,6 +806,9 @@ const coreRoutes: Routes = [{
     path: 'packages/macos',
     loadComponent: () => import('./pages/packages/packages-macos/packages-macos.component').then(m => m.PackagesMacosComponent)
 }, {
+    path: 'packages/view_macos/:id',
+    loadComponent: () => import('./pages/packages/packages-view-macos-app/packages-view-macos-app.component').then(m => m.PackagesViewMacosAppComponent)
+}, {
     path: 'patchstatus/index',
     loadComponent: () => import('./pages/patchstatus/patchstatus-index/patchstatus-index.component').then(m => m.PatchstatusIndexComponent)
 }, {

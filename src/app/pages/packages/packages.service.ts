@@ -5,9 +5,13 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
     PackagesLinuxParams,
     PackagesLinuxRoot,
+    PackagesMacosAppParams,
+    PackagesMacosAppsParams,
+    PackagesMacosAppsRoot,
     PackagesTotalSummary,
     PackagesViewLinuxParams,
     PackagesViewLinuxRoot,
+    PackagesViewMacosAppRoot,
     PackagesViewWindowAppRoot,
     PackagesWindowsAppParams,
     PackagesWindowsAppsParams,
@@ -70,6 +74,28 @@ export class PackagesService {
     public getViewWindowsApp(id: number, params: PackagesWindowsAppParams): Observable<PackagesViewWindowAppRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<PackagesViewWindowAppRoot>(`${proxyPath}/packages/view_windows/${id}.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getMacosApps(params: PackagesMacosAppsParams): Observable<PackagesMacosAppsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<PackagesMacosAppsRoot>(`${proxyPath}/packages/macos.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getViewMacosApp(id: number, params: PackagesMacosAppParams): Observable<PackagesViewMacosAppRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<PackagesViewMacosAppRoot>(`${proxyPath}/packages/view_macos/${id}.json`, {
             params: params as {}
         }).pipe(
             map(data => {

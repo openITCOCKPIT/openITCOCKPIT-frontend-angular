@@ -211,3 +211,95 @@ export function getDefaultPackagesWindowsAppParams(): PackagesWindowsAppParams {
         'filter[WindowsAppsHosts.version]': '',
     }
 }
+
+
+/**********************
+ *    Macos action    *
+ **********************/
+
+export interface PackagesMacosAppsParams {
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[MacosApps.id][]': number[]
+    'filter[MacosApps.name]': string
+    'filter[MacosApps.description]': string
+}
+
+export function getDefaultPackagesMacosAppsParams(): PackagesMacosAppsParams {
+    return {
+        scroll: true,
+        sort: 'MacosApps.name',
+        page: 1,
+        direction: 'asc',
+        'filter[MacosApps.id][]': [],
+        'filter[MacosApps.name]': '',
+        'filter[MacosApps.description]': ''
+    }
+}
+
+export interface PackagesMacosAppsRoot extends PaginateOrScroll {
+    all_macos_apps: AllMacosApp[]
+}
+
+export interface AllMacosApp {
+    id: number
+    name: string
+    description: string
+    created: string
+    modified: string
+    all_hosts: number[]
+}
+
+/***************************
+ *    view_macos action    *
+ ***************************/
+
+export interface PackagesViewMacosAppRoot extends PaginateOrScroll {
+    app: ViewMacosApp
+    all_host_apps: ViewMacosHostApp[]
+}
+
+export interface ViewMacosApp {
+    id: number
+    name: string
+    description: string
+    created: string
+    modified: string
+}
+
+export interface ViewMacosHostApp {
+    id: number
+    macos_app_id: number
+    host_id: number
+    version: string
+    created: string
+    modified: string
+    host: {
+        id: number
+        name: string
+        uuid: string
+        container_id: number
+    }
+}
+
+export interface PackagesMacosAppParams {
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string
+    'filter[MacosAppsHosts.version]': string
+}
+
+export function getDefaultPackagesMacosAppParams(): PackagesMacosAppParams {
+    return {
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': '',
+        'filter[MacosAppsHosts.version]': '',
+    }
+}

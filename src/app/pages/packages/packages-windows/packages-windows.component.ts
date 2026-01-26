@@ -105,7 +105,7 @@ export class PackagesWindowsComponent implements OnInit, OnDestroy {
             // //a/packages/windows?id=161&id=162
             let appId = params['id']
             if (appId) {
-                //this.params['filter[PackagesLinux.id][]'] = [].concat(linuxPackageId); // make sure we always get an array
+                this.params['filter[WindowsApps.id][]'] = [].concat(appId); // make sure we always get an array
             }
 
             this.load();
