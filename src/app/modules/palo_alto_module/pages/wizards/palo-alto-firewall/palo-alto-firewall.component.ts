@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
-import { FortigateFirewallWizardService } from './fortigate-firewall-wizard.service';
-import { FortigateFirewallWizardPost } from './fortigate-firewall-wizard.interface';
+import { PaloAltoFirewallWizardService } from './palo-alto-firewall-wizard.service';
+import { PaloAltoFirewallWizardPost } from './palo-alto-firewall-wizard.interface';
+import { RouterLink } from '@angular/router';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
     CardBodyComponent,
     CardComponent,
@@ -11,22 +13,20 @@ import {
     FormControlDirective,
     FormLabelDirective
 } from '@coreui/angular';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
+import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
+import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormsModule } from '@angular/forms';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { RouterLink } from '@angular/router';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 
 @Component({
-    selector: 'oitc-fortigate-firewall',
+    selector: 'oitc-palo-alto-firewall',
     imports: [
         RouterLink,
         FaIconComponent,
@@ -47,14 +47,17 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
         FormErrorDirective,
         FormsModule
     ],
-    templateUrl: './fortigate-firewall.component.html',
-    styleUrl: './fortigate-firewall.component.css',
+    templateUrl: './palo-alto-firewall.component.html',
+    styleUrl: './palo-alto-firewall.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FortigateFirewallComponent extends WizardsAbstractComponent {
-    protected override WizardService: FortigateFirewallWizardService = inject(FortigateFirewallWizardService);
+export class PaloAltoFirewallComponent extends WizardsAbstractComponent {
+    @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
+    protected override WizardService: PaloAltoFirewallWizardService = inject(PaloAltoFirewallWizardService);
+    public checked: boolean = false;
+    public accordionClosed: boolean = true;
 
-    protected override post: FortigateFirewallWizardPost = {
+    protected override post: PaloAltoFirewallWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
@@ -68,13 +71,12 @@ export class FortigateFirewallComponent extends WizardsAbstractComponent {
         securityName: '',
         snmpCommunity: '',
         snmpVersion: '2'
-    } as FortigateFirewallWizardPost;
+    } as PaloAltoFirewallWizardPost;
     protected snmpVersions: SelectKeyValueString[] = [
         {value: '1', key: 'SNMP V 1'},
         {value: '2', key: 'SNMP V 2c'},
         {value: '3', key: 'SNMP V 3'},
     ]
-
 
     protected securityLevels: SelectKeyValueString[] = [
         {key: 'authPriv', value: '1'},

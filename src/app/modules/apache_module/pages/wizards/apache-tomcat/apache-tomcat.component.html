@@ -1,0 +1,345 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item">
+                <a [routerLink]="['/', 'wizards', 'index']">
+                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    {{ t('Wizards') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                {{ t('Apache Tomcat') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card>
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Configuration Wizard: Apache Tomcat') }}
+            </h5>
+        </c-card-header>
+        <c-card-body class="p-0">
+            <div class="row m-0 text-center mb-3" style="min-height: 22px;">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Host Information') }}
+                    </span>
+                </div>
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Configure services') }}
+                    </span>
+                </div>
+                <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+                    <div class="btn-group btn-group-xs w-100 h-100">
+                        <button type="button" class="btn btn-primary"
+                                [title]="'Back' | transloco"
+                                style="border-radius: 0;"
+                                [fallbackUrl]="['wizards', 'index']"
+                                oitcBackButton>
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-success"
+                                style="border-radius: 0;"
+                                [title]="'Next' | transloco"
+                                (click)="submit()">
+                            {{ t('Next') }}
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </c-card-body>
+        <c-card-body>
+            <fieldset class="padding-bottom-20">
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4>
+                        {{ t('Apache Tomcat connection settings') }}
+                    </h4>
+                </legend>
+
+                <c-accordion class="mb-3">
+                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                        <ng-template cTemplateId="accordionHeaderTemplate">
+                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                                {{ t('How to set up') }}
+                            </button>
+                        </ng-template>
+                        <ng-template cTemplateId="accordionBodyTemplate">
+                            <div class="accordion-body">
+                                {{ t('To enable and activate the status pages within tomcat do the following:') }}
+                                <ol>
+                                    <li>
+                                        {{ t('Edit Tomcat config /opt/tomcat/conf/tomcat-users.xml (Path maybe differs)') }}
+                                    </li>
+                                    <li>
+                                        {{ t('Add the following code (change user and password)') }}
+                                        <pre>&lt;tomcat-users xmlns=&quot;http://tomcat.apache.org/xml&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://tomcat.apache.org/xml tomcat-users.xsd&quot;
+    version=&quot;1.0&quot;&gt;
+    &lt;role rolename=&quot;manager-gui&quot;/&gt;
+    &lt;role rolename=&quot;admin-gui&quot;/&gt;
+    &lt;user username=&quot;admin&quot; password=&quot;PasswordXYZ&quot; roles=&quot;manager-gui&quot;/&gt;</pre>
+                                    </li>
+                                    <li>
+                                        {{ t('Restart tomcat service') }}
+                                    </li>
+                                </ol>
+                            </div>
+                        </ng-template>
+                    </c-accordion-item>
+                </c-accordion>
+
+                <div class="mb-3">
+                    <label cLabel for="post.TOMCAT_USER">
+                        {{ t('Tomcat Username') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           id="post.TOMCAT_USER"
+                           type="text"
+                           name="post.TOMCAT_USER"
+                           oitcFormError [errors]="errors" errorField="TOMCAT_USER"
+                           [(ngModel)]="post.TOMCAT_USER">
+                    <oitc-form-feedback [errors]="errors" errorField="TOMCAT_USER"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.TOMCAT_PW">
+                        {{ t('Tomcat Password') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           id="post.TOMCAT_PW"
+                           type="password"
+                           name="post.TOMCAT_PW"
+                           oitcFormError [errors]="errors" errorField="TOMCAT_PW"
+                           [(ngModel)]="post.TOMCAT_PW">
+                    <oitc-form-feedback [errors]="errors" errorField="TOMCAT_PW"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.TOMCAT_PORT">
+                        {{ t('Tomcat Port') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           id="post.TOMCAT_PORT"
+                           type="number"
+                           name="post.TOMCAT_PORT"
+                           oitcFormError [errors]="errors" errorField="TOMCAT_PORT"
+                           [(ngModel)]="post.TOMCAT_PORT">
+                    <oitc-form-feedback [errors]="errors" errorField="TOMCAT_PORT"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="TOMCAT_AUTH_MODE">
+                        {{ t('Tomcat Authmode') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-select
+                        name="TOMCAT_AUTH_MODE"
+                        id="TOMCAT_AUTH_MODE"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.TOMCAT_AUTH_MODE"
+                        [options]="tomcatAuthModes"
+                        [appendTo]="''">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="TOMCAT_AUTH_MODE"></oitc-form-feedback>
+                </div>
+            </fieldset>
+
+            <oitc-wizards-dynamicfields
+                [(post)]="post.services"
+                [errors]="errors"
+                [titleErrorField]="'services'"
+                [title]="'Apache Tomcat services'|transloco"
+            />
+            <c-row class="mb-1">
+                <c-col md="6">
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="WizardTomcatMemoryPoolDiscovery"></oitc-form-feedback>
+                </c-col>
+            </c-row>
+            <fieldset>
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4 [ngClass]="{'text-danger': errors.hasOwnProperty('memoryPoolServices') }">
+                        {{ t('Apache Tomcat memory pool Services') }}
+                    </h4>
+                    <span class="help-block italic text-primary small">
+                        {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
+                    </span>
+                    <oitc-form-feedback [errors]="errors" errorField="memoryPoolServices"></oitc-form-feedback>
+                </legend>
+
+                <div>
+                    <ng-template #contentTemplate let-data>
+                        <span class="h5 text-info" *ngIf="data">
+                            {{ t('Discovering memory pools for Services') }}
+                        </span>
+                        <br>
+                        {{ t('Scan the Apache Tomcat server and find all memory pools. Only possible with a valid configuration for that Apache Tomcat server.') }}
+                    </ng-template>
+
+                    <ng-template #buttonTemplate let-data>
+                        <div class="ms-2">
+                            <button class="ripple" (click)="executeMemoryPoolDiscovery()" cButton color="info">
+                                {{ t('Start memory pool discovery') }}
+                            </button>
+                        </div>
+
+                    </ng-template>
+
+                    <oitc-alert
+                        baseIcon="circle"
+                        color="info"
+                        [icon]="['fas', 'info']"
+                        [contentTemplate]="contentTemplate"
+                        [buttonTemplate]="buttonTemplate"></oitc-alert>
+
+                </div>
+
+                <c-row class="mb-3">
+                    <c-col md="6">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            </span>
+                            <ng-select
+                                id="tags"
+                                name="tags"
+                                [items]="[]"
+                                [(ngModel)]="searchedTags"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                [isOpen]="false"
+                                [placeholder]="'Filter by memory pool name'|transloco">
+                            </ng-select>
+                            <span cInputGroupText>
+                                <c-form-check>
+                                    <input
+                                        cFormCheckInput
+                                        name="toggleNetworkCheckboxes"
+                                        id="toggleNetworkCheckboxes"
+                                        type="checkbox"
+                                        (ngModelChange)="toggleCheck($event)"
+                                        [(ngModel)]="checked"/>
+                                    <label cFormCheckLabel for="toggleNetworkCheckboxes">
+                                        {{ t('Toggle checkboxes') }}
+                                    </label>
+                                </c-form-check>
+                            </span>
+                        </c-input-group>
+                    </c-col>
+                    <c-col md="2">
+                        <button cButton
+                                class="ripple"
+                                color="primary"
+                                (click)="toggleAccordionClose(!accordionClosed)">
+                            @if (!accordionClosed) {
+                                <fa-icon [icon]="['fas', 'down-left-and-up-right-to-center']"></fa-icon>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'up-right-and-down-left-from-center']"></fa-icon>
+                            }
+                            {{ t('Collapse all') }}
+                        </button>
+                    </c-col>
+                </c-row>
+
+
+                <ul class="m-0 p-0">
+                    <ol class="m-0 p-0" *ngFor="let memoryPoolService of post.memoryPoolServices">
+                        @if (!memoryPoolService.servicecommandargumentvalues.length) {
+                            <ng-container *ngIf="hasName(memoryPoolService.name)">
+
+                                <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
+                                    <div class="d-flex align-items-center">
+                                        <input cFormCheckInput
+                                               type="checkbox"
+                                               [id]="memoryPoolService.name"
+                                               class="alert-icon lg-checkbox"
+                                               name="checkbox"
+                                               [(ngModel)]="memoryPoolService.createService"/>
+                                        <label class="custom-control-label custom-control-label-ok"
+                                               [for]="memoryPoolService.name">
+                                            {{ memoryPoolService.name }}
+                                            <span class="help-block italic">
+                                                {{ memoryPoolService.description }}
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        } @else {
+                            <ng-container *ngIf="hasName(memoryPoolService.name)">
+                                <c-accordion class="mb-3">
+                                    <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
+                                        <ng-template cTemplateId="accordionHeaderTemplate">
+                                            <div class="form-group bg-info-subtle"
+                                                 (click)="accordionItem.toggleItem()"
+                                                 [collapsed]="!accordionItem.visible" cAccordionButton>
+                                                <div class="d-flex align-items-center">
+                                                    <input cFormCheckInput
+                                                           type="checkbox"
+                                                           [id]="memoryPoolService.name"
+                                                           class="alert-icon lg-checkbox"
+                                                           name="checkbox"
+                                                           (click)="$event.stopPropagation()"
+                                                           [(ngModel)]="memoryPoolService.createService"/>
+                                                    <label class="custom-control-label custom-control-label-ok"
+                                                           (click)="$event.stopPropagation()"
+                                                           [for]="memoryPoolService.name">
+                                                        {{ memoryPoolService.name }}
+                                                        <span class="help-block italic">
+                                                            {{ memoryPoolService.description }}
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template cTemplateId="accordionBodyTemplate">
+                                            <div class="accordion-body">
+                                                @for (
+                                                    commandArgument of memoryPoolService.servicecommandargumentvalues; track $index) {
+                                                    <div
+                                                        class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
+                                                        {{ commandArgument.commandargument.human_name }}
+                                                        <input class="form-control"
+                                                               type="text"
+                                                               [disabled]="!memoryPoolService.createService || $index === 0"
+                                                               [(ngModel)]="commandArgument.value">
+                                                    </div>
+                                                }
+                                            </div>
+                                        </ng-template>
+                                    </c-accordion-item>
+                                </c-accordion>
+                            </ng-container>
+                        }
+                    </ol>
+                </ul>
+            </fieldset>
+
+
+        </c-card-body>
+    </c-card>
+
+</ng-container>

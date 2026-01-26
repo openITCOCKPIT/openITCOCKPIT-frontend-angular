@@ -14,7 +14,7 @@
                 </a></li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                {{ t('Network Basic') }}
+                {{ t('Gude Sensors') }}
             </li>
         </ol>
     </nav>
@@ -22,10 +22,11 @@
     <c-card>
         <c-card-header>
             <h5 cCardTitle>
-                {{ t('Configuration Wizard: Network Basic') }}
+                {{ t('Configuration Wizard: Gude Sensors') }}
             </h5>
         </c-card-header>
         <c-card-body class="p-0">
+
             <div class="row m-0 text-center mb-3" style="min-height: 22px;">
                 <div
                     class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
@@ -38,7 +39,7 @@
                     class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Configure SNMP for Network Monitoring') }}
+                        {{ t('Configure SNMP for Gude Sensors Monitoring') }}
                     </span>
                 </div>
                 <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
@@ -65,6 +66,8 @@
             </div>
         </c-card-body>
         <c-card-body>
+
+
             <fieldset class="padding-bottom-20">
                 <legend class="fs-md fieldset-legend-border-bottom">
                     <h4>
@@ -106,16 +109,13 @@
                         <oitc-form-feedback [errors]="errors" errorField="securityLevel"></oitc-form-feedback>
                         <div class="help-block text-primary-light">
                             @if (post.securityLevel === '1') {
-                                <span
-                                >{{ t('Communication with authentication and privacy. The protocols used for Authentication are MD5 and SHA and for Privacy, DES (Data Encryption Standard) and AES (Advanced Encryption Standard).') }}</span>
+                                <span>{{ t('Communication with authentication and privacy. The protocols used for Authentication are MD5 and SHA and for Privacy, DES (Data Encryption Standard) and AES (Advanced Encryption Standard).') }}</span>
                             }
                             @if (post.securityLevel === '2') {
-                                <span
-                                >{{ t('Communication with authentication and without privacy. The protocols used for Authentication are MD5 and SHA (Secure Hash Algorithm).') }}</span>
+                                <span>{{ t('Communication with authentication and without privacy. The protocols used for Authentication are MD5 and SHA (Secure Hash Algorithm).') }}</span>
                             }
                             @if (post.securityLevel === '3') {
-                                <span
-                                >{{ t('Communication without authentication and privacy.') }}</span>
+                                <span>{{ t('Communication without authentication and privacy.') }}</span>
                             }
                         </div>
                     </div>
@@ -221,33 +221,26 @@
                 }
             </fieldset>
 
-            <oitc-wizards-dynamicfields
-                [(post)]="post.services"
-                [errors]="errors"
-                [titleErrorField]="'services'"
-                [title]="'SNMP services'|transloco"
-            />
-
             <fieldset>
                 <legend class="fs-md fieldset-legend-border-bottom">
-                    <h4 [ngClass]="{'text-danger': errors.hasOwnProperty('interfaces') }">
-                        {{ t('SNMP Interfaces') }}
+                    <h4 [ngClass]="{'text-danger': errors.hasOwnProperty('sensorServices') }">
+                        {{ t('Gude Sensors Services') }}
                     </h4>
                     <span class="help-block italic text-primary small">
                         {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
                     </span>
-                    <oitc-form-feedback [errors]="errors" errorField="interfaces"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors" errorField="sensorServices"></oitc-form-feedback>
                 </legend>
 
                 <div>
                     <ng-template #contentTemplate let-data>
                         @if (data) {
                             <span class="h5 text-info">
-                                {{ t('Discovering Interfaces for SNMP Services') }}
+                                {{ t('Discovering Gude Sensors Services') }}
                             </span>
                         }
                         <br>
-                        {{ t('Scan this device and locate all of the interfaces that reside on the device. Only possible with valid SNMP configuration') }}
+                        {{ t('Scan this device and locate all of the sensors that reside on the device. Only possible with valid SNMP configuration') }}
                     </ng-template>
 
                     <ng-template #buttonTemplate let-data>
@@ -258,13 +251,13 @@
                                 color="primary"
                                 type="button"
                                 [disabled]="DiscoveryIsRunning"
-                                (click)="runSnmpDiscovery()">
+                                (click)="runGudeSensorsDiscovery()">
                                 @if (DiscoveryIsRunning) {
                                     <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
                                 } @else {
                                     <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
                                 }
-                                {{ t('Start SNMP interface discovery') }}
+                                {{ t('Start Sensors discovery') }}
                             </button>
                         </div>
 
@@ -281,7 +274,7 @@
 
                 <c-row class="mb-1">
                     <c-col md="6">
-                        <oitc-form-feedback [errors]="errors" errorField="snmpcommand"></oitc-form-feedback>
+                        <oitc-form-feedback [errors]="errors" errorField="gudesensorscommand"></oitc-form-feedback>
                     </c-col>
                 </c-row>
                 <c-row class="mb-3">
@@ -334,30 +327,30 @@
 
 
                 <ul class="m-0 p-0">
-                    @for (interface of post.interfaces; track interface) {
+                    @for (sensor of post.sensorServices; track sensor) {
                         <ol class="m-0 p-0">
-                            @if (!interface.servicecommandargumentvalues.length) {
-                                @if (hasName(interface.name)) {
+                            @if (!sensor.servicecommandargumentvalues.length) {
+                                @if (hasName(sensor.name)) {
                                     <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
                                         <div class="d-flex align-items-center">
                                             <input cFormCheckInput
                                                    type="checkbox"
-                                                   [id]="interface.name"
+                                                   [id]="sensor.name"
                                                    class="alert-icon lg-checkbox"
                                                    name="checkbox"
-                                                   [(ngModel)]="interface.createService"/>
+                                                   [(ngModel)]="sensor.createService"/>
                                             <label class="custom-control-label custom-control-label-ok"
-                                                   [for]="interface.name">
-                                                {{ interface.name }}
+                                                   [for]="sensor.name">
+                                                {{ sensor.name }}
                                                 <span class="help-block italic">
-                                                    {{ interface.description }}
+                                                    {{ sensor.description }}
                                                 </span>
                                             </label>
                                         </div>
                                     </div>
                                 }
                             } @else {
-                                @if (hasName(interface.name)) {
+                                @if (hasName(sensor.name)) {
                                     <c-accordion class="mb-3">
                                         <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
                                             <ng-template cTemplateId="accordionHeaderTemplate">
@@ -367,17 +360,17 @@
                                                     <div class="d-flex align-items-center">
                                                         <input cFormCheckInput
                                                                type="checkbox"
-                                                               [id]="interface.name"
+                                                               [id]="sensor.name"
                                                                class="alert-icon lg-checkbox"
                                                                name="checkbox"
                                                                (click)="$event.stopPropagation()"
-                                                               [(ngModel)]="interface.createService"/>
+                                                               [(ngModel)]="sensor.createService"/>
                                                         <label class="custom-control-label custom-control-label-ok"
                                                                (click)="$event.stopPropagation()"
-                                                               [for]="interface.name">
-                                                            {{ interface.name }}
+                                                               [for]="sensor.name">
+                                                            {{ sensor.name }}
                                                             <span class="help-block italic">
-                                                                {{ interface.description }}
+                                                                {{ sensor.description }}
                                                             </span>
                                                         </label>
                                                     </div>
@@ -385,13 +378,14 @@
                                             </ng-template>
                                             <ng-template cTemplateId="accordionBodyTemplate">
                                                 <div class="accordion-body">
-                                                    @for (commandArgument of interface.servicecommandargumentvalues; track $index) {
+                                                    @for (
+                                                        commandArgument of sensor.servicecommandargumentvalues; track $index) {
                                                         <div
                                                             class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
                                                             {{ commandArgument.commandargument.human_name }}
                                                             <input class="form-control"
                                                                    type="text"
-                                                                   [disabled]="!interface.createService || $index === 0"
+                                                                   [disabled]="!sensor.createService || $index === 0"
                                                                    [(ngModel)]="commandArgument.value">
                                                         </div>
                                                     }
