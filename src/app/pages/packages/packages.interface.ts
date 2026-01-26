@@ -120,3 +120,94 @@ export function getDefaultPackagesViewLinuxParams(): PackagesViewLinuxParams {
         'filter[PackagesLinuxHosts.is_security_update]': '',
     }
 }
+
+/************************
+ *    Windows action    *
+ ************************/
+
+export interface PackagesWindowsAppsParams {
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[WindowsApps.id][]': number[]
+    'filter[WindowsApps.name]': string
+    'filter[WindowsApps.publisher]': string
+}
+
+export function getDefaultPackagesWindowsAppsParams(): PackagesWindowsAppsParams {
+    return {
+        scroll: true,
+        sort: 'WindowsApps.name',
+        page: 1,
+        direction: 'asc',
+        'filter[WindowsApps.id][]': [],
+        'filter[WindowsApps.name]': '',
+        'filter[WindowsApps.publisher]': ''
+    }
+}
+
+export interface PackagesWindowsAppsRoot extends PaginateOrScroll {
+    all_windows_apps: AllWindowsApp[]
+}
+
+export interface AllWindowsApp {
+    id: number
+    name: string
+    publisher: string
+    created: string
+    modified: string
+    all_hosts: number[]
+}
+
+/*****************************
+ *    view_windows action    *
+ *****************************/
+
+export interface PackagesViewWindowAppRoot extends PaginateOrScroll {
+    app: ViewWindowsApp
+    all_host_apps: ViewWindowsHostApp[]
+}
+
+export interface ViewWindowsApp {
+    id: number
+    name: string
+    publisher: string
+    created: string
+    modified: string
+}
+
+export interface ViewWindowsHostApp {
+    id: number
+    windows_app_id: number
+    host_id: number
+    version: string
+    created: string
+    modified: string
+    host: {
+        id: number
+        name: string
+        uuid: string
+        container_id: number
+    }
+}
+
+export interface PackagesWindowsAppParams {
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string
+    'filter[WindowsAppsHosts.version]': string
+}
+
+export function getDefaultPackagesWindowsAppParams(): PackagesWindowsAppParams {
+    return {
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': '',
+        'filter[WindowsAppsHosts.version]': '',
+    }
+}

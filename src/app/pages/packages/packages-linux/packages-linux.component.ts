@@ -21,18 +21,14 @@ import {
     NavItemComponent,
     RowComponent,
     TableDirective,
-    TemplateIdDirective,
-    TextColorDirective,
-    WidgetStatFComponent
+    TextColorDirective
 } from '@coreui/angular';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 import { IndexPage } from '../../../pages.interface';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { forkJoin, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { PackagesService } from '../packages.service';
-import { LocalNumberPipe } from '../../../pipes/local-number.pipe';
-import { PackagesLinuxParams, PackagesLinuxRoot, PackagesTotalSummary } from '../packages.interface';
-import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
+import { PackagesLinuxParams, PackagesLinuxRoot } from '../packages.interface';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -44,6 +40,8 @@ import { AsyncPipe } from '@angular/common';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PackagesOsTabsComponent } from '../packages-os-tabs/packages-os-tabs.component';
+import { PackagesSummaryComponent } from '../packages-summary/packages-summary.component';
 
 @Component({
     selector: 'oitc-packages-index',
@@ -58,14 +56,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         CardTitleDirective,
         ColComponent,
         RowComponent,
-        TemplateIdDirective,
-        WidgetStatFComponent,
         TextColorDirective,
         TranslocoPipe,
         TableDirective,
         BadgeOutlineComponent,
-        BlockLoaderComponent,
-        LocalNumberPipe,
         NoRecordsComponent,
         ContainerComponent,
         PaginateOrScrollComponent,
@@ -85,7 +79,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         FormsModule,
         InputGroupComponent,
         InputGroupTextDirective,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        PackagesOsTabsComponent,
+        PackagesSummaryComponent
     ],
     templateUrl: './packages-linux.component.html',
     styleUrl: './packages-linux.component.css',
@@ -105,7 +101,6 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     public isLoading: boolean = true;
     public params: PackagesLinuxParams = this.getDefaultPackagesLinuxParams();
     public packages?: PackagesLinuxRoot;
-    public summary?: PackagesTotalSummary;
 
     public filterAvailableUpdates = false;
     public filterAvailableSecurityUpdates = false;
@@ -143,20 +138,12 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
             this.params['filter[available_security_updates]'] = 1;
         }
 
-
-        let request = {
-            packages: this.PackagesService.getPackages(this.params),
-            summary: this.PackagesService.getSummary()
-        };
-
-        forkJoin(request).subscribe(
-            (result) => {
-                this.packages = result.packages;
-                this.summary = result.summary;
-
-                this.isLoading = false;
+        this.subscriptions.add(
+            this.PackagesService.getPackages(this.params).subscribe((packages) => {
+                this.packages = packages;
                 this.cdr.markForCheck();
-            });
+            })
+        );
     }
 
 

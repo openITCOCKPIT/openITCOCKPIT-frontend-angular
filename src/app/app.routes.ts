@@ -791,8 +791,17 @@ const coreRoutes: Routes = [{
     path: 'packages/view_linux/:id',
     loadComponent: () => import('./pages/packages/packages-view-linux/packages-view-linux.component').then(m => m.PackagesViewLinuxComponent)
 }, {
+    path: 'packages/windows_updates',
+    loadComponent: () => import('./pages/packages/packages-windows-updates/packages-windows-updates.component').then(m => m.PackagesWindowsUpdatesComponent)
+}, {
     path: 'packages/windows',
     loadComponent: () => import('./pages/packages/packages-windows/packages-windows.component').then(m => m.PackagesWindowsComponent)
+}, {
+    path: 'packages/view_windows/:id',
+    loadComponent: () => import('./pages/packages/packages-view-windows-app/packages-view-windows-app.component').then(m => m.PackagesViewWindowsAppComponent)
+}, {
+    path: 'packages/macos_updates',
+    loadComponent: () => import('./pages/packages/packages-macos-updates/packages-macos-updates.component').then(m => m.PackagesMacosUpdatesComponent)
 }, {
     path: 'packages/macos',
     loadComponent: () => import('./pages/packages/packages-macos/packages-macos.component').then(m => m.PackagesMacosComponent)
