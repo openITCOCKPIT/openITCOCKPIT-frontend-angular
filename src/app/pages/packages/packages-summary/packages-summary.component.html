@@ -19,7 +19,35 @@
         </c-row>
     } @else {
         <c-row class="equal-height-row d-flex flex-wrap">
-            <c-col [xs]="12" [md]="6" [lg]="3" [xl]="2" [offset]="{xl: 2, lg: 0, md:0, xs:0}">
+            <c-col [xs]="12" [md]="6" [lg]="3" [xl]="2" class="text-start">
+                <button type="button"
+                        class="btn btn-primary text-white ripple p-2 w-100">
+                    @switch (os_family()) {
+                        @case ('linux') {
+                            <fa-icon [icon]="['fab', 'linux']" [size]="'7x'"></fa-icon>
+                            <br>
+                            {{ t('Linux') }}
+                        }
+                        @case ('windows') {
+                            <fa-icon [icon]="['fab', 'windows']" [size]="'7x'"></fa-icon>
+                            <br>
+                            {{ t('Windows') }}
+                        }
+                        @case ('macos') {
+                            <fa-icon [icon]="['fab', 'apple']" [size]="'7x'"></fa-icon>
+                            <br>
+                            {{ t('macOS') }}
+                        }
+                        @default {
+                            <fa-icon [icon]="['fab', 'linux']" [size]="'7x'"></fa-icon>
+                            <br>
+                            {{ t('Linux') }}
+                        }
+                    }
+
+                </button>
+            </c-col>
+            <c-col [xs]="12" [md]="6" [lg]="3" [xl]="2">
                 <c-widget-stat-f
                     [title]="String(summary.total | localNumber)"
                     [value]="'Packages' | transloco"
