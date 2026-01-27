@@ -42,6 +42,16 @@ export interface HostObject {
     type?: HostOrServiceType // hosts/index
 }
 
+export interface SoftwareInformationHost {
+    SoftwareInformationExists: boolean // hosts/index
+    osFamily: string
+    updatesCounter: {
+        total: number
+        updates: number
+        security_updates: number
+    }
+}
+
 // Same as HostObject but with "Host" key in between as CakePHP 2 does.
 // [Host][name] instead of [name]
 export interface HostObjectCake2 {

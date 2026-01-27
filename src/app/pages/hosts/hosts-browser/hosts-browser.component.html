@@ -146,6 +146,35 @@
                             }
                         </c-nav-item>
                     }
+                    @if (softwareInformation?.SoftwareInformationExists) {
+                        <c-nav-item>
+                            <button
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.SoftwareInventory}"
+                                (click)="changeTab(HostBrowserTabs.SoftwareInventory)">
+                                <fa-icon [icon]="['fas', 'square-binary']"></fa-icon>
+                                {{ t('Software status') }}
+                                @if (softwareInformation && softwareInformation.updatesCounter) {
+                                    @if (!softwareInformation.updatesCounter.updates &&
+                                    !softwareInformation.updatesCounter.security_updates) {
+                                        <fa-icon [icon]="['fas', 'check']"
+                                                 [title]="'Up to Date' | transloco"
+                                                 [cTextColor]="'success'"></fa-icon>
+                                    }
+                                    @if (softwareInformation.updatesCounter.updates && !softwareInformation.updatesCounter.security_updates) {
+                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                                 [title]="'Update Available' | transloco"
+                                                 [cTextColor]="'warning'"></fa-icon>
+                                    } @else if (softwareInformation.updatesCounter.security_updates) {
+                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                                 [title]="'Security Update Available' | transloco"
+                                                 [cTextColor]="'danger'"></fa-icon>
+                                    }
+                                }
+                            </button>
+                        </c-nav-item>
+                    }
+
                 </c-nav>
             </c-card-header>
             <c-card-body>
@@ -1239,6 +1268,25 @@
                     </div>
                 }
                 <!-- SLA Module end -->
+                <!-- Software inventory start -->
+                @if (selectedTab == HostBrowserTabs.SoftwareInventory) {
+                    <div>
+                        @if (softwareInformation?.SoftwareInformationExists && softwareInformation?.osFamily) {
+                            @switch (softwareInformation?.osFamily) {
+                                @case ('linux') {
+                                    LINUX UPDATES
+                                }
+                                @case ('windows') {
+                                    WINDOWS UPDATES
+                                }
+                                @case ('macos') {
+                                    WINDOWS UPDATES
+                                }
+                            }
+                        }
+                    </div>
+                }
+                <!-- Software inventory end -->
             </c-card-body>
         </c-card>
     }
