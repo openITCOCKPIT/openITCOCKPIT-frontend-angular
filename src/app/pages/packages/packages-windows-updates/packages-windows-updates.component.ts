@@ -113,14 +113,22 @@ export class PackagesWindowsUpdatesComponent implements OnInit, OnDestroy, Index
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
-            //console.log(params);
 
             // //a/packages/windows?uid=161&uid=162
             let updateId = params['uid']
             if (updateId) {
                 this.params['filter[WindowsUpdates.id][]'] = [].concat(updateId); // make sure we always get an array
             }
-
+            let availableUpdates = params['filter[available_updates]'];
+            if (availableUpdates) {
+                this.filterAvailableUpdates = true;
+                this.filterAvailableSecurityUpdates = false;
+            }
+            let availableSecurityUpdates = params['filter[available_security_updates]'];
+            if (availableSecurityUpdates) {
+                this.filterAvailableUpdates = false;
+                this.filterAvailableSecurityUpdates = true;
+            }
             this.load();
         }));
     }
@@ -171,6 +179,8 @@ export class PackagesWindowsUpdatesComponent implements OnInit, OnDestroy, Index
     }
 
     public resetFilter() {
+        this.filterAvailableUpdates = false;
+        this.filterAvailableSecurityUpdates = false;
         this.params = getDefaultPackagesWindowsUpdatesParams();
         this.load();
     }

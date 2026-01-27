@@ -123,6 +123,17 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
                 this.params['filter[PackagesLinux.id][]'] = [].concat(linuxPackageId); // make sure we always get an array
             }
 
+            let availableUpdates = params['filter[available_updates]'];
+            if (availableUpdates) {
+                this.filterAvailableUpdates = true;
+                this.filterAvailableSecurityUpdates = false;
+            }
+            let availableSecurityUpdates = params['filter[available_security_updates]'];
+            if (availableSecurityUpdates) {
+                this.filterAvailableUpdates = false;
+                this.filterAvailableSecurityUpdates = true;
+            }
+
             this.load();
         }));
     }
@@ -173,6 +184,8 @@ export class PackagesLinuxComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public resetFilter() {
+        this.filterAvailableUpdates = false;
+        this.filterAvailableSecurityUpdates = false;
         this.params = this.getDefaultPackagesLinuxParams();
         this.load();
     }

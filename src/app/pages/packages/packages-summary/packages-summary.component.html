@@ -98,15 +98,28 @@
                         <c-row>
                             <c-col class="text-center px-0">
                                 <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
-                                {{ summary.linux.updatesAvailable }}
+                                <a *oitcPermission="['packages', 'linux']"
+                                   [routerLink]="['/', 'packages', 'linux']"
+                                   [queryParams]="{'filter[available_updates]': 1}">
+                                    {{ summary.linux.updatesAvailable }}
+                                </a>
                             </c-col>
                             <c-col class="text-center px-0">
                                 <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
-                                {{ summary.windows.updatesAvailable }}
+                                <a *oitcPermission="['packages', 'windows_updates']"
+                                   [routerLink]="['/', 'packages', 'windows_updates']"
+                                   [queryParams]="{'filter[available_updates]': 1}">
+                                    {{ summary.windows.updatesAvailable }}
+                                </a>
+
                             </c-col>
                             <c-col class="text-center px-0">
                                 <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
-                                {{ summary.macos.updatesAvailable }}
+                                <a *oitcPermission="['packages', 'macos_updates']"
+                                   [routerLink]="['/', 'packages', 'macos_updates']"
+                                   [queryParams]="{'filter[available_updates]': 1}">
+                                    {{ summary.macos.updatesAvailable }}
+                                </a>
                             </c-col>
                         </c-row>
                     </ng-template>
@@ -125,15 +138,28 @@
                         <c-row>
                             <c-col class="text-center px-0">
                                 <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
-                                {{ summary.linux.securityUpdates | localNumber }}
+                                <a *oitcPermission="['packages', 'linux']"
+                                   [routerLink]="['/', 'packages', 'linux']"
+                                   [queryParams]="{'filter[available_security_updates]': 1}">
+                                    {{ summary.linux.securityUpdates | localNumber }}
+                                </a>
                             </c-col>
                             <c-col class="text-center px-0">
                                 <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
-                                {{ summary.windows.securityUpdates | localNumber }}
+                                <a *oitcPermission="['packages', 'windows_updates']"
+                                   [routerLink]="['/', 'packages', 'windows_updates']"
+                                   [queryParams]="{'filter[available_security_updates]': 1}">
+                                    {{ summary.windows.securityUpdates | localNumber }}
+                                </a>
+
                             </c-col>
                             <c-col class="text-center px-0">
                                 <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
-                                {{ summary.macos.securityUpdates | localNumber }}
+                                <a *oitcPermission="['packages', 'macos_updates']"
+                                   [routerLink]="['/', 'packages', 'macos_updates']"
+                                   [queryParams]="{'filter[available_security_updates]': 1}">
+                                    {{ summary.macos.securityUpdates | localNumber }}
+                                </a>
                             </c-col>
                         </c-row>
                     </ng-template>
