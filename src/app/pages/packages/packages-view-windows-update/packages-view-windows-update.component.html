@@ -14,24 +14,24 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'square-binary']"></fa-icon>
-                {{ t('App Details') }}
+                <fa-icon [icon]="['fab', 'windows']"></fa-icon>
+                {{ t('Update Details') }}
             </li>
         </ol>
     </nav>
 
 
-    @if (!app) {
+    @if (!update) {
         <oitc-block-loader [height]="'25rem'"></oitc-block-loader>
     }
 
-    @if (app) {
+    @if (update) {
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>
-                    {{ t('Windows App details:') }}
+                    {{ t('Windows Update details:') }}
                     <small class="fw-300">
-                        {{ app.app.name }}
+                        {{ update.update.name }}
                     </small>
                 </h5>
                 <c-nav class="card-toolbar card-header-pills">
@@ -44,7 +44,7 @@
                         </button>
                     </c-nav-item>
                     <c-nav-item class="px-1">
-                        <button (click)="loadWindowsAppView()" cButton class="ripple" color="default" size="xs">
+                        <button (click)="loadWindowsUpdateView()" cButton class="ripple" color="default" size="xs">
                             <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
                             {{ t('Refresh') }}
                         </button>
@@ -70,10 +70,10 @@
                                 </div>
                                 <div>
                                     <div class="fs-6 fw-semibold">
-                                        {{ app.app.name }}
+                                        {{ update.update.name }}
                                     </div>
                                     <div class="fw-semibold small text-body-secondary">
-                                        {{ app.app.publisher }}
+                                        {{ update.update.description }}
                                     </div>
                                 </div>
                             </c-card-body>
@@ -110,21 +110,43 @@
                                     />
                                 </c-input-group>
                             </c-col>
-                            <c-col [xs]="12" [lg]="6" class="ui-fluid">
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'arrow-down']"></fa-icon>
-                                    </span>
-                                    <input (debouncedValue)="onFilterChange($event)"
-                                           [(ngModel)]="params['filter[WindowsAppsHosts.version]']"
-                                           [placeholder]="'Filter by installed version' | transloco"
-                                           aria-label="Install version"
-                                           cFormControl
-                                           name="'WindowsAppsHosts.version"
-                                           oitcDebounce
-                                           type="text"
-                                    />
-                                </c-input-group>
+                        </c-row>
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" lg="2">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Patch status') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="has_updates"
+                                            id="has_updates"
+                                            type="checkbox"
+                                            oitcDebounce
+                                            [(ngModel)]="filterRebootRequired"/>
+
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="has_updates">{{ t('Reboot required') }}</label>
+                                    </c-form-check>
+
+                                    <c-form-check>
+                                        <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="has_security_updates"
+                                            id="has_security_updates"
+                                            type="checkbox"
+                                            oitcDebounce
+                                            [(ngModel)]="filterAvailableSecurityUpdates"/>
+
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="has_security_updates">{{ t('Is Security Update') }}</label>
+                                    </c-form-check>
+                                </fieldset>
                             </c-col>
                         </c-row>
 
@@ -152,55 +174,70 @@
                                 {{ t('Patch status') }}
                             </td>
                         }
-                        <th mat-sort-header="WindowsAppsHosts.version">
-                            {{ t('Installed version') }}
+                        <th mat-sort-header="WindowsUpdatesHosts.is_security_update">
+                            {{ t('Security update') }}
+                        </th>
+                        <th mat-sort-header="WindowsUpdatesHosts.reboot_required">
+                            {{ t('Reboot required') }}
                         </th>
                     </thead>
                     <tbody>
-                        @for (host of app.all_host_apps; track $index) {
+                        @for (host of update.all_host_updates; track $index) {
                             <tr>
                                 <td class="word-break">
                                     @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                                        <a [routerLink]="['/', 'hosts', 'browser', host.host.id]">
-                                            {{ host.host.name }}
+                                        <a [routerLink]="['/', 'hosts', 'browser', host.Hosts.id]">
+                                            {{ host.Hosts.name }}
                                         </a>
                                     } @else {
-                                        {{ host.host.name }}
+                                        {{ host.Hosts.name }}
                                     }
                                 </td>
 
                                 @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
                                     <td>
                                         <a [routerLink]="['/', 'patchstatus', 'index']"
-                                           [queryParams]="{host_id: host.host.id}">
+                                           [queryParams]="{host_id: host.Hosts.id}">
                                             {{ t('Host Patch status') }}
                                         </a>
                                     </td>
                                 }
 
                                 <td>
-                                    <oitc-copy-to-clipboard [data]="host.version">
-                                        {{ host.version }}
-                                    </oitc-copy-to-clipboard>
+                                    @if (host.is_security_update) {
+                                        <oitc-badge-outline color="danger" class="me-1">
+                                            {{ t('Is Security Update') }}
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (host.reboot_required) {
+                                        <oitc-badge-outline color="danger" class="me-1">
+                                            <fa-icon [icon]="['fas', 'arrow-rotate-left']"
+                                                     [cTextColor]="'danger'"></fa-icon>
+                                            {{ t('Reboot required') }}
+                                        </oitc-badge-outline>
+                                    }
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
 
-                @if (app && app.all_host_apps.length === 0) {
+                @if (update && update.all_host_updates.length === 0) {
                     <oitc-no-records></oitc-no-records>
                 }
-                @if (app && app.all_host_apps) {
+                @if (update && update.all_host_updates) {
                     <c-container
                         class="mb-3 py-2"
                         [fluid]="true">
                         <c-row>
                             <c-col>
-                                @if (app) {
+                                @if (update) {
                                     <oitc-paginate-or-scroll
                                         (paginatorChange)="onPaginatorChange($event)"
-                                        [paginateOrScroll]="app"></oitc-paginate-or-scroll>
+                                        [paginateOrScroll]="update"></oitc-paginate-or-scroll>
                                 }
                             </c-col>
                         </c-row>

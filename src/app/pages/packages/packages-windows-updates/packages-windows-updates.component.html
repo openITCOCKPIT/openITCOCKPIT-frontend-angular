@@ -1,1 +1,310 @@
-<p>packages-windows-updates works!</p>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['packages', 'windows_updates']"
+                   [routerLink]="['/', 'packages', 'windows_updates']">
+                    <fa-icon [icon]="['fas', 'cubes']"></fa-icon>
+                    {{ t('Packages') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fab', 'windows']"></fa-icon>
+                {{ t('Windows Updates') }}
+            </li>
+        </ol>
+    </nav>
+
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Windows Updates ') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <oitc-packages-summary></oitc-packages-summary>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[WindowsUpdates.name]']"
+                                       [placeholder]="'Filter by update name' | transloco"
+                                       aria-label="Filter by Update namee"
+                                       cFormControl
+                                       name="'WindowsUpdates.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[WindowsUpdates.description]']"
+                                       [placeholder]="'Filter by update description' | transloco"
+                                       aria-label="Update update"
+                                       cFormControl
+                                       name="'WindowsUpdates.description"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[WindowsUpdates.kbarticle_ids]']"
+                                       [placeholder]="'Filter by KB-ID' | transloco"
+                                       aria-label="Filter windows kbarticle id"
+                                       cFormControl
+                                       name="'WindowsUpdates.kbarticle_ids"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[WindowsUpdates.update_id]']"
+                                       [placeholder]="'Filter by Update ID' | transloco"
+                                       aria-label="Update update ID"
+                                       cFormControl
+                                       name="'WindowsUpdates.update_id"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" lg="2">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Update status') }}
+                                </h5>
+
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="has_updates"
+                                        id="has_updates"
+                                        type="checkbox"
+                                        oitcDebounce
+                                        [(ngModel)]="filterAvailableUpdates"/>
+
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="has_updates">{{ t('Updates available') }}</label>
+                                </c-form-check>
+
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="has_security_updates"
+                                        id="has_security_updates"
+                                        type="checkbox"
+                                        oitcDebounce
+                                        [(ngModel)]="filterAvailableSecurityUpdates"/>
+
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="has_security_updates">{{ t('Security updates available') }}</label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            <oitc-packages-os-tabs [isActive]="2"></oitc-packages-os-tabs>
+
+            @if (!updates) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+
+            @if (updates) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="WindowsUpdates.name">
+                            {{ t('Update') }}
+                        </th>
+                        <th scope="col" mat-sort-header="WindowsUpdates.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th>
+                            {{ t('KB-IDs') }}
+                        </th>
+                        <th scope="col" mat-sort-header="WindowsUpdates.update_id">
+                            {{ t('Update ID') }}
+                        </th>
+                        <th>{{ t('Installed on') }}</th>
+                        <th>{{ t('Status') }}</th>
+                    </thead>
+                    <tbody>
+
+                        @for (update of updates.all_windows_updates; track $index) {
+                            <tr>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'view_windows_update'])|async) {
+                                        <a [routerLink]="['/', 'packages', 'view_windows_update', update.id]">
+                                            {{ update.name }}
+                                        </a>
+                                    } @else {
+                                        {{ update.name }}
+                                    }
+                                </td>
+                                <td>
+                                    {{ update.description }}
+                                </td>
+                                <td>
+                                    @for (kbId of update.kbarticle_ids; track $index) {
+                                        <oitc-copy-to-clipboard [data]="kbId">
+                                            KB{{ kbId }}
+                                        </oitc-copy-to-clipboard>
+                                    }
+                                </td>
+                                <td>
+                                    <oitc-copy-to-clipboard [data]="update.update_id">
+                                        {{ update.update_id }}
+                                    </oitc-copy-to-clipboard>
+                                </td>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                        <a [routerLink]="['/', 'patchstatus', 'index']"
+                                           [queryParams]="{host_id: update.all_hosts}">
+                                            {{ update.all_hosts.length }}
+                                        </a>
+                                    } @else {
+                                        {{ update.all_hosts.length }}
+                                    }
+                                </td>
+                                <td>
+                                    @if (update.hosts_needs_update.length > 0) {
+                                        @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                            <a [routerLink]="['/', 'patchstatus', 'index']"
+                                               [queryParams]="{host_id: update.hosts_needs_update}">
+                                                <oitc-badge-outline color="warning" class="me-1">
+                                                    <b>{{ update.hosts_needs_update.length }}</b>
+                                                    {{ t('Update Available') }}
+                                                </oitc-badge-outline>
+                                            </a>
+                                        } @else {
+                                            <oitc-badge-outline color="warning" class="me-1">
+                                                <b>{{ update.hosts_needs_update.length }}</b>
+                                                {{ t('Update Available') }}
+                                            </oitc-badge-outline>
+                                        }
+                                    }
+
+                                    @if (update.hosts_needs_security_update.length > 0) {
+                                        @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                            <a [routerLink]="['/', 'patchstatus', 'index']"
+                                               [queryParams]="{host_id: update.hosts_needs_update}">
+                                                <oitc-badge-outline color="danger" class="me-1">
+                                                    <b>{{ update.hosts_needs_security_update.length }}</b>
+                                                    {{ t('Security Update Available') }}
+                                                </oitc-badge-outline>
+                                            </a>
+                                        } @else {
+                                            <oitc-badge-outline color="danger" class="me-1">
+                                                <b>{{ update.hosts_needs_security_update.length }}</b>
+                                                {{ t('Security Update Available') }}
+                                            </oitc-badge-outline>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @if (updates && updates.all_windows_updates.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (updates && updates.all_windows_updates) {
+                <c-container
+                    class="mb-3 py-2"
+                    [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            @if (updates) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="updates"></oitc-paginate-or-scroll>
+                            }
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
+
+        </c-card-body>
+    </c-card>
+</ng-container>

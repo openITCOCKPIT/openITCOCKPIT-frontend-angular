@@ -794,6 +794,9 @@ const coreRoutes: Routes = [{
     path: 'packages/windows_updates',
     loadComponent: () => import('./pages/packages/packages-windows-updates/packages-windows-updates.component').then(m => m.PackagesWindowsUpdatesComponent)
 }, {
+    path: 'packages/view_windows_update/:id',
+    loadComponent: () => import('./pages/packages/packages-view-windows-update/packages-view-windows-update.component').then(m => m.PackagesViewWindowsUpdateComponent)
+}, {
     path: 'packages/windows',
     loadComponent: () => import('./pages/packages/packages-windows/packages-windows.component').then(m => m.PackagesWindowsComponent)
 }, {
@@ -802,6 +805,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'packages/macos_updates',
     loadComponent: () => import('./pages/packages/packages-macos-updates/packages-macos-updates.component').then(m => m.PackagesMacosUpdatesComponent)
+}, {
+    path: 'packages/view_macos_update/:id',
+    loadComponent: () => import('./pages/packages/packages-view-macos-update/packages-view-macos-update.component').then(m => m.PackagesViewMacosUpdateComponent)
 }, {
     path: 'packages/macos',
     loadComponent: () => import('./pages/packages/packages-macos/packages-macos.component').then(m => m.PackagesMacosComponent)

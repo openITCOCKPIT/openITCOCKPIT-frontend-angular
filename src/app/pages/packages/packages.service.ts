@@ -13,9 +13,13 @@ import {
     PackagesViewLinuxRoot,
     PackagesViewMacosAppRoot,
     PackagesViewWindowAppRoot,
+    PackagesViewWindowsUpdateParams,
+    PackagesViewWindowsUpdateRoot,
     PackagesWindowsAppParams,
     PackagesWindowsAppsParams,
-    PackagesWindowsAppsRoot
+    PackagesWindowsAppsRoot,
+    PackagesWindowsUpdatesParams,
+    PackagesWindowsUpdatesRoot
 } from './packages.interface';
 
 @Injectable({
@@ -96,6 +100,28 @@ export class PackagesService {
     public getViewMacosApp(id: number, params: PackagesMacosAppParams): Observable<PackagesViewMacosAppRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<PackagesViewMacosAppRoot>(`${proxyPath}/packages/view_macos/${id}.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getWindowsUpdates(params: PackagesWindowsUpdatesParams): Observable<PackagesWindowsUpdatesRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<PackagesWindowsUpdatesRoot>(`${proxyPath}/packages/windows_updates.json`, {
+            params: params as {} // cast PackagesLinuxParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getViewWindowsUpdate(id: number, params: PackagesViewWindowsUpdateParams): Observable<PackagesViewWindowsUpdateRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<PackagesViewWindowsUpdateRoot>(`${proxyPath}/packages/view_windows_update/${id}.json`, {
             params: params as {}
         }).pipe(
             map(data => {

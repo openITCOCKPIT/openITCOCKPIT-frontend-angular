@@ -303,3 +303,118 @@ export function getDefaultPackagesMacosAppParams(): PackagesMacosAppParams {
         'filter[MacosAppsHosts.version]': '',
     }
 }
+
+/********************************
+ *    windows_updates action    *
+ ********************************/
+export interface PackagesWindowsUpdatesParams {
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[WindowsUpdates.id][]': number[],
+    'filter[WindowsUpdates.name]': string,
+    'filter[WindowsUpdates.description]': string,
+    'filter[WindowsUpdates.kbarticle_ids]': string,
+    'filter[WindowsUpdates.update_id]': string,
+    'filter[available_updates]': number | string
+    'filter[available_security_updates]': number | string
+}
+
+export function getDefaultPackagesWindowsUpdatesParams(): PackagesWindowsUpdatesParams {
+    return {
+        scroll: true,
+        sort: 'WindowsUpdates.name',
+        page: 1,
+        direction: 'asc',
+        'filter[WindowsUpdates.id][]': [],
+        'filter[WindowsUpdates.name]': '',
+        'filter[WindowsUpdates.description]': '',
+        'filter[WindowsUpdates.kbarticle_ids]': '',
+        'filter[WindowsUpdates.update_id]': '',
+        'filter[available_updates]': '',
+        'filter[available_security_updates]': ''
+    }
+}
+
+export interface PackagesWindowsUpdatesRoot extends PaginateOrScroll {
+    all_windows_updates: AllWindowsUpdate[]
+    _csrfToken: string
+}
+
+export interface AllWindowsUpdate {
+    id: number
+    name: string
+    description: string
+    kbarticle_ids: string[]
+    update_id: string
+    created: string
+    modified: string
+    available_updates: number
+    available_security_updates: number
+    all_hosts: number[]
+    hosts_needs_update: number[]
+    hosts_needs_security_update: number[]
+}
+
+/************************************
+ *    view_windows_update action    *
+ ************************************/
+
+export interface PackagesViewWindowsUpdateParams {
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string
+    'filter[WindowsUpdatesHosts.is_security_update]': string | number
+    'filter[WindowsUpdatesHosts.reboot_required]': string | number
+}
+
+export function getDefaultPackagesViewWindowsUpdateParams(): PackagesViewWindowsUpdateParams {
+    return {
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': '',
+        'filter[WindowsUpdatesHosts.is_security_update]': '',
+        'filter[WindowsUpdatesHosts.reboot_required]': '',
+    }
+}
+
+
+export interface PackagesViewWindowsUpdateRoot extends PaginateOrScroll {
+    all_host_updates: AllWindowsHostUpdate[]
+    update: PackagesWindowsUpdate
+    _csrfToken: string
+}
+
+export interface AllWindowsHostUpdate {
+    id: number
+    windows_update_id: number
+    host_id: number
+    reboot_required: boolean
+    is_security_update: boolean
+    created: string
+    modified: string
+    windows_update: {
+        name: string
+        description: string
+        kbarticle_ids: string[]
+    }
+    Hosts: {
+        id: number
+        name: string
+    }
+}
+
+export interface PackagesWindowsUpdate {
+    id: number
+    name: string
+    description: string
+    kbarticle_ids: string[],
+    update_id: string
+    created: string
+    modified: string
+}
