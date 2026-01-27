@@ -119,6 +119,11 @@ export class PackagesMacosUpdatesComponent implements OnInit, OnDestroy, IndexPa
                 this.params['filter[MacosUpdates.id][]'] = [].concat(updateId); // make sure we always get an array
             }
 
+            let availableUpdates = params['filter[available_updates]'];
+            if (availableUpdates) {
+                this.filterAvailableUpdates = true;
+            }
+
             this.load();
         }));
     }
@@ -165,6 +170,7 @@ export class PackagesMacosUpdatesComponent implements OnInit, OnDestroy, IndexPa
     }
 
     public resetFilter() {
+        this.filterAvailableUpdates = false;
         this.params = getDefaultPackagesMacosUpdatesParams();
         this.filterAvailableUpdates = false;
         this.load();

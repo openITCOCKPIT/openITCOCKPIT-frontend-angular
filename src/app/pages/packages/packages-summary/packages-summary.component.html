@@ -157,7 +157,7 @@
                                 <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
                                 <a *oitcPermission="['packages', 'macos_updates']"
                                    [routerLink]="['/', 'packages', 'macos_updates']"
-                                   [queryParams]="{'filter[available_security_updates]': 1}">
+                                   [queryParams]="{'filter[available_updates]': 1}">
                                     {{ summary.macos.securityUpdates | localNumber }}
                                 </a>
                             </c-col>
