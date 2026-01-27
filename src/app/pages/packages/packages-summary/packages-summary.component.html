@@ -60,15 +60,25 @@
                         <c-row>
                             <c-col class="text-center px-0">
                                 <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
-                                {{ summary.linux.totalPackages }}
+                                <a *oitcPermission="['packages', 'linux']"
+                                   [routerLink]="['/', 'packages', 'linux']">
+                                    {{ summary.linux.totalPackages }}
+                                </a>
+
                             </c-col>
                             <c-col class="text-center px-0">
                                 <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
-                                {{ summary.windows.totalPackages }}
+                                <a *oitcPermission="['packages', 'windows']"
+                                   [routerLink]="['/', 'packages', 'windows']">
+                                    {{ summary.windows.totalPackages }}
+                                </a>
                             </c-col>
                             <c-col class="text-center px-0">
                                 <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
-                                {{ summary.macos.totalPackages }}
+                                <a *oitcPermission="['packages', 'macos']"
+                                   [routerLink]="['/', 'packages', 'macos']">
+                                    {{ summary.macos.totalPackages }}
+                                </a>
                             </c-col>
                         </c-row>
                     </ng-template>

@@ -26,6 +26,7 @@ import { Subscription } from 'rxjs';
 import { PackagesService } from '../packages.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { AgentconnectorOperatingSystems } from '../../agentconnector/agentconnector.enums';
+import { PermissionDirective } from '../../../permissions/permission.directive';
 
 @Component({
     selector: 'oitc-packages-summary',
@@ -41,7 +42,8 @@ import { AgentconnectorOperatingSystems } from '../../agentconnector/agentconnec
         WidgetStatFComponent,
         TranslocoDirective,
         RouterLink,
-        TextColorDirective
+        TextColorDirective,
+        PermissionDirective
     ],
     templateUrl: './packages-summary.component.html',
     styleUrl: './packages-summary.component.css',
