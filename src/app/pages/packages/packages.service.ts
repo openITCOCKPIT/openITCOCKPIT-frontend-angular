@@ -8,10 +8,14 @@ import {
     PackagesMacosAppParams,
     PackagesMacosAppsParams,
     PackagesMacosAppsRoot,
+    PackagesMacosUpdatesParams,
+    PackagesMacosUpdatesRoot,
     PackagesTotalSummary,
     PackagesViewLinuxParams,
     PackagesViewLinuxRoot,
     PackagesViewMacosAppRoot,
+    PackagesViewMacosUpdateParams,
+    PackagesViewMacosUpdateRoot,
     PackagesViewWindowAppRoot,
     PackagesViewWindowsUpdateParams,
     PackagesViewWindowsUpdateRoot,
@@ -122,6 +126,28 @@ export class PackagesService {
     public getViewWindowsUpdate(id: number, params: PackagesViewWindowsUpdateParams): Observable<PackagesViewWindowsUpdateRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<PackagesViewWindowsUpdateRoot>(`${proxyPath}/packages/view_windows_update/${id}.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getMacosUpdates(params: PackagesMacosUpdatesParams): Observable<PackagesMacosUpdatesRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<PackagesMacosUpdatesRoot>(`${proxyPath}/packages/macos_updates.json`, {
+            params: params as {} // cast PackagesLinuxParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getViewMacosUpdate(id: number, params: PackagesViewMacosUpdateParams): Observable<PackagesViewMacosUpdateRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<PackagesViewMacosUpdateRoot>(`${proxyPath}/packages/view_macos_update/${id}.json`, {
             params: params as {}
         }).pipe(
             map(data => {

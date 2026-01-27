@@ -1,1 +1,234 @@
-<p>packages-macos-updates works!</p>
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['packages', 'macos_updates']"
+                   [routerLink]="['/', 'packages', 'macos_updates']">
+                    <fa-icon [icon]="['fas', 'cubes']"></fa-icon>
+                    {{ t('Packages') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fab', 'apple']"></fa-icon>
+                {{ t('macOS Updates') }}
+            </li>
+        </ol>
+    </nav>
+
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('macOS Updates ') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <oitc-packages-summary [os_family]="'macos'"></oitc-packages-summary>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[MacosUpdates.name]']"
+                                       [placeholder]="'Filter by update name' | transloco"
+                                       aria-label="Filter by Update namee"
+                                       cFormControl
+                                       name="'MacosUpdates.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[MacosUpdates.description]']"
+                                       [placeholder]="'Filter by update description' | transloco"
+                                       aria-label="Update update"
+                                       cFormControl
+                                       name="'MacosUpdates.description"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" lg="2">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Update status') }}
+                                </h5>
+
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="has_updates"
+                                        id="has_updates"
+                                        type="checkbox"
+                                        oitcDebounce
+                                        [(ngModel)]="filterAvailableUpdates"/>
+
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="has_updates">{{ t('Updates available') }}</label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            <oitc-packages-os-tabs [isActive]="4"></oitc-packages-os-tabs>
+
+            @if (!updates) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+
+            @if (updates) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="MacosUpdates.name">
+                            {{ t('Update') }}
+                        </th>
+                        <th scope="col" mat-sort-header="MacosUpdates.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="MacosUpdates.version">
+                            {{ t('Version') }}
+                        </th>
+                        <th>{{ t('Available on') }}</th>
+                        <th>{{ t('Status') }}</th>
+                    </thead>
+                    <tbody>
+
+                        @for (update of updates.all_macos_updates; track $index) {
+                            <tr>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'view_macos_update'])|async) {
+                                        <a [routerLink]="['/', 'packages', 'view_macos_update', update.id]">
+                                            {{ update.name }}
+                                        </a>
+                                    } @else {
+                                        {{ update.name }}
+                                    }
+                                </td>
+                                <td>
+                                    {{ update.description }}
+                                </td>
+                                <td>
+                                    <oitc-copy-to-clipboard [data]="update.version">
+                                        {{ update.version }}
+                                    </oitc-copy-to-clipboard>
+                                </td>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                        <a [routerLink]="['/', 'patchstatus', 'index']"
+                                           [queryParams]="{host_id: update.all_hosts}">
+                                            {{ update.all_hosts.length }}
+                                        </a>
+                                    } @else {
+                                        {{ update.all_hosts.length }}
+                                    }
+                                </td>
+                                <td>
+                                    @if (update.hosts_needs_update.length > 0) {
+                                        @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                            <a [routerLink]="['/', 'patchstatus', 'index']"
+                                               [queryParams]="{host_id: update.hosts_needs_update}">
+                                                <oitc-badge-outline color="danger" class="me-1">
+                                                    <b>{{ update.hosts_needs_update.length }}</b>
+                                                    {{ t('Security Update Available') }}
+                                                </oitc-badge-outline>
+                                            </a>
+                                        } @else {
+                                            <oitc-badge-outline color="danger" class="me-1">
+                                                <b>{{ update.hosts_needs_update.length }}</b>
+                                                {{ t('Security Update Available') }}
+                                            </oitc-badge-outline>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @if (updates && updates.all_macos_updates.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (updates && updates.all_macos_updates) {
+                <c-container
+                    class="mb-3 py-2"
+                    [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            @if (updates) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="updates"></oitc-paginate-or-scroll>
+                            }
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
+
+        </c-card-body>
+    </c-card>
+</ng-container>

@@ -418,3 +418,106 @@ export interface PackagesWindowsUpdate {
     created: string
     modified: string
 }
+
+
+/******************************
+ *    macos_updates action    *
+ ******************************/
+export interface PackagesMacosUpdatesParams {
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[MacosUpdates.id][]': number[],
+    'filter[MacosUpdates.name]': string,
+    'filter[MacosUpdates.description]': string,
+    'filter[MacosUpdates.version]': string,
+    'filter[available_updates]': number | string
+}
+
+export function getDefaultPackagesMacosUpdatesParams(): PackagesMacosUpdatesParams {
+    return {
+        scroll: true,
+        sort: 'MacosUpdates.name',
+        page: 1,
+        direction: 'asc',
+        'filter[MacosUpdates.id][]': [],
+        'filter[MacosUpdates.name]': '',
+        'filter[MacosUpdates.description]': '',
+        'filter[MacosUpdates.version]': '',
+        'filter[available_updates]': '',
+    }
+}
+
+export interface PackagesMacosUpdatesRoot extends PaginateOrScroll {
+    all_macos_updates: AllMacosUpdate[]
+    _csrfToken: string
+}
+
+export interface AllMacosUpdate {
+    id: number
+    name: string
+    description: string
+    version: string
+    created: string
+    modified: string
+    available_updates: number
+    all_hosts: number[]
+    hosts_needs_update: number[]
+}
+
+
+/**********************************
+ *    view_macos_update action    *
+ **********************************/
+
+export interface PackagesViewMacosUpdateParams {
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[Hosts.name]': string
+}
+
+export function getDefaultPackagesViewMacosUpdateParams(): PackagesViewMacosUpdateParams {
+    return {
+        scroll: true,
+        sort: 'Hosts.name',
+        page: 1,
+        direction: 'asc',
+        'filter[Hosts.name]': ''
+    }
+}
+
+
+export interface PackagesViewMacosUpdateRoot extends PaginateOrScroll {
+    all_host_updates: AllMacosHostUpdate[]
+    update: PackagesMacosUpdate
+    _csrfToken: string
+}
+
+export interface AllMacosHostUpdate {
+    id: number
+    macos_update_id: number
+    host_id: number
+    created: string
+    modified: string
+    macos_update: {
+        name: string
+        description: string
+        version: string
+    }
+    Hosts: {
+        id: number
+        name: string
+    }
+}
+
+export interface PackagesMacosUpdate {
+    id: number
+    name: string
+    description: string
+    version: string
+    created: string
+    modified: string
+}
