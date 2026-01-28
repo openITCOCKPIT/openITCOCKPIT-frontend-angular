@@ -121,6 +121,15 @@ import {
     IsarFlowHostBrowserTabComponent
 } from '../../../modules/isarflow_module/components/isar-flow-host-browser-tab/isar-flow-host-browser-tab.component';
 import { TitleService } from '../../../services/title.service';
+import {
+    BrowserSoftwareLinuxComponent
+} from './browser-software/browser-software-linux/browser-software-linux.component';
+import {
+    BrowserSoftwareWindowsComponent
+} from './browser-software/browser-software-windows/browser-software-windows.component';
+import {
+    BrowserSoftwareMacosComponent
+} from './browser-software/browser-software-macos/browser-software-macos.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -181,7 +190,10 @@ import { TitleService } from '../../../services/title.service';
         SlaHostInformationElementComponent,
         IsarFlowHostBrowserTabComponent,
         TextColorDirective,
-        BgColorDirective
+        BgColorDirective,
+        BrowserSoftwareLinuxComponent,
+        BrowserSoftwareWindowsComponent,
+        BrowserSoftwareMacosComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
