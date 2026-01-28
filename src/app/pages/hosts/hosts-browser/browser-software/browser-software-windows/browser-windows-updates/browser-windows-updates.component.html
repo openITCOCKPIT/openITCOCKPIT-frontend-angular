@@ -176,8 +176,9 @@
                         @for (update of updates.all_windows_updates; track $index) {
                             <tr>
                                 <td>
-                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'view_windows_update'])|async) {
-                                        <a [routerLink]="['/', 'packages', 'view_windows_update', update.windows_update_id]">
+                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'windows_updates'])|async) {
+                                        <a [routerLink]="['/', 'packages', 'windows_updates']"
+                                           [queryParams]="{ uid: update.windows_update_id }">
                                             {{ update.windows_update.name }}
                                         </a>
                                     } @else {
