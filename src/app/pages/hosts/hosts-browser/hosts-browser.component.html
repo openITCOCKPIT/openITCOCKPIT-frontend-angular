@@ -1283,7 +1283,7 @@
                                                 <fa-icon [icon]="['fas', 'info-circle']" [cTextColor]="'info'"
                                                          [size]="'2x'"></fa-icon>
                                             </div>
-                                            <table>
+                                            <table cTable>
                                                 <tr>
                                                     <th> {{ t('Uptime') }}</th>
                                                     <td class="text-end"> {{ softwareInformation.packagesHostDetails.uptime_in_words }}</td>
@@ -1317,7 +1317,7 @@
                                                 {{ softwareInformation.packagesHostDetails.total }}
                                             </div>
                                             <div>
-                                                @if (softwareInformation.packagesHostDetails.os_family === 'linux') {
+                                                @if (softwareInformation.packagesHostDetails.os_type === 'linux') {
                                                     {{ t('Installed packages') }}
                                                 } @else {
                                                     {{ t('Installed apps') }}
@@ -1362,7 +1362,7 @@
                                 </c-col>
                             </c-row>
 
-                            @switch (softwareInformation.packagesHostDetails.os_family) {
+                            @switch (softwareInformation.packagesHostDetails.os_type) {
                                 @case ('linux') {
                                     <oitc-browser-software-linux [hostId]="Number(result.mergedHost.id)">
                                     </oitc-browser-software-linux>

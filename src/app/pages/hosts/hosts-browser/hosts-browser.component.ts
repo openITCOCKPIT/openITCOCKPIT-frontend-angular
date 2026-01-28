@@ -14,7 +14,6 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import {
     AlertComponent,
     BadgeComponent,
-    BgColorDirective,
     BorderDirective,
     ButtonGroupComponent,
     ButtonToolbarComponent,
@@ -191,7 +190,6 @@ import { PatchstatusIconComponent } from '../../patchstatus/patchstatus-icon/pat
         SlaHostInformationElementComponent,
         IsarFlowHostBrowserTabComponent,
         TextColorDirective,
-        BgColorDirective,
         BrowserSoftwareLinuxComponent,
         BrowserSoftwareWindowsComponent,
         BrowserSoftwareMacosComponent,
