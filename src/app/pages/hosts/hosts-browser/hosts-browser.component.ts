@@ -14,6 +14,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import {
     AlertComponent,
     BadgeComponent,
+    BgColorDirective,
     BorderDirective,
     ButtonGroupComponent,
     ButtonToolbarComponent,
@@ -179,7 +180,8 @@ import { TitleService } from '../../../services/title.service';
         AsyncPipe,
         SlaHostInformationElementComponent,
         IsarFlowHostBrowserTabComponent,
-        TextColorDirective
+        TextColorDirective,
+        BgColorDirective
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
