@@ -1,1 +1,171 @@
-<p>browser-macos-apps works!</p>
+<ng-container *transloco="let t">
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Install macOS Apps') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[MacosApps.name]']"
+                                       [placeholder]="'Filter by application name' | transloco"
+                                       aria-label="MacOS app name"
+                                       cFormControl
+                                       name="'MacosApps.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[MacosApps.description]']"
+                                       [placeholder]="'Filter by app description' | transloco"
+                                       aria-label="App description"
+                                       cFormControl
+                                       name="'MacosApps.description"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[MacosAppsHosts.version]']"
+                                       [placeholder]="'Filter by version' | transloco"
+                                       aria-label="Filter version"
+                                       cFormControl
+                                       name="'MacosAppsHosts.version"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            @if (!apps) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+
+            @if (apps) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="MacosApps.name">
+                            {{ t('Application name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="MacosApps.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="MacosAppsHosts.version">
+                            {{ t('Installed version') }}
+                        </th>
+                    </thead>
+                    <tbody>
+
+                        @for (app of apps.all_macos_apps; track $index) {
+                            <tr>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'macos'])|async) {
+                                        <a [routerLink]="['/', 'packages', 'macos']"
+                                           [queryParams]="{ id: app.macos_app_id }">
+                                            {{ app.macos_app.name }}
+                                        </a>
+                                    } @else {
+                                        {{ app.macos_app.name }}
+                                    }
+                                </td>
+                                <td>
+                                    {{ app.macos_app.description }}
+                                </td>
+                                <td>
+                                    {{ app.version }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @if (apps && apps.all_macos_apps.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (apps && apps.all_macos_apps) {
+                <c-container
+                    class="mb-3 py-2"
+                    [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            @if (apps) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="apps"></oitc-paginate-or-scroll>
+                            }
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
+
+        </c-card-body>
+    </c-card>
+</ng-container>

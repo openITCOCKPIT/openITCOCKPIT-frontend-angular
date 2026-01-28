@@ -185,3 +185,52 @@ export function getDefaultBrowserSoftwareMacosUpdateParams(): BrowserSoftwareMac
         'filter[MacosUpdates.version]': ''
     }
 }
+
+export interface BrowserSoftwareMacosAppHostRoot extends PaginateOrScroll {
+    all_macos_apps: BrowserSoftwareMacosHostAllMacosApp[]
+    _csrfToken: string
+}
+
+export interface BrowserSoftwareMacosHostAllMacosApp {
+    id: number
+    macos_app_id: number
+    host_id: number
+    version: string
+    created: string
+    modified: string
+    macos_app: {
+        id: number
+        name: string
+        description: string
+        created: string
+        modified: string
+    }
+    host: {
+        id: number
+        name: string
+        uuid: string
+        container_id: number
+    }
+}
+
+export interface BrowserSoftwareMacosAppParams {
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[MacosApps.name]': string
+    'filter[MacosApps.description]': string
+    'filter[MacosAppsHosts.version]': string
+}
+
+export function getDefaultBrowserSoftwareMacosAppParams(): BrowserSoftwareMacosAppParams {
+    return {
+        scroll: true,
+        sort: 'MacosApps.name',
+        page: 1,
+        direction: 'asc',
+        'filter[MacosApps.name]': '',
+        'filter[MacosApps.description]': '',
+        'filter[MacosAppsHosts.version]': ''
+    }
+}
