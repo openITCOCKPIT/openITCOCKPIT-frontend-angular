@@ -141,3 +141,47 @@ export function getDefaultBrowserSoftwareWindowsAppParams(): BrowserSoftwareWind
         'filter[WindowsAppsHosts.version]': ''
     }
 }
+
+export interface BrowserSoftwareMacosUpdateHostRoot extends PaginateOrScroll {
+    all_macos_updates: BrowserSoftwareMacosHostAllMacosUpdate[]
+    _csrfToken: string
+}
+
+export interface BrowserSoftwareMacosHostAllMacosUpdate {
+    id: number
+    macos_update_id: number
+    host_id: number
+    created: string
+    modified: string
+    macos_update: {
+        name: string
+        description: string
+        version: string
+    }
+    Hosts: {
+        id: number
+        name: string
+    }
+}
+
+export interface BrowserSoftwareMacosUpdateParams {
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[MacosUpdates.name]': string
+    'filter[MacosUpdates.description]': string
+    'filter[MacosUpdates.version]': string
+}
+
+export function getDefaultBrowserSoftwareMacosUpdateParams(): BrowserSoftwareMacosUpdateParams {
+    return {
+        scroll: true,
+        sort: 'MacosUpdates.name',
+        page: 1,
+        direction: 'asc',
+        'filter[MacosUpdates.name]': '',
+        'filter[MacosUpdates.description]': '',
+        'filter[MacosUpdates.version]': ''
+    }
+}

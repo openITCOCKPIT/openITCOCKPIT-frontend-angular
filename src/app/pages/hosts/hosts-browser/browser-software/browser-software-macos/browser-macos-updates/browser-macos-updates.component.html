@@ -1,0 +1,172 @@
+<ng-container *transloco="let t">
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Available macOS Updates') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[MacosUpdates.name]']"
+                                       [placeholder]="'Filter by update name' | transloco"
+                                       aria-label="MacOS update name"
+                                       cFormControl
+                                       name="'MacosUpdates.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[MacosUpdates.description]']"
+                                       [placeholder]="'Filter by update description' | transloco"
+                                       aria-label="MacOS update description"
+                                       cFormControl
+                                       name="'MacosUpdates.description"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[MacosUpdates.version]']"
+                                       [placeholder]="'Filter by version' | transloco"
+                                       aria-label="Filter by version"
+                                       cFormControl
+                                       name="'MacosUpdates.version"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            @if (!updates) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+
+            @if (updates) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="MacosUpdates.name">
+                            {{ t('Update') }}
+                        </th>
+                        <th scope="col" mat-sort-header="MacosUpdates.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="MacosUpdates.version">
+                            {{ t('Version') }}
+                        </th>
+                    </thead>
+                    <tbody>
+
+                        @for (update of updates.all_macos_updates; track $index) {
+                            <tr>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'view_macos_update'])|async) {
+                                        <a [routerLink]="['/', 'packages', 'view_macos_update', update.macos_update_id]">
+                                            {{ update.macos_update.name }}
+                                        </a>
+                                    } @else {
+                                        {{ update.macos_update.name }}
+                                    }
+                                </td>
+                                <td>
+                                    {{ update.macos_update.description }}
+                                </td>
+                                <td>
+                                    <oitc-copy-to-clipboard [data]="update.macos_update.version">
+                                        {{ update.macos_update.version }}
+                                    </oitc-copy-to-clipboard>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @if (updates && updates.all_macos_updates.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (updates && updates.all_macos_updates) {
+                <c-container
+                    class="mb-3 py-2"
+                    [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            @if (updates) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="updates"></oitc-paginate-or-scroll>
+                            }
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
+
+        </c-card-body>
+    </c-card>
+</ng-container>
