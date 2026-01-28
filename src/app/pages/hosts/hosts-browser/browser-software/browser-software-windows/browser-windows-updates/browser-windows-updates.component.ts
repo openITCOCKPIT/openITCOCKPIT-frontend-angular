@@ -8,7 +8,7 @@ import {
     InputSignal
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
     BrowserSoftwareLinuxHostRoot,
     BrowserSoftwareLinuxParams,
@@ -84,7 +84,8 @@ import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-dir
         TranslocoDirective,
         TranslocoPipe,
         TrueFalseDirective,
-        XsButtonDirective
+        XsButtonDirective,
+        RouterLink
     ],
     templateUrl: './browser-windows-updates.component.html',
     styleUrl: './browser-windows-updates.component.css',
