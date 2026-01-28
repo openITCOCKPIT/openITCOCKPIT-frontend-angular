@@ -1253,23 +1253,7 @@
                     </div>
                 }
                 <!-- IsarFlow Module end -->
-                <!-- SLA Module start -->
-                @if (selectedTab == HostBrowserTabs.SLA) {
-                    <div>
-                        @if (( PermissionsService.hasModuleObservable('SLAModule')|async )
-                        && ( this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'slaHostInformation']) | async )) {
-                            <oitc-sla-host-information-element
-                                [hostId]="result.mergedHost.id"></oitc-sla-host-information-element>
-                        } @else {
-                            <label class="text-danger">
-                                {{ t('No permissions') }}
-                            </label>
-                        }
-                    </div>
-                }
-                <!-- SLA Module end -->
                 <!-- Software inventory start -->
-
                 @if (selectedTab == HostBrowserTabs.SoftwareInventory) {
                     @if (this.PermissionsService.hasPermissionObservable(['packages', 'index']) | async) {
                         <div>
@@ -1373,6 +1357,21 @@
                 }
 
                 <!-- Software inventory end -->
+                <!-- SLA Module start -->
+                @if (selectedTab == HostBrowserTabs.SLA) {
+                    <div>
+                        @if (( PermissionsService.hasModuleObservable('SLAModule')|async )
+                        && ( this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'slaHostInformation']) | async )) {
+                            <oitc-sla-host-information-element
+                                [hostId]="result.mergedHost.id"></oitc-sla-host-information-element>
+                        } @else {
+                            <label class="text-danger">
+                                {{ t('No permissions') }}
+                            </label>
+                        }
+                    </div>
+                }
+                <!-- SLA Module end -->
             </c-card-body>
         </c-card>
     }
