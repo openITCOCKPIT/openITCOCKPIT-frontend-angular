@@ -126,8 +126,9 @@
                         @for (app of apps.all_windows_apps; track $index) {
                             <tr>
                                 <td>
-                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'view_windows'])|async) {
-                                        <a [routerLink]="['/', 'packages', 'view_windows', app.windows_app.id]">
+                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'windows'])|async) {
+                                        <a [routerLink]="['/', 'packages', 'windows']"
+                                           [queryParams]="{ id: app.windows_app.id }">
                                             {{ app.windows_app.name }}
                                         </a>
                                     } @else {
