@@ -6,8 +6,7 @@ import {
     inject,
     input,
     InputSignal,
-    OnDestroy,
-    OnInit
+    OnDestroy
 } from '@angular/core';
 import { IndexPage } from '../../../../../pages.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -94,7 +93,7 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
     styleUrl: './browser-software-linux.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BrowserSoftwareLinuxComponent implements OnInit, OnDestroy, IndexPage {
+export class BrowserSoftwareLinuxComponent implements OnDestroy, IndexPage {
 
     public hostId: InputSignal<number> = input<number>(0);
 
@@ -117,10 +116,6 @@ export class BrowserSoftwareLinuxComponent implements OnInit, OnDestroy, IndexPa
                 this.load();
             }
         });
-    }
-
-    public ngOnInit(): void {
-
     }
 
     public load(): void {

@@ -5,14 +5,15 @@ import {
     effect,
     inject,
     input,
-    InputSignal
+    InputSignal,
+    OnDestroy
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
-    BrowserSoftwareLinuxHostRoot,
-    BrowserSoftwareLinuxParams,
-    getDefaultBrowserSoftwareLinuxParams
+    BrowserSoftwareWindowsUpdateHostRoot,
+    BrowserSoftwareWindowsUpdateParams,
+    getDefaultBrowserSoftwareWindowsUpdateParams
 } from '../../browser-software.interface';
 import { PaginatorChangeEvent } from '../../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -50,6 +51,10 @@ import { TableLoaderComponent } from '../../../../../../layouts/primeng/loading/
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { update } from 'lodash';
+import {
+    CopyToClipboardComponent
+} from '../../../../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 
 @Component({
     selector: 'oitc-browser-windows-updates',
@@ -84,13 +89,15 @@ import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-dir
         TranslocoDirective,
         TranslocoPipe,
         TrueFalseDirective,
-        XsButtonDirective
+        XsButtonDirective,
+        RouterLink,
+        CopyToClipboardComponent
     ],
     templateUrl: './browser-windows-updates.component.html',
     styleUrl: './browser-windows-updates.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BrowserWindowsUpdatesComponent {
+export class BrowserWindowsUpdatesComponent implements OnDestroy {
     public hostId: InputSignal<number> = input<number>(0);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
@@ -102,8 +109,8 @@ export class BrowserWindowsUpdatesComponent {
     private readonly router = inject(Router);
 
     protected hideFilter: boolean = true;
-    public params: BrowserSoftwareLinuxParams = getDefaultBrowserSoftwareLinuxParams();
-    public packages?: BrowserSoftwareLinuxHostRoot;
+    public params: BrowserSoftwareWindowsUpdateParams = getDefaultBrowserSoftwareWindowsUpdateParams();
+    public updates?: BrowserSoftwareWindowsUpdateHostRoot;
 
     constructor() {
         effect(() => {
@@ -113,14 +120,10 @@ export class BrowserWindowsUpdatesComponent {
         });
     }
 
-    public ngOnInit(): void {
-
-    }
-
     public load(): void {
         this.subscriptions.add(
-            this.BrowserSoftwareService.getPackagesLinux(this.hostId(), this.params).subscribe((packages) => {
-                this.packages = packages;
+            this.BrowserSoftwareService.getWindowsUpdates(this.hostId(), this.params).subscribe((packages) => {
+                this.updates = packages;
                 this.cdr.markForCheck();
             })
         );
@@ -148,7 +151,7 @@ export class BrowserWindowsUpdatesComponent {
     }
 
     public resetFilter() {
-        this.params = getDefaultBrowserSoftwareLinuxParams();
+        this.params = getDefaultBrowserSoftwareWindowsUpdateParams();
         this.load();
     }
 
@@ -163,4 +166,6 @@ export class BrowserWindowsUpdatesComponent {
 
     public onMassActionComplete(success: boolean): void {
     }
+
+    protected readonly update = update;
 }

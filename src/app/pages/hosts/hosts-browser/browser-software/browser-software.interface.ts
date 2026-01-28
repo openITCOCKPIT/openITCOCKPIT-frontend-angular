@@ -1,9 +1,6 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { ViewLinuxPackageHost } from '../../../packages/packages.interface';
 
-export interface BrowserSoftwareInterface {
-}
-
 export interface BrowserSoftwareLinuxHostRoot extends PaginateOrScroll {
     all_packages_linux: BrowserSoftwareLinuxHostAllPackagesLinux[]
     _csrfToken: string
@@ -42,5 +39,56 @@ export function getDefaultBrowserSoftwareLinuxParams(): BrowserSoftwareLinuxPara
         'filter[PackagesLinuxHosts.available_version]': '',
         'filter[PackagesLinuxHosts.needs_update]': '',
         'filter[PackagesLinuxHosts.is_security_update]': '',
+    }
+}
+
+export interface BrowserSoftwareWindowsUpdateHostRoot extends PaginateOrScroll {
+    all_windows_updates: BrowserSoftwareWindowsHostAllWindowsUpdate[]
+    _csrfToken: string
+}
+
+export interface BrowserSoftwareWindowsHostAllWindowsUpdate {
+    id: number
+    windows_update_id: number
+    host_id: number
+    reboot_required: boolean
+    is_security_update: boolean
+    created: string
+    modified: string
+    windows_update: {
+        name: string
+        description: string
+        kbarticle_ids: string[]
+        update_id: string
+    }
+    Hosts: {
+        id: number
+        name: string
+    }
+}
+
+export interface BrowserSoftwareWindowsUpdateParams {
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[WindowsUpdates.name]': string
+    'filter[WindowsUpdates.description]': string
+    'filter[WindowsUpdates.kbarticle_ids]': string
+    'filter[WindowsUpdates.update_id]': string
+    'filter[WindowsUpdatesHosts.is_security_update]': string | boolean
+}
+
+export function getDefaultBrowserSoftwareWindowsUpdateParams(): BrowserSoftwareWindowsUpdateParams {
+    return {
+        scroll: true,
+        sort: 'WindowsUpdates.name',
+        page: 1,
+        direction: 'asc',
+        'filter[WindowsUpdates.name]': '',
+        'filter[WindowsUpdates.description]': '',
+        'filter[WindowsUpdates.kbarticle_ids]': '',
+        'filter[WindowsUpdates.update_id]': '',
+        'filter[WindowsUpdatesHosts.is_security_update]': '',
     }
 }
