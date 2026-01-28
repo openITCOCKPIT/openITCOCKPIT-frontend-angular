@@ -195,8 +195,9 @@
                         @for (package of packages.all_packages_linux; track $index) {
                             <tr>
                                 <td>
-                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'view_linux'])|async) {
-                                        <a [routerLink]="['/', 'packages', 'view_linux', package.packages_linux.id]">
+                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'linux'])|async) {
+                                        <a [routerLink]="['/', 'packages', 'linux']"
+                                           [queryParams]="{ lpid: package.packages_linux.id }">
                                             {{ package.packages_linux.name }}
                                         </a>
                                     } @else {
