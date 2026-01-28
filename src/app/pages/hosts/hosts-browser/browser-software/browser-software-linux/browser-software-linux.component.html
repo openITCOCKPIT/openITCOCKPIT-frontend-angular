@@ -1,1 +1,262 @@
-<p>browser-software-linux works!</p>
+<ng-container *transloco="let t">
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Packages') }}
+                <small class="fw-300">
+                    {{ t('Linux overview') }}
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[PackagesLinux.name]']"
+                                       [placeholder]="'Filter by package name' | transloco"
+                                       aria-label="Packages linux name"
+                                       cFormControl
+                                       name="'PackagesLinux.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[PackagesLinux.description]']"
+                                       [placeholder]="'Filter by package description' | transloco"
+                                       aria-label="Packages linux description"
+                                       cFormControl
+                                       name="'PackagesLinux.description"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'star-of-life']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[PackagesLinuxHosts.available_version]']"
+                                       [placeholder]="'Filter by available version' | transloco"
+                                       aria-label="Filter by available version"
+                                       cFormControl
+                                       name="'PackagesLinuxHosts.available_version"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'arrow-down']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[PackagesLinuxHosts.current_version]']"
+                                       [placeholder]="'Filter by installed version' | transloco"
+                                       aria-label="Filter by installed version"
+                                       cFormControl
+                                       name="'PackagesLinuxHosts.installed"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" lg="2">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Package status') }}
+                                </h5>
+
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="has_updates"
+                                        id="has_updates"
+                                        type="checkbox"
+                                        oitcDebounce
+                                        trueFalseValue
+                                        [trueValue]="1"
+                                        [falseValue]="''"
+                                        [(ngModel)]="params['filter[PackagesLinuxHosts.needs_update]']"
+                                    />
+
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="has_updates">{{ t('Updates available') }}</label>
+                                </c-form-check>
+
+                                <c-form-check>
+                                    <input
+                                        (debouncedValue)="onFilterChange($event)"
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        name="has_security_updates"
+                                        id="has_security_updates"
+                                        type="checkbox"
+                                        oitcDebounce
+                                        trueFalseValue
+                                        [trueValue]="1"
+                                        [falseValue]="''"
+                                        [(ngModel)]="params['filter[PackagesLinuxHosts.is_security_update]']"/>
+
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="has_security_updates">{{ t('Security updates available') }}</label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            @if (!packages) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+
+            @if (packages) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="PackagesLinux.name">
+                            {{ t('Package') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PackagesLinux.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PackagesLinuxHosts.current_version">
+                            {{ t('Installed version') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PackagesLinuxHosts.available_version">
+                            {{ t('Available version') }}
+                        </th>
+                        <th scope="col" mat-sort-header="PackagesLinuxHosts.needs_update">
+                            {{ t('Update available') }}
+                        </th>
+                    </thead>
+                    <tbody>
+
+                        @for (package of packages.all_packages_linux; track $index) {
+                            <tr>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'view_linux'])|async) {
+                                        <a [routerLink]="['/', 'packages', 'view_linux', package.packages_linux.id]">
+                                            {{ package.packages_linux.name }}
+                                        </a>
+                                    } @else {
+                                        {{ package.packages_linux.name }}
+                                    }
+                                </td>
+                                <td>
+                                    {{ package.packages_linux.description }}
+                                </td>
+                                <td>
+                                    {{ package.current_version }}
+                                </td>
+                                <td>
+                                    @if (package.needs_update) {
+                                        {{ package.available_version }}
+                                    }
+                                </td>
+                                <td>
+                                    @if (package.needs_update) {
+                                        @if (package.is_security_update) {
+                                            <oitc-badge-outline color="danger" class="me-1">
+                                                {{ t('Security Update Available') }}
+                                            </oitc-badge-outline>
+                                        } @else {
+                                            <oitc-badge-outline color="warning" class="me-1">
+                                                {{ t('Update Available') }}
+                                            </oitc-badge-outline>
+                                        }
+                                    } @else {
+                                        <oitc-badge-outline color="success" class="me-1">
+                                            {{ t('Up to date') }}
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @if (packages && packages.all_packages_linux.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (packages && packages.all_packages_linux) {
+                <c-container
+                    class="mb-3 py-2"
+                    [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            @if (packages) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="packages"></oitc-paginate-or-scroll>
+                            }
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
+
+        </c-card-body>
+    </c-card>
+</ng-container>
