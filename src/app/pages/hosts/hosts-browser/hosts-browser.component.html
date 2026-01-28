@@ -1342,13 +1342,18 @@
 
                                 @switch (softwareInformation?.osFamily) {
                                     @case ('linux') {
-                                        <oitc-browser-software-linux></oitc-browser-software-linux>
+                                        <oitc-browser-software-linux [hostId]="Number(result.mergedHost.id)">
+                                        </oitc-browser-software-linux>
                                     }
                                     @case ('windows') {
-                                        <oitc-browser-software-windows></oitc-browser-software-windows>
+                                        <oitc-browser-software-windows [hostId]="Number(result.mergedHost.id)">
+                                        </oitc-browser-software-windows>
                                     }
                                     @case ('macos') {
-                                        <oitc-browser-software-macos></oitc-browser-software-macos>
+                                        <oitc-browser-software-macos
+                                            [hostId]="Number(result.mergedHost.id)">
+
+                                        </oitc-browser-software-macos>
                                     }
                                 }
                             }
