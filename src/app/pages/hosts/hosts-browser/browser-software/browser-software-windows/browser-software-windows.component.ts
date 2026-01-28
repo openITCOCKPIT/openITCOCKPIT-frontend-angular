@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, InputSignal } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { CardComponent, NavComponent, NavItemComponent } from '@coreui/angular';
+import { NavComponent, NavItemComponent } from '@coreui/angular';
 import { BrowserWindowsUpdatesComponent } from './browser-windows-updates/browser-windows-updates.component';
 import { BrowserWindowsAppsComponent } from './browser-windows-apps/browser-windows-apps.component';
 
@@ -15,8 +15,7 @@ import { BrowserWindowsAppsComponent } from './browser-windows-apps/browser-wind
         NavItemComponent,
         BrowserWindowsUpdatesComponent,
         BrowserWindowsAppsComponent,
-        BrowserWindowsAppsComponent,
-        CardComponent
+        BrowserWindowsAppsComponent
     ],
     templateUrl: './browser-software-windows.component.html',
     styleUrl: './browser-software-windows.component.css',
