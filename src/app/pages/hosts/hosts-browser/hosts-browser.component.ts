@@ -130,6 +130,7 @@ import {
 import {
     BrowserSoftwareMacosComponent
 } from './browser-software/browser-software-macos/browser-software-macos.component';
+import { PatchstatusIconComponent } from '../../patchstatus/patchstatus-icon/patchstatus-icon.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -193,7 +194,8 @@ import {
         BgColorDirective,
         BrowserSoftwareLinuxComponent,
         BrowserSoftwareWindowsComponent,
-        BrowserSoftwareMacosComponent
+        BrowserSoftwareMacosComponent,
+        PatchstatusIconComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
