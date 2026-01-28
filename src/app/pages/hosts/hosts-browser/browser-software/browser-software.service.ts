@@ -5,6 +5,8 @@ import { map, Observable } from 'rxjs';
 import {
     BrowserSoftwareLinuxHostRoot,
     BrowserSoftwareLinuxParams,
+    BrowserSoftwareWindowsAppHostRoot,
+    BrowserSoftwareWindowsAppParams,
     BrowserSoftwareWindowsUpdateHostRoot,
     BrowserSoftwareWindowsUpdateParams
 } from './browser-software.interface';
@@ -30,6 +32,17 @@ export class BrowserSoftwareService {
     public getWindowsUpdates(hostId: number, params: BrowserSoftwareWindowsUpdateParams): Observable<BrowserSoftwareWindowsUpdateHostRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<BrowserSoftwareWindowsUpdateHostRoot>(`${proxyPath}/packages/host_windows_updates/${hostId}.json`, {
+            params: params as {} // cast into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getWindowsApps(hostId: number, params: BrowserSoftwareWindowsAppParams): Observable<BrowserSoftwareWindowsAppHostRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<BrowserSoftwareWindowsAppHostRoot>(`${proxyPath}/packages/host_windows_apps/${hostId}.json`, {
             params: params as {} // cast into object
         }).pipe(
             map(data => {

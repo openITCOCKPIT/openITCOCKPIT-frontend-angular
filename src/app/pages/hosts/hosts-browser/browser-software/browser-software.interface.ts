@@ -92,3 +92,52 @@ export function getDefaultBrowserSoftwareWindowsUpdateParams(): BrowserSoftwareW
         'filter[WindowsUpdatesHosts.is_security_update]': '',
     }
 }
+
+export interface BrowserSoftwareWindowsAppHostRoot extends PaginateOrScroll {
+    all_windows_apps: BrowserSoftwareWindowsHostAllWindowsApp[]
+    _csrfToken: string
+}
+
+export interface BrowserSoftwareWindowsHostAllWindowsApp {
+    id: number
+    windows_app_id: number
+    host_id: number
+    version: string
+    created: string
+    modified: string
+    windows_app: {
+        id: number
+        name: string
+        publisher: string
+        created: string
+        modified: string
+    }
+    host: {
+        id: number
+        name: string
+        uuid: string
+        container_id: number
+    }
+}
+
+export interface BrowserSoftwareWindowsAppParams {
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc
+    'filter[WindowsApps.name]': string
+    'filter[WindowsApps.publisher]': string
+    'filter[WindowsAppsHosts.version]': string
+}
+
+export function getDefaultBrowserSoftwareWindowsAppParams(): BrowserSoftwareWindowsAppParams {
+    return {
+        scroll: true,
+        sort: 'WindowsApps.name',
+        page: 1,
+        direction: 'asc',
+        'filter[WindowsApps.name]': '',
+        'filter[WindowsApps.publisher]': '',
+        'filter[WindowsAppsHosts.version]': ''
+    }
+}

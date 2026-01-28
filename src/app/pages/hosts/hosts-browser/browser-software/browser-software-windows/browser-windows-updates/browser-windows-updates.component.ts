@@ -51,7 +51,6 @@ import { TableLoaderComponent } from '../../../../../../layouts/primeng/loading/
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { update } from 'lodash';
 import {
     CopyToClipboardComponent
 } from '../../../../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
@@ -167,5 +166,4 @@ export class BrowserWindowsUpdatesComponent implements OnDestroy {
     public onMassActionComplete(success: boolean): void {
     }
 
-    protected readonly update = update;
 }
