@@ -1,1 +1,23 @@
-<p>browser-software-windows works!</p>
+<ng-container *transloco="let t">
+    <c-card>
+        <c-nav variant="underline-border" class="card-toolbar card-header-pills me-3 justify-content-end mt-1">
+            <c-nav-item class="nav-link cursor-pointer" [class.active]="activeTab === 'updates'"
+                        (click)="changeTab('updates')">
+                <fa-icon [icon]="['fab', 'windows']"></fa-icon>
+                {{ t('Windows Updates') }}
+            </c-nav-item>
+            <c-nav-item class="nav-link cursor-pointer" [class.active]="activeTab === 'apps'"
+                        (click)="changeTab('apps')">
+                <fa-icon [icon]="['fab', 'windows']"></fa-icon>
+                {{ t('Windows Apps') }}
+            </c-nav-item>
+        </c-nav>
+        
+        @if (activeTab === 'updates') {
+            <oitc-browser-windows-updates [hostId]="hostId()"></oitc-browser-windows-updates>
+        } @else if (activeTab === 'apps') {
+            <oitc-browser-windows-apps [hostId]="hostId()"></oitc-browser-windows-apps>
+        }
+    </c-card>
+
+</ng-container>

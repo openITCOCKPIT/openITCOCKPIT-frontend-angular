@@ -1,53 +1,36 @@
-import { ChangeDetectionStrategy, Component, inject, input, InputSignal, OnDestroy, OnInit } from '@angular/core';
-import { IndexPage } from '../../../../../pages.interface';
-import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
-import { Sort } from '@angular/material/sort';
-import { Subscription } from 'rxjs';
-import { TranslocoService } from '@jsverse/transloco';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, InputSignal } from '@angular/core';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { CardComponent, NavComponent, NavItemComponent } from '@coreui/angular';
+import { BrowserWindowsUpdatesComponent } from './browser-windows-updates/browser-windows-updates.component';
+import { BrowserWindowsAppsComponent } from './browser-windows-apps/browser-windows-apps.component';
 
 
 @Component({
     selector: 'oitc-browser-software-windows',
-    imports: [],
+    imports: [
+        TranslocoDirective,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        BrowserWindowsUpdatesComponent,
+        BrowserWindowsAppsComponent,
+        BrowserWindowsAppsComponent,
+        CardComponent
+    ],
     templateUrl: './browser-software-windows.component.html',
     styleUrl: './browser-software-windows.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BrowserSoftwareWindowsComponent implements OnInit, OnDestroy, IndexPage {
+export class BrowserSoftwareWindowsComponent {
     public hostId: InputSignal<number> = input<number>(0);
+    private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
-    private subscription: Subscription = new Subscription();
-    private readonly TranslocoService = inject(TranslocoService);
+    public activeTab: 'updates' | 'apps' = 'updates';
 
-    ngOnInit(): void {
-        throw new Error('Method not implemented.');
+    public changeTab(tab: 'updates' | 'apps') {
+        this.activeTab = tab;
+        this.cdr.markForCheck();
     }
 
-    ngOnDestroy(): void {
-        this.subscription.unsubscribe();
-    }
-
-    toggleFilter(): void {
-        throw new Error('Method not implemented.');
-    }
-
-    resetFilter(): void {
-        throw new Error('Method not implemented.');
-    }
-
-    onPaginatorChange(change: PaginatorChangeEvent): void {
-        throw new Error('Method not implemented.');
-    }
-
-    onFilterChange(event: Event): void {
-        throw new Error('Method not implemented.');
-    }
-
-    onSortChange(sort: Sort): void {
-        throw new Error('Method not implemented.');
-    }
-
-    onMassActionComplete(success: boolean): void {
-        throw new Error('Method not implemented.');
-    }
 }
