@@ -1299,7 +1299,12 @@
                                                     {{ softwareInformation?.updatesCounter?.total }}
                                                 </div>
                                                 <div>
-                                                    {{ t('Total') }}
+                                                    @if (softwareInformation?.osFamily === 'linux') {
+                                                        {{ t('Installed packages') }}
+                                                    } @else {
+                                                        {{ t('Installed apps') }}
+                                                    }
+
                                                 </div>
                                             </c-card-body>
                                         </c-card>
