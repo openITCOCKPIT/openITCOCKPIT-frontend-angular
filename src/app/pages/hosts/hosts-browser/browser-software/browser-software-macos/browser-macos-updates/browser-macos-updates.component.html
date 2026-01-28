@@ -126,8 +126,9 @@
                         @for (update of updates.all_macos_updates; track $index) {
                             <tr>
                                 <td>
-                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'view_macos_update'])|async) {
-                                        <a [routerLink]="['/', 'packages', 'view_macos_update', update.macos_update_id]">
+                                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'macos_updates'])|async) {
+                                        <a [routerLink]="['/', 'packages', 'macos_updates', update.macos_update_id]"
+                                           [queryParams]="{ uid: update.macos_update_id }">
                                             {{ update.macos_update.name }}
                                         </a>
                                     } @else {
