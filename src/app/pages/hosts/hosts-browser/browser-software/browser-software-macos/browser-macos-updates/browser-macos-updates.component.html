@@ -127,7 +127,7 @@
                             <tr>
                                 <td>
                                     @if (this.PermissionsService.hasPermissionObservable(['packages', 'macos_updates'])|async) {
-                                        <a [routerLink]="['/', 'packages', 'macos_updates', update.macos_update_id]"
+                                        <a [routerLink]="['/', 'packages', 'macos_updates']"
                                            [queryParams]="{ uid: update.macos_update_id }">
                                             {{ update.macos_update.name }}
                                         </a>
