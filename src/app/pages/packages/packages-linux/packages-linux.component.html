@@ -165,7 +165,9 @@
                             {{ t('Description') }}
                         </th>
                         <th>{{ t('Installed on') }}</th>
-                        <th>{{ t('Status') }}</th>
+                        <th mat-sort-header="packageStatus">
+                            {{ t('Status') }}
+                        </th>
                     </thead>
                     <tbody>
 
