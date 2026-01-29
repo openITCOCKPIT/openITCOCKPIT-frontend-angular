@@ -20,32 +20,32 @@
     } @else {
         <c-row class="equal-height-row d-flex flex-wrap">
             <c-col [xs]="12" [md]="6" [lg]="3" [xl]="2" class="text-start">
-                <button type="button"
-                        class="btn btn-primary text-white ripple p-2 w-100">
-                    @switch (os_family()) {
-                        @case ('linux') {
-                            <fa-icon [icon]="['fab', 'linux']" [size]="'7x'"></fa-icon>
-                            <br>
-                            {{ t('Linux') }}
+                <c-card [cBgColor]="'primary'" [textColor]="'white'">
+                    <c-card-body class="card-body p-2 text-center">
+                        @switch (os_family()) {
+                            @case ('linux') {
+                                <fa-icon [icon]="['fab', 'linux']" [size]="'7x'"></fa-icon>
+                                <br>
+                                {{ t('Linux') }}
+                            }
+                            @case ('windows') {
+                                <fa-icon [icon]="['fab', 'windows']" [size]="'7x'"></fa-icon>
+                                <br>
+                                {{ t('Windows') }}
+                            }
+                            @case ('macos') {
+                                <fa-icon [icon]="['fab', 'apple']" [size]="'7x'"></fa-icon>
+                                <br>
+                                {{ t('macOS') }}
+                            }
+                            @default {
+                                <fa-icon [icon]="['fab', 'linux']" [size]="'7x'"></fa-icon>
+                                <br>
+                                {{ t('Linux') }}
+                            }
                         }
-                        @case ('windows') {
-                            <fa-icon [icon]="['fab', 'windows']" [size]="'7x'"></fa-icon>
-                            <br>
-                            {{ t('Windows') }}
-                        }
-                        @case ('macos') {
-                            <fa-icon [icon]="['fab', 'apple']" [size]="'7x'"></fa-icon>
-                            <br>
-                            {{ t('macOS') }}
-                        }
-                        @default {
-                            <fa-icon [icon]="['fab', 'linux']" [size]="'7x'"></fa-icon>
-                            <br>
-                            {{ t('Linux') }}
-                        }
-                    }
-
-                </button>
+                    </c-card-body>
+                </c-card>
             </c-col>
             <c-col [xs]="12" [md]="6" [lg]="3" [xl]="2">
                 <c-widget-stat-f
