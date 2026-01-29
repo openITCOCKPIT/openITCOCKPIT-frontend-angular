@@ -53,6 +53,7 @@ import { fortinetModuleRoutes } from './modules/fortinet_module/fortinet_module.
 import { fujitsuModuleRoutes } from './modules/fujitsu_module/fujitsu_module.routes';
 import { netAppModuleRoutes } from './modules/netapp_module/netapp_module.routes';
 import { paloAltoModuleRoutes } from './modules/palo_alto_module/palo_alto_module.routes';
+import { kubernetesModuleRoutes } from './modules/kubernetes_module/kubernetes_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -127,7 +128,8 @@ const moduleRoutes: Routes = [
     ...fortinetModuleRoutes,
     ...fujitsuModuleRoutes,
     ...netAppModuleRoutes,
-    ...paloAltoModuleRoutes
+    ...paloAltoModuleRoutes,
+    ...kubernetesModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
