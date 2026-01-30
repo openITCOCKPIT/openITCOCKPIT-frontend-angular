@@ -11,6 +11,8 @@ import {
 import { AsyncPipe } from '@angular/common';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import {
+    BgColorDirective,
+    CardBodyComponent, CardComponent,
     ColComponent,
     RowComponent,
     TemplateIdDirective,
@@ -43,7 +45,10 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
         TranslocoDirective,
         RouterLink,
         TextColorDirective,
-        PermissionDirective
+        PermissionDirective,
+        CardBodyComponent,
+        CardComponent,
+        BgColorDirective
     ],
     templateUrl: './packages-summary.component.html',
     styleUrl: './packages-summary.component.css',
