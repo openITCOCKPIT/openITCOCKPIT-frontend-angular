@@ -59,24 +59,30 @@
                     <ng-template cTemplateId="widgetFooterTemplate">
                         <c-row>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
+                                <fa-icon *oitcPermission="['packages', 'linux'];negate:true" [icon]="['fab', 'linux']"
+                                         [cTextColor]="'primary'"></fa-icon>
                                 <a *oitcPermission="['packages', 'linux']"
                                    [routerLink]="['/', 'packages', 'linux']">
+                                    <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.linux.totalPackages }}
                                 </a>
 
                             </c-col>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
+                                <fa-icon *oitcPermission="['packages', 'linux'];negate:true" [icon]="['fab', 'windows']"
+                                         [cTextColor]="'primary'"></fa-icon>
                                 <a *oitcPermission="['packages', 'windows']"
                                    [routerLink]="['/', 'packages', 'windows']">
+                                    <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.windows.totalPackages }}
                                 </a>
                             </c-col>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
+                                <fa-icon *oitcPermission="['packages', 'linux'];negate:true" [icon]="['fab', 'apple']"
+                                         [cTextColor]="'primary'"></fa-icon>
                                 <a *oitcPermission="['packages', 'macos']"
                                    [routerLink]="['/', 'packages', 'macos']">
+                                    <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.macos.totalPackages }}
                                 </a>
                             </c-col>
@@ -97,27 +103,33 @@
                     <ng-template cTemplateId="widgetFooterTemplate">
                         <c-row>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
+                                <fa-icon *oitcPermission="['packages', 'linux'];negate:true" [icon]="['fab', 'linux']"
+                                         [cTextColor]="'primary'"></fa-icon>
                                 <a *oitcPermission="['packages', 'linux']"
                                    [routerLink]="['/', 'packages', 'linux']"
                                    [queryParams]="{'filter[available_updates]': 1}">
+                                    <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.linux.updatesAvailable }}
                                 </a>
                             </c-col>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
+                                <fa-icon *oitcPermission="['packages', 'linux'];negate:true" [icon]="['fab', 'windows']"
+                                         [cTextColor]="'primary'"></fa-icon>
                                 <a *oitcPermission="['packages', 'windows_updates']"
                                    [routerLink]="['/', 'packages', 'windows_updates']"
                                    [queryParams]="{'filter[available_updates]': 1}">
+                                    <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.windows.updatesAvailable }}
                                 </a>
 
                             </c-col>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
+                                <fa-icon *oitcPermission="['packages', 'linux'];negate:true" [icon]="['fab', 'apple']"
+                                         [cTextColor]="'primary'"></fa-icon>
                                 <a *oitcPermission="['packages', 'macos_updates']"
                                    [routerLink]="['/', 'packages', 'macos_updates']"
                                    [queryParams]="{'filter[available_updates]': 1}">
+                                    <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.macos.updatesAvailable }}
                                 </a>
                             </c-col>
@@ -137,27 +149,33 @@
                     <ng-template cTemplateId="widgetFooterTemplate">
                         <c-row>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
+                                <fa-icon *oitcPermission="['packages', 'linux'];negate:true" [icon]="['fab', 'linux']"
+                                         [cTextColor]="'primary'"></fa-icon>
                                 <a *oitcPermission="['packages', 'linux']"
                                    [routerLink]="['/', 'packages', 'linux']"
                                    [queryParams]="{'filter[available_security_updates]': 1}">
+                                    <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.linux.securityUpdates | localNumber }}
                                 </a>
                             </c-col>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
+                                <fa-icon *oitcPermission="['packages', 'linux'];negate:true" [icon]="['fab', 'windows']"
+                                         [cTextColor]="'primary'"></fa-icon>
                                 <a *oitcPermission="['packages', 'windows_updates']"
                                    [routerLink]="['/', 'packages', 'windows_updates']"
                                    [queryParams]="{'filter[available_security_updates]': 1}">
+                                    <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.windows.securityUpdates | localNumber }}
                                 </a>
 
                             </c-col>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
+                                <fa-icon *oitcPermission="['packages', 'linux'];negate:true" [icon]="['fab', 'apple']"
+                                         [cTextColor]="'primary'"></fa-icon>
                                 <a *oitcPermission="['packages', 'macos_updates']"
                                    [routerLink]="['/', 'packages', 'macos_updates']"
                                    [queryParams]="{'filter[available_updates]': 1}">
+                                    <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.macos.securityUpdates | localNumber }}
                                 </a>
                             </c-col>
@@ -177,35 +195,38 @@
                     <ng-template cTemplateId="widgetFooterTemplate">
                         <c-row>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
                                 @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
                                     <a [routerLink]="['/', 'patchstatus', 'index']"
                                        [queryParams]="{host_id: summary.linux.hostsWithUpdates}">
+                                        <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
                                         {{ summary.linux.hostsWithUpdates.length | localNumber }}
                                     </a>
                                 } @else {
+                                    <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.linux.hostsWithUpdates.length | localNumber }}
                                 }
                             </c-col>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
                                 @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
                                     <a [routerLink]="['/', 'patchstatus', 'index']"
                                        [queryParams]="{host_id: summary.windows.hostsWithUpdates}">
+                                        <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
                                         {{ summary.windows.hostsWithUpdates.length | localNumber }}
                                     </a>
                                 } @else {
+                                    <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.windows.hostsWithUpdates.length | localNumber }}
                                 }
                             </c-col>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
                                 @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
                                     <a [routerLink]="['/', 'patchstatus', 'index']"
                                        [queryParams]="{host_id: summary.macos.hostsWithUpdates}">
+                                        <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
                                         {{ summary.macos.hostsWithUpdates.length | localNumber }}
                                     </a>
                                 } @else {
+                                    <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.macos.hostsWithUpdates.length | localNumber }}
                                 }
                             </c-col>
@@ -225,35 +246,38 @@
                     <ng-template cTemplateId="widgetFooterTemplate">
                         <c-row>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
                                 @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
                                     <a [routerLink]="['/', 'patchstatus', 'index']"
                                        [queryParams]="{host_id: summary.linux.hostsWithSecurityUpdates}">
+                                        <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
                                         {{ summary.linux.hostsWithSecurityUpdates.length | localNumber }}
                                     </a>
                                 } @else {
+                                    <fa-icon [icon]="['fab', 'linux']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.linux.hostsWithSecurityUpdates.length | localNumber }}
                                 }
                             </c-col>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
                                 @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
                                     <a [routerLink]="['/', 'patchstatus', 'index']"
                                        [queryParams]="{host_id: summary.windows.hostsWithSecurityUpdates}">
+                                        <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
                                         {{ summary.windows.hostsWithSecurityUpdates.length | localNumber }}
                                     </a>
                                 } @else {
+                                    <fa-icon [icon]="['fab', 'windows']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.windows.hostsWithSecurityUpdates.length | localNumber }}
                                 }
                             </c-col>
                             <c-col class="text-center px-0">
-                                <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
                                 @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
                                     <a [routerLink]="['/', 'patchstatus', 'index']"
                                        [queryParams]="{host_id: summary.macos.hostsWithSecurityUpdates}">
+                                        <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
                                         {{ summary.macos.hostsWithSecurityUpdates.length | localNumber }}
                                     </a>
                                 } @else {
+                                    <fa-icon [icon]="['fab', 'apple']" [cTextColor]="'primary'"></fa-icon>
                                     {{ summary.macos.hostsWithSecurityUpdates.length | localNumber }}
                                 }
                             </c-col>
