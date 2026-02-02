@@ -110,6 +110,7 @@ export interface KubernetesWizardPost extends WizardPost {
 
 export interface KubernetesEndpointsWizardPost extends WizardPost {
     host_id: number
+    port: number
 }
 
 export interface EndpointDiscovery {

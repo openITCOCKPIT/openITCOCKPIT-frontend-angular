@@ -24,9 +24,6 @@ import {
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { RouterLink } from '@angular/router';
-
-import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { KubernetesWizardService } from './kubernetes-wizard.service';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -49,17 +46,15 @@ import { Servicetemplate } from '../../../../../pages/wizards/wizards.interface'
         FormsModule,
         TranslocoDirective,
         TranslocoPipe,
-        WizardsDynamicfieldsComponent,
         RouterLink,
-        OitcAlertComponent,
-        XsButtonDirective,
-        ColComponent,
-        RowComponent,
         RequiredIconComponent,
         AccordionButtonDirective,
         AccordionComponent,
         AccordionItemComponent,
-        TemplateIdDirective
+        TemplateIdDirective,
+        RowComponent,
+        ColComponent,
+        WizardsDynamicfieldsComponent
     ],
     templateUrl: './kubernetes.component.html',
     styleUrl: './kubernetes.component.css',
@@ -73,13 +68,11 @@ export class KubernetesComponent extends WizardsAbstractComponent {
     public checked: boolean = false;
 
     protected override post: KubernetesEndpointsWizardPost = {
-        pveUsername: '',
-        pveApiTokenName: '',
-        pveApiTokenSecret: '',
+        port: 0,
 // Default fields from the base wizard
         host_id: 0,
         services: [],
-    } as KubernetesEndpointsWizardPost;
+    };
 
     protected endpointServicetemplate: Servicetemplate = {} as Servicetemplate;
 
