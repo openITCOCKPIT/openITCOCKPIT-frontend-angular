@@ -30,7 +30,8 @@ import {
     HostsLoadHostsByStringParams,
     HostsNotMonitoredParams,
     HostsNotMonitoredRoot,
-    HostUsedByRoot
+    HostUsedByRoot,
+    SoftwareInformationHost
 } from './hosts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
@@ -632,6 +633,22 @@ export class HostsService {
             .pipe(
                 map(data => {
                     return data.slaOverview;
+                })
+            )
+    }
+
+    public loadSoftwareInformation(id: number): Observable<SoftwareInformationHost> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<SoftwareInformationHost>(`${proxyPath}/hosts/loadSoftwareInformation/.json`, {
+                params: {
+                    angular: true,
+                    id: id
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data;
                 })
             )
     }

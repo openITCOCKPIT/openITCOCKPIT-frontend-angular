@@ -1,0 +1,21 @@
+<ng-container *transloco="let t">
+    <c-nav variant="tabs" class="card-toolbar card-header-pills me-3 justify-content-end mt-1 border-0">
+        <c-nav-item class="nav-link cursor-pointer" [class.active]="activeTab === 'updates'"
+                    (click)="changeTab('updates')">
+            <fa-icon [icon]="['fab', 'apple']"></fa-icon>
+            {{ t('macOS Updates') }}
+        </c-nav-item>
+        <c-nav-item class="nav-link cursor-pointer" [class.active]="activeTab === 'apps'"
+                    (click)="changeTab('apps')">
+            <fa-icon [icon]="['fab', 'apple']"></fa-icon>
+            {{ t('macOS Apps') }}
+        </c-nav-item>
+    </c-nav>
+
+    @if (activeTab === 'updates') {
+        <oitc-browser-macos-updates [hostId]="hostId()"></oitc-browser-macos-updates>
+    } @else if (activeTab === 'apps') {
+        <oitc-browser-macos-apps [hostId]="hostId()"></oitc-browser-macos-apps>
+    }
+
+</ng-container>
