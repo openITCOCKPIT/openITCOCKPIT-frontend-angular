@@ -785,6 +785,39 @@ const coreRoutes: Routes = [{
     path: 'statuspagegroups/index',
     loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-index/statuspagegroups-index.component').then(m => m.StatuspagegroupsIndexComponent)
 }, {
+    path: 'packages/linux',
+    loadComponent: () => import('./pages/packages/packages-linux/packages-linux.component').then(m => m.PackagesLinuxComponent)
+}, {
+    path: 'packages/view_linux/:id',
+    loadComponent: () => import('./pages/packages/packages-view-linux/packages-view-linux.component').then(m => m.PackagesViewLinuxComponent)
+}, {
+    path: 'packages/windows_updates',
+    loadComponent: () => import('./pages/packages/packages-windows-updates/packages-windows-updates.component').then(m => m.PackagesWindowsUpdatesComponent)
+}, {
+    path: 'packages/view_windows_update/:id',
+    loadComponent: () => import('./pages/packages/packages-view-windows-update/packages-view-windows-update.component').then(m => m.PackagesViewWindowsUpdateComponent)
+}, {
+    path: 'packages/windows',
+    loadComponent: () => import('./pages/packages/packages-windows/packages-windows.component').then(m => m.PackagesWindowsComponent)
+}, {
+    path: 'packages/view_windows/:id',
+    loadComponent: () => import('./pages/packages/packages-view-windows-app/packages-view-windows-app.component').then(m => m.PackagesViewWindowsAppComponent)
+}, {
+    path: 'packages/macos_updates',
+    loadComponent: () => import('./pages/packages/packages-macos-updates/packages-macos-updates.component').then(m => m.PackagesMacosUpdatesComponent)
+}, {
+    path: 'packages/view_macos_update/:id',
+    loadComponent: () => import('./pages/packages/packages-view-macos-update/packages-view-macos-update.component').then(m => m.PackagesViewMacosUpdateComponent)
+}, {
+    path: 'packages/macos',
+    loadComponent: () => import('./pages/packages/packages-macos/packages-macos.component').then(m => m.PackagesMacosComponent)
+}, {
+    path: 'packages/view_macos/:id',
+    loadComponent: () => import('./pages/packages/packages-view-macos-app/packages-view-macos-app.component').then(m => m.PackagesViewMacosAppComponent)
+}, {
+    path: 'patchstatus/index',
+    loadComponent: () => import('./pages/patchstatus/patchstatus-index/patchstatus-index.component').then(m => m.PatchstatusIndexComponent)
+}, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)
 }, {
