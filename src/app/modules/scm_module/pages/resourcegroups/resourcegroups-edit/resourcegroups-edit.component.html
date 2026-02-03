@@ -91,6 +91,15 @@
                                oitcFormError [errors]="errors" errorField="description">
                     </div>
                     <div class="mb-3">
+                        <label cLabel for="ResourcegroupDepartment">
+                            {{ t('Department') }}
+                        </label>
+                        <input cFormControl id="ResourcegroupDepartment" required type="text"
+                               name="department"
+                               [(ngModel)]="post.department"
+                               oitcFormError [errors]="errors" errorField="department">
+                    </div>
+                    <div class="mb-3">
                         <label cLabel for="deadline">
                             {{ t('Deadline') }}
                             <oitc-required-icon></oitc-required-icon>

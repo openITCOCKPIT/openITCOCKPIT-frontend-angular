@@ -78,6 +78,7 @@ export interface ResourcegroupsGet {
 export interface ResourcegroupsPost {
     id?: number
     description: string
+    department: string
     timeperiod_id: number | null
     reminder_time: number
     deadline: string
