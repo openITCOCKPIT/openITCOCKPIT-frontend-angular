@@ -91,31 +91,70 @@
                 </c-accordion>
 
                 <div class="mb-3">
-                    <label cLabel for="post.port">
+                    <label cLabel for="post.K8S_PORT">
                         {{ t('Port') }}
                         <oitc-required-icon/>
                     </label>
                     <input cFormControl
-                           id="post.port"
+                           id="post.K8S_PORT"
                            type="text"
-                           name="post.port"
-                           [(ngModel)]="post.port"
-                           oitcFormError [errors]="errors" errorField="port"
+                           name="post.K8S_PORT"
+                           [(ngModel)]="post.K8S_PORT"
+                           oitcFormError [errors]="errors" errorField="K8S_PORT"
                            placeholder="root@pam">
-                    <oitc-form-feedback [errors]="errors" errorField="port"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors" errorField="K8S_PORT"></oitc-form-feedback>
                 </div>
             </fieldset>
 
+            <div>
+                <ng-template #contentTemplate let-data>
+                    @if (data) {
+                        <span class="h5 text-info">
+                            {{ t('Discovering Endpoints for Services') }}
+                        </span>
+                    }
+                    <br>
+                    {{ t('Scan Kubernetes for Endpoints. Only possible with a working Kubernetes configuration') }}
+                </ng-template>
+
+                <ng-template #buttonTemplate let-data>
+                    <div class="ms-2">
+                        <button
+                            cButton
+                            class="ripple"
+                            color="primary"
+                            type="button"
+                            [disabled]="DiscoveryIsRunning"
+                            (click)="runEndpointDiscovery()">
+                            @if (DiscoveryIsRunning) {
+                                <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                            }
+                            {{ t('Start Endpoint discovery') }}
+                        </button>
+                    </div>
+                </ng-template>
+
+                <oitc-alert
+                    baseIcon="circle"
+                    color="info"
+                    [icon]="['fas', 'info']"
+                    [contentTemplate]="contentTemplate"
+                    [buttonTemplate]="buttonTemplate"></oitc-alert>
+
+            </div>
+
             <c-row class="mb-1">
                 <c-col md="6">
-                    <oitc-form-feedback [errors]="errors" errorField="proxmoxstoragecommand"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors" errorField="kubernetesendpointcommand"></oitc-form-feedback>
                 </c-col>
             </c-row>
             <oitc-wizards-dynamicfields
                 [(post)]="post.services"
                 [errors]="errors"
                 [titleErrorField]="'services'"
-                [title]="'Proxmox Storages'|transloco"
+                [title]="'Kubernetes Endpoints'|transloco"
             />
 
 

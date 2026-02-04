@@ -2,9 +2,7 @@ import { WizardGet, WizardPost } from '../../../../../pages/wizards/wizards.inte
 
 // WIZARD GET
 export interface KubernetesEndpointWizardGet extends WizardGet {
-    pveUsername: string
-    pveApiTokenName: string
-    pveApiTokenSecret: string
+    K8S_PORT: number
     endpointServicetemplate: EndpointServiceTemplate
 }
 
@@ -110,7 +108,7 @@ export interface KubernetesWizardPost extends WizardPost {
 
 export interface KubernetesEndpointsWizardPost extends WizardPost {
     host_id: number
-    port: number
+    K8S_PORT: number
 }
 
 export interface EndpointDiscovery {

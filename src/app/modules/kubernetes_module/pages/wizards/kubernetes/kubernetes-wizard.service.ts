@@ -41,7 +41,7 @@ export class KubernetesWizardService extends WizardsService {
     }
 
     public executeEndpointDiscovery(post: KubernetesEndpointsWizardPost): Observable<EndpointDiscovery | GenericResponseWrapper> {
-        return this.http.post<EndpointDiscovery>(`${this.proxyPath}/kubernetes_module/wizards/executeEndpointsDiscovery/${post.host_id}.json?angular=true`, post)
+        return this.http.post<EndpointDiscovery>(`${this.proxyPath}/kubernetes_module/wizards/listEndpoints/${post.host_id}.json?angular=true`, post)
             .pipe(
                 map((data: EndpointDiscovery) => {
                     return data

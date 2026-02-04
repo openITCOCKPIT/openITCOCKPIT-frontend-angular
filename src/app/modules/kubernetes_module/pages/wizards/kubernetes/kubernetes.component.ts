@@ -29,6 +29,8 @@ import { KubernetesWizardService } from './kubernetes-wizard.service';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { KubernetesEndpointsWizardPost, KubernetesEndpointWizardGet } from './kubernetes-wizard.interface';
 import { Servicetemplate } from '../../../../../pages/wizards/wizards.interface';
+import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-endpoints',
@@ -54,7 +56,9 @@ import { Servicetemplate } from '../../../../../pages/wizards/wizards.interface'
         TemplateIdDirective,
         RowComponent,
         ColComponent,
-        WizardsDynamicfieldsComponent
+        WizardsDynamicfieldsComponent,
+        OitcAlertComponent,
+        XsButtonDirective
     ],
     templateUrl: './kubernetes.component.html',
     styleUrl: './kubernetes.component.css',
@@ -68,7 +72,7 @@ export class KubernetesComponent extends WizardsAbstractComponent {
     public checked: boolean = false;
 
     protected override post: KubernetesEndpointsWizardPost = {
-        port: 0,
+        K8S_PORT: 0,
 // Default fields from the base wizard
         host_id: 0,
         services: [],
@@ -87,7 +91,7 @@ export class KubernetesComponent extends WizardsAbstractComponent {
     }
 
 
-    protected runStorageDiscovery(): void {
+    protected runEndpointDiscovery(): void {
         this.post.services = [];
         this.beginDiscovery();
         this.cdr.markForCheck();
