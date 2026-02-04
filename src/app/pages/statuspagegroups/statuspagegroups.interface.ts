@@ -49,6 +49,7 @@ export interface StatuspagegroupPost {
     name: string
     description: string | null
     additional_information: string
+    further_information: string
     show_ticker: boolean
     modified?: string
     created?: string

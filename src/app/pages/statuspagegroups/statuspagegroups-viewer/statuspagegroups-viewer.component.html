@@ -30,16 +30,31 @@
                             <div>
                                 {{ StatupagegroupViewRootResponse.statuspagegroup.description }}
                             </div>
-                            <c-row class="mt-3">
+                            <c-row class="equal-height-row d-flex flex-wrap mt-3">
                                 @if (StatupagegroupViewRootResponse.statuspagegroup.additional_information) {
-                                    <c-col [xs]="12" [md]="12" [lg]="12" [order]="{lg:'last', md: 'first'}">
+
+                                    <c-col [xs]="12" [md]="12"
+                                           [lg]="StatupagegroupViewRootResponse.statuspagegroup.further_information?6:12"
+                                           [order]="{lg:'last', md: 'first'}" class="mt-2">
                                         <div
-                                            class="d-inline-flex border border-secondary border-opacity-25 p-2 rounded my-2 w-100">
+                                            class="d-inline-flex border border-secondary border-opacity-25 p-2 rounded my-2 w-100 h-100">
                                             <div class="word-break"
-                                                 [innerHTML]="html | trustAsHtml "></div>
+                                                 [innerHTML]="additional_information_html | trustAsHtml "></div>
                                         </div>
                                     </c-col>
                                 }
+                                @if (StatupagegroupViewRootResponse.statuspagegroup.further_information) {
+                                    <c-col [xs]="12" [md]="12"
+                                           [lg]="StatupagegroupViewRootResponse.statuspagegroup.additional_information?6:12"
+                                           [order]="{lg:'last', md: 'first'}" class="mt-2">
+                                        <div
+                                            class="d-inline-flex border border-secondary border-opacity-25 p-2 rounded my-2 w-100 h-100">
+                                            <div class="word-break"
+                                                 [innerHTML]="further_information_html | trustAsHtml "></div>
+                                        </div>
+                                    </c-col>
+                                }
+
                                 <c-col [xs]="12" [md]="6" [lg]="6" class="my-2">
                                     <div
                                         class="d-inline-flex border border-secondary border-opacity-25 p-2 rounded my-2 w-100 h-100">
