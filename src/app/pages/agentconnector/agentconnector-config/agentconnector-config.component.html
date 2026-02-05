@@ -843,6 +843,88 @@
                         </c-card>
                     </c-col>
                 </c-row>
+                <c-row class="pt-4">
+                    <c-col [xs]="12" [sm]="12" [md]="12" [lg]="6" class="d-flex">
+                        <c-card class="flex-1">
+                            <c-card-body class="flex-1">
+                                <fieldset>
+                                    <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                        <h4>
+                                            <fa-icon [icon]="['fas', 'cubes']"></fa-icon>
+                                            {{ t('Software Inventory & Patch Management') }}
+                                        </h4>
+                                    </legend>
+                                    <div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="enable_packagemanager"
+                                                       id="enable_packagemanager"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.enable_packagemanager"/>
+                                                <label cFormCheckLabel for="enable_packagemanager">
+                                                    {{ t('Enable Update and Software Inventory') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="enable_packagemanager_update_check"
+                                                       id="enable_packagemanager_update_check"
+                                                       type="checkbox"
+                                                       [disabled]="!config.bool.enable_packagemanager"
+                                                       [(ngModel)]="config.bool.enable_packagemanager_update_check"/>
+                                                <label cFormCheckLabel for="enable_packagemanager_update_check">
+                                                    {{ t('Enable update of cached metadata (e.g. apt-get update)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mt-3">
+                                            <label cLabel for="packagemanager_check_interval">
+                                                {{ t('Update interval in minutes') }}
+                                                <oitc-required-icon></oitc-required-icon>
+                                            </label>
+                                            <input cFormControl
+                                                   id="packagemanager_check_interval" required type="number"
+                                                   name="packagemanager_check_interval"
+                                                   min="1"
+                                                   max="14400"
+                                                   placeholder="60"
+                                                   oitcFormError [errors]="errors"
+                                                   [disabled]="!config.bool.enable_packagemanager"
+                                                   errorField="packagemanager_check_interval"
+                                                   [(ngModel)]="config.int.packagemanager_check_interval">
+                                            <oitc-form-feedback [errors]="errors"
+                                                                errorField="packagemanager_check_interval"></oitc-form-feedback>
+                                            <div class="help-block">
+                                                {{ t('Determines how often the openITCOCKPIT Agent will check for availalbe updates and run the software inventory.') }}
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <label cLabel for="packagemanager_description_length">
+                                                {{ t('Length limit of descriptions') }}
+                                                <oitc-required-icon></oitc-required-icon>
+                                            </label>
+                                            <input cFormControl
+                                                   id="packagemanager_description_length" required type="number"
+                                                   name="packagemanager_description_length"
+                                                   min="-1"
+                                                   max="1024"
+                                                   placeholder="80"
+                                                   oitcFormError [errors]="errors"
+                                                   [disabled]="!config.bool.enable_packagemanager"
+                                                   errorField="packagemanager_description_length"
+                                                   [(ngModel)]="config.int.packagemanager_description_length">
+                                            <oitc-form-feedback [errors]="errors"
+                                                                errorField="packagemanager_description_length"></oitc-form-feedback>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                </c-row>
             </c-card-body>
         }
     </c-card>
