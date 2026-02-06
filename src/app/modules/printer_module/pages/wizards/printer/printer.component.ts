@@ -22,7 +22,7 @@ import { FormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
-import { NgIf } from '@angular/common';
+
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
@@ -44,7 +44,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         FormsModule,
         RequiredIconComponent,
         SelectComponent,
-        NgIf,
         BackButtonDirective
     ],
     templateUrl: './printer.component.html',

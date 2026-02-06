@@ -22,9 +22,11 @@
     <c-card class="mb-3">
         <c-card-header>
             <h5 cCardTitle>{{ t('openITCOCKPIT Agent Configuration for:') }}
-                <small class="fw-300" *ngIf="host">
-                    {{ host.name }} ({{ host.address }})
-                </small>
+                @if (host) {
+                    <small class="fw-300">
+                        {{ host.name }} ({{ host.address }})
+                    </small>
+                }
             </h5>
 
         </c-card-header>
@@ -56,172 +58,199 @@
                                 <div class="pt-3">
 
                                     <!-- Running connection test -->
-                                    <div class="alert border-faded bg-transparent text-secondary" *ngIf="runningCheck">
-                                        <div class="d-flex align-items-center">
-                                            <div class="alert-icon me-2">
-                                                <span class="icon-stack icon-stack-md">
-                                                    <i class="base-circle icon-stack-3x text-cyan-500"></i>
-                                                    <i class="fas fa-certificate icon-stack-1x text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <span class="h5 text-cyan-500">
-                                                    {{ t('Executing TLS certificate exchange') }}
-                                                </span>
-                                                <span *ngIf="isSatellite">
-                                                    {{ t('(via remote satellite system)') }}
-                                                </span>
-
-                                                <div class="mt-2">
-                                                    <p-progressBar mode="indeterminate"
-                                                                   [style]="{ height: '6px' }"/>
+                                    @if (runningCheck) {
+                                        <div class="alert border-faded bg-transparent text-secondary">
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon me-2">
+                                                    <span class="icon-stack icon-stack-md">
+                                                        <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                                        <i class="fas fa-certificate icon-stack-1x text-white"></i>
+                                                    </span>
                                                 </div>
-                                            </div>
-                                            <div class="ms-2" *ngIf="isSatellite">
-                                                <button class="btn btn-outline-danger btn-sm ripple"
-                                                        (click)="cancelSatRequest()">
-                                                    <fa-icon [icon]="['fas', 'stop']"></fa-icon>
-                                                    {{ t('Cancel') }}
-                                                </button>
+                                                <div class="flex-1">
+                                                    <span class="h5 text-cyan-500">
+                                                        {{ t('Executing TLS certificate exchange') }}
+                                                    </span>
+                                                    @if (isSatellite) {
+                                                        <span>
+                                                            {{ t('(via remote satellite system)') }}
+                                                        </span>
+                                                    }
+                                                    <div class="mt-2">
+                                                        <p-progressBar mode="indeterminate"
+                                                                       [style]="{ height: '6px' }"/>
+                                                    </div>
+                                                </div>
+                                                @if (isSatellite) {
+                                                    <div class="ms-2">
+                                                        <button class="btn btn-outline-danger btn-sm ripple"
+                                                                (click)="cancelSatRequest()">
+                                                            <fa-icon [icon]="['fas', 'stop']"></fa-icon>
+                                                            {{ t('Cancel') }}
+                                                        </button>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
-                                    </div>
+                                    }
 
                                     <!-- Connection successful -->
-                                    <div class="alert border-faded bg-transparent text-secondary"
-                                         *ngIf="connection_test?.status === 'success'">
-                                        <div class="d-flex align-items-center">
-                                            <div class="alert-icon me-2">
-                                                <span class="icon-stack icon-stack-md">
-                                                    <i class="base-circle icon-stack-3x text-success"></i>
-                                                    <i class="fas fa-check icon-stack-1x text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <span class="h5 text-success">
-                                                    {{ t('Success') }}
-                                                </span>
-                                                <br>
-                                                {{ connection_test?.error }}
-                                                <div *ngIf="connection_test?.guzzle_error">
-                                                    {{ connection_test?.guzzle_error }}
+                                    @if (connection_test?.status === 'success') {
+                                        <div class="alert border-faded bg-transparent text-secondary"
+                                        >
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon me-2">
+                                                    <span class="icon-stack icon-stack-md">
+                                                        <i class="base-circle icon-stack-3x text-success"></i>
+                                                        <i class="fas fa-check icon-stack-1x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <span class="h5 text-success">
+                                                        {{ t('Success') }}
+                                                    </span>
+                                                    <br>
+                                                    {{ connection_test?.error }}
+                                                    @if (connection_test?.guzzle_error) {
+                                                        <div>
+                                                            {{ connection_test?.guzzle_error }}
+                                                        </div>
+                                                    }
+                                                </div>
+                                                <div class="ms-2">
+                                                    <button class="btn btn-outline-success btn-sm ripple"
+                                                            [disabled]="disableNextButton"
+                                                            (click)="onNextButtonClick()">
+                                                        {{ t('Next') }}
+                                                        <fa-icon [icon]="['fas', 'arrow-right']"></fa-icon>
+                                                    </button>
                                                 </div>
                                             </div>
-                                            <div class="ms-2">
-                                                <button class="btn btn-outline-success btn-sm ripple"
-                                                        [disabled]="disableNextButton"
-                                                        (click)="onNextButtonClick()">
-                                                    {{ t('Next') }}
-                                                    <fa-icon [icon]="['fas', 'arrow-right']"></fa-icon>
-                                                </button>
-                                            </div>
                                         </div>
-                                    </div>
+                                    }
 
                                     <!-- Connection error -->
-                                    <div class="alert border-faded bg-transparent text-secondary"
-                                         *ngIf="connection_test?.status === 'error'">
-                                        <div class="d-flex align-items-center">
-                                            <div class="alert-icon me-2">
-                                                <span class="icon-stack icon-stack-md">
-                                                    <i class="base-circle icon-stack-3x text-danger"></i>
-                                                    <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <span class="h5 text-danger">
-                                                    {{ t('Error') }}
-                                                </span>
-                                                <br>
-                                                {{ connection_test?.error }}
-                                                <div *ngIf="connection_test?.guzzle_error">
-                                                    {{ connection_test?.guzzle_error }}
+                                    @if (connection_test?.status === 'error') {
+                                        <div class="alert border-faded bg-transparent text-secondary"
+                                        >
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon me-2">
+                                                    <span class="icon-stack icon-stack-md">
+                                                        <i class="base-circle icon-stack-3x text-danger"></i>
+                                                        <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
+                                                    </span>
                                                 </div>
-                                            </div>
-                                            <div class="ms-2"
-                                                 *ngIf="connection_test?.oitc_errno === AgentHttpClientErrors.ERRNO_HTTPS_COMPROMISED">
-                                                <button class="btn btn-outline-danger btn-sm ripple"
-                                                        (click)="reExchangeAutoTLS()">
-                                                    <fa-icon [icon]="['fas', 'certificate']"></fa-icon>
-                                                    {{ t('Reset AutoTLS certificate') }}
-                                                </button>
+                                                <div class="flex-1">
+                                                    <span class="h5 text-danger">
+                                                        {{ t('Error') }}
+                                                    </span>
+                                                    <br>
+                                                    {{ connection_test?.error }}
+                                                    @if (connection_test?.guzzle_error) {
+                                                        <div>
+                                                            {{ connection_test?.guzzle_error }}
+                                                        </div>
+                                                    }
+                                                </div>
+                                                @if (connection_test?.oitc_errno === AgentHttpClientErrors.ERRNO_HTTPS_COMPROMISED) {
+                                                    <div class="ms-2"
+                                                    >
+                                                        <button class="btn btn-outline-danger btn-sm ripple"
+                                                                (click)="reExchangeAutoTLS()">
+                                                            <fa-icon [icon]="['fas', 'certificate']"></fa-icon>
+                                                            {{ t('Reset AutoTLS certificate') }}
+                                                        </button>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
-                                    </div>
+                                    }
 
                                     <!-- Connection warning -->
-                                    <div class="alert border-faded bg-transparent text-secondary"
-                                         *ngIf="connection_test?.status === 'warning'">
-                                        <div class="d-flex align-items-center">
-                                            <div class="alert-icon me-2">
-                                                <span class="icon-stack icon-stack-md">
-                                                    <i class="base-circle icon-stack-3x text-warning"></i>
-                                                    <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <span class="h5 text-warning">
-                                                    {{ t('Error!') }}
-                                                </span>
-                                                <br>
-                                                {{ connection_test?.error }}
-                                                <div *ngIf="connection_test?.guzzle_error">
-                                                    {{ connection_test?.guzzle_error }}
+                                    @if (connection_test?.status === 'warning') {
+                                        <div class="alert border-faded bg-transparent text-secondary"
+                                        >
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon me-2">
+                                                    <span class="icon-stack icon-stack-md">
+                                                        <i class="base-circle icon-stack-3x text-warning"></i>
+                                                        <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
+                                                    </span>
                                                 </div>
-                                            </div>
-                                            <div class="ms-2"
-                                                 *ngIf="connection_test?.oitc_errno === AgentHttpClientErrors.ERRNO_AGENT_RESPONSES_TO_HTTP">
-                                                <button class="btn btn-outline-warning btn-sm ripple"
-                                                        (click)="reExchangeAutoTLS()">
-                                                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-                                                    {{ t('Trust this Agent and generate a new certificate.') }}
-                                                </button>
+                                                <div class="flex-1">
+                                                    <span class="h5 text-warning">
+                                                        {{ t('Error!') }}
+                                                    </span>
+                                                    <br>
+                                                    {{ connection_test?.error }}
+                                                    @if (connection_test?.guzzle_error) {
+                                                        <div>
+                                                            {{ connection_test?.guzzle_error }}
+                                                        </div>
+                                                    }
+                                                </div>
+                                                @if (connection_test?.oitc_errno === AgentHttpClientErrors.ERRNO_AGENT_RESPONSES_TO_HTTP) {
+                                                    <div class="ms-2"
+                                                    >
+                                                        <button class="btn btn-outline-warning btn-sm ripple"
+                                                                (click)="reExchangeAutoTLS()">
+                                                            <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                                            {{ t('Trust this Agent and generate a new certificate.') }}
+                                                        </button>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
-                                    </div>
+                                    }
 
                                     <!-- Connection unknown -->
-                                    <div class="alert border-faded bg-transparent text-secondary"
-                                         *ngIf="connection_test?.status === 'unknown'">
-                                        <div class="d-flex align-items-center">
-                                            <div class="alert-icon me-2">
-                                                <span class="icon-stack icon-stack-md">
-                                                    <i class="base-circle icon-stack-3x unknown"></i>
-                                                    <i class="fas fa-times icon-stack-1x text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <span class="h5 unknown">
-                                                    {{ t('Unknown error') }}
-                                                </span>
-                                                <br>
-                                                {{ connection_test?.error }}
-                                                <div *ngIf="connection_test?.guzzle_error">
-                                                    {{ connection_test?.guzzle_error }}
+                                    @if (connection_test?.status === 'unknown') {
+                                        <div class="alert border-faded bg-transparent text-secondary"
+                                        >
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon me-2">
+                                                    <span class="icon-stack icon-stack-md">
+                                                        <i class="base-circle icon-stack-3x unknown"></i>
+                                                        <i class="fas fa-times icon-stack-1x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <span class="h5 unknown">
+                                                        {{ t('Unknown error') }}
+                                                    </span>
+                                                    <br>
+                                                    {{ connection_test?.error }}
+                                                    @if (connection_test?.guzzle_error) {
+                                                        <div>
+                                                            {{ connection_test?.guzzle_error }}
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
 
                                     <!-- hasSatelliteError -->
-                                    <div class="alert border-faded bg-transparent text-secondary"
-                                         *ngIf="hasSatelliteError">
-                                        <div class="d-flex align-items-center">
-                                            <div class="alert-icon me-2">
-                                                <span class="icon-stack icon-stack-md">
-                                                    <i class="base-circle icon-stack-3x text-danger"></i>
-                                                    <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-1">
-                                                <span class="h5 text-danger">
-                                                    {{ t('Error') }}
-                                                </span>
-                                                <br>
-                                                {{ satelliteErrorMsg }}
+                                    @if (hasSatelliteError) {
+                                        <div class="alert border-faded bg-transparent text-secondary"
+                                        >
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon me-2">
+                                                    <span class="icon-stack icon-stack-md">
+                                                        <i class="base-circle icon-stack-3x text-danger"></i>
+                                                        <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <span class="h5 text-danger">
+                                                        {{ t('Error') }}
+                                                    </span>
+                                                    <br>
+                                                    {{ satelliteErrorMsg }}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
 
                                 </div>
                             </fieldset>

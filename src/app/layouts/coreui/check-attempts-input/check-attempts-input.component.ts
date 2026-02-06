@@ -15,7 +15,7 @@ import {
     InputGroupComponent,
     RowComponent
 } from '@coreui/angular';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 
@@ -30,7 +30,6 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
         FormControlDirective,
         TranslocoPipe,
         XsButtonDirective,
-        NgForOf,
         InputGroupComponent
     ],
     templateUrl: './check-attempts-input.component.html',

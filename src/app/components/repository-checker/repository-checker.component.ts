@@ -5,16 +5,15 @@ import { AlertComponent } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { RepositoryCheckerService } from './repository-checker.service';
 import { Subscription } from 'rxjs';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-repository-checker',
     imports: [
-    TranslocoDirective,
-    AlertComponent,
-    FaIconComponent,
-    NgIf
-],
+        TranslocoDirective,
+        AlertComponent,
+        FaIconComponent
+    ],
     templateUrl: './repository-checker.component.html',
     styleUrl: './repository-checker.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -2,43 +2,46 @@
     @if (reportDetails) {
 
         <!-- Summary only report -->
-        <ng-container *ngIf="reportDetails.summary == 1">
+        @if (reportDetails.summary == 1) {
             <c-row>
-                <c-col [xs]="12" [md]="6" class="d-flex" *ngIf="hostSummary.length > 0">
-                    <c-card class="mb-3 flex-1">
-                        <c-card-header>
-                            <h5 cCardTitle>
-                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                {{ t('Hosts summary') }}
-                            </h5>
-                        </c-card-header>
-                        <c-card-body>
-                            <oitc-host-pie-echart
-                                [chartData]="hostSummary"></oitc-host-pie-echart>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-
-                <c-col [xs]="12" [md]="6" class="d-flex" *ngIf="serviceSummary.length > 0">
-                    <c-card class="mb-3 flex-1">
-                        <c-card-header>
-                            <h5 cCardTitle>
-                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                                {{ t('Services summary') }}
-                            </h5>
-                        </c-card-header>
-                        <c-card-body>
-                            <oitc-service-pie-echart
-                                [chartData]="serviceSummary"></oitc-service-pie-echart>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
+                @if (hostSummary.length > 0) {
+                    <c-col [xs]="12" [md]="6" class="d-flex">
+                        <c-card class="mb-3 flex-1">
+                            <c-card-header>
+                                <h5 cCardTitle>
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    {{ t('Hosts summary') }}
+                                </h5>
+                            </c-card-header>
+                            <c-card-body>
+                                <oitc-host-pie-echart
+                                    [chartData]="hostSummary"></oitc-host-pie-echart>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                }
+                @if (serviceSummary.length > 0) {
+                    <c-col [xs]="12" [md]="6" class="d-flex">
+                        <c-card class="mb-3 flex-1">
+                            <c-card-header>
+                                <h5 cCardTitle>
+                                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                    {{ t('Services summary') }}
+                                </h5>
+                            </c-card-header>
+                            <c-card-body>
+                                <oitc-service-pie-echart
+                                    [chartData]="serviceSummary"></oitc-service-pie-echart>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                }
             </c-row>
-        </ng-container>
+        }
 
 
         <!-- Detailed report -->
-        <ng-container *ngIf="reportDetails.summary == 0">
+        @if (reportDetails.summary == 0) {
             <c-row>
                 @for (host of hostsWithServices; track $index) {
                     <c-col [xs]="12">
@@ -56,46 +59,48 @@
                             </c-card-header>
                             <c-card-body>
                                 <c-row>
-                                    <c-col [xs]="12"
-                                           *ngIf="host.Host._pieChartMetrics && host.Host._pieChartMetrics.length > 0">
-                                        <oitc-host-simple-pie-chart
-                                            class="mb-2"
-                                            [pieData]="host.Host._pieChartMetrics"
-                                            [width]="200"
-                                        ></oitc-host-simple-pie-chart>
-                                    </c-col>
-
-                                    <c-col [xs]="12" *ngIf="host.Services.length > 0">
-                                        <h5>{{ t('Service availability') }}</h5>
-                                    </c-col>
-
-                                    @for (service of host.Services; track $index) {
-                                        <c-col [xs]="12" *ngIf="service.Service._chartAbsolutValues">
-                                            <span>
-                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                                <a *oitcPermission="['services', 'browser']"
-                                                   [routerLink]="['/', 'services', 'browser', service.Service.id]">
-                                                    {{ service.Service.name }}
-                                                </a>
-                                                <span *oitcPermission="['services', 'browser']; negate: true">
-                                                    {{ service.Service.name }}
-                                                </span>
-                                            </span>
-
-                                            <oitc-service-progressbar
-                                                [progressbarData]="service.Service._chartAbsolutValues"
-                                                [showPercentage]="false"
-                                                class="mb-2"></oitc-service-progressbar>
+                                    @if (host.Host._pieChartMetrics && host.Host._pieChartMetrics.length > 0) {
+                                        <c-col [xs]="12"
+                                        >
+                                            <oitc-host-simple-pie-chart
+                                                class="mb-2"
+                                                [pieData]="host.Host._pieChartMetrics"
+                                                [width]="200"
+                                            ></oitc-host-simple-pie-chart>
                                         </c-col>
                                     }
+                                    @if (host.Services.length > 0) {
+                                        <c-col [xs]="12">
+                                            <h5>{{ t('Service availability') }}</h5>
+                                        </c-col>
+                                    }
+                                    @for (service of host.Services; track $index) {
+                                        @if (service.Service._chartAbsolutValues) {
+                                            <c-col [xs]="12">
+                                                <span>
+                                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                    <a *oitcPermission="['services', 'browser']"
+                                                       [routerLink]="['/', 'services', 'browser', service.Service.id]">
+                                                        {{ service.Service.name }}
+                                                    </a>
+                                                    <span *oitcPermission="['services', 'browser']; negate: true">
+                                                        {{ service.Service.name }}
+                                                    </span>
+                                                </span>
+                                                <oitc-service-progressbar
+                                                    [progressbarData]="service.Service._chartAbsolutValues"
+                                                    [showPercentage]="false"
+                                                    class="mb-2"></oitc-service-progressbar>
+                                            </c-col>
+                                        }
+                                    }
                                 </c-row>
-
                             </c-card-body>
                         </c-card>
                     </c-col>
                 }
             </c-row>
-        </ng-container>
+        }
     }
 
 

@@ -126,7 +126,10 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
 
     // This hack is needed to make the child component to update its view.
     protected wizardLoad(result: WizardGet): void {
-        this.childComponent.cdr.markForCheck();
+        this.cdr.markForCheck();
+        if (this.childComponent) {
+            this.childComponent.cdr.markForCheck();
+        }
     }
 
     protected beginDiscovery(): void {

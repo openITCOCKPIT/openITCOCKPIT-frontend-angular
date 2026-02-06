@@ -7,12 +7,14 @@
                         {{ t('Add national holidays') }}
                     </button>
                     <ul cDropdownMenu>
-                        <li *ngFor="let c of countries | keyvalue">
-                            <a cDropdownItem (click)="changeCountryCodeAndEmit(c.key)">
-                                <span class="fi" [ngClass]="'fi-'+c.key"></span>
-                                {{ c.value }}
-                            </a>
-                        </li>
+                        @for (c of countries | keyvalue; track c) {
+                            <li>
+                                <a cDropdownItem (click)="changeCountryCodeAndEmit(c.key)">
+                                    <span class="fi" [ngClass]="'fi-'+c.key"></span>
+                                    {{ c.value }}
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </c-dropdown>
 
@@ -46,13 +48,14 @@
                         {{ arg.dayNumberText }}
                     </div>
                     <div>
-                        <button cButton
-                                (click)="triggerAddEventModal(arg)"
-                                *ngIf="!hasEvents(formatJsDateToFullcalendarString(arg.date))"
-                                class="ripple" size="xs"
-                                color="success">
-                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                        </button>
+                        @if (!hasEvents(formatJsDateToFullcalendarString(arg.date))) {
+                            <button cButton
+                                    (click)="triggerAddEventModal(arg)"
+                                    class="ripple" size="xs"
+                                    color="success">
+                                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            </button>
+                        }
                     </div>
                 </div>
             </ng-template>

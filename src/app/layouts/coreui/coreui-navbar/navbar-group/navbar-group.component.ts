@@ -23,10 +23,10 @@ import { NgClass } from '@angular/common';
 @Component({
     selector: 'oitc-navbar-group',
     imports: [
-    FaIconComponent,
-    RouterLink,
-    NgClass
-],
+        FaIconComponent,
+        RouterLink,
+        NgClass
+    ],
     templateUrl: './navbar-group.component.html',
     styleUrl: './navbar-group.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

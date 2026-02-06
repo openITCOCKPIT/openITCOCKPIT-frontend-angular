@@ -30,28 +30,34 @@
                         <fa-icon [icon]="['fas', 'arrows-spin']"></fa-icon>
                     </button>
                 </c-nav-item>
-                <c-nav-item class="px-1" *ngIf="!isReadonly">
-                    <button (click)="lockOrUnlock(false)" cButton class="ripple" color="danger"
-                            *ngIf="dashboardIsLocked"
-                            size="xs"
-                            [cTooltip]="'Unlock for edit'|transloco" cTooltipPlacement="bottom">
-                        <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                    </button>
-                    <button (click)="lockOrUnlock(true)" cButton class="ripple" color="primary"
-                            *ngIf="!dashboardIsLocked"
-                            size="xs"
-                            [cTooltip]="'Lock for edit'|transloco" cTooltipPlacement="bottom">
-                        <fa-icon [icon]="['fas', 'unlock']"></fa-icon>
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1" *ngIf="!isReadonly">
-                    <button (click)="toggleAddWidgetModal()" cButton class="ripple" color="success"
-                            [disabled]="dashboardIsLocked"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                        {{ t('Add Widget') }}
-                    </button>
-                </c-nav-item>
+                @if (!isReadonly) {
+                    <c-nav-item class="px-1">
+                        @if (dashboardIsLocked) {
+                            <button (click)="lockOrUnlock(false)" cButton class="ripple" color="danger"
+                                    size="xs"
+                                    [cTooltip]="'Unlock for edit'|transloco" cTooltipPlacement="bottom">
+                                <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                            </button>
+                        }
+                        @if (!dashboardIsLocked) {
+                            <button (click)="lockOrUnlock(true)" cButton class="ripple" color="primary"
+                                    size="xs"
+                                    [cTooltip]="'Lock for edit'|transloco" cTooltipPlacement="bottom">
+                                <fa-icon [icon]="['fas', 'unlock']"></fa-icon>
+                            </button>
+                        }
+                    </c-nav-item>
+                }
+                @if (!isReadonly) {
+                    <c-nav-item class="px-1">
+                        <button (click)="toggleAddWidgetModal()" cButton class="ripple" color="success"
+                                [disabled]="dashboardIsLocked"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('Add Widget') }}
+                        </button>
+                    </c-nav-item>
+                }
                 <c-nav-item class="px-1">
                     <button (click)="loadTabContent(this.currentTabId)" cButton class="ripple" color="default"
                             size="xs">
@@ -98,99 +104,99 @@
             }
 
             <!-- Actual dashboard content -->
-            <div class="grid-container" *ngIf="layout.length > 0" [ngClass]="{'border-0': dashboardIsLocked}">
-                <ktd-grid [cols]="cols"
-                          [rowHeight]="rowHeight"
-                          [gap]="10"
-                          [layout]="layout"
-                          [compactType]="compactType"
-                          [preventCollision]="preventCollision"
-                          [scrollableParent]="autoScroll ? document : null"
-                          scrollSpeed="4"
-                          (dragStarted)="onDragStarted($event)"
-                          (resizeStarted)="onResizeStarted($event)"
-                          (dragEnded)="onDragEnded($event)"
-                          (resizeEnded)="onResizeEnded($event)"
-                          (layoutUpdated)="onLayoutUpdated($event)">
-                    <ktd-grid-item *ngFor="let widget of widgets; trackBy:WidgetTrackById"
-                                   [id]="widget.id"
-                                   [transition]="currentTransition"
-                                   [dragStartThreshold]="dragStartThreshold"
-                                   [draggable]="!disableDrag"
-                                   [resizable]="!disableResize"
-                                   class="overflow-visible">
-
-                        <!-- Optional Custom placeholder template -->
-                        <ng-template ktdGridItemPlaceholder>
-                            <!-- Custom placeholder content goes here -->
-
-                            <c-card class="w-100 h-100 justify-content-center widget-placeholder">
-                                <div class="align-self-center">
-                                    <fa-icon [icon]="['fas', 'up-down-left-right']" size="2x"></fa-icon>
+            @if (layout.length > 0) {
+                <div class="grid-container" [ngClass]="{'border-0': dashboardIsLocked}">
+                    <ktd-grid [cols]="cols"
+                              [rowHeight]="rowHeight"
+                              [gap]="10"
+                              [layout]="layout"
+                              [compactType]="compactType"
+                              [preventCollision]="preventCollision"
+                              [scrollableParent]="autoScroll ? document : null"
+                              scrollSpeed="4"
+                              (dragStarted)="onDragStarted($event)"
+                              (resizeStarted)="onResizeStarted($event)"
+                              (dragEnded)="onDragEnded($event)"
+                              (resizeEnded)="onResizeEnded($event)"
+                              (layoutUpdated)="onLayoutUpdated($event)">
+                        @for (widget of widgets; track WidgetTrackById($index, widget)) {
+                            <ktd-grid-item
+                                [id]="widget.id"
+                                [transition]="currentTransition"
+                                [dragStartThreshold]="dragStartThreshold"
+                                [draggable]="!disableDrag"
+                                [resizable]="!disableResize"
+                                class="overflow-visible">
+                                <!-- Optional Custom placeholder template -->
+                                <ng-template ktdGridItemPlaceholder>
+                                    <!-- Custom placeholder content goes here -->
+                                    <c-card class="w-100 h-100 justify-content-center widget-placeholder">
+                                        <div class="align-self-center">
+                                            <fa-icon [icon]="['fas', 'up-down-left-right']" size="2x"></fa-icon>
+                                        </div>
+                                    </c-card>
+                                </ng-template>
+                                <div class="grid-item-content">
+                                    <c-card class="w-100 h-100">
+                                        <c-card-header [ngClass]="{'cursor-grab': !dashboardIsLocked}"
+                                                       [class]="widget.color"
+                                                       class="card-header-slim">
+                                            <h5 cCardTitle ktdGridDragHandle>
+                                                <!-- The icons are stored in the database to be backwards compatible we use the good old i-tag -->
+                                                <i [classList]="widget.icon"></i>
+                                                {{ widget.title }}
+                                            </h5>
+                                            <c-nav class="card-toolbar card-header-pills">
+                                                @if (!dashboardIsLocked) {
+                                                    <c-nav-item class="px-1">
+                                                        <button
+                                                            class="btn btn-sm btn-icon ripple btn-icon-hover-primary"
+                                                            (click)="toggleRenameWidgetModal(widget)">
+                                                            <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                                                        </button>
+                                                    </c-nav-item>
+                                                }
+                                                @if (!dashboardIsLocked) {
+                                                    <c-nav-item class="px-1">
+                                                        <oitc-dashboard-colorpicker
+                                                            (selectedColor)="onColorChange($event, widget)"></oitc-dashboard-colorpicker>
+                                                    </c-nav-item>
+                                                }
+                                                @if (!disableRemove) {
+                                                    <c-nav-item class="px-1">
+                                                        <button class="btn btn-sm btn-icon ripple btn-icon-hover-danger"
+                                                                (mousedown)="stopEventPropagation($event)"
+                                                                (click)="removeItem(widget.id)">
+                                                            <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                                                        </button>
+                                                    </c-nav-item>
+                                                }
+                                            </c-nav>
+                                        </c-card-header>
+                                        <c-card-body class="overflow-auto pt-2 pb-0"
+                                                     [attr.id]="'widget-body-'+widget.id">
+                                            @if (isWidgetAvailable(widget)) {
+                                                <oitc-widget-container
+                                                    [widgetInput]="widget"
+                                                    [isReadonly]="isReadonly"></oitc-widget-container>
+                                            }
+                                            @if (!isWidgetAvailable(widget)) {
+                                                <c-alert color="warning">
+                                                    <h4 cAlertHeading>
+                                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                        {{ t('Missing permissions') }}
+                                                    </h4>
+                                                    <p>{{ t('Sorry, this widget is not accessible using your permissions.') }}</p>
+                                                </c-alert>
+                                            }
+                                        </c-card-body>
+                                    </c-card>
                                 </div>
-                            </c-card>
-
-                        </ng-template>
-
-                        <div class="grid-item-content">
-
-                            <c-card class="w-100 h-100">
-                                <c-card-header [ngClass]="{'cursor-grab': !dashboardIsLocked}"
-                                               [class]="widget.color"
-                                               class="card-header-slim">
-                                    <h5 cCardTitle ktdGridDragHandle>
-                                        <!-- The icons are stored in the database to be backwards compatible we use the good old i-tag -->
-                                        <i [classList]="widget.icon"></i>
-                                        {{ widget.title }}
-                                    </h5>
-
-                                    <c-nav class="card-toolbar card-header-pills">
-
-                                        <c-nav-item class="px-1" *ngIf="!dashboardIsLocked">
-                                            <button class="btn btn-sm btn-icon ripple btn-icon-hover-primary"
-                                                    (click)="toggleRenameWidgetModal(widget)">
-                                                <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
-                                            </button>
-                                        </c-nav-item>
-
-                                        <c-nav-item class="px-1" *ngIf="!dashboardIsLocked">
-                                            <oitc-dashboard-colorpicker
-                                                (selectedColor)="onColorChange($event, widget)"></oitc-dashboard-colorpicker>
-                                        </c-nav-item>
-
-                                        <c-nav-item class="px-1" *ngIf="!disableRemove">
-                                            <button class="btn btn-sm btn-icon ripple btn-icon-hover-danger"
-                                                    (mousedown)="stopEventPropagation($event)"
-                                                    (click)="removeItem(widget.id)">
-                                                <fa-icon [icon]="['fas', 'times']"></fa-icon>
-                                            </button>
-                                        </c-nav-item>
-                                    </c-nav>
-
-                                </c-card-header>
-                                <c-card-body class="overflow-auto pt-2 pb-0" [attr.id]="'widget-body-'+widget.id">
-                                    <ng-container *ngIf="isWidgetAvailable(widget)">
-                                        <oitc-widget-container
-                                            [widgetInput]="widget"
-                                            [isReadonly]="isReadonly"></oitc-widget-container>
-                                    </ng-container>
-                                    <ng-container *ngIf="!isWidgetAvailable(widget)">
-                                        <c-alert color="warning">
-                                            <h4 cAlertHeading>
-                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                                {{ t('Missing permissions') }}
-                                            </h4>
-                                            <p>{{ t('Sorry, this widget is not accessible using your permissions.') }}</p>
-                                        </c-alert>
-                                    </ng-container>
-                                </c-card-body>
-                            </c-card>
-
-                        </div>
-
-                    </ktd-grid-item>
-                </ktd-grid>
-            </div>
+                            </ktd-grid-item>
+                        }
+                    </ktd-grid>
+                </div>
+            }
         </c-card-body>
     </c-card>
 

@@ -37,7 +37,7 @@ import { BbCodeParserService } from '../../../../services/bb-code-parser.service
 import { GenericValidationError } from '../../../../generic-responses';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-changecalendars-event-editor',
@@ -64,8 +64,7 @@ import { NgIf } from '@angular/common';
         XsButtonDirective,
         CardTitleDirective,
         CardBodyComponent,
-        CardComponent,
-        NgIf
+        CardComponent
     ],
     templateUrl: './changecalendars-event-editor.component.html',
     styleUrl: './changecalendars-event-editor.component.css',

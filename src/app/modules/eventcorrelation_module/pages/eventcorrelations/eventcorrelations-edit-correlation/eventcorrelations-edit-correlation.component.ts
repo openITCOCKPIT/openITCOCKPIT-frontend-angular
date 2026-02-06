@@ -41,7 +41,7 @@ import {
 } from '@coreui/angular';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -84,7 +84,6 @@ import { FormsModule } from '@angular/forms';
         FaIconComponent,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         RowComponent,
         TranslocoDirective,

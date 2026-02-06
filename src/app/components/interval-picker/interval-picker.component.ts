@@ -20,7 +20,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { LocalStorageService } from '../../services/local-storage.service';
 
@@ -35,8 +35,7 @@ import { LocalStorageService } from '../../services/local-storage.service';
         ColComponent,
         DropdownMenuDirective,
         NgClass,
-        TranslocoDirective,
-        NgForOf
+        TranslocoDirective
     ],
     templateUrl: './interval-picker.component.html',
     styleUrl: './interval-picker.component.css',

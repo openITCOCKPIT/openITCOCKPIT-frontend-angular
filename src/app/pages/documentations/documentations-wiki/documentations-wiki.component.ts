@@ -24,7 +24,7 @@ import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loa
 import { Subscription } from 'rxjs';
 import { DocumentationWikiRecord, DocumentationWikiRecordResponse } from '../documentations.interface';
 import { DocumentationsService } from '../documentations.service';
-import { NgIf } from '@angular/common';
+
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 
 @Component({
@@ -43,7 +43,6 @@ import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
         CardTextDirective,
         XsButtonDirective,
         BlockLoaderComponent,
-        NgIf,
         ButtonCloseDirective,
         ModalBodyComponent,
         ModalComponent,

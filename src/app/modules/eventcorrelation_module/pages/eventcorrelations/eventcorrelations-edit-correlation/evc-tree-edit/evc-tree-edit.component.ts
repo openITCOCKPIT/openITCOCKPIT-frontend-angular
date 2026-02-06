@@ -22,7 +22,7 @@ import { ConnectionOperator, EvcTreeValidationErrors } from '../../eventcorrelat
 import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
 import { generateGuid } from '@foblex/utils';
 import { IPoint, PointExtensions } from '@foblex/2d';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ButtonGroupComponent, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -121,7 +121,6 @@ const GROUP_HEIGHT = 50;
         NgClass,
         RowComponent,
         ColComponent,
-        NgIf,
         TooltipDirective,
         FaIconComponent,
         TranslocoDirective,

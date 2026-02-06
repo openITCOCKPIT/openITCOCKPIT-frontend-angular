@@ -49,13 +49,15 @@
                     [errorText]="'Define defaults like which Container and services should assigned to imported hosts, depending on the used data source (Importer).'">
                 </oitc-alert>
 
-                <oitc-alert *ngIf="showRootAlert"
-                            color="warning"
-                            baseIcon="circle"
-                            [icon]="['fas', 'exclamation-triangle']"
-                            [errorHeadline]="'/root container selected!'"
-                            [errorText]="'Choosing a tenant container is recommended for later permission purposes'">
-                </oitc-alert>
+                @if (showRootAlert) {
+                    <oitc-alert
+                        color="warning"
+                        baseIcon="circle"
+                        [icon]="['fas', 'exclamation-triangle']"
+                        [errorHeadline]="'/root container selected!'"
+                        [errorText]="'Choosing a tenant container is recommended for later permission purposes'">
+                    </oitc-alert>
+                }
 
                 <div class="mb-3">
                     <label cLabel for="container">
@@ -72,14 +74,18 @@
                         [debounce]="true"
                         (onChange)="onContainerChange()">
                     </oitc-select>
-                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
-                    <div *ngIf="post.container_id === ROOT_CONTAINER"
-                         class="help-block text-warning text-warning-glow">
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                        {{ t('Hosts in /root can\'t be moved to other containers later') }}
-                    </div>
+                    @if (!post.container_id) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
+                    @if (post.container_id === ROOT_CONTAINER) {
+                        <div
+                            class="help-block text-warning text-warning-glow">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                            {{ t('Hosts in /root can\'t be moved to other containers later') }}
+                        </div>
+                    }
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                 </div>
                 <div class="mb-3">
@@ -152,9 +158,11 @@
                                         [(ngModel)]="post.hosttemplate_id"
                                         oitcFormError [errors]="errors" errorField="hosttemplates">
                                     </oitc-select>
-                                    <div *ngIf="!post.hosttemplate_id" class="text-warning-glow pt-1">
-                                        {{ t('Please select a host template.') }}
-                                    </div>
+                                    @if (!post.hosttemplate_id) {
+                                        <div class="text-warning-glow pt-1">
+                                            {{ t('Please select a host template.') }}
+                                        </div>
+                                    }
                                     <oitc-form-feedback [errors]="errors"
                                                         errorField="hosttemplate_id"></oitc-form-feedback>
                                 </div>
@@ -221,38 +229,42 @@
                             <div class="help-block">
                                 {{ t('If the match is successful, these service templates are assigned to the imported hosts.') }}
                             </div>
-                            <div class="text-danger" *ngIf="errors_exists_matches_servicetemplates">
-                                {{ t('Do not enter empty matches') }}
-                            </div>
+                            @if (errors_exists_matches_servicetemplates) {
+                                <div class="text-danger">
+                                    {{ t('Do not enter empty matches') }}
+                                </div>
+                            }
 
-                            <div class="alert border-faded bg-transparent text-info"
-                                 *ngIf="servicetemplates.length === 0 && post.container_id">
-                                <div class="d-flex align-items-center">
-                                    <div class="alert-icon me-2">
-                                        <span class="icon-stack icon-stack-md">
-                                            <i class="base-circle icon-stack-3x text-info"></i>
-                                            <i class="fas fa-exclamation icon-stack-1x text-white"></i>
-                                        </span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <span class="h5 text-info">
-                                            {{ t('No service templates are defined!') }}
-                                        </span>
-                                        <br>
-                                        <div>
-                                            {{ t('Please create at least one "Service template"') }}
+                            @if (servicetemplates.length === 0 && post.container_id) {
+                                <div class="alert border-faded bg-transparent text-info"
+                                >
+                                    <div class="d-flex align-items-center">
+                                        <div class="alert-icon me-2">
+                                            <span class="icon-stack icon-stack-md">
+                                                <i class="base-circle icon-stack-3x text-info"></i>
+                                                <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                                            </span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <span class="h5 text-info">
+                                                {{ t('No service templates are defined!') }}
+                                            </span>
+                                            <br>
+                                            <div>
+                                                {{ t('Please create at least one "Service template"') }}
+                                            </div>
+                                        </div>
+                                        <div class="ms-2">
+                                            <a *oitcPermission="['servicetemplates', 'index']"
+                                               [routerLink]="['/', 'servicetemplates', 'index']"
+                                               class="btn btn-outline-info ripple">
+                                                <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                                                {{ t('Go to "Service templates"') }}
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="ms-2">
-                                        <a *oitcPermission="['servicetemplates', 'index']"
-                                           [routerLink]="['/', 'servicetemplates', 'index']"
-                                           class="btn btn-outline-info ripple">
-                                            <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
-                                            {{ t('Go to "Service templates"') }}
-                                        </a>
-                                    </div>
                                 </div>
-                            </div>
+                            }
                         </legend>
                         <hr class="border-bottom border-opacity-25 border-dashed">
                         @for (match of post.hostdefaults_to_servicetemplates; track $index) {
@@ -338,13 +350,15 @@
                             <c-col>
                             </c-col>
                             <c-col class="text-end">
-                                <button cButton class="ripple" color="success"
-                                        *ngIf="servicetemplates.length > 0" type="button"
-                                        [disabled]="!servicetemplates.length"
-                                        (click)="addMatchServicetemplate()">
-                                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                    {{ t('Add') }}
-                                </button>
+                                @if (servicetemplates.length > 0) {
+                                    <button cButton class="ripple" color="success"
+                                            type="button"
+                                            [disabled]="!servicetemplates.length"
+                                            (click)="addMatchServicetemplate()">
+                                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                        {{ t('Add') }}
+                                    </button>
+                                }
                             </c-col>
                         </c-row>
                     </fieldset>
@@ -365,34 +379,36 @@
                             <div class="help-block">
                                 {{ t('If the match is successful, these service template groups are assigned to the imported hosts.') }}
                             </div>
-                            <div class="alert border-faded bg-transparent text-info"
-                                 *ngIf="servicetemplategroups.length === 0 && post.container_id">
-                                <div class="d-flex align-items-center">
-                                    <div class="alert-icon me-2">
-                                        <span class="icon-stack icon-stack-md">
-                                            <i class="base-circle icon-stack-3x text-info"></i>
-                                            <i class="fas fa-exclamation icon-stack-1x text-white"></i>
-                                        </span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <span class="h5 text-info">
-                                            {{ t('No service template groups are defined') }}
-                                        </span>
-                                        <br>
-                                        <div>
-                                            {{ t('Please create at least one "Service template groups"') }}
+                            @if (servicetemplategroups.length === 0 && post.container_id) {
+                                <div class="alert border-faded bg-transparent text-info"
+                                >
+                                    <div class="d-flex align-items-center">
+                                        <div class="alert-icon me-2">
+                                            <span class="icon-stack icon-stack-md">
+                                                <i class="base-circle icon-stack-3x text-info"></i>
+                                                <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                                            </span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <span class="h5 text-info">
+                                                {{ t('No service template groups are defined') }}
+                                            </span>
+                                            <br>
+                                            <div>
+                                                {{ t('Please create at least one "Service template groups"') }}
+                                            </div>
+                                        </div>
+                                        <div class="ms-2">
+                                            <a *oitcPermission="['servicetemplategroups', 'index']"
+                                               [routerLink]="['/', 'servicetemplategroups', 'index']"
+                                               class="btn btn-outline-info ripple">
+                                                <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                                                {{ t('Go to "Service template groups"') }}
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="ms-2">
-                                        <a *oitcPermission="['servicetemplategroups', 'index']"
-                                           [routerLink]="['/', 'servicetemplategroups', 'index']"
-                                           class="btn btn-outline-info ripple">
-                                            <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
-                                            {{ t('Go to "Service template groups"') }}
-                                        </a>
-                                    </div>
                                 </div>
-                            </div>
+                            }
                         </legend>
                         <hr class="border-bottom border-opacity-25 border-dashed">
                         @for (match of post.hostdefaults_to_servicetemplategroups; track $index) {
@@ -478,13 +494,15 @@
                         }
                         <c-row>
                             <c-col class="text-end">
-                                <button cButton class="ripple" color="success"
-                                        *ngIf="servicetemplategroups.length > 0" type="button"
-                                        [disabled]="!servicetemplategroups.length"
-                                        (click)="addMatchServicetemplategroup()">
-                                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                    {{ t('Add') }}
-                                </button>
+                                @if (servicetemplategroups.length > 0) {
+                                    <button cButton class="ripple" color="success"
+                                            type="button"
+                                            [disabled]="!servicetemplategroups.length"
+                                            (click)="addMatchServicetemplategroup()">
+                                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                        {{ t('Add') }}
+                                    </button>
+                                }
                             </c-col>
                         </c-row>
                     </fieldset>
@@ -505,34 +523,36 @@
                             <div class="help-block">
                                 {{ t('If the match is successful, these agent checks are assigned to the imported hosts.') }}
                             </div>
-                            <div class="alert border-faded bg-transparent text-info"
-                                 *ngIf="agentchecks.length === 0 && post.container_id">
-                                <div class="d-flex align-items-center">
-                                    <div class="alert-icon me-2">
-                                        <span class="icon-stack icon-stack-md">
-                                            <i class="base-circle icon-stack-3x text-info"></i>
-                                            <i class="fas fa-exclamation icon-stack-1x text-white"></i>
-                                        </span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <span class="h5 text-info">
-                                            {{ t('No agent checks are defined') }}
-                                        </span>
-                                        <br>
-                                        <div>
-                                            {{ t('Please create at least one "Agent check"') }}
+                            @if (agentchecks.length === 0 && post.container_id) {
+                                <div class="alert border-faded bg-transparent text-info"
+                                >
+                                    <div class="d-flex align-items-center">
+                                        <div class="alert-icon me-2">
+                                            <span class="icon-stack icon-stack-md">
+                                                <i class="base-circle icon-stack-3x text-info"></i>
+                                                <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                                            </span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <span class="h5 text-info">
+                                                {{ t('No agent checks are defined') }}
+                                            </span>
+                                            <br>
+                                            <div>
+                                                {{ t('Please create at least one "Agent check"') }}
+                                            </div>
+                                        </div>
+                                        <div class="ms-2">
+                                            <a *oitcPermission="['agentchecks', 'index']"
+                                               [routerLink]="['/', 'agentchecks', 'index']"
+                                               class="btn btn-outline-info ripple">
+                                                <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                                                {{ t('Go to "Agent checks"') }}
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="ms-2">
-                                        <a *oitcPermission="['agentchecks', 'index']"
-                                           [routerLink]="['/', 'agentchecks', 'index']"
-                                           class="btn btn-outline-info ripple">
-                                            <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
-                                            {{ t('Go to "Agent checks"') }}
-                                        </a>
-                                    </div>
                                 </div>
-                            </div>
+                            }
                         </legend>
                         <hr class="border-bottom border-opacity-25 border-dashed">
                         @for (match of post.hostdefaults_to_agentchecks; track $index) {
@@ -601,13 +621,15 @@
                             <c-col>
                             </c-col>
                             <c-col class="text-end">
-                                <button cButton class="ripple" color="success"
-                                        *ngIf="agentchecks.length > 0" type="button"
-                                        [disabled]="!agentchecks.length"
-                                        (click)="addMatchAgentcheck()">
-                                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                    {{ t('Add') }}
-                                </button>
+                                @if (agentchecks.length > 0) {
+                                    <button cButton class="ripple" color="success"
+                                            type="button"
+                                            [disabled]="!agentchecks.length"
+                                            (click)="addMatchAgentcheck()">
+                                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                        {{ t('Add') }}
+                                    </button>
+                                }
                             </c-col>
                         </c-row>
                     </fieldset>
@@ -628,34 +650,36 @@
                             <div class="help-block">
                                 {{ t('If the match is successful, these service templates are assigned to the imported hosts.') }}
                             </div>
-                            <div class="alert border-faded bg-transparent text-info"
-                                 *ngIf="servicetemplates.length === 0 && post.container_id">
-                                <div class="d-flex align-items-center">
-                                    <div class="alert-icon me-2">
-                                        <span class="icon-stack icon-stack-md">
-                                            <i class="base-circle icon-stack-3x text-info"></i>
-                                            <i class="fas fa-exclamation icon-stack-1x text-white"></i>
-                                        </span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <span class="h5 text-info">
-                                            {{ t('No service templates are defined!') }}
-                                        </span>
-                                        <br>
-                                        <div>
-                                            {{ t('Please create at least one "Service template"') }}
+                            @if (servicetemplates.length === 0 && post.container_id) {
+                                <div class="alert border-faded bg-transparent text-info"
+                                >
+                                    <div class="d-flex align-items-center">
+                                        <div class="alert-icon me-2">
+                                            <span class="icon-stack icon-stack-md">
+                                                <i class="base-circle icon-stack-3x text-info"></i>
+                                                <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                                            </span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <span class="h5 text-info">
+                                                {{ t('No service templates are defined!') }}
+                                            </span>
+                                            <br>
+                                            <div>
+                                                {{ t('Please create at least one "Service template"') }}
+                                            </div>
+                                        </div>
+                                        <div class="ms-2">
+                                            <a *oitcPermission="['servicetemplates', 'index']"
+                                               [routerLink]="['/', 'servicetemplates', 'index']"
+                                               class="btn btn-outline-info ripple">
+                                                <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                                                {{ t('Go to "Service templates"') }}
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="ms-2">
-                                        <a *oitcPermission="['servicetemplates', 'index']"
-                                           [routerLink]="['/', 'servicetemplates', 'index']"
-                                           class="btn btn-outline-info ripple">
-                                            <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
-                                            {{ t('Go to "Service templates"') }}
-                                        </a>
-                                    </div>
                                 </div>
-                            </div>
+                            }
                         </legend>
                         <hr class="border-bottom border-opacity-25 border-dashed">
                         @for (match of post.hostdefaults_to_servicetemplates_external_monitoring; track $index) {
@@ -725,13 +749,15 @@
                             <c-col>
                             </c-col>
                             <c-col class="text-end">
-                                <button cButton class="ripple" color="success"
-                                        *ngIf="servicetemplates.length > 0" type="button"
-                                        [disabled]="!servicetemplates.length"
-                                        (click)="addMatchServicetemplatesExternalMonitoring()">
-                                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                    {{ t('Add') }}
-                                </button>
+                                @if (servicetemplates.length > 0) {
+                                    <button cButton class="ripple" color="success"
+                                            type="button"
+                                            [disabled]="!servicetemplates.length"
+                                            (click)="addMatchServicetemplatesExternalMonitoring()">
+                                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                        {{ t('Add') }}
+                                    </button>
+                                }
                             </c-col>
                         </c-row>
                     </fieldset>

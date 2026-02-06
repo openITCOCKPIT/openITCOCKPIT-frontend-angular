@@ -44,7 +44,7 @@ import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-sele
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { UserTimezonesSelect } from '../../../../../pages/users/users.interface';
 import { ProfileService } from '../../../../../pages/profile/profile.service';
-import { NgIf } from '@angular/common';
+
 import { UsersService } from '../../../../../pages/users/users.service';
 
 @Component({
@@ -81,7 +81,6 @@ import { UsersService } from '../../../../../pages/users/users.service';
         FormControlDirective,
         InputGroupComponent,
         InputGroupTextDirective,
-        NgIf,
         DropdownComponent,
         DropdownItemDirective,
         DropdownMenuDirective,

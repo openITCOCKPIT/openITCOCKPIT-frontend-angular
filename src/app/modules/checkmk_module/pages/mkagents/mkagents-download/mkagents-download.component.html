@@ -64,75 +64,74 @@
                 </c-col>
             </c-row>
 
-            <oitc-block-loader *ngIf="!agentDownloads" height="35rem"></oitc-block-loader>
+            @if (!agentDownloads) {
+                <oitc-block-loader height="35rem"></oitc-block-loader>
+            }
 
-            <div *ngIf="agentDownloads">
-                <c-row class="mt-3">
-                    <c-col [xs]="12">
-                        <c-card>
-                            <c-card-body>
-                                <fieldset>
-                                    <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                                        <h4>
-                                            <fa-icon [icon]="['fab', 'linux']"></fa-icon>
-                                            {{ t('Linux, Unix, macOS and other') }}
-                                        </h4>
-                                    </legend>
-                                    <div>
-                                        <oitc-mkagents-list-downloads
-                                            [filetypeWithFiles]="agentDownloads.agents.unix"></oitc-mkagents-list-downloads>
-                                    </div>
-                                </fieldset>
-                            </c-card-body>
-                        </c-card>
-
-                    </c-col>
-                </c-row>
-
-                <c-row class="mt-3">
-                    <c-col [xs]="12">
-                        <c-card>
-                            <c-card-body>
-                                <fieldset>
-                                    <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                                        <h4>
-                                            <fa-icon [icon]="['fab', 'windows']"></fa-icon>
-                                            {{ t('Windows') }}
-                                        </h4>
-                                    </legend>
-                                    <div>
-                                        <oitc-mkagents-list-downloads
-                                            [filetypeWithFiles]="agentDownloads.agents.windows"></oitc-mkagents-list-downloads>
-                                    </div>
-                                </fieldset>
-                            </c-card-body>
-                        </c-card>
-
-                    </c-col>
-                </c-row>
-
-                <c-row class="mt-3">
-                    <c-col [xs]="12">
-                        <c-card>
-                            <c-card-body>
-                                <fieldset>
-                                    <legend class="fs-md fieldset-legend-border-bottom mt-1">
-                                        <h4>
-                                            <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
-                                            {{ t('z/OS') }}
-                                        </h4>
-                                    </legend>
-                                    <div>
-                                        <oitc-mkagents-list-downloads
-                                            [filetypeWithFiles]="agentDownloads.agents.z_os"></oitc-mkagents-list-downloads>
-                                    </div>
-                                </fieldset>
-                            </c-card-body>
-                        </c-card>
-
-                    </c-col>
-                </c-row>
-            </div>
+            @if (agentDownloads) {
+                <div>
+                    <c-row class="mt-3">
+                        <c-col [xs]="12">
+                            <c-card>
+                                <c-card-body>
+                                    <fieldset>
+                                        <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                            <h4>
+                                                <fa-icon [icon]="['fab', 'linux']"></fa-icon>
+                                                {{ t('Linux, Unix, macOS and other') }}
+                                            </h4>
+                                        </legend>
+                                        <div>
+                                            <oitc-mkagents-list-downloads
+                                                [filetypeWithFiles]="agentDownloads.agents.unix"></oitc-mkagents-list-downloads>
+                                        </div>
+                                    </fieldset>
+                                </c-card-body>
+                            </c-card>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-3">
+                        <c-col [xs]="12">
+                            <c-card>
+                                <c-card-body>
+                                    <fieldset>
+                                        <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                            <h4>
+                                                <fa-icon [icon]="['fab', 'windows']"></fa-icon>
+                                                {{ t('Windows') }}
+                                            </h4>
+                                        </legend>
+                                        <div>
+                                            <oitc-mkagents-list-downloads
+                                                [filetypeWithFiles]="agentDownloads.agents.windows"></oitc-mkagents-list-downloads>
+                                        </div>
+                                    </fieldset>
+                                </c-card-body>
+                            </c-card>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-3">
+                        <c-col [xs]="12">
+                            <c-card>
+                                <c-card-body>
+                                    <fieldset>
+                                        <legend class="fs-md fieldset-legend-border-bottom mt-1">
+                                            <h4>
+                                                <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                                                {{ t('z/OS') }}
+                                            </h4>
+                                        </legend>
+                                        <div>
+                                            <oitc-mkagents-list-downloads
+                                                [filetypeWithFiles]="agentDownloads.agents.z_os"></oitc-mkagents-list-downloads>
+                                        </div>
+                                    </fieldset>
+                                </c-card-body>
+                            </c-card>
+                        </c-col>
+                    </c-row>
+                </div>
+            }
 
 
         </c-card-body>
