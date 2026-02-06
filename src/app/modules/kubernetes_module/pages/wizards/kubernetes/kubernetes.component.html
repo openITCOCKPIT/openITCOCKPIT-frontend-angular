@@ -83,8 +83,53 @@
                         <ng-template cTemplateId="accordionBodyTemplate">
                             <div class="accordion-body">
                                 <p>
-                                    {{ t('TBD') }}
+                                    {{ t('The plugin requires an API server URL (`--server`) and a **service account token** (`--token` or `--token-file`).') }}
+                                    <br/>{{ t('The recommended way is to create a **ServiceAccount** with minimal RBAC permissions.') }}
                                 </p>
+
+                                <ol>
+                                    <li>
+                                        {{ t('Create a ServiceAccount:') }}
+                                        <pre>kubectl create namespace monitoring
+kubectl create serviceaccount k8s-checker -n monitoring</pre>
+                                    </li>
+                                    <li>
+                                        {{ t('Create a ClusterRole with read-only permissions:') }}
+                                        <pre>apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: k8s-checker
+rules:
+- apiGroups: [""]
+  resources: ["nodes","pods","endpoints","events"]
+  verbs: ["get","list","watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments","daemonsets"]
+  verbs: ["get","list","watch"]</pre>
+                                        <br/>
+                                        {{ t('Apply the ClusterRole:') }}
+                                        <pre>kubectl apply -f k8s-checker-role.yaml</pre>
+                                    </li>
+                                    <li>
+                                        {{ t('Bind the role to the service account:') }}
+                                        <pre>kubectl create clusterrolebinding k8s-checker-binding   --clusterrole=k8s-checker   --serviceaccount=monitoring:k8s-checker</pre>
+                                    </li>
+                                    <li>
+                                        {{ t('Get the token:') }}
+                                        <br/>
+                                        <br/>{{ t('For Kubernetes v1.24+ (new `service-account-token` secret):') }}
+                                        <pre>kubectl create token k8s-checker -n monitoring > token.txt</pre>
+                                        <br/>
+                                        <br/>{{ t('For older versions (<1.24):') }}
+                                        <pre>SECRET=$(kubectl get sa k8s-checker -n monitoring -o jsonpath='&#123;.secrets[0].name&#125;')
+kubectl get secret $SECRET -n monitoring -o jsonpath='&#123;.data.token&#125;' | base64 -d > token.txt</pre>
+                                    </li>
+                                    <li>
+                                        {{ t('Now you can pass the file to the plugin:') }}
+                                        <br/>
+                                        <pre>./check_k8s_oitc.py nodes   --server https://k8s.example.org:6443   --token-file token.txt --insecure</pre>
+                                    </li>
+                                </ol>
                             </div>
                         </ng-template>
                     </c-accordion-item>
