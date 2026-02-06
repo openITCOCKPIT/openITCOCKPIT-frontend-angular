@@ -83,10 +83,8 @@ export class KubernetesComponent extends WizardsAbstractComponent {
     protected override wizardLoad(result: KubernetesEndpointWizardGet): void {
         this.cdr.markForCheck();
         this.post.services = [];
-        //   this.post.pveUsername = result.pveUsername;
-        //   this.post.pveApiTokenName = result.pveApiTokenName;
-        //   this.post.pveApiTokenSecret = result.pveApiTokenSecret;
-        this.endpointServicetemplate = result.servicetemplates[0];
+        this.post.K8S_PORT = result.K8S_PORT;
+        this.endpointServicetemplate = result.servicetemplates[6];
         super.wizardLoad(result);
     }
 
@@ -98,23 +96,37 @@ export class KubernetesComponent extends WizardsAbstractComponent {
         this.WizardService.executeEndpointDiscovery(this.post).subscribe((data: any) => {
             this.post.services = [];
             this.errors = {} as GenericValidationError;
-//            this.accordionClosed = true;
             this.cdr.markForCheck();
             // Error
             if (data && data.services && data.services.length && data.services[0].value && data.services[2]) {
+
                 for (let key in data.services[2].value) {
-                    let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.endpointServicetemplate.servicetemplatecommandargumentvalues));
-                    servicetemplatecommandargumentvalues[3].value = data.services[2].value[key].name;
-                    let name = "PVE Storage Usage " + String(data.services[2].value[key].name);
-                    this.post.services.push(
-                        {
-                            createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, name),
-                            description: '',
-                            host_id: this.post.host_id,
-                            name: name,
-                            servicecommandargumentvalues: servicetemplatecommandargumentvalues,
-                            servicetemplate_id: this.endpointServicetemplate.id
-                        });
+
+                    // Traverse the groups
+                    Object.entries(data.services[2].value[key].name).forEach(([groupName, value]) => {
+
+                        // Traverse the endpoints
+                        for (let endpointKey in data.services[2].value[key].name[groupName]) {
+                            let endpointName = data.services[2].value[key].name[groupName][endpointKey];
+                            let name = "k8s endpoint " + groupName + "/" + endpointName;
+
+                            // Set the argument values
+                            let servicetemplatecommandargumentvalues = structuredClone(this.endpointServicetemplate.servicetemplatecommandargumentvalues);
+                            servicetemplatecommandargumentvalues[1].value = groupName;
+                            servicetemplatecommandargumentvalues[2].value = endpointName;
+
+                            // Add service
+                            this.post.services.push(
+                                {
+                                    createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, name),
+                                    description: '',
+                                    host_id: this.post.host_id,
+                                    name: name,
+                                    servicecommandargumentvalues: servicetemplatecommandargumentvalues,
+                                    servicetemplate_id: this.endpointServicetemplate.id
+                                });
+                        }
+                    });
                 }
                 this.cdr.markForCheck();
                 this.endDiscovery();
