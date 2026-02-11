@@ -1,0 +1,235 @@
+<ng-container *transloco="let t">
+
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item">
+                <a [routerLink]="['/', 'wizards', 'index']">
+                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                    {{ t('Wizards') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                {{ t('Kubernetes') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card>
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Configuration Wizard: Kubernetes') }}
+            </h5>
+        </c-card-header>
+        <c-card-body class="p-0">
+            <div class="row m-0 text-center mb-3" style="min-height: 22px;">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Host Information') }}
+                    </span>
+                </div>
+                <div
+                    class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+                    <span>
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('Configure services for Kubernetes') }}
+                    </span>
+                </div>
+                <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
+                    <div class="btn-group btn-group-xs w-100 h-100">
+                        <button type="button" class="btn btn-primary"
+                                [title]="'Back' | transloco"
+                                style="border-radius: 0;"
+                                [fallbackUrl]="['wizards', 'index']"
+                                oitcBackButton>
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-success"
+                                style="border-radius: 0;"
+                                [title]="'Next' | transloco"
+                                (click)="submit()">
+                            {{ t('Next') }}
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </c-card-body>
+        <c-card-body>
+            <fieldset class="padding-bottom-20">
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4>
+                        {{ t('Kubernetes Settings') }}
+                    </h4>
+                </legend>
+
+                <c-accordion class="mb-3">
+                    <c-accordion-item #item0="cAccordionItem" [visible]="false">
+                        <ng-template cTemplateId="accordionHeaderTemplate">
+                            <button class="wizard-accordion bg-info-subtle" (click)="item0.toggleItem()"
+                                    [collapsed]="!item0.visible" cAccordionButton>
+                                <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
+                                {{ t('Setup Guide') }}:
+                            </button>
+                        </ng-template>
+                        <ng-template cTemplateId="accordionBodyTemplate">
+                            <div class="accordion-body">
+                                <p>
+                                    {{ t('The plugin requires an API server URL (`--server`) and a **service account token** (`--token` or `--token-file`).') }}
+                                    <br/>{{ t('The recommended way is to create a **ServiceAccount** with minimal RBAC permissions.') }}
+                                </p>
+
+                                <ol>
+                                    <li>
+                                        {{ t('Create a ServiceAccount:') }}
+                                        <pre>kubectl create namespace monitoring
+kubectl create serviceaccount k8s-checker -n monitoring</pre>
+                                    </li>
+                                    <li>
+                                        {{ t('Create a ClusterRole with read-only permissions:') }}
+                                        <pre>apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: k8s-checker
+rules:
+- apiGroups: [""]
+  resources: ["nodes","pods","endpoints","events"]
+  verbs: ["get","list","watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments","daemonsets"]
+  verbs: ["get","list","watch"]</pre>
+                                        <br/>
+                                        {{ t('Apply the ClusterRole:') }}
+                                        <pre>kubectl apply -f k8s-checker-role.yaml</pre>
+                                    </li>
+                                    <li>
+                                        {{ t('Bind the role to the service account:') }}
+                                        <pre>kubectl create clusterrolebinding k8s-checker-binding   --clusterrole=k8s-checker   --serviceaccount=monitoring:k8s-checker</pre>
+                                    </li>
+                                    <li>
+                                        {{ t('Get the token:') }}
+                                        <br/>
+                                        <br/>{{ t('For Kubernetes v1.24+ (new `service-account-token` secret):') }}
+                                        <pre>kubectl create token k8s-checker -n monitoring > token.txt</pre>
+                                        <br/>
+                                        <br/>{{ t('For older versions (<1.24):') }}
+                                        <pre>SECRET=$(kubectl get sa k8s-checker -n monitoring -o jsonpath='&#123;.secrets[0].name&#125;')
+kubectl get secret $SECRET -n monitoring -o jsonpath='&#123;.data.token&#125;' | base64 -d > token.txt</pre>
+                                    </li>
+                                    <li>
+                                        {{ t('Now you can pass the file to the plugin:') }}
+                                        <br/>
+                                        <pre>./check_k8s_oitc.py nodes   --server https://k8s.example.org:6443   --token-file token.txt --insecure</pre>
+                                    </li>
+                                </ol>
+                            </div>
+                        </ng-template>
+                    </c-accordion-item>
+                </c-accordion>
+
+                <div class="mb-3">
+                    <label cLabel for="post.K8S_PORT">
+                        {{ t('Port') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.K8S_PORT"
+                           type="text"
+                           name="post.K8S_PORT"
+                           [(ngModel)]="post.K8S_PORT"
+                           oitcFormError [errors]="errors" errorField="K8S_PORT"
+                           placeholder="6443">
+                    <oitc-form-feedback [errors]="errors" errorField="K8S_PORT"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.K8S_PORT">
+                        {{ t('Token File location') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            @if (this.post.TOKEN_FILE_EXISTS) {
+                                <fa-icon [icon]="['fas', 'check']" class="text-success"
+                                         [cTooltip]="t('The token file was found')"></fa-icon>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'times']" class="text-warning"
+                                         [cTooltip]="t('Please create the token and put it to this path.')"></fa-icon>
+                            }
+                        </span>
+                        <input cFormControl
+                               [readOnly]="true"
+                               id="post.TOKEN_FILE_PATH"
+                               type="text"
+                               [disabled]="true"
+                               name="post.TOKEN_FILE_PATH"
+                               [value]="post.TOKEN_FILE_PATH"
+                               oitcFormError [errors]="errors" errorField="TOKEN_FILE_PATH">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="TOKEN_FILE_PATH"></oitc-form-feedback>
+                </div>
+            </fieldset>
+
+            <div>
+                <ng-template #contentTemplate let-data>
+                    @if (data) {
+                        <span class="h5 text-info">
+                            {{ t('Discovering Endpoints for Services') }}
+                        </span>
+                    }
+                    <br>
+                    {{ t('Scan Kubernetes for Endpoints. Only possible with a working Kubernetes configuration') }}
+                </ng-template>
+
+                <ng-template #buttonTemplate let-data>
+                    <div class="ms-2">
+                        <button
+                            cButton
+                            class="ripple"
+                            color="primary"
+                            type="button"
+                            [disabled]="DiscoveryIsRunning"
+                            (click)="runEndpointDiscovery()">
+                            @if (DiscoveryIsRunning) {
+                                <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                            }
+                            {{ t('Start Endpoint discovery') }}
+                        </button>
+                    </div>
+                </ng-template>
+
+                <oitc-alert
+                    baseIcon="circle"
+                    color="info"
+                    [icon]="['fas', 'info']"
+                    [contentTemplate]="contentTemplate"
+                    [buttonTemplate]="buttonTemplate"></oitc-alert>
+
+            </div>
+
+            <c-row class="mb-1">
+                <c-col md="6">
+                    <oitc-form-feedback [errors]="errors" errorField="kubernetesendpointcommand"></oitc-form-feedback>
+                </c-col>
+            </c-row>
+            <oitc-wizards-dynamicfields
+                [(post)]="post.services"
+                [errors]="errors"
+                [titleErrorField]="'services'"
+                [title]="'Kubernetes Endpoints'|transloco"
+            />
+
+
+        </c-card-body>
+    </c-card>
+</ng-container>
