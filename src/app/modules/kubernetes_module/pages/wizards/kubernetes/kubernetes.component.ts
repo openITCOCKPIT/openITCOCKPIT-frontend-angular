@@ -11,8 +11,11 @@ import {
     ColComponent,
     FormControlDirective,
     FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     RowComponent,
-    TemplateIdDirective
+    TemplateIdDirective,
+    TooltipDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -58,7 +61,10 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         ColComponent,
         WizardsDynamicfieldsComponent,
         OitcAlertComponent,
-        XsButtonDirective
+        XsButtonDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TooltipDirective
     ],
     templateUrl: './kubernetes.component.html',
     styleUrl: './kubernetes.component.css',
@@ -72,7 +78,9 @@ export class KubernetesComponent extends WizardsAbstractComponent {
     public checked: boolean = false;
 
     protected override post: KubernetesEndpointsWizardPost = {
-        K8S_PORT: 0,
+        K8S_PORT: 6443,
+        TOKEN_FILE_PATH: 'A',
+        TOKEN_FILE_EXISTS: false,
 // Default fields from the base wizard
         host_id: 0,
         services: [],
@@ -84,10 +92,11 @@ export class KubernetesComponent extends WizardsAbstractComponent {
         this.cdr.markForCheck();
         this.post.services = [];
         this.post.K8S_PORT = result.K8S_PORT;
+        this.post.TOKEN_FILE_PATH = result.TOKEN_FILE_PATH;
+        this.post.TOKEN_FILE_EXISTS = result.TOKEN_FILE_EXISTS;
         this.endpointServicetemplate = result.servicetemplates[6];
         super.wizardLoad(result);
     }
-
 
     protected runEndpointDiscovery(): void {
         this.post.services = [];
@@ -97,6 +106,7 @@ export class KubernetesComponent extends WizardsAbstractComponent {
             this.post.services = [];
             this.errors = {} as GenericValidationError;
             this.cdr.markForCheck();
+            this.post.TOKEN_FILE_EXISTS = data.TOKEN_FILE_EXISTS;
             // Error
             if (data && data.services && data.services.length && data.services[0].value && data.services[2]) {
 

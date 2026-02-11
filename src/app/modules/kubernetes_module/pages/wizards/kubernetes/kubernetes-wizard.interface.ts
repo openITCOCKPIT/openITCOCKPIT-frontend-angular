@@ -3,6 +3,8 @@ import { WizardGet, WizardPost } from '../../../../../pages/wizards/wizards.inte
 // WIZARD GET
 export interface KubernetesEndpointWizardGet extends WizardGet {
     K8S_PORT: number
+    TOKEN_FILE_PATH: string
+    TOKEN_FILE_EXISTS: boolean
     endpointServicetemplate: EndpointServiceTemplate
 }
 
@@ -108,6 +110,8 @@ export interface KubernetesWizardPost extends WizardPost {
 
 export interface KubernetesEndpointsWizardPost extends WizardPost {
     host_id: number
+    TOKEN_FILE_PATH: string
+    TOKEN_FILE_EXISTS: boolean
     K8S_PORT: number
 }
 

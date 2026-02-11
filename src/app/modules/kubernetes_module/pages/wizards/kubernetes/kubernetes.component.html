@@ -146,8 +146,35 @@ kubectl get secret $SECRET -n monitoring -o jsonpath='&#123;.data.token&#125;' |
                            name="post.K8S_PORT"
                            [(ngModel)]="post.K8S_PORT"
                            oitcFormError [errors]="errors" errorField="K8S_PORT"
-                           placeholder="root@pam">
+                           placeholder="6443">
                     <oitc-form-feedback [errors]="errors" errorField="K8S_PORT"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.K8S_PORT">
+                        {{ t('Token File location') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <c-input-group>
+                        <span cInputGroupText>
+                            @if (this.post.TOKEN_FILE_EXISTS) {
+                                <fa-icon [icon]="['fas', 'check']" class="text-success"
+                                         [cTooltip]="t('The token file was found')"></fa-icon>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'times']" class="text-warning"
+                                         [cTooltip]="t('Please create the token and put it to this path.')"></fa-icon>
+                            }
+                        </span>
+                        <input cFormControl
+                               [readOnly]="true"
+                               id="post.TOKEN_FILE_PATH"
+                               type="text"
+                               [disabled]="true"
+                               name="post.TOKEN_FILE_PATH"
+                               [value]="post.TOKEN_FILE_PATH"
+                               oitcFormError [errors]="errors" errorField="TOKEN_FILE_PATH">
+                    </c-input-group>
+                    <oitc-form-feedback [errors]="errors" errorField="TOKEN_FILE_PATH"></oitc-form-feedback>
                 </div>
             </fieldset>
 
