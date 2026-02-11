@@ -136,7 +136,7 @@
                                     optionValue="key"
                                     optionLabel="value"
                                     class="flex-1"
-                                    [(ngModel)]="params['filter[Logentries.logentry_type]']"
+                                    [(ngModel)]="params['filter[Logentries.logentry_type][]']"
                                     [options]="entryTypesForSelect"
                                     [debounce]="true"
                                     [placeholder]="'Filter by entry type' | transloco"
