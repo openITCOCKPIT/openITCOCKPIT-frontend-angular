@@ -147,6 +147,8 @@ export class SatellitesAddComponent implements OnDestroy, OnInit {
     private getUserTimezone() {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.post.Satellite.timezone = data.user_timezone;
+            this.serverTimeZone = data.server_timezone;
+            this.serverTime = data.server_time;
             this.cdr.markForCheck();
         }));
     }
