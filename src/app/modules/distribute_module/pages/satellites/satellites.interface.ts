@@ -251,7 +251,7 @@ export interface IndexSatellite {
     name: string
     port: number
     private_key_path: string
-    proxy_url: string
+    proxy_url: string | null
     remote_port: number
     sync_method: string
     timeout: number

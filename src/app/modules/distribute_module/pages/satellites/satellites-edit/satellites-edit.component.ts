@@ -187,7 +187,7 @@ export class SatellitesEditComponent implements OnDestroy, OnInit {
                     this.post.protocol = 'http';
                 }
                 this.post.proxyProtocol = 'https';
-                if (this.post.Satellite.proxy_url.startsWith('http://')) {
+                if (this.post.Satellite.proxy_url?.startsWith('http://')) {
                     this.post.proxyProtocol = 'http';
                 }
 
