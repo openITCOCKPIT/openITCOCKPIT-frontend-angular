@@ -15,7 +15,6 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -28,7 +27,7 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import { GenericValidationError } from '../../../generic-responses';
 import { SystemdowntimesGet, SystemdowntimesPost } from '../systemdowntimes.interface';
 import { HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -190,6 +189,7 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
 
                     if (!this.createAnother) {
                         this.HistoryService.navigateWithFallback(['/downtimes/host']);
+                        return;
                     }
                     // Create another
                     this.post = this.getClearForm();

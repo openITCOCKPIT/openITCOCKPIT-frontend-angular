@@ -194,6 +194,7 @@ export class AddServicedowntimeComponent implements OnInit, OnDestroy {
 
                     if (!this.createAnother) {
                         this.HistoryService.navigateWithFallback(['/downtimes/service']);
+                        return;
                     }
                     // Create another
                     this.post = this.getClearForm();
