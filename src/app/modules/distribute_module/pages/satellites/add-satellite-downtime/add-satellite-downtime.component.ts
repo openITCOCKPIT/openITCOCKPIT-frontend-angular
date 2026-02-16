@@ -189,6 +189,7 @@ export class AddSatellitedowntimeComponent implements OnInit, OnDestroy {
 
                     if (!this.createAnother) {
                         this.HistoryService.navigateWithFallback(['/downtimes/host']);
+                        return;
                     }
                     // Create another
                     this.post = this.getClearForm();
