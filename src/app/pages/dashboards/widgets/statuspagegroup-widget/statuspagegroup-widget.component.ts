@@ -79,7 +79,7 @@ export class StatuspagegroupWidgetComponent extends BaseWidgetComponent implemen
                 this.config = response;
                 this.selectedAutoRefresh.key = this.config.refresh_key ?? 0;
                 //trigger refresh for allocated widgets
-                if (this.isReadonly()) {
+                if (this.selectedAutoRefresh.key > 0) {
                     this.startRefreshInterval(this.selectedAutoRefresh.key);
                 }
                 this.cdr.markForCheck();
