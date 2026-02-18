@@ -206,6 +206,7 @@ export class ResourcegroupsAddComponent implements OnInit, OnDestroy {
     public getClearForm(): ResourcegroupsPost {
         return {
             description: '',
+            department: '',
             timeperiod_id: null,
             reminder_time: 15,
             deadline: '',
