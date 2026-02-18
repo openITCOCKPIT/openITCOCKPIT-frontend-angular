@@ -151,22 +151,26 @@
                                                                 class="btn-group btn-group-xs btn-group-justified w-100"
                                                                 role="group" *oitcPermission="['services', 'index']"
                                                                 [hidden]="summaryState.ServiceSummary.total === 0">
-                                                                <a class="btn btn-success "
+                                                                <a class="btn btn-success"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}"
                                                                    [routerLink]="['/', 'services', 'index']"
                                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
                                                                     {{ summaryState.ServiceSummary.state[0] }}
                                                                 </a>
-                                                                <a class="btn btn-warning "
+                                                                <a class="btn btn-warning"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}"
                                                                    [routerLink]="['/', 'services', 'index']"
                                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
                                                                     {{ summaryState.ServiceSummary.state[1] }}
                                                                 </a>
-                                                                <a class="btn btn-danger "
+                                                                <a class="btn btn-danger"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}"
                                                                    [routerLink]="['/', 'services', 'index']"
                                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
                                                                     {{ summaryState.ServiceSummary.state[2] }}
                                                                 </a>
-                                                                <a class="btn btn-secondary "
+                                                                <a class="btn btn-secondary"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}"
                                                                    [routerLink]="['/', 'services', 'index']"
                                                                    [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
                                                                     {{ summaryState.ServiceSummary.state[3] }}
@@ -177,16 +181,20 @@
                                                                 role="group"
                                                                 *oitcPermission="['services', 'index']; negate: true"
                                                                 [hidden]="summaryState.ServiceSummary.total === 0">
-                                                                <a class="btn btn-success ">
+                                                                <a class="btn btn-success"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}">
                                                                     {{ summaryState.ServiceSummary.state[0] }}
                                                                 </a>
-                                                                <a class="btn btn-warning ">
+                                                                <a class="btn btn-warning"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}">
                                                                     {{ summaryState.ServiceSummary.state[1] }}
                                                                 </a>
-                                                                <a class="btn btn-danger ">
+                                                                <a class="btn btn-danger"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}">
                                                                     {{ summaryState.ServiceSummary.state[2] }}
                                                                 </a>
-                                                                <a class="btn btn-secondary ">
+                                                                <a class="btn btn-secondary"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}">
                                                                     {{ summaryState.ServiceSummary.state[3] }}
                                                                 </a>
                                                             </div>
@@ -466,17 +474,20 @@
                                                     <div class="btn-group btn-group-xs btn-group-justified w-100"
                                                          role="group"
                                                          *oitcPermission="['hosts', 'index']">
-                                                        <a class="btn btn-success "
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.HostSummary.state[0]}"
                                                            [routerLink]="['/', 'hosts', 'index']"
                                                            [queryParams]="{'id': summaryState.HostIdsGroupByState[0]}">
                                                             {{ summaryState.Hostgroup.HostSummary.state[0] }}
                                                         </a>
-                                                        <a class="btn btn-danger "
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.HostSummary.state[1]}"
                                                            [routerLink]="['/', 'hosts', 'index']"
                                                            [queryParams]="{'id': summaryState.HostIdsGroupByState[1]}">
                                                             {{ summaryState.Hostgroup.HostSummary.state[1] }}
                                                         </a>
-                                                        <a class="btn btn-secondary "
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.HostSummary.state[2]}"
                                                            [routerLink]="['/', 'hosts', 'index']"
                                                            [queryParams]="{'id': summaryState.HostIdsGroupByState[2]}">
                                                             {{ summaryState.Hostgroup.HostSummary.state[2] }}
@@ -485,13 +496,16 @@
                                                     <div class="btn-group btn-group-xs btn-group-justified w-100"
                                                          role="group"
                                                          *oitcPermission="['hosts', 'index']; negate: true">
-                                                        <a class="btn btn-success ">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.HostSummary.state[0]}">
                                                             {{ summaryState.Hostgroup.HostSummary.state[0] }}
                                                         </a>
-                                                        <a class="btn btn-danger ">
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.HostSummary.state[1]}">
                                                             {{ summaryState.Hostgroup.HostSummary.state[1] }}
                                                         </a>
-                                                        <a class="btn btn-secondary ">
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.HostSummary.state[2]}">
                                                             {{ summaryState.Hostgroup.HostSummary.state[2] }}
                                                         </a>
                                                     </div>
@@ -505,22 +519,26 @@
                                                     <div class="btn-group btn-group-xs btn-group-justified w-100"
                                                          role="group"
                                                          *oitcPermission="['services', 'index']">
-                                                        <a class="btn btn-success "
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[0]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
                                                             {{ summaryState.Hostgroup.TotalServiceSummary.state[0] }}
                                                         </a>
-                                                        <a class="btn btn-warning "
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[1]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
                                                             {{ summaryState.Hostgroup.TotalServiceSummary.state[1] }}
                                                         </a>
-                                                        <a class="btn btn-danger "
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[2]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
                                                             {{ summaryState.Hostgroup.TotalServiceSummary.state[2] }}
                                                         </a>
-                                                        <a class="btn btn-secondary "
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[3]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
                                                             {{ summaryState.Hostgroup.TotalServiceSummary.state[3] }}
@@ -529,16 +547,20 @@
                                                     <div class="btn-group btn-group-xs btn-group-justified w-100"
                                                          role="group"
                                                          *oitcPermission="['services', 'index']; negate: true">
-                                                        <a class="btn btn-success ">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[0]}">
                                                             {{ summaryState.Hostgroup.TotalServiceSummary.state[0] }}
                                                         </a>
-                                                        <a class="btn btn-warning ">
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[1]}">
                                                             {{ summaryState.Hostgroup.TotalServiceSummary.state[1] }}
                                                         </a>
-                                                        <a class="btn btn-danger ">
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[2]}">
                                                             {{ summaryState.Hostgroup.TotalServiceSummary.state[2] }}
                                                         </a>
-                                                        <a class="btn btn-secondary ">
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[3]}">
                                                             {{ summaryState.Hostgroup.TotalServiceSummary.state[3] }}
                                                         </a>
                                                     </div>
@@ -574,21 +596,25 @@
                                                              role="group"
                                                              *oitcPermission="['services', 'index']">
                                                             <a class="btn btn-success state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[0]}"
                                                                [routerLink]="['/', 'services', 'index']"
                                                                [queryParams]="{'id': host.ServiceIdsGroupByState[0]}">
                                                                 {{ host.ServiceSummary.state[0] }}
                                                             </a>
                                                             <a class="btn btn-warning state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[1]}"
                                                                [routerLink]="['/', 'services', 'index']"
                                                                [queryParams]="{'id': host.ServiceIdsGroupByState[1]}">
                                                                 {{ host.ServiceSummary.state[1] }}
                                                             </a>
                                                             <a class="btn btn-danger state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[2]}"
                                                                [routerLink]="['/', 'services', 'index']"
                                                                [queryParams]="{'id': host.ServiceIdsGroupByState[2]}">
                                                                 {{ host.ServiceSummary.state[2] }}
                                                             </a>
                                                             <a class="btn btn-default state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[3]}"
                                                                [routerLink]="['/', 'services', 'index']"
                                                                [queryParams]="{'id': host.ServiceIdsGroupByState[3]}">
                                                                 {{ host.ServiceSummary.state[3] }}
@@ -597,16 +623,20 @@
                                                         <div class="btn-group btn-group-xs btn-group-justified"
                                                              role="group"
                                                              *oitcPermission="['services', 'index']; negate: true">
-                                                            <a class="btn btn-success state-button-small font-sm">
+                                                            <a class="btn btn-success state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[0]}">
                                                                 {{ host.ServiceSummary.state[0] }}
                                                             </a>
-                                                            <a class="btn btn-warning state-button-small font-sm">
+                                                            <a class="btn btn-warning state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[1]}">
                                                                 {{ host.ServiceSummary.state[1] }}
                                                             </a>
-                                                            <a class="btn btn-danger state-button-small font-sm">
+                                                            <a class="btn btn-danger state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[2]}">
                                                                 {{ host.ServiceSummary.state[2] }}
                                                             </a>
-                                                            <a class="btn btn-default state-button-small font-sm">
+                                                            <a class="btn btn-default state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[3]}">
                                                                 {{ host.ServiceSummary.state[3] }}
                                                             </a>
                                                         </div>
@@ -691,22 +721,26 @@
                                                          role="group"
                                                          *oitcPermission="['services', 'index']"
                                                          [hidden]="summaryState.ServiceSummary.total === 0">
-                                                        <a class="btn btn-success "
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
                                                             {{ summaryState.ServiceSummary.state[0] }}
                                                         </a>
-                                                        <a class="btn btn-warning "
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
                                                             {{ summaryState.ServiceSummary.state[1] }}
                                                         </a>
-                                                        <a class="btn btn-danger "
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
                                                             {{ summaryState.ServiceSummary.state[2] }}
                                                         </a>
-                                                        <a class="btn btn-secondary "
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
                                                             {{ summaryState.ServiceSummary.state[3] }}
@@ -716,16 +750,20 @@
                                                          role="group"
                                                          *oitcPermission="['services', 'index']; negate: true"
                                                          [hidden]="summaryState.ServiceSummary.total === 0">
-                                                        <a class="btn btn-success ">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}">
                                                             {{ summaryState.ServiceSummary.state[0] }}
                                                         </a>
-                                                        <a class="btn btn-warning ">
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}">
                                                             {{ summaryState.ServiceSummary.state[1] }}
                                                         </a>
-                                                        <a class="btn btn-danger ">
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}">
                                                             {{ summaryState.ServiceSummary.state[2] }}
                                                         </a>
-                                                        <a class="btn btn-secondary ">
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}">
                                                             {{ summaryState.ServiceSummary.state[3] }}
                                                         </a>
                                                     </div>
@@ -857,17 +895,20 @@
                                                          role="group"
                                                          *oitcPermission="['hosts', 'index']"
                                                          [hidden]="summaryState.ServiceSummary.total === 0">
-                                                        <a class="btn btn-success "
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[0]}"
                                                            [routerLink]="['/', 'hosts', 'index']"
                                                            [queryParams]="{'id': summaryState.HostIdsGroupByState[0]}">
                                                             {{ summaryState.HostSummary.state[0] }}
                                                         </a>
-                                                        <a class="btn btn-danger "
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[1]}"
                                                            [routerLink]="['/', 'hosts', 'index']"
                                                            [queryParams]="{'id': summaryState.HostIdsGroupByState[1]}">
                                                             {{ summaryState.HostSummary.state[1] }}
                                                         </a>
-                                                        <a class="btn btn-secondary "
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[2]}"
                                                            [routerLink]="['/', 'hosts', 'index']"
                                                            [queryParams]="{'id': summaryState.HostIdsGroupByState[2]}">
                                                             {{ summaryState.HostSummary.state[2] }}
@@ -877,13 +918,16 @@
                                                          role="group"
                                                          *oitcPermission="['hosts', 'index']; negate: true"
                                                          [hidden]="summaryState.ServiceSummary.total === 0">
-                                                        <a class="btn btn-success ">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[0]}">
                                                             {{ summaryState.HostSummary.state[0] }}
                                                         </a>
-                                                        <a class="btn btn-danger ">
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[1]}">
                                                             {{ summaryState.HostSummary.state[1] }}
                                                         </a>
-                                                        <a class="btn btn-secondary ">
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[2]}">
                                                             {{ summaryState.HostSummary.state[2] }}
                                                         </a>
                                                     </div>
@@ -897,22 +941,26 @@
                                                     <div class="btn-group btn-group-xs btn-group-justified w-100"
                                                          role="group" *oitcPermission="['services', 'index']"
                                                          [hidden]="summaryState.ServiceSummary.total === 0">
-                                                        <a class="btn btn-success "
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
                                                             {{ summaryState.ServiceSummary.state[0] }}
                                                         </a>
-                                                        <a class="btn btn-warning "
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
                                                             {{ summaryState.ServiceSummary.state[1] }}
                                                         </a>
-                                                        <a class="btn btn-danger "
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
                                                             {{ summaryState.ServiceSummary.state[2] }}
                                                         </a>
-                                                        <a class="btn btn-secondary "
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
                                                             {{ summaryState.ServiceSummary.state[3] }}
@@ -922,16 +970,20 @@
                                                          role="group"
                                                          *oitcPermission="['services', 'index']; negate: true"
                                                          [hidden]="summaryState.ServiceSummary.total === 0">
-                                                        <a class="btn btn-success ">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}">
                                                             {{ summaryState.ServiceSummary.state[0] }}
                                                         </a>
-                                                        <a class="btn btn-warning ">
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}">
                                                             {{ summaryState.ServiceSummary.state[1] }}
                                                         </a>
-                                                        <a class="btn btn-danger ">
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}">
                                                             {{ summaryState.ServiceSummary.state[2] }}
                                                         </a>
-                                                        <a class="btn btn-secondary ">
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}">
                                                             {{ summaryState.ServiceSummary.state[3] }}
                                                         </a>
                                                     </div>
