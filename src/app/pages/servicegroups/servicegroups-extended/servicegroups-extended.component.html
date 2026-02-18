@@ -161,8 +161,9 @@
             }
 
             @if (servicegroupExtended.servicegroup.Servicegroup.uuid !== '') {
-                <table bordered cTable
-                       class="mt-2 mb-0" hover striped>
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="serviceParams.sort" [matSortDirection]="serviceParams.direction">
                     <thead>
                     <tr class="border-bottom">
                         <td colspan="8" class="p-1 col-8">
@@ -241,7 +242,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>
+                        <th scope="col" mat-sort-header="Servicestatus.current_state">
                             {{ t('Status') }}
                         </th>
                         <th class="text-center">
@@ -258,12 +259,24 @@
                                 P
                             </span>
                         </th>
-                        <th>{{ t('Host name') }}</th>
-                        <th class="col-4">{{ t('Service name') }}</th>
-                        <th>{{ t('State since') }}</th>
-                        <th>{{ t('Last check') }}</th>
-                        <th>{{ t('Next check') }}</th>
-                        <th>{{ t('Output') }}</th>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Host name') }}
+                        </th>
+                        <th class="col-4" scope="col" mat-sort-header="servicename">
+                            {{ t('Service name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicestatus.last_state_change">
+                            {{ t('State since') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicestatus.last_check">
+                            {{ t('Last check') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicestatus.next_check">
+                            {{ t('Next check') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicestatus.output">
+                            {{ t('Output') }}
+                        </th>
                         <th></th>
                     </tr>
                     </thead>

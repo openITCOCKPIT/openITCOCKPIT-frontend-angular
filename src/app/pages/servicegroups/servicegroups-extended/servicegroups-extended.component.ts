@@ -95,6 +95,7 @@ import { ServicesService } from '../../services/services.service';
 import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 
 @Component({
     selector: 'oitc-servicegroups-extended',
@@ -143,7 +144,9 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
         ServicestatusSimpleIconComponent,
         DisableModalComponent,
         DeleteAllModalComponent,
-        NgClass
+        NgClass,
+        MatSort,
+        MatSortHeader
     ],
     templateUrl: './servicegroups-extended.component.html',
     styleUrl: './servicegroups-extended.component.css',
@@ -520,6 +523,14 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
                 this.onMassActionComplete(true)
             }, 5000);
         }));
+    }
+
+    public onSortChange(sort: Sort): void {
+        if (sort.direction) {
+            this.serviceParams.sort = sort.active;
+            this.serviceParams.direction = sort.direction;
+            this.loadServicegroupExtended();
+        }
     }
 
     protected onMassActionComplete(event: boolean): void {
