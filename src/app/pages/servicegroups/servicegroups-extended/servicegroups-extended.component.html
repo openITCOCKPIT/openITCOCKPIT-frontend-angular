@@ -189,7 +189,8 @@
                         <td colspan="4" class="p-1">
                             <div>
                                 <c-row class="mx-0 row">
-                                    <c-col class="col-3 bg-ok py-2 rounded-start text-white">
+                                    <c-col class="col-3 bg-ok py-2 rounded-start text-white"
+                                           [ngClass]="{'opacity-25': !servicegroupExtended.servicegroup.StatusSummary.ok}">
                                         <input cFormCheckInput
                                                type="checkbox"
                                                name="statusFilterup"
@@ -201,7 +202,8 @@
                                             {{ servicegroupExtended.servicegroup.StatusSummary.ok }}
                                         </label>
                                     </c-col>
-                                    <c-col class="col-3 bg-warning py-2  text-white">
+                                    <c-col class="col-3 bg-warning py-2  text-white"
+                                           [ngClass]="{'opacity-25': !servicegroupExtended.servicegroup.StatusSummary.warning}">
                                         <input cFormCheckInput
                                                type="checkbox"
                                                name="statusFilterdown"
@@ -213,7 +215,8 @@
                                             {{ servicegroupExtended.servicegroup.StatusSummary.warning }}
                                         </label>
                                     </c-col>
-                                    <c-col class="col-3 bg-critical py-2  text-white">
+                                    <c-col class="col-3 bg-critical py-2  text-white"
+                                           [ngClass]="{'opacity-25': !servicegroupExtended.servicegroup.StatusSummary.critical}">
                                         <input cFormCheckInput
                                                type="checkbox"
                                                name="statusFiltercritical"
@@ -225,7 +228,8 @@
                                             {{ servicegroupExtended.servicegroup.StatusSummary.critical }}
                                         </label>
                                     </c-col>
-                                    <c-col class="col-3 bg-unknown py-2 rounded-end  text-white">
+                                    <c-col class="col-3 bg-unknown py-2 rounded-end  text-white"
+                                           [ngClass]="{'opacity-25': !servicegroupExtended.servicegroup.StatusSummary.unknown}">
                                         <input cFormCheckInput
                                                type="checkbox"
                                                name="statusFilterunknown"
