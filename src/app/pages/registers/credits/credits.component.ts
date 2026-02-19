@@ -1,13 +1,13 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  HostListener,
-  inject,
-  OnDestroy,
-  ViewChild,
-  DOCUMENT
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    DOCUMENT,
+    ElementRef,
+    HostListener,
+    inject,
+    OnDestroy,
+    ViewChild
 } from '@angular/core';
 
 import { interval, Subscription } from 'rxjs';
@@ -52,7 +52,7 @@ export class CreditsComponent implements OnDestroy {
         }
     }
 
-    @HostListener("document:fullscreenchange", ['$event']) fullScreen() {
+    @HostListener("document:fullscreenchange") fullScreen() {
         if (this.isFullScreen) {
             // Leave full screen
             if (this.scrollInterval) {

@@ -1,166 +1,746 @@
 <ng-container *transloco="let t">
-    <c-toaster [placement]="'top-end'" class="p-3 toaster-min-width toaster-max-width" position="fixed"
-               *ngIf="summaryState">
-        <c-toast #toast="cToast"
-                 (timer)="onToastTimerChange($event)"
-                 (visibleChange)="onToastVisibleChange($event)"
-                 [visible]="toastVisible"
-                 [delay]="5000"
-                 class="align-items-center w-100">
-            <div class="d-flex">
-
-                <c-toast-header>
-                    <c-progress thin>
-                        <c-progress-bar [value]="toastPercentage"></c-progress-bar>
-                    </c-progress>
-                </c-toast-header>
-
-                <c-toast-body class="w-100">
-
-                    <oitc-toaster-loader *ngIf="!summaryState"></oitc-toaster-loader>
-                    <section>
-                        <article *ngIf="iconType == 'host'">
-                            <div class="bg-color-white pt-2 pl-2 pb-2">
-                                <header>
-                                    <h2 class="bold txt-color-blueDark">
-                                        <fa-icon [icon]="['fas', 'desktop']" size="lg"
-                                                 class="txt-color-blueDark"></fa-icon>
-                                        {{ t('Host') }}
-                                        <span class="text-danger" *ngIf="summaryState.Host.disabled">
-                                            {{ t(' (DISABLED)') }}
-                                        </span>
-                                    </h2>
-                                    <c-col lg="12" class="p-0 no-margin">
-                                        <c-progress thin>
-                                            <c-progress-bar [value]="toastPercentage"></c-progress-bar>
-                                        </c-progress>
-                                    </c-col>
-                                </header>
-                                <div class="txt-color-blueDark font-xs pt-2 pb-2">
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Hostname') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            <span *oitcPermission="['hosts', 'browser']">
-                                                <a [routerLink]="['/', 'hosts', 'browser', summaryState.Host.id]">
-                                                    {{ summaryState.Host.hostname }}
-                                                </a>
-                                            </span>
-                                            <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                                {{ summaryState.Host.hostname }}
-                                            </span>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Description') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            {{ summaryState.Host.description }}
-                                        </c-col>
-                                    </c-row>
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('State') }}
-                                        </c-col>
-                                        <c-col lg="8" [hidden]="!summaryState.Hoststatus.isInMonitoring"
-                                               class="text-center text-white text-capitalize bg-{{(summaryState.Hoststatus.isHardstate)?summaryState.Hoststatus.humanState:summaryState.Hoststatus.humanState+'-soft'}}">
-                                            <span class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
-                                            <fa-icon [icon]="['fas', 'user']"
-                                                     [hidden]="!summaryState.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'power-off']"
-                                                     [hidden]="summaryState.Hoststatus.scheduledDowntimeDepth === 0"></fa-icon>
-                                        </c-col>
-                                        <c-col lg="8" [hidden]="summaryState.Hoststatus.isInMonitoring"
-                                               class="text-center text-white bg-primary">
-                                            {{ t('Not in monitoring') }}
-                                            <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
-                                        </c-col>
-                                    </c-row>
-                                    <div [hidden]="!summaryState.Hoststatus.isInMonitoring">
-                                        <c-row>
-                                            <c-col lg="3">
-                                                {{ t('Output') }}
+    @if (summaryState) {
+        <c-toaster [placement]="'top-end'" class="p-3 toaster-min-width toaster-max-width" position="fixed"
+        >
+            <c-toast #toast="cToast"
+                     (timer)="onToastTimerChange($event)"
+                     (visibleChange)="onToastVisibleChange($event)"
+                     [visible]="toastVisible"
+                     [delay]="5000"
+                     class="align-items-center w-100">
+                <div class="d-flex">
+                    <c-toast-header>
+                        <c-progress thin>
+                            <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                        </c-progress>
+                    </c-toast-header>
+                    <c-toast-body class="w-100">
+                        @if (!summaryState) {
+                            <oitc-toaster-loader></oitc-toaster-loader>
+                        }
+                        <section>
+                            @if (iconType == 'host') {
+                                <article>
+                                    <div class="bg-color-white pt-2 pl-2 pb-2">
+                                        <header>
+                                            <h2 class="bold txt-color-blueDark">
+                                                <fa-icon [icon]="['fas', 'desktop']" size="lg"
+                                                         class="txt-color-blueDark"></fa-icon>
+                                                {{ t('Host') }}
+                                                @if (summaryState.Host.disabled) {
+                                                    <span class="text-danger">
+                                                        {{ t(' (DISABLED)') }}
+                                                    </span>
+                                                }
+                                            </h2>
+                                            <c-col lg="12" class="p-0 no-margin">
+                                                <c-progress thin>
+                                                    <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                                                </c-progress>
                                             </c-col>
-                                            <c-col lg="8" class="p-0">
-                                                <div class="cropText"
-                                                     [innerHTML]="summaryState.Hoststatus.outputHtml | trustAsHtml"></div>
-                                            </c-col>
-                                        </c-row>
-                                        <c-row>
-                                            <c-col lg="3">
-                                                {{ t('Perfdata') }}
-                                            </c-col>
-                                            <c-col lg="8" class="p-0">
-                                                {{ summaryState.Hoststatus.perfdata }}
-                                            </c-col>
-                                        </c-row>
-                                        <c-row>
-                                            <c-col lg="3">
-                                                {{ t('Current attempt') }}
-                                            </c-col>
-                                            <c-col lg="8" class="p-0">
-                                                {{ summaryState.Hoststatus.current_check_attempt }}
-                                                /{{ summaryState.Hoststatus.max_check_attempts }}
-                                            </c-col>
-                                        </c-row>
-                                        <c-row>
-                                            <c-col lg="3">
-                                                {{ t('Last check') }}
-                                            </c-col>
-                                            <c-col lg="8" class="p-0">
-                                                {{ summaryState.Hoststatus.lastCheck }}
-                                            </c-col>
-                                        </c-row>
-                                        <c-row>
-                                            <c-col lg="3">
-                                                {{ t('Next check') }}
-                                            </c-col>
-                                            <c-col lg="8" class="p-0">
-                                                {{ summaryState.Hoststatus.nextCheck }}
-                                            </c-col>
-                                        </c-row>
-                                    </div>
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Summary State') }}
-                                        </c-col>
-                                        <c-col lg="8" *ngIf="summaryState.Services.length > 0"
-                                               class="text-center text-white text-capitalize bg-{{summaryState.Services[0].Servicestatus.humanState}}">
-                                            {{ summaryState.Services[0].Servicestatus.humanState }}
-
-                                        </c-col>
-                                    </c-row>
-                                    <c-row class="pt-2">
-                                        <c-col lg="3">
-                                            {{ t('Summary Output') }}
-                                        </c-col>
-                                        <c-col lg="9">
+                                        </header>
+                                        <div class="txt-color-blueDark font-xs pt-2 pb-2">
                                             <c-row>
-                                                <c-col lg="12" class="p-0">
-                                                    {{ t('Services: ') }} {{ summaryState.ServiceSummary.total }}
+                                                <c-col lg="3">
+                                                    {{ t('Hostname') }}
                                                 </c-col>
-                                                <c-col lg="11">
+                                                <c-col lg="8" class="p-0">
+                                                    <span *oitcPermission="['hosts', 'browser']">
+                                                        <a [routerLink]="['/', 'hosts', 'browser', summaryState.Host.id]">
+                                                            {{ summaryState.Host.hostname }}
+                                                        </a>
+                                                    </span>
+                                                    <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                                        {{ summaryState.Host.hostname }}
+                                                    </span>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Description') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    {{ summaryState.Host.description }}
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('State') }}
+                                                </c-col>
+                                                <c-col lg="8" [hidden]="!summaryState.Hoststatus.isInMonitoring"
+                                                       class="text-center text-white text-capitalize bg-{{(summaryState.Hoststatus.isHardstate)?summaryState.Hoststatus.humanState:summaryState.Hoststatus.humanState+'-soft'}}">
+                                                    <span
+                                                        class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
+                                                    <fa-icon [icon]="['fas', 'user']"
+                                                             [hidden]="!summaryState.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'power-off']"
+                                                             [hidden]="summaryState.Hoststatus.scheduledDowntimeDepth === 0"></fa-icon>
+                                                </c-col>
+                                                <c-col lg="8" [hidden]="summaryState.Hoststatus.isInMonitoring"
+                                                       class="text-center text-white bg-primary">
+                                                    {{ t('Not in monitoring') }}
+                                                    <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
+                                                </c-col>
+                                            </c-row>
+                                            <div [hidden]="!summaryState.Hoststatus.isInMonitoring">
+                                                <c-row>
+                                                    <c-col lg="3">
+                                                        {{ t('Output') }}
+                                                    </c-col>
+                                                    <c-col lg="8" class="p-0">
+                                                        <div class="cropText"
+                                                             [innerHTML]="summaryState.Hoststatus.outputHtml | trustAsHtml"></div>
+                                                    </c-col>
+                                                </c-row>
+                                                <c-row>
+                                                    <c-col lg="3">
+                                                        {{ t('Perfdata') }}
+                                                    </c-col>
+                                                    <c-col lg="8" class="p-0">
+                                                        {{ summaryState.Hoststatus.perfdata }}
+                                                    </c-col>
+                                                </c-row>
+                                                <c-row>
+                                                    <c-col lg="3">
+                                                        {{ t('Current attempt') }}
+                                                    </c-col>
+                                                    <c-col lg="8" class="p-0">
+                                                        {{ summaryState.Hoststatus.current_check_attempt }}
+                                                        /{{ summaryState.Hoststatus.max_check_attempts }}
+                                                    </c-col>
+                                                </c-row>
+                                                <c-row>
+                                                    <c-col lg="3">
+                                                        {{ t('Last check') }}
+                                                    </c-col>
+                                                    <c-col lg="8" class="p-0">
+                                                        {{ summaryState.Hoststatus.lastCheck }}
+                                                    </c-col>
+                                                </c-row>
+                                                <c-row>
+                                                    <c-col lg="3">
+                                                        {{ t('Next check') }}
+                                                    </c-col>
+                                                    <c-col lg="8" class="p-0">
+                                                        {{ summaryState.Hoststatus.nextCheck }}
+                                                    </c-col>
+                                                </c-row>
+                                            </div>
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Summary State') }}
+                                                </c-col>
+                                                @if (summaryState.Services.length > 0) {
+                                                    <c-col lg="8"
+                                                           class="text-center text-white text-capitalize bg-{{summaryState.Services[0].Servicestatus.humanState}}">
+                                                        {{ summaryState.Services[0].Servicestatus.humanState }}
+                                                    </c-col>
+                                                }
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Summary Output') }}
+                                                </c-col>
+                                                <c-col lg="9">
+                                                    <c-row>
+                                                        <c-col lg="12" class="p-0">
+                                                            {{ t('Services: ') }} {{ summaryState.ServiceSummary.total }}
+                                                        </c-col>
+                                                        <c-col lg="11">
+                                                            <div
+                                                                class="btn-group btn-group-xs btn-group-justified w-100"
+                                                                role="group" *oitcPermission="['services', 'index']"
+                                                                [hidden]="summaryState.ServiceSummary.total === 0">
+                                                                <a class="btn btn-success"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}"
+                                                                   [routerLink]="['/', 'services', 'index']"
+                                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
+                                                                    {{ summaryState.ServiceSummary.state[0] }}
+                                                                </a>
+                                                                <a class="btn btn-warning"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}"
+                                                                   [routerLink]="['/', 'services', 'index']"
+                                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
+                                                                    {{ summaryState.ServiceSummary.state[1] }}
+                                                                </a>
+                                                                <a class="btn btn-danger"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}"
+                                                                   [routerLink]="['/', 'services', 'index']"
+                                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
+                                                                    {{ summaryState.ServiceSummary.state[2] }}
+                                                                </a>
+                                                                <a class="btn btn-secondary"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}"
+                                                                   [routerLink]="['/', 'services', 'index']"
+                                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
+                                                                    {{ summaryState.ServiceSummary.state[3] }}
+                                                                </a>
+                                                            </div>
+                                                            <div
+                                                                class="btn-group btn-group-xs btn-group-justified w-100"
+                                                                role="group"
+                                                                *oitcPermission="['services', 'index']; negate: true"
+                                                                [hidden]="summaryState.ServiceSummary.total === 0">
+                                                                <a class="btn btn-success"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}">
+                                                                    {{ summaryState.ServiceSummary.state[0] }}
+                                                                </a>
+                                                                <a class="btn btn-warning"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}">
+                                                                    {{ summaryState.ServiceSummary.state[1] }}
+                                                                </a>
+                                                                <a class="btn btn-danger"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}">
+                                                                    {{ summaryState.ServiceSummary.state[2] }}
+                                                                </a>
+                                                                <a class="btn btn-secondary"
+                                                                   [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}">
+                                                                    {{ summaryState.ServiceSummary.state[3] }}
+                                                                </a>
+                                                            </div>
+                                                        </c-col>
+                                                    </c-row>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2" [hidden]="summaryState.Services.length === 0">
+                                                <c-col lg="4">
+                                                    {{ t('Service') }}
+                                                </c-col>
+                                                <c-col lg="3" class="p-0">
+                                                    {{ t('State') }}
+                                                </c-col>
+                                                <c-col lg="4">
+                                                    {{ t('Output') }}
+                                                </c-col>
+                                            </c-row>
+                                            @for (service of summaryState.Services; track service) {
+                                                <c-row class="pt-3">
+                                                    <!-- Servicename -->
+                                                    <c-col lg="4" class="cropText"
+                                                           title="{{service.Service.servicename}}">
+                                                        <span *oitcPermission="['services', 'browser']">
+                                                            <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
+                                                                {{ service.Service.servicename }}
+                                                            </a>
+                                                        </span>
+                                                        <span *oitcPermission="['services', 'browser']; negate: true">
+                                                            {{ service.Service.servicename }}
+                                                        </span>
+                                                    </c-col>
+                                                    <!-- State -->
+                                                    <c-col lg="3" [hidden]="!service.Servicestatus.isInMonitoring"
+                                                           class="text-center text-white text-capitalize bg-{{(service.Servicestatus.isHardstate)?service.Servicestatus.humanState:service.Servicestatus.humanState+'-soft'}}">
+                                                        {{ service.Servicestatus.humanState }}
+                                                        <fa-icon [icon]="['fas', 'user']"
+                                                                 [hidden]="!service.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'power-off']"
+                                                                 [hidden]="service.Servicestatus.scheduledDowntimeDepth === 0"></fa-icon>
+                                                    </c-col>
+                                                    <c-col lg="3" [hidden]="service.Servicestatus.isInMonitoring"
+                                                           class="text-center text-white bg-primary">
+                                                        {{ t('Not in monitoring') }}
+                                                        <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
+                                                    </c-col>
+                                                    <!-- Output -->
+                                                    <c-col lg="4" class="cropText">
+                                                        <div class="cropText"
+                                                             [innerHTML]="service.Servicestatus.outputHtml | trustAsHtml"></div>
+                                                    </c-col>
+                                                </c-row>
+                                            }
+                                        </div>
+                                    </div>
+                                </article>
+                            }
+                            @if (iconType == 'service') {
+                                <article>
+                                    <div class="bg-color-white pt-2 pl-2 pb-2">
+                                        <header>
+                                            <h2 class="bold txt-color-blueDark">
+                                                <fa-icon [icon]="['fas', 'cog']" size="lg"
+                                                         class="txt-color-blueDark"></fa-icon>
+                                                {{ t('Service') }}
+                                                @if (summaryState.Service.disabled) {
+                                                    <span class="text-danger">
+                                                        {{ t(' (DISABLED)') }}
+                                                    </span>
+                                                }
+                                            </h2>
+                                            <c-col lg="12" class="p-0">
+                                                <c-progress thin>
+                                                    <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                                                </c-progress>
+                                            </c-col>
+                                        </header>
+                                        <div class="txt-color-blueDark font-xs pt-2 pb-2">
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Hostname') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    <span *oitcPermission="['hosts', 'browser']">
+                                                        <a [routerLink]="['/', 'hosts', 'browser', summaryState.Host.id]">
+                                                            {{ summaryState.Host.hostname }}
+                                                        </a>
+                                                    </span>
+                                                    <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                                        {{ summaryState.Host.hostname }}
+                                                    </span>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Host state') }}
+                                                </c-col>
+                                                <c-col lg="8" [hidden]="!summaryState.Hoststatus.isInMonitoring"
+                                                       class="text-center text-white text-capitalize bg-{{(summaryState.Hoststatus.isHardstate)?summaryState.Hoststatus.humanState:summaryState.Hoststatus.humanState+'-soft'}}">
+                                                    <span
+                                                        class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
+                                                    <fa-icon [icon]="['fas', 'user']"
+                                                             [hidden]="!summaryState.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'power-off']"
+                                                             [hidden]="summaryState.Hoststatus.scheduledDowntimeDepth === 0"></fa-icon>
+                                                </c-col>
+                                                <c-col lg="8" [hidden]="summaryState.Hoststatus.isInMonitoring"
+                                                       class="text-center text-white bg-primary">
+                                                    {{ t('Not in monitoring') }}
+                                                    <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Service') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    <span *oitcPermission="['services', 'browser']">
+                                                        <a [routerLink]="['/', 'services', 'browser', summaryState.Service.id]">
+                                                            {{ summaryState.Service.servicename }}
+                                                        </a>
+                                                    </span>
+                                                    <span *oitcPermission="['services', 'browser']; negate: true">
+                                                        {{ summaryState.Service.servicename }}
+                                                    </span>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Description') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    {{ summaryState.Service.description }}
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('State') }}
+                                                </c-col>
+                                                <c-col lg="8" [hidden]="!summaryState.Servicestatus.isInMonitoring"
+                                                       class="text-center text-white text-capitalize bg-{{(summaryState.Servicestatus.isHardstate)?summaryState.Servicestatus.humanState:summaryState.Servicestatus.humanState+'-soft'}}">
+                                                    <span
+                                                        class="padding-5">{{ summaryState.Servicestatus.humanState }}</span>
+                                                    <fa-icon [icon]="['fas', 'user']"
+                                                             [hidden]="!summaryState.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'power-off']"
+                                                             [hidden]="summaryState.Servicestatus.scheduledDowntimeDepth === 0"></fa-icon>
+                                                </c-col>
+                                                <c-col lg="8" [hidden]="summaryState.Servicestatus.isInMonitoring"
+                                                       class="text-center text-white bg-primary">
+                                                    {{ t('Not in monitoring') }}
+                                                    <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
+                                                </c-col>
+                                            </c-row>
+                                            <div [hidden]="!summaryState.Servicestatus.isInMonitoring">
+                                                <c-row>
+                                                    <c-col lg="3">
+                                                        {{ t('Output') }}
+                                                    </c-col>
+                                                    <c-col lg="8" class="p-0">
+                                                        <div class="cropText"
+                                                             [innerHTML]="summaryState.Servicestatus.outputHtml | trustAsHtml"></div>
+                                                    </c-col>
+                                                </c-row>
+                                                <c-row>
+                                                    <c-col lg="3">
+                                                        {{ t('Perfdata') }}
+                                                    </c-col>
+                                                    <c-col lg="8" class="p-0">
+                                                        {{ summaryState.Servicestatus.perfdata }}
+                                                    </c-col>
+                                                </c-row>
+                                                <c-row>
+                                                    <c-col lg="3">
+                                                        {{ t('Current attempt') }}
+                                                    </c-col>
+                                                    <c-col lg="8" class="p-0">
+                                                        {{ summaryState.Servicestatus.current_check_attempt }}
+                                                        /{{ summaryState.Servicestatus.max_check_attempts }}
+                                                    </c-col>
+                                                </c-row>
+                                                <c-row>
+                                                    <c-col lg="3">
+                                                        {{ t('Last check') }}
+                                                    </c-col>
+                                                    <c-col lg="8" class="p-0">
+                                                        {{ summaryState.Servicestatus.lastCheck }}
+                                                    </c-col>
+                                                </c-row>
+                                                <c-row>
+                                                    <c-col lg="3">
+                                                        {{ t('Next check') }}
+                                                    </c-col>
+                                                    <c-col lg="8" class="p-0">
+                                                        {{ summaryState.Servicestatus.nextCheck }}
+                                                    </c-col>
+                                                </c-row>
+                                                <c-row>
+                                                    <c-col lg="3">
+                                                        {{ t('Last state change') }}
+                                                    </c-col>
+                                                    <c-col lg="8" class="p-0">
+                                                        {{ summaryState.Servicestatus.last_state_change }}
+                                                    </c-col>
+                                                </c-row>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            }
+                            @if (iconType == 'hostgroup') {
+                                <article>
+                                    <div class="bg-color-white pt-2 pl-2 pb-2">
+                                        <header>
+                                            <h2 class="bold txt-color-blueDark">
+                                                <fa-icon [icon]="['fas', 'sitemap']" size="lg"
+                                                         class="txt-color-blueDark"></fa-icon>
+                                                {{ t('Host group') }}
+                                            </h2>
+                                            <c-col lg="12" class="p-0">
+                                                <c-progress thin>
+                                                    <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                                                </c-progress>
+                                            </c-col>
+                                        </header>
+                                        <div class="txt-color-blueDark font-xs pt-2 pb-2">
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Host group name') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    <span *oitcPermission="['hostgroups', 'extended']">
+                                                        <a [routerLink]="['/', 'hostgroups', 'extended', summaryState.Hostgroup.id]">
+                                                            {{ summaryState.Hostgroup.name }}
+                                                        </a>
+                                                    </span>
+                                                    <span *oitcPermission="['hostgroups', 'extended']; negate: true">
+                                                        {{ summaryState.Hostgroup.name }}
+                                                    </span>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Description') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    {{ summaryState.Hostgroup.description }}
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Summary state') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    <div
+                                                        class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                        {{ summaryState.CumulatedHumanState }}
+                                                    </div>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="4">
+                                                    {{ t('Summary output') }}
+                                                </c-col>
+                                                <c-col lg="4" class="p-0">
+                                                    {{ t('Hosts: ') }}{{ summaryState.Hostgroup.HostSummary.total }}
+                                                </c-col>
+                                                <c-col lg="4" class="p-0">
+                                                    {{ t('Services: ') }}{{ summaryState.Hostgroup.TotalServiceSummary.total }}
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Hosts overview') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
                                                     <div class="btn-group btn-group-xs btn-group-justified w-100"
-                                                         role="group" *oitcPermission="['services', 'index']"
+                                                         role="group"
+                                                         *oitcPermission="['hosts', 'index']">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.HostSummary.state[0]}"
+                                                           [routerLink]="['/', 'hosts', 'index']"
+                                                           [queryParams]="{'id': summaryState.HostIdsGroupByState[0]}">
+                                                            {{ summaryState.Hostgroup.HostSummary.state[0] }}
+                                                        </a>
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.HostSummary.state[1]}"
+                                                           [routerLink]="['/', 'hosts', 'index']"
+                                                           [queryParams]="{'id': summaryState.HostIdsGroupByState[1]}">
+                                                            {{ summaryState.Hostgroup.HostSummary.state[1] }}
+                                                        </a>
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.HostSummary.state[2]}"
+                                                           [routerLink]="['/', 'hosts', 'index']"
+                                                           [queryParams]="{'id': summaryState.HostIdsGroupByState[2]}">
+                                                            {{ summaryState.Hostgroup.HostSummary.state[2] }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                         role="group"
+                                                         *oitcPermission="['hosts', 'index']; negate: true">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.HostSummary.state[0]}">
+                                                            {{ summaryState.Hostgroup.HostSummary.state[0] }}
+                                                        </a>
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.HostSummary.state[1]}">
+                                                            {{ summaryState.Hostgroup.HostSummary.state[1] }}
+                                                        </a>
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.HostSummary.state[2]}">
+                                                            {{ summaryState.Hostgroup.HostSummary.state[2] }}
+                                                        </a>
+                                                    </div>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Services overview') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                         role="group"
+                                                         *oitcPermission="['services', 'index']">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[0]}"
+                                                           [routerLink]="['/', 'services', 'index']"
+                                                           [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
+                                                            {{ summaryState.Hostgroup.TotalServiceSummary.state[0] }}
+                                                        </a>
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[1]}"
+                                                           [routerLink]="['/', 'services', 'index']"
+                                                           [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
+                                                            {{ summaryState.Hostgroup.TotalServiceSummary.state[1] }}
+                                                        </a>
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[2]}"
+                                                           [routerLink]="['/', 'services', 'index']"
+                                                           [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
+                                                            {{ summaryState.Hostgroup.TotalServiceSummary.state[2] }}
+                                                        </a>
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[3]}"
+                                                           [routerLink]="['/', 'services', 'index']"
+                                                           [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
+                                                            {{ summaryState.Hostgroup.TotalServiceSummary.state[3] }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                         role="group"
+                                                         *oitcPermission="['services', 'index']; negate: true">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[0]}">
+                                                            {{ summaryState.Hostgroup.TotalServiceSummary.state[0] }}
+                                                        </a>
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[1]}">
+                                                            {{ summaryState.Hostgroup.TotalServiceSummary.state[1] }}
+                                                        </a>
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[2]}">
+                                                            {{ summaryState.Hostgroup.TotalServiceSummary.state[2] }}
+                                                        </a>
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.Hostgroup.TotalServiceSummary.state[3]}">
+                                                            {{ summaryState.Hostgroup.TotalServiceSummary.state[3] }}
+                                                        </a>
+                                                    </div>
+                                                </c-col>
+                                            </c-row>
+                                            @for (host of summaryState.Hosts; track host) {
+                                                <c-row class="pt-2">
+                                                    <c-col lg="3" class="cropText">
+                                                        <span *oitcPermission="['hosts', 'browser']">
+                                                            <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
+                                                                {{ host.Host.hostname }}
+                                                            </a>
+                                                        </span>
+                                                        <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                                            {{ host.Host.hostname }}
+                                                        </span>
+                                                    </c-col>
+                                                    <c-col lg="4" [hidden]="!host.Hoststatus.isInMonitoring"
+                                                           class="text-center text-white text-capitalize bg-{{(host.Hoststatus.isHardstate)?host.Hoststatus.humanState:host.Hoststatus.humanState+'-soft'}}">
+                                                        {{ host.Hoststatus.humanState }}
+                                                        <fa-icon [icon]="['fas', 'user']"
+                                                                 [hidden]="!host.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'power-off']"
+                                                                 [hidden]="host.Hoststatus.scheduledDowntimeDepth === 0"></fa-icon>
+                                                    </c-col>
+                                                    <c-col lg="4" [hidden]="host.Hoststatus.isInMonitoring"
+                                                           class="text-center text-white bg-primary">
+                                                        {{ t('Not in monitoring') }}
+                                                        <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
+                                                    </c-col>
+                                                    <c-col lg="4" class="offset-lg-1 p-0">
+                                                        <div class="btn-group btn-group-xs btn-group-justified"
+                                                             role="group"
+                                                             *oitcPermission="['services', 'index']">
+                                                            <a class="btn btn-success state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[0]}"
+                                                               [routerLink]="['/', 'services', 'index']"
+                                                               [queryParams]="{'id': host.ServiceIdsGroupByState[0]}">
+                                                                {{ host.ServiceSummary.state[0] }}
+                                                            </a>
+                                                            <a class="btn btn-warning state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[1]}"
+                                                               [routerLink]="['/', 'services', 'index']"
+                                                               [queryParams]="{'id': host.ServiceIdsGroupByState[1]}">
+                                                                {{ host.ServiceSummary.state[1] }}
+                                                            </a>
+                                                            <a class="btn btn-danger state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[2]}"
+                                                               [routerLink]="['/', 'services', 'index']"
+                                                               [queryParams]="{'id': host.ServiceIdsGroupByState[2]}">
+                                                                {{ host.ServiceSummary.state[2] }}
+                                                            </a>
+                                                            <a class="btn btn-default state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[3]}"
+                                                               [routerLink]="['/', 'services', 'index']"
+                                                               [queryParams]="{'id': host.ServiceIdsGroupByState[3]}">
+                                                                {{ host.ServiceSummary.state[3] }}
+                                                            </a>
+                                                        </div>
+                                                        <div class="btn-group btn-group-xs btn-group-justified"
+                                                             role="group"
+                                                             *oitcPermission="['services', 'index']; negate: true">
+                                                            <a class="btn btn-success state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[0]}">
+                                                                {{ host.ServiceSummary.state[0] }}
+                                                            </a>
+                                                            <a class="btn btn-warning state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[1]}">
+                                                                {{ host.ServiceSummary.state[1] }}
+                                                            </a>
+                                                            <a class="btn btn-danger state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[2]}">
+                                                                {{ host.ServiceSummary.state[2] }}
+                                                            </a>
+                                                            <a class="btn btn-default state-button-small font-sm"
+                                                               [ngClass]="{'opacity-25': !host.ServiceSummary.state[3]}">
+                                                                {{ host.ServiceSummary.state[3] }}
+                                                            </a>
+                                                        </div>
+                                                    </c-col>
+                                                </c-row>
+                                            }
+                                        </div>
+                                    </div>
+                                </article>
+                            }
+                            @if (iconType == 'servicegroup') {
+                                <article>
+                                    <div class="bg-color-white pt-2 pl-2 pb-2">
+                                        <header>
+                                            <h2 class="bold txt-color-blueDark">
+                                                <fa-icon [icon]="['fas', 'cogs']" size="lg"
+                                                         class="txt-color-blueDark"></fa-icon>
+                                                {{ t('Service group') }}
+                                            </h2>
+                                            <c-col lg="12" class="p-0">
+                                                <c-progress thin>
+                                                    <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                                                </c-progress>
+                                            </c-col>
+                                        </header>
+                                        <div class="txt-color-blueDark font-xs pt-2 pb-2">
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Service group name') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    <span *oitcPermission="['servicegroups', 'extended']">
+                                                        <a [routerLink]="['/', 'servicegroups', 'extended', summaryState.Servicegroup.id]">
+                                                            {{ summaryState.Servicegroup.name }}
+                                                        </a>
+                                                    </span>
+                                                    <span *oitcPermission="['servicegroups', 'extended']; negate: true">
+                                                        {{ summaryState.Servicegroup.name }}
+                                                    </span>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Description') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    {{ summaryState.Servicegroup.description }}
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Summary state') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0"
+                                                       [hidden]="summaryState.ServiceSummary.total === 0">
+                                                    <div
+                                                        class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                        {{ summaryState.CumulatedHumanState }}
+                                                    </div>
+                                                </c-col>
+                                                <c-col lg="8" class="p-0"
+                                                       [hidden]="summaryState.ServiceSummary.total > 0">
+                                                    <div class="text-center text-white text-capitalize bg-primary">
+                                                        {{ summaryState.CumulatedHumanState }}
+                                                    </div>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Summary output') }}
+                                                </c-col>
+                                                <c-col lg="4" class="p-0">
+                                                    {{ t('Services: ') }}{{ summaryState.ServiceSummary.total }}
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Services overview') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                         role="group"
+                                                         *oitcPermission="['services', 'index']"
                                                          [hidden]="summaryState.ServiceSummary.total === 0">
-                                                        <a class="btn btn-success "
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
                                                             {{ summaryState.ServiceSummary.state[0] }}
                                                         </a>
-                                                        <a class="btn btn-warning "
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
                                                             {{ summaryState.ServiceSummary.state[1] }}
                                                         </a>
-                                                        <a class="btn btn-danger "
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
                                                             {{ summaryState.ServiceSummary.state[2] }}
                                                         </a>
-                                                        <a class="btn btn-secondary "
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}"
                                                            [routerLink]="['/', 'services', 'index']"
                                                            [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
                                                             {{ summaryState.ServiceSummary.state[3] }}
@@ -170,837 +750,363 @@
                                                          role="group"
                                                          *oitcPermission="['services', 'index']; negate: true"
                                                          [hidden]="summaryState.ServiceSummary.total === 0">
-                                                        <a class="btn btn-success ">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}">
                                                             {{ summaryState.ServiceSummary.state[0] }}
                                                         </a>
-                                                        <a class="btn btn-warning ">
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}">
                                                             {{ summaryState.ServiceSummary.state[1] }}
                                                         </a>
-                                                        <a class="btn btn-danger ">
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}">
                                                             {{ summaryState.ServiceSummary.state[2] }}
                                                         </a>
-                                                        <a class="btn btn-secondary ">
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}">
                                                             {{ summaryState.ServiceSummary.state[3] }}
                                                         </a>
                                                     </div>
                                                 </c-col>
                                             </c-row>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row class="pt-2" [hidden]="summaryState.Services.length === 0">
-                                        <c-col lg="4">
-                                            {{ t('Service') }}
-                                        </c-col>
-                                        <c-col lg="3" class="p-0">
-                                            {{ t('State') }}
-                                        </c-col>
-                                        <c-col lg="4">
-                                            {{ t('Output') }}
-                                        </c-col>
-                                    </c-row>
-                                    <c-row class="pt-3" *ngFor="let service of summaryState.Services">
-                                        <!-- Servicename -->
-                                        <c-col lg="4" class="cropText" title="{{service.Service.servicename}}">
-                                            <span *oitcPermission="['services', 'browser']">
-                                                <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
-                                                    {{ service.Service.servicename }}
-                                                </a>
-                                            </span>
-                                            <span *oitcPermission="['services', 'browser']; negate: true">
-                                                {{ service.Service.servicename }}
-                                            </span>
-                                        </c-col>
-                                        <!-- State -->
-                                        <c-col lg="3" [hidden]="!service.Servicestatus.isInMonitoring"
-                                               class="text-center text-white text-capitalize bg-{{(service.Servicestatus.isHardstate)?service.Servicestatus.humanState:service.Servicestatus.humanState+'-soft'}}">
-                                            {{ service.Servicestatus.humanState }}
-                                            <fa-icon [icon]="['fas', 'user']"
-                                                     [hidden]="!service.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'power-off']"
-                                                     [hidden]="service.Servicestatus.scheduledDowntimeDepth === 0"></fa-icon>
-                                        </c-col>
-                                        <c-col lg="3" [hidden]="service.Servicestatus.isInMonitoring"
-                                               class="text-center text-white bg-primary">
-                                            {{ t('Not in monitoring') }}
-                                            <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
-                                        </c-col>
-                                        <!-- Output -->
-                                        <c-col lg="4" class="cropText">
-                                            <div class="cropText"
-                                                 [innerHTML]="service.Servicestatus.outputHtml | trustAsHtml"></div>
-                                        </c-col>
-                                    </c-row>
-                                </div>
-                            </div>
-                        </article>
-                        <article *ngIf="iconType == 'service'">
-                            <div class="bg-color-white pt-2 pl-2 pb-2">
-                                <header>
-                                    <h2 class="bold txt-color-blueDark">
-                                        <fa-icon [icon]="['fas', 'cog']" size="lg" class="txt-color-blueDark"></fa-icon>
-                                        {{ t('Service') }}
-                                        <span class="text-danger" *ngIf="summaryState.Service.disabled">
-                                            {{ t(' (DISABLED)') }}
-                                        </span>
-                                    </h2>
-                                    <c-col lg="12" class="p-0">
-                                        <c-progress thin>
-                                            <c-progress-bar [value]="toastPercentage"></c-progress-bar>
-                                        </c-progress>
-                                    </c-col>
-                                </header>
-                                <div class="txt-color-blueDark font-xs pt-2 pb-2">
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Hostname') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            <span *oitcPermission="['hosts', 'browser']">
-                                                <a [routerLink]="['/', 'hosts', 'browser', summaryState.Host.id]">
-                                                    {{ summaryState.Host.hostname }}
-                                                </a>
-                                            </span>
-                                            <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                                {{ summaryState.Host.hostname }}
-                                            </span>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Host state') }}
-                                        </c-col>
-                                        <c-col lg="8" [hidden]="!summaryState.Hoststatus.isInMonitoring"
-                                               class="text-center text-white text-capitalize bg-{{(summaryState.Hoststatus.isHardstate)?summaryState.Hoststatus.humanState:summaryState.Hoststatus.humanState+'-soft'}}">
-                                            <span class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
-                                            <fa-icon [icon]="['fas', 'user']"
-                                                     [hidden]="!summaryState.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'power-off']"
-                                                     [hidden]="summaryState.Hoststatus.scheduledDowntimeDepth === 0"></fa-icon>
-                                        </c-col>
-                                        <c-col lg="8" [hidden]="summaryState.Hoststatus.isInMonitoring"
-                                               class="text-center text-white bg-primary">
-                                            {{ t('Not in monitoring') }}
-                                            <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Service') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            <span *oitcPermission="['services', 'browser']">
-                                                <a [routerLink]="['/', 'services', 'browser', summaryState.Service.id]">
-                                                    {{ summaryState.Service.servicename }}
-                                                </a>
-                                            </span>
-                                            <span *oitcPermission="['services', 'browser']; negate: true">
-                                                {{ summaryState.Service.servicename }}
-                                            </span>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Description') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            {{ summaryState.Service.description }}
-                                        </c-col>
-                                    </c-row>
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('State') }}
-                                        </c-col>
-                                        <c-col lg="8" [hidden]="!summaryState.Servicestatus.isInMonitoring"
-                                               class="text-center text-white text-capitalize bg-{{(summaryState.Servicestatus.isHardstate)?summaryState.Servicestatus.humanState:summaryState.Servicestatus.humanState+'-soft'}}">
-                                            <span class="padding-5">{{ summaryState.Servicestatus.humanState }}</span>
-                                            <fa-icon [icon]="['fas', 'user']"
-                                                     [hidden]="!summaryState.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'power-off']"
-                                                     [hidden]="summaryState.Servicestatus.scheduledDowntimeDepth === 0"></fa-icon>
-                                        </c-col>
-                                        <c-col lg="8" [hidden]="summaryState.Servicestatus.isInMonitoring"
-                                               class="text-center text-white bg-primary">
-                                            {{ t('Not in monitoring') }}
-                                            <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
-                                        </c-col>
-                                    </c-row>
-                                    <div [hidden]="!summaryState.Servicestatus.isInMonitoring">
-                                        <c-row>
-                                            <c-col lg="3">
-                                                {{ t('Output') }}
-                                            </c-col>
-                                            <c-col lg="8" class="p-0">
-                                                <div class="cropText"
-                                                     [innerHTML]="summaryState.Servicestatus.outputHtml | trustAsHtml"></div>
-                                            </c-col>
-                                        </c-row>
-                                        <c-row>
-                                            <c-col lg="3">
-                                                {{ t('Perfdata') }}
-                                            </c-col>
-                                            <c-col lg="8" class="p-0">
-                                                {{ summaryState.Servicestatus.perfdata }}
-                                            </c-col>
-                                        </c-row>
-                                        <c-row>
-                                            <c-col lg="3">
-                                                {{ t('Current attempt') }}
-                                            </c-col>
-                                            <c-col lg="8" class="p-0">
-                                                {{ summaryState.Servicestatus.current_check_attempt }}
-                                                /{{ summaryState.Servicestatus.max_check_attempts }}
-                                            </c-col>
-                                        </c-row>
-                                        <c-row>
-                                            <c-col lg="3">
-                                                {{ t('Last check') }}
-                                            </c-col>
-                                            <c-col lg="8" class="p-0">
-                                                {{ summaryState.Servicestatus.lastCheck }}
-                                            </c-col>
-                                        </c-row>
-                                        <c-row>
-                                            <c-col lg="3">
-                                                {{ t('Next check') }}
-                                            </c-col>
-                                            <c-col lg="8" class="p-0">
-                                                {{ summaryState.Servicestatus.nextCheck }}
-                                            </c-col>
-                                        </c-row>
-                                        <c-row>
-                                            <c-col lg="3">
-                                                {{ t('Last state change') }}
-                                            </c-col>
-                                            <c-col lg="8" class="p-0">
-                                                {{ summaryState.Servicestatus.last_state_change }}
-                                            </c-col>
-                                        </c-row>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                        <article *ngIf="iconType == 'hostgroup'">
-                            <div class="bg-color-white pt-2 pl-2 pb-2">
-                                <header>
-                                    <h2 class="bold txt-color-blueDark">
-                                        <fa-icon [icon]="['fas', 'sitemap']" size="lg"
-                                                 class="txt-color-blueDark"></fa-icon>
-                                        {{ t('Host group') }}
-                                    </h2>
-                                    <c-col lg="12" class="p-0">
-                                        <c-progress thin>
-                                            <c-progress-bar [value]="toastPercentage"></c-progress-bar>
-                                        </c-progress>
-                                    </c-col>
-                                </header>
-                                <div class="txt-color-blueDark font-xs pt-2 pb-2">
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Host group name') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            <span *oitcPermission="['hostgroups', 'extended']">
-                                                <a [routerLink]="['/', 'hostgroups', 'extended', summaryState.Hostgroup.id]">
-                                                    {{ summaryState.Hostgroup.name }}
-                                                </a>
-                                            </span>
-                                            <span *oitcPermission="['hostgroups', 'extended']; negate: true">
-                                                {{ summaryState.Hostgroup.name }}
-                                            </span>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Description') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            {{ summaryState.Hostgroup.description }}
-                                        </c-col>
-                                    </c-row>
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Summary state') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            <div
-                                                class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
-                                                {{ summaryState.CumulatedHumanState }}
-                                            </div>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row class="pt-2">
-                                        <c-col lg="4">
-                                            {{ t('Summary output') }}
-                                        </c-col>
-                                        <c-col lg="4" class="p-0">
-                                            {{ t('Hosts: ') }}{{ summaryState.Hostgroup.HostSummary.total }}
-                                        </c-col>
-                                        <c-col lg="4" class="p-0">
-                                            {{ t('Services: ') }}{{ summaryState.Hostgroup.TotalServiceSummary.total }}
-                                        </c-col>
-                                    </c-row>
-
-                                    <c-row class="pt-2">
-                                        <c-col lg="3">
-                                            {{ t('Hosts overview') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
-                                                 *oitcPermission="['hosts', 'index']">
-                                                <a class="btn btn-success "
-                                                   [routerLink]="['/', 'hosts', 'index']"
-                                                   [queryParams]="{'id': summaryState.HostIdsGroupByState[0]}">
-                                                    {{ summaryState.Hostgroup.HostSummary.state[0] }}
-                                                </a>
-                                                <a class="btn btn-danger "
-                                                   [routerLink]="['/', 'hosts', 'index']"
-                                                   [queryParams]="{'id': summaryState.HostIdsGroupByState[1]}">
-                                                    {{ summaryState.Hostgroup.HostSummary.state[1] }}
-                                                </a>
-                                                <a class="btn btn-secondary "
-                                                   [routerLink]="['/', 'hosts', 'index']"
-                                                   [queryParams]="{'id': summaryState.HostIdsGroupByState[2]}">
-                                                    {{ summaryState.Hostgroup.HostSummary.state[2] }}
-                                                </a>
-                                            </div>
-                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
-                                                 *oitcPermission="['hosts', 'index']; negate: true">
-                                                <a class="btn btn-success ">
-                                                    {{ summaryState.Hostgroup.HostSummary.state[0] }}
-                                                </a>
-                                                <a class="btn btn-danger ">
-                                                    {{ summaryState.Hostgroup.HostSummary.state[1] }}
-                                                </a>
-                                                <a class="btn btn-secondary ">
-                                                    {{ summaryState.Hostgroup.HostSummary.state[2] }}
-                                                </a>
-                                            </div>
-                                        </c-col>
-                                    </c-row>
-
-                                    <c-row class="pt-2">
-                                        <c-col lg="3">
-                                            {{ t('Services overview') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
-                                                 *oitcPermission="['services', 'index']">
-                                                <a class="btn btn-success "
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
-                                                    {{ summaryState.Hostgroup.TotalServiceSummary.state[0] }}
-                                                </a>
-                                                <a class="btn btn-warning "
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
-                                                    {{ summaryState.Hostgroup.TotalServiceSummary.state[1] }}
-                                                </a>
-                                                <a class="btn btn-danger "
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
-                                                    {{ summaryState.Hostgroup.TotalServiceSummary.state[2] }}
-                                                </a>
-                                                <a class="btn btn-secondary "
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
-                                                    {{ summaryState.Hostgroup.TotalServiceSummary.state[3] }}
-                                                </a>
-                                            </div>
-                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
-                                                 *oitcPermission="['services', 'index']; negate: true">
-                                                <a class="btn btn-success ">
-                                                    {{ summaryState.Hostgroup.TotalServiceSummary.state[0] }}
-                                                </a>
-                                                <a class="btn btn-warning ">
-                                                    {{ summaryState.Hostgroup.TotalServiceSummary.state[1] }}
-                                                </a>
-                                                <a class="btn btn-danger ">
-                                                    {{ summaryState.Hostgroup.TotalServiceSummary.state[2] }}
-                                                </a>
-                                                <a class="btn btn-secondary ">
-                                                    {{ summaryState.Hostgroup.TotalServiceSummary.state[3] }}
-                                                </a>
-                                            </div>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row class="pt-2" *ngFor="let host of summaryState.Hosts">
-                                        <c-col lg="3" class="cropText">
-                                            <span *oitcPermission="['hosts', 'browser']">
-                                                <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]">
-                                                    {{ host.Host.hostname }}
-                                                </a>
-                                            </span>
-                                            <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                                {{ host.Host.hostname }}
-                                            </span>
-                                        </c-col>
-                                        <c-col lg="4" [hidden]="!host.Hoststatus.isInMonitoring"
-                                               class="text-center text-white text-capitalize bg-{{(host.Hoststatus.isHardstate)?host.Hoststatus.humanState:host.Hoststatus.humanState+'-soft'}}">
-                                            {{ host.Hoststatus.humanState }}
-                                            <fa-icon [icon]="['fas', 'user']"
-                                                     [hidden]="!host.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'power-off']"
-                                                     [hidden]="host.Hoststatus.scheduledDowntimeDepth === 0"></fa-icon>
-                                        </c-col>
-                                        <c-col lg="4" [hidden]="host.Hoststatus.isInMonitoring"
-                                               class="text-center text-white bg-primary">
-                                            {{ t('Not in monitoring') }}
-                                            <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
-                                        </c-col>
-                                        <c-col lg="4" class="offset-lg-1 p-0">
-                                            <div class="btn-group btn-group-xs btn-group-justified" role="group"
-                                                 *oitcPermission="['services', 'index']">
-                                                <a class="btn btn-success state-button-small font-sm"
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': host.ServiceIdsGroupByState[0]}">
-                                                    {{ host.ServiceSummary.state[0] }}
-                                                </a>
-                                                <a class="btn btn-warning state-button-small font-sm"
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': host.ServiceIdsGroupByState[1]}">
-                                                    {{ host.ServiceSummary.state[1] }}
-                                                </a>
-                                                <a class="btn btn-danger state-button-small font-sm"
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': host.ServiceIdsGroupByState[2]}">
-                                                    {{ host.ServiceSummary.state[2] }}
-                                                </a>
-                                                <a class="btn btn-default state-button-small font-sm"
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': host.ServiceIdsGroupByState[3]}">
-                                                    {{ host.ServiceSummary.state[3] }}
-                                                </a>
-                                            </div>
-                                            <div class="btn-group btn-group-xs btn-group-justified" role="group"
-                                                 *oitcPermission="['services', 'index']; negate: true">
-                                                <a class="btn btn-success state-button-small font-sm">
-                                                    {{ host.ServiceSummary.state[0] }}
-                                                </a>
-                                                <a class="btn btn-warning state-button-small font-sm">
-                                                    {{ host.ServiceSummary.state[1] }}
-                                                </a>
-                                                <a class="btn btn-danger state-button-small font-sm">
-                                                    {{ host.ServiceSummary.state[2] }}
-                                                </a>
-                                                <a class="btn btn-default state-button-small font-sm">
-                                                    {{ host.ServiceSummary.state[3] }}
-                                                </a>
-                                            </div>
-                                        </c-col>
-                                    </c-row>
-                                </div>
-                            </div>
-                        </article>
-                        <article *ngIf="iconType == 'servicegroup'">
-                            <div class="bg-color-white pt-2 pl-2 pb-2">
-                                <header>
-                                    <h2 class="bold txt-color-blueDark">
-                                        <fa-icon [icon]="['fas', 'cogs']" size="lg"
-                                                 class="txt-color-blueDark"></fa-icon>
-                                        {{ t('Service group') }}
-                                    </h2>
-                                    <c-col lg="12" class="p-0">
-                                        <c-progress thin>
-                                            <c-progress-bar [value]="toastPercentage"></c-progress-bar>
-                                        </c-progress>
-                                    </c-col>
-                                </header>
-                                <div class="txt-color-blueDark font-xs pt-2 pb-2">
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Service group name') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            <span *oitcPermission="['servicegroups', 'extended']">
-                                                <a [routerLink]="['/', 'servicegroups', 'extended', summaryState.Servicegroup.id]">
-                                                    {{ summaryState.Servicegroup.name }}
-                                                </a>
-                                            </span>
-                                            <span *oitcPermission="['servicegroups', 'extended']; negate: true">
-                                                {{ summaryState.Servicegroup.name }}
-                                            </span>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Description') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            {{ summaryState.Servicegroup.description }}
-                                        </c-col>
-                                    </c-row>
-                                    <c-row class="pt-2">
-                                        <c-col lg="3">
-                                            {{ t('Summary state') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0"
-                                               [hidden]="summaryState.ServiceSummary.total === 0">
-                                            <div
-                                                class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
-                                                {{ summaryState.CumulatedHumanState }}
-                                            </div>
-                                        </c-col>
-                                        <c-col lg="8" class="p-0"
-                                               [hidden]="summaryState.ServiceSummary.total > 0">
-                                            <div class="text-center text-white text-capitalize bg-primary">
-                                                {{ summaryState.CumulatedHumanState }}
-                                            </div>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row class="pt-2">
-                                        <c-col lg="3">
-                                            {{ t('Summary output') }}
-                                        </c-col>
-                                        <c-col lg="4" class="p-0">
-                                            {{ t('Services: ') }}{{ summaryState.ServiceSummary.total }}
-                                        </c-col>
-                                    </c-row>
-                                    <c-row class="pt-2">
-                                        <c-col lg="3">
-                                            {{ t('Services overview') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
-                                                 *oitcPermission="['services', 'index']"
-                                                 [hidden]="summaryState.ServiceSummary.total === 0">
-                                                <a class="btn btn-success "
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
-                                                    {{ summaryState.ServiceSummary.state[0] }}
-                                                </a>
-                                                <a class="btn btn-warning "
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
-                                                    {{ summaryState.ServiceSummary.state[1] }}
-                                                </a>
-                                                <a class="btn btn-danger "
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
-                                                    {{ summaryState.ServiceSummary.state[2] }}
-                                                </a>
-                                                <a class="btn btn-secondary "
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
-                                                    {{ summaryState.ServiceSummary.state[3] }}
-                                                </a>
-                                            </div>
-                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
-                                                 *oitcPermission="['services', 'index']; negate: true"
-                                                 [hidden]="summaryState.ServiceSummary.total === 0">
-                                                <a class="btn btn-success ">
-                                                    {{ summaryState.ServiceSummary.state[0] }}
-                                                </a>
-                                                <a class="btn btn-warning ">
-                                                    {{ summaryState.ServiceSummary.state[1] }}
-                                                </a>
-                                                <a class="btn btn-danger ">
-                                                    {{ summaryState.ServiceSummary.state[2] }}
-                                                </a>
-                                                <a class="btn btn-secondary ">
-                                                    {{ summaryState.ServiceSummary.state[3] }}
-                                                </a>
-                                            </div>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row class="pt-4" [hidden]="summaryState.Services.length === 0">
-                                        <c-col lg="5">
-                                            {{ t('Service') }}
-                                        </c-col>
-                                        <c-col lg="2" class="p-0">
-                                            {{ t('State') }}
-                                        </c-col>
-                                        <c-col lg="4">
-                                            {{ t('Output') }}
-                                        </c-col>
-                                    </c-row>
-                                    <c-row class="pt-2" *ngFor="let service of summaryState.Services">
-                                        <c-col lg="5" class="cropText"
-                                               title="{{service.Host.hostname}}/{{service.Service.servicename}}">
-                                            <span *oitcPermission="['services', 'browser']">
-                                                <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
-                                                    {{ service.Host.hostname }}/{{ service.Service.servicename }}
-                                                </a>
-                                            </span>
-                                            <span *oitcPermission="['services', 'browser']; negate: true">
-                                                {{ service.Host.hostname }}/{{ service.Service.servicename }}
-                                            </span>
-                                        </c-col>
-                                        <c-col lg="2" [hidden]="!service.Servicestatus.isInMonitoring"
-                                               class="text-center text-white text-capitalize bg-{{(service.Servicestatus.isHardstate)?service.Servicestatus.humanState:service.Servicestatus.humanState+'-soft'}}">
-                                            {{ service.Servicestatus.humanState }}
-                                            <fa-icon [icon]="['fas', 'user']"
-                                                     [hidden]="!service.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'power-off']"
-                                                     [hidden]="service.Servicestatus.scheduledDowntimeDepth === 0"></fa-icon>
-                                        </c-col>
-                                        <c-col lg="2" [hidden]="service.Servicestatus.isInMonitoring"
-                                               class="text-center text-white bg-primary">
-                                            <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
-                                        </c-col>
-                                        <div class="col-lg-4 cropText">
-                                            <div class="cropText"
-                                                 [innerHTML]="service.Servicestatus.outputHtml | trustAsHtml"></div>
+                                            <c-row class="pt-4" [hidden]="summaryState.Services.length === 0">
+                                                <c-col lg="5">
+                                                    {{ t('Service') }}
+                                                </c-col>
+                                                <c-col lg="2" class="p-0">
+                                                    {{ t('State') }}
+                                                </c-col>
+                                                <c-col lg="4">
+                                                    {{ t('Output') }}
+                                                </c-col>
+                                            </c-row>
+                                            @for (service of summaryState.Services; track service) {
+                                                <c-row class="pt-2">
+                                                    <c-col lg="5" class="cropText"
+                                                           title="{{service.Host.hostname}}/{{service.Service.servicename}}">
+                                                        <span *oitcPermission="['services', 'browser']">
+                                                            <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
+                                                                {{ service.Host.hostname }}
+                                                                /{{ service.Service.servicename }}
+                                                            </a>
+                                                        </span>
+                                                        <span *oitcPermission="['services', 'browser']; negate: true">
+                                                            {{ service.Host.hostname }}
+                                                            /{{ service.Service.servicename }}
+                                                        </span>
+                                                    </c-col>
+                                                    <c-col lg="2" [hidden]="!service.Servicestatus.isInMonitoring"
+                                                           class="text-center text-white text-capitalize bg-{{(service.Servicestatus.isHardstate)?service.Servicestatus.humanState:service.Servicestatus.humanState+'-soft'}}">
+                                                        {{ service.Servicestatus.humanState }}
+                                                        <fa-icon [icon]="['fas', 'user']"
+                                                                 [hidden]="!service.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'power-off']"
+                                                                 [hidden]="service.Servicestatus.scheduledDowntimeDepth === 0"></fa-icon>
+                                                    </c-col>
+                                                    <c-col lg="2" [hidden]="service.Servicestatus.isInMonitoring"
+                                                           class="text-center text-white bg-primary">
+                                                        <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
+                                                    </c-col>
+                                                    <div class="col-lg-4 cropText">
+                                                        <div class="cropText"
+                                                             [innerHTML]="service.Servicestatus.outputHtml | trustAsHtml"></div>
+                                                    </div>
+                                                </c-row>
+                                            }
                                         </div>
-                                    </c-row>
-                                </div>
-                            </div>
-                        </article>
-                        <article *ngIf="iconType == 'map'">
-                            <div class="bg-color-white pt-2 pl-2 pb-2">
-                                <header>
-                                    <h2 class="bold txt-color-blueDark">
-                                        <fa-icon [icon]="['fas', 'map-marked-alt']" size="lg"
-                                                 class="txt-color-blueDark"></fa-icon>
-                                        {{ t('Map') }}
-                                    </h2>
-                                    <c-col lg="12" class="p-0">
-                                        <c-progress thin>
-                                            <c-progress-bar [value]="toastPercentage"></c-progress-bar>
-                                        </c-progress>
-                                    </c-col>
-                                </header>
-                                <div class="txt-color-blueDark font-xs pt-2 pb-2">
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Map name') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            <span *oitcPermission="['mapmodule', 'mapeditors', 'view']">
-                                                <a [routerLink]="['/', 'map_module', 'mapeditors', 'view', summaryState.Map.object_id, false]">
-                                                    {{ summaryState.Map.name }}
-                                                </a>
-                                            </span>
-                                            <span *oitcPermission="['mapmodule', 'mapeditors', 'view']; negate: true">
-                                                {{ summaryState.Map.name }}
-                                            </span>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row>
-                                        <c-col lg="3">
-                                            {{ t('Map title') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            {{ summaryState.Map.title }}
-                                        </c-col>
-                                    </c-row>
-                                    <c-row class="pt-2">
-                                        <c-col lg="3">
-                                            {{ t('Summary state') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0"
-                                               [hidden]="summaryState.HostSummary.total === 0|| summaryState.ServiceSummary.total === 0">
-                                            <div
-                                                class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
-                                                {{ summaryState.CumulatedHumanState }}
-                                            </div>
-                                        </c-col>
-                                        <c-col lg="8" class="p-0"
-                                               [hidden]="summaryState.HostSummary.total > 0 && summaryState.ServiceSummary.total > 0">
-                                            <div class="text-center text-white text-capitalize bg-primary">
-                                                {{ summaryState.CumulatedHumanState }}
-                                            </div>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row class="pt-2">
-                                        <c-col lg="3">
-                                            {{ t('Summary output') }}
-                                        </c-col>
-                                        <c-col lg="4" class="p-0">
-                                            {{ t('Hosts: ') }}{{ summaryState.HostSummary.total }}
-                                        </c-col>
-                                        <c-col lg="4" class="p-0">
-                                            {{ t('Services: ') }}{{ summaryState.ServiceSummary.total }}
-                                        </c-col>
-                                    </c-row>
-                                    <c-row class="pt-2">
-                                        <c-col lg="3">
-                                            {{ t('Hosts overview') }}
-                                        </c-col>
-                                        <c-col lg="8" class="p-0">
-                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
-                                                 *oitcPermission="['hosts', 'index']"
-                                                 [hidden]="summaryState.ServiceSummary.total === 0">
-                                                <a class="btn btn-success "
-                                                   [routerLink]="['/', 'hosts', 'index']"
-                                                   [queryParams]="{'id': summaryState.HostIdsGroupByState[0]}">
-                                                    {{ summaryState.HostSummary.state[0] }}
-                                                </a>
-                                                <a class="btn btn-danger "
-                                                   [routerLink]="['/', 'hosts', 'index']"
-                                                   [queryParams]="{'id': summaryState.HostIdsGroupByState[1]}">
-                                                    {{ summaryState.HostSummary.state[1] }}
-                                                </a>
-                                                <a class="btn btn-secondary "
-                                                   [routerLink]="['/', 'hosts', 'index']"
-                                                   [queryParams]="{'id': summaryState.HostIdsGroupByState[2]}">
-                                                    {{ summaryState.HostSummary.state[2] }}
-                                                </a>
-                                            </div>
-                                            <div class="btn-group btn-group-xs btn-group-justified w-100" role="group"
-                                                 *oitcPermission="['hosts', 'index']; negate: true"
-                                                 [hidden]="summaryState.ServiceSummary.total === 0">
-                                                <a class="btn btn-success ">
-                                                    {{ summaryState.HostSummary.state[0] }}
-                                                </a>
-                                                <a class="btn btn-danger ">
-                                                    {{ summaryState.HostSummary.state[1] }}
-                                                </a>
-                                                <a class="btn btn-secondary ">
-                                                    {{ summaryState.HostSummary.state[2] }}
-                                                </a>
-                                            </div>
-                                        </c-col>
-                                    </c-row>
-
-                                    <c-row class="pt-2">
-                                        <c-col lg="3">
-                                            {{ t('Services overview') }}
-                                        </c-col>
-                                        <div class="col-lg-8 p-0">
-                                            <div class="btn-group btn-group-xs btn-group-justified w-100"
-                                                 role="group" *oitcPermission="['services', 'index']"
-                                                 [hidden]="summaryState.ServiceSummary.total === 0">
-                                                <a class="btn btn-success "
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
-                                                    {{ summaryState.ServiceSummary.state[0] }}
-                                                </a>
-                                                <a class="btn btn-warning "
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
-                                                    {{ summaryState.ServiceSummary.state[1] }}
-                                                </a>
-                                                <a class="btn btn-danger "
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
-                                                    {{ summaryState.ServiceSummary.state[2] }}
-                                                </a>
-                                                <a class="btn btn-secondary "
-                                                   [routerLink]="['/', 'services', 'index']"
-                                                   [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
-                                                    {{ summaryState.ServiceSummary.state[3] }}
-                                                </a>
-                                            </div>
-                                            <div class="btn-group btn-group-xs btn-group-justified w-100"
-                                                 role="group" *oitcPermission="['services', 'index']; negate: true"
-                                                 [hidden]="summaryState.ServiceSummary.total === 0">
-                                                <a class="btn btn-success ">
-                                                    {{ summaryState.ServiceSummary.state[0] }}
-                                                </a>
-                                                <a class="btn btn-warning ">
-                                                    {{ summaryState.ServiceSummary.state[1] }}
-                                                </a>
-                                                <a class="btn btn-danger ">
-                                                    {{ summaryState.ServiceSummary.state[2] }}
-                                                </a>
-                                                <a class="btn btn-secondary ">
-                                                    {{ summaryState.ServiceSummary.state[3] }}
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </c-row>
-                                    <c-row class="pt-2">
-                                        <c-col lg="12">
-                                            <span class="bold">
-                                                {{ t('Host and services are not in state UP/OK') }}
-                                            </span>
-                                            <span class="text-info">(
-                                                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                                                {{ t(' maximum 20') }}
-                                            </span>)
-                                        </c-col>
-                                    </c-row>
-                                    <div
-                                        *ngIf="summaryState.NotOkHosts.length > 0 || summaryState.NotOkServices.length">
-                                        <c-row class="pt-4" [hidden]="summaryState.NotOkHosts.length === 0">
-                                            <c-col lg="4">
-                                                {{ t('Host') }}
-                                            </c-col>
-                                            <c-col lg="3" class="p-0">
-                                                {{ t('State') }}
-                                            </c-col>
-                                            <c-col lg="4">
-                                                {{ t('Output') }}
-                                            </c-col>
-                                        </c-row>
-                                        <c-row class="pt-1" *ngFor="let notOkHost of summaryState.NotOkHosts">
-                                            <c-col lg="4" class="cropText" title="{{notOkHost.Host.hostname}}">
-                                                <span *oitcPermission="['hosts', 'browser']">
-                                                    <a [routerLink]="['/', 'hosts', 'browser', notOkHost.Host.id]">
-                                                        {{ notOkHost.Host.hostname }}
-                                                    </a>
-                                                </span>
-                                                <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                                    {{ notOkHost.Host.hostname }}
-                                                </span>
-                                            </c-col>
-                                            <c-col lg="3" [hidden]="!notOkHost.Hoststatus.isInMonitoring"
-                                                   class="text-center text-white text-capitalize bg-{{(notOkHost.Hoststatus.isHardstate)?notOkHost.Hoststatus.humanState:notOkHost.Hoststatus.humanState+'-soft'}}">
-                                                {{ notOkHost.Hoststatus.humanState }}
-                                                <fa-icon [icon]="['fas', 'user']"
-                                                         [hidden]="!notOkHost.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'power-off']"
-                                                         [hidden]="notOkHost.Hoststatus.scheduledDowntimeDepth === 0"></fa-icon>
-                                            </c-col>
-                                            <c-col lg="3" [hidden]="notOkHost.Hoststatus.isInMonitoring"
-                                                   class="text-center text-white bg-primary">
-                                                {{ t('Not in monitoring') }}
-                                                <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
-                                            </c-col>
-                                            <c-col lg="4" class="cropText" title="notOkHost.Hoststatus.output">
-                                                <div class="cropText"
-                                                     [innerHTML]="notOkHost.Hoststatus.outputHtml | trustAsHtml"></div>
-                                            </c-col>
-                                        </c-row>
-                                        <c-row class="pt-2" [hidden]="summaryState.NotOkServices.length === 0">
-                                            <c-col lg="4">
-                                                {{ t('Service') }}
-                                            </c-col>
-                                            <c-col lg="3" class="p-0">
-                                                {{ t('State') }}
-                                            </c-col>
-                                            <c-col lg="4">
-                                                {{ t('Output') }}
-                                            </c-col>
-                                        </c-row>
-                                        <c-row class="pt-1"
-                                               *ngFor="let notOkService of summaryState.NotOkServices">
-                                            <c-col lg="4" class="cropText"
-                                                   title="{{notOkService.Service.hostname}}/{{notOkService.Service.hostname}}">
-                                                <span *oitcPermission="['services', 'browser']">
-                                                    <a [routerLink]="['/', 'services', 'browser', notOkService.Service.id]">
-                                                        {{ notOkService.Service.servicename }}
-                                                    </a>
-                                                </span>
-                                                <span *oitcPermission="['services', 'browser']; negate: true">
-                                                    {{ notOkService.Service.servicename }}
-                                                </span>
-                                            </c-col>
-                                            <c-col lg="3" [hidden]="!notOkService.Servicestatus.isInMonitoring"
-                                                   class="text-center text-white text-capitalize bg-{{(notOkService.Servicestatus.isHardstate)?notOkService.Servicestatus.humanState:notOkService.Servicestatus.humanState+'-soft'}}">
-                                                {{ notOkService.Servicestatus.humanState }}
-                                                <fa-icon [icon]="['fas', 'user']"
-                                                         [hidden]="!notOkService.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
-                                                <fa-icon [icon]="['fas', 'power-off']"
-                                                         [hidden]="notOkService.Servicestatus.scheduledDowntimeDepth === 0"></fa-icon>
-                                            </c-col>
-                                            <c-col lg="3" [hidden]="notOkService.Servicestatus.isInMonitoring"
-                                                   class="text-center text-white bg-primary">
-                                                {{ t('Not in monitoring') }}
-                                                <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
-                                            </c-col>
-                                            <c-col lg="4" class="cropText" title="notOkService.Servicestatus.output">
-                                                {{ notOkService.Servicestatus.output }}
-                                            </c-col>
-                                        </c-row>
                                     </div>
-                                </div>
-                            </div>
-                        </article>
-                    </section>
-
-                </c-toast-body>
-            </div>
-        </c-toast>
-    </c-toaster>
+                                </article>
+                            }
+                            @if (iconType == 'map') {
+                                <article>
+                                    <div class="bg-color-white pt-2 pl-2 pb-2">
+                                        <header>
+                                            <h2 class="bold txt-color-blueDark">
+                                                <fa-icon [icon]="['fas', 'map-marked-alt']" size="lg"
+                                                         class="txt-color-blueDark"></fa-icon>
+                                                {{ t('Map') }}
+                                            </h2>
+                                            <c-col lg="12" class="p-0">
+                                                <c-progress thin>
+                                                    <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                                                </c-progress>
+                                            </c-col>
+                                        </header>
+                                        <div class="txt-color-blueDark font-xs pt-2 pb-2">
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Map name') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    <span *oitcPermission="['mapmodule', 'mapeditors', 'view']">
+                                                        <a [routerLink]="['/', 'map_module', 'mapeditors', 'view', summaryState.Map.object_id, false]">
+                                                            {{ summaryState.Map.name }}
+                                                        </a>
+                                                    </span>
+                                                    <span
+                                                        *oitcPermission="['mapmodule', 'mapeditors', 'view']; negate: true">
+                                                        {{ summaryState.Map.name }}
+                                                    </span>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Map title') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    {{ summaryState.Map.title }}
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Summary state') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0"
+                                                       [hidden]="summaryState.HostSummary.total === 0|| summaryState.ServiceSummary.total === 0">
+                                                    <div
+                                                        class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                        {{ summaryState.CumulatedHumanState }}
+                                                    </div>
+                                                </c-col>
+                                                <c-col lg="8" class="p-0"
+                                                       [hidden]="summaryState.HostSummary.total > 0 && summaryState.ServiceSummary.total > 0">
+                                                    <div class="text-center text-white text-capitalize bg-primary">
+                                                        {{ summaryState.CumulatedHumanState }}
+                                                    </div>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Summary output') }}
+                                                </c-col>
+                                                <c-col lg="4" class="p-0">
+                                                    {{ t('Hosts: ') }}{{ summaryState.HostSummary.total }}
+                                                </c-col>
+                                                <c-col lg="4" class="p-0">
+                                                    {{ t('Services: ') }}{{ summaryState.ServiceSummary.total }}
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Hosts overview') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                         role="group"
+                                                         *oitcPermission="['hosts', 'index']"
+                                                         [hidden]="summaryState.ServiceSummary.total === 0">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[0]}"
+                                                           [routerLink]="['/', 'hosts', 'index']"
+                                                           [queryParams]="{'id': summaryState.HostIdsGroupByState[0]}">
+                                                            {{ summaryState.HostSummary.state[0] }}
+                                                        </a>
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[1]}"
+                                                           [routerLink]="['/', 'hosts', 'index']"
+                                                           [queryParams]="{'id': summaryState.HostIdsGroupByState[1]}">
+                                                            {{ summaryState.HostSummary.state[1] }}
+                                                        </a>
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[2]}"
+                                                           [routerLink]="['/', 'hosts', 'index']"
+                                                           [queryParams]="{'id': summaryState.HostIdsGroupByState[2]}">
+                                                            {{ summaryState.HostSummary.state[2] }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                         role="group"
+                                                         *oitcPermission="['hosts', 'index']; negate: true"
+                                                         [hidden]="summaryState.ServiceSummary.total === 0">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[0]}">
+                                                            {{ summaryState.HostSummary.state[0] }}
+                                                        </a>
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[1]}">
+                                                            {{ summaryState.HostSummary.state[1] }}
+                                                        </a>
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[2]}">
+                                                            {{ summaryState.HostSummary.state[2] }}
+                                                        </a>
+                                                    </div>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Services overview') }}
+                                                </c-col>
+                                                <div class="col-lg-8 p-0">
+                                                    <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                         role="group" *oitcPermission="['services', 'index']"
+                                                         [hidden]="summaryState.ServiceSummary.total === 0">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}"
+                                                           [routerLink]="['/', 'services', 'index']"
+                                                           [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
+                                                            {{ summaryState.ServiceSummary.state[0] }}
+                                                        </a>
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}"
+                                                           [routerLink]="['/', 'services', 'index']"
+                                                           [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
+                                                            {{ summaryState.ServiceSummary.state[1] }}
+                                                        </a>
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}"
+                                                           [routerLink]="['/', 'services', 'index']"
+                                                           [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
+                                                            {{ summaryState.ServiceSummary.state[2] }}
+                                                        </a>
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}"
+                                                           [routerLink]="['/', 'services', 'index']"
+                                                           [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
+                                                            {{ summaryState.ServiceSummary.state[3] }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                         role="group"
+                                                         *oitcPermission="['services', 'index']; negate: true"
+                                                         [hidden]="summaryState.ServiceSummary.total === 0">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}">
+                                                            {{ summaryState.ServiceSummary.state[0] }}
+                                                        </a>
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}">
+                                                            {{ summaryState.ServiceSummary.state[1] }}
+                                                        </a>
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}">
+                                                            {{ summaryState.ServiceSummary.state[2] }}
+                                                        </a>
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}">
+                                                            {{ summaryState.ServiceSummary.state[3] }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="12">
+                                                    <span class="bold">
+                                                        {{ t('Host and services are not in state UP/OK') }}
+                                                    </span>
+                                                    <span class="text-info">(
+                                                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                                        {{ t(' maximum 20') }}
+                                                    </span>)
+                                                </c-col>
+                                            </c-row>
+                                            @if (summaryState.NotOkHosts.length > 0 || summaryState.NotOkServices.length) {
+                                                <div
+                                                >
+                                                    <c-row class="pt-4" [hidden]="summaryState.NotOkHosts.length === 0">
+                                                        <c-col lg="4">
+                                                            {{ t('Host') }}
+                                                        </c-col>
+                                                        <c-col lg="3" class="p-0">
+                                                            {{ t('State') }}
+                                                        </c-col>
+                                                        <c-col lg="4">
+                                                            {{ t('Output') }}
+                                                        </c-col>
+                                                    </c-row>
+                                                    @for (notOkHost of summaryState.NotOkHosts; track notOkHost) {
+                                                        <c-row class="pt-1">
+                                                            <c-col lg="4" class="cropText"
+                                                                   title="{{notOkHost.Host.hostname}}">
+                                                                <span *oitcPermission="['hosts', 'browser']">
+                                                                    <a [routerLink]="['/', 'hosts', 'browser', notOkHost.Host.id]">
+                                                                        {{ notOkHost.Host.hostname }}
+                                                                    </a>
+                                                                </span>
+                                                                <span
+                                                                    *oitcPermission="['hosts', 'browser']; negate: true">
+                                                                    {{ notOkHost.Host.hostname }}
+                                                                </span>
+                                                            </c-col>
+                                                            <c-col lg="3"
+                                                                   [hidden]="!notOkHost.Hoststatus.isInMonitoring"
+                                                                   class="text-center text-white text-capitalize bg-{{(notOkHost.Hoststatus.isHardstate)?notOkHost.Hoststatus.humanState:notOkHost.Hoststatus.humanState+'-soft'}}">
+                                                                {{ notOkHost.Hoststatus.humanState }}
+                                                                <fa-icon [icon]="['fas', 'user']"
+                                                                         [hidden]="!notOkHost.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
+                                                                <fa-icon [icon]="['fas', 'power-off']"
+                                                                         [hidden]="notOkHost.Hoststatus.scheduledDowntimeDepth === 0"></fa-icon>
+                                                            </c-col>
+                                                            <c-col lg="3" [hidden]="notOkHost.Hoststatus.isInMonitoring"
+                                                                   class="text-center text-white bg-primary">
+                                                                {{ t('Not in monitoring') }}
+                                                                <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
+                                                            </c-col>
+                                                            <c-col lg="4" class="cropText"
+                                                                   title="notOkHost.Hoststatus.output">
+                                                                <div class="cropText"
+                                                                     [innerHTML]="notOkHost.Hoststatus.outputHtml | trustAsHtml"></div>
+                                                            </c-col>
+                                                        </c-row>
+                                                    }
+                                                    <c-row class="pt-2"
+                                                           [hidden]="summaryState.NotOkServices.length === 0">
+                                                        <c-col lg="4">
+                                                            {{ t('Service') }}
+                                                        </c-col>
+                                                        <c-col lg="3" class="p-0">
+                                                            {{ t('State') }}
+                                                        </c-col>
+                                                        <c-col lg="4">
+                                                            {{ t('Output') }}
+                                                        </c-col>
+                                                    </c-row>
+                                                    @for (notOkService of summaryState.NotOkServices; track notOkService) {
+                                                        <c-row class="pt-1"
+                                                        >
+                                                            <c-col lg="4" class="cropText"
+                                                                   title="{{notOkService.Service.hostname}}/{{notOkService.Service.hostname}}">
+                                                                <span *oitcPermission="['services', 'browser']">
+                                                                    <a [routerLink]="['/', 'services', 'browser', notOkService.Service.id]">
+                                                                        {{ notOkService.Service.servicename }}
+                                                                    </a>
+                                                                </span>
+                                                                <span
+                                                                    *oitcPermission="['services', 'browser']; negate: true">
+                                                                    {{ notOkService.Service.servicename }}
+                                                                </span>
+                                                            </c-col>
+                                                            <c-col lg="3"
+                                                                   [hidden]="!notOkService.Servicestatus.isInMonitoring"
+                                                                   class="text-center text-white text-capitalize bg-{{(notOkService.Servicestatus.isHardstate)?notOkService.Servicestatus.humanState:notOkService.Servicestatus.humanState+'-soft'}}">
+                                                                {{ notOkService.Servicestatus.humanState }}
+                                                                <fa-icon [icon]="['fas', 'user']"
+                                                                         [hidden]="!notOkService.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
+                                                                <fa-icon [icon]="['fas', 'power-off']"
+                                                                         [hidden]="notOkService.Servicestatus.scheduledDowntimeDepth === 0"></fa-icon>
+                                                            </c-col>
+                                                            <c-col lg="3"
+                                                                   [hidden]="notOkService.Servicestatus.isInMonitoring"
+                                                                   class="text-center text-white bg-primary">
+                                                                {{ t('Not in monitoring') }}
+                                                                <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
+                                                            </c-col>
+                                                            <c-col lg="4" class="cropText"
+                                                                   title="notOkService.Servicestatus.output">
+                                                                {{ notOkService.Servicestatus.output }}
+                                                            </c-col>
+                                                        </c-row>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </article>
+                            }
+                        </section>
+                    </c-toast-body>
+                </div>
+            </c-toast>
+        </c-toaster>
+    }
 </ng-container>

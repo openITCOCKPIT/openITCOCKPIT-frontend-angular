@@ -4,7 +4,9 @@
         <button [color]="'default'" cButton cDropdownToggle [size]="'xs'">
             <fa-icon [icon]="['fas', 'clock']"></fa-icon>
             {{ humanTimerange }}
-            <span class="text-primary" *ngIf="humanAutoRefresh !== ''">{{ humanAutoRefresh }}</span>
+            @if (humanAutoRefresh !== '') {
+                <span class="text-primary">{{ humanAutoRefresh }}</span>
+            }
 
         </button>
         <div cDropdownMenu class="grafana-datepicker-container">
@@ -14,13 +16,15 @@
                         <fieldset>
                             <h4>{{ t('Auto refresh') }}</h4>
                             <hr class="border-dashed">
-                            <div *ngFor="let interval of timeranges.update_interval"
-                                 class="no-padding cursor-pointer"
-                                 style="line-height: 25px;"
-                                 [ngClass]="{'text-primary': interval.key === selectedAutoRefresh}"
-                                 (click)="changeAutoRefresh(interval.key, interval.name)">
-                                {{ interval.name }}
-                            </div>
+                            @for (interval of timeranges.update_interval; track interval) {
+                                <div
+                                    class="no-padding cursor-pointer"
+                                    style="line-height: 25px;"
+                                    [ngClass]="{'text-primary': interval.key === selectedAutoRefresh}"
+                                    (click)="changeAutoRefresh(interval.key, interval.name)">
+                                    {{ interval.name }}
+                                </div>
+                            }
                         </fieldset>
                     </c-col>
 
@@ -28,13 +32,15 @@
                         <fieldset>
                             <h4>{{ t('Long term') }}</h4>
                             <hr class="border-dashed">
-                            <div *ngFor="let interval of timeranges.quick"
-                                 class="no-padding cursor-pointer"
-                                 style="line-height: 25px;"
-                                 [ngClass]="{'text-primary': interval.key === selectedTimerange}"
-                                 (click)="changeTimerange(interval.key, interval.name)">
-                                {{ interval.name }}
-                            </div>
+                            @for (interval of timeranges.quick; track interval) {
+                                <div
+                                    class="no-padding cursor-pointer"
+                                    style="line-height: 25px;"
+                                    [ngClass]="{'text-primary': interval.key === selectedTimerange}"
+                                    (click)="changeTimerange(interval.key, interval.name)">
+                                    {{ interval.name }}
+                                </div>
+                            }
                         </fieldset>
                     </c-col>
 
@@ -43,13 +49,15 @@
                         <fieldset>
                             <h4>{{ t('Until now') }}</h4>
                             <hr class="border-dashed">
-                            <div *ngFor="let interval of timeranges.today"
-                                 class="no-padding cursor-pointer"
-                                 style="line-height: 25px;"
-                                 [ngClass]="{'text-primary': interval.key === selectedTimerange}"
-                                 (click)="changeTimerange(interval.key, interval.name)">
-                                {{ interval.name }}
-                            </div>
+                            @for (interval of timeranges.today; track interval) {
+                                <div
+                                    class="no-padding cursor-pointer"
+                                    style="line-height: 25px;"
+                                    [ngClass]="{'text-primary': interval.key === selectedTimerange}"
+                                    (click)="changeTimerange(interval.key, interval.name)">
+                                    {{ interval.name }}
+                                </div>
+                            }
                         </fieldset>
                     </c-col>
 
@@ -57,13 +65,15 @@
                         <fieldset>
                             <h4>{{ t('Today') }}</h4>
                             <hr class="border-dashed">
-                            <div *ngFor="let interval of timeranges.last"
-                                 class="no-padding cursor-pointer"
-                                 style="line-height: 25px;"
-                                 [ngClass]="{'text-primary': interval.key === selectedTimerange}"
-                                 (click)="changeTimerange(interval.key, interval.name)">
-                                {{ interval.name }}
-                            </div>
+                            @for (interval of timeranges.last; track interval) {
+                                <div
+                                    class="no-padding cursor-pointer"
+                                    style="line-height: 25px;"
+                                    [ngClass]="{'text-primary': interval.key === selectedTimerange}"
+                                    (click)="changeTimerange(interval.key, interval.name)">
+                                    {{ interval.name }}
+                                </div>
+                            }
                         </fieldset>
                     </c-col>
                 </c-row>

@@ -1,9 +1,10 @@
 <ng-container *transloco="let t">
 
-    <oitc-services-browser-menu
-        *ngIf="serviceBrowserConfig"
-        [config]="serviceBrowserConfig">
-    </oitc-services-browser-menu>
+    @if (serviceBrowserConfig) {
+        <oitc-services-browser-menu
+            [config]="serviceBrowserConfig">
+        </oitc-services-browser-menu>
+    }
 
     <c-card class="mb-3 mt-3">
         <c-card-header>
@@ -203,84 +204,95 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!servicestatehistories"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="servicestatehistories"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col" mat-sort-header="StatehistoryServices.state">
-                        {{ t('State') }}
-                    </th>
-                    <th scope="col" mat-sort-header="StatehistoryServices.state_time">
-                        {{ t('Date') }}
-                    </th>
-                    <th scope="col" mat-sort-header="StatehistoryServices.current_check_attempt">
-                        {{ t('Check attempt') }}
-                    </th>
-                    <th scope="col" mat-sort-header="StatehistoryServices.is_hardstate">
-                        {{ t('State type') }}
-                    </th>
-                    <th scope="col" mat-sort-header="StatehistoryServices.output">
-                        {{ t('Service output') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let statehistory of servicestatehistories.all_statehistories">
-                    <td class="text-center">
-                        <oitc-servicestatus-simple-icon
-                            [servicestatus]="statehistory.StatehistoryService.state"
-                            [hardstate]="statehistory.StatehistoryService.is_hardstate"></oitc-servicestatus-simple-icon>
-                    </td>
-                    <td>
-                        {{ statehistory.StatehistoryService.state_time }}
-                    </td>
-                    <td class="text-center">
-                        {{ statehistory.StatehistoryService.current_check_attempt }}/
-                        {{ statehistory.StatehistoryService.max_check_attempts }}
-                    </td>
-                    <td class="text-center">
-                        <span class="badge text-uppercase"
-                              [ngClass]="{
+            @if (!servicestatehistories) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (servicestatehistories) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col" mat-sort-header="StatehistoryServices.state">
+                            {{ t('State') }}
+                        </th>
+                        <th scope="col" mat-sort-header="StatehistoryServices.state_time">
+                            {{ t('Date') }}
+                        </th>
+                        <th scope="col" mat-sort-header="StatehistoryServices.current_check_attempt">
+                            {{ t('Check attempt') }}
+                        </th>
+                        <th scope="col" mat-sort-header="StatehistoryServices.is_hardstate">
+                            {{ t('State type') }}
+                        </th>
+                        <th scope="col" mat-sort-header="StatehistoryServices.output">
+                            {{ t('Service output') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (statehistory of servicestatehistories.all_statehistories; track statehistory) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-servicestatus-simple-icon
+                                        [servicestatus]="statehistory.StatehistoryService.state"
+                                        [hardstate]="statehistory.StatehistoryService.is_hardstate"></oitc-servicestatus-simple-icon>
+                                </td>
+                                <td>
+                                    {{ statehistory.StatehistoryService.state_time }}
+                                </td>
+                                <td class="text-center">
+                                    {{ statehistory.StatehistoryService.current_check_attempt }}/
+                                    {{ statehistory.StatehistoryService.max_check_attempts }}
+                                </td>
+                                <td class="text-center">
+                                    @if (statehistory.StatehistoryService.is_hardstate) {
+                                        <span class="badge text-uppercase"
+                                              [ngClass]="{
                                     'bg-ok': statehistory.StatehistoryService.state == 0,
                                     'bg-warning': statehistory.StatehistoryService.state == 1,
                                     'bg-critical': statehistory.StatehistoryService.state == 2,
                                     'bg-unknown': statehistory.StatehistoryService.state == 3
                                     }"
-                              *ngIf="statehistory.StatehistoryService.is_hardstate">
-                            {{ 'Hard' | transloco }}
-                        </span>
-                        <span class="badge text-uppercase opacity-50"
-                              [ngClass]="{
+                                        >
+                                            {{ 'Hard' | transloco }}
+                                        </span>
+                                    }
+                                    @if (!statehistory.StatehistoryService.is_hardstate) {
+                                        <span class="badge text-uppercase opacity-50"
+                                              [ngClass]="{
                                     'bg-ok': statehistory.StatehistoryService.state == 0,
                                     'bg-warning': statehistory.StatehistoryService.state == 1,
                                     'bg-critical': statehistory.StatehistoryService.state == 2,
                                     'bg-unknown': statehistory.StatehistoryService.state == 3
                                     }"
-                              *ngIf="!statehistory.StatehistoryService.is_hardstate">
-                            {{ 'Soft' | transloco }}
-                        </span>
-                    </td>
-                    <td>
-                        <div class="word-break"
-                             [innerHTML]="statehistory.StatehistoryService.outputHtml | trustAsHtml "></div>
-                    </td>
-
-                </tr>
-                </tbody>
-            </table>
-            <oitc-no-records
-                *ngIf="servicestatehistories && servicestatehistories.all_statehistories.length === 0"></oitc-no-records>
+                                        >
+                                            {{ 'Soft' | transloco }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="word-break"
+                                         [innerHTML]="statehistory.StatehistoryService.outputHtml | trustAsHtml "></div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @if (servicestatehistories && servicestatehistories.all_statehistories.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
             <c-container
                 [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="servicestatehistories"
-                            [paginateOrScroll]="servicestatehistories"></oitc-paginate-or-scroll>
+                        @if (servicestatehistories) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="servicestatehistories"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

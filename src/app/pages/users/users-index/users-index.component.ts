@@ -37,7 +37,7 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -71,7 +71,6 @@ import { HttpParams } from '@angular/common/http';
         NavComponent,
         NavItemComponent,
         XsButtonDirective,
-        NgIf,
         CardBodyComponent,
         ContainerComponent,
         RowComponent,
@@ -107,8 +106,6 @@ import { HttpParams } from '@angular/common/http';
         MatSortHeader,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         PermissionDirective,
@@ -276,8 +273,11 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
         });
     }
 
-    public linkFor(format: 'csv') {
+    public linkFor(format: 'csv' | 'xlsx'): string {
         let baseUrl = '/users/listToCsv?';
+        if (format === 'xlsx') {
+            baseUrl = '/users/listToXlsx?';
+        }
 
         let urlParams = {
             'angular': true,

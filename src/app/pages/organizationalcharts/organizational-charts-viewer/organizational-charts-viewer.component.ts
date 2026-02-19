@@ -7,7 +7,6 @@ import {
     input,
     model,
     OnDestroy,
-    OnInit,
     ViewChild
 } from '@angular/core';
 import {
@@ -45,7 +44,7 @@ import { OcTreeNode } from '../organizational-charts-editor/organizational-chart
 import { Subscription } from 'rxjs';
 import { OrganizationalChartNodesService } from '../organizationalchartnodes.service';
 import { OrganizationalChartsService } from '../organizationalcharts.service';
-import { Point, PointExtensions } from '@foblex/2d';
+import { Point } from '@foblex/2d';
 import { NgClass } from '@angular/common';
 import { OcNodeViewerComponent } from './oc-node-viewer/oc-node-viewer.component';
 import { OrganizationalchartUserRoles } from '../organizationalcharts.enum';
@@ -81,7 +80,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
     styleUrl: './organizational-charts-viewer.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
+export class OrganizationalChartsViewerComponent implements OnDestroy {
 
     // Two-way binding for the organizational charts tree from the add or edit component
     public nodeTree = model<OrganizationalChartsTreeNode[]>([]);
@@ -121,6 +120,11 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
     ) {
 
         effect(() => {
+            const nodes = this.nodeTree(); // <-- This makes the effect depend on nodeTree
+            const connections = this.connections() // <-- This makes the effect depend on connections
+
+            this.updateNodes();
+
             if (this.selectedContainerId() > 0) {
                 this.selectNodeByContainerId(this.selectedContainerId());
             }
@@ -128,9 +132,9 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
 
     }
 
-    public ngOnInit(): void {
-
+    private updateNodes() {
         // In view - copy existing nodes into f-flow
+        this.nodes = [];
         this.nodeTree().forEach((node) => {
             this.nodes.push({
                 fNodeId: String(node.id),
@@ -141,7 +145,6 @@ export class OrganizationalChartsViewerComponent implements OnInit, OnDestroy {
                 node: node
             });
         });
-        this.cdr.markForCheck();
     }
 
     public ngOnDestroy(): void {

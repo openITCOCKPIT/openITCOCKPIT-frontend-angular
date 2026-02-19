@@ -3,7 +3,7 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { Subscription } from 'rxjs';
 import { SlasService } from '../slas.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -68,7 +68,6 @@ import { TimeperiodsService } from '../../../../../pages/timeperiods/timeperiods
         RequiredIconComponent,
         SelectComponent,
         FormErrorDirective,
-        NgIf,
         FormFeedbackComponent,
         FormsModule,
         FormDirective,
@@ -90,7 +89,7 @@ import { TimeperiodsService } from '../../../../../pages/timeperiods/timeperiods
         FaStackComponent,
         FaStackItemSizeDirective,
         PermissionDirective,
-        AsyncPipe,
+        AsyncPipe
     ],
     templateUrl: './slas-add.component.html',
     styleUrl: './slas-add.component.css',

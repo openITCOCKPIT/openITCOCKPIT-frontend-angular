@@ -2,11 +2,12 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    effect,
     EventEmitter,
     inject,
+    input,
     Input,
     OnDestroy,
-    OnInit,
     Output
 } from '@angular/core';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -20,7 +21,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { LocalStorageService } from '../../services/local-storage.service';
 
@@ -35,14 +36,13 @@ import { LocalStorageService } from '../../services/local-storage.service';
         ColComponent,
         DropdownMenuDirective,
         NgClass,
-        TranslocoDirective,
-        NgForOf
+        TranslocoDirective
     ],
     templateUrl: './interval-picker.component.html',
     styleUrl: './interval-picker.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class IntervalPickerComponent implements OnInit, OnDestroy {
+export class IntervalPickerComponent implements OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
 
     public refreshRates: SelectKeyValue[] = [
@@ -56,6 +56,10 @@ export class IntervalPickerComponent implements OnInit, OnDestroy {
         {key: 900, value: this.TranslocoService.translate('Refresh every 15m')}
     ];
 
+
+    public useLocalStorage = input<boolean>(true);
+    public initialInterval = input<number | undefined>(0); // Select 'Disabled' by default, only relevant if useLocalStorage is false
+
     @Input() public selectedAutoRefresh: SelectKeyValue = this.refreshRates[0]
     @Output() change = new EventEmitter<SelectKeyValue>();
 
@@ -64,19 +68,33 @@ export class IntervalPickerComponent implements OnInit, OnDestroy {
 
     private readonly LocalStorageService = inject(LocalStorageService);
 
-    public ngOnInit(): void {
-        // Restore the selected auto refresh from local storage
-        let storedRefreshRate = Number(this.LocalStorageService.getItemWithDefault('auto-refresh-rate', 0));
-        if (storedRefreshRate > 1) {
-            this.refreshRates.forEach((refreshRate) => {
-                if (refreshRate.key === storedRefreshRate) {
-                    this.changeRefresh(refreshRate);
+    public constructor() {
+        effect(() => {
+            // Restore the selected auto refresh from local storage
+            if (this.useLocalStorage()) {
+                let storedRefreshRate = Number(this.LocalStorageService.getItemWithDefault('auto-refresh-rate', 0));
+                if (storedRefreshRate > 1) {
+                    this.refreshRates.forEach((refreshRate) => {
+                        if (refreshRate.key === storedRefreshRate) {
+                            this.changeRefresh(refreshRate);
+                        }
+                    });
                 }
-            });
-        }
 
-        this.cdr.markForCheck();
+                this.cdr.markForCheck();
+            } else {
+                // If not using local storage, use the initialInterval input to set the selected auto refresh
+                this.refreshRates.forEach((refreshRate) => {
+                    if (refreshRate.key === this.initialInterval()) {
+                        //this.changeRefresh(refreshRate);
+                        this.selectedAutoRefresh = refreshRate;
+                    }
+                    this.cdr.markForCheck();
+                });
+            }
+        });
     }
+
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
@@ -85,7 +103,9 @@ export class IntervalPickerComponent implements OnInit, OnDestroy {
     public changeRefresh(refreshValue: SelectKeyValue) {
         this.selectedAutoRefresh = refreshValue;
 
-        this.LocalStorageService.setItem('auto-refresh-rate', String(refreshValue.key));
+        if (this.useLocalStorage()) {
+            this.LocalStorageService.setItem('auto-refresh-rate', String(refreshValue.key));
+        }
 
         this.cdr.markForCheck();
 

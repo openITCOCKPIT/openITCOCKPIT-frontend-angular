@@ -21,7 +21,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import {
@@ -68,7 +68,6 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         InputGroupTextDirective,
         NavComponent,
         NavItemComponent,
-        NgIf,
         NgSelectComponent,
         PermissionDirective,
         RegexHelperTooltipComponent,

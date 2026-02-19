@@ -1,0 +1,12 @@
+.accordion-button-padding-left {
+    padding-left: 1.3rem; /*var(--cui-accordion-btn-padding-x) [1.25rem] + border */
+}
+
+.alert-icon {
+    margin-right: 10px;
+}
+
+.lg-checkbox {
+    width: 20px;
+    height: 20px;
+}

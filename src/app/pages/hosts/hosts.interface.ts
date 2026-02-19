@@ -42,6 +42,32 @@ export interface HostObject {
     type?: HostOrServiceType // hosts/index
 }
 
+export interface SoftwareInformationHost {
+    SoftwareInformationExists: boolean // hosts/index
+    packagesHostDetails: PackagesBrowserHostDetails
+}
+
+export interface PackagesBrowserHostDetails {
+    id: number
+    host_id: number
+    os_type: string
+    os_name: string
+    os_version: string
+    os_family: string
+    agent_version: string
+    reboot_required: boolean
+    system_uptime: number
+    last_update: string
+    available_updates: number
+    available_security_updates: number
+    last_error: any
+    created: string
+    modified: string
+    total: number
+    last_update_user: string
+    uptime_in_words: string
+}
+
 // Same as HostObject but with "Host" key in between as CakePHP 2 does.
 // [Host][name] instead of [name]
 export interface HostObjectCake2 {
@@ -237,6 +263,7 @@ export interface HostsIndexFilter {
     'Hoststatus.is_hardstate': string,
     'Hoststatus.active_checks_enabled': string,
     'hostpriority': string[]
+    'Hostgroups.id': number[]
 }
 
 export interface HostsCurrentStateFilter {
@@ -280,7 +307,8 @@ export function getDefaultHostsIndexFilter(): HostsIndexFilter {
         'Hoststatus.notifications_enabled': '',
         'Hoststatus.is_hardstate': '',
         'Hoststatus.active_checks_enabled': '',
-        'hostpriority': []
+        'hostpriority': [],
+        'Hostgroups.id': []
     }
 }
 

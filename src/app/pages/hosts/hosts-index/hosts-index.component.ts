@@ -37,7 +37,7 @@ import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -125,6 +125,8 @@ import {
     ColumnsConfigImportModalComponent
 } from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
 import { IndexPage } from '../../../pages.interface';
+import { HostgroupsService } from '../../hostgroups/hostgroups.service';
+import { HostgroupsLoadHostgroupsByStringParams } from '../../hostgroups/hostgroups.interface';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -153,8 +155,6 @@ import { IndexPage } from '../../../pages.interface';
         MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         PaginatorModule,
@@ -245,6 +245,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public hosts?: HostsIndexRoot;
     public hideFilter: boolean = true;
     public satellites: SelectKeyValue[] = [];
+    public hostgroups: SelectKeyValue[] = [];
 
     public hostTypes: any[] = [];
     public selectedItems: any[] = [];
@@ -252,6 +253,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public userFullname: string = '';
 
     private readonly HostsService = inject(HostsService);
+    private readonly HostgroupsService = inject(HostgroupsService);
     private subscriptions: Subscription = new Subscription();
     public readonly PermissionsService = inject(PermissionsService);
     public readonly route = inject(ActivatedRoute);
@@ -407,7 +409,18 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
                 this.cdr.markForCheck();
             })
         );
+        this.loadHostgroups('');
 
+    }
+
+    protected loadHostgroups = (search: string) => {
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({
+            'filter[Containers.name]': search,
+            'selected[]': this.filter['Hostgroups.id']
+        } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+            this.hostgroups = data;
+            this.cdr.markForCheck();
+        }));
     }
 
     public ngOnDestroy() {
@@ -659,7 +672,8 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             'filter[Hosts.address]': this.filter['Hosts.address'],
             'filter[Hosts.satellite_id][]': this.filter['Hosts.satellite_id'],
             'filter[Hosts.host_type][]': this.filter['Hosts.host_type'],
-            'filter[hostpriority][]': priorityFilter
+            'filter[hostpriority][]': priorityFilter,
+            'filter[Hostgroups.id][]': this.filter['Hostgroups.id'],
         };
 
         let stringParams: HttpParams = new HttpParams();
@@ -923,6 +937,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             }
             this.convert2currentStateFilter(bookmarkfilter['hostpriority'], 'priorityFilter');
             this.filter['Hosts.satellite_id'] = bookmarkfilter['Hosts.satellite_id'];
+            this.filter['Hostgroups.id'] = bookmarkfilter['Hostgroups.id'];
             this.loadHosts();
 
         }

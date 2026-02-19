@@ -66,8 +66,10 @@
                         <c-col [md]="10">
                             <legend class="p-0 text-primary fs-6">
                                 {{ userContainerRole.path }}
-                                <fa-icon [icon]="['fas', 'minus-square']" class="text-danger"
-                                         *ngIf="selectedUserContainers.indexOf(userContainerRole._joinData.container_id) !== -1"></fa-icon>
+                                @if (selectedUserContainers.indexOf(userContainerRole._joinData.container_id) !== -1) {
+                                    <fa-icon [icon]="['fas', 'minus-square']" class="text-danger"
+                                    ></fa-icon>
+                                }
                             </legend>
                             <div class="d-inline-block"
                                  [ngClass]="{'user-strike' : selectedUserContainers.indexOf(userContainerRole._joinData.container_id) !== -1}">
@@ -110,11 +112,13 @@
                     </c-row>
                 }
                 <c-row>
-                    <c-col [md]="4" class="text-end font-xs text-primary italic mt-2"
-                           *ngIf="post.usercontainerroles._ids.length > 0 && selectedUserContainers.length > 0">
-                        {{ t('The user permissions will be extended or adapted with additional containers') }}
-                        <fa-icon [icon]="['fas', 'down-long']"></fa-icon>
-                    </c-col>
+                    @if (post.usercontainerroles._ids.length > 0 && selectedUserContainers.length > 0) {
+                        <c-col [md]="4" class="text-end font-xs text-primary italic mt-2"
+                        >
+                            {{ t('The user permissions will be extended or adapted with additional containers') }}
+                            <fa-icon [icon]="['fas', 'down-long']"></fa-icon>
+                        </c-col>
+                    }
                 </c-row>
 
 
@@ -533,10 +537,14 @@
                                                     errorField="apikeys.{{$index}}.description"></oitc-form-feedback>
                                 <div class="help-block">
                                     {{ t('Last used:') }}
-                                    <span class="text-info"
-                                          *ngIf="apiKey.last_use === null">{{ t('never') }}</span>
-                                    <span class="text-info"
-                                          *ngIf="apiKey.last_use !== null">{{ apiKey.last_use }}</span>
+                                    @if (apiKey.last_use === null) {
+                                        <span class="text-info"
+                                        >{{ t('never') }}</span>
+                                    }
+                                    @if (apiKey.last_use !== null) {
+                                        <span class="text-info"
+                                        >{{ apiKey.last_use }}</span>
+                                    }
                                 </div>
                             </c-col>
                             <c-col md="8">

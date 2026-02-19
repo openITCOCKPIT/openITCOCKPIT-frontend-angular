@@ -61,64 +61,77 @@
         </c-card-header>
         <c-card-body>
 
-            <oitc-table-loader *ngIf="!initialized"></oitc-table-loader>
-            <table *ngIf="initialized" bordered cTable class="mt-2 mb-0" hover striped>
-                <thead>
-                <tr>
-                    <th scope="col">
-                        {{ t('Name') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Value') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Actions') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody *ngIf="macros">
-                <tr *ngFor="let macro of macros">
-                    <td class="text-primary code-font">
-                        <oitc-copy-to-clipboard [data]="macro.name">
-                            {{ macro.name }}
-                        </oitc-copy-to-clipboard>
-                    </td>
-                    <td>
-                        <code [ngClass]="{'text-blur': macro.password > 0}">
-                            {{ macro.value }}
-                        </code>
-                    </td>
-                    <td>{{ macro.description }}</td>
+            @if (!initialized) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (initialized) {
+                <table bordered cTable class="mt-2 mb-0" hover striped>
+                    <thead>
+                    <tr>
+                        <th scope="col">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Value') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Actions') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    @if (macros) {
+                        <tbody>
+                            @for (macro of macros; track macro) {
+                                <tr>
+                                    <td class="text-primary code-font">
+                                        <oitc-copy-to-clipboard [data]="macro.name">
+                                            {{ macro.name }}
+                                        </oitc-copy-to-clipboard>
+                                    </td>
+                                    <td>
+                                        <code [ngClass]="{'text-blur': macro.password > 0}">
+                                            {{ macro.value }}
+                                        </code>
+                                    </td>
+                                    <td>{{ macro.description }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-xs" role="group">
+                                            @if (macro.password == 1) {
+                                                <button (click)="macro.password = 0"
+                                                        [title]="'Show value' | transloco"
+                                                        class="btn btn-primary ripple"
+                                                        type="button">
+                                                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                                </button>
+                                            }
+                                            @if (macro.password == 0) {
+                                                <button (click)="macro.password = 1"
+                                                        [title]="'Hide value' | transloco"
+                                                        class="btn btn-danger ripple"
+                                                        type="button">
+                                                    <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
+                                                </button>
+                                            }
+                                            <button class="btn btn-default ripple" type="button"
+                                                    [title]="'Edit macro' | transloco"
+                                                    (click)="editMacro(macro)">
+                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+            }
 
-                    <td>
-                        <div class="btn-group btn-group-xs" role="group">
-                            <button (click)="macro.password = 0" *ngIf="macro.password == 1"
-                                    [title]="'Show value' | transloco"
-                                    class="btn btn-primary ripple"
-                                    type="button">
-                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                            </button>
-                            <button (click)="macro.password = 1" *ngIf="macro.password == 0"
-                                    [title]="'Hide value' | transloco"
-                                    class="btn btn-danger ripple"
-                                    type="button">
-                                <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
-                            </button>
-                            <button class="btn btn-default ripple" type="button" [title]="'Edit macro' | transloco"
-                                    (click)="editMacro(macro)">
-                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                            </button>
-                        </div>
-                    </td>
-
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records *ngIf="macros && macros.length === 0"></oitc-no-records>
+            @if (macros && macros.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
 
             <c-container
                 [fluid]="true">
@@ -145,80 +158,74 @@
                 </h5>
                 <button [cModalToggle]="macroModal.id" cButtonClose></button>
             </c-modal-header>
-            <c-modal-body *ngIf="currentMacro">
-
-                <div class="mb-3">
-                    <label cLabel for="macroName">
-                        {{ t('Macro name') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <ng-select id="macroName"
-                               name="name"
-                               [items]="availableMacroNames"
-                               [(ngModel)]="currentMacro.Macro.name"
-                               oitcFormError [errors]="errors" errorField="name">
-                        <ng-template ng-option-tmp let-macro="item" let-search="searchTerm">
-                            <div [ngOptionHighlight]="search">{{ macro }}</div>
-                        </ng-template>
-                    </ng-select>
-                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
-                </div>
-
-
-                <div class="mb-3">
-                    <label cLabel for="inputValue">
-                        {{ t('Value') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <c-input-group>
-                        <span cInputGroupText>
-                            <fa-icon [icon]="['fas', 'usd']"></fa-icon>
-                        </span>
-                        <input id="inputValue" cFormControl type="text"
-                               name="value"
-                               [(ngModel)]="currentMacro.Macro.value"
-                               oitcFormError [errors]="errors" errorField="value"/>
-                    </c-input-group>
-                    <oitc-form-feedback [errors]="errors" errorField="value"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="inputDescription">
-                        {{ t('Description') }}
-                    </label>
-                    <c-input-group>
-                        <span cInputGroupText>
-                            <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
-
-                        </span>
-                        <input id="inputDescription" cFormControl type="text"
-                               name="description"
-                               [(ngModel)]="currentMacro.Macro.description"
-                               oitcFormError [errors]="errors" errorField="description"/>
-                    </c-input-group>
-                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <c-form-check>
-                        <input cFormCheckInput id="inputHideValue" type="checkbox"
-                               trueFalseValue
-                               [falseValue]="0"
-                               [trueValue]="1" name="is_password"
-                               [(ngModel)]="currentMacro.Macro.password"/>
-                        <label cFormCheckLabel for="inputHideValue">
-                            {{ t('Hide value') }}
+            @if (currentMacro) {
+                <c-modal-body>
+                    <div class="mb-3">
+                        <label cLabel for="macroName">
+                            {{ t('Macro name') }}
+                            <oitc-required-icon></oitc-required-icon>
                         </label>
-                    </c-form-check>
-                </div>
-
-                <div class="mb-3 help-block">
-                    {{ t('Blur macro value to prevent accidentally leak values if your PC is connected to a projector or television.') }}
-                    <br>
-                    {{ t('Security notice: The value will be still written to the HTML document in plaintext!') }}
-                </div>
-
-            </c-modal-body>
+                        <ng-select id="macroName"
+                                   name="name"
+                                   [items]="availableMacroNames"
+                                   [(ngModel)]="currentMacro.Macro.name"
+                                   oitcFormError [errors]="errors" errorField="name">
+                            <ng-template ng-option-tmp let-macro="item" let-search="searchTerm">
+                                <div [ngOptionHighlight]="search">{{ macro }}</div>
+                            </ng-template>
+                        </ng-select>
+                        <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="inputValue">
+                            {{ t('Value') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'usd']"></fa-icon>
+                            </span>
+                            <input id="inputValue" cFormControl type="text"
+                                   name="value"
+                                   [(ngModel)]="currentMacro.Macro.value"
+                                   oitcFormError [errors]="errors" errorField="value"/>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="value"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="inputDescription">
+                            {{ t('Description') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                            </span>
+                            <input id="inputDescription" cFormControl type="text"
+                                   name="description"
+                                   [(ngModel)]="currentMacro.Macro.description"
+                                   oitcFormError [errors]="errors" errorField="description"/>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput id="inputHideValue" type="checkbox"
+                                   trueFalseValue
+                                   [falseValue]="0"
+                                   [trueValue]="1" name="is_password"
+                                   [(ngModel)]="currentMacro.Macro.password"/>
+                            <label cFormCheckLabel for="inputHideValue">
+                                {{ t('Hide value') }}
+                            </label>
+                        </c-form-check>
+                    </div>
+                    <div class="mb-3 help-block">
+                        {{ t('Blur macro value to prevent accidentally leak values if your PC is connected to a projector or television.') }}
+                        <br>
+                        {{ t('Security notice: The value will be still written to the HTML document in plaintext!') }}
+                    </div>
+                </c-modal-body>
+            }
             <c-modal-footer>
                 <button cButton color="primary" type="submit" class="ripple">
                     {{ t('Save') }}
@@ -240,83 +247,79 @@
                 </h5>
                 <button [cModalToggle]="macroModalEdit.id" cButtonClose></button>
             </c-modal-header>
-            <c-modal-body *ngIf="currentMacro">
-
-                <div class="mb-3">
-                    <label cLabel for="macroNameEdit">
-                        {{ t('Macro name') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <ng-select id="macroNameEdit"
-                               name="name"
-                               [(ngModel)]="currentMacro.Macro.name"
-                               oitcFormError [errors]="errors" errorField="name">
-                        <ng-option *ngFor="let macroName of availableMacroNames" [value]="macroName">
-                            {{ macroName }}
-                        </ng-option>
-                    </ng-select>
-                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
-                    <div class="help-block text-warning">
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                        {{ t('If you change the macro name, you manually need to edit all occurrences of the macro!') }}
-                    </div>
-                </div>
-
-
-                <div class="mb-3">
-                    <label cLabel for="inputValueEdit">
-                        {{ t('Value') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <c-input-group>
-                        <span cInputGroupText>
-                            <fa-icon [icon]="['fas', 'usd']"></fa-icon>
-                        </span>
-                        <input id="inputValueEdit" cFormControl type="text"
-                               name="value"
-                               [(ngModel)]="currentMacro.Macro.value"
-                               oitcFormError [errors]="errors" errorField="value"/>
-                    </c-input-group>
-                    <oitc-form-feedback [errors]="errors" errorField="value"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="inputDescriptionEdit">
-                        {{ t('Description') }}
-                    </label>
-                    <c-input-group>
-                        <span cInputGroupText>
-                            <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
-
-                        </span>
-                        <input id="inputDescriptionEdit" cFormControl type="text"
-                               name="description"
-                               [(ngModel)]="currentMacro.Macro.description"
-                               oitcFormError [errors]="errors" errorField="description"/>
-                    </c-input-group>
-                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <c-form-check>
-                        <input cFormCheckInput id="inputHideValueEdit" type="checkbox"
-                               trueFalseValue
-                               [falseValue]="0"
-                               [trueValue]="1" name="is_password"
-                               [(ngModel)]="currentMacro.Macro.password"/>
-                        <label cFormCheckLabel for="inputHideValueEdit">
-                            {{ t('Hide value') }}
+            @if (currentMacro) {
+                <c-modal-body>
+                    <div class="mb-3">
+                        <label cLabel for="macroNameEdit">
+                            {{ t('Macro name') }}
+                            <oitc-required-icon></oitc-required-icon>
                         </label>
-                    </c-form-check>
-                </div>
-
-                <div class="mb-3 help-block">
-                    {{ t('Blur macro value to prevent accidentally leak values if your PC is connected to a projector or television.') }}
-                    <br>
-                    {{ t('Security notice: The value will be still written to the HTML document in plaintext!') }}
-                </div>
-
-            </c-modal-body>
+                        <ng-select id="macroNameEdit"
+                                   name="name"
+                                   [(ngModel)]="currentMacro.Macro.name"
+                                   oitcFormError [errors]="errors" errorField="name">
+                            @for (macroName of availableMacroNames; track macroName) {
+                                <ng-option [value]="macroName">
+                                    {{ macroName }}
+                                </ng-option>
+                            }
+                        </ng-select>
+                        <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                        <div class="help-block text-warning">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                            {{ t('If you change the macro name, you manually need to edit all occurrences of the macro!') }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="inputValueEdit">
+                            {{ t('Value') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'usd']"></fa-icon>
+                            </span>
+                            <input id="inputValueEdit" cFormControl type="text"
+                                   name="value"
+                                   [(ngModel)]="currentMacro.Macro.value"
+                                   oitcFormError [errors]="errors" errorField="value"/>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="value"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="inputDescriptionEdit">
+                            {{ t('Description') }}
+                        </label>
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                            </span>
+                            <input id="inputDescriptionEdit" cFormControl type="text"
+                                   name="description"
+                                   [(ngModel)]="currentMacro.Macro.description"
+                                   oitcFormError [errors]="errors" errorField="description"/>
+                        </c-input-group>
+                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <c-form-check>
+                            <input cFormCheckInput id="inputHideValueEdit" type="checkbox"
+                                   trueFalseValue
+                                   [falseValue]="0"
+                                   [trueValue]="1" name="is_password"
+                                   [(ngModel)]="currentMacro.Macro.password"/>
+                            <label cFormCheckLabel for="inputHideValueEdit">
+                                {{ t('Hide value') }}
+                            </label>
+                        </c-form-check>
+                    </div>
+                    <div class="mb-3 help-block">
+                        {{ t('Blur macro value to prevent accidentally leak values if your PC is connected to a projector or television.') }}
+                        <br>
+                        {{ t('Security notice: The value will be still written to the HTML document in plaintext!') }}
+                    </div>
+                </c-modal-body>
+            }
             <c-modal-footer>
                 <button cButton color="danger" type="button" class="ripple me-auto" (click)="deleteMacro()">
                     {{ t('Delete') }}

@@ -52,6 +52,7 @@ import { StatupagegroupViewDetailsRoot } from '../../../statuspagegroups/statusp
 export class StatuspagegroupWidgetComponent extends BaseWidgetComponent implements AfterViewInit {
     protected flipped = signal<boolean>(false);
     @ViewChild('boxContainer') boxContainer?: ElementRef;
+    @ViewChild(StatuspagegroupsViewerComponent) statuspagegroupsViewerComponent?: StatuspagegroupsViewerComponent;
     public widgetHeight: number = 0;
 
     // widget config will be loaded from the server
@@ -73,11 +74,14 @@ export class StatuspagegroupWidgetComponent extends BaseWidgetComponent implemen
                 if (response.statuspagegroup_id) {
                     // Cast any string to number
                     response.statuspagegroup_id = Number(response.statuspagegroup_id);
-                    this.loadStatuspagegroupDetails(response.statuspagegroup_id);
                 }
 
                 this.config = response;
                 this.selectedAutoRefresh.key = this.config.refresh_key ?? 0;
+                //trigger refresh for allocated widgets
+                if (this.selectedAutoRefresh.key > 0) {
+                    this.startRefreshInterval(this.selectedAutoRefresh.key);
+                }
                 this.cdr.markForCheck();
             });
         }
@@ -157,7 +161,7 @@ export class StatuspagegroupWidgetComponent extends BaseWidgetComponent implemen
 
     protected refresh(): void {
         if (this.config?.statuspagegroup_id) {
-            this.loadStatuspagegroupDetails(Number(this.config?.statuspagegroup_id));
+            this.statuspagegroupsViewerComponent?.loadStatuspagegroup();
             this.cdr.markForCheck();
 
         }
@@ -174,13 +178,6 @@ export class StatuspagegroupWidgetComponent extends BaseWidgetComponent implemen
     }
 
     public override layoutUpdate(event: KtdGridLayout): void {
-    }
-
-    public loadStatuspagegroupDetails(id: number) {
-        this.subscriptions.add(this.StatuspagegroupsService.getStatuspagegroupGetDetails(id).subscribe(response => {
-            this.statuspagegroup = response;
-            this.cdr.markForCheck();
-        }));
     }
 
     protected readonly Number = Number;

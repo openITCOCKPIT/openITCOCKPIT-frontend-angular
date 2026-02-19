@@ -18,7 +18,7 @@ import {
 } from '@coreui/angular';
 import { GrafanaUserdashboardViewResponse } from '../grafana-userdashboards.interface';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { NgIf } from '@angular/common';
+
 import { Error404Component } from '../../../../../layouts/coreui/errors/error404/error404.component';
 import { IframeComponent } from '../../../../../components/iframe/iframe.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
@@ -39,7 +39,6 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         NavComponent,
         CardFooterComponent,
         BlockLoaderComponent,
-        NgIf,
         Error404Component,
         IframeComponent,
         NavItemComponent,

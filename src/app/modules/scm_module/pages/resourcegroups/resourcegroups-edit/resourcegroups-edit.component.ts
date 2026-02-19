@@ -23,7 +23,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
@@ -69,7 +69,6 @@ import {
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         ReactiveFormsModule,
         RequiredIconComponent,
@@ -213,6 +212,7 @@ export class ResourcegroupsEditComponent implements OnInit, OnDestroy {
     public getClearForm(): ResourcegroupsPost {
         return {
             description: '',
+            department: '',
             timeperiod_id: null,
             reminder_time: 15,
             deadline: '',

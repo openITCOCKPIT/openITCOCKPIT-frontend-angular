@@ -148,68 +148,73 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!agents"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="agents"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Mkagents.name">
-                        {{ t('Agent name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Mkagents.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Mkagents.command_line">
-                        {{ t('Command') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let agent of agents.all_agents">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['CheckmkModule', 'mkagents', 'delete']"
-                            [disabled]="false"
-                            [item]="agent"></oitc-item-select>
-
-                    </td>
-                    <td>{{ agent.Mkagent.name }}</td>
-                    <td>{{ agent.Mkagent.description }}</td>
-                    <td>{{ agent.Mkagent.command_line }}</td>
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'CheckmkModule.mkagents.edit'"
-                                             [url]="'/checkmk_module/mkagents/edit/' + agent.Mkagent.id">
-                            <oitc-actions-button-element [permission]="'CheckmkModule.mkagents.edit'"
+            @if (!agents) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (agents) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Mkagents.name">
+                            {{ t('Agent name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Mkagents.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Mkagents.command_line">
+                            {{ t('Command') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (agent of agents.all_agents; track agent) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['CheckmkModule', 'mkagents', 'delete']"
+                                        [disabled]="false"
+                                        [item]="agent"></oitc-item-select>
+                                </td>
+                                <td>{{ agent.Mkagent.name }}</td>
+                                <td>{{ agent.Mkagent.description }}</td>
+                                <td>{{ agent.Mkagent.command_line }}</td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'CheckmkModule.mkagents.edit'"
                                                          [url]="'/checkmk_module/mkagents/edit/' + agent.Mkagent.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'CheckmkModule.mkagents.edit'"
+                                                                     [url]="'/checkmk_module/mkagents/edit/' + agent.Mkagent.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider
+                                            *oitcPermission="['CheckmkModule', 'mkagents', 'delete']"></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(agent)"
+                                                                     [permission]="'CheckmkModule.mkagents.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                            <li cDropdownDivider *oitcPermission="['CheckmkModule', 'mkagents', 'delete']"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(agent)"
-                                                         [permission]="'CheckmkModule.mkagents.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records *ngIf="agents && agents.all_agents.length === 0"></oitc-no-records>
-            <ng-container *ngIf="agents && agents.all_agents">
+            @if (agents && agents.all_agents.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (agents && agents.all_agents) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -230,16 +235,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="agents"
-                            [paginateOrScroll]="agents"></oitc-paginate-or-scroll>
+                        @if (agents) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="agents"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

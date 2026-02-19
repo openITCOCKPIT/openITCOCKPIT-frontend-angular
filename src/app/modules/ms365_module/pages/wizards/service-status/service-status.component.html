@@ -75,7 +75,8 @@
                 <c-accordion class="mb-3">
                     <c-accordion-item #item0="cAccordionItem" [visible]="false">
                         <ng-template cTemplateId="accordionHeaderTemplate">
-                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                            <button class="wizard-accordion bg-info-subtle" (click)="item0.toggleItem()"
+                                    [collapsed]="!item0.visible" cAccordionButton>
                                 <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
                                 {{ t('How to set up') }}
                             </button>
@@ -171,16 +172,29 @@
 
             <div>
                 <ng-template #contentTemplate let-data>
-                    <span class="h5 text-info" *ngIf="data">
-                        {{ t('Discovering Services for Services') }}
-                    </span>
+                    @if (data) {
+                        <span class="h5 text-info">
+                            {{ t('Discovering Services for Services') }}
+                        </span>
+                    }
                     <br>
                     {{ t('Scan Services. Only possible with valid Microsoft 365 credentials.') }}
                 </ng-template>
 
                 <ng-template #buttonTemplate let-data>
                     <div class="ms-2">
-                        <button class="ripple" (click)="runServiceDiscovery()" cButton color="info">
+                        <button
+                            cButton
+                            class="ripple"
+                            color="primary"
+                            type="button"
+                            [disabled]="DiscoveryIsRunning"
+                            (click)="runServiceDiscovery()">
+                            @if (DiscoveryIsRunning) {
+                                <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                            }
                             {{ t('Start Service discovery') }}
                         </button>
                     </div>

@@ -24,128 +24,122 @@
             </li>
         </ol>
     </nav>
-    <form cForm *ngIf="importedHostgroup">
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('View imported host group:') }}
-                    <span class="fw-300 italic">{{ importedHostgroup.ImportedHostgroup.name }}</span>
-                </h5>
-
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['import_module','ImportedHostgroups', 'index']" cButton
-                                class="ripple" color="default"
-                                oitcBackButton
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                            {{ t('Back') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-            </c-card-header>
-            <c-card-body>
-                <div class="mb-3">
-                    <label cLabel for="name">
-                        {{ t('Name') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl readonly disabled
-                           id="name"
-                           required
-                           type="text"
-                           name="name"
-                           [(ngModel)]="importedHostgroup.ImportedHostgroup.name"
-                           oitcFormError errorField="name">
-                </div>
-                <div class="mb-3">
-                    <label cLabel for="identifier">
-                        {{ t('Identifier') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl readonly disabled
-                           id="identifier"
-                           type="text"
-                           name="identifier"
-                           [(ngModel)]="importedHostgroup.ImportedHostgroup.identifier">
-                </div>
-                <div class="mb-3">
-                    <label cLabel for="description">
-                        {{ t('Description') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl readonly disabled
-                           id="description"
-                           type="text"
-                           name="description"
-                           [(ngModel)]="importedHostgroup.ImportedHostgroup.description">
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="InportedHostgroupTags">
-                        {{ t('Tags') }}
-                    </label>
-
-                    <c-input-group>
-                        <ng-select
-                            id="InportedHostgroupTags"
-                            name="InportedHostgroupTags"
-                            [items]="[]"
-                            [disabled]="true"
-                            [(ngModel)]="tagsForSelect"
-                            [addTag]="true"
-                            [multiple]="true"
-                            [selectOnTab]="true"
-                            [placeholder]="'Add tags'|transloco"
-                            [isOpen]="false">
-                        </ng-select>
-                    </c-input-group>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="container">
-                        {{ t('Container') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <select cSelect
-                            name="container"
-                            id="container"
-                            [disabled]="true"
-                            [(ngModel)]="importedHostgroup.ImportedHostgroup.container_id">
-                        <option value="{{importedHostgroup.ImportedHostgroup.container_id}}">
-                            {{ containerPath }}
-                        </option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="imported_hosts">
-                        {{ t('Imported hosts ') }}
-                    </label>
-
-                    <oitc-multi-select
-                        name="imported_hosts"
-                        id="imported_hosts"
-                        optionValue="key"
-                        optionLabel="value"
-                        [disabled]="true"
-                        [(ngModel)]="importedHostIds"
-                        [options]="importedHosts">
-                    </oitc-multi-select>
-                    <div class="help-block">
-                        {{ t('Predefined connection settings are used to load additional information dynamically') }}
+    @if (importedHostgroup) {
+        <form cForm>
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>{{ t('View imported host group:') }}
+                        <span class="fw-300 italic">{{ importedHostgroup.ImportedHostgroup.name }}</span>
+                    </h5>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['import_module','ImportedHostgroups', 'index']" cButton
+                                    class="ripple" color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
+                    <div class="mb-3">
+                        <label cLabel for="name">
+                            {{ t('Name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl readonly disabled
+                               id="name"
+                               required
+                               type="text"
+                               name="name"
+                               [(ngModel)]="importedHostgroup.ImportedHostgroup.name"
+                               oitcFormError errorField="name">
                     </div>
-                </div>
-            </c-card-body>
-            <c-card-footer class="text-end">
-
-
-                <button [fallbackUrl]="['import_module','ImportedHostgroups', 'index']" cButton class="ms-1 ripple"
-                        color="default"
-                        oitcBackButton
-                        type="button">
-                    {{ t('Cancel') }}
-                </button>
-            </c-card-footer>
-        </c-card>
-    </form>
+                    <div class="mb-3">
+                        <label cLabel for="identifier">
+                            {{ t('Identifier') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl readonly disabled
+                               id="identifier"
+                               type="text"
+                               name="identifier"
+                               [(ngModel)]="importedHostgroup.ImportedHostgroup.identifier">
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="description">
+                            {{ t('Description') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl readonly disabled
+                               id="description"
+                               type="text"
+                               name="description"
+                               [(ngModel)]="importedHostgroup.ImportedHostgroup.description">
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="InportedHostgroupTags">
+                            {{ t('Tags') }}
+                        </label>
+                        <c-input-group>
+                            <ng-select
+                                id="InportedHostgroupTags"
+                                name="InportedHostgroupTags"
+                                [items]="[]"
+                                [disabled]="true"
+                                [(ngModel)]="tagsForSelect"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                [placeholder]="'Add tags'|transloco"
+                                [isOpen]="false">
+                            </ng-select>
+                        </c-input-group>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="container">
+                            {{ t('Container') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <select cSelect
+                                name="container"
+                                id="container"
+                                [disabled]="true"
+                                [(ngModel)]="importedHostgroup.ImportedHostgroup.container_id">
+                            <option value="{{importedHostgroup.ImportedHostgroup.container_id}}">
+                                {{ containerPath }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="imported_hosts">
+                            {{ t('Imported hosts ') }}
+                        </label>
+                        <oitc-multi-select
+                            name="imported_hosts"
+                            id="imported_hosts"
+                            optionValue="key"
+                            optionLabel="value"
+                            [disabled]="true"
+                            [(ngModel)]="importedHostIds"
+                            [options]="importedHosts">
+                        </oitc-multi-select>
+                        <div class="help-block">
+                            {{ t('Predefined connection settings are used to load additional information dynamically') }}
+                        </div>
+                    </div>
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button [fallbackUrl]="['import_module','ImportedHostgroups', 'index']" cButton class="ms-1 ripple"
+                            color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        </form>
+    }
 </ng-container>

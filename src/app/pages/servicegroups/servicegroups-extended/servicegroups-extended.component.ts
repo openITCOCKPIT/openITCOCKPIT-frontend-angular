@@ -1,32 +1,31 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownComponent,
-  DropdownDividerDirective,
-  DropdownItemDirective,
-  DropdownMenuDirective,
-  DropdownToggleDirective,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownComponent,
+    DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-
 
 
 import { FormsModule } from '@angular/forms';
@@ -96,63 +95,64 @@ import { ServicesService } from '../../services/services.service';
 import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 
 @Component({
     selector: 'oitc-servicegroups-extended',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PaginatorModule,
-    PermissionDirective,
-    SelectComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    DropdownDividerDirective,
-    ServiceMaintenanceModalComponent,
-    ServiceResetChecktimeModalComponent,
-    DebounceDirective,
-    TableDirective,
-    NgForOf,
-    TranslocoPipe,
-    RowComponent,
-    ColComponent,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    PopoverGraphComponent,
-    DropdownComponent,
-    DropdownToggleDirective,
-    DropdownMenuDirective,
-    DropdownItemDirective,
-    ContainerComponent,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    ServiceAcknowledgeModalComponent,
-    TableLoaderComponent,
-    ObjectUuidComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    ServicestatusSimpleIconComponent,
-    DisableModalComponent,
-    DeleteAllModalComponent,
-    NgClass
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        PaginatorModule,
+        PermissionDirective,
+        SelectComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        DropdownDividerDirective,
+        ServiceMaintenanceModalComponent,
+        ServiceResetChecktimeModalComponent,
+        DebounceDirective,
+        TableDirective,
+        TranslocoPipe,
+        RowComponent,
+        ColComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        PopoverGraphComponent,
+        DropdownComponent,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        DropdownItemDirective,
+        ContainerComponent,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        ServiceAcknowledgeModalComponent,
+        TableLoaderComponent,
+        ObjectUuidComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        ServicestatusSimpleIconComponent,
+        DisableModalComponent,
+        DeleteAllModalComponent,
+        NgClass,
+        MatSort,
+        MatSortHeader
+    ],
     templateUrl: './servicegroups-extended.component.html',
     styleUrl: './servicegroups-extended.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService },
-        { provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService }
+        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService},
+        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService}
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -523,6 +523,14 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
                 this.onMassActionComplete(true)
             }, 5000);
         }));
+    }
+
+    public onSortChange(sort: Sort): void {
+        if (sort.direction) {
+            this.serviceParams.sort = sort.active;
+            this.serviceParams.direction = sort.direction;
+            this.loadServicegroupExtended();
+        }
     }
 
     protected onMassActionComplete(event: boolean): void {

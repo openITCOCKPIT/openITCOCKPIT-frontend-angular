@@ -5,17 +5,17 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckInputDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckInputDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
@@ -40,33 +40,33 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-calendars-add',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormDirective,
-    FormsModule,
-    ReactiveFormsModule,
-    BackButtonDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    CardFooterComponent,
-    NgSelectModule,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FormDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        BackButtonDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        CardFooterComponent,
+        NgSelectModule,
         NgOptionHighlightDirective,
-    FullCalendarModule,
-    FormCheckInputDirective,
-    CalendarComponent
-],
+        FullCalendarModule,
+        FormCheckInputDirective,
+        CalendarComponent
+    ],
     templateUrl: './calendars-add.component.html',
     styleUrl: './calendars-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -112,8 +112,6 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                 this.countries = result.countries;
                 this.cdr.markForCheck();
             });
-
-        this.loadHolidays();
     }
 
     public ngOnDestroy() {

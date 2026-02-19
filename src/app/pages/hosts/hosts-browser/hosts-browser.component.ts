@@ -28,12 +28,13 @@ import {
     NavItemComponent,
     RowComponent,
     TableDirective,
+    TextColorDirective,
     TooltipDirective
 } from '@coreui/angular';
 import { HostBrowserMenuConfig, HostsBrowserMenuComponent } from '../hosts-browser-menu/hosts-browser-menu.component';
-import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgClass } from '@angular/common';
 import { BrowserLoaderComponent } from '../../../layouts/primeng/loading/browser-loader/browser-loader.component';
-import { HostBrowserResult, HostBrowserSlaOverview, MergedHost } from '../hosts.interface';
+import { HostBrowserResult, HostBrowserSlaOverview, MergedHost, SoftwareInformationHost } from '../hosts.interface';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { HostBrowserTabs } from '../hosts.enum';
@@ -119,6 +120,16 @@ import {
     IsarFlowHostBrowserTabComponent
 } from '../../../modules/isarflow_module/components/isar-flow-host-browser-tab/isar-flow-host-browser-tab.component';
 import { TitleService } from '../../../services/title.service';
+import {
+    BrowserSoftwareLinuxComponent
+} from './browser-software/browser-software-linux/browser-software-linux.component';
+import {
+    BrowserSoftwareWindowsComponent
+} from './browser-software/browser-software-windows/browser-software-windows.component';
+import {
+    BrowserSoftwareMacosComponent
+} from './browser-software/browser-software-macos/browser-software-macos.component';
+import { PatchstatusIconComponent } from '../../patchstatus/patchstatus-icon/patchstatus-icon.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -131,7 +142,6 @@ import { TitleService } from '../../../services/title.service';
         RowComponent,
         ColComponent,
         HostsBrowserMenuComponent,
-        NgIf,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
@@ -165,7 +175,6 @@ import { TitleService } from '../../../services/title.service';
         TableDirective,
         CopyToClipboardComponent,
         BadgeComponent,
-        NgForOf,
         HoststatusSimpleIconComponent,
         LabelLinkComponent,
         KeyValuePipe,
@@ -179,7 +188,12 @@ import { TitleService } from '../../../services/title.service';
         AdditionalHostInformationComponent,
         AsyncPipe,
         SlaHostInformationElementComponent,
-        IsarFlowHostBrowserTabComponent
+        IsarFlowHostBrowserTabComponent,
+        TextColorDirective,
+        BrowserSoftwareLinuxComponent,
+        BrowserSoftwareWindowsComponent,
+        BrowserSoftwareMacosComponent,
+        PatchstatusIconComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
@@ -211,6 +225,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
 
     public AdditionalInformationExists: boolean = false;
     public isarFlowInformationExists: boolean = false;
+    public softwareInformation?: SoftwareInformationHost;
 
     public SlaOverview: false | HostBrowserSlaOverview = false;
 
@@ -296,6 +311,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             this.loadAdditionalInformation();
             this.loadIsarFlowInformation();
             this.loadSlaInformation();
+            this.loadSoftwareInformation();
 
             this.lastUpdated = new Date();
 
@@ -349,6 +365,15 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         if (this.result?.mergedHost && this.result.mergedHost.sla_id) {
             this.subscriptions.add(this.HostsService.loadSlaInformation(this.result.mergedHost.id, this.result.mergedHost.sla_id).subscribe((result) => {
                 this.SlaOverview = result;
+                this.cdr.markForCheck();
+            }));
+        }
+    }
+
+    public loadSoftwareInformation(): void {
+        if (this.result?.mergedHost) {
+            this.subscriptions.add(this.HostsService.loadSoftwareInformation(this.result.mergedHost.id).subscribe((result) => {
+                this.softwareInformation = result;
                 this.cdr.markForCheck();
             }));
         }

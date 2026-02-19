@@ -79,7 +79,8 @@
                 <c-accordion class="mb-3">
                     <c-accordion-item #item0="cAccordionItem" [visible]="false">
                         <ng-template cTemplateId="accordionHeaderTemplate">
-                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
+                            <button class="wizard-accordion bg-info-subtle" (click)="item0.toggleItem()"
+                                    [collapsed]="!item0.visible" cAccordionButton>
                                 <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
                                 {{ t('VMware configuration help') }}
                             </button>
@@ -154,20 +155,33 @@
 
                 <div>
                     <ng-template #contentTemplate let-data>
-                        <span class="h5 text-info" *ngIf="data">
-                            {{ t('Discovering Datastores for Services') }}
-                        </span>
+                        @if (data) {
+                            <span class="h5 text-info">
+                                {{ t('Discovering Datastores for Services') }}
+                            </span>
+                        }
                         <br>
                         {{ t('Scan VMWare and find all of datastores. Only possible with valid VMWare configuration') }}
                     </ng-template>
 
+
                     <ng-template #buttonTemplate let-data>
                         <div class="ms-2">
-                            <button class="ripple" (click)="runDatastoreDiscovery()" cButton color="info">
+                            <button
+                                cButton
+                                class="ripple"
+                                color="info"
+                                type="button"
+                                [disabled]="DiscoveryIsRunning"
+                                (click)="runDatastoreDiscovery()">
+                                @if (DiscoveryIsRunning) {
+                                    <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                                } @else {
+                                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                                }
                                 {{ t('Start Datastore discovery') }}
                             </button>
                         </div>
-
                     </ng-template>
 
                     <oitc-alert
@@ -234,75 +248,75 @@
 
 
                 <ul class="m-0 p-0">
-                    <ol class="m-0 p-0" *ngFor="let datastoreService of post.dataStoreServices">
-                        @if (!datastoreService.servicecommandargumentvalues.length) {
-                            <ng-container *ngIf="hasName(datastoreService.name)">
-
-                                <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
-                                    <div class="d-flex align-items-center">
-                                        <input cFormCheckInput
-                                               type="checkbox"
-                                               [id]="datastoreService.name"
-                                               class="alert-icon lg-checkbox"
-                                               name="checkbox"
-                                               [(ngModel)]="datastoreService.createService"/>
-                                        <label class="custom-control-label custom-control-label-ok"
-                                               [for]="datastoreService.name">
-                                            {{ datastoreService.name }}
-                                            <span class="help-block italic">
-                                                {{ datastoreService.description }}
-                                            </span>
-                                        </label>
+                    @for (datastoreService of post.dataStoreServices; track datastoreService) {
+                        <ol class="m-0 p-0">
+                            @if (!datastoreService.servicecommandargumentvalues.length) {
+                                @if (hasName(datastoreService.name)) {
+                                    <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
+                                        <div class="d-flex align-items-center">
+                                            <input cFormCheckInput
+                                                   type="checkbox"
+                                                   [id]="datastoreService.name"
+                                                   class="alert-icon lg-checkbox"
+                                                   name="checkbox"
+                                                   [(ngModel)]="datastoreService.createService"/>
+                                            <label class="custom-control-label custom-control-label-ok"
+                                                   [for]="datastoreService.name">
+                                                {{ datastoreService.name }}
+                                                <span class="help-block italic">
+                                                    {{ datastoreService.description }}
+                                                </span>
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
-                            </ng-container>
-                        } @else {
-                            <ng-container *ngIf="hasName(datastoreService.name)">
-                                <c-accordion class="mb-3">
-                                    <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
-                                        <ng-template cTemplateId="accordionHeaderTemplate">
-                                            <div class="form-group bg-primary-subtle"
-                                                 (click)="accordionItem.toggleItem()"
-                                                 [collapsed]="!accordionItem.visible" cAccordionButton>
-                                                <div class="d-flex align-items-center">
-                                                    <input cFormCheckInput
-                                                           type="checkbox"
-                                                           [id]="datastoreService.name"
-                                                           class="alert-icon lg-checkbox"
-                                                           name="checkbox"
-                                                           (click)="$event.stopPropagation()"
-                                                           [(ngModel)]="datastoreService.createService"/>
-                                                    <label class="custom-control-label custom-control-label-ok"
-                                                           (click)="$event.stopPropagation()"
-                                                           [for]="datastoreService.name">
-                                                        {{ datastoreService.name }}
-                                                        <span class="help-block italic">
-                                                            {{ datastoreService.description }}
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </ng-template>
-                                        <ng-template cTemplateId="accordionBodyTemplate">
-                                            <div class="accordion-body">
-                                                @for (
-                                                    commandArgument of datastoreService.servicecommandargumentvalues; track $index) {
-                                                    <div
-                                                        class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
-                                                        {{ commandArgument.commandargument.human_name }}
-                                                        <input class="form-control"
-                                                               type="text"
-                                                               [disabled]="!datastoreService.createService || $index === 0"
-                                                               [(ngModel)]="commandArgument.value">
+                                }
+                            } @else {
+                                @if (hasName(datastoreService.name)) {
+                                    <c-accordion class="mb-3">
+                                        <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
+                                            <ng-template cTemplateId="accordionHeaderTemplate">
+                                                <div class="form-group wizard-accordion bg-info-subtle"
+                                                     (click)="accordionItem.toggleItem()"
+                                                     [collapsed]="!accordionItem.visible" cAccordionButton>
+                                                    <div class="d-flex align-items-center">
+                                                        <input cFormCheckInput
+                                                               type="checkbox"
+                                                               [id]="datastoreService.name"
+                                                               class="alert-icon lg-checkbox"
+                                                               name="checkbox"
+                                                               (click)="$event.stopPropagation()"
+                                                               [(ngModel)]="datastoreService.createService"/>
+                                                        <label class="custom-control-label custom-control-label-ok"
+                                                               (click)="$event.stopPropagation()"
+                                                               [for]="datastoreService.name">
+                                                            {{ datastoreService.name }}
+                                                            <span class="help-block italic">
+                                                                {{ datastoreService.description }}
+                                                            </span>
+                                                        </label>
                                                     </div>
-                                                }
-                                            </div>
-                                        </ng-template>
-                                    </c-accordion-item>
-                                </c-accordion>
-                            </ng-container>
-                        }
-                    </ol>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template cTemplateId="accordionBodyTemplate">
+                                                <div class="accordion-body">
+                                                    @for (commandArgument of datastoreService.servicecommandargumentvalues; track $index) {
+                                                        <div
+                                                            class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}">
+                                                            {{ commandArgument.commandargument.human_name }}
+                                                            <input class="form-control"
+                                                                   type="text"
+                                                                   [disabled]="!datastoreService.createService || $index === 0"
+                                                                   [(ngModel)]="commandArgument.value">
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </ng-template>
+                                        </c-accordion-item>
+                                    </c-accordion>
+                                }
+                            }
+                        </ol>
+                    }
                 </ul>
             </fieldset>
         </c-card-body>

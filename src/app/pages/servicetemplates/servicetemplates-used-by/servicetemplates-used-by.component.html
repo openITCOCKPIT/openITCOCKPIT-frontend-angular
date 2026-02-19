@@ -22,166 +22,172 @@
     </nav>
 
     <oitc-form-loader [isVisible]="!servicetemplate"></oitc-form-loader>
-    <c-card class="mb-3" *ngIf="servicetemplate">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Service template') }}
-                <small class="fw-300">
-                    <i>
-                        <strong>
-                            »{{ servicetemplate.name }}«
-                        </strong>
-                        {{ t('is used by') }}
-                        {{ total }}
-                        {{ t('objects.') }}
-                    </i>
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <c-form-check>
-                        <input (debouncedValue)="onFilterChange($event)"
-                               [(ngModel)]="params['filter[Services.disabled]']" cFormCheckInput
-                               id="ServicesDisabled"
-                               name="ServicesDisabled"
-                               oitcDebounce
-                               type="checkbox"/>
-                        <label cFormCheckLabel
-                               for="ServicesDisabled">{{ t('Include disabled services') }}</label>
-                    </c-form-check>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['servicetemplates', 'index']" cButton class="ripple" color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
-            <c-container
-                [fluid]="true">
-                <table bordered cTable class="mt-2 mb-0" hover striped>
-                    <thead>
-                    <tr *ngIf="total > 0">
-                        <th class="width-50 text-center bg-secondary bg-opacity-10" scope="col">
-                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                        </th>
-                        <th class="bg-secondary bg-opacity-10">
-                            {{ t('Service name') }}
-                        </th>
-                        <th class="text-center width-50 bg-secondary bg-opacity-10" scope="col">
-                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        @for (host of hostsWithServices; track $index) {
-                            <tr>
-                                <td colspan="3">
-                                    @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                                        <a [routerLink]="['/', 'hosts', 'browser', host.id]">
+    @if (servicetemplate) {
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Service template') }}
+                    <small class="fw-300">
+                        <i>
+                            <strong>
+                                »{{ servicetemplate.name }}«
+                            </strong>
+                            {{ t('is used by') }}
+                            {{ total }}
+                            {{ t('objects.') }}
+                        </i>
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <c-form-check>
+                            <input (debouncedValue)="onFilterChange($event)"
+                                   [(ngModel)]="params['filter[Services.disabled]']" cFormCheckInput
+                                   id="ServicesDisabled"
+                                   name="ServicesDisabled"
+                                   oitcDebounce
+                                   type="checkbox"/>
+                            <label cFormCheckLabel
+                                   for="ServicesDisabled">{{ t('Include disabled services') }}</label>
+                        </c-form-check>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['servicetemplates', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <c-container
+                    [fluid]="true">
+                    <table bordered cTable class="mt-2 mb-0" hover striped>
+                        <thead>
+                            @if (total > 0) {
+                                <tr>
+                                    <th class="width-50 text-center bg-secondary bg-opacity-10" scope="col">
+                                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                                    </th>
+                                    <th class="bg-secondary bg-opacity-10">
+                                        {{ t('Service name') }}
+                                    </th>
+                                    <th class="text-center width-50 bg-secondary bg-opacity-10" scope="col">
+                                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                    </th>
+                                </tr>
+                            }
+                        </thead>
+                        <tbody>
+                            @for (host of hostsWithServices; track $index) {
+                                <tr>
+                                    <td colspan="3">
+                                        @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                            <a [routerLink]="['/', 'hosts', 'browser', host.id]">
+                                                {{ host.name }} ({{ host.address }})
+                                            </a>
+                                        } @else {
                                             {{ host.name }} ({{ host.address }})
-                                        </a>
-                                    } @else {
-                                        {{ host.name }} ({{ host.address }})
-                                    }
-
-                                    @if (PermissionsService.hasPermissionObservable(['services', 'serviceList'])|async) {
-                                        <a class="float-end"
-                                           [routerLink]="['/', 'services', 'serviceList', host.id]">
-                                            <span [title]="'Go to Service list'|transloco">
-                                                <fa-icon [icon]="['fas', 'list']"></fa-icon>
-                                            </span>
-                                        </a>
-                                    }
-                                </td>
-                            </tr>
-                            <tr *ngFor="let service of host.services">
-                                <td class="text-center">
-                                    <oitc-item-select
-                                        *oitcPermission="['hosts', 'edit']"
-                                        [disabled]="!host.allow_edit"
-                                        [item]="service"></oitc-item-select>
-                                </td>
-                                <td>
-                                    @if (PermissionsService.hasPermissionObservable(['services', 'edit'])|async) {
-                                        <a [routerLink]="['/', 'services', 'edit', service.id]">
-                                            {{ service.servicename }}
-                                            <span [hidden]="!service.disabled" [title]="'Disabled' | transloco">
-                                                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                            </span>
-                                        </a>
-                                    } @else {
-                                        {{ service.servicename }}
-                                        <span [hidden]="!service.disabled" [title]="'Disabled' | transloco">
-                                            <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                        </span>
-                                    }
-                                </td>
-                                <td>
-                                    <oitc-actions-button [permission]="'services.edit'"
-                                                         [allowEdit]="host.allow_edit"
-                                                         [url]="'/services/edit/' + service.id">
-                                        <oitc-actions-button-element [permission]="'services.edit'"
-                                                                     *ngIf="host.allow_edit"
-                                                                     [url]="'/services/edit/' + service.id">
-                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                            {{ t('Edit') }}
-                                        </oitc-actions-button-element>
-                                        <li cDropdownDivider *ngIf="host.allow_edit"></li>
-                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(service)"
-                                                                     *ngIf="host.allow_edit"
-                                                                     [permission]="'services.delete'">
-                                            <span class="text-danger">
-                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                {{ t('Delete') }}
-                                            </span>
-                                        </oitc-actions-button-element>
-                                    </oitc-actions-button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-
-                </table>
-
-                <ng-container *ngIf="hostsWithServices.length > 0">
-                    <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
-                                 [fluid]="true">
-                        <c-row>
-                            <c-col>
-                                <oitc-select-all
-                                    [itemsCount]="total"></oitc-select-all>
-                            </c-col>
-                            <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                                <div class="btn-group d-flex flex-row" role="group">
-                                    <button (click)="toggleDeleteAllModal()" class="btn btn-outline-danger col-3"
-                                            type="button">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete selected') }}
-                                    </button>
-                                </div>
-                            </c-col>
-                        </c-row>
-                    </c-container>
-                </ng-container>
-
-
-                <oitc-not-used-by-object *ngIf="total === 0">
-                    {{ t('This service template is not used by any object') }}
-                </oitc-not-used-by-object>
-
-            </c-container>
-        </c-card-body>
-    </c-card>
+                                        }
+                                        @if (PermissionsService.hasPermissionObservable(['services', 'serviceList'])|async) {
+                                            <a class="float-end"
+                                               [routerLink]="['/', 'services', 'serviceList', host.id]">
+                                                <span [title]="'Go to Service list'|transloco">
+                                                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                                                </span>
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                                @for (service of host.services; track service) {
+                                    <tr>
+                                        <td class="text-center">
+                                            <oitc-item-select
+                                                *oitcPermission="['hosts', 'edit']"
+                                                [disabled]="!host.allow_edit"
+                                                [item]="service"></oitc-item-select>
+                                        </td>
+                                        <td>
+                                            @if (PermissionsService.hasPermissionObservable(['services', 'edit'])|async) {
+                                                <a [routerLink]="['/', 'services', 'edit', service.id]">
+                                                    {{ service.servicename }}
+                                                    <span [hidden]="!service.disabled" [title]="'Disabled' | transloco">
+                                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                                    </span>
+                                                </a>
+                                            } @else {
+                                                {{ service.servicename }}
+                                                <span [hidden]="!service.disabled" [title]="'Disabled' | transloco">
+                                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                                </span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <oitc-actions-button [permission]="'services.edit'"
+                                                                 [allowEdit]="host.allow_edit"
+                                                                 [url]="'/services/edit/' + service.id">
+                                                @if (host.allow_edit) {
+                                                    <oitc-actions-button-element [permission]="'services.edit'"
+                                                                                 [url]="'/services/edit/' + service.id">
+                                                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                        {{ t('Edit') }}
+                                                    </oitc-actions-button-element>
+                                                }
+                                                @if (host.allow_edit) {
+                                                    <li cDropdownDivider></li>
+                                                }
+                                                @if (host.allow_edit) {
+                                                    <oitc-actions-button-element (click)="toggleDeleteAllModal(service)"
+                                                                                 [permission]="'services.delete'">
+                                                        <span class="text-danger">
+                                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                            {{ t('Delete') }}
+                                                        </span>
+                                                    </oitc-actions-button-element>
+                                                }
+                                            </oitc-actions-button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    @if (hostsWithServices.length > 0) {
+                        <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                                     [fluid]="true">
+                            <c-row>
+                                <c-col>
+                                    <oitc-select-all
+                                        [itemsCount]="total"></oitc-select-all>
+                                </c-col>
+                                <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                                    <div class="btn-group d-flex flex-row" role="group">
+                                        <button (click)="toggleDeleteAllModal()" class="btn btn-outline-danger col-3"
+                                                type="button">
+                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                            {{ t('Delete selected') }}
+                                        </button>
+                                    </div>
+                                </c-col>
+                            </c-row>
+                        </c-container>
+                    }
+                    @if (total === 0) {
+                        <oitc-not-used-by-object>
+                            {{ t('This service template is not used by any object') }}
+                        </oitc-not-used-by-object>
+                    }
+                </c-container>
+            </c-card-body>
+        </c-card>
+    }
 </ng-container>
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

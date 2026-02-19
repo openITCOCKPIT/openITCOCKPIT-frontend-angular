@@ -25,366 +25,363 @@
         </ol>
     </nav>
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
-    <form cForm (ngSubmit)="submit(ResourcegroupsSubmitType.ResourcegroupsIndex)" autocomplete="off" *ngIf="post">
-        <c-card class="mb-3">
-            <c-card-header>
-                <h5 cCardTitle>{{ t('Edit resource group:') }}
-                    <small class="fw-300">
-                        {{ post.container.name }}
-                    </small>
-                </h5>
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['scm_module', 'resourcegroups', 'index']" cButton class="ripple"
-                                color="default"
-                                oitcBackButton
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                            {{ t('Back') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-            </c-card-header>
-            <c-card-body>
-                <div class="mb-3">
-                    <label cLabel for="container">
-                        {{ t('Container') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <oitc-select
-                        name="container"
-                        id="container"
-                        optionValue="key"
-                        optionLabel="value"
-                        [options]="containers"
-                        [(ngModel)]="this.post.container.parent_id"
-                        [debounce]="true"
-                        (onChange)="onContainerChange()"
-                        oitcFormError [errors]="errors" errorField="container.parent_id">
-                    </oitc-select>
-                    <div *ngIf="!this.post.container.parent_id" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
-                    <oitc-form-feedback [errors]="errors" errorField="container.parent_id"></oitc-form-feedback>
-                </div>
-                <div class="mb-3">
-                    <label cLabel for="ResourcegroupName">
-                        {{ t('Name') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl id="ResourcegroupName" required type="text"
-                           name="name"
-                           [(ngModel)]="post.container.name"
-                           oitcFormError [errors]="errors" errorField="container.name">
-                    <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
-                </div>
-                <div class="mb-3">
-                    <label cLabel for="ResourcegroupDescription">
-                        {{ t('Description') }}
-                    </label>
-                    <input cFormControl id="ResourcegroupDescription" required type="text"
-                           name="description"
-                           [(ngModel)]="post.description"
-                           oitcFormError [errors]="errors" errorField="description">
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="deadline">
-                        {{ t('Deadline') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl required type="text"
-                           id="deadline"
-                           name="deadline"
-                           placeholder="07:00"
-                           oitcFormError [errors]="errors" errorField="deadline"
-                           [(ngModel)]="post.deadline">
-                    <oitc-form-feedback [errors]="errors" errorField="deadline"></oitc-form-feedback>
-
-                    <div class="help-block">
-                        {{ t('Determines the time at which a status had to be transmitted (hh:mm).') }}
-                    </div>
-                    @if (serverTimezone) {
-                        <div class="help-block">
-                            {{ t('Server timezone is:') }}
-                            <strong>
-                                {{ serverTimezone.server_timezone }}.
-                            </strong>
-                            {{ t('Current server time:') }}
-                            <strong>
-                                {{ serverTimezone.server_time }}
-                            </strong>
-                        </div>
-                    }
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="reminder_time">
-                        {{ t('Reminder time') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl required type="text"
-                           id="reminder_time"
-                           name="reminder_time"
-                           placeholder="15"
-                           oitcFormError [errors]="errors" errorField="reminder_time"
-                           [(ngModel)]="post.reminder_time">
-                    <oitc-form-feedback [errors]="errors" errorField="reminder_time"></oitc-form-feedback>
-
-                    <div class="help-block">
-                        {{ t('Sends a reminder email to all users if no status had been transmitted before the deadline exceeded (in minutes).') }}
-                    </div>
-                </div>
-
-
-                <div class="mb-3">
-                    <label cLabel for="ResourcegroupTimeperiod">
-                        @if (this.PermissionsService.hasPermissionObservable(['timeperiods', 'edit'])|async) {
-                            @if (post.timeperiod_id && post.timeperiod_id > 0) {
-                                <a [routerLink]="['/', 'timeperiods', 'edit', post.timeperiod_id]">
-                                    {{ t('Time period') }}
-                                </a>
-                            } @else {
-                                <span>
-                                    {{ t('Time period') }}
-                                </span>
-                            }
-                        } @else {
-                            {{ t('Time period') }}
-                        }
-                    </label>
-
-                    <c-input-group class="select-input-group">
+    @if (post) {
+        <form cForm (ngSubmit)="submit(ResourcegroupsSubmitType.ResourcegroupsIndex)" autocomplete="off">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>{{ t('Edit resource group:') }}
+                        <small class="fw-300">
+                            {{ post.container.name }}
+                        </small>
+                    </h5>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['scm_module', 'resourcegroups', 'index']" cButton class="ripple"
+                                    color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
+                    <div class="mb-3">
+                        <label cLabel for="container">
+                            {{ t('Container') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
                         <oitc-select
-                            class="flex-1"
-                            name="ResourcegroupTimeperiod"
-                            id="ResourcegroupTimeperiod"
-                            required
-                            [placeholder]="'Please choose' | transloco"
+                            name="container"
+                            id="container"
                             optionValue="key"
                             optionLabel="value"
-                            [showClear]="true"
-                            [(ngModel)]="post.timeperiod_id"
-                            [options]="timeperiods">
+                            [options]="containers"
+                            [(ngModel)]="this.post.container.parent_id"
+                            [debounce]="true"
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container.parent_id">
                         </oitc-select>
-                        <span cInputGroupText>
-                            @if (this.PermissionsService.hasPermissionObservable(['timeperiods', 'viewdetails'])|async) {
-                                @if (post.timeperiod_id) {
-                                    <oitc-timeperiod-details-tooltip [timeperiodId]="post.timeperiod_id">
-                                    </oitc-timeperiod-details-tooltip>
-                                }
-                                <fa-icon [icon]="['fas', 'clock']"
-                                         [hidden]="post.timeperiod_id && post.timeperiod_id > 0"></fa-icon>
-                            } @else {
-                                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                            }
-                        </span>
-                    </c-input-group>
-                </div>
-
-                <fieldset class="pt-3">
-                    <legend class="fs-md fieldset-legend-border-bottom-thin">
-                        <h5>
-                            {{ t('Region managers') }}
-                        </h5>
-                    </legend>
-                    <div class="mb-1">
-                        <label cLabel for="RegionManagersUserSelect">
-                            {{ t('Users') }}
-                        </label>
-                        <c-input-group>
-                            <span cInputGroupText class="bg-primary" [title]="t('Users')">
-                                <fa-icon [icon]="['fas', 'users']" class="text-white"></fa-icon>
-                            </span>
-                            <oitc-multi-select
-                                name="RegionManagersUserSelect"
-                                id="RegionManagersUserSelect"
-                                optionValue="key"
-                                optionLabel="value"
-                                [appendTo]="''"
-                                [(ngModel)]="post.region_managers._ids"
-                                [options]="region_managers"
-                                oitcFormError [errors]="errors" errorField="region_managers"
-                                class="flex-1 rounded-end">
-                            </oitc-multi-select>
-                        </c-input-group>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="region_managers"></oitc-form-feedback>
-                    </div>
-                    <div class="mb-1">
-                        <label cLabel for="RegionManagersMailinglistSelect">
-                            {{ t('Mailing lists') }}
-                        </label>
-                        <c-input-group>
-                            <span cInputGroupText class="bg-primary" [title]="t('Users')">
-                                <fa-icon [icon]="['fas', 'envelopes-bulk']" class="text-white"></fa-icon>
-                            </span>
-                            <oitc-multi-select
-                                name="RegionManagersMailinglistSelect"
-                                id="RegionManagersMailinglistSelect"
-                                optionValue="key"
-                                optionLabel="value"
-                                [appendTo]="''"
-                                [(ngModel)]="post.mailinglists_region_managers._ids"
-                                [options]="mailinglists_region_managers"
-                                oitcFormError [errors]="errors" errorField="mailinglists_region_managers"
-                                class="flex-1 rounded-end">
-                            </oitc-multi-select>
-                        </c-input-group>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="mailinglists_region_managers"></oitc-form-feedback>
-
-                    </div>
-                </fieldset>
-
-                <fieldset class="pt-3">
-                    <legend class="fs-md fieldset-legend-border-bottom-thin">
-                        <h5>
-                            {{ t('Managers') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </h5>
-                    </legend>
-
-                    <div class="mb-1">
-                        <label cLabel for="ManagersSelect">
-                            {{ t('Users') }}
-
-                        </label>
-                        <c-input-group>
-                            <span cInputGroupText class="bg-primary" [title]="t('Users')">
-                                <fa-icon [icon]="['fas', 'users']" class="text-white"></fa-icon>
-                            </span>
-                            <oitc-multi-select
-                                name="ManagersSelect"
-                                id="ManagersSelect"
-                                optionValue="key"
-                                optionLabel="value"
-                                [appendTo]="''"
-                                [(ngModel)]="post.managers._ids"
-                                [options]="managers"
-                                oitcFormError [errors]="errors" errorField="managers"
-                                class="flex-1 rounded-end">
-                            </oitc-multi-select>
-                        </c-input-group>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="managers"></oitc-form-feedback>
-                    </div>
-                    <div class="mb-1">
-                        <label cLabel for="ManagersMailinglistSelect">
-                            {{ t('Mailing lists') }}
-                        </label>
-                        <c-input-group>
-                            <span cInputGroupText class="bg-primary" [title]="t('Mailing lists')">
-                                <fa-icon [icon]="['fas', 'envelopes-bulk']" class="text-white"></fa-icon>
-                            </span>
-                            <oitc-multi-select
-                                name="ManagersMailinglistSelect"
-                                id="ManagersMailinglistSelect"
-                                optionValue="key"
-                                optionLabel="value"
-                                [appendTo]="''"
-                                [(ngModel)]="post.mailinglists_managers._ids"
-                                [options]="mailinglists_managers"
-                                oitcFormError [errors]="errors" errorField="mailinglists_managers"
-                                class="flex-1 rounded-end">
-                            </oitc-multi-select>
-                        </c-input-group>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="mailinglists_managers"></oitc-form-feedback>
-                    </div>
-                </fieldset>
-
-                <fieldset class="pt-3">
-                    <legend class="fs-md fieldset-legend-border-bottom-thin">
-                        <h5>
-                            {{ t('Users') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </h5>
-                    </legend>
-                    <div class="mb-3">
-                        <label cLabel for="UsersSelect">
-                            {{ t('Users') }}
-                        </label>
-                        <c-input-group>
-                            <span cInputGroupText class="bg-primary" [title]="t('Users')">
-                                <fa-icon [icon]="['fas', 'users']" class="text-white"></fa-icon>
-                            </span>
-                            <oitc-multi-select
-                                name="UsersSelect"
-                                id="UsersSelect"
-                                optionValue="key"
-                                optionLabel="value"
-                                [appendTo]="''"
-                                [(ngModel)]="post.users._ids"
-                                [options]="users"
-                                oitcFormError [errors]="errors" errorField="users"
-                                class="flex-1 rounded-end">
-                            </oitc-multi-select>
-                        </c-input-group>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="users"></oitc-form-feedback>
-                    </div>
-                    <div class="mb-3">
-                        <label cLabel for="UsersMailinglistSelect">
-                            {{ t('Mailing lists') }}
-                        </label>
-                        <c-input-group>
-                            <span cInputGroupText class="bg-primary" [title]="t('Users')">
-                                <fa-icon [icon]="['fas', 'envelopes-bulk']" class="text-white"></fa-icon>
-                            </span>
-                            <oitc-multi-select
-                                name="UsersMailinglistSelect"
-                                id="UsersMailinglistSelect"
-                                optionValue="key"
-                                optionLabel="value"
-                                [appendTo]="''"
-                                [(ngModel)]="post.mailinglists_users._ids"
-                                [options]="mailinglists_users"
-                                oitcFormError [errors]="errors" errorField="mailinglists_users"
-                                class="flex-1 rounded-end">
-                            </oitc-multi-select>
-                        </c-input-group>
-                        <oitc-form-feedback [errors]="errors"
-                                            errorField="mailinglists_users"></oitc-form-feedback>
-                    </div>
-                </fieldset>
-            </c-card-body>
-            <c-card-footer class="text-end">
-
-                <label class="me-2">
-                    <input cFormCheckInput type="checkbox" name="createAnother"
-                           [(ngModel)]="createAnother">
-                    {{ t('Create another') }}
-                </label>
-
-                <c-dropdown direction="center" variant="btn-group" class="ms-1">
-                    <button cButton color="primary" type="submit" class="ripple">
-                        {{ t('Update resource group') }}
-                    </button>
-                    <button [split]="true" cButton cDropdownToggle color="primary" [disabled]="createAnother">
-                        <span class="visually-hidden">Toggle Dropdown</span>
-                    </button>
-                    <ul cDropdownMenu>
-                        @if (this.PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'add'])|async) {
-                            <li>
-                                <button cDropdownItem type="button"
-                                        (click)="submit(ResourcegroupsSubmitType.ResourceAdd)">
-                                    <fa-icon [icon]="['fas', 'chalkboard-user']"></fa-icon>
-                                    {{ t('Save and create resource') }}
-                                </button>
-                            </li>
+                        @if (!this.post.container.parent_id) {
+                            <div class="text-warning-glow pt-1">
+                                {{ t('Please select a container.') }}
+                            </div>
                         }
-
-                    </ul>
-                </c-dropdown>
-
-                <button [fallbackUrl]="['scmmodule','resourcegroups', 'index']" cButton class="ms-1 ripple"
-                        color="default"
-                        oitcBackButton
-                        type="button">
-                    {{ t('Cancel') }}
-                </button>
-            </c-card-footer>
-        </c-card>
-    </form>
+                        <oitc-form-feedback [errors]="errors" errorField="container.parent_id"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="ResourcegroupName">
+                            {{ t('Name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="ResourcegroupName" required type="text"
+                               name="name"
+                               [(ngModel)]="post.container.name"
+                               oitcFormError [errors]="errors" errorField="container.name">
+                        <oitc-form-feedback [errors]="errors" errorField="container.name"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="ResourcegroupDescription">
+                            {{ t('Description') }}
+                        </label>
+                        <input cFormControl id="ResourcegroupDescription" required type="text"
+                               name="description"
+                               [(ngModel)]="post.description"
+                               oitcFormError [errors]="errors" errorField="description">
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="ResourcegroupDepartment">
+                            {{ t('Department') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="ResourcegroupDepartment" required type="text"
+                               name="department"
+                               [(ngModel)]="post.department"
+                               oitcFormError [errors]="errors" errorField="department">
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="deadline">
+                            {{ t('Deadline') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl required type="text"
+                               id="deadline"
+                               name="deadline"
+                               placeholder="07:00"
+                               oitcFormError [errors]="errors" errorField="deadline"
+                               [(ngModel)]="post.deadline">
+                        <oitc-form-feedback [errors]="errors" errorField="deadline"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Determines the time at which a status had to be transmitted (hh:mm).') }}
+                        </div>
+                        @if (serverTimezone) {
+                            <div class="help-block">
+                                {{ t('Server timezone is:') }}
+                                <strong>
+                                    {{ serverTimezone.server_timezone }}.
+                                </strong>
+                                {{ t('Current server time:') }}
+                                <strong>
+                                    {{ serverTimezone.server_time }}
+                                </strong>
+                            </div>
+                        }
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="reminder_time">
+                            {{ t('Reminder time') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl required type="text"
+                               id="reminder_time"
+                               name="reminder_time"
+                               placeholder="15"
+                               oitcFormError [errors]="errors" errorField="reminder_time"
+                               [(ngModel)]="post.reminder_time">
+                        <oitc-form-feedback [errors]="errors" errorField="reminder_time"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Sends a reminder email to all users if no status had been transmitted before the deadline exceeded (in minutes).') }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="ResourcegroupTimeperiod">
+                            @if (this.PermissionsService.hasPermissionObservable(['timeperiods', 'edit'])|async) {
+                                @if (post.timeperiod_id && post.timeperiod_id > 0) {
+                                    <a [routerLink]="['/', 'timeperiods', 'edit', post.timeperiod_id]">
+                                        {{ t('Time period') }}
+                                    </a>
+                                } @else {
+                                    <span>
+                                        {{ t('Time period') }}
+                                    </span>
+                                }
+                            } @else {
+                                {{ t('Time period') }}
+                            }
+                        </label>
+                        <c-input-group class="select-input-group">
+                            <oitc-select
+                                class="flex-1"
+                                name="ResourcegroupTimeperiod"
+                                id="ResourcegroupTimeperiod"
+                                required
+                                [placeholder]="'Please choose' | transloco"
+                                optionValue="key"
+                                optionLabel="value"
+                                [showClear]="true"
+                                [(ngModel)]="post.timeperiod_id"
+                                [options]="timeperiods">
+                            </oitc-select>
+                            <span cInputGroupText>
+                                @if (this.PermissionsService.hasPermissionObservable(['timeperiods', 'viewdetails'])|async) {
+                                    @if (post.timeperiod_id) {
+                                        <oitc-timeperiod-details-tooltip [timeperiodId]="post.timeperiod_id">
+                                        </oitc-timeperiod-details-tooltip>
+                                    }
+                                    <fa-icon [icon]="['fas', 'clock']"
+                                             [hidden]="post.timeperiod_id && post.timeperiod_id > 0"></fa-icon>
+                                } @else {
+                                    <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                }
+                            </span>
+                        </c-input-group>
+                    </div>
+                    <fieldset class="pt-3">
+                        <legend class="fs-md fieldset-legend-border-bottom-thin">
+                            <h5>
+                                {{ t('Region managers') }}
+                            </h5>
+                        </legend>
+                        <div class="mb-1">
+                            <label cLabel for="RegionManagersUserSelect">
+                                {{ t('Users') }}
+                            </label>
+                            <c-input-group>
+                                <span cInputGroupText class="bg-primary" [title]="t('Users')">
+                                    <fa-icon [icon]="['fas', 'users']" class="text-white"></fa-icon>
+                                </span>
+                                <oitc-multi-select
+                                    name="RegionManagersUserSelect"
+                                    id="RegionManagersUserSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [appendTo]="''"
+                                    [(ngModel)]="post.region_managers._ids"
+                                    [options]="region_managers"
+                                    oitcFormError [errors]="errors" errorField="region_managers"
+                                    class="flex-1 rounded-end">
+                                </oitc-multi-select>
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="region_managers"></oitc-form-feedback>
+                        </div>
+                        <div class="mb-1">
+                            <label cLabel for="RegionManagersMailinglistSelect">
+                                {{ t('Mailing lists') }}
+                            </label>
+                            <c-input-group>
+                                <span cInputGroupText class="bg-primary" [title]="t('Users')">
+                                    <fa-icon [icon]="['fas', 'envelopes-bulk']" class="text-white"></fa-icon>
+                                </span>
+                                <oitc-multi-select
+                                    name="RegionManagersMailinglistSelect"
+                                    id="RegionManagersMailinglistSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [appendTo]="''"
+                                    [(ngModel)]="post.mailinglists_region_managers._ids"
+                                    [options]="mailinglists_region_managers"
+                                    oitcFormError [errors]="errors" errorField="mailinglists_region_managers"
+                                    class="flex-1 rounded-end">
+                                </oitc-multi-select>
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="mailinglists_region_managers"></oitc-form-feedback>
+                        </div>
+                    </fieldset>
+                    <fieldset class="pt-3">
+                        <legend class="fs-md fieldset-legend-border-bottom-thin">
+                            <h5>
+                                {{ t('Managers') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </h5>
+                        </legend>
+                        <div class="mb-1">
+                            <label cLabel for="ManagersSelect">
+                                {{ t('Users') }}
+                            </label>
+                            <c-input-group>
+                                <span cInputGroupText class="bg-primary" [title]="t('Users')">
+                                    <fa-icon [icon]="['fas', 'users']" class="text-white"></fa-icon>
+                                </span>
+                                <oitc-multi-select
+                                    name="ManagersSelect"
+                                    id="ManagersSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [appendTo]="''"
+                                    [(ngModel)]="post.managers._ids"
+                                    [options]="managers"
+                                    oitcFormError [errors]="errors" errorField="managers"
+                                    class="flex-1 rounded-end">
+                                </oitc-multi-select>
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="managers"></oitc-form-feedback>
+                        </div>
+                        <div class="mb-1">
+                            <label cLabel for="ManagersMailinglistSelect">
+                                {{ t('Mailing lists') }}
+                            </label>
+                            <c-input-group>
+                                <span cInputGroupText class="bg-primary" [title]="t('Mailing lists')">
+                                    <fa-icon [icon]="['fas', 'envelopes-bulk']" class="text-white"></fa-icon>
+                                </span>
+                                <oitc-multi-select
+                                    name="ManagersMailinglistSelect"
+                                    id="ManagersMailinglistSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [appendTo]="''"
+                                    [(ngModel)]="post.mailinglists_managers._ids"
+                                    [options]="mailinglists_managers"
+                                    oitcFormError [errors]="errors" errorField="mailinglists_managers"
+                                    class="flex-1 rounded-end">
+                                </oitc-multi-select>
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="mailinglists_managers"></oitc-form-feedback>
+                        </div>
+                    </fieldset>
+                    <fieldset class="pt-3">
+                        <legend class="fs-md fieldset-legend-border-bottom-thin">
+                            <h5>
+                                {{ t('Users') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </h5>
+                        </legend>
+                        <div class="mb-3">
+                            <label cLabel for="UsersSelect">
+                                {{ t('Users') }}
+                            </label>
+                            <c-input-group>
+                                <span cInputGroupText class="bg-primary" [title]="t('Users')">
+                                    <fa-icon [icon]="['fas', 'users']" class="text-white"></fa-icon>
+                                </span>
+                                <oitc-multi-select
+                                    name="UsersSelect"
+                                    id="UsersSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [appendTo]="''"
+                                    [(ngModel)]="post.users._ids"
+                                    [options]="users"
+                                    oitcFormError [errors]="errors" errorField="users"
+                                    class="flex-1 rounded-end">
+                                </oitc-multi-select>
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="users"></oitc-form-feedback>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="UsersMailinglistSelect">
+                                {{ t('Mailing lists') }}
+                            </label>
+                            <c-input-group>
+                                <span cInputGroupText class="bg-primary" [title]="t('Users')">
+                                    <fa-icon [icon]="['fas', 'envelopes-bulk']" class="text-white"></fa-icon>
+                                </span>
+                                <oitc-multi-select
+                                    name="UsersMailinglistSelect"
+                                    id="UsersMailinglistSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [appendTo]="''"
+                                    [(ngModel)]="post.mailinglists_users._ids"
+                                    [options]="mailinglists_users"
+                                    oitcFormError [errors]="errors" errorField="mailinglists_users"
+                                    class="flex-1 rounded-end">
+                                </oitc-multi-select>
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="mailinglists_users"></oitc-form-feedback>
+                        </div>
+                    </fieldset>
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <label class="me-2">
+                        <input cFormCheckInput type="checkbox" name="createAnother"
+                               [(ngModel)]="createAnother">
+                        {{ t('Create another') }}
+                    </label>
+                    <c-dropdown direction="center" variant="btn-group" class="ms-1">
+                        <button cButton color="primary" type="submit" class="ripple">
+                            {{ t('Update resource group') }}
+                        </button>
+                        <button [split]="true" cButton cDropdownToggle color="primary" [disabled]="createAnother">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul cDropdownMenu>
+                            @if (this.PermissionsService.hasPermissionObservable(['scmmodule', 'resources', 'add'])|async) {
+                                <li>
+                                    <button cDropdownItem type="button"
+                                            (click)="submit(ResourcegroupsSubmitType.ResourceAdd)">
+                                        <fa-icon [icon]="['fas', 'chalkboard-user']"></fa-icon>
+                                        {{ t('Save and create resource') }}
+                                    </button>
+                                </li>
+                            }
+                        </ul>
+                    </c-dropdown>
+                    <button [fallbackUrl]="['scmmodule','resourcegroups', 'index']" cButton class="ms-1 ripple"
+                            color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        </form>
+    }
 </ng-container>

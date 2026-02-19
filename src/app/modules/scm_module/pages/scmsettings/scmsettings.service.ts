@@ -6,7 +6,7 @@ import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } fro
 import { ScmSettingsIndex, ScmSettingsPost } from './scmsettings.interface';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ScmsettingsService {
 

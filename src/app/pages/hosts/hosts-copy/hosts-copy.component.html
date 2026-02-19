@@ -37,92 +37,89 @@
         </c-card-header>
         <c-card-body>
 
-            <oitc-form-loader [isVisible]="hosts.length === 0" />
+            <oitc-form-loader [isVisible]="hosts.length === 0"/>
 
-            <c-card class="mb-3" *ngFor="let host of hosts; let i = index">
-                <c-card-header>
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    <span class="ms-1">
-                        {{ t('Source host:') }}
-                        {{ host.Source.name }}
-                        <span class="italic">({{ host.Source.address }})</span>
-                    </span>
-                </c-card-header>
-                <c-card-body>
-
-                    <div class="mb-3">
-                        <label cLabel for="name{{i}}">
-                            {{ t('Host name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl required type="text"
-                               name="name{{i}}"
-                               id="name{{i}}"
-                               [(ngModel)]="host.Host.name"
-                               (blur)="checkForDuplicateHostname(host.Host.name, i)"
-                               oitcFormError [errors]="host.Error" errorField="name">
-                        <oitc-form-feedback [errors]="host.Error" errorField="name"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Name of the new host') }}
+            @for (host of hosts; track host; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source host:') }}
+                            {{ host.Source.name }}
+                            <span class="italic">({{ host.Source.address }})</span>
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('Host name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="name{{i}}"
+                                   id="name{{i}}"
+                                   [(ngModel)]="host.Host.name"
+                                   (blur)="checkForDuplicateHostname(host.Host.name, i)"
+                                   oitcFormError [errors]="host.Error" errorField="name">
+                            <oitc-form-feedback [errors]="host.Error" errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new host') }}
+                            </div>
                         </div>
-                    </div>
-
-                    <c-alert color="warning" *ngIf="isHostnameInUse[i]">
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                        {{
-                            t('A host with the name {0} already exists. Duplicate host names could lead to confusion.', {
-                                '0': host.Host.name
-                            })
-                        }}
-
-                    </c-alert>
-
-                    <div class="mb-3">
-                        <label cLabel for="description{{i}}">
-                            {{ t('Description') }}
-                        </label>
-                        <input cFormControl required type="text"
-                               name="description{{i}}"
-                               id="description{{i}}"
-                               [(ngModel)]="host.Host.description"
-                               oitcFormError [errors]="host.Error" errorField="description">
-                        <oitc-form-feedback [errors]="host.Error"
-                                            errorField="description"></oitc-form-feedback>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="address{{i}}">
-                            {{ t('Address') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl required type="text"
-                               name="address{{i}}"
-                               id="address{{i}}"
-                               [(ngModel)]="host.Host.address"
-                               oitcFormError [errors]="host.Error" errorField="address">
-                        <oitc-form-feedback [errors]="host.Error"
-                                            errorField="address"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Address of the new host') }}
+                        @if (isHostnameInUse[i]) {
+                            <c-alert color="warning">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                {{
+                                    t('A host with the name {0} already exists. Duplicate host names could lead to confusion.', {
+                                        '0': host.Host.name
+                                    })
+                                }}
+                            </c-alert>
+                        }
+                        <div class="mb-3">
+                            <label cLabel for="description{{i}}">
+                                {{ t('Description') }}
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="description{{i}}"
+                                   id="description{{i}}"
+                                   [(ngModel)]="host.Host.description"
+                                   oitcFormError [errors]="host.Error" errorField="description">
+                            <oitc-form-feedback [errors]="host.Error"
+                                                errorField="description"></oitc-form-feedback>
                         </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="hosturl{{i}}">
-                            {{ t('Host URL') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl required type="text"
-                               name="hosturl{{i}}"
-                               id="hosturl{{i}}"
-                               [(ngModel)]="host.Host.host_url"
-                               oitcFormError [errors]="host.Error" errorField="host_url">
-                        <oitc-form-feedback [errors]="host.Error"
-                                            errorField="host_url"></oitc-form-feedback>
-                    </div>
-
-                </c-card-body>
-            </c-card>
+                        <div class="mb-3">
+                            <label cLabel for="address{{i}}">
+                                {{ t('Address') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="address{{i}}"
+                                   id="address{{i}}"
+                                   [(ngModel)]="host.Host.address"
+                                   oitcFormError [errors]="host.Error" errorField="address">
+                            <oitc-form-feedback [errors]="host.Error"
+                                                errorField="address"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Address of the new host') }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="hosturl{{i}}">
+                                {{ t('Host URL') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="hosturl{{i}}"
+                                   id="hosturl{{i}}"
+                                   [(ngModel)]="host.Host.host_url"
+                                   oitcFormError [errors]="host.Error" errorField="host_url">
+                            <oitc-form-feedback [errors]="host.Error"
+                                                errorField="host_url"></oitc-form-feedback>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            }
 
         </c-card-body>
         <c-card-footer class="text-end">

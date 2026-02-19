@@ -28,7 +28,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ExternalCommandsService, HostAcknowledgeItem } from '../../../services/external-commands.service';
@@ -56,7 +56,6 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         ModalFooterComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
-        NgIf,
         ReactiveFormsModule,
         RowComponent,
         TranslocoDirective,
