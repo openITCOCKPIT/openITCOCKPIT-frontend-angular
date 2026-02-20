@@ -170,16 +170,19 @@
                                     <fa-icon [icon]="['fas', 'desktop']" class="font-50-percent"></fa-icon>
                                 </div>
                                 <div class="p1 bg-success text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.hoststatusCount[0]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.hoststatusCountPercentage[0]+'%, transparent '+statusCounts.hoststatusCountPercentage[0]+'%)'"
                                      [title]="statusCounts.hoststatusCountPercentage[0]+'%'">
                                     {{ statusCounts.hoststatusCount[0] }}
                                 </div>
                                 <div class="bg-danger text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.hoststatusCount[1]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.hoststatusCountPercentage[1]+'%, transparent '+statusCounts.hoststatusCountPercentage[1]+'%)'"
                                      [title]="statusCounts.hoststatusCountPercentage[1]+'%'">
                                     {{ statusCounts.hoststatusCount[1] }}
                                 </div>
                                 <div class="bg-secondary text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.hoststatusCount[2]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.hoststatusCountPercentage[2]+'%, transparent '+statusCounts.hoststatusCountPercentage[2]+'%)'"
                                      [title]="statusCounts.hoststatusCountPercentage[2]+'%'">
                                     {{ statusCounts.hoststatusCount[2] }}
@@ -193,10 +196,12 @@
                                 <div class="bg-dark tactical-overview-flex-item text-white font-xx-small">
                                     {{ t('Unhandled') }}
                                 </div>
-                                <div class="bg-down-soft tactical-overview-flex-item text-white text-center">
+                                <div class="bg-down-soft tactical-overview-flex-item text-white text-center"
+                                     [ngClass]="{'opacity-25': !statusCounts.unhandledHosts[1]}">
                                     {{ statusCounts.unhandledHosts[1] }}
                                 </div>
-                                <div class="bg-unreachable-soft tactical-overview-flex-item text-white text-center">
+                                <div class="bg-unreachable-soft tactical-overview-flex-item text-white text-center"
+                                     [ngClass]="{'opacity-25': !statusCounts.unhandledHosts[2]}">
                                     {{ statusCounts.unhandledHosts[2] }}
                                 </div>
                             </div>
@@ -215,21 +220,25 @@
                                     <fa-icon [icon]="['fas', 'cog']" class="font-50-percent"></fa-icon>
                                 </div>
                                 <div class="p1 bg-success text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.servicestatusCount[0]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.servicestatusCountPercentage[0]+'%, transparent '+statusCounts.servicestatusCountPercentage[0]+'%)'"
                                      [title]="statusCounts.servicestatusCountPercentage[0]+'%'">
                                     {{ statusCounts.servicestatusCount[0] }}
                                 </div>
                                 <div class="bg-color-warning  text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.servicestatusCount[1]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.servicestatusCountPercentage[1]+'%, transparent '+statusCounts.servicestatusCountPercentage[1]+'%)'"
                                      [title]="statusCounts.servicestatusCountPercentage[1]+'%'">
                                     {{ statusCounts.servicestatusCount[1] }}
                                 </div>
-                                <div class="bg-danger  text-white tactical-overview-flex-item py-2"
+                                <div class="bg-danger text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.servicestatusCount[2]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.servicestatusCountPercentage[2]+'%, transparent '+statusCounts.servicestatusCountPercentage[2]+'%)'"
                                      [title]="statusCounts.servicestatusCountPercentage[2]+'%'">
                                     {{ statusCounts.servicestatusCount[2] }}
                                 </div>
-                                <div class="bg-secondary  text-white tactical-overview-flex-item py-2"
+                                <div class="bg-secondary text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.servicestatusCount[3]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.servicestatusCountPercentage[3]+'%, transparent '+statusCounts.servicestatusCountPercentage[3]+'%)'"
                                      [title]="statusCounts.servicestatusCountPercentage[3]+'%'">
                                     {{ statusCounts.servicestatusCount[3] }}
@@ -243,13 +252,16 @@
                                 <div class="bg-dark tactical-overview-flex-item text-white font-xx-small">
                                     {{ t('Unhandled') }}
                                 </div>
-                                <div class="bg-warning-soft tactical-overview-flex-item text-white text-center">
+                                <div class="bg-warning-soft tactical-overview-flex-item text-white text-center"
+                                     [ngClass]="{'opacity-25': !statusCounts.unhandledServices[1]}">
                                     {{ statusCounts.unhandledServices[1] }}
                                 </div>
-                                <div class="bg-critical-soft tactical-overview-flex-item text-white text-center">
+                                <div class="bg-critical-soft tactical-overview-flex-item text-white text-center"
+                                     [ngClass]="{'opacity-25': !statusCounts.unhandledServices[2]}">
                                     {{ statusCounts.unhandledServices[2] }}
                                 </div>
-                                <div class="bg-unknown-soft tactical-overview-flex-item text-white text-center">
+                                <div class="bg-unknown-soft tactical-overview-flex-item text-white text-center"
+                                     [ngClass]="{'opacity-25': !statusCounts.unhandledServices[3]}">
                                     {{ statusCounts.unhandledServices[3] }}
                                 </div>
                             </div>

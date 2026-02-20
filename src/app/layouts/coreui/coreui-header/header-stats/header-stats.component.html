@@ -13,11 +13,13 @@
                             <fa-icon [icon]="['fas', 'hdd']"></fa-icon>
                         </button>
                         <button cButton type="button" color="danger" class="px-3" cTooltip="{{t('Down')}}"
+                                [ngClass]="{'opacity-25': !hoststatusCount[1]}"
                                 [routerLink]="['/', 'hosts', 'index']"
                                 [queryParams]="{ hoststate: [1], sort: 'Hoststatus.last_state_change', direction: 'desc'}">
                             {{ hoststatusCount[1] }}
                         </button>
                         <button cButton type="button" color="secondary" class="px-3" cTooltip="{{t('Unreachable')}}"
+                                [ngClass]="{'opacity-25': !hoststatusCount[2]}"
                                 [routerLink]="['/', 'hosts', 'index']"
                                 [queryParams]="{ hoststate: [2], sort: 'Hoststatus.last_state_change', direction: 'desc'}">
                             {{ hoststatusCount[2] }}
@@ -26,10 +28,12 @@
                         <button cButton type="button" color="default" class="px-3">
                             <fa-icon [icon]="['fas', 'hdd']"></fa-icon>
                         </button>
-                        <button cButton type="button" color="danger" class="px-3" cTooltip="{{t('Down')}}">
+                        <button cButton type="button" color="danger" class="px-3" cTooltip="{{t('Down')}}"
+                                [ngClass]="{'opacity-25': !hoststatusCount[1]}">
                             {{ hoststatusCount[1] }}
                         </button>
-                        <button cButton type="button" color="secondary" class="px-3" cTooltip="{{t('Unreachable')}}">
+                        <button cButton type="button" color="secondary" class="px-3" cTooltip="{{t('Unreachable')}}"
+                                [ngClass]="{'opacity-25': !hoststatusCount[2]}">
                             {{ hoststatusCount[2] }}
                         </button>
                     }
@@ -44,17 +48,20 @@
                                     [queryParams]="{ servicestate: [0,1,2,3], sort: 'Servicestatus.last_state_change', direction: 'desc'}">
                                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                             </button>
-                            <button cButton type="button" color="danger" class="px-3" cTooltip="{{t('Critical')}}"
-                                    [routerLink]="['/', 'services', 'index']"
-                                    [queryParams]="{ servicestate: [2], sort: 'Servicestatus.last_state_change', direction: 'desc'}">
-                                {{ servicestatusCount[2] }}
-                            </button>
                             <button cButton type="button" color="warning" class="px-3" cTooltip="{{t('Warning')}}"
+                                    [ngClass]="{'opacity-25': !servicestatusCount[1]}"
                                     [routerLink]="['/', 'services', 'index']"
                                     [queryParams]="{ servicestate: [1], sort: 'Servicestatus.last_state_change', direction: 'desc'}">
                                 {{ servicestatusCount[1] }}
                             </button>
+                            <button cButton type="button" color="danger" class="px-3" cTooltip="{{t('Critical')}}"
+                                    [ngClass]="{'opacity-25': !servicestatusCount[2]}"
+                                    [routerLink]="['/', 'services', 'index']"
+                                    [queryParams]="{ servicestate: [2], sort: 'Servicestatus.last_state_change', direction: 'desc'}">
+                                {{ servicestatusCount[2] }}
+                            </button>
                             <button cButton type="button" color="secondary" class="px-3" cTooltip="{{t('Unknown')}}"
+                                    [ngClass]="{'opacity-25': !servicestatusCount[3]}"
                                     [routerLink]="['/', 'services', 'index']"
                                     [queryParams]="{ servicestate: [3], sort: 'Servicestatus.last_state_change', direction: 'desc'}">
                                 {{ servicestatusCount[3] }}
@@ -64,13 +71,16 @@
                                     cTooltip="{{t('All services')}}">
                                 <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                             </button>
-                            <button cButton type="button" color="danger" class="px-3" cTooltip="{{t('Critical')}}">
-                                {{ servicestatusCount[2] }}
-                            </button>
-                            <button cButton type="button" color="warning" class="px-3" cTooltip="{{t('Warning')}}">
+                            <button cButton type="button" color="warning" class="px-3" cTooltip="{{t('Warning')}}"
+                                    [ngClass]="{'opacity-25': !servicestatusCount[1]}">
                                 {{ servicestatusCount[1] }}
                             </button>
-                            <button cButton type="button" color="secondary" class="px-3" cTooltip="{{t('Unknown')}}">
+                            <button cButton type="button" color="danger" class="px-3" cTooltip="{{t('Critical')}}"
+                                    [ngClass]="{'opacity-25': !servicestatusCount[2]}">
+                                {{ servicestatusCount[2] }}
+                            </button>
+                            <button cButton type="button" color="secondary" class="px-3" cTooltip="{{t('Unknown')}}"
+                                    [ngClass]="{'opacity-25': !servicestatusCount[3]}">>
                                 {{ servicestatusCount[3] }}
                             </button>
                         }
