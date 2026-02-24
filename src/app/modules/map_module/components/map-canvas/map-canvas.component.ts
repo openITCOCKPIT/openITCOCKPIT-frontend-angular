@@ -102,7 +102,7 @@ export class MapCanvasComponent implements OnInit, AfterViewInit {
     }
 
     private setCanvasMinHeight(): void {
-        this.canvasHeight = 600;
+        this.canvasHeight = window.innerHeight - 200;
         //calculate canvas height based on background position
         if (this.canvasContainerRef) {
 
@@ -120,7 +120,7 @@ export class MapCanvasComponent implements OnInit, AfterViewInit {
                 let posY = background.y - mapCanvas.y;
                 let height = posY + backgroundHeight + 11;
 
-                if (height > 600) {
+                if (height > this.canvasHeight) {
                     this.canvasHeight = height;
                 }
             }
