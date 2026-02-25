@@ -147,7 +147,7 @@ export class KubernetesComponent extends WizardsAbstractComponent {
             const errorResponse: GenericValidationError = data.data as GenericValidationError;
             if (data.data) {
                 this.errors = errorResponse;
-                if (this.errors.hasOwnProperty('vcenter') || this.errors.hasOwnProperty('vmwareuser') || this.errors.hasOwnProperty('vmwarepass')) {
+                if (this.errors.hasOwnProperty('K8S_PORT')) {
                     this.notyService.scrollContentDivToTop();
                 }
             }

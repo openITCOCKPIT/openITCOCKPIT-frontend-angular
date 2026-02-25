@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { KubernetesComponent } from './kubernetes.component';
 
-describe('StorageComponent', () => {
+describe('KubernetesComponent', () => {
     let component: KubernetesComponent;
     let fixture: ComponentFixture<KubernetesComponent>;
 

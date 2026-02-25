@@ -101,11 +101,6 @@ export interface Commandargument {
 
 
 // WIZARD POST
-export interface KubernetesWizardPost extends WizardPost {
-    pveUsername: string
-    pveApiTokenName: string
-    pveApiTokenSecret: string
-}
 
 
 export interface KubernetesEndpointsWizardPost extends WizardPost {
