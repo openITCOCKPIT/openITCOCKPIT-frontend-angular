@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     AlertComponent,
+    AlertHeadingDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -83,7 +84,8 @@ import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
         RowComponent,
         ColComponent,
         AlertComponent,
-        MultiSelectComponent
+        MultiSelectComponent,
+        AlertHeadingDirective
     ],
     templateUrl: './external-monitorings-edit.component.html',
     styleUrl: './external-monitorings-edit.component.css',
