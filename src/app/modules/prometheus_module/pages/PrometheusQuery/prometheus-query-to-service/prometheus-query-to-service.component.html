@@ -429,10 +429,13 @@
 
             <div class="mb-3">
                 <label cLabel for="ValidateService.servicetemplate_id">
-                    <a [routerLink]="['/', 'servicetemplates', 'edit', ValidateService.servicetemplate_id]">
+                    <oitc-label-link
+                        [objectId]="ValidateService.servicetemplate_id"
+                        [route]="'/servicetemplates/edit'"
+                        [permissions]="'servicetemplates.edit'">
                         {{ t('Service template') }}
-                        <oitc-required-icon/>
-                    </a>
+                        <oitc-required-icon></oitc-required-icon>
+                    </oitc-label-link>
                 </label>
                 <oitc-select
                     name="ValidateService.servicetemplate_id"

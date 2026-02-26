@@ -58,6 +58,7 @@ import { sprintf } from 'sprintf-js';
 import { trim } from 'lodash';
 import { PrometheusHelpComponent } from '../../../components/prometheus-help/prometheus-help.component';
 import { PrometheusThresholdType } from '../prometheus.enum';
+import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 
 @Component({
     selector: 'oitc-prometheus-query-to-service',
@@ -92,7 +93,8 @@ import { PrometheusThresholdType } from '../prometheus.enum';
         FormFeedbackComponent,
         PrometheusThresholdsComponent,
         PrometheusHelpComponent,
-        CardFooterComponent
+        CardFooterComponent,
+        LabelLinkComponent
     ],
     templateUrl: './prometheus-query-to-service.component.html',
     styleUrl: './prometheus-query-to-service.component.css',

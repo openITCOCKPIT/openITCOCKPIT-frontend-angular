@@ -80,6 +80,10 @@ export class OrganizationalchartWidgetComponent extends BaseWidgetComponent impl
                     this.loadOrganizationalChart();
                 }
                 this.selectedAutoRefresh.key = this.config.refresh_key ?? 0;
+                if (this.selectedAutoRefresh.key > 0) {
+                    this.startRefreshInterval(this.selectedAutoRefresh.key);
+                }
+
                 this.cdr.markForCheck();
             });
         }

@@ -44,12 +44,13 @@ export function getDefaultHostgroupsIndexFilter(): HostgroupsIndexFilter {
 /** EXTENDED VIEW PARAMS **/
 export interface HostgroupsExtendedParams {
     // Same again? Maybe create an intermediate class? OOP FTW :-P
-    angular: true,
-    scroll: boolean,
-    page: number,
-
-    selected: number;
-    'filter[Hosts.name]': string,
+    angular: true
+    scroll: boolean
+    page: number
+    sort: string
+    direction: 'asc' | 'desc' | ''
+    selected: number
+    'filter[Hosts.name]': string
     'filter[Hoststatus.current_state][]': string[]
 }
 
@@ -58,7 +59,8 @@ export function getDefaultHostgroupsExtendedParams(): HostgroupsExtendedParams {
         angular: true,
         scroll: true,
         page: 1,
-
+        sort: 'cumulated_service_status',
+        direction: 'desc',
         selected: 0,
         "filter[Hosts.name]": '',
         "filter[Hoststatus.current_state][]": [],

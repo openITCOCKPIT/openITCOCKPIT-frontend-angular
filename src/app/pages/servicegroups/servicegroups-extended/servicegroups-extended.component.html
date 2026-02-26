@@ -161,8 +161,9 @@
             }
 
             @if (servicegroupExtended.servicegroup.Servicegroup.uuid !== '') {
-                <table bordered cTable
-                       class="mt-2 mb-0" hover striped>
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="serviceParams.sort" [matSortDirection]="serviceParams.direction">
                     <thead>
                     <tr class="border-bottom">
                         <td colspan="8" class="p-1 col-8">
@@ -188,7 +189,8 @@
                         <td colspan="4" class="p-1">
                             <div>
                                 <c-row class="mx-0 row">
-                                    <c-col class="col-3 bg-ok py-2 rounded-start text-white">
+                                    <c-col class="col-3 bg-ok py-2 rounded-start text-white"
+                                           [ngClass]="{'opacity-25': !servicegroupExtended.servicegroup.StatusSummary.ok}">
                                         <input cFormCheckInput
                                                type="checkbox"
                                                name="statusFilterup"
@@ -200,7 +202,8 @@
                                             {{ servicegroupExtended.servicegroup.StatusSummary.ok }}
                                         </label>
                                     </c-col>
-                                    <c-col class="col-3 bg-warning py-2  text-white">
+                                    <c-col class="col-3 bg-warning py-2  text-white"
+                                           [ngClass]="{'opacity-25': !servicegroupExtended.servicegroup.StatusSummary.warning}">
                                         <input cFormCheckInput
                                                type="checkbox"
                                                name="statusFilterdown"
@@ -212,7 +215,8 @@
                                             {{ servicegroupExtended.servicegroup.StatusSummary.warning }}
                                         </label>
                                     </c-col>
-                                    <c-col class="col-3 bg-critical py-2  text-white">
+                                    <c-col class="col-3 bg-critical py-2  text-white"
+                                           [ngClass]="{'opacity-25': !servicegroupExtended.servicegroup.StatusSummary.critical}">
                                         <input cFormCheckInput
                                                type="checkbox"
                                                name="statusFiltercritical"
@@ -224,7 +228,8 @@
                                             {{ servicegroupExtended.servicegroup.StatusSummary.critical }}
                                         </label>
                                     </c-col>
-                                    <c-col class="col-3 bg-unknown py-2 rounded-end  text-white">
+                                    <c-col class="col-3 bg-unknown py-2 rounded-end  text-white"
+                                           [ngClass]="{'opacity-25': !servicegroupExtended.servicegroup.StatusSummary.unknown}">
                                         <input cFormCheckInput
                                                type="checkbox"
                                                name="statusFilterunknown"
@@ -241,7 +246,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>
+                        <th scope="col" mat-sort-header="Servicestatus.current_state">
                             {{ t('Status') }}
                         </th>
                         <th class="text-center">
@@ -258,12 +263,24 @@
                                 P
                             </span>
                         </th>
-                        <th>{{ t('Host name') }}</th>
-                        <th class="col-4">{{ t('Service name') }}</th>
-                        <th>{{ t('State since') }}</th>
-                        <th>{{ t('Last check') }}</th>
-                        <th>{{ t('Next check') }}</th>
-                        <th>{{ t('Output') }}</th>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Host name') }}
+                        </th>
+                        <th class="col-4" scope="col" mat-sort-header="servicename">
+                            {{ t('Service name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicestatus.last_state_change">
+                            {{ t('State since') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicestatus.last_check">
+                            {{ t('Last check') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicestatus.next_check">
+                            {{ t('Next check') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicestatus.output">
+                            {{ t('Output') }}
+                        </th>
                         <th></th>
                     </tr>
                     </thead>

@@ -118,23 +118,42 @@
                 </div>
 
                 <div class="mb-3">
-                    <label cLabel for="additional_information">
-                        {{ t('Additional information') }}
-                    </label>
-
                     <c-row>
                         <c-col [xs]="12" [lg]="6">
-                            <oitc-bb-code-editor [(bbcode)]="post.additional_information"
-                                                 (bbcodeChange)="onChangeOfBbCode($event)"></oitc-bb-code-editor>
+                            <label cLabel for="additional_information">
+                                {{ t('Additional information') }}
+                            </label>
+                            <c-col>
+                                <oitc-bb-code-editor [(bbcode)]="post.additional_information"
+                                                     (bbcodeChange)="onChangeOfBbCode($event)"></oitc-bb-code-editor>
+                            </c-col>
+                            <c-col>
+                                <div class="text-break" [innerHTML]="additional_information_html | trustAsHtml"></div>
+                            </c-col>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="additional_information"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Can be used to display information or instructions') }}
+                            </div>
                         </c-col>
                         <c-col [xs]="12" [lg]="6">
-                            <div class="text-break" [innerHTML]="html | trustAsHtml"></div>
+                            <label cLabel for="further_information">
+                                {{ t('Further information') }}
+                            </label>
+                            <c-col>
+                                <oitc-bb-code-editor [(bbcode)]="post.further_information"
+                                                     (bbcodeChange)="onChangeOfBbCode($event)"></oitc-bb-code-editor>
+                            </c-col>
+                            <c-col>
+                                <div class="text-break" [innerHTML]="further_information_html | trustAsHtml"></div>
+                            </c-col>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="further_information"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Can be used to display further information or instructions') }}
+                            </div>
                         </c-col>
                     </c-row>
-                    <oitc-form-feedback [errors]="errors" errorField="additional_information"></oitc-form-feedback>
-                    <div class="help-block">
-                        {{ t('Can be used to display information or instructions') }}
-                    </div>
                 </div>
 
                 <c-form-check class="mb-3">
