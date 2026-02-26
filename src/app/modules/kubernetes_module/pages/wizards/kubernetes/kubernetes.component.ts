@@ -36,7 +36,7 @@ import { OitcAlertComponent } from '../../../../../components/alert/alert.compon
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
-    selector: 'oitc-endpoints',
+    selector: 'oitc-kubernetes-endpoints',
     imports: [
         BackButtonDirective,
         CardBodyComponent,
