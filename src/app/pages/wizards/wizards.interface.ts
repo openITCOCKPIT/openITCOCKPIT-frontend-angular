@@ -1,4 +1,5 @@
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { GenericValidationError } from '../../generic-responses';
 
 export interface WizardsIndex {
     wizards: { [key: string]: WizardElement }
@@ -170,5 +171,33 @@ export interface WizardAssignments {
     type_id: string
     servicetemplates: {
         _ids: number[]
+    }
+}
+
+// WIZARD SNMP POST
+
+export interface SNMPWizardPost extends WizardPost {
+    authPassword: string
+    authProtocol: string
+    privacyPassword: string
+    privacyProtocol: string
+    securityLevel: string
+    securityName: string
+    snmpCommunity: string
+    snmpVersion: string
+}
+
+// SNMP Discovery for Wizards
+export interface SnmpDiscovery {
+    success: boolean
+    errors: GenericValidationError | undefined
+    _csrfToken: any
+}
+
+export interface DiscoveryItem {
+    key: number
+    value: {
+        number: string
+        name: string
     }
 }
