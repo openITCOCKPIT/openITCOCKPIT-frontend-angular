@@ -124,6 +124,9 @@ export class KubernetesComponent extends WizardsAbstractComponent {
     protected TOKEN_FILE_PATH: string = '';
 
     protected override wizardLoad(result: KubernetesEndpointWizardGet): void {
+        // Remove the last entry from this.post.services.
+        this.post.services.pop();
+
         this.cdr.markForCheck();
         this.post.K8S_PORT = result.K8S_PORT;
         this.TOKEN_FILE_PATH = result.TOKEN_FILE_PATH;
