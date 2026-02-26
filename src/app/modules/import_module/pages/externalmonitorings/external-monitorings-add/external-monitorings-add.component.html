@@ -180,40 +180,37 @@
                                                 </c-alert>
                                             </c-col>
                                         </c-row>
+
+
                                     }
-                                    @if (messageTemplates.length > 0) {
-                                        <c-row>
-                                            <c-col></c-col>
-                                        </c-row>
-                                        <c-row class="px-2">
-                                            <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
-                                                <h4 cAlertHeading class="text-primary">
-                                                    {{ t('Detected message templates') }}
-                                                    <span class="help-block small">
-                                                        ({{ messageTemplates.length }})
-                                                    </span>
-                                                </h4>
-                                                <div class="mb-3">
-                                                    <label cLabel for="messageTemplates">
-                                                        {{ t('Message templates') }}
-                                                    </label>
-                                                    <oitc-multi-select
-                                                        name="messageTemplates"
-                                                        id="messageTemplates"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [(ngModel)]="post.message_template_ids"
-                                                        [options]="messageTemplates"
-                                                        class="flex-1"
-                                                        oitcFormError [errors]="errors"
-                                                        errorField="message_template_ids">
-                                                    </oitc-multi-select>
-                                                    <oitc-form-feedback [errors]="errors"
-                                                                        errorField="message_template_ids"></oitc-form-feedback>
-                                                </div>
-                                            </c-col>
-                                        </c-row>
-                                    }
+                                    <c-row class="px-2">
+                                        <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
+                                            <h4 cAlertHeading class="text-primary">
+                                                {{ t('Detected message templates') }}
+                                                <span class="help-block small">
+                                                    ({{ messageTemplates.length }})
+                                                </span>
+                                            </h4>
+                                            <div class="mb-3">
+                                                <label cLabel for="messageTemplates">
+                                                    {{ t('Message templates') }}
+                                                </label>
+                                                <oitc-multi-select
+                                                    name="messageTemplates"
+                                                    id="messageTemplates"
+                                                    optionValue="key"
+                                                    optionLabel="value"
+                                                    [(ngModel)]="post.message_template_ids"
+                                                    [options]="messageTemplates"
+                                                    class="flex-1"
+                                                    oitcFormError [errors]="errors"
+                                                    errorField="message_template_ids">
+                                                </oitc-multi-select>
+                                                <oitc-form-feedback [errors]="errors"
+                                                                    errorField="message_template_ids"></oitc-form-feedback>
+                                            </div>
+                                        </c-col>
+                                    </c-row>
                                 </fieldset>
                             </c-container>
                         }

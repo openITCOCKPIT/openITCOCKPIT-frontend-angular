@@ -3,6 +3,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
     AlertComponent,
+    AlertHeadingDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -92,7 +93,8 @@ import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
         MultiSelectComponent,
         AlertComponent,
         RowComponent,
-        ColComponent
+        ColComponent,
+        AlertHeadingDirective
     ],
     templateUrl: './external-monitorings-add.component.html',
     styleUrl: './external-monitorings-add.component.css',
