@@ -1,4 +1,4 @@
-import { WizardGet, WizardPost } from '../../../../../pages/wizards/wizards.interface';
+import { Service, WizardGet, WizardPost } from '../../../../../pages/wizards/wizards.interface';
 
 // WIZARD GET
 export interface KubernetesEndpointWizardGet extends WizardGet {
@@ -105,6 +105,7 @@ export interface Commandargument {
 
 export interface KubernetesEndpointsWizardPost extends WizardPost {
     host_id: number
+    endpointservices: Service[]
     TOKEN_FILE_PATH: string
     TOKEN_FILE_EXISTS: boolean
     K8S_PORT: number

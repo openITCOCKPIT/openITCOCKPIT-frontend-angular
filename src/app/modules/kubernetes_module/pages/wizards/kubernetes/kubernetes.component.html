@@ -18,6 +18,7 @@
             </li>
         </ol>
     </nav>
+
     <c-card>
         <c-card-header>
             <h5 cCardTitle>
@@ -37,7 +38,7 @@
                     class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Configure services for Kubernetes') }}
+                        {{ t('Configure services') }}
                     </span>
                 </div>
                 <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
@@ -74,10 +75,9 @@
                 <c-accordion class="mb-3">
                     <c-accordion-item #item0="cAccordionItem" [visible]="false">
                         <ng-template cTemplateId="accordionHeaderTemplate">
-                            <button class="wizard-accordion bg-info-subtle" (click)="item0.toggleItem()"
-                                    [collapsed]="!item0.visible" cAccordionButton>
+                            <button (click)="item0.toggleItem()" [collapsed]="!item0.visible" cAccordionButton>
                                 <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
-                                {{ t('Setup Guide') }}:
+                                {{ t('How to set up') }}
                             </button>
                         </ng-template>
                         <ng-template cTemplateId="accordionBodyTemplate">
@@ -157,7 +157,7 @@ kubectl get secret $SECRET -n monitoring -o jsonpath='&#123;.data.token&#125;' |
                     </label>
                     <c-input-group>
                         <span cInputGroupText>
-                            @if (this.post.TOKEN_FILE_EXISTS) {
+                            @if (this.TOKEN_FILE_EXISTS) {
                                 <fa-icon [icon]="['fas', 'check']" class="text-success"
                                          [cTooltip]="t('The token file was found')"></fa-icon>
                             } @else {
@@ -167,67 +167,201 @@ kubectl get secret $SECRET -n monitoring -o jsonpath='&#123;.data.token&#125;' |
                         </span>
                         <input cFormControl
                                [readOnly]="true"
-                               id="post.TOKEN_FILE_PATH"
+                               id="TOKEN_FILE_PATH"
                                type="text"
                                [disabled]="true"
-                               name="post.TOKEN_FILE_PATH"
-                               [value]="post.TOKEN_FILE_PATH"
+                               name="TOKEN_FILE_PATH"
+                               [value]="TOKEN_FILE_PATH"
                                oitcFormError [errors]="errors" errorField="TOKEN_FILE_PATH">
                     </c-input-group>
                     <oitc-form-feedback [errors]="errors" errorField="TOKEN_FILE_PATH"></oitc-form-feedback>
                 </div>
             </fieldset>
 
-            <div>
-                <ng-template #contentTemplate let-data>
-                    @if (data) {
-                        <span class="h5 text-info">
-                            {{ t('Discovering Endpoints for Services') }}
-                        </span>
-                    }
-                    <br>
-                    {{ t('Scan Kubernetes for Endpoints. Only possible with a working Kubernetes configuration') }}
-                </ng-template>
-
-                <ng-template #buttonTemplate let-data>
-                    <div class="ms-2">
-                        <button
-                            cButton
-                            class="ripple"
-                            color="primary"
-                            type="button"
-                            [disabled]="DiscoveryIsRunning"
-                            (click)="runEndpointDiscovery()">
-                            @if (DiscoveryIsRunning) {
-                                <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
-                            } @else {
-                                <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
-                            }
-                            {{ t('Start Endpoint discovery') }}
-                        </button>
-                    </div>
-                </ng-template>
-
-                <oitc-alert
-                    baseIcon="circle"
-                    color="info"
-                    [icon]="['fas', 'info']"
-                    [contentTemplate]="contentTemplate"
-                    [buttonTemplate]="buttonTemplate"></oitc-alert>
-
-            </div>
-
+            <oitc-wizards-dynamicfields
+                [(post)]="post.services"
+                [errors]="errors"
+                [titleErrorField]="'services'"
+                [title]="'Kubernetes Services'|transloco"
+            />
             <c-row class="mb-1">
                 <c-col md="6">
                     <oitc-form-feedback [errors]="errors" errorField="kubernetesendpointcommand"></oitc-form-feedback>
                 </c-col>
             </c-row>
-            <oitc-wizards-dynamicfields
-                [(post)]="post.services"
-                [errors]="errors"
-                [titleErrorField]="'services'"
-                [title]="'Kubernetes Endpoints'|transloco"
-            />
+            <fieldset>
+                <legend class="fs-md fieldset-legend-border-bottom">
+                    <h4 [ngClass]="{'text-danger': errors.hasOwnProperty('endpointservices') }">
+                        {{ t('Kubernetes Endpoint Services') }}
+                    </h4>
+                    <span class="help-block italic text-primary small">
+                        {{ t('To avoiding duplicate service configuration, the existing services with the same name will be automatically deselected') }}
+                    </span>
+                    <oitc-form-feedback [errors]="errors" errorField="endpointservices"></oitc-form-feedback>
+                </legend>
+
+                <div>
+                    <ng-template #contentTemplate let-data>
+                        @if (data) {
+                            <span class="h5 text-info">
+                                {{ t('Discovering Endpoints for Services') }}
+                            </span>
+                        }
+                        <br>
+                        {{ t('Scan Kubernetes for Endpoints. Only possible with a working Kubernetes configuration') }}
+                    </ng-template>
+
+                    <ng-template #buttonTemplate let-data>
+                        <div class="ms-2">
+                            <button
+                                cButton
+                                class="ripple"
+                                color="primary"
+                                type="button"
+                                [disabled]="DiscoveryIsRunning"
+                                (click)="runEndpointDiscovery()">
+                                @if (DiscoveryIsRunning) {
+                                    <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                                } @else {
+                                    <fa-icon [icon]="['fas', 'wand-sparkles']"></fa-icon>
+                                }
+                                {{ t('Start Endpoint discovery') }}
+                            </button>
+                        </div>
+
+                    </ng-template>
+
+                    <oitc-alert
+                        baseIcon="circle"
+                        color="info"
+                        [icon]="['fas', 'info']"
+                        [contentTemplate]="contentTemplate"
+                        [buttonTemplate]="buttonTemplate"></oitc-alert>
+
+                </div>
+
+                <c-row class="mb-3">
+                    <c-col md="6">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            </span>
+                            <ng-select
+                                id="tags"
+                                name="tags"
+                                [items]="[]"
+                                [(ngModel)]="searchedTags"
+                                [addTag]="true"
+                                [multiple]="true"
+                                [selectOnTab]="true"
+                                [isOpen]="false"
+                                [placeholder]="'Filter by memory pool name'|transloco">
+                            </ng-select>
+                            <span cInputGroupText>
+                                <c-form-check>
+                                    <input
+                                        cFormCheckInput
+                                        name="toggleNetworkCheckboxes"
+                                        id="toggleNetworkCheckboxes"
+                                        type="checkbox"
+                                        (ngModelChange)="toggleCheck($event)"
+                                        [(ngModel)]="checked"/>
+                                    <label cFormCheckLabel for="toggleNetworkCheckboxes">
+                                        {{ t('Toggle checkboxes') }}
+                                    </label>
+                                </c-form-check>
+                            </span>
+                        </c-input-group>
+                    </c-col>
+                    <c-col md="2">
+                        <button cButton
+                                class="ripple"
+                                color="primary"
+                                (click)="toggleAccordionClose(!accordionClosed)">
+                            @if (!accordionClosed) {
+                                <fa-icon [icon]="['fas', 'down-left-and-up-right-to-center']"></fa-icon>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'up-right-and-down-left-from-center']"></fa-icon>
+                            }
+                            {{ t('Collapse all') }}
+                        </button>
+                    </c-col>
+                </c-row>
+
+
+                <ul class="m-0 p-0">
+                    @for (service of post.endpointservices; track service) {
+                        <ol class="m-0 p-0">
+                            @if (!service.servicecommandargumentvalues.length) {
+                                @if (hasName(service.name)) {
+                                    <div class="mb-3 py-3 border rounded form-group accordion-button-padding-left">
+                                        <div class="d-flex align-items-center">
+                                            <input cFormCheckInput
+                                                   type="checkbox"
+                                                   [id]="service.name"
+                                                   class="alert-icon lg-checkbox"
+                                                   name="checkbox"
+                                                   [(ngModel)]="service.createService"/>
+                                            <label class="custom-control-label custom-control-label-ok"
+                                                   [for]="service.name">
+                                                {{ service.name }}
+                                                <span class="help-block italic">
+                                                    {{ service.description }}
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                            } @else {
+                                @if (hasName(service.name)) {
+                                    <c-accordion class="mb-3">
+                                        <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
+                                            <ng-template cTemplateId="accordionHeaderTemplate">
+                                                <div class="form-group wizard-accordion bg-info-subtle"
+                                                     (click)="accordionItem.toggleItem()"
+                                                     [collapsed]="!accordionItem.visible" cAccordionButton>
+                                                    <div class="d-flex align-items-center">
+                                                        <input cFormCheckInput
+                                                               type="checkbox"
+                                                               [id]="service.name"
+                                                               class="alert-icon lg-checkbox"
+                                                               name="checkbox"
+                                                               (click)="$event.stopPropagation()"
+                                                               [(ngModel)]="service.createService"/>
+                                                        <label class="custom-control-label custom-control-label-ok"
+                                                               (click)="$event.stopPropagation()"
+                                                               [for]="service.name">
+                                                            {{ service.name }}
+                                                            <span class="help-block italic">
+                                                                {{ service.description }}
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template cTemplateId="accordionBodyTemplate">
+                                                <div class="accordion-body">
+                                                    @for (commandArgument of service.servicecommandargumentvalues; track commandArgument) {
+                                                        <div
+                                                            class="mb-3 form-group {{detectColor(commandArgument.commandargument.human_name)}}"
+                                                        >
+                                                            {{ commandArgument.commandargument.human_name }}
+                                                            <input class="form-control"
+                                                                   type="text"
+                                                                   [disabled]="!service.createService"
+                                                                   [(ngModel)]="commandArgument.value">
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </ng-template>
+                                        </c-accordion-item>
+                                    </c-accordion>
+                                }
+                            }
+                        </ol>
+                    }
+                </ul>
+            </fieldset>
 
 
         </c-card-body>
