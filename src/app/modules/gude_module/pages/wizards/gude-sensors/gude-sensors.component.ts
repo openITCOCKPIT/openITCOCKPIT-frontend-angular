@@ -37,7 +37,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { Service, Servicetemplate } from '../../../../../pages/wizards/wizards.interface';
+import { ServiceForWizard, ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-gude-sensors',
@@ -125,8 +125,8 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
         {key: '3DES', value: '3des'},
         {key: '3DESDE', value: '3desde'},
     ];
-    protected sensorsServicetemplateTemp: Servicetemplate = {} as Servicetemplate;
-    protected sensorsServicetemplateHumidity: Servicetemplate = {} as Servicetemplate;
+    protected sensorsServicetemplateTemp: ServicetemplateForWizard = {} as ServicetemplateForWizard;
+    protected sensorsServicetemplateHumidity: ServicetemplateForWizard = {} as ServicetemplateForWizard;
 
     protected override wizardLoad(result: GudeSensorsWizardGet): void {
         this.sensorsServicetemplateTemp = result.sensorsServicetemplateTemp;
@@ -141,7 +141,7 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
 
         // Remove all sensors from request where createService is false.
         request.sensorServices = request.sensorServices.filter(
-            (sensorService: Service) => sensorService.createService && this.hasName(sensorService.name)
+            (sensorService: ServiceForWizard) => sensorService.createService && this.hasName(sensorService.name)
         );
 
         this.subscriptions.add(this.WizardService.submit(request)
@@ -171,7 +171,7 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
 
     protected toggleCheck(checked: boolean): void {
         this.checked = checked;
-        this.post.sensorServices.forEach((service: Service) => {
+        this.post.sensorServices.forEach((service: ServiceForWizard) => {
             if (!this.hasName(service.name)) {
                 return;
             }

@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { HpServerHardwareWizardService } from './hpserverhardware-wizard.service';
-import { HpServerHardwareWizardPost } from './hpserverhardware-wizard.interface';
 import {
     CardBodyComponent,
     CardComponent,
@@ -24,6 +23,7 @@ import {
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import { SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-hpserverhardware',
@@ -53,21 +53,20 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 })
 export class HpserverhardwareComponent extends WizardsAbstractComponent {
     protected override WizardService: HpServerHardwareWizardService = inject(HpServerHardwareWizardService);
-    protected override post: HpServerHardwareWizardPost = {
+    protected override post: SNMPWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
 // Fields for the wizard
         authPassword: '',
         authProtocol: 'md5',
-        interfaces: [],
         privacyPassword: '',
         privacyProtocol: 'des',
         securityLevel: '1',
         securityName: '',
         snmpCommunity: '',
         snmpVersion: '2'
-    } as HpServerHardwareWizardPost;
+    } as SNMPWizardPost;
 
     protected snmpVersions: SelectKeyValueString[] = [
         {value: '1', key: 'SNMP V 1'},

@@ -28,13 +28,10 @@ import { RouterLink } from '@angular/router';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
-import {
-    ProxmoxStorageWizardGet,
-    ProxmoxStorageWizardPost,
-    StorageServiceTemplate
-} from './proxmox-storage-wizard.interface';
+import { ProxmoxStorageWizardGet, ProxmoxStorageWizardPost } from './proxmox-storage-wizard.interface';
 import { ProxmoxStorageWizardService } from './proxmox-storage-wizard.service';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
+import { ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-storage',
@@ -84,7 +81,7 @@ export class StorageComponent extends WizardsAbstractComponent {
         services: [],
     } as ProxmoxStorageWizardPost;
 
-    protected storageServicetemplate: StorageServiceTemplate = {} as StorageServiceTemplate;
+    protected storageServicetemplate: ServicetemplateForWizard = {} as ServicetemplateForWizard;
 
     protected override wizardLoad(result: ProxmoxStorageWizardGet): void {
         this.cdr.markForCheck();

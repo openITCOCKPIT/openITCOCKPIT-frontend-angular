@@ -1,25 +1,25 @@
 import {
-    DiscoveryItem,
-    Service,
-    Servicetemplate,
-    SnmpDiscovery,
+    ServiceForWizard,
+    ServicetemplateForWizard,
     SNMPWizardPost,
+    WizardDiscovery,
+    WizardDiscoveryItem,
     WizardGet
 } from '../../../../../pages/wizards/wizards.interface';
 
 // WIZARD GET
 export interface GudeSensorsWizardGet extends WizardGet {
-    sensorsServicetemplateTemp: Servicetemplate
-    sensorsServicetemplateHumidity: Servicetemplate
+    sensorsServicetemplateTemp: ServicetemplateForWizard
+    sensorsServicetemplateHumidity: ServicetemplateForWizard
 }
 
 
 // WIZARD POST
 export interface GudeSensorsWizardPost extends SNMPWizardPost {
-    sensorServices: Service[]
+    sensorServices: ServiceForWizard[]
 }
 
 // SNMP Discovery
-export interface GudeSensorsSnmpDiscovery extends SnmpDiscovery {
-    sensors: DiscoveryItem[]
+export interface GudeSensorsSnmpDiscovery extends WizardDiscovery {
+    sensors: WizardDiscoveryItem[]
 }

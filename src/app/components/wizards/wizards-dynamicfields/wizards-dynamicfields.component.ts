@@ -30,7 +30,7 @@ import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { Service } from '../../../pages/wizards/wizards.interface';
+import { ServiceForWizard } from '../../../pages/wizards/wizards.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -73,9 +73,9 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
     public checked: boolean = false;
     public accordionClosed: boolean = true;
 
-    @Input() post: Service[] = [];
+    @Input() post: ServiceForWizard[] = [];
     @Input() errors: GenericValidationError = {} as GenericValidationError;
-    @Output() postChange = new EventEmitter<Service[]>();
+    @Output() postChange = new EventEmitter<ServiceForWizard[]>();
 
     constructor() {
         effect(() => {
@@ -94,7 +94,7 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
 
     protected toggleCheck(checked: boolean): void {
         this.checked = checked;
-        this.post.forEach((service: Service) => {
+        this.post.forEach((service: ServiceForWizard) => {
             if (!this.hasName(service.name)) {
                 return;
             }

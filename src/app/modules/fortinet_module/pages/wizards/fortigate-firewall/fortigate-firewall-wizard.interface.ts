@@ -1,6 +1,6 @@
-import { Service, SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
+import { ServiceForWizard, SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
 
 // WIZARD POST
 export interface FortigateFirewallWizardPost extends SNMPWizardPost {
-    interfaces: Service[]
+    interfaces: ServiceForWizard[]
 }

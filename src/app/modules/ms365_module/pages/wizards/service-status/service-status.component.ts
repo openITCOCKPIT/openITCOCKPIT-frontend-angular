@@ -28,7 +28,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { GenericValidationError } from '../../../../../generic-responses';
 import { M365ServiceStatusService } from './service-status.service';
 import { Ms365ServiceStatusWizardGet, Ms365ServiceStatusWizardPost } from './service-status.interface';
-import { Servicetemplate } from '../../../../../pages/wizards/wizards.interface';
+import { ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-storage',
@@ -73,7 +73,7 @@ export class ServiceStatusComponent extends WizardsAbstractComponent {
         services: [],
     } as Ms365ServiceStatusWizardPost;
 
-    protected storageServicetemplate: Servicetemplate = {} as Servicetemplate;
+    protected storageServicetemplate: ServicetemplateForWizard = {} as ServicetemplateForWizard;
 
     protected override wizardLoad(result: Ms365ServiceStatusWizardGet): void {
         this.cdr.markForCheck();
