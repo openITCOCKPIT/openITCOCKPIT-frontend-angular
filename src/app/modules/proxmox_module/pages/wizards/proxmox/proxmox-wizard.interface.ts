@@ -15,11 +15,3 @@ export interface ProxmoxWizardPost extends WizardPost {
     pveApiTokenSecret: string
     storageServices: any[] | undefined
 }
-
-
-export interface ProxmoxStoragesWizardPost {
-    host_id: number
-}
-
-export interface StorageDiscovery {
-}
