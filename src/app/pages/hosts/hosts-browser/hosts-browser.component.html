@@ -146,6 +146,35 @@
                             }
                         </c-nav-item>
                     }
+                    @if (( this.PermissionsService.hasPermissionObservable(['packages', 'index']) | async ) && softwareInformation?.SoftwareInformationExists) {
+                        <c-nav-item>
+                            <button
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.SoftwareInventory}"
+                                (click)="changeTab(HostBrowserTabs.SoftwareInventory)">
+                                <fa-icon [icon]="['fas', 'square-binary']"></fa-icon>
+                                {{ t('Software status') }}
+                                @if (softwareInformation && softwareInformation.packagesHostDetails) {
+                                    @if (!softwareInformation.packagesHostDetails.available_updates &&
+                                    !softwareInformation.packagesHostDetails.available_security_updates) {
+                                        <fa-icon [icon]="['fas', 'check']"
+                                                 [title]="'Up to Date' | transloco"
+                                                 [cTextColor]="'success'"></fa-icon>
+                                    }
+                                    @if (softwareInformation.packagesHostDetails.available_updates && !softwareInformation.packagesHostDetails.available_security_updates) {
+                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                                 [title]="'Update Available' | transloco"
+                                                 [cTextColor]="'warning'"></fa-icon>
+                                    } @else if (softwareInformation.packagesHostDetails.available_security_updates) {
+                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                                 [title]="'Security Update Available' | transloco"
+                                                 [cTextColor]="'danger'"></fa-icon>
+                                    }
+                                }
+                            </button>
+                        </c-nav-item>
+                    }
+
                 </c-nav>
             </c-card-header>
             <c-card-body>
@@ -1224,6 +1253,136 @@
                     </div>
                 }
                 <!-- IsarFlow Module end -->
+                <!-- Software inventory start -->
+                @if (selectedTab == HostBrowserTabs.SoftwareInventory && softwareInformation) {
+                    @if (this.PermissionsService.hasPermissionObservable(['packages', 'index']) | async) {
+                        @if (softwareInformation.SoftwareInformationExists && softwareInformation.packagesHostDetails) {
+                            <c-row class="equal-height-row d-flex flex-wrap">
+                                <c-col [xs]="12" [md]="6" [lg]="4" [xl]="4" class="mb-3">
+                                    <c-card class="h-100">
+                                        <c-card-body class="card-body pt-1">
+                                            <h2 class="pt-2">
+                                                <oitc-patchstatus-icon
+                                                    [type]="softwareInformation.packagesHostDetails.os_type"
+                                                    [platform]="softwareInformation.packagesHostDetails.os_name"
+                                                    [version]="softwareInformation.packagesHostDetails.os_version"
+                                                    [family]="softwareInformation.packagesHostDetails.os_family"
+                                                ></oitc-patchstatus-icon>
+                                            </h2>
+
+                                            <h5 class="position-absolute bottom-0 py-3">
+                                                {{ softwareInformation.packagesHostDetails.os_version }}
+                                            </h5>
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                                <c-col [xs]="12" [md]="6" [lg]="4" [xl]="2" class="mb-3">
+                                    <c-card class="h-100">
+                                        <c-card-body class="card-body p-2">
+                                            <div class="text-end">
+                                                <fa-icon [icon]="['fas', 'info-circle']" [cTextColor]="'info'"
+                                                         [size]="'2x'"></fa-icon>
+                                            </div>
+                                            <table cTable>
+                                                <tr>
+                                                    <th> {{ t('Uptime') }}</th>
+                                                    <td class="text-end"> {{ softwareInformation.packagesHostDetails.uptime_in_words }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th> {{ t('Last update') }}</th>
+                                                    <td class="text-end"> {{ softwareInformation.packagesHostDetails.last_update_user }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th> {{ t('Reboot required') }}</th>
+                                                    <td class="text-end">
+                                                        @if (softwareInformation.packagesHostDetails.reboot_required) {
+                                                            <span class="text-danger">{{ t('Yes') }}</span>
+                                                        } @else {
+                                                            <span class="text-success">{{ t('No') }}</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                                <c-col [xs]="12" [md]="6" [lg]="4" [xl]="2" class="mb-3">
+                                    <c-card class="h-100">
+                                        <c-card-body class="card-body p-2">
+                                            <div class="text-end">
+                                                <fa-icon [icon]="['fas', 'chart-pie']" [cTextColor]="'primary'"
+                                                         [size]="'2x'"></fa-icon>
+                                            </div>
+                                            <div class="fs-3 fw-semibold">
+                                                {{ softwareInformation.packagesHostDetails.total }}
+                                            </div>
+                                            <div>
+                                                @if (softwareInformation.packagesHostDetails.os_type === 'linux') {
+                                                    {{ t('Installed packages') }}
+                                                } @else {
+                                                    {{ t('Installed apps') }}
+                                                }
+                                            </div>
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                                <c-col [xs]="12" [md]="6" [lg]="4" [xl]="2" class="mb-3">
+                                    <c-card class="h-100">
+                                        <c-card-body class="card-body p-2">
+                                            <div class="text-end">
+                                                <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                                         [cTextColor]="'warning'"
+                                                         [size]="'2x'"></fa-icon>
+                                            </div>
+                                            <div class="fs-3 fw-semibold">
+                                                {{ softwareInformation.packagesHostDetails.available_updates }}
+                                            </div>
+                                            <div>
+                                                {{ t('Updates') }}
+                                            </div>
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                                <c-col [xs]="12" [md]="6" [lg]="4" [xl]="2" class="mb-3">
+                                    <c-card class="h-100">
+                                        <c-card-body class="card-body p-2">
+                                            <div class="text-end">
+                                                <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                                         [cTextColor]="'danger'"
+                                                         [size]="'2x'"></fa-icon>
+                                            </div>
+                                            <div class="fs-3 fw-semibold">
+                                                {{ softwareInformation.packagesHostDetails.available_security_updates }}
+                                            </div>
+                                            <div>
+                                                {{ t('Security updates') }}
+                                            </div>
+                                        </c-card-body>
+                                    </c-card>
+                                </c-col>
+                            </c-row>
+
+                            @switch (softwareInformation.packagesHostDetails.os_type) {
+                                @case ('linux') {
+                                    <oitc-browser-software-linux [hostId]="Number(result.mergedHost.id)">
+                                    </oitc-browser-software-linux>
+                                }
+                                @case ('windows') {
+                                    <oitc-browser-software-windows [hostId]="Number(result.mergedHost.id)">
+                                    </oitc-browser-software-windows>
+                                }
+                                @case ('macos') {
+                                    <oitc-browser-software-macos
+                                        [hostId]="Number(result.mergedHost.id)">
+
+                                    </oitc-browser-software-macos>
+                                }
+                            }
+                        }
+                    }
+                }
+
+                <!-- Software inventory end -->
                 <!-- SLA Module start -->
                 @if (selectedTab == HostBrowserTabs.SLA) {
                     <div>

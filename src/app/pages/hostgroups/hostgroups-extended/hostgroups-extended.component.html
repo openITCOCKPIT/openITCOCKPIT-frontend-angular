@@ -203,7 +203,9 @@
                     @if (hostgroupExtended.Hostgroup.uuid === '') {
                         <oitc-table-loader></oitc-table-loader>
                     }
-                    <table bordered cTable class="mt-2 mb-0 mb-3" hover striped>
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                           (matSortChange)="onSortChange($event)"
+                           [matSortActive]="hostParams.sort" [matSortDirection]="hostParams.direction">
                         <thead>
                         <tr class="border-bottom">
                             <td colspan="8" class="p-1 col-8">
@@ -229,7 +231,8 @@
                             <td colspan="4" class="p-1">
                                 <div>
                                     <c-row class="mx-0 row">
-                                        <c-col class="col-4 bg-ok py-2 rounded-start text-white">
+                                        <c-col class="col-4 bg-ok py-2 rounded-start text-white"
+                                               [ngClass]="{'opacity-25': !hostgroupExtended.StatusSummary.up}">
                                             <input cFormCheckInput
                                                    type="checkbox"
                                                    name="statusFilterup"
@@ -241,7 +244,8 @@
                                                 {{ hostgroupExtended.StatusSummary.up }}
                                             </label>
                                         </c-col>
-                                        <c-col class="col-4 bg-down py-2  text-white">
+                                        <c-col class="col-4 bg-down py-2  text-white"
+                                               [ngClass]="{'opacity-25': !hostgroupExtended.StatusSummary.down}">
                                             <input cFormCheckInput
                                                    type="checkbox"
                                                    name="statusFilterdown"
@@ -253,7 +257,8 @@
                                                 {{ hostgroupExtended.StatusSummary.down }}
                                             </label>
                                         </c-col>
-                                        <c-col class="col-4 bg-unreachable py-2 rounded-end  text-white">
+                                        <c-col class="col-4 bg-unreachable py-2 rounded-end  text-white"
+                                               [ngClass]="{'opacity-25': !hostgroupExtended.StatusSummary.unreachable}">
                                             <input cFormCheckInput
                                                    type="checkbox"
                                                    name="statusFilterunreachable"
@@ -271,10 +276,13 @@
                         </tr>
                         <tr>
                             <th></th>
-                            <th>
+                            <th scope="col" mat-sort-header="Hoststatus.current_state">
                                 {{ t('Status') }}
                             </th>
-                            <th></th>
+                            <th scope="col" mat-sort-header="cumulated_service_status">
+                                <fa-icon [icon]="['fas', 'cogs']"
+                                         [title]="'cumalative service status' | transloco"></fa-icon>
+                            </th>
                             <th class="text-center">
                                 <fa-icon [icon]="['fas', 'user']" [title]="'is acknowledged' | transloco"></fa-icon>
                             </th>
@@ -286,11 +294,21 @@
                                     P
                                 </span>
                             </th>
-                            <th class="col-4">{{ t('Host name') }}</th>
-                            <th>{{ t('State since') }}</th>
-                            <th>{{ t('Last check') }}</th>
-                            <th>{{ t('Next check') }}</th>
-                            <th>{{ t('Service Summary') }}</th>
+                            <th scope="col" class="col-4" mat-sort-header="Hosts.name">
+                                {{ t('Host name') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Hoststatus.last_state_change">
+                                {{ t('State since') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Hoststatus.last_check">
+                                {{ t('Last check') }}
+                            </th>
+                            <th scope="col" mat-sort-header="Hoststatus.next_check">
+                                {{ t('Next check') }}
+                            </th>
+                            <th>
+                                {{ t('Service Summary') }}
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -374,21 +392,25 @@
                                              class="btn-group btn-group-justified w-100"
                                              role="group">
                                             <a class="btn btn-success state-button-small"
+                                               [ngClass]="{'opacity-25': !host.ServicestatusSummary.state.ok}"
                                                [queryParams]="{servicestate:0,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
                                                [routerLink]="['/', 'services', 'index']">
                                                 {{ host.ServicestatusSummary.state.ok }}
                                             </a>
                                             <a class="btn btn-warning state-button-small"
+                                               [ngClass]="{'opacity-25': !host.ServicestatusSummary.state.warning}"
                                                [queryParams]="{servicestate:1,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
                                                [routerLink]="['/', 'services', 'index']">
                                                 {{ host.ServicestatusSummary.state.warning }}
                                             </a>
                                             <a class="btn btn-danger state-button-small"
+                                               [ngClass]="{'opacity-25': !host.ServicestatusSummary.state.critical}"
                                                [queryParams]="{servicestate:2,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
                                                [routerLink]="['/', 'services', 'index']">
                                                 {{ host.ServicestatusSummary.state.critical }}
                                             </a>
                                             <a class="btn btn-secondary state-button-small"
+                                               [ngClass]="{'opacity-25': !host.ServicestatusSummary.state.unknown}"
                                                [queryParams]="{servicestate:3,sort:'Servicestatus.last_state_change', host_id: host.Host.id, direction: 'desc'}"
                                                [routerLink]="['/', 'services', 'index']">
                                                 {{ host.ServicestatusSummary.state.unknown }}
@@ -396,16 +418,20 @@
                                         </div>
                                         <div *oitcPermission="['services', 'index'];negate:true"
                                              class="btn-group btn-group-justified w-100" role="group">
-                                            <a class="btn btn-success state-button-small">
+                                            <a class="btn btn-success state-button-small"
+                                               [ngClass]="{'opacity-25': !host.ServicestatusSummary.state.ok}">
                                                 {{ host.ServicestatusSummary.state.ok }}
                                             </a>
-                                            <a class="btn btn-warning state-button-small">
+                                            <a class="btn btn-warning state-button-small"
+                                               [ngClass]="{'opacity-25': !host.ServicestatusSummary.state.warning}">
                                                 {{ host.ServicestatusSummary.state.warning }}
                                             </a>
-                                            <a class="btn btn-danger state-button-small">
+                                            <a class="btn btn-danger state-button-small"
+                                               [ngClass]="{'opacity-25': !host.ServicestatusSummary.state.critical}">
                                                 {{ host.ServicestatusSummary.state.critical }}
                                             </a>
-                                            <a class="btn btn-secondary state-button-small">
+                                            <a class="btn btn-secondary state-button-small"
+                                               [ngClass]="{'opacity-25': !host.ServicestatusSummary.state.unknown}">
                                                 {{ host.ServicestatusSummary.state.unknown }}
                                             </a>
                                         </div>
@@ -498,7 +524,8 @@
                                                         <div>
                                                             <c-row class="mx-0 row">
                                                                 <c-col
-                                                                    class="col-3 bg-ok py-2 rounded-start text-white">
+                                                                    class="col-3 bg-ok py-2 rounded-start text-white"
+                                                                    [ngClass]="{'opacity-25': !host.ServicestatusSummary.state.ok}">
                                                                     <input cFormCheckInput
                                                                            type="checkbox"
                                                                            name="statusFilterServiceOk"
@@ -512,7 +539,8 @@
                                                                         {{ t('ok') }}
                                                                     </label>
                                                                 </c-col>
-                                                                <c-col class="col-3 bg-warning py-2  text-white">
+                                                                <c-col class="col-3 bg-warning py-2  text-white"
+                                                                       [ngClass]="{'opacity-25': !host.ServicestatusSummary.state.warning}">
                                                                     <input cFormCheckInput
                                                                            type="checkbox"
                                                                            name="statusFilterServiceWarning"
@@ -527,7 +555,8 @@
                                                                         {{ t('warning') }}
                                                                     </label>
                                                                 </c-col>
-                                                                <c-col class="col-3 bg-critical py-2 text-white">
+                                                                <c-col class="col-3 bg-critical py-2 text-white"
+                                                                       [ngClass]="{'opacity-25': !host.ServicestatusSummary.state.critical}">
                                                                     <input cFormCheckInput
                                                                            type="checkbox"
                                                                            name="statusFilterServiceCritical"
@@ -543,7 +572,8 @@
                                                                     </label>
                                                                 </c-col>
                                                                 <c-col
-                                                                    class="col-3 bg-unknown py-2 rounded-end  text-white">
+                                                                    class="col-3 bg-unknown py-2 rounded-end  text-white"
+                                                                    [ngClass]="{'opacity-25': !host.ServicestatusSummary.state.unknown}">
                                                                     <input cFormCheckInput
                                                                            type="checkbox"
                                                                            name="statusFilterServiceUnknown"
@@ -640,7 +670,7 @@
                                                                     </span>
                                                                 }
                                                             </td>
-                                                            <td>
+                                                            <td class="word-break">
                                                                 <span *oitcPermission="['services', 'browser']">
                                                                     <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
                                                                         {{ service.Service.servicename }}

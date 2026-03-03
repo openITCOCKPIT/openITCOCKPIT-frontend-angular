@@ -45,7 +45,8 @@ export interface ServicegroupsExtendedParams {
     angular: true,
     scroll: boolean,
     page: number,
-
+    sort: string
+    direction: 'asc' | 'desc' | ''
     selected: number;
     'filter[Services.name]': string,
     'filter[servicename]': string,
@@ -57,7 +58,8 @@ export function getDefaultServicegroupsExtendedParams(): ServicegroupsExtendedPa
         angular: true,
         scroll: true,
         page: 1,
-
+        sort: 'Servicestatus.current_state',
+        direction: 'desc',
         selected: 0,
         "filter[Services.name]": '',
         "filter[servicename]": '',

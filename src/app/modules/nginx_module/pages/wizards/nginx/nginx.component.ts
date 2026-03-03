@@ -20,10 +20,10 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
-import { NginxWizardPost } from './nginx-wizard.interface';
 import { NginxWizardService } from './nginx-wizard.service';
 import { RouterLink } from '@angular/router';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
+import { WizardPost } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-nginx',
@@ -59,13 +59,11 @@ export class NginxComponent extends WizardsAbstractComponent {
     protected override WizardService: NginxWizardService = inject(NginxWizardService);
     protected useSsl: boolean = false;
 
-    protected override post: NginxWizardPost = {
+    protected override post: WizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
-// Nginx specific fields
-        hostNginxOptions: ''
-    } as NginxWizardPost;
+    } as WizardPost;
 
 
     protected useSslChanged(): void {

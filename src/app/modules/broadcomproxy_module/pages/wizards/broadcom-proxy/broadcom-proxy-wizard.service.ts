@@ -2,22 +2,22 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { WizardsService } from '../../../../../pages/wizards/wizards.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { BroadcomProxyWizardGet, BroadcomProxyWizardPost } from './broadcom-proxy-wizard.interface';
+import { SNMPWizardPost, WizardGet } from '../../../../../pages/wizards/wizards.interface';
 
 @Injectable({
     providedIn: 'root'
 })
 export class BroadcomProxyWizardService extends WizardsService {
 
-    public fetch(hostId: number): Observable<BroadcomProxyWizardGet> {
-        return this.http.get<BroadcomProxyWizardGet>(`${this.proxyPath}/broadcom_proxy_module/wizards/broadcomProxy/${hostId}.json?angular=true`).pipe(
-            map((data: BroadcomProxyWizardGet): BroadcomProxyWizardGet => {
+    public fetch(hostId: number): Observable<WizardGet> {
+        return this.http.get<WizardGet>(`${this.proxyPath}/broadcom_proxy_module/wizards/broadcomProxy/${hostId}.json?angular=true`).pipe(
+            map((data: WizardGet): WizardGet => {
                 return data;
             })
         );
     }
 
-    public submit(post: BroadcomProxyWizardPost): Observable<GenericResponseWrapper> {
+    public submit(post: SNMPWizardPost): Observable<GenericResponseWrapper> {
         return this.http.post<any>(`${this.proxyPath}/broadcom_proxy_module/wizards/broadcomProxy.json?angular=true`, post)
             .pipe(
                 map(data => {

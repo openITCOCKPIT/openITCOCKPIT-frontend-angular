@@ -37,6 +37,8 @@ export interface AgentConfigBoolFields {
     verify_autossl_expiry: boolean
     use_https: boolean
     use_https_verify: boolean
+    enable_packagemanager: boolean
+    enable_packagemanager_update_check: boolean
     cpustats: boolean
     memory: boolean
     swap: boolean
@@ -60,6 +62,8 @@ export interface AgentConfigIntFields {
     bind_port: number
     check_interval: number
     push_timeout: number
+    packagemanager_check_interval: number
+    packagemanager_description_length: number
 }
 
 export interface AgentConfigArrayFields {

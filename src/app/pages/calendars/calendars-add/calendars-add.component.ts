@@ -112,8 +112,6 @@ export class CalendarsAddComponent implements OnInit, OnDestroy {
                 this.countries = result.countries;
                 this.cdr.markForCheck();
             });
-
-        this.loadHolidays();
     }
 
     public ngOnDestroy() {

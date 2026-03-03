@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { ArubaNetworkWizardService } from './aruba-network-wizard.service';
-import { ArubaNetworkWizardPost } from './aruba-network-wizard.interface';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -24,6 +23,7 @@ import {
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import { SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-aruba-network',
@@ -57,21 +57,20 @@ export class ArubaNetworkComponent extends WizardsAbstractComponent {
     public checked: boolean = false;
     public accordionClosed: boolean = true;
 
-    protected override post: ArubaNetworkWizardPost = {
+    protected override post: SNMPWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
 // Fields for the wizard
         authPassword: '',
         authProtocol: 'md5',
-        interfaces: [],
         privacyPassword: '',
         privacyProtocol: 'des',
         securityLevel: '1',
         securityName: '',
         snmpCommunity: '',
         snmpVersion: '2'
-    } as ArubaNetworkWizardPost;
+    } as SNMPWizardPost;
     protected snmpVersions: SelectKeyValueString[] = [
         {value: '1', key: 'SNMP V 1'},
         {value: '2', key: 'SNMP V 2c'},

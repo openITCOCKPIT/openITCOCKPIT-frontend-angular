@@ -90,7 +90,8 @@ export class StatuspagegroupsAddStepOneComponent implements OnInit, OnDestroy {
 
     public containers: SelectKeyValue[] = [];
 
-    public html: string = '';
+    public additional_information_html: string = '';
+    public further_information_html: string = '';
 
     private subscriptions: Subscription = new Subscription();
     private readonly StatuspagegroupsService = inject(StatuspagegroupsService);
@@ -123,6 +124,7 @@ export class StatuspagegroupsAddStepOneComponent implements OnInit, OnDestroy {
             name: '',
             description: null,
             additional_information: '',
+            further_information: '',
             show_ticker: true,
             container_id: 0,
             statuspagegroup_categories: [],
@@ -133,7 +135,8 @@ export class StatuspagegroupsAddStepOneComponent implements OnInit, OnDestroy {
 
     protected onChangeOfBbCode(event: any): void {
         if (this.post) {
-            this.html = this.BbCodeParserService.parse(this.post.additional_information);
+            this.additional_information_html = this.BbCodeParserService.parse(this.post.additional_information);
+            this.further_information_html = this.BbCodeParserService.parse(this.post.further_information);
         }
     }
 
