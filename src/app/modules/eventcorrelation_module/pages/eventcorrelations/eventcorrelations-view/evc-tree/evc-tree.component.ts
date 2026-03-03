@@ -11,7 +11,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { EFConnectableSide, EFMarkerType, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
-import * as dagre from "@dagrejs/dagre"
+import dagre from '@dagrejs/dagre';
 
 import { IPoint, PointExtensions } from '@foblex/2d';
 import { generateGuid } from '@foblex/utils';
@@ -38,6 +38,10 @@ import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-dir
 import { EvcServicestatusToasterService } from './evc-servicestatus-toaster/evc-servicestatus-toaster.service';
 import { EvcServicestatusToasterComponent } from './evc-servicestatus-toaster/evc-servicestatus-toaster.component';
 import { FormsModule } from '@angular/forms';
+
+// Dagre is currently working on the TypeScript modules, maybe we need this in the future
+// import dagre, { Node } from '@dagrejs/dagre';
+// import { Edge } from '@dagrejs/graphlib';
 //import { NgxResizeObserverModule } from 'ngx-resize-observer';
 
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
