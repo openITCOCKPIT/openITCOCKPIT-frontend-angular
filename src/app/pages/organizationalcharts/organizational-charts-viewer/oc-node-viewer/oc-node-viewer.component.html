@@ -169,6 +169,7 @@
                                     <fa-icon [icon]="['fas', 'desktop']" class="font-50-percent"></fa-icon>
                                 </div>
                                 <div class="p1 bg-success text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.hoststatusCount[0]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.hoststatusCountPercentage[0]+'%, transparent '+statusCounts.hoststatusCountPercentage[0]+'%)'"
                                      [title]="statusCounts.hoststatusCountPercentage[0]+'%'">
                                     @if (statusCounts.hoststatusCount[0] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
@@ -181,6 +182,7 @@
                                     }
                                 </div>
                                 <div class="bg-danger text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.hoststatusCount[1]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.hoststatusCountPercentage[1]+'%, transparent '+statusCounts.hoststatusCountPercentage[1]+'%)'"
                                      [title]="statusCounts.hoststatusCountPercentage[1]+'%'">
                                     @if (statusCounts.hoststatusCount[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
@@ -193,6 +195,7 @@
                                     }
                                 </div>
                                 <div class="bg-secondary text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.hoststatusCount[2]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.hoststatusCountPercentage[2]+'%, transparent '+statusCounts.hoststatusCountPercentage[2]+'%)'"
                                      [title]="statusCounts.hoststatusCountPercentage[2]+'%'">
                                     @if (statusCounts.hoststatusCount[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
@@ -213,7 +216,8 @@
                                 <div class="bg-dark tactical-overview-flex-item text-white font-xx-small">
                                     {{ t('Unhandled') }}
                                 </div>
-                                <div class="bg-down-soft tactical-overview-flex-item text-white text-center">
+                                <div class="bg-down-soft tactical-overview-flex-item text-white text-center"
+                                     [ngClass]="{'opacity-25': !statusCounts.unhandledHosts[1] }">
                                     @if (statusCounts.unhandledHosts[1] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
                                         <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
                                            [queryParams]="{id: statusCounts.unhandledHosts.hostIds[1], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
@@ -223,7 +227,8 @@
                                         {{ statusCounts.unhandledHosts[1] }}
                                     }
                                 </div>
-                                <div class="bg-unreachable-soft tactical-overview-flex-item text-white text-center">
+                                <div class="bg-unreachable-soft tactical-overview-flex-item text-white text-center"
+                                     [ngClass]="{'opacity-25': !statusCounts.unhandledHosts[2] }">
                                     @if (statusCounts.unhandledHosts[2] > 0 && ( PermissionsService.hasPermissionObservable(['hosts', 'index'])|async )) {
                                         <a [routerLink]="['/', 'hosts', 'index']" class="text-white"
                                            [queryParams]="{id: statusCounts.unhandledHosts.hostIds[2], sort: 'Hoststatus.last_state_change',  direction: 'desc'}">
@@ -249,6 +254,7 @@
                                     <fa-icon [icon]="['fas', 'cog']" class="font-50-percent"></fa-icon>
                                 </div>
                                 <div class="p1 bg-success text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.servicestatusCount[0]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.servicestatusCountPercentage[0]+'%, transparent '+statusCounts.servicestatusCountPercentage[0]+'%)'"
                                      [title]="statusCounts.servicestatusCountPercentage[0]+'%'">
                                     @if (statusCounts.servicestatusCount[0] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
@@ -261,6 +267,7 @@
                                     }
                                 </div>
                                 <div class="bg-color-warning  text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.servicestatusCount[1]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.servicestatusCountPercentage[1]+'%, transparent '+statusCounts.servicestatusCountPercentage[1]+'%)'"
                                      [title]="statusCounts.servicestatusCountPercentage[1]+'%'">
                                     @if (statusCounts.servicestatusCount[1] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
@@ -272,7 +279,8 @@
                                         {{ statusCounts.servicestatusCount[1] }}
                                     }
                                 </div>
-                                <div class="bg-danger  text-white tactical-overview-flex-item py-2"
+                                <div class="bg-danger text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.servicestatusCount[2]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.servicestatusCountPercentage[2]+'%, transparent '+statusCounts.servicestatusCountPercentage[2]+'%)'"
                                      [title]="statusCounts.servicestatusCountPercentage[2]+'%'">
                                     @if (statusCounts.servicestatusCount[2] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
@@ -285,6 +293,7 @@
                                     }
                                 </div>
                                 <div class="bg-secondary  text-white tactical-overview-flex-item py-2"
+                                     [ngClass]="{'opacity-25': !statusCounts.servicestatusCount[3]}"
                                      [style.background]="'linear-gradient(0deg, rgba(255,255,255,0.3) '+statusCounts.servicestatusCountPercentage[3]+'%, transparent '+statusCounts.servicestatusCountPercentage[3]+'%)'"
                                      [title]="statusCounts.servicestatusCountPercentage[3]+'%'">
                                     @if (statusCounts.servicestatusCount[3] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
@@ -305,7 +314,8 @@
                                 <div class="bg-dark tactical-overview-flex-item text-white font-xx-small">
                                     {{ t('Unhandled') }}
                                 </div>
-                                <div class="bg-warning-soft tactical-overview-flex-item text-white text-center">
+                                <div class="bg-warning-soft tactical-overview-flex-item text-white text-center"
+                                     [ngClass]="{'opacity-25': !statusCounts.unhandledServices[1]}">
                                     @if (statusCounts.unhandledServices[1] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
                                         <a [routerLink]="['/', 'services', 'index']" class="text-white"
                                            [queryParams]="{id: statusCounts.unhandledServices.serviceIds[1], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
@@ -315,7 +325,8 @@
                                         {{ statusCounts.unhandledServices[1] }}
                                     }
                                 </div>
-                                <div class="bg-critical-soft tactical-overview-flex-item text-white text-center">
+                                <div class="bg-critical-soft tactical-overview-flex-item text-white text-center"
+                                     [ngClass]="{'opacity-25': !statusCounts.unhandledServices[2]}">
                                     @if (statusCounts.unhandledServices[2] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
                                         <a [routerLink]="['/', 'services', 'index']" class="text-white"
                                            [queryParams]="{id: statusCounts.unhandledServices.serviceIds[2], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
@@ -325,7 +336,8 @@
                                         {{ statusCounts.unhandledServices[2] }}
                                     }
                                 </div>
-                                <div class="bg-unknown-soft tactical-overview-flex-item text-white text-center">
+                                <div class="bg-unknown-soft tactical-overview-flex-item text-white text-center"
+                                     [ngClass]="{'opacity-25': !statusCounts.unhandledServices[3]}">
                                     @if (statusCounts.unhandledServices[3] > 0 && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
                                         <a [routerLink]="['/', 'services', 'index']" class="text-white"
                                            [queryParams]="{id: statusCounts.unhandledServices.serviceIds[3], sort: 'Servicestatus.last_state_change',  direction: 'desc'}">

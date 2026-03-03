@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import {
-    ExternalMonitoringConfig,
+    ExternalMonitoringConfig, ExternalMonitoringConnect,
     ExternalMonitoringPost,
     ExternalMonitoringsIndexParams,
     ExternalMonitoringsIndexRoot,
@@ -13,6 +13,7 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { ExternalSystemConnect, ExternalSystemPost } from '../externalsystems/external-systems.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -159,4 +160,16 @@ export class ExternalMonitoringsService {
             })
         )
     }
+
+    public testConnection(params: ExternalMonitoringPost): Observable<ExternalMonitoringConnect> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<ExternalMonitoringConnect>(`${proxyPath}/import_module/external_monitorings/testConnection.json?angular=true`,
+            params // cast ExternalMonitoringPost into object
+        ).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
 }

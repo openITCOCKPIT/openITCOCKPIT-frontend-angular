@@ -2,6 +2,7 @@ import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator
 import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { ExternalMonitoringSystems } from './external-monitoring-systems.enum';
+import { ConnectMessage } from '../externalsystems/external-systems.interface';
 
 export interface ExternalMonitoringsIndexRoot extends PaginateOrScroll {
     externalMonitorings: ExternalMonitoring[]
@@ -24,7 +25,8 @@ export interface ExternalMonitoringPost {
     name: string
     description: string
     system_type: ExternalMonitoringSystems | ''
-    json_data: any
+    json_data: any,
+    message_template_ids?: number[],
 }
 
 export interface ExternalMonitoringsIndexParams {
@@ -142,4 +144,14 @@ export interface FlowchiefNodesByStringParams {
     externalMonitoringId: number,
     'filter[FlowchiefNodes.path]': string,
     'selected[]': number[],
+}
+
+export interface ExternalMonitoringConnect {
+    status: ExternalMonitoringConnectStatus
+    messageTemplates: SelectKeyValue[]
+}
+
+export interface ExternalMonitoringConnectStatus {
+    status: boolean
+    msg: ConnectMessage
 }
