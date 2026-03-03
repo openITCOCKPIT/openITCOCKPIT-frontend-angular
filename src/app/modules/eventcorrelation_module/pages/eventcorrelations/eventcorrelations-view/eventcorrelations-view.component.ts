@@ -81,10 +81,23 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private cdr = inject(ChangeDetectorRef);
+    public highlightHostId: number = 0;
+    public highlightServiceId: number = 0;
 
     public ngOnInit(): void {
         this.route.queryParams.subscribe(params => {
             this.id = Number(this.route.snapshot.paramMap.get('id'));
+            // Query String Parameters
+            const highlightHostId = Number(params['highlightHostId']) || 0;
+            if (highlightHostId > 0) {
+                this.highlightHostId = highlightHostId;
+            }
+
+            const highlightServiceId = Number(params['highlightServiceId']) || 0;
+            if (highlightServiceId > 0) {
+                this.highlightServiceId = highlightServiceId;
+            }
+
             this.loadEventcorrelation();
         });
     }

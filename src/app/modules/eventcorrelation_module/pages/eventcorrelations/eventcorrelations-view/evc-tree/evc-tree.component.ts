@@ -62,6 +62,7 @@ interface INodeViewModel {
     connectorId: string
     position: IPoint,
     evcNode: EvcGraphNode
+    highlight: boolean
 }
 
 
@@ -155,6 +156,9 @@ export class EvcTreeComponent {
     private isInitialized = false;
 
     private toasterTimeout: any = null;
+
+    public highlightHostId = input<number>(0);
+    public highlightServiceId = input<number>(0);
 
     constructor() {
         this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered unknown');
@@ -300,6 +304,13 @@ export class EvcTreeComponent {
                 // This centers the operator node between the service nodes
                 xpos = xpos + (SERVICE_WIDTH - OPERATOR_WIDTH) / 2;
             }
+            let highlight = false;
+
+            if (node.evcNode.type === 'service') {
+                if (node.evcNode.service?.host.id == this.highlightHostId() || node.evcNode.service?.id == this.highlightServiceId()) {
+                    highlight = true;
+                }
+            }
 
             return {
                 id: generateGuid(),
@@ -308,6 +319,7 @@ export class EvcTreeComponent {
                     x: xpos,//evcNode.x,
                     y: evcNode.y
                 },
+                highlight: highlight,
                 evcNode: evcNode.evcNode
             }
         });

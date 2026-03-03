@@ -84,6 +84,7 @@
                         <c-nav-item class="px-1">
                             <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'editCorrelation']"
                                [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', rootElement.host.id]"
+                               [queryParams]="{'highlightHostId': this.highlightHostId, 'highlightServiceId': this.highlightServiceId}"
                                cButton
                                class="ripple"
                                color="primary"
@@ -165,7 +166,10 @@
                             [connectionLine]="connectionLine"
                             [evcDirection]="evcTreeDirection"
                             (resetEvent)="resetHandler($event)"
-                            [isWidget]="false"></oitc-evc-tree>
+                            [isWidget]="false"
+                            [highlightHostId]="highlightHostId"
+                            [highlightServiceId]="highlightServiceId">
+                        </oitc-evc-tree>
                     </div>
                 }
             </c-card-body>
