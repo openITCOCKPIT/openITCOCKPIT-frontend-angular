@@ -37,7 +37,7 @@ import { NgClass } from '@angular/common';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { Service, Servicetemplate } from '../../../../../pages/wizards/wizards.interface';
+import { ServiceForWizard, ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
 import { KubernetesEndpointsWizardPost, KubernetesEndpointWizardGet } from './kubernetes-wizard.interface';
 
 @Component({
@@ -119,7 +119,7 @@ export class KubernetesComponent extends WizardsAbstractComponent {
         services: [],
     };
 
-    protected endpointServicetemplate: Servicetemplate = {} as Servicetemplate;
+    protected endpointServicetemplate: ServicetemplateForWizard = {} as ServicetemplateForWizard;
     protected TOKEN_FILE_EXISTS: boolean = false;
     protected TOKEN_FILE_PATH: string = '';
 
@@ -138,13 +138,13 @@ export class KubernetesComponent extends WizardsAbstractComponent {
         let request: KubernetesEndpointsWizardPost = JSON.parse(JSON.stringify(this.post));
 
         // Remove all services from request where createService is false.
-        request.services = request.services.filter((service: Service) => {
+        request.services = request.services.filter((service: ServiceForWizard) => {
             return service.createService && this.childComponent.hasName(service.name);
         });
 
         // Remove all Apache Tomcat memory pool services from request where createService is false.
         request.endpointservices = request.endpointservices.filter(
-            (memoryPoolServices: Service) => memoryPoolServices.createService && this.hasName(memoryPoolServices.name)
+            (memoryPoolServices: ServiceForWizard) => memoryPoolServices.createService && this.hasName(memoryPoolServices.name)
         );
 
         this.subscriptions.add(this.WizardService.submit(request)
@@ -234,7 +234,7 @@ export class KubernetesComponent extends WizardsAbstractComponent {
 
     protected toggleCheck(checked: boolean): void {
         this.checked = checked;
-        this.post.endpointservices.forEach((service: Service) => {
+        this.post.endpointservices.forEach((service: ServiceForWizard) => {
             if (!this.hasName(service.name)) {
                 return;
             }

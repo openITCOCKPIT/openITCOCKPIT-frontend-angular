@@ -1,7 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
-import { FujitsuEternusTapeLibraryWizardService } from './fujitsu-eternus-tape-library-wizard.service';
+import { BroadcomBESWizardService } from './broadcom-bes-wizard.service';
+import { BroadcomBESWizardPost } from './broadcom-bes-wizard.interface';
+import { FormsModule } from '@angular/forms';
+import {
+    WizardsDynamicfieldsComponent
+} from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -15,18 +21,14 @@ import {
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
+
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormsModule } from '@angular/forms';
-import {
-    WizardsDynamicfieldsComponent
-} from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
+import { WizardGet } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
-    selector: 'oitc-fujitsu-eternus-tape-library',
+    selector: 'oitc-broadcom-bes',
     imports: [
         RouterLink,
         FaIconComponent,
@@ -47,36 +49,35 @@ import { SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
         FormErrorDirective,
         FormsModule
     ],
-    templateUrl: './fujitsu-eternus-tape-library.component.html',
-    styleUrl: './fujitsu-eternus-tape-library.component.css',
+    templateUrl: './broadcom-bes.component.html',
+    styleUrl: './broadcom-bes.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FujitsuEternusTapeLibraryComponent extends WizardsAbstractComponent {
+export class BroadcomBESComponent extends WizardsAbstractComponent {
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
-    protected override WizardService: FujitsuEternusTapeLibraryWizardService = inject(FujitsuEternusTapeLibraryWizardService);
+    protected override WizardService: BroadcomBESWizardService = inject(BroadcomBESWizardService);
     public checked: boolean = false;
-    public accordionClosed: boolean = true;
 
-    protected override post: SNMPWizardPost = {
+    protected override post: BroadcomBESWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
 // Fields for the wizard
         authPassword: '',
         authProtocol: 'md5',
-        interfaces: [],
         privacyPassword: '',
         privacyProtocol: 'des',
         securityLevel: '1',
         securityName: '',
         snmpCommunity: '',
         snmpVersion: '2'
-    } as SNMPWizardPost;
+    } as BroadcomBESWizardPost;
     protected snmpVersions: SelectKeyValueString[] = [
         {value: '1', key: 'SNMP V 1'},
         {value: '2', key: 'SNMP V 2c'},
         {value: '3', key: 'SNMP V 3'},
-    ];
+    ]
+
 
     protected securityLevels: SelectKeyValueString[] = [
         {key: 'authPriv', value: '1'},
@@ -94,4 +95,8 @@ export class FujitsuEternusTapeLibraryComponent extends WizardsAbstractComponent
         {key: '3DES', value: '3des'},
         {key: '3DESDE', value: '3desde'},
     ];
+
+    protected override wizardLoad(result: WizardGet): void {
+        super.wizardLoad(result);
+    }
 }

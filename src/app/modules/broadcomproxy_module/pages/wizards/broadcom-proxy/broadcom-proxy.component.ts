@@ -17,12 +17,12 @@ import {
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { BroadcomProxyWizardPost } from './broadcom-proxy-wizard.interface';
 import { BroadcomProxyWizardService } from './broadcom-proxy-wizard.service';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
+import { SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
 
 
 @Component({
@@ -55,7 +55,7 @@ export class BroadcomProxyComponent extends WizardsAbstractComponent {
     protected override WizardService: BroadcomProxyWizardService = inject(BroadcomProxyWizardService);
     public checked: boolean = false;
 
-    protected override post: BroadcomProxyWizardPost = {
+    protected override post: SNMPWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
@@ -68,7 +68,7 @@ export class BroadcomProxyComponent extends WizardsAbstractComponent {
         securityName: '',
         snmpCommunity: '',
         snmpVersion: '2'
-    } as BroadcomProxyWizardPost;
+    } as SNMPWizardPost;
     protected snmpVersions: SelectKeyValueString[] = [
         {value: '1', key: 'SNMP V 1'},
         {value: '2', key: 'SNMP V 2c'},

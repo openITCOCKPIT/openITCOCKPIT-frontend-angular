@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { WizardsService } from '../../../../../pages/wizards/wizards.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { GudeSensorsWizardGet, GudeSensorsWizardPost, SnmpDiscovery } from './gude-sensors-wizard.interface';
+import { GudeSensorsSnmpDiscovery, GudeSensorsWizardGet, GudeSensorsWizardPost } from './gude-sensors-wizard.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -37,10 +37,10 @@ export class GudeSensorsWizardService extends WizardsService {
 
     }
 
-    public executeGudeSensorsDiscovery(post: GudeSensorsWizardPost): Observable<SnmpDiscovery | GenericResponseWrapper> {
-        return this.http.post<SnmpDiscovery>(`${this.proxyPath}/gude_module/wizards/executeGudeSensorsDiscovery/${post.host_id}.json?angular=true`, post)
+    public executeGudeSensorsDiscovery(post: GudeSensorsWizardPost): Observable<GudeSensorsSnmpDiscovery | GenericResponseWrapper> {
+        return this.http.post<GudeSensorsSnmpDiscovery>(`${this.proxyPath}/gude_module/wizards/executeGudeSensorsDiscovery/${post.host_id}.json?angular=true`, post)
             .pipe(
-                map((data: SnmpDiscovery) => {
+                map((data: GudeSensorsSnmpDiscovery) => {
                     return data
                 }),
                 catchError((error: any) => {

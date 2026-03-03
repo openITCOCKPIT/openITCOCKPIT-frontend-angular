@@ -35,15 +35,11 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import {
-    StorageServiceTemplate
-} from '../../../../proxmox_module/pages/wizards/storage/proxmox-storage-wizard.interface';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { N0 } from '../../../../nwc_module/pages/wizards/networkbasic/networkbasic-wizard.interface';
-import { Service } from '../../../../../pages/wizards/wizards.interface';
+import { ServiceForWizard, ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-apache-tomcat',
@@ -106,7 +102,7 @@ export class ApacheTomcatComponent extends WizardsAbstractComponent {
         memoryPoolServices: []
     } as ApacheTomcatWizardPost;
 
-    protected memoryPoolServicetemplate: StorageServiceTemplate = {} as StorageServiceTemplate;
+    protected memoryPoolServicetemplate: ServicetemplateForWizard = {} as ServicetemplateForWizard;
 
     protected override wizardLoad(result: ApacheTomcatWizardGet): void {
         this.cdr.markForCheck();
@@ -127,13 +123,13 @@ export class ApacheTomcatComponent extends WizardsAbstractComponent {
         let request: ApacheTomcatWizardPost = JSON.parse(JSON.stringify(this.post));
 
         // Remove all services from request where createService is false.
-        request.services = request.services.filter((service: Service) => {
+        request.services = request.services.filter((service: ServiceForWizard) => {
             return service.createService && this.childComponent.hasName(service.name);
         });
 
         // Remove all Apache Tomcat memory pool services from request where createService is false.
         request.memoryPoolServices = request.memoryPoolServices.filter(
-            (memoryPoolServices: Service) => memoryPoolServices.createService && this.hasName(memoryPoolServices.name)
+            (memoryPoolServices: ServiceForWizard) => memoryPoolServices.createService && this.hasName(memoryPoolServices.name)
         );
 
         this.subscriptions.add(this.WizardService.submit(request)
@@ -205,7 +201,7 @@ export class ApacheTomcatComponent extends WizardsAbstractComponent {
 
     protected toggleCheck(checked: boolean): void {
         this.checked = checked;
-        this.post.memoryPoolServices.forEach((service: N0) => {
+        this.post.memoryPoolServices.forEach((service: ServiceForWizard) => {
             if (!this.hasName(service.name)) {
                 return;
             }

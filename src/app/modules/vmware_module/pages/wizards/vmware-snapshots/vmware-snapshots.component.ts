@@ -1,10 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import {
-    SnapshotServicetemplate,
-    VmwareSnapshotsWizardGet,
-    VmwareSnapshotsWizardPost
-} from './vmware-snapshots-wizard.interface';
+import { VmwareSnapshotsWizardGet, VmwareSnapshotsWizardPost } from './vmware-snapshots-wizard.interface';
 import { VmwareSnapshotsWizardService } from './vmware-snapshots-wizard.service';
 import { PaginatorModule } from 'primeng/paginator';
 import { FormsModule } from '@angular/forms';
@@ -43,6 +39,7 @@ import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-vmware-snapshots',
@@ -102,7 +99,7 @@ export class VmwareSnapshotsComponent extends WizardsAbstractComponent {
         typeId: 'vmware-snapshots'
     } as VmwareSnapshotsWizardPost;
 
-    protected snapshotServicetemplate: SnapshotServicetemplate = {} as SnapshotServicetemplate;
+    protected snapshotServicetemplate: ServicetemplateForWizard = {} as ServicetemplateForWizard;
 
     static readonly SNAPSHOT_REGEX = '.*';
 
