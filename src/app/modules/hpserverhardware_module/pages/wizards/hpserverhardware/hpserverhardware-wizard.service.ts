@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { WizardsService } from '../../../../../pages/wizards/wizards.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { SNMPWizardPost, WizardGet } from '../../../../../pages/wizards/wizards.interface';
+import { WizardGet } from '../../../../../pages/wizards/wizards.interface';
+import { HpServerHardwareWizardPost } from './hpserverhardware-wizard.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,7 @@ export class HpServerHardwareWizardService extends WizardsService {
         );
     }
 
-    public submit(post: SNMPWizardPost): Observable<GenericResponseWrapper> {
+    public submit(post: HpServerHardwareWizardPost): Observable<GenericResponseWrapper> {
         return this.http.post<any>(`${this.proxyPath}/hpserverhardware_module/wizards/hpserverhardware.json?angular=true`, post)
             .pipe(
                 map(data => {

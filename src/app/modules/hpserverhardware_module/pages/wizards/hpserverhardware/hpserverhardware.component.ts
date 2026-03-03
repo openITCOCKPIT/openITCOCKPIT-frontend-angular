@@ -23,7 +23,7 @@ import {
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
+import { HpServerHardwareWizardPost } from './hpserverhardware-wizard.interface';
 
 @Component({
     selector: 'oitc-hpserverhardware',
@@ -53,10 +53,11 @@ import { SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
 })
 export class HpserverhardwareComponent extends WizardsAbstractComponent {
     protected override WizardService: HpServerHardwareWizardService = inject(HpServerHardwareWizardService);
-    protected override post: SNMPWizardPost = {
+    protected override post: HpServerHardwareWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
+        interfaces: [],
 // Fields for the wizard
         authPassword: '',
         authProtocol: 'md5',
@@ -66,7 +67,7 @@ export class HpserverhardwareComponent extends WizardsAbstractComponent {
         securityName: '',
         snmpCommunity: '',
         snmpVersion: '2'
-    } as SNMPWizardPost;
+    } as HpServerHardwareWizardPost;
 
     protected snmpVersions: SelectKeyValueString[] = [
         {value: '1', key: 'SNMP V 1'},
