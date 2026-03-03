@@ -1,18 +1,7 @@
 // WIZARD GET
-import { WizardGet, WizardPost } from '../../../../../pages/wizards/wizards.interface';
-
-export interface PrinterWizardGet extends WizardGet {
-}
+import { SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
 
 // WIZARD POST
-export interface PrinterWizardPost extends WizardPost {
-    authPassword: string
-    authProtocol: string
+export interface PrinterWizardPost extends SNMPWizardPost {
     interfaces: any[]
-    privacyPassword: string
-    privacyProtocol: string
-    securityLevel: string
-    securityName: string
-    snmpCommunity: string
-    snmpVersion: string
 }

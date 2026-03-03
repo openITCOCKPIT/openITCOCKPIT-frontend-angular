@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { HpServerHardwareWizardService } from './hpserverhardware-wizard.service';
-import { HpServerHardwareWizardPost } from './hpserverhardware-wizard.interface';
 import {
     CardBodyComponent,
     CardComponent,
@@ -24,6 +23,7 @@ import {
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import { HpServerHardwareWizardPost } from './hpserverhardware-wizard.interface';
 
 @Component({
     selector: 'oitc-hpserverhardware',
@@ -57,10 +57,10 @@ export class HpserverhardwareComponent extends WizardsAbstractComponent {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
+        interfaces: [],
 // Fields for the wizard
         authPassword: '',
         authProtocol: 'md5',
-        interfaces: [],
         privacyPassword: '',
         privacyProtocol: 'des',
         securityLevel: '1',
