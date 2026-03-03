@@ -2,17 +2,21 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
+    AlertComponent,
+    AlertHeadingDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
     ContainerComponent,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -36,6 +40,7 @@ import {
     ExternalMonitoringConfigLibreNMS,
     ExternalMonitoringConfigOpmanager,
     ExternalMonitoringConfigPrtg,
+    ExternalMonitoringConnect,
     ExternalMonitoringPost
 } from '../external-monitorings.interface';
 
@@ -50,6 +55,7 @@ import { SystemnameService } from '../../../../../services/systemname.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 import { HistoryService } from '../../../../../history.service';
+import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 import { DynamicalFormFields } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 import {
@@ -83,7 +89,12 @@ import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
         RouterLink,
         SelectComponent,
         ContainerComponent,
-        DynamicalFormFieldsComponent
+        DynamicalFormFieldsComponent,
+        MultiSelectComponent,
+        AlertComponent,
+        RowComponent,
+        ColComponent,
+        AlertHeadingDirective
     ],
     templateUrl: './external-monitorings-add.component.html',
     styleUrl: './external-monitorings-add.component.css',
@@ -103,6 +114,11 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     public readonly SystemnameService = inject(SystemnameService);
     public formFields?: DynamicalFormFields;
+
+    public connectStatus: boolean | null = null;
+    public connectMessage: string = '';
+
+    public messageTemplates: SelectKeyValue[] = [];
 
     protected readonly ExternalMonitoringTypes = [
         {
@@ -148,7 +164,8 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
             name: '',
             description: '',
             system_type: '',
-            json_data: {}
+            json_data: {},
+            message_template_ids: []
         }
     }
 
@@ -221,6 +238,20 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
                 })
             );
         }
+    }
+
+    public checkConnection() {
+        this.subscriptions.add(this.ExternalMonitoringsService.testConnection(this.post)
+            .subscribe((result: ExternalMonitoringConnect) => {
+                this.connectStatus = result.status.status;
+                if (result.status.msg) {
+                    this.connectMessage = result.status.msg.message;
+                }
+                if (result.messageTemplates) {
+                    this.messageTemplates = result.messageTemplates;
+                }
+                this.cdr.markForCheck();
+            }));
     }
 
     protected readonly Object = Object;

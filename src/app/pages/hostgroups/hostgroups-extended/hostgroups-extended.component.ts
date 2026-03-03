@@ -118,6 +118,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { ServicesService } from '../../services/services.service';
 import { EnableItem } from '../../../layouts/coreui/enable-modal/enable.interface';
 import { ENABLE_SERVICE_TOKEN } from '../../../tokens/enable-injection.token';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 
 @Component({
     selector: 'oitc-hostgroups-extended',
@@ -173,7 +174,11 @@ import { ENABLE_SERVICE_TOKEN } from '../../../tokens/enable-injection.token';
         SlaHostgroupHostsStatusOverviewComponent,
         DeleteAllModalComponent,
         AsyncPipe,
-        EnableModalComponent
+        EnableModalComponent,
+        TableDirective,
+        TableLoaderComponent,
+        MatSortHeader,
+        MatSort,
     ],
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css',
@@ -680,5 +685,13 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
     public changeTab(newTab: HostgroupExtendedTabs): void {
         this.selectedTab = newTab;
+    }
+
+    public onSortChange(sort: Sort): void {
+        if (sort.direction) {
+            this.hostParams.sort = sort.active;
+            this.hostParams.direction = sort.direction;
+            this.loadHostgroupExtended();
+        }
     }
 }

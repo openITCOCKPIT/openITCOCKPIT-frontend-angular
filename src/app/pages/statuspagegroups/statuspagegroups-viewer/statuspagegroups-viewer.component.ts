@@ -90,7 +90,9 @@ export class StatuspagegroupsViewerComponent implements OnDestroy {
 
     public StatupagegroupViewRootResponse?: StatupagegroupViewRoot;
     public statuspagegroupId = input<number>(0);
-    public html: string = '';
+
+    public additional_information_html: string = '';
+    public further_information_html: string = '';
 
     public filter: StatuspagegroupViewLocalFilter = this.clearFilter();
     public problemsFilered: StatupagegroupProblem[] = [];
@@ -123,7 +125,10 @@ export class StatuspagegroupsViewerComponent implements OnDestroy {
                 this.applyFilter();
 
                 if (this.StatupagegroupViewRootResponse.statuspagegroup.additional_information) {
-                    this.html = this.BbCodeParserService.parse(this.StatupagegroupViewRootResponse.statuspagegroup.additional_information);
+                    this.additional_information_html = this.BbCodeParserService.parse(this.StatupagegroupViewRootResponse.statuspagegroup.additional_information);
+                }
+                if (this.StatupagegroupViewRootResponse.statuspagegroup.further_information) {
+                    this.further_information_html = this.BbCodeParserService.parse(this.StatupagegroupViewRootResponse.statuspagegroup.further_information);
                 }
 
                 this.cdr.markForCheck();

@@ -129,6 +129,94 @@
                                     </div>
                                 }
                                 @if (post.system_type === ExternalMonitoringSystems.FlowChief) {
+                                    <c-container
+                                        [fluid]="true" class="shadow-sm px-2 py-4 mb-4 bg-body rounded">
+                                        <fieldset>
+                                            <legend class="small fieldset-legend-border-bottom">
+                                                <h4>
+                                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                                    {{ t('Object type settings') }}
+                                                </h4>
+                                                <div class="help-block">
+                                                    {{ t('Please select all message templates you want to import or leave them blank to import without filtering by message template.') }}
+                                                </div>
+                                            </legend>
+                                            <c-row>
+                                                <c-col [xs]="12" class="mt-3">
+                                                    <div class="alert border-faded bg-transparent text-secondary mt-2">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="alert-icon me-2">
+                                                                <span class="icon-stack icon-stack-md">
+                                                                    <i class="base-circle icon-stack-3x text-primary-500"></i>
+                                                                    <i class="fas fa-info icon-stack-1x text-white"></i>
+                                                                </span>
+                                                            </div>
+                                                            <div class="flex-1">
+                                                                <span class="h5 text-primary">
+                                                                    {{ t('Load message templates for import') }}
+                                                                </span>
+                                                                <br>
+                                                                {{ t('Selecting the message templates can take some time if the number of config items is too large.') }}
+                                                            </div>
+                                                            <button class="btn btn-outline-primary btn-sm ripple"
+                                                                    type="button"
+                                                                    (click)="checkConnection()">
+                                                                {{ t('Check External System Connection and load available messsage templates') }}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </c-col>
+                                            </c-row>
+                                            @if (connectStatus === false) {
+                                                <c-row>
+                                                    <c-col [xs]="12" class="mt-3">
+                                                        <c-alert color="danger">
+                                                            <h4 cAlertHeading>{{ t('404 Bad Request') }}</h4>
+                                                            <p>{{ connectMessage }}</p>
+                                                        </c-alert>
+                                                    </c-col>
+                                                </c-row>
+                                            }
+                                            @if (connectStatus === true) {
+                                                <c-row>
+                                                    <c-col [xs]="12" class="mt-3">
+                                                        <c-alert color="success">
+                                                            <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                                                            {{ t('Connection established successfully.') }}
+                                                        </c-alert>
+                                                    </c-col>
+                                                </c-row>
+                                            }
+                                            <c-row class="px-2">
+                                                <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
+                                                    <h4 cAlertHeading class="text-primary">
+                                                        {{ t('Detected message templates') }}
+                                                        <span class="help-block small">
+                                                            ({{ messageTemplates.length }})
+                                                        </span>
+                                                    </h4>
+                                                    <div class="mb-3">
+                                                        <label cLabel for="messageTemplates">
+                                                            {{ t('Message templates') }}
+                                                        </label>
+                                                        <oitc-multi-select
+                                                            name="messageTemplates"
+                                                            id="messageTemplates"
+                                                            optionValue="key"
+                                                            optionLabel="value"
+                                                            [(ngModel)]="post.message_template_ids"
+                                                            [options]="messageTemplates"
+                                                            class="flex-1"
+                                                            oitcFormError [errors]="errors"
+                                                            errorField="message_template_ids">
+                                                        </oitc-multi-select>
+                                                        <oitc-form-feedback [errors]="errors"
+                                                                            errorField="message_template_ids"></oitc-form-feedback>
+                                                    </div>
+                                                </c-col>
+                                            </c-row>
+                                        </fieldset>
+                                    </c-container>
                                     <c-row
                                         *oitcPermission="['ImportModule', 'ExternalMonitorings', 'flowchiefNodeSelection']">
                                         <c-col class="mb-3">

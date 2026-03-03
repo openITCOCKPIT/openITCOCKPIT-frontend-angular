@@ -16,7 +16,9 @@
                     <c-row>
                         @if (widget && config && !flipped()) {
                             <c-col [xs]="12" class="text-end">
-                                <oitc-interval-picker (change)="onRefreshChange($event)"></oitc-interval-picker>
+                                <oitc-interval-picker (change)="onRefreshChange($event)"
+                                                      [useLocalStorage]="false"
+                                                      [initialInterval]="config.refresh_key"></oitc-interval-picker>
                             </c-col>
                         }
                     </c-row>

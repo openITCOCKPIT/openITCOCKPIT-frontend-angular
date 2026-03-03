@@ -151,6 +151,8 @@ export class SatellitesEditComponent implements OnDestroy, OnInit {
     private getUserTimezone() {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.post.Satellite.timezone = data.user_timezone;
+            this.serverTimeZone = data.server_timezone;
+            this.serverTime = data.server_time;
             this.cdr.markForCheck();
         }));
     }
@@ -181,11 +183,11 @@ export class SatellitesEditComponent implements OnDestroy, OnInit {
                 }
 
                 this.post.protocol = 'https';
-                if (this.post.Satellite.url.startsWith('http://')) {
+                if (this.post.Satellite.url?.startsWith('http://')) {
                     this.post.protocol = 'http';
                 }
                 this.post.proxyProtocol = 'https';
-                if (this.post.Satellite.proxy_url.startsWith('http://')) {
+                if (this.post.Satellite.proxy_url?.startsWith('http://')) {
                     this.post.proxyProtocol = 'http';
                 }
 

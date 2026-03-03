@@ -24,6 +24,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-map-summary-toaster',
@@ -42,7 +43,8 @@ import { PermissionDirective } from '../../../../permissions/permission.directiv
         RouterLink,
         TrustAsHtmlPipe,
         ToastHeaderComponent,
-        PermissionDirective
+        PermissionDirective,
+        NgClass
     ],
     templateUrl: './map-summary-toaster.component.html',
     styleUrl: './map-summary-toaster.component.css',

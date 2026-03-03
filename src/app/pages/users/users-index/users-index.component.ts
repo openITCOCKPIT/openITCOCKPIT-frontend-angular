@@ -273,8 +273,11 @@ export class UsersIndexComponent implements OnInit, OnDestroy, IndexPage {
         });
     }
 
-    public linkFor(format: 'csv') {
+    public linkFor(format: 'csv' | 'xlsx'): string {
         let baseUrl = '/users/listToCsv?';
+        if (format === 'xlsx') {
+            baseUrl = '/users/listToXlsx?';
+        }
 
         let urlParams = {
             'angular': true,
