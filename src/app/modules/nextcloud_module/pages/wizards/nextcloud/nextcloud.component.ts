@@ -28,7 +28,7 @@ import { NextcloudWizardGet, NextcloudWizardPost } from './nextcloud-wizard.inte
 import { NextcloudWizardService } from './nextcloud-wizard.service';
 import { RouterLink } from '@angular/router';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { Service } from '../../../../../pages/wizards/wizards.interface';
+import { ServiceForWizard } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-nextcloud',
@@ -83,7 +83,7 @@ export class NextcloudComponent extends WizardsAbstractComponent {
 
     protected useSslChanged(): void {
         // Traverse this.post.services and do the same for all array positions.
-        this.post.services.forEach((service: Service): void => {
+        this.post.services.forEach((service: ServiceForWizard): void => {
             let lastKey: number = service.servicecommandargumentvalues.length - 1;
 
             if (this.useSsl) {

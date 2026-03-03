@@ -55,6 +55,8 @@ import { fujitsuModuleRoutes } from './modules/fujitsu_module/fujitsu_module.rou
 import { netAppModuleRoutes } from './modules/netapp_module/netapp_module.routes';
 import { nextcloudModuleRoutes } from './modules/nextcloud_module/nextcloud_module.routes';
 import { paloAltoModuleRoutes } from './modules/palo_alto_module/palo_alto_module.routes';
+import { kubernetesModuleRoutes } from './modules/kubernetes_module/kubernetes_module.routes';
+import { broadcomModuleRoutes } from './modules/broadcom_module/broadcom_module.routes';
 import { redfishModuleRoutes } from './modules/redfish_module/redfish_module.routes';
 
 @Component({
@@ -133,6 +135,8 @@ const moduleRoutes: Routes = [
     ...netAppModuleRoutes,
     ...nextcloudModuleRoutes,
     ...paloAltoModuleRoutes,
+    ...kubernetesModuleRoutes,
+    ...broadcomModuleRoutes,
     ...redfishModuleRoutes
 ];
 /***    Core routes   ***/

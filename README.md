@@ -314,7 +314,7 @@ icon: {
 
 * Official [Discord Server](https://discord.gg/G8KhxKuQ9G)
 * Join [#openitcockpit](https://web.libera.chat/#openitcockpit) on Libera Chat
-* [Allgeier IT Services GmbH](https://www.allgeier-its.com/) provides commercial support
+* [AVENDIS GmbH](https://avendis.com/) provides commercial support
 
 # Security
 
@@ -326,7 +326,7 @@ All disclosed vulnerabilities are available here: [https://openitcockpit.io/secu
 
 ```
 Copyright (C) 2015-2025  it-novum GmbH
-Copyright (C) 2025-today Allgeier IT Services GmbH
+Copyright (C) 2025-today AVENDIS GmbH
 
 
 openITCOCKPIT is dual licensed
