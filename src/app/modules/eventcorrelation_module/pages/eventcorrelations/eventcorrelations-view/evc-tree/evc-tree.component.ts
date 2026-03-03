@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { EFConnectableSide, EFMarkerType, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
 import * as dagre from "@dagrejs/dagre"
+
 import { IPoint, PointExtensions } from '@foblex/2d';
 import { generateGuid } from '@foblex/utils';
 import { EvcTreeDirection } from './evc-tree.enum';
