@@ -56,6 +56,7 @@ import { netAppModuleRoutes } from './modules/netapp_module/netapp_module.routes
 import { nextcloudModuleRoutes } from './modules/nextcloud_module/nextcloud_module.routes';
 import { paloAltoModuleRoutes } from './modules/palo_alto_module/palo_alto_module.routes';
 import { kubernetesModuleRoutes } from './modules/kubernetes_module/kubernetes_module.routes';
+import { broadcomModuleRoutes } from './modules/broadcom_module/broadcom_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -133,7 +134,8 @@ const moduleRoutes: Routes = [
     ...netAppModuleRoutes,
     ...nextcloudModuleRoutes,
     ...paloAltoModuleRoutes,
-    ...kubernetesModuleRoutes
+    ...kubernetesModuleRoutes,
+    ...broadcomModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
