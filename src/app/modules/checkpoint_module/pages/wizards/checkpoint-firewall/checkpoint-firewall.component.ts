@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { CheckpointFirewallWizardService } from './checkpoint-firewall-wizard.service';
-import { CheckpointFirewallWizardPost } from './checkpoint-firewall-wizard.interface';
 import { FormsModule } from '@angular/forms';
 import {
     WizardsDynamicfieldsComponent
@@ -25,7 +24,7 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { WizardGet } from '../../../../../pages/wizards/wizards.interface';
+import { SNMPWizardPost, WizardGet } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-checkpoint-firewall',
@@ -58,7 +57,7 @@ export class CheckpointFirewallComponent extends WizardsAbstractComponent {
     protected override WizardService: CheckpointFirewallWizardService = inject(CheckpointFirewallWizardService);
     public checked: boolean = false;
 
-    protected override post: CheckpointFirewallWizardPost = {
+    protected override post: SNMPWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
@@ -71,7 +70,7 @@ export class CheckpointFirewallComponent extends WizardsAbstractComponent {
         securityName: '',
         snmpCommunity: '',
         snmpVersion: '2'
-    } as CheckpointFirewallWizardPost;
+    } as SNMPWizardPost;
     protected snmpVersions: SelectKeyValueString[] = [
         {value: '1', key: 'SNMP V 1'},
         {value: '2', key: 'SNMP V 2c'},
