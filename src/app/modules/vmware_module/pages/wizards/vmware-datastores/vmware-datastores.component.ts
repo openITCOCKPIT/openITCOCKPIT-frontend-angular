@@ -1,11 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, ViewChildren } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import {
-    DatastoreService,
-    DatastoreServicetemplate,
-    VmwareDatastoresWizardGet,
-    VmwareDatastoresWizardPost
-} from './vmware-datastores-wizard.interface';
+import { VmwareDatastoresWizardGet, VmwareDatastoresWizardPost } from './vmware-datastores-wizard.interface';
 import { VmwareDatastoresWizardService } from './vmware-datastores-wizard.service';
 import { PaginatorModule } from 'primeng/paginator';
 import { FormsModule } from '@angular/forms';
@@ -41,6 +36,7 @@ import { NgClass } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { ServiceForWizard, ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-vmware-esx',
@@ -101,7 +97,7 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
     } as VmwareDatastoresWizardPost;
 
     protected searchedTags: string[] = [];
-    protected datastoreServicetemplate: DatastoreServicetemplate = {} as DatastoreServicetemplate;
+    protected datastoreServicetemplate: ServicetemplateForWizard = {} as ServicetemplateForWizard;
 
     protected override wizardLoad(result: VmwareDatastoresWizardGet): void {
         this.post.vmwareuser = result.vmwareuser;
@@ -117,7 +113,7 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
 
         // Remove all datastore services from request where createService is false.
         request.dataStoreServices = request.dataStoreServices.filter(
-            (dataStoreService: DatastoreService) => dataStoreService.createService && this.hasName(dataStoreService.name)
+            (dataStoreService: ServiceForWizard) => dataStoreService.createService && this.hasName(dataStoreService.name)
         );
 
         this.subscriptions.add(this.WizardService.submit(request)
@@ -147,7 +143,7 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
 
     protected toggleCheck(checked: boolean): void {
         this.checked = checked;
-        this.post.dataStoreServices.forEach((service: DatastoreService) => {
+        this.post.dataStoreServices.forEach((service: ServiceForWizard) => {
             if (!this.hasName(service.name)) {
                 return;
             }

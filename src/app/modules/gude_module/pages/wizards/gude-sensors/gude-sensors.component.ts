@@ -2,12 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, ViewChildren } from '@angul
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { GudeSensorsWizardService } from './gude-sensors-wizard.service';
-import {
-    GudeSensorsWizardGet,
-    GudeSensorsWizardPost,
-    InterfaceServicetemplate,
-    SensorService
-} from './gude-sensors-wizard.interface';
+import { GudeSensorsWizardGet, GudeSensorsWizardPost } from './gude-sensors-wizard.interface';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -42,6 +37,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import { ServiceForWizard, ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-gude-sensors',
@@ -129,8 +125,8 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
         {key: '3DES', value: '3des'},
         {key: '3DESDE', value: '3desde'},
     ];
-    protected sensorsServicetemplateTemp: InterfaceServicetemplate = {} as InterfaceServicetemplate;
-    protected sensorsServicetemplateHumidity: InterfaceServicetemplate = {} as InterfaceServicetemplate;
+    protected sensorsServicetemplateTemp: ServicetemplateForWizard = {} as ServicetemplateForWizard;
+    protected sensorsServicetemplateHumidity: ServicetemplateForWizard = {} as ServicetemplateForWizard;
 
     protected override wizardLoad(result: GudeSensorsWizardGet): void {
         this.sensorsServicetemplateTemp = result.sensorsServicetemplateTemp;
@@ -145,7 +141,7 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
 
         // Remove all sensors from request where createService is false.
         request.sensorServices = request.sensorServices.filter(
-            (sensorService: SensorService) => sensorService.createService && this.hasName(sensorService.name)
+            (sensorService: ServiceForWizard) => sensorService.createService && this.hasName(sensorService.name)
         );
 
         this.subscriptions.add(this.WizardService.submit(request)
@@ -175,7 +171,7 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
 
     protected toggleCheck(checked: boolean): void {
         this.checked = checked;
-        this.post.sensorServices.forEach((service: SensorService) => {
+        this.post.sensorServices.forEach((service: ServiceForWizard) => {
             if (!this.hasName(service.name)) {
                 return;
             }

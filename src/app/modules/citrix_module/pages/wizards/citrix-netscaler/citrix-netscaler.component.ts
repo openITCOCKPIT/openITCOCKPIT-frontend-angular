@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { CitrixNetscalerWizardService } from './citrix-netscaler-wizard.service';
-import { CitrixNetscalerWizardPost } from './citrix-netscaler-wizard.interface';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -24,6 +23,7 @@ import {
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import { SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-citrix-netscaler',
@@ -57,7 +57,7 @@ export class CitrixNetscalerComponent extends WizardsAbstractComponent {
     public checked: boolean = false;
     public accordionClosed: boolean = true;
 
-    protected override post: CitrixNetscalerWizardPost = {
+    protected override post: SNMPWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
@@ -70,7 +70,7 @@ export class CitrixNetscalerComponent extends WizardsAbstractComponent {
         securityName: '',
         snmpCommunity: '',
         snmpVersion: '2'
-    } as CitrixNetscalerWizardPost;
+    } as SNMPWizardPost;
     protected snmpVersions: SelectKeyValueString[] = [
         {value: '1', key: 'SNMP V 1'},
         {value: '2', key: 'SNMP V 2c'},
