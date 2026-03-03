@@ -35,11 +35,13 @@
                         <input cFormControl id="inputcomment_host" name="inputcomment_host"
                                [placeholder]="'Comment' | transloco"
                                [(ngModel)]="ackModal.comment">
-                        <div *ngIf="error" cFormText>
-                            <div class="help-block text-danger">
-                                {{ t('Comment can not be empty') }}
+                        @if (error) {
+                            <div cFormText>
+                                <div class="help-block text-danger">
+                                    {{ t('Comment can not be empty') }}
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                     <c-form-check class="mb-3">
                         <input cFormCheckInput id="acksticky_host" name="acksticky_host" type="checkbox"

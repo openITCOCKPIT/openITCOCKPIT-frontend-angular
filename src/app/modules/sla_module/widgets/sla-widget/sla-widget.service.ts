@@ -6,13 +6,15 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { GenericResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class SlaWidgetService {
 
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
-  constructor() { }
+
+    constructor() {
+    }
 
 
     public loadWidgetConfig(widgetId: string): Observable<SlaWidgetResponse> {

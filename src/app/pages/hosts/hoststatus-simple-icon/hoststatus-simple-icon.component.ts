@@ -7,9 +7,9 @@ import { TooltipDirective } from '@coreui/angular';
 @Component({
     selector: 'oitc-hoststatus-simple-icon',
     imports: [
-    NgClass,
-    TooltipDirective
-],
+        NgClass,
+        TooltipDirective
+    ],
     templateUrl: './hoststatus-simple-icon.component.html',
     styleUrl: './hoststatus-simple-icon.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,21 +1,21 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-  BadgeComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownDividerDirective,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent, InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    BadgeComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownDividerDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent, InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -37,7 +37,7 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
@@ -59,49 +59,47 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
 @Component({
     selector: 'oitc-customalert-rules-index',
     imports: [
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    ContainerComponent,
-    ColComponent,
-    RowComponent,
-    FormDirective,
-    FormsModule,
-    ReactiveFormsModule,
-    NgIf,
-    TableLoaderComponent,
-    MatSort,
-    MatSortHeader,
-    TableDirective,
-    ItemSelectComponent,
-    BadgeComponent,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    DropdownDividerDirective,
-    NgForOf,
-    DebounceDirective,
-    FormControlDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    TranslocoPipe,
-    NgSelectComponent,
-    DeleteAllModalComponent,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    SelectAllComponent
-],
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        ContainerComponent,
+        ColComponent,
+        RowComponent,
+        FormDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        TableLoaderComponent,
+        MatSort,
+        MatSortHeader,
+        TableDirective,
+        ItemSelectComponent,
+        BadgeComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        DropdownDividerDirective,
+        DebounceDirective,
+        FormControlDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        TranslocoPipe,
+        NgSelectComponent,
+        DeleteAllModalComponent,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        SelectAllComponent
+    ],
     templateUrl: './customalert-rules-index.component.html',
     styleUrl: './customalert-rules-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: CustomalertRulesService }
+        {provide: DELETE_SERVICE_TOKEN, useClass: CustomalertRulesService}
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

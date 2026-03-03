@@ -25,7 +25,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { DecimalPipe, NgIf } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -55,7 +55,6 @@ import { DataSet } from 'vis-data/peer';
         InputGroupTextDirective,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         RowComponent,
         SelectComponent,

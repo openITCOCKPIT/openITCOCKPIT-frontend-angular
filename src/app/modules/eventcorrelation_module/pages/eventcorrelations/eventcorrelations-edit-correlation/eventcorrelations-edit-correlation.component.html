@@ -41,10 +41,7 @@
                             {{ t('Unsaved changes') }}
                         </c-badge>
                     }
-
-
                 </h5>
-
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
                         <button (click)="saveEventcorrelation()" cButton class="ripple" color="success" size="xs">
@@ -105,7 +102,6 @@
                         </em>
                     </c-col>
                 </c-row>
-
                 <div class="d-flex h-100">
                     <oitc-evc-tree-edit
                         class="flex-1 w-100 h-100 mt-3"
@@ -121,14 +117,12 @@
                         [highlightHostId]="highlightHostId"
                         [highlightServiceId]="highlightServiceId"></oitc-evc-tree-edit>
                 </div>
-
             </c-card-body>
             <c-card-footer>
                 &nbsp;
             </c-card-footer>
         </c-card>
     }
-
 
 
     <!-- Service / vService modal -->
@@ -153,7 +147,6 @@
         </c-modal-header>
         @if (modalVService) {
             <c-modal-body>
-
                 <div class="mb-3">
                     <label cLabel for="servicename">
                         {{ t('Name of vService') }}
@@ -169,13 +162,11 @@
                         {{ t('Name of the virtual service that holds the result of the correlation.') }}
                     </div>
                 </div>
-
                 <div class="mb-3">
                     <label cLabel for="servicetemplate">
                         {{ t('Service template') }}
                         <oitc-required-icon></oitc-required-icon>
                     </label>
-
                     <oitc-select
                         name="servicetemplate"
                         id="servicetemplate"
@@ -192,7 +183,6 @@
                         {{ t('Only service templates of the EVC type are available.') }}
                     </div>
                 </div>
-
                 @if (modalCurrentLayerIndex === 0) {
                     <!-- "Real" Services -->
                     <div class="mb-3">
@@ -212,6 +202,7 @@
                                 class="flex-1"
                                 [appendTo]="''"
                                 (onChange)="updateServiceScores()"
+
                                 oitcFormError [errors]="errors" errorField="service_ids">
                             </oitc-multi-select-optgroup>
                         </c-input-group>
@@ -221,7 +212,6 @@
                         </div>
                     </div>
                 }
-
                 @if (modalCurrentLayerIndex > 0) {
                     <!-- "virtual" Services -->
                     <div class="mb-3">
@@ -250,7 +240,6 @@
                         </div>
                     </div>
                 }
-
                 <div class="mb-3">
                     <label for="operator" cLabel>
                         {{ t('Operator') }}
@@ -265,11 +254,11 @@
                         [options]="modalOperators"
                         [appendTo]="''"
                         (onChange)="updateServiceScores()"
+
                         oitcFormError [errors]="errors" errorField="operator">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="operator"></oitc-form-feedback>
                 </div>
-
                 @if (modalVService.operator === EventcorrelationOperators.MIN) {
                     <div class="mb-3">
                         <label cLabel for="operator_modifier">
@@ -547,5 +536,4 @@
             </button>
         </c-modal-footer>
     </c-modal>
-
 </ng-container>

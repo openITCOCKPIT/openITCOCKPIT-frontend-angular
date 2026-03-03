@@ -41,7 +41,7 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { NgIf } from '@angular/common';
+
 import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
@@ -76,7 +76,6 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         DropdownToggleDirective,
         DropdownMenuDirective,
         DropdownItemDirective,
-        NgIf,
         InputGroupTextDirective,
         NgSelectComponent,
         NgOptionTemplateDirective,
@@ -152,6 +151,8 @@ export class SatellitesEditComponent implements OnDestroy, OnInit {
     private getUserTimezone() {
         this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
             this.post.Satellite.timezone = data.user_timezone;
+            this.serverTimeZone = data.server_timezone;
+            this.serverTime = data.server_time;
             this.cdr.markForCheck();
         }));
     }
@@ -182,11 +183,11 @@ export class SatellitesEditComponent implements OnDestroy, OnInit {
                 }
 
                 this.post.protocol = 'https';
-                if (this.post.Satellite.url.startsWith('http://')) {
+                if (this.post.Satellite.url?.startsWith('http://')) {
                     this.post.protocol = 'http';
                 }
                 this.post.proxyProtocol = 'https';
-                if (this.post.Satellite.proxy_url.startsWith('http://')) {
+                if (this.post.Satellite.proxy_url?.startsWith('http://')) {
                     this.post.proxyProtocol = 'http';
                 }
 

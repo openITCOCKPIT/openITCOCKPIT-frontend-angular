@@ -25,7 +25,7 @@ import {
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -58,7 +58,6 @@ import { FormErrorDirective } from '../../../../layouts/coreui/form-error.direct
         ProgressComponent,
         FormFeedbackComponent,
         NgClass,
-        NgIf,
         FormLabelDirective,
         RequiredIconComponent,
         SelectComponent,

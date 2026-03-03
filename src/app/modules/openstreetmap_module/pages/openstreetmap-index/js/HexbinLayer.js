@@ -27,7 +27,7 @@ L.HexbinLayer = L.SVG.extend({
         opacity: 0.6,
         duration: 200,
         radius: 25,//12
-        radiusRange:[10, 25],//[4,12]
+        radiusRange: [10, 25],//[4,12]
         colorScaleExtent: [1, undefined],
         radiusScaleExtent: [1, undefined],
         colorDomain: [-1, 0, 1, 2, 3, 4],
@@ -50,17 +50,16 @@ L.HexbinLayer = L.SVG.extend({
 
     },
 
-     value: function value(d) {
-         //return _.meanBy(d, (o) => o.o.colorcode)
-         var stats = [];
-         d.forEach(function(o) {
-             stats.push(o.o.colorcode);
-         });
-         return stats.reduce(function(a, b) {
-             return Math.max(a, b);
-         }, -Infinity);
-     },
-
+    value: function value(d) {
+        //return _.meanBy(d, (o) => o.o.colorcode)
+        var stats = [];
+        d.forEach(function(o) {
+            stats.push(o.o.colorcode);
+        });
+        return stats.reduce(function(a, b) {
+            return Math.max(a, b);
+        }, -Infinity);
+    },
 
 
     /**
@@ -239,7 +238,7 @@ L.HexbinLayer = L.SVG.extend({
         // Generate the map bounds (to be used to filter the hexes to what is visible)
         var bounds = that._map.getBounds();
         var size = that._map.getSize();
-        if (size !== undefined && size.x && size.y) {
+        if(size !== undefined && size.x && size.y) {
             bounds = bounds.pad(that.options.radius * 2 / Math.max(size.x, size.y));
         }
 
@@ -339,9 +338,9 @@ L.HexbinLayer = L.SVG.extend({
                 that._hoverHandler.mouseout.call(this, that, event, d, i);
             })
             .on('click', function(event, d, i) {
-               // console.log(d);
+                // console.log(d);
                 that.options.click(d);
-               // that._dispatch.call('click', this, event, d, i);
+                // that._dispatch.call('click', this, event, d, i);
             });
 
 

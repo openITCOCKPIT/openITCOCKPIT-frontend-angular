@@ -27,7 +27,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Service } from '../../../pages/wizards/wizards.interface';
@@ -44,8 +44,6 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         FormsModule,
         InputGroupComponent,
         InputGroupTextDirective,
-        NgForOf,
-        NgIf,
         NgSelectComponent,
         RowComponent,
         TranslocoPipe,

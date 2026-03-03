@@ -267,221 +267,255 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!hostescalations"></oitc-table-loader>
-            <table *ngIf="hostescalations" bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col">
-                        {{ t('Hosts') }}
-                        <fa-stack>
-                            <fa-icon [icon]="['fas', 'plus']" class="text-primary"
-                                     stackItemSize="1x" pull="right"></fa-icon>
-                            <fa-icon [icon]="['fas', 'filter']" class="text-success"
-                                     stackItemSize="1x"
-                                     transform="shrink-8 right-3 down-7"></fa-icon>
-                        </fa-stack>
-                        {{ t('Excluded hosts groups ') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Host groups') }}
-                        <fa-stack>
-                            <fa-icon [icon]="['fas', 'plus']" class="text-primary"
-                                     stackItemSize="1x" pull="right"></fa-icon>
-                            <fa-icon [icon]="['fas', 'filter']" class="text-success"
-                                     stackItemSize="1x"
-                                     transform="shrink-8 right-3 down-7"></fa-icon>
-                        </fa-stack>
-                        {{ t('Excluded hosts') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('First') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Last') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Interval') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Time period') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Contacts') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Contact groups') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Options') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let hostescalation of hostescalations.all_hostescalations">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['hostescalations', 'delete']"
-                            [disabled]="!hostescalation.allowEdit"
-                            [item]="hostescalation"></oitc-item-select>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                            <li *ngFor="let host of hostescalation.hosts">
-                                <fa-icon [icon]="['fas', 'plus']" class="badge bg-success"></fa-icon>
-                                <a *oitcPermission="['hosts', 'edit']"
-                                   [routerLink]="['/', 'hosts', 'edit', host.id]">
-                                    {{ host.name }}
-                                </a>
-                                <span *oitcPermission="['hosts', 'edit']; negate: true">
-                                    {{ host.name }}
-                                </span>
-                                <fa-icon *ngIf="host.disabled == 1" [icon]="['fas', 'power-off']"
-                                         class="text-danger"></fa-icon>
-                            </li>
-                            <div class="d-flex" *ngIf="hostescalation.hostgroups_excluded.length > 0">
-                                <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
-                                <div>
-                                    <fa-icon
-                                        [icon]="['fas', 'filter']"
-                                        class="text-primary opacity-50"></fa-icon>
-                                </div>
-                                <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
-                            </div>
-                            <li *ngFor="let hostgroup of hostescalation.hostgroups_excluded">
-                                <fa-icon [icon]="['fas', 'minus']" class="badge bg-danger"></fa-icon>
-                                <a *oitcPermission="['hostgroups', 'edit']"
-                                   [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
-                                    {{ hostgroup.container.name }}
-                                </a>
-                                <span *oitcPermission="['hostgroups', 'edit']; negate: true">
-                                    {{ hostgroup.container.name }}
-                                </span>
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                            <li *ngFor="let hostgroup of hostescalation.hostgroups">
-                                <fa-icon [icon]="['fas', 'plus']" class="badge bg-success"></fa-icon>
-                                <a *oitcPermission="['hostgroups', 'edit']"
-                                   [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
-                                    {{ hostgroup.container.name }}
-                                </a>
-                                <span *oitcPermission="['hostgroups', 'edit']; negate: true">
-                                    {{ hostgroup.container.name }}
-                                </span>
+            @if (!hostescalations) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (hostescalations) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col">
+                            {{ t('Hosts') }}
+                            <fa-stack>
+                                <fa-icon [icon]="['fas', 'plus']" class="text-primary"
+                                         stackItemSize="1x" pull="right"></fa-icon>
+                                <fa-icon [icon]="['fas', 'filter']" class="text-success"
+                                         stackItemSize="1x"
+                                         transform="shrink-8 right-3 down-7"></fa-icon>
+                            </fa-stack>
+                            {{ t('Excluded hosts groups ') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Host groups') }}
+                            <fa-stack>
+                                <fa-icon [icon]="['fas', 'plus']" class="text-primary"
+                                         stackItemSize="1x" pull="right"></fa-icon>
+                                <fa-icon [icon]="['fas', 'filter']" class="text-success"
+                                         stackItemSize="1x"
+                                         transform="shrink-8 right-3 down-7"></fa-icon>
+                            </fa-stack>
+                            {{ t('Excluded hosts') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('First') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Last') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Interval') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Time period') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Contacts') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Contact groups') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Options') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (hostescalation of hostescalations.all_hostescalations; track hostescalation) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['hostescalations', 'delete']"
+                                        [disabled]="!hostescalation.allowEdit"
+                                        [item]="hostescalation"></oitc-item-select>
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @for (host of hostescalation.hosts; track host) {
+                                            <li>
+                                                <fa-icon [icon]="['fas', 'plus']" class="badge bg-success"></fa-icon>
+                                                <a *oitcPermission="['hosts', 'edit']"
+                                                   [routerLink]="['/', 'hosts', 'edit', host.id]">
+                                                    {{ host.name }}
+                                                </a>
+                                                <span *oitcPermission="['hosts', 'edit']; negate: true">
+                                                    {{ host.name }}
+                                                </span>
+                                                @if (host.disabled == 1) {
+                                                    <fa-icon [icon]="['fas', 'power-off']"
+                                                             class="text-danger"></fa-icon>
+                                                }
+                                            </li>
+                                        }
+                                        @if (hostescalation.hostgroups_excluded.length > 0) {
+                                            <div class="d-flex">
+                                                <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
+                                                <div>
+                                                    <fa-icon
+                                                        [icon]="['fas', 'filter']"
+                                                        class="text-primary opacity-50"></fa-icon>
+                                                </div>
+                                                <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
+                                            </div>
+                                        }
+                                        @for (hostgroup of hostescalation.hostgroups_excluded; track hostgroup) {
+                                            <li>
+                                                <fa-icon [icon]="['fas', 'minus']" class="badge bg-danger"></fa-icon>
+                                                <a *oitcPermission="['hostgroups', 'edit']"
+                                                   [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
+                                                    {{ hostgroup.container.name }}
+                                                </a>
+                                                <span *oitcPermission="['hostgroups', 'edit']; negate: true">
+                                                    {{ hostgroup.container.name }}
+                                                </span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @for (hostgroup of hostescalation.hostgroups; track hostgroup) {
+                                            <li>
+                                                <fa-icon [icon]="['fas', 'plus']" class="badge bg-success"></fa-icon>
+                                                <a *oitcPermission="['hostgroups', 'edit']"
+                                                   [routerLink]="['/', 'hostgroups', 'edit', hostgroup.id]">
+                                                    {{ hostgroup.container.name }}
+                                                </a>
+                                                <span *oitcPermission="['hostgroups', 'edit']; negate: true">
+                                                    {{ hostgroup.container.name }}
+                                                </span>
+                                            </li>
+                                        }
+                                        @if (hostescalation.hosts_excluded.length > 0) {
+                                            <div class="d-flex">
+                                                <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
+                                                <div>
+                                                    <fa-icon
+                                                        [icon]="['fas', 'filter']"
+                                                        class="text-primary opacity-50"></fa-icon>
+                                                </div>
+                                                <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
+                                            </div>
+                                        }
+                                        @for (host of hostescalation.hosts_excluded; track host) {
+                                            <li>
+                                                <fa-icon [icon]="['fas', 'minus']" class="badge bg-danger"></fa-icon>
+                                                <a *oitcPermission="['hosts', 'edit']"
+                                                   [routerLink]="['/', 'hosts', 'edit', host.id]">
+                                                    {{ host.name }}
+                                                </a>
+                                                <span *oitcPermission="['hosts', 'edit']; negate: true">
+                                                    {{ host.name }}
+                                                </span>
+                                                @if (host.disabled == 1) {
+                                                    <fa-icon [icon]="['fas', 'power-off']"
+                                                             class="text-danger"></fa-icon>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>{{ hostescalation.first_notification }}</td>
+                                <td>{{ hostescalation.last_notification }}</td>
+                                <td>{{ hostescalation.notification_interval }}</td>
+                                <td>
+                                    @if (hostescalation.timeperiod) {
+                                        <div>
+                                            <a *oitcPermission="['timeperiods', 'edit']"
+                                               [routerLink]="['/', 'timeperiods', 'edit', hostescalation.timeperiod.id]">
+                                                {{ hostescalation.timeperiod.name }}
+                                            </a>
+                                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                                {{ hostescalation.timeperiod.name }}
+                                            </span>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @for (contact of hostescalation.contacts; track contact) {
+                                            <li>
+                                                <a *oitcPermission="['contacts', 'edit']"
+                                                   [routerLink]="['/', 'contacts', 'edit', contact.id]">
+                                                    {{ contact.name }}
+                                                </a>
+                                                <span *oitcPermission="['contacts', 'edit']; negate: true">
+                                                    {{ contact.name }}
+                                                </span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @for (contactgroup of hostescalation.contactgroups; track contactgroup) {
+                                            <li>
+                                                <a *oitcPermission="['contactgroups', 'edit']"
+                                                   [routerLink]="['/', 'contactgroups', 'edit', contactgroup.id]">
+                                                    {{ contactgroup.container.name }}
+                                                </a>
+                                                <span *oitcPermission="['contactgroups', 'edit']; negate: true">
+                                                    {{ contactgroup.container.name }}
+                                                </span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td class="text-center">
+                                    @if (hostescalation.escalate_on_recovery) {
+                                        <span class="badge bg-success mx-1" title="{{ t('Recovery') }}"
+                                        >
+                                            {{ t('R') }}
+                                        </span>
+                                    }
+                                    @if (hostescalation.escalate_on_down) {
+                                        <span class="badge bg-danger mx-1" title="{{ t('Down') }}"
+                                        >
+                                            {{ t('D') }}
+                                        </span>
+                                    }
+                                    @if (hostescalation.escalate_on_unreachable) {
+                                        <span class="badge bg-secondary mx-1" title="{{ t('Unreachable') }}"
+                                        >
+                                            {{ t('U') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'hostescalations.edit'"
+                                                         [url]="'/hostescalations/edit/' + hostescalation.id"
+                                                         [allowEdit]="hostescalation.allowEdit">
+                                        <oitc-actions-button-element [permission]="'hostescalations.edit'"
+                                                                     [url]="'/hostescalations/edit/' + hostescalation.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(hostescalation)"
+                                                                     [permission]="'hostescalations.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                            </li>
-                            <div class="d-flex" *ngIf="hostescalation.hosts_excluded.length > 0">
-                                <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
-                                <div>
-                                    <fa-icon
-                                        [icon]="['fas', 'filter']"
-                                        class="text-primary opacity-50"></fa-icon>
-                                </div>
-                                <div class="border-top border-primary opacity-50 mt-2 w-100"></div>
-                            </div>
-                            <li *ngFor="let host of hostescalation.hosts_excluded">
-                                <fa-icon [icon]="['fas', 'minus']" class="badge bg-danger"></fa-icon>
-                                <a *oitcPermission="['hosts', 'edit']"
-                                   [routerLink]="['/', 'hosts', 'edit', host.id]">
-                                    {{ host.name }}
-                                </a>
-                                <span *oitcPermission="['hosts', 'edit']; negate: true">
-                                    {{ host.name }}
-                                </span>
-                                <fa-icon *ngIf="host.disabled == 1" [icon]="['fas', 'power-off']"
-                                         class="text-danger"></fa-icon>
-                            </li>
-                        </ul>
-                    </td>
-                    <td>{{ hostescalation.first_notification }}</td>
-                    <td>{{ hostescalation.last_notification }}</td>
-                    <td>{{ hostescalation.notification_interval }}</td>
-                    <td>
-                        <div *ngIf="hostescalation.timeperiod">
-                            <a *oitcPermission="['timeperiods', 'edit']"
-                               [routerLink]="['/', 'timeperiods', 'edit', hostescalation.timeperiod.id]">
-                                {{ hostescalation.timeperiod.name }}
-                            </a>
-                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
-                                {{ hostescalation.timeperiod.name }}
-                            </span>
-                        </div>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                            <li *ngFor="let contact of hostescalation.contacts">
-                                <a *oitcPermission="['contacts', 'edit']"
-                                   [routerLink]="['/', 'contacts', 'edit', contact.id]">
-                                    {{ contact.name }}
-                                </a>
-                                <span *oitcPermission="['contacts', 'edit']; negate: true">
-                                    {{ contact.name }}
-                                </span>
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                            <li *ngFor="let contactgroup of hostescalation.contactgroups">
-                                <a *oitcPermission="['contactgroups', 'edit']"
-                                   [routerLink]="['/', 'contactgroups', 'edit', contactgroup.id]">
-                                    {{ contactgroup.container.name }}
-                                </a>
-                                <span *oitcPermission="['contactgroups', 'edit']; negate: true">
-                                    {{ contactgroup.container.name }}
-                                </span>
-                            </li>
-                        </ul>
-                    </td>
-                    <td class="text-center">
-                        <span class="badge bg-success mx-1" title="{{ t('Recovery') }}"
-                              *ngIf="hostescalation.escalate_on_recovery">
-                            {{ t('R') }}
-                        </span>
-                        <span class="badge bg-danger mx-1" title="{{ t('Down') }}"
-                              *ngIf="hostescalation.escalate_on_down">
-                            {{ t('D') }}
-                        </span>
-                        <span class="badge bg-secondary mx-1" title="{{ t('Unreachable') }}"
-                              *ngIf="hostescalation.escalate_on_unreachable">
-                            {{ t('U') }}
-                        </span>
-                    </td>
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'hostescalations.edit'"
-                                             [url]="'/hostescalations/edit/' + hostescalation.id"
-                                             [allowEdit]="hostescalation.allowEdit">
-                            <oitc-actions-button-element [permission]="'hostescalations.edit'"
-                                                         [url]="'/hostescalations/edit/' + hostescalation.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(hostescalation)"
-                                                         [permission]="'hostescalations.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records
-                *ngIf="hostescalations && hostescalations.all_hostescalations.length === 0"></oitc-no-records>
-            <ng-container *ngIf="hostescalations && hostescalations.all_hostescalations">
+            @if (hostescalations && hostescalations.all_hostescalations.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (hostescalations && hostescalations.all_hostescalations) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -491,7 +525,6 @@
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
-
                                 <button (click)="toggleDeleteAllModal()"
                                         *oitcPermission="['hostescalations', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
@@ -503,16 +536,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="hostescalations"
-                            [paginateOrScroll]="hostescalations"></oitc-paginate-or-scroll>
+                        @if (hostescalations) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="hostescalations"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

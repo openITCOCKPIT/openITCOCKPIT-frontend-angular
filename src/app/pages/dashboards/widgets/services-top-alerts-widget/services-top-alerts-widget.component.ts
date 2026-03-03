@@ -15,7 +15,7 @@ import {
     ServicesTopAlertsWidgetParams
 } from './services-top-alerts-widget.interface';
 import { ServicesTopAlertsService } from './services-top-alerts.service';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
     BadgeComponent,
     ColComponent,
@@ -65,7 +65,6 @@ import { RouterLink } from '@angular/router';
         FormControlDirective,
         InputGroupComponent,
         InputGroupTextDirective,
-        NgIf,
         NoRecordsComponent,
         ReactiveFormsModule,
         RowComponent,

@@ -4,17 +4,17 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { ProxyPost } from '../proxy.interface';
@@ -29,7 +29,7 @@ import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProxyService } from '../proxy.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-proxy-index',
@@ -55,8 +55,7 @@ import { NgIf } from '@angular/common';
         BackButtonDirective,
         CardFooterComponent,
         XsButtonDirective,
-        FormLoaderComponent,
-        NgIf
+        FormLoaderComponent
     ],
     templateUrl: './proxy-index.component.html',
     styleUrl: './proxy-index.component.css',

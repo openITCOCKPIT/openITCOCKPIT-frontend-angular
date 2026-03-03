@@ -40,51 +40,50 @@
 
             <oitc-form-loader [isVisible]="servicetemplategroups.length === 0"></oitc-form-loader>
 
-            <c-card class="mb-3" *ngFor="let servicetemplategroup of servicetemplategroups; let i = index">
-                <c-card-header>
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    <span class="ms-1">
-                        {{ t('Source service template group:') }}
-                        {{ servicetemplategroup.Source.name }}
-                    </span>
-                </c-card-header>
-                <c-card-body>
-
-                    <div class="mb-3">
-                        <label cLabel for="name{{i}}">
-                            {{ t('Service template group name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl
-                               required
-                               type="text"
-                               name="name{{i}}"
-                               id="name{{i}}"
-                               [(ngModel)]="servicetemplategroup.Servicetemplategroup.container.name"
-                               oitcFormError [errors]="servicetemplategroup.Error" errorField="name">
-                        <oitc-form-feedback [errors]="servicetemplategroup.Error"
-                                            errorField="name"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Name of the new service template group') }}
+            @for (servicetemplategroup of servicetemplategroups; track servicetemplategroup; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source service template group:') }}
+                            {{ servicetemplategroup.Source.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('Service template group name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   required
+                                   type="text"
+                                   name="name{{i}}"
+                                   id="name{{i}}"
+                                   [(ngModel)]="servicetemplategroup.Servicetemplategroup.container.name"
+                                   oitcFormError [errors]="servicetemplategroup.Error" errorField="name">
+                            <oitc-form-feedback [errors]="servicetemplategroup.Error"
+                                                errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new service template group') }}
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="description{{i}}">
-                            {{ t('Description') }}
-                        </label>
-                        <input cFormControl
-                               type="text"
-                               name="description{{i}}"
-                               id="description{{i}}"
-                               [(ngModel)]="servicetemplategroup.Servicetemplategroup.description"
-                               oitcFormError [errors]="servicetemplategroup.Error" errorField="description">
-                        <oitc-form-feedback [errors]="servicetemplategroup.Error"
-                                            errorField="description"></oitc-form-feedback>
-                    </div>
-
-                </c-card-body>
-            </c-card>
+                        <div class="mb-3">
+                            <label cLabel for="description{{i}}">
+                                {{ t('Description') }}
+                            </label>
+                            <input cFormControl
+                                   type="text"
+                                   name="description{{i}}"
+                                   id="description{{i}}"
+                                   [(ngModel)]="servicetemplategroup.Servicetemplategroup.description"
+                                   oitcFormError [errors]="servicetemplategroup.Error" errorField="description">
+                            <oitc-form-feedback [errors]="servicetemplategroup.Error"
+                                                errorField="description"></oitc-form-feedback>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            }
 
         </c-card-body>
         <c-card-footer class="text-end">

@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, effect, inject, OnDe
 import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
 import { SlaWidgetService } from './sla-widget.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SlasService } from '../../pages/slas/slas.service';
 import { AlertComponent, AlertHeadingDirective, ColComponent, FormLabelDirective, RowComponent } from '@coreui/angular';
@@ -18,7 +18,6 @@ import { SlaConfig, SlaHostsAndServices, SlaWidgetResponse } from '../sla-widget
     selector: 'oitc-sla-widget',
     imports: [
         FaIconComponent,
-        NgIf,
         TranslocoDirective,
         RowComponent,
         ColComponent,

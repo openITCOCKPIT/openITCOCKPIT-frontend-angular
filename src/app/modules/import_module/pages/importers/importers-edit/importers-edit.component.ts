@@ -36,7 +36,7 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -80,7 +80,6 @@ import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } fro
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         ReactiveFormsModule,
         RequiredIconComponent,
         RowComponent,
@@ -99,7 +98,6 @@ import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } fro
         TrueFalseDirective,
         FormCheckComponent,
         NgClass,
-        NgForOf,
         DynamicalFormFieldsComponent,
         FormCheckLabelDirective,
         TranslocoPipe,

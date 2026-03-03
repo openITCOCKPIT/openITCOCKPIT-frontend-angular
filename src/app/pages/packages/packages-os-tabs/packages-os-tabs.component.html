@@ -1,0 +1,39 @@
+<ng-container *transloco="let t">
+    <c-nav variant="underline-border" class="card-toolbar card-header-pills me-3 justify-content-end mt-1">
+        <c-nav-item>
+            <a [routerLink]="['/', 'packages', 'linux']"
+               *oitcPermission="['packages', 'linux']" class="nav-link" [class.active]="isActive() === 1">
+                <fa-icon [icon]="['fab', 'linux']"></fa-icon>
+                {{ t('Linux') }}
+            </a>
+        </c-nav-item>
+        <c-nav-item>
+            <a [routerLink]="['/', 'packages', 'windows_updates']"
+               *oitcPermission="['packages', 'windows_updates']" class="nav-link" [class.active]="isActive() === 2">
+                <fa-icon [icon]="['fab', 'windows']"></fa-icon>
+                {{ t('Windows Updates') }}
+            </a>
+        </c-nav-item>
+        <c-nav-item>
+            <a [routerLink]="['/', 'packages', 'windows']"
+               *oitcPermission="['packages', 'windows']" class="nav-link" [class.active]="isActive() === 3">
+                <fa-icon [icon]="['fab', 'windows']"></fa-icon>
+                {{ t('Windows Apps') }}
+            </a>
+        </c-nav-item>
+        <c-nav-item>
+            <a [routerLink]="['/', 'packages', 'macos_updates']"
+               *oitcPermission="['packages', 'macos_updates']" class="nav-link" [class.active]="isActive() === 4">
+                <fa-icon [icon]="['fab', 'apple']"></fa-icon>
+                {{ t('macOS Updates') }}
+            </a>
+        </c-nav-item>
+        <c-nav-item>
+            <a [routerLink]="['/', 'packages', 'macos']"
+               *oitcPermission="['packages', 'macos']" class="nav-link" [class.active]="isActive() === 5">
+                <fa-icon [icon]="['fab', 'apple']"></fa-icon>
+                {{ t('macOS Apps') }}
+            </a>
+        </c-nav-item>
+    </c-nav>
+</ng-container>

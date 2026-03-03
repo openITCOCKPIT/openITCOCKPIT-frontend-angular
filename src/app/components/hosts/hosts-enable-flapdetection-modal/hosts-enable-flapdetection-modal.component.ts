@@ -11,17 +11,17 @@ import {
     ViewChild
 } from '@angular/core';
 import {
-  ButtonCloseDirective,
-  CardBodyComponent,
-  CardComponent,
-  ColComponent,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective,
-  RowComponent
+    ButtonCloseDirective,
+    CardBodyComponent,
+    CardComponent,
+    ColComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -37,21 +37,21 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'oitc-hosts-enable-flapdetection-modal',
     imports: [
-    ButtonCloseDirective,
-    CardBodyComponent,
-    CardComponent,
-    ColComponent,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ReactiveFormsModule,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective
-],
+        ButtonCloseDirective,
+        CardBodyComponent,
+        CardComponent,
+        ColComponent,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective
+    ],
     templateUrl: './hosts-enable-flapdetection-modal.component.html',
     styleUrl: './hosts-enable-flapdetection-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

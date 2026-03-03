@@ -15,7 +15,7 @@ import {
     TooltipDirective
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { WizardsService } from '../wizards.service';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
@@ -48,8 +48,6 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
         NgClass,
         ActionsButtonComponent,
         ActionsButtonElementComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         TableDirective,
         TableLoaderComponent,

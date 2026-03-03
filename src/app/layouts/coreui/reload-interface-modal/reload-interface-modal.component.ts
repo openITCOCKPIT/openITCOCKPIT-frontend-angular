@@ -8,15 +8,15 @@ import {
     ViewChild
 } from '@angular/core';
 import {
-  ColComponent,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective,
-  ProgressComponent,
-  RowComponent
+    ColComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    ProgressComponent,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -27,17 +27,17 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'oitc-reload-interface-modal',
     imports: [
-    ColComponent,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ProgressComponent,
-    RowComponent,
-    TranslocoDirective
-],
+        ColComponent,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ProgressComponent,
+        RowComponent,
+        TranslocoDirective
+    ],
     templateUrl: './reload-interface-modal.component.html',
     styleUrl: './reload-interface-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

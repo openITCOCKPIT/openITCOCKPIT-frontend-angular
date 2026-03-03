@@ -168,8 +168,7 @@
                                     <td>{{ mailinglist.department }}</td>
                                     <td>
                                         <ul>
-                                            @for (
-                                                mailinglist_recipient of mailinglist.mailinglist_recipients; track $index) {
+                                            @for (mailinglist_recipient of mailinglist.mailinglist_recipients; track $index) {
                                                 <li>
                                                     {{ mailinglist_recipient.name }}
                                                     <span class="ps-1">

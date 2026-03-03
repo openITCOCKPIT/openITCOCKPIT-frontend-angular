@@ -1,14 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { GenericValidationError } from '../../../generic-responses';
-import { NgForOf, NgIf } from '@angular/common';
+
 import _ from 'lodash';
 
 @Component({
     selector: 'oitc-form-feedback',
-    imports: [
-        NgIf,
-        NgForOf
-    ],
+    imports: [],
     templateUrl: './form-feedback.component.html',
     styleUrl: './form-feedback.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

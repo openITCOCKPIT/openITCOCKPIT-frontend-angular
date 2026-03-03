@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { AsyncPipe, DecimalPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, DecimalPipe, KeyValuePipe, NgClass } from '@angular/common';
 
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -19,16 +19,14 @@ import { PermissionsService } from '../../../../permissions/permissions.service'
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Response, SlaServiceInformationElementRoot } from './sla-service-information-element.interface';
 import {
-  AlertComponent,
-  BadgeComponent,
-  ColComponent,
-  RowComponent,
-  TableDirective
+    AlertComponent,
+    BadgeComponent,
+    ColComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-
-
 
 
 import { FormsModule } from '@angular/forms';
@@ -41,25 +39,23 @@ import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-
 @Component({
     selector: 'oitc-sla-service-information-element',
     imports: [
-    TranslocoDirective,
-    SkeletonModule,
-    NgIf,
-    ColComponent,
-    FaIconComponent,
-    NgForOf,
-    RowComponent,
-    RouterLink,
-    FormsModule,
-    AsyncPipe,
-    NgClass,
-    TableDirective,
-    BadgeOutlineComponent,
-    KeyValuePipe,
-    BadgeComponent,
-    AlertComponent,
-    TableLoaderComponent,
-    DecimalPipe
-],
+        TranslocoDirective,
+        SkeletonModule,
+        ColComponent,
+        FaIconComponent,
+        RowComponent,
+        RouterLink,
+        FormsModule,
+        AsyncPipe,
+        NgClass,
+        TableDirective,
+        BadgeOutlineComponent,
+        KeyValuePipe,
+        BadgeComponent,
+        AlertComponent,
+        TableLoaderComponent,
+        DecimalPipe
+    ],
     templateUrl: './sla-service-information-element.component.html',
     styleUrl: './sla-service-information-element.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

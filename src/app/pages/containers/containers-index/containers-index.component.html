@@ -97,9 +97,11 @@
 
             <!-- fancy loader -->
             <c-row>
-                <c-col [xs]="12" class="mt-2" *ngIf="isLoading">
-                    <oitc-nest-loader></oitc-nest-loader>
-                </c-col>
+                @if (isLoading) {
+                    <c-col [xs]="12" class="mt-2">
+                        <oitc-nest-loader></oitc-nest-loader>
+                    </c-col>
+                }
             </c-row>
 
 
@@ -107,21 +109,28 @@
                 <c-col [xs]="12">
                     <div class="dd">
                         <!-- Recursive component -->
-                        <oitc-container-nest *ngIf="nestedContainers.length > 0"
-                                             [nestedContainers]="nestedContainers"
-                                             [containerTemplate]="containerTemplate">
-                        </oitc-container-nest>
+                        @if (nestedContainers.length > 0) {
+                            <oitc-container-nest
+                                [nestedContainers]="nestedContainers"
+                                [containerTemplate]="containerTemplate">
+                            </oitc-container-nest>
+                        }
 
                         <ng-template #containerTemplate let-container let-index="index" let-collapsed="collapsed"
                                      let-component="component">
                             <div class="dd-handle">
-                                <button
-                                    *ngIf="container.children.length > 0"
-                                    type="button" class="dd-collapse-button"
-                                    (click)="component.toggleCollapsed(index)">
-                                    <i class="fas fa-angle-down" *ngIf="!collapsed[index]"></i>
-                                    <i class="fas fa-angle-right" *ngIf="collapsed[index]"></i>
-                                </button>
+                                @if (container.children.length > 0) {
+                                    <button
+                                        type="button" class="dd-collapse-button"
+                                        (click)="component.toggleCollapsed(index)">
+                                        @if (!collapsed[index]) {
+                                            <i class="fas fa-angle-down"></i>
+                                        }
+                                        @if (collapsed[index]) {
+                                            <i class="fas fa-angle-right"></i>
+                                        }
+                                    </button>
+                                }
 
                                 @switch (container.Container.containertype_id) {
                                     @case (ContainerTypesEnum.CT_GLOBAL) {
@@ -149,8 +158,10 @@
                                         <i class="fas fa-pen-to-square"></i>
                                     }
                                     @case (ContainerTypesEnum.CT_RESOURCEGROUP) {
-                                        <i class="fas fa-user-group"
-                                           *ngIf="( PermissionsService.hasModuleObservable('ScmModule') | async )"></i>
+                                        @if (( PermissionsService.hasModuleObservable('ScmModule') | async )) {
+                                            <i class="fas fa-user-group"
+                                            ></i>
+                                        }
                                     }
                                     @default {
                                         <i class="fas fa-question"></i>
@@ -159,90 +170,95 @@
 
 
                                 <!-- Container name and Links -->
-                                <span [ngSwitch]="container.Container.containertype_id">
-                                    <!-- Link for Tenants -->
-                                    <oitc-label-link
-                                        *ngSwitchCase="ContainerTypesEnum.CT_TENANT"
-                                        [objectId]="container.Container.linkedId"
-                                        [route]="'/tenants/edit'"
-                                        [permissions]="'tenants.edit'"
-                                    >
-                                        {{ container.Container.name }}
-                                    </oitc-label-link>
-
-                                    <!-- Link for Tenants -->
-                                    <span *ngSwitchCase="ContainerTypesEnum.CT_NODE">
-                                        <a [routerLink]="['/', 'containers', 'index', container.Container.linkedId]">
-                                            {{ container.Container.name }}
-                                        </a>
-                                    </span>
-
-                                    <!-- Link for Locations -->
-                                    <oitc-label-link
-                                        *ngSwitchCase="ContainerTypesEnum.CT_LOCATION"
-                                        [objectId]="container.Container.linkedId"
-                                        [route]="'/locations/edit'"
-                                        [permissions]="'locations.edit'"
-                                    >
-                                        {{ container.Container.name }}
-                                    </oitc-label-link>
-
-                                    <!-- Link for Contact groups -->
-                                    <oitc-label-link
-                                        *ngSwitchCase="ContainerTypesEnum.CT_CONTACTGROUP"
-                                        [objectId]="container.Container.linkedId"
-                                        [route]="'/contactgroups/edit'"
-                                        [permissions]="'contactgroups.edit'"
-                                    >
-                                        {{ container.Container.name }}
-                                    </oitc-label-link>
-
-                                    <!-- Link for Host groups -->
-                                    <oitc-label-link
-                                        *ngSwitchCase="ContainerTypesEnum.CT_HOSTGROUP"
-                                        [objectId]="container.Container.linkedId"
-                                        [route]="'/hostgroups/edit'"
-                                        [permissions]="'hostgroups.edit'"
-                                    >
-                                        {{ container.Container.name }}
-                                    </oitc-label-link>
-
-                                    <!-- Link for Service groups -->
-                                    <oitc-label-link
-                                        *ngSwitchCase="ContainerTypesEnum.CT_SERVICEGROUP"
-                                        [objectId]="container.Container.linkedId"
-                                        [route]="'/servicegroups/edit'"
-                                        [permissions]="'servicegroups.edit'"
-                                    >
-                                        {{ container.Container.name }}
-                                    </oitc-label-link>
-
-                                    <!-- Link for Service template groups -->
-                                    <oitc-label-link
-                                        *ngSwitchCase="ContainerTypesEnum.CT_SERVICETEMPLATEGROUP"
-                                        [objectId]="container.Container.linkedId"
-                                        [route]="'/servicetemplategroups/edit'"
-                                        [permissions]="'servicetemplategroups.edit'"
-                                    >
-                                        {{ container.Container.name }}
-                                    </oitc-label-link>
-
-                                    <!-- Link for Resource groups -->
-                                    @if (PermissionsService.hasModuleObservable('ScmModule') | async) {
-                                        <oitc-label-link
-                                            *ngSwitchCase="ContainerTypesEnum.CT_RESOURCEGROUP"
-                                            [objectId]="container.Container.linkedId"
-                                            [route]="'/scm_module/resourcegroups/edit'"
-                                            [permissions]="'scmmodule.resourcegroups.edit'"
-                                        >
-                                            {{ container.Container.name }}
-                                        </oitc-label-link>
+                                <span>
+                                    @switch (container.Container.containertype_id) {
+                                        <!-- Link for Tenants -->
+                                        @case (ContainerTypesEnum.CT_TENANT) {
+                                            <oitc-label-link
+                                                [objectId]="container.Container.linkedId"
+                                                [route]="'/tenants/edit'"
+                                                [permissions]="'tenants.edit'"
+                                            >
+                                                {{ container.Container.name }}
+                                            </oitc-label-link>
+                                        }
+                                        <!-- Link for Tenants -->
+                                        @case (ContainerTypesEnum.CT_NODE) {
+                                            <span>
+                                                <a [routerLink]="['/', 'containers', 'index', container.Container.linkedId]">
+                                                    {{ container.Container.name }}
+                                                </a>
+                                            </span>
+                                        }
+                                        <!-- Link for Locations -->
+                                        @case (ContainerTypesEnum.CT_LOCATION) {
+                                            <oitc-label-link
+                                                [objectId]="container.Container.linkedId"
+                                                [route]="'/locations/edit'"
+                                                [permissions]="'locations.edit'"
+                                            >
+                                                {{ container.Container.name }}
+                                            </oitc-label-link>
+                                        }
+                                        <!-- Link for Contact groups -->
+                                        @case (ContainerTypesEnum.CT_CONTACTGROUP) {
+                                            <oitc-label-link
+                                                [objectId]="container.Container.linkedId"
+                                                [route]="'/contactgroups/edit'"
+                                                [permissions]="'contactgroups.edit'"
+                                            >
+                                                {{ container.Container.name }}
+                                            </oitc-label-link>
+                                        }
+                                        <!-- Link for Host groups -->
+                                        @case (ContainerTypesEnum.CT_HOSTGROUP) {
+                                            <oitc-label-link
+                                                [objectId]="container.Container.linkedId"
+                                                [route]="'/hostgroups/edit'"
+                                                [permissions]="'hostgroups.edit'"
+                                            >
+                                                {{ container.Container.name }}
+                                            </oitc-label-link>
+                                        }
+                                        <!-- Link for Service groups -->
+                                        @case (ContainerTypesEnum.CT_SERVICEGROUP) {
+                                            <oitc-label-link
+                                                [objectId]="container.Container.linkedId"
+                                                [route]="'/servicegroups/edit'"
+                                                [permissions]="'servicegroups.edit'"
+                                            >
+                                                {{ container.Container.name }}
+                                            </oitc-label-link>
+                                        }
+                                        <!-- Link for Service template groups -->
+                                        @case (ContainerTypesEnum.CT_SERVICETEMPLATEGROUP) {
+                                            <oitc-label-link
+                                                [objectId]="container.Container.linkedId"
+                                                [route]="'/servicetemplategroups/edit'"
+                                                [permissions]="'servicetemplategroups.edit'"
+                                            >
+                                                {{ container.Container.name }}
+                                            </oitc-label-link>
+                                        }
+                                        <!-- Link for Resource groups -->
+                                        @case (ContainerTypesEnum.CT_RESOURCEGROUP) {
+                                            @if (PermissionsService.hasModuleObservable('ScmModule') | async) {
+                                                <oitc-label-link
+                                                    [objectId]="container.Container.linkedId"
+                                                    [route]="'/scm_module/resourcegroups/edit'"
+                                                    [permissions]="'scmmodule.resourcegroups.edit'"
+                                                >
+                                                    {{ container.Container.name }}
+                                                </oitc-label-link>
+                                            }
+                                        }
+                                        <!-- All other container types do just print the name -->
+                                        @default {
+                                            <span>
+                                                {{ container.Container.name }}
+                                            </span>
+                                        }
                                     }
-
-                                    <!-- All other container types do just print the name -->
-                                    <span *ngSwitchDefault>
-                                        {{ container.Container.name }}
-                                    </span>
                                 </span>
                                 <!-- End of Container name and Links -->
 
@@ -300,61 +316,66 @@
                                     </span>
                                 }
 
-                                <span class="float-end"
-                                      *ngIf="container.Container.containertype_id == ContainerTypesEnum.CT_CONTACTGROUP"
-                                      [title]="'Contacts' | transloco"
-                                >
-                                    <i class="fas fa-user"></i>
-                                    {{ container.Container.contacts }}
-                                </span>
-
-                                <span class="float-end"
-                                      *ngIf="container.Container.containertype_id == ContainerTypesEnum.CT_SERVICETEMPLATEGROUP"
-                                      [title]="'Service templates' | transloco"
-                                >
-                                    <i class="fas fa-pen-to-square"></i>
-                                    {{ container.Container.servicetemplates }}
-                                </span>
-
-                                <span class="float-end"
-                                      *ngIf="container.Container.containertype_id == ContainerTypesEnum.CT_HOSTGROUP">
-                                    <span [title]="'Hosts' | transloco">
-                                        <i class="fas fa-desktop"></i>
-                                        {{ container.Container.hosts }}
+                                @if (container.Container.containertype_id == ContainerTypesEnum.CT_CONTACTGROUP) {
+                                    <span class="float-end"
+                                          [title]="'Contacts' | transloco"
+                                    >
+                                        <i class="fas fa-user"></i>
+                                        {{ container.Container.contacts }}
                                     </span>
+                                }
 
-                                    <span [title]="'Host templates' | transloco">
-                                        <i class="fas fa-pen-to-square"></i>
-                                        {{ container.Container.hosttemplates }}
-                                    </span>
-                                </span>
-
-                                <span class="float-end"
-                                      *ngIf="container.Container.containertype_id == ContainerTypesEnum.CT_SERVICEGROUP">
-                                    <span [title]="'Services' | transloco">
-                                        <i class="fas fa-cog"></i>
-                                        {{ container.Container.services }}
-                                    </span>
-
-                                    <span [title]="'Service templates' | transloco">
+                                @if (container.Container.containertype_id == ContainerTypesEnum.CT_SERVICETEMPLATEGROUP) {
+                                    <span class="float-end"
+                                          [title]="'Service templates' | transloco"
+                                    >
                                         <i class="fas fa-pen-to-square"></i>
                                         {{ container.Container.servicetemplates }}
                                     </span>
-                                </span>
+                                }
 
-                                @if (PermissionsService.hasModuleObservable('ScmModule') | async) {
+                                @if (container.Container.containertype_id == ContainerTypesEnum.CT_HOSTGROUP) {
                                     <span class="float-end"
-                                          *ngIf="container.Container.containertype_id == ContainerTypesEnum.CT_RESOURCEGROUP">
-                                        <span [title]="'Resources' | transloco">
-                                            <i class="fas fa-chalkboard-user"></i>
-                                            {{ container.Container.resources }}
+                                    >
+                                        <span [title]="'Hosts' | transloco">
+                                            <i class="fas fa-desktop"></i>
+                                            {{ container.Container.hosts }}
                                         </span>
-
-                                        <span [title]="'Users' | transloco">
-                                            <i class="fas fa-users"></i>
-                                            {{ container.Container.users }}
+                                        <span [title]="'Host templates' | transloco">
+                                            <i class="fas fa-pen-to-square"></i>
+                                            {{ container.Container.hosttemplates }}
                                         </span>
                                     </span>
+                                }
+
+                                @if (container.Container.containertype_id == ContainerTypesEnum.CT_SERVICEGROUP) {
+                                    <span class="float-end"
+                                    >
+                                        <span [title]="'Services' | transloco">
+                                            <i class="fas fa-cog"></i>
+                                            {{ container.Container.services }}
+                                        </span>
+                                        <span [title]="'Service templates' | transloco">
+                                            <i class="fas fa-pen-to-square"></i>
+                                            {{ container.Container.servicetemplates }}
+                                        </span>
+                                    </span>
+                                }
+
+                                @if (PermissionsService.hasModuleObservable('ScmModule') | async) {
+                                    @if (container.Container.containertype_id == ContainerTypesEnum.CT_RESOURCEGROUP) {
+                                        <span class="float-end"
+                                        >
+                                            <span [title]="'Resources' | transloco">
+                                                <i class="fas fa-chalkboard-user"></i>
+                                                {{ container.Container.resources }}
+                                            </span>
+                                            <span [title]="'Users' | transloco">
+                                                <i class="fas fa-users"></i>
+                                                {{ container.Container.users }}
+                                            </span>
+                                        </span>
+                                    }
 
                                 }
                                 <!-- End of Sub containers badge and count interformation -->

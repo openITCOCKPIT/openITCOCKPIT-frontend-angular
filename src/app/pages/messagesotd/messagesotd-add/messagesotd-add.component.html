@@ -89,20 +89,26 @@
                 <div class="mb-3">
                     <label cLabel for="post.expiration_duration">
                         {{ t('Expiration') }}
-                        <oitc-required-icon *ngIf="post.expire"/>
+                        @if (post.expire) {
+                            <oitc-required-icon/>
+                        }
                     </label>
                     <c-input-group>
                         <c-dropdown>
-                            <button *ngIf="post.expire"
+                            @if (post.expire) {
+                                <button
                                     cButton cDropdownToggle color="primary">
-                                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                                {{ t('expiration duration') }}
-                            </button>
-                            <button *ngIf="! post.expire"
+                                    <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                    {{ t('expiration duration') }}
+                                </button>
+                            }
+                            @if (!post.expire) {
+                                <button
                                     cButton cDropdownToggle color="primary">
-                                <fa-icon [icon]="['fas', 'infinity']"></fa-icon>
-                                {{ t('no expiration') }}
-                            </button>
+                                    <fa-icon [icon]="['fas', 'infinity']"></fa-icon>
+                                    {{ t('no expiration') }}
+                                </button>
+                            }
                             <ul cDropdownMenu>
                                 <li cDropdownItem (click)="setExpiration(true)">
                                     <fa-icon [icon]="['fas', 'clock']"></fa-icon>
@@ -212,13 +218,19 @@
                                             <span class="icon-stack icon-stack-lg">
                                                 <i class="base base-comment icon-stack-3x opacity-100"
                                                    [ngClass]="'text-'+post.style"></i>
-                                                <i class="fas fa-info icon-stack-1x opacity-100 text-white mb-2"
-                                                   *ngIf="post.style == 'primary' || post.style == 'info'"></i>
+                                                @if (post.style == 'primary' || post.style == 'info') {
+                                                    <i class="fas fa-info icon-stack-1x opacity-100 text-white mb-2"
+                                                    ></i>
+                                                }
 
-                                                <i class="fas fa-check icon-stack-1x opacity-100 text-white mb-2"
-                                                   *ngIf="post.style == 'success'"></i>
-                                                <i class="fas fa-exclamation icon-stack-1x opacity-100 text-white mb-2"
-                                                   *ngIf="post.style == 'warning' || post.style == 'danger'"></i>
+                                                @if (post.style == 'success') {
+                                                    <i class="fas fa-check icon-stack-1x opacity-100 text-white mb-2"
+                                                    ></i>
+                                                }
+                                                @if (post.style == 'warning' || post.style == 'danger') {
+                                                    <i class="fas fa-exclamation icon-stack-1x opacity-100 text-white mb-2"
+                                                    ></i>
+                                                }
                                             </span>
                                         </div>
                                         <div class="flex-1 ps-3">
@@ -250,12 +262,16 @@
                 </label>
 
                 <button cButton class="ripple" color="primary" type="submit">
-                    <span *ngIf="post.notify_users">
-                        {{ t('Create message of the day and notify users') }}
-                    </span>
-                    <span *ngIf="! post.notify_users">
-                        {{ t('Create message of the day') }}
-                    </span>
+                    @if (post.notify_users) {
+                        <span>
+                            {{ t('Create message of the day and notify users') }}
+                        </span>
+                    }
+                    @if (!post.notify_users) {
+                        <span>
+                            {{ t('Create message of the day') }}
+                        </span>
+                    }
                 </button>
                 <button [fallbackUrl]="['messagesOtd', 'index']" cButton class="ms-1 ripple"
                         color="default"

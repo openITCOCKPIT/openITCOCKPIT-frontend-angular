@@ -37,7 +37,7 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { FormsModule } from '@angular/forms';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
 import {
@@ -77,14 +77,12 @@ import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.tok
         InputGroupTextDirective,
         TranslocoPipe,
         MultiSelectComponent,
-        NgIf,
         TableLoaderComponent,
         MatSort,
         MatSortHeader,
         TableDirective,
         ActionsButtonComponent,
         ActionsButtonElementComponent,
-        NgForOf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         DeleteAllModalComponent,

@@ -35,7 +35,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { AddNewEvent, CalendarEvent, Countries } from '../calendars.interface';
 import {
@@ -56,36 +56,34 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 @Component({
     selector: 'oitc-calendar',
     imports: [
-    ColComponent,
-    TranslocoDirective,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FaIconComponent,
-    FullCalendarModule,
-    KeyValuePipe,
-    NgForOf,
-    NgIf,
-    RowComponent,
-    XsButtonDirective,
-    NgClass,
-    ButtonCloseDirective,
-    FormControlDirective,
-    FormDirective,
-    FormLabelDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    RequiredIconComponent,
-    TranslocoPipe,
-    ModalToggleDirective
-],
+        ColComponent,
+        TranslocoDirective,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        FaIconComponent,
+        FullCalendarModule,
+        KeyValuePipe,
+        RowComponent,
+        XsButtonDirective,
+        NgClass,
+        ButtonCloseDirective,
+        FormControlDirective,
+        FormDirective,
+        FormLabelDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        RequiredIconComponent,
+        TranslocoPipe,
+        ModalToggleDirective
+    ],
     templateUrl: './calendar.component.html',
     styleUrl: './calendar.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

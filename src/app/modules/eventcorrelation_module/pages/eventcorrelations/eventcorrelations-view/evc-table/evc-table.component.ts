@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { TooltipDirective } from '@coreui/angular';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { EvcSummaryService } from '../../eventcorrelations.interface';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -18,12 +18,15 @@ import { EventcorrelationOperators } from '../../eventcorrelations.enum';
 @Component({
     selector: 'oitc-evc-table',
     imports: [
-        NgIf,
         NgClass,
         FaIconComponent,
         TooltipDirective,
         EvcServicestatusToasterComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        NgClass,
+        FaIconComponent,
+        TooltipDirective,
+        EvcServicestatusToasterComponent
     ],
     templateUrl: './evc-table.component.html',
     styleUrl: './evc-table.component.css',

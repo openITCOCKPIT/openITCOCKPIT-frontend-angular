@@ -1,21 +1,21 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -34,7 +34,7 @@ import {
     SystemfailureIndexRoot
 } from '../systemfailures.interface';
 import { Subscription } from 'rxjs';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { SystemfailuresService } from '../systemfailures.service';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
@@ -57,44 +57,42 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 @Component({
     selector: 'oitc-systemfailures-index',
     imports: [
-    CardComponent,
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    RowComponent,
-    TranslocoPipe,
-    MatSort,
-    MatSortHeader,
-    NgForOf,
-    NgIf,
-    TableDirective,
-    ItemSelectComponent,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    SelectAllComponent,
-    TableLoaderComponent,
-    DeleteAllModalComponent,
-    CardFooterComponent
-],
+        CardComponent,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        RowComponent,
+        TranslocoPipe,
+        MatSort,
+        MatSortHeader,
+        TableDirective,
+        ItemSelectComponent,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        SelectAllComponent,
+        TableLoaderComponent,
+        DeleteAllModalComponent,
+        CardFooterComponent
+    ],
     templateUrl: './systemfailures-index.component.html',
     styleUrl: './systemfailures-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: SystemfailuresService }
+        {provide: DELETE_SERVICE_TOKEN, useClass: SystemfailuresService}
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

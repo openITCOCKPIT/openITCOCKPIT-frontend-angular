@@ -11,11 +11,13 @@
                class="popup-graph-container"
                [style]="{ width: '70%', 'margin-left': '35px' }">
         <ng-template pTemplate="content">
-            <div class="row" *ngIf="isLoading">
-                <div class="col-12">
-                    <oitc-chart-loader></oitc-chart-loader>
+            @if (isLoading) {
+                <div class="row">
+                    <div class="col-12">
+                        <oitc-chart-loader></oitc-chart-loader>
+                    </div>
                 </div>
-            </div>
+            }
 
             <div class="row" [hidden]="isLoading">
                 @for (gauge of perfData; track perfData; let index = $index) {

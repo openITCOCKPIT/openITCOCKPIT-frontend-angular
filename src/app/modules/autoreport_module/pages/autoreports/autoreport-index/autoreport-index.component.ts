@@ -32,7 +32,7 @@ import {
     AutoreportsIndexRoot,
     AutoreportIndex
 } from '../autoreports.interface';
-import { DecimalPipe, NgForOf, NgIf } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
@@ -53,7 +53,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 
 @Component({
-  selector: 'oitc-autoreport-index',
+    selector: 'oitc-autoreport-index',
     imports: [
         TranslocoDirective,
         FaIconComponent,
@@ -76,12 +76,10 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         InputGroupComponent,
         InputGroupTextDirective,
         TranslocoPipe,
-        NgIf,
         TableLoaderComponent,
         MatSort,
         TableDirective,
         MatSortHeader,
-        NgForOf,
         ItemSelectComponent,
         NoRecordsComponent,
         PaginateOrScrollComponent,
@@ -92,12 +90,12 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         DropdownDividerDirective,
         DecimalPipe
     ],
-  templateUrl: './autoreport-index.component.html',
-  styleUrl: './autoreport-index.component.css',
+    templateUrl: './autoreport-index.component.html',
+    styleUrl: './autoreport-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: AutoreportsService } // Inject the CommandsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: AutoreportsService} // Inject the CommandsService into the DeleteAllModalComponent
     ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutoreportIndexComponent implements OnInit, OnDestroy, IndexPage {
 
@@ -120,6 +118,7 @@ export class AutoreportIndexComponent implements OnInit, OnDestroy, IndexPage {
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
+
     public toggleFilter(): void {
         this.hideFilter = !this.hideFilter;
     }

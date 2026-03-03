@@ -377,214 +377,263 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!servicedependencies"></oitc-table-loader>
-            <table *ngIf="servicedependencies" bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col">
-                        {{ t('Services') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Dependent services') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Service groups') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Dependent service groups') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Timeperiod') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Inherits parent') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Execution failure criteria') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Notification failure criteria') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let servicedependency of servicedependencies.all_servicedependencies">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['servicedependencies', 'delete']"
-                            [disabled]="!servicedependency.allowEdit"
-                            [item]="servicedependency"></oitc-item-select>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                            <li *ngFor="let service of servicedependency.services">
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"
-                                         class="badge bg-secondary"></fa-icon>
-                                <a *oitcPermission="['services', 'edit']"
-                                   [routerLink]="['/', 'services', 'edit', service.id]">
-                                    {{ service.servicename }}
-                                </a>
-                                <span *oitcPermission="['services', 'edit']; negate: true">
-                                    {{ service.servicename }}
-                                </span>
-                                <fa-icon *ngIf="service.disabled == 1" [icon]="['fas', 'power-off']"
-                                         class="text-danger"></fa-icon>
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                            <li *ngFor="let service of servicedependency.services_dependent">
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
-                                         class="badge bg-primary"></fa-icon>
-                                <a *oitcPermission="['services', 'edit']"
-                                   [routerLink]="['/', 'services', 'edit', service.id]">
-                                    {{ service.servicename }}
-                                </a>
-                                <span *oitcPermission="['services', 'edit']; negate: true">
-                                    {{ service.servicename }}
-                                </span>
-                                <fa-icon *ngIf="service.disabled == 1" [icon]="['fas', 'power-off']"
-                                         class="text-danger"></fa-icon>
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                            <li *ngFor="let servicegroup of servicedependency.servicegroups">
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"
-                                         class="badge bg-secondary"></fa-icon>
-                                <a *oitcPermission="['servicegroups', 'edit']"
-                                   [routerLink]="['/', 'servicegroups', 'edit', servicegroup.id]">
-                                    {{ servicegroup.container.name }}
-                                </a>
-                                <span *oitcPermission="['servicegroups', 'edit']; negate: true">
-                                    {{ servicegroup.container.name }}
-                                </span>
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                            <li *ngFor="let servicegroup of servicedependency.servicegroups_dependent">
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
-                                         class="badge bg-primary"></fa-icon>
-                                <a *oitcPermission="['servicegroups', 'edit']"
-                                   [routerLink]="['/', 'servicegroups', 'edit', servicegroup.id]">
-                                    {{ servicegroup.container.name }}
-                                </a>
-                                <span *oitcPermission="['servicegroups', 'edit']; negate: true">
-                                    {{ servicegroup.container.name }}
-                                </span>
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                        <div *ngIf="servicedependency.timeperiod">
-                            <a *oitcPermission="['timeperiods', 'edit']"
-                               [routerLink]="['/', 'timeperiods', 'edit', servicedependency.timeperiod.id]">
-                                {{ servicedependency.timeperiod.name }}
-                            </a>
-                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
-                                {{ servicedependency.timeperiod.name }}
-                            </span>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <span class="badge bg-success mx-1" title="{{ t('Yes') }}"
-                              *ngIf="servicedependency.inherits_parent">
-                            {{ t('Yes') }}
-                        </span>
-                        <span class="badge bg-danger mx-1" title="{{ t('No') }}"
-                              *ngIf="!servicedependency.inherits_parent">
-                            {{ t('No') }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="badge bg-success mx-1" title="{{ t('Ok') }}"
-                              *ngIf="servicedependency.execution_fail_on_ok">
-                            {{ t('O') }}
-                        </span>
-                        <span class="badge bg-warning mx-1" title="{{ t('Warning') }}"
-                              *ngIf="servicedependency.execution_fail_on_warning">
-                            {{ t('W') }}
-                        </span>
-                        <span class="badge bg-danger mx-1" title="{{ t('Critical') }}"
-                              *ngIf="servicedependency.execution_fail_on_critical">
-                            {{ t('C') }}
-                        </span>
-                        <span class="badge bg-secondary mx-1" title="{{ t('Unknown') }}"
-                              *ngIf="servicedependency.execution_fail_on_unknown">
-                            {{ t('U') }}
-                        </span>
-                        <span class="badge bg-primary mx-1" title="{{ t('Pending') }}"
-                              *ngIf="servicedependency.execution_fail_on_pending">
-                            {{ t('P') }}
-                        </span>
-                        <span class="badge bg-primary mx-1" title="{{ t('Execution none') }}"
-                              *ngIf="servicedependency.execution_none">
-                            {{ t('N') }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="badge bg-success mx-1" title="{{ t('Recovery') }}"
-                              *ngIf="servicedependency.notification_fail_on_ok">
-                            {{ t('O') }}
-                        </span>
-                        <span class="badge bg-warning mx-1" title="{{ t('Warning') }}"
-                              *ngIf="servicedependency.notification_fail_on_warning">
-                            {{ t('W') }}
-                        </span>
-                        <span class="badge bg-danger mx-1" title="{{ t('Critical') }}"
-                              *ngIf="servicedependency.notification_fail_on_critical">
-                            {{ t('C') }}
-                        </span>
-                        <span class="badge bg-secondary mx-1" title="{{ t('Unknown') }}"
-                              *ngIf="servicedependency.notification_fail_on_unknown">
-                            {{ t('U') }}
-                        </span>
-                        <span class="badge bg-primary mx-1" title="{{ t('Pending') }}"
-                              *ngIf="servicedependency.notification_fail_on_pending">
-                            {{ t('P') }}
-                        </span>
-                        <span class="badge bg-primary mx-1" title="{{ t('Notification none') }}"
-                              *ngIf="servicedependency.notification_none">
-                            {{ t('N') }}
-                        </span>
-                    </td>
+            @if (!servicedependencies) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (servicedependencies) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col">
+                            {{ t('Services') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Dependent services') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Service groups') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Dependent service groups') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Timeperiod') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Inherits parent') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Execution failure criteria') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Notification failure criteria') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (servicedependency of servicedependencies.all_servicedependencies; track servicedependency) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['servicedependencies', 'delete']"
+                                        [disabled]="!servicedependency.allowEdit"
+                                        [item]="servicedependency"></oitc-item-select>
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @for (service of servicedependency.services; track service) {
+                                            <li>
+                                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"
+                                                         class="badge bg-secondary"></fa-icon>
+                                                <a *oitcPermission="['services', 'edit']"
+                                                   [routerLink]="['/', 'services', 'edit', service.id]">
+                                                    {{ service.servicename }}
+                                                </a>
+                                                <span *oitcPermission="['services', 'edit']; negate: true">
+                                                    {{ service.servicename }}
+                                                </span>
+                                                @if (service.disabled == 1) {
+                                                    <fa-icon [icon]="['fas', 'power-off']"
+                                                             class="text-danger"></fa-icon>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @for (service of servicedependency.services_dependent; track service) {
+                                            <li>
+                                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
+                                                         class="badge bg-primary"></fa-icon>
+                                                <a *oitcPermission="['services', 'edit']"
+                                                   [routerLink]="['/', 'services', 'edit', service.id]">
+                                                    {{ service.servicename }}
+                                                </a>
+                                                <span *oitcPermission="['services', 'edit']; negate: true">
+                                                    {{ service.servicename }}
+                                                </span>
+                                                @if (service.disabled == 1) {
+                                                    <fa-icon [icon]="['fas', 'power-off']"
+                                                             class="text-danger"></fa-icon>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @for (servicegroup of servicedependency.servicegroups; track servicegroup) {
+                                            <li>
+                                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="270"
+                                                         class="badge bg-secondary"></fa-icon>
+                                                <a *oitcPermission="['servicegroups', 'edit']"
+                                                   [routerLink]="['/', 'servicegroups', 'edit', servicegroup.id]">
+                                                    {{ servicegroup.container.name }}
+                                                </a>
+                                                <span *oitcPermission="['servicegroups', 'edit']; negate: true">
+                                                    {{ servicegroup.container.name }}
+                                                </span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @for (servicegroup of servicedependency.servicegroups_dependent; track servicegroup) {
+                                            <li>
+                                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
+                                                         class="badge bg-primary"></fa-icon>
+                                                <a *oitcPermission="['servicegroups', 'edit']"
+                                                   [routerLink]="['/', 'servicegroups', 'edit', servicegroup.id]">
+                                                    {{ servicegroup.container.name }}
+                                                </a>
+                                                <span *oitcPermission="['servicegroups', 'edit']; negate: true">
+                                                    {{ servicegroup.container.name }}
+                                                </span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>
+                                    @if (servicedependency.timeperiod) {
+                                        <div>
+                                            <a *oitcPermission="['timeperiods', 'edit']"
+                                               [routerLink]="['/', 'timeperiods', 'edit', servicedependency.timeperiod.id]">
+                                                {{ servicedependency.timeperiod.name }}
+                                            </a>
+                                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                                {{ servicedependency.timeperiod.name }}
+                                            </span>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (servicedependency.inherits_parent) {
+                                        <span class="badge bg-success mx-1" title="{{ t('Yes') }}"
+                                        >
+                                            {{ t('Yes') }}
+                                        </span>
+                                    }
+                                    @if (!servicedependency.inherits_parent) {
+                                        <span class="badge bg-danger mx-1" title="{{ t('No') }}"
+                                        >
+                                            {{ t('No') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (servicedependency.execution_fail_on_ok) {
+                                        <span class="badge bg-success mx-1" title="{{ t('Ok') }}"
+                                        >
+                                            {{ t('O') }}
+                                        </span>
+                                    }
+                                    @if (servicedependency.execution_fail_on_warning) {
+                                        <span class="badge bg-warning mx-1" title="{{ t('Warning') }}"
+                                        >
+                                            {{ t('W') }}
+                                        </span>
+                                    }
+                                    @if (servicedependency.execution_fail_on_critical) {
+                                        <span class="badge bg-danger mx-1" title="{{ t('Critical') }}"
+                                        >
+                                            {{ t('C') }}
+                                        </span>
+                                    }
+                                    @if (servicedependency.execution_fail_on_unknown) {
+                                        <span class="badge bg-secondary mx-1" title="{{ t('Unknown') }}"
+                                        >
+                                            {{ t('U') }}
+                                        </span>
+                                    }
+                                    @if (servicedependency.execution_fail_on_pending) {
+                                        <span class="badge bg-primary mx-1" title="{{ t('Pending') }}"
+                                        >
+                                            {{ t('P') }}
+                                        </span>
+                                    }
+                                    @if (servicedependency.execution_none) {
+                                        <span class="badge bg-primary mx-1" title="{{ t('Execution none') }}"
+                                        >
+                                            {{ t('N') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (servicedependency.notification_fail_on_ok) {
+                                        <span class="badge bg-success mx-1" title="{{ t('Recovery') }}"
+                                        >
+                                            {{ t('O') }}
+                                        </span>
+                                    }
+                                    @if (servicedependency.notification_fail_on_warning) {
+                                        <span class="badge bg-warning mx-1" title="{{ t('Warning') }}"
+                                        >
+                                            {{ t('W') }}
+                                        </span>
+                                    }
+                                    @if (servicedependency.notification_fail_on_critical) {
+                                        <span class="badge bg-danger mx-1" title="{{ t('Critical') }}"
+                                        >
+                                            {{ t('C') }}
+                                        </span>
+                                    }
+                                    @if (servicedependency.notification_fail_on_unknown) {
+                                        <span class="badge bg-secondary mx-1" title="{{ t('Unknown') }}"
+                                        >
+                                            {{ t('U') }}
+                                        </span>
+                                    }
+                                    @if (servicedependency.notification_fail_on_pending) {
+                                        <span class="badge bg-primary mx-1" title="{{ t('Pending') }}"
+                                        >
+                                            {{ t('P') }}
+                                        </span>
+                                    }
+                                    @if (servicedependency.notification_none) {
+                                        <span class="badge bg-primary mx-1" title="{{ t('Notification none') }}"
+                                        >
+                                            {{ t('N') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'servicedependencies.edit'"
+                                                         [url]="'/servicedependencies/edit/' + servicedependency.id"
+                                                         [allowEdit]="servicedependency.allowEdit">
+                                        <oitc-actions-button-element [permission]="'servicedependencies.edit'"
+                                                                     [url]="'/servicedependencies/edit/' + servicedependency.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(servicedependency)"
+                                                                     [permission]="'servicedependencies.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'servicedependencies.edit'"
-                                             [url]="'/servicedependencies/edit/' + servicedependency.id"
-                                             [allowEdit]="servicedependency.allowEdit">
-                            <oitc-actions-button-element [permission]="'servicedependencies.edit'"
-                                                         [url]="'/servicedependencies/edit/' + servicedependency.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(servicedependency)"
-                                                         [permission]="'servicedependencies.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records
-                *ngIf="servicedependencies && servicedependencies.all_servicedependencies.length === 0"></oitc-no-records>
-            <ng-container *ngIf="servicedependencies && servicedependencies.all_servicedependencies">
+            @if (servicedependencies && servicedependencies.all_servicedependencies.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (servicedependencies && servicedependencies.all_servicedependencies) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -594,7 +643,6 @@
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
-
                                 <button (click)="toggleDeleteAllModal()"
                                         *oitcPermission="['servicedependencies', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
@@ -606,16 +654,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="servicedependencies"
-                            [paginateOrScroll]="servicedependencies"></oitc-paginate-or-scroll>
+                        @if (servicedependencies) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="servicedependencies"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

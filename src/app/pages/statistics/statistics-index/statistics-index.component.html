@@ -33,36 +33,42 @@
 
             <c-row>
                 <c-col sm="12">
-                    <c-alert color="info"
-                             *ngIf="currentSettings && currentSettings.settings.Systemsetting.value == Statistics.DISABLED">
-                        <fa-icon [icon]="['fas', 'times']"></fa-icon>
-                        {{ t('Sending of anonymous statistics is currently disabled.') }}
-                        <button class="btn btn-xs btn-success float-end" (click)="saveSettings(Statistics.ENABLED)">
-                            {{ t('Enable') }}
-                        </button>
-                    </c-alert>
+                    @if (currentSettings && currentSettings.settings.Systemsetting.value == Statistics.DISABLED) {
+                        <c-alert color="info"
+                        >
+                            <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                            {{ t('Sending of anonymous statistics is currently disabled.') }}
+                            <button class="btn btn-xs btn-success float-end" (click)="saveSettings(Statistics.ENABLED)">
+                                {{ t('Enable') }}
+                            </button>
+                        </c-alert>
+                    }
                 </c-col>
 
                 <c-col sm="12">
-                    <c-alert color="info"
-                             *ngIf="currentSettings && currentSettings.settings.Systemsetting.value == Statistics.WAITING_FOR_APPROVAL">
-                        <fa-icon [icon]="['fas', 'times']"></fa-icon>
-                        {{ t('Sending of anonymous statistics is currently disabled. Waiting for your approval.') }}
-                        <button class="btn btn-xs btn-success float-end" (click)="saveSettings(Statistics.ENABLED)">
-                            {{ t('Enable') }}
-                        </button>
-                    </c-alert>
+                    @if (currentSettings && currentSettings.settings.Systemsetting.value == Statistics.WAITING_FOR_APPROVAL) {
+                        <c-alert color="info"
+                        >
+                            <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                            {{ t('Sending of anonymous statistics is currently disabled. Waiting for your approval.') }}
+                            <button class="btn btn-xs btn-success float-end" (click)="saveSettings(Statistics.ENABLED)">
+                                {{ t('Enable') }}
+                            </button>
+                        </c-alert>
+                    }
                 </c-col>
 
                 <c-col sm="12">
-                    <c-alert color="success"
-                             *ngIf="currentSettings && currentSettings.settings.Systemsetting.value == Statistics.ENABLED">
-                        <fa-icon [icon]="['fas', 'check']"></fa-icon>
-                        {{ t('Sending of anonymous statistics is currently enabled. Many thanks for your support!') }}
-                        <button class="btn btn-xs btn-danger float-end" (click)="saveSettings(Statistics.DISABLED)">
-                            {{ t('Disable') }}
-                        </button>
-                    </c-alert>
+                    @if (currentSettings && currentSettings.settings.Systemsetting.value == Statistics.ENABLED) {
+                        <c-alert color="success"
+                        >
+                            <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                            {{ t('Sending of anonymous statistics is currently enabled. Many thanks for your support!') }}
+                            <button class="btn btn-xs btn-danger float-end" (click)="saveSettings(Statistics.DISABLED)">
+                                {{ t('Disable') }}
+                            </button>
+                        </c-alert>
+                    }
                 </c-col>
 
             </c-row>
@@ -119,18 +125,18 @@
                     <p>{{ t('The system_id is a unique number that was generated on your system. The system_id is included in every request, to enable our database to locate your record and update it.') }}</p>
                     <p><strong>{{ t('The system_id will not be linked to any other records.') }}</strong></p>
                 </c-col>
-                <c-col sm="12" *ngIf="currentSettings">
-
-                    {{ t('If you want to change your system_id, you can delete the file') }}
-                    <ng-container *ngIf="currentSettings.IS_CONTAINER">
-                        <code>/opt/openitc/var/system-id</code>
-                    </ng-container>
-                    <ng-container *ngIf="!currentSettings.IS_CONTAINER">
-                        <code>/opt/openitc/etc/system-id</code>.
-                    </ng-container>
-                    {{ t('openITCOCKPIT will generate a new system_id, if required.') }}
-
-                </c-col>
+                @if (currentSettings) {
+                    <c-col sm="12">
+                        {{ t('If you want to change your system_id, you can delete the file') }}
+                        @if (currentSettings.IS_CONTAINER) {
+                            <code>/opt/openitc/var/system-id</code>
+                        }
+                        @if (!currentSettings.IS_CONTAINER) {
+                            <code>/opt/openitc/etc/system-id</code>.
+                        }
+                        {{ t('openITCOCKPIT will generate a new system_id, if required.') }}
+                    </c-col>
+                }
             </c-row>
 
             <c-row class="mt-3">

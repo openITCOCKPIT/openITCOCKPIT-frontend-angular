@@ -20,165 +20,186 @@
     </nav>
 
     <oitc-form-loader [isVisible]="!contactgroup"></oitc-form-loader>
-    <c-card class="mb-3" *ngIf="contactgroup">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Contact group') }}
-                <small class="fw-300">
-                    <i>
-                        <strong>
-                            »{{ contactgroup.name }}«
-                        </strong>
-                        {{ t('is used by') }}
-                        {{ total }}
-                        {{ t('objects.') }}
-                    </i>
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['contactgroups', 'index']" cButton class="ripple" color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
-            <c-container
-                [fluid]="true">
-                <table bordered cTable class="mt-2 mb-0" hover striped *ngIf="objects">
-                    <tbody>
-
-                    <!-- Host templates -->
-                    <tr *ngIf="objects.hosttemplates.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                            {{ t('Host template') }} ({{ objects.hosttemplates.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let hosttemplate of objects.hosttemplates">
-                        <td colspan="2">
-                            <a *oitcPermission="['hosttemplates', 'edit']"
-                               [routerLink]="['/', 'hosttemplates', 'edit', hosttemplate.id]">
-                                {{ hosttemplate.name }}
-                            </a>
-                            <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
-                                {{ hosttemplate.name }}
-                            </span>
-                        </td>
-                    </tr>
-
-                    <!-- Hosts -->
-                    <tr *ngIf="objects.hosts.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                            {{ t('Host') }} ({{ objects.hosts.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let host of objects.hosts">
-                        <td colspan="2">
-                            <a *oitcPermission="['hosts', 'edit']"
-                               [routerLink]="['/', 'hosts', 'edit', host.id]">
-                                {{ host.name }}
-                            </a>
-                            <span *oitcPermission="['hosts', 'edit']; negate: true">
-                                {{ host.name }}
-                            </span>
-                        </td>
-                    </tr>
-
-                    <!-- Service templates -->
-                    <tr *ngIf="objects.servicetemplates.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                            {{ t('Service template') }} ({{ objects.servicetemplates.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let servicetemplate of objects.servicetemplates">
-                        <td colspan="2">
-                            <a *oitcPermission="['servicetemplates', 'edit']"
-                               [routerLink]="['/', 'servicetemplates', 'edit', servicetemplate.id]">
-                                {{ servicetemplate.name }}
-                            </a>
-                            <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
-                                {{ servicetemplate.name }}
-                            </span>
-                        </td>
-                    </tr>
-
-                    <!-- Services -->
-                    <tr *ngIf="objects.services.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                            {{ t('Service') }} ({{ objects.services.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let service of objects.services">
-                        <td colspan="2">
-                            <a *oitcPermission="['services', 'edit']"
-                               [routerLink]="['/', 'services', 'edit', service.id]">
-                                {{ service.name }}
-                            </a>
-                            <span *oitcPermission="['services', 'edit']; negate: true">
-                                {{ service.name }}
-                            </span>
-                        </td>
-                    </tr>
-
-                    <!-- Hostescalations -->
-                    <tr *ngIf="objects.hostescalations.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
-                            {{ t('Host escalation') }} ({{ objects.hostescalations.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let hostescalation of objects.hostescalations">
-                        <td colspan="2">
-                            <a *oitcPermission="['hostescalations', 'edit']"
-                               [routerLink]="['/', 'hostescalations', 'edit', hostescalation.id]">
-                                {{ t('Host escalation') }} #{{ hostescalation.id }}
-                            </a>
-                            <span *oitcPermission="['hostescalations', 'edit']; negate: true">
-                                {{ t('Host escalation') }} #{{ hostescalation.id }}
-                            </span>
-                        </td>
-                    </tr>
-
-                    <!-- Serviceescalations -->
-                    <tr *ngIf="objects.serviceescalations.length > 0">
-                        <th colspan="2" class="bg-secondary bg-opacity-10">
-                            <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
-                            {{ t('Service escalation') }} ({{ objects.serviceescalations.length }})
-                        </th>
-                    </tr>
-                    <tr *ngFor="let serviceescalation of objects.serviceescalations">
-                        <td colspan="2">
-                            <a *oitcPermission="['serviceescalations', 'edit']"
-                               [routerLink]="['/', 'serviceescalations', 'edit', serviceescalation.id]">
-                                {{ t('Service escalation') }} #{{ serviceescalation.id }}
-                            </a>
-                            <span *oitcPermission="['serviceescalations', 'edit']; negate: true">
-                                {{ t('Service escalation') }} #{{ serviceescalation.id }}
-                            </span>
-                        </td>
-                    </tr>
-
-                    </tbody>
-                </table>
-
-                <oitc-not-used-by-object *ngIf="total === 0">
-                    {{ t('This contact group is not used by any object') }}
-                </oitc-not-used-by-object>
-
-            </c-container>
-        </c-card-body>
-    </c-card>
+    @if (contactgroup) {
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Contact group') }}
+                    <small class="fw-300">
+                        <i>
+                            <strong>
+                                »{{ contactgroup.name }}«
+                            </strong>
+                            {{ t('is used by') }}
+                            {{ total }}
+                            {{ t('objects.') }}
+                        </i>
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['contactgroups', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <c-container
+                    [fluid]="true">
+                    @if (objects) {
+                        <table bordered cTable class="mt-2 mb-0" hover striped>
+                            <tbody>
+                            <!-- Host templates -->
+                                @if (objects.hosttemplates.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                                            {{ t('Host template') }} ({{ objects.hosttemplates.length }})
+                                        </th>
+                                    </tr>
+                                }
+                                @for (hosttemplate of objects.hosttemplates; track hosttemplate) {
+                                    <tr>
+                                        <td colspan="2">
+                                            <a *oitcPermission="['hosttemplates', 'edit']"
+                                               [routerLink]="['/', 'hosttemplates', 'edit', hosttemplate.id]">
+                                                {{ hosttemplate.name }}
+                                            </a>
+                                            <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
+                                                {{ hosttemplate.name }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            <!-- Hosts -->
+                                @if (objects.hosts.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            {{ t('Host') }} ({{ objects.hosts.length }})
+                                        </th>
+                                    </tr>
+                                }
+                                @for (host of objects.hosts; track host) {
+                                    <tr>
+                                        <td colspan="2">
+                                            <a *oitcPermission="['hosts', 'edit']"
+                                               [routerLink]="['/', 'hosts', 'edit', host.id]">
+                                                {{ host.name }}
+                                            </a>
+                                            <span *oitcPermission="['hosts', 'edit']; negate: true">
+                                                {{ host.name }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            <!-- Service templates -->
+                                @if (objects.servicetemplates.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                                            {{ t('Service template') }} ({{ objects.servicetemplates.length }})
+                                        </th>
+                                    </tr>
+                                }
+                                @for (servicetemplate of objects.servicetemplates; track servicetemplate) {
+                                    <tr>
+                                        <td colspan="2">
+                                            <a *oitcPermission="['servicetemplates', 'edit']"
+                                               [routerLink]="['/', 'servicetemplates', 'edit', servicetemplate.id]">
+                                                {{ servicetemplate.name }}
+                                            </a>
+                                            <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
+                                                {{ servicetemplate.name }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            <!-- Services -->
+                                @if (objects.services.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                            {{ t('Service') }} ({{ objects.services.length }})
+                                        </th>
+                                    </tr>
+                                }
+                                @for (service of objects.services; track service) {
+                                    <tr>
+                                        <td colspan="2">
+                                            <a *oitcPermission="['services', 'edit']"
+                                               [routerLink]="['/', 'services', 'edit', service.id]">
+                                                {{ service.name }}
+                                            </a>
+                                            <span *oitcPermission="['services', 'edit']; negate: true">
+                                                {{ service.name }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            <!-- Hostescalations -->
+                                @if (objects.hostescalations.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
+                                            {{ t('Host escalation') }} ({{ objects.hostescalations.length }})
+                                        </th>
+                                    </tr>
+                                }
+                                @for (hostescalation of objects.hostescalations; track hostescalation) {
+                                    <tr>
+                                        <td colspan="2">
+                                            <a *oitcPermission="['hostescalations', 'edit']"
+                                               [routerLink]="['/', 'hostescalations', 'edit', hostescalation.id]">
+                                                {{ t('Host escalation') }} #{{ hostescalation.id }}
+                                            </a>
+                                            <span *oitcPermission="['hostescalations', 'edit']; negate: true">
+                                                {{ t('Host escalation') }} #{{ hostescalation.id }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            <!-- Serviceescalations -->
+                                @if (objects.serviceescalations.length > 0) {
+                                    <tr>
+                                        <th colspan="2" class="bg-secondary bg-opacity-10">
+                                            <fa-icon [icon]="['fas', 'bomb']"></fa-icon>
+                                            {{ t('Service escalation') }} ({{ objects.serviceescalations.length }})
+                                        </th>
+                                    </tr>
+                                }
+                                @for (serviceescalation of objects.serviceescalations; track serviceescalation) {
+                                    <tr>
+                                        <td colspan="2">
+                                            <a *oitcPermission="['serviceescalations', 'edit']"
+                                               [routerLink]="['/', 'serviceescalations', 'edit', serviceescalation.id]">
+                                                {{ t('Service escalation') }} #{{ serviceescalation.id }}
+                                            </a>
+                                            <span *oitcPermission="['serviceescalations', 'edit']; negate: true">
+                                                {{ t('Service escalation') }} #{{ serviceescalation.id }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    @if (total === 0) {
+                        <oitc-not-used-by-object>
+                            {{ t('This contact group is not used by any object') }}
+                        </oitc-not-used-by-object>
+                    }
+                </c-container>
+            </c-card-body>
+        </c-card>
+    }
 </ng-container>

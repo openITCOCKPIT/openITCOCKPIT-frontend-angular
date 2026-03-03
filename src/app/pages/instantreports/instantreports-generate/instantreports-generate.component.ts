@@ -17,7 +17,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -57,7 +57,6 @@ import { InstantreportViewerComponent } from './instantreport-viewer/instantrepo
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         TranslocoDirective,
         XsButtonDirective,

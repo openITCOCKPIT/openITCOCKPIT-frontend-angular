@@ -23,7 +23,7 @@ import {
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -68,7 +68,6 @@ import { HostBrowserTabs } from '../../../../../pages/hosts/hosts.enum';
         FormsModule,
         InputGroupComponent,
         InputGroupTextDirective,
-        NgIf,
         ReactiveFormsModule,
         RowComponent,
         TableLoaderComponent,
@@ -78,7 +77,6 @@ import { HostBrowserTabs } from '../../../../../pages/hosts/hosts.enum';
         PaginateOrScrollComponent,
         MatSort,
         MatSortHeader,
-        NgForOf,
         TableDirective,
         AsyncPipe,
         ActionsButtonComponent,

@@ -12,7 +12,7 @@ import {
 } from '@coreui/angular';
 import { OnlineOfflineComponent } from '../../online-offline/online-offline.component';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgClass, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { NetworkDeviceComponent } from '../network-device/network-device.component';
 import { VirtualMachineComponent } from '../virtual-machine/virtual-machine.component';
 import { ServerComponent } from '../server/server.component';
@@ -26,31 +26,27 @@ import { DependencyTreeComponent } from '../../../dependency-tree/dependency-tre
 @Component({
     selector: 'oitc-itop-overview',
     imports: [
-    ColComponent,
-    OnlineOfflineComponent,
-    RowComponent,
-    TranslocoDirective,
-    NgSwitch,
-    NgIf,
-    NetworkDeviceComponent,
-    VirtualMachineComponent,
-    ServerComponent,
-    DefaultComponent,
-    WanLineComponent,
-    CustomClassComponent,
-    NgSwitchCase,
-    NgSwitchDefault,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    NgClass,
-    DependencyTreeComponent
-],
+        ColComponent,
+        OnlineOfflineComponent,
+        RowComponent,
+        TranslocoDirective,
+        NetworkDeviceComponent,
+        VirtualMachineComponent,
+        ServerComponent,
+        DefaultComponent,
+        WanLineComponent,
+        CustomClassComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        NgClass,
+        DependencyTreeComponent
+    ],
     templateUrl: './itop-overview.component.html',
     styleUrl: './itop-overview.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

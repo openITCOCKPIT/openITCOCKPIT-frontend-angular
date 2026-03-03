@@ -63,9 +63,11 @@
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
 
-                    <div *ngIf="!post.Changecalendar.container_id" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
+                    @if (!post.Changecalendar.container_id) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
                 </div>
 
                 <!-- NAME -->

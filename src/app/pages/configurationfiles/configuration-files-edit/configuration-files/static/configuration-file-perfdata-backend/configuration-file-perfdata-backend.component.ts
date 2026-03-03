@@ -19,7 +19,7 @@ import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.
 import { FormFeedbackComponent } from '../../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../../components/required-icon/required-icon.component';
-import { NgIf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ConfigurationFilesService } from '../../../../configuration-files.service';
 import { FormsModule } from '@angular/forms';
@@ -27,15 +27,14 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-configuration-file-perfdata-backend',
     imports: [
-    FormErrorDirective,
-    FormFeedbackComponent,
-    PaginatorModule,
-    RequiredIconComponent,
-    NgIf,
-    FormSelectDirective,
-    TranslocoDirective,
-    FormsModule
-],
+        FormErrorDirective,
+        FormFeedbackComponent,
+        PaginatorModule,
+        RequiredIconComponent,
+        FormSelectDirective,
+        TranslocoDirective,
+        FormsModule
+    ],
     templateUrl: './configuration-file-perfdata-backend.component.html',
     styleUrl: './configuration-file-perfdata-backend.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

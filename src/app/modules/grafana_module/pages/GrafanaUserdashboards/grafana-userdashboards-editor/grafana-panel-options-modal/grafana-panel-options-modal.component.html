@@ -10,155 +10,146 @@
         <c-modal-body>
 
             <c-row>
-                <c-col [xs]="12" *ngIf="currentEvent">
-
-                    <div class="mb-3">
-                        <label cLabel for="PanelTitle">
-                            {{ t('Panel title') }}
-                        </label>
-                        <input cFormControl
-                               id="PanelTitle"
-                               name="PanelTitle"
-                               [(ngModel)]="currentEvent.panel.title">
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="unit">
-                            {{ t('Panel unit ') }}
-                        </label>
-
-                        <oitc-select-optgroup
-                            name="unit"
-                            id="unit"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="currentEvent.panel.unit"
-                            [options]="grafanaUnitsSelect"
-                            [appendTo]="''">
-                        </oitc-select-optgroup>
-                    </div>
-
-                </c-col>
+                @if (currentEvent) {
+                    <c-col [xs]="12">
+                        <div class="mb-3">
+                            <label cLabel for="PanelTitle">
+                                {{ t('Panel title') }}
+                            </label>
+                            <input cFormControl
+                                   id="PanelTitle"
+                                   name="PanelTitle"
+                                   [(ngModel)]="currentEvent.panel.title">
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="unit">
+                                {{ t('Panel unit ') }}
+                            </label>
+                            <oitc-select-optgroup
+                                name="unit"
+                                id="unit"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="currentEvent.panel.unit"
+                                [options]="grafanaUnitsSelect"
+                                [appendTo]="''">
+                            </oitc-select-optgroup>
+                        </div>
+                    </c-col>
+                }
             </c-row>
 
-            <c-row *ngIf="currentEvent">
-                <c-col [xs]="12">
-                    <label class="form-label">
-                        {{ t('Visualization type') }}
-                    </label>
-                </c-col>
-
-                <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
-                    <button type="button"
-                            class="btn btn-outline-primary w-100 ripple"
-                            (click)="changeVisualizationType(GrafanaChartTypesEnum.timeseries)"
-                            [ngClass]="{'btn-primary text-white': currentEvent.panel.visualization_type === GrafanaChartTypesEnum.timeseries}">
-                        <fa-icon [icon]="['fas', 'chart-area']"></fa-icon>
-                        {{ t('Time series') }}
-                    </button>
-                </c-col>
-
-                <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
-                    <button type="button"
-                            class="btn btn-outline-primary w-100 ripple"
-                            (click)="changeVisualizationType(GrafanaChartTypesEnum.barchart)"
-                            [ngClass]="{'btn-primary text-white': currentEvent.panel.visualization_type === GrafanaChartTypesEnum.barchart}">
-                        <fa-icon [icon]="['fas', 'chart-column']"></fa-icon>
-                        {{ t('Bar chart') }}
-                    </button>
-                </c-col>
-
-                <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
-                    <button type="button"
-                            class="btn btn-outline-primary w-100 ripple"
-                            (click)="changeVisualizationType(GrafanaChartTypesEnum.stat)"
-                            [ngClass]="{'btn-primary text-white': currentEvent.panel.visualization_type === GrafanaChartTypesEnum.stat}">
-                        <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
-                        {{ t('Stat') }}
-                    </button>
-                </c-col>
-
-                <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
-                    <button type="button"
-                            class="btn btn-outline-primary w-100 ripple"
-                            (click)="changeVisualizationType(GrafanaChartTypesEnum.gauge)"
-                            [ngClass]="{'btn-primary text-white': currentEvent.panel.visualization_type === GrafanaChartTypesEnum.gauge}">
-                        <fa-icon [icon]="['fas', 'gauge-high']"></fa-icon>
-                        {{ t('Gauge') }}
-                    </button>
-                </c-col>
-
-                <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
-                    <button type="button"
-                            class="btn btn-outline-primary w-100 ripple"
-                            (click)="changeVisualizationType(GrafanaChartTypesEnum.bargauge)"
-                            [ngClass]="{'btn-primary text-white': currentEvent.panel.visualization_type === GrafanaChartTypesEnum.bargauge}">
-                        <fa-icon [icon]="['fas', 'chart-simple']"></fa-icon>
-                        {{ t('Bar gauge') }}
-                    </button>
-                </c-col>
-
-                <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
-                    <button type="button"
-                            class="btn btn-outline-primary w-100 ripple"
-                            (click)="changeVisualizationType(GrafanaChartTypesEnum.bargaugeretro)"
-                            [ngClass]="{'btn-primary text-white': currentEvent.panel.visualization_type === GrafanaChartTypesEnum.bargaugeretro}">
-                        <fa-icon [icon]="['fas', 'bars']"></fa-icon>
-                        {{ t('Retro LCD') }}
-                    </button>
-                </c-col>
-
-            </c-row>
-
-            <c-row *ngIf="currentEvent" class="mt-2">
-                <c-col [xs]="12">
-                    <label class="control-label">
+            @if (currentEvent) {
+                <c-row>
+                    <c-col [xs]="12">
                         <label class="form-label">
-                            {{ t('Stack series') }}
-                            <span class="help-block">
-                                {{ t('only available for time series and bar charts') }}
-                            </span>
+                            {{ t('Visualization type') }}
                         </label>
-                    </label>
-                </c-col>
-
-                <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
-                    <oitc-ui-blocker
-                        [blocked]="(!(currentEvent.panel.visualization_type === GrafanaChartTypesEnum.timeseries || currentEvent.panel.visualization_type === GrafanaChartTypesEnum.barchart))">
+                    </c-col>
+                    <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
                         <button type="button"
-                                class="btn btn-outline-primary btn-xs w-100 ripple"
-                                (click)="changeStackingMode(GrafanaStackingModesEnum.none)"
-                                [ngClass]="{'btn-primary text-white': currentEvent.panel.stacking_mode === GrafanaStackingModesEnum.none}">
-                            {{ t('Off') }}
+                                class="btn btn-outline-primary w-100 ripple"
+                                (click)="changeVisualizationType(GrafanaChartTypesEnum.timeseries)"
+                                [ngClass]="{'btn-primary text-white': currentEvent.panel.visualization_type === GrafanaChartTypesEnum.timeseries}">
+                            <fa-icon [icon]="['fas', 'chart-area']"></fa-icon>
+                            {{ t('Time series') }}
                         </button>
-                    </oitc-ui-blocker>
-                </c-col>
-
-                <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
-                    <oitc-ui-blocker
-                        [blocked]="(!(currentEvent.panel.visualization_type === GrafanaChartTypesEnum.timeseries || currentEvent.panel.visualization_type === GrafanaChartTypesEnum.barchart))">
+                    </c-col>
+                    <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
                         <button type="button"
-                                class="btn btn-outline-primary btn-xs w-100 ripple"
-                                (click)="changeStackingMode(GrafanaStackingModesEnum.normal)"
-                                [ngClass]="{'btn-primary text-white': currentEvent.panel.stacking_mode === GrafanaStackingModesEnum.normal}">
-                            {{ t('Normal') }}
+                                class="btn btn-outline-primary w-100 ripple"
+                                (click)="changeVisualizationType(GrafanaChartTypesEnum.barchart)"
+                                [ngClass]="{'btn-primary text-white': currentEvent.panel.visualization_type === GrafanaChartTypesEnum.barchart}">
+                            <fa-icon [icon]="['fas', 'chart-column']"></fa-icon>
+                            {{ t('Bar chart') }}
                         </button>
-                    </oitc-ui-blocker>
-                </c-col>
-
-                <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
-                    <oitc-ui-blocker
-                        [blocked]="(!(currentEvent.panel.visualization_type === GrafanaChartTypesEnum.timeseries || currentEvent.panel.visualization_type === GrafanaChartTypesEnum.barchart))">
+                    </c-col>
+                    <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
                         <button type="button"
-                                class="btn btn-outline-primary btn-xs w-100 ripple"
-                                (click)="changeStackingMode(GrafanaStackingModesEnum.percent)"
-                                [ngClass]="{'btn-primary text-white': currentEvent.panel.stacking_mode === GrafanaStackingModesEnum.percent}">
-                            {{ t('100%') }}
+                                class="btn btn-outline-primary w-100 ripple"
+                                (click)="changeVisualizationType(GrafanaChartTypesEnum.stat)"
+                                [ngClass]="{'btn-primary text-white': currentEvent.panel.visualization_type === GrafanaChartTypesEnum.stat}">
+                            <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                            {{ t('Stat') }}
                         </button>
-                    </oitc-ui-blocker>
-                </c-col>
+                    </c-col>
+                    <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
+                        <button type="button"
+                                class="btn btn-outline-primary w-100 ripple"
+                                (click)="changeVisualizationType(GrafanaChartTypesEnum.gauge)"
+                                [ngClass]="{'btn-primary text-white': currentEvent.panel.visualization_type === GrafanaChartTypesEnum.gauge}">
+                            <fa-icon [icon]="['fas', 'gauge-high']"></fa-icon>
+                            {{ t('Gauge') }}
+                        </button>
+                    </c-col>
+                    <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
+                        <button type="button"
+                                class="btn btn-outline-primary w-100 ripple"
+                                (click)="changeVisualizationType(GrafanaChartTypesEnum.bargauge)"
+                                [ngClass]="{'btn-primary text-white': currentEvent.panel.visualization_type === GrafanaChartTypesEnum.bargauge}">
+                            <fa-icon [icon]="['fas', 'chart-simple']"></fa-icon>
+                            {{ t('Bar gauge') }}
+                        </button>
+                    </c-col>
+                    <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
+                        <button type="button"
+                                class="btn btn-outline-primary w-100 ripple"
+                                (click)="changeVisualizationType(GrafanaChartTypesEnum.bargaugeretro)"
+                                [ngClass]="{'btn-primary text-white': currentEvent.panel.visualization_type === GrafanaChartTypesEnum.bargaugeretro}">
+                            <fa-icon [icon]="['fas', 'bars']"></fa-icon>
+                            {{ t('Retro LCD') }}
+                        </button>
+                    </c-col>
+                </c-row>
+            }
 
-            </c-row>
+            @if (currentEvent) {
+                <c-row class="mt-2">
+                    <c-col [xs]="12">
+                        <label class="control-label">
+                            <label class="form-label">
+                                {{ t('Stack series') }}
+                                <span class="help-block">
+                                    {{ t('only available for time series and bar charts') }}
+                                </span>
+                            </label>
+                        </label>
+                    </c-col>
+                    <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
+                        <oitc-ui-blocker
+                            [blocked]="(!(currentEvent.panel.visualization_type === GrafanaChartTypesEnum.timeseries || currentEvent.panel.visualization_type === GrafanaChartTypesEnum.barchart))">
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-xs w-100 ripple"
+                                    (click)="changeStackingMode(GrafanaStackingModesEnum.none)"
+                                    [ngClass]="{'btn-primary text-white': currentEvent.panel.stacking_mode === GrafanaStackingModesEnum.none}">
+                                {{ t('Off') }}
+                            </button>
+                        </oitc-ui-blocker>
+                    </c-col>
+                    <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
+                        <oitc-ui-blocker
+                            [blocked]="(!(currentEvent.panel.visualization_type === GrafanaChartTypesEnum.timeseries || currentEvent.panel.visualization_type === GrafanaChartTypesEnum.barchart))">
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-xs w-100 ripple"
+                                    (click)="changeStackingMode(GrafanaStackingModesEnum.normal)"
+                                    [ngClass]="{'btn-primary text-white': currentEvent.panel.stacking_mode === GrafanaStackingModesEnum.normal}">
+                                {{ t('Normal') }}
+                            </button>
+                        </oitc-ui-blocker>
+                    </c-col>
+                    <c-col [xs]="12" [md]="4" [lg]="4" class="px-1 my-1">
+                        <oitc-ui-blocker
+                            [blocked]="(!(currentEvent.panel.visualization_type === GrafanaChartTypesEnum.timeseries || currentEvent.panel.visualization_type === GrafanaChartTypesEnum.barchart))">
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-xs w-100 ripple"
+                                    (click)="changeStackingMode(GrafanaStackingModesEnum.percent)"
+                                    [ngClass]="{'btn-primary text-white': currentEvent.panel.stacking_mode === GrafanaStackingModesEnum.percent}">
+                                {{ t('100%') }}
+                            </button>
+                        </oitc-ui-blocker>
+                    </c-col>
+                </c-row>
+            }
 
         </c-modal-body>
         <c-modal-footer>

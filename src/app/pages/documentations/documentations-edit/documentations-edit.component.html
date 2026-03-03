@@ -16,60 +16,63 @@
             </li>
         </ol>
     </nav>
-    <c-card class="mb-3" *ngIf="documentation">
-        <c-card-header>
-            <ng-container [ngSwitch]="type">
-                <h5 cCardTitle *ngSwitchCase="'servicetemplate'">
-                    {{ t('Service template:') }}
-                    <small class="fw-300">
-                        {{ documentation.objectName }}
-                    </small>
-                </h5>
-
-                <h5 cCardTitle *ngSwitchCase="'hosttemplate'">
-                    {{ t('Host template:') }}
-                    <small class="fw-300">
-                        {{ documentation.objectName }}
-                    </small>
-                </h5>
-
-                <h5 cCardTitle *ngSwitchDefault>
-                    {{ t('Object:') }}
-                    <small class="fw-300">
-                        {{ t('documentation') }}
-                    </small>
-                </h5>
-            </ng-container>
-
-
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['dashboards', 'index']" cButton class="ripple" color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'times']"></fa-icon>
-                        {{ t('Cancel') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button cButton class="ripple"
-                            color="success"
-                            (click)="saveDocumentation()"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'save']"></fa-icon>
-                        {{ t('Save') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
-            <c-row>
-                <c-col xs="12">
-                    <oitc-bb-code-editor [(bbcode)]="documentation.bbcode"></oitc-bb-code-editor>
-                </c-col>
-
-            </c-row>
-        </c-card-body>
-    </c-card>
+    @if (documentation) {
+        <c-card class="mb-3">
+            <c-card-header>
+                @switch (type) {
+                    @case ('servicetemplate') {
+                        <h5 cCardTitle>
+                            {{ t('Service template:') }}
+                            <small class="fw-300">
+                                {{ documentation.objectName }}
+                            </small>
+                        </h5>
+                    }
+                    @case ('hosttemplate') {
+                        <h5 cCardTitle>
+                            {{ t('Host template:') }}
+                            <small class="fw-300">
+                                {{ documentation.objectName }}
+                            </small>
+                        </h5>
+                    }
+                    @default {
+                        <h5 cCardTitle>
+                            {{ t('Object:') }}
+                            <small class="fw-300">
+                                {{ t('documentation') }}
+                            </small>
+                        </h5>
+                    }
+                }
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['dashboards', 'index']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                            {{ t('Cancel') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button cButton class="ripple"
+                                color="success"
+                                (click)="saveDocumentation()"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'save']"></fa-icon>
+                            {{ t('Save') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <c-row>
+                    <c-col xs="12">
+                        <oitc-bb-code-editor [(bbcode)]="documentation.bbcode"></oitc-bb-code-editor>
+                    </c-col>
+                </c-row>
+            </c-card-body>
+        </c-card>
+    }
 </ng-container>
 

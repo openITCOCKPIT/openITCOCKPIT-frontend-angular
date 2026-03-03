@@ -1,17 +1,17 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  HostListener,
-  inject,
-  Inject,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  DOCUMENT
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    HostListener,
+    inject,
+    Inject,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+    DOCUMENT
 } from '@angular/core';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 import {
     KtdDragEnd,
@@ -91,10 +91,8 @@ import {
 @Component({
     selector: 'oitc-dashboards-index',
     imports: [
-        NgForOf,
         KtdGridComponent,
         KtdGridItemComponent,
-        NgIf,
         CardTitleDirective,
         CardBodyComponent,
         CardHeaderComponent,

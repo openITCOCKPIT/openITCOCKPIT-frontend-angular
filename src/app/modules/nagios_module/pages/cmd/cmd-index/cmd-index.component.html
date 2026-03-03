@@ -11,7 +11,7 @@
                    [routerLink]="['/', 'nagios_module', 'cmd', 'index']">
                     <fa-icon [icon]="['fas', 'code']"></fa-icon>
                     {{ t('Monitoring Engine') }}
-               </a>
+                </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'code']"></fa-icon>
@@ -87,18 +87,20 @@
                                         </td>
                                     </tr>
                                 } @else {
-                                    <tr *ngFor="let param of currentCommandParams | keyvalue">
-                                        <td>{{ param.key }}</td>
-                                        <td>
-                                            @if (param.value === null) {
-                                                <i class="text-danger">{{ t('required') }}</i>
-                                            } @else {
-                                                <code>
-                                                    {{ param.value }}
-                                                </code>
-                                            }
-                                        </td>
-                                    </tr>
+                                    @for (param of currentCommandParams | keyvalue; track param) {
+                                        <tr>
+                                            <td>{{ param.key }}</td>
+                                            <td>
+                                                @if (param.value === null) {
+                                                    <i class="text-danger">{{ t('required') }}</i>
+                                                } @else {
+                                                    <code>
+                                                        {{ param.value }}
+                                                    </code>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
                                 }
                             </tbody>
                         </table>
@@ -143,14 +145,16 @@
                             {{ t('is not required in the URL and can be removed.') }}
                         </div>
 
-                        <div class="mb-3 help-block"
-                             *ngIf="currentCommandName !== 'ACKNOWLEDGE_OTRS_HOST_SVC_PROBLEM'">
-                            <a [href]="'https://www.naemon.io/documentation/developer/externalcommands/'+currentCommandForNaemonIoDocs+'.html'"
-                               target="_blank">
-                                {{ t('External documentation') }}
-                            </a>
-                            <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
-                        </div>
+                        @if (currentCommandName !== 'ACKNOWLEDGE_OTRS_HOST_SVC_PROBLEM') {
+                            <div class="mb-3 help-block"
+                            >
+                                <a [href]="'https://www.naemon.io/documentation/developer/externalcommands/'+currentCommandForNaemonIoDocs+'.html'"
+                                   target="_blank">
+                                    {{ t('External documentation') }}
+                                </a>
+                                <fa-icon [icon]="['fas', 'external-link-alt']"></fa-icon>
+                            </div>
+                        }
 
                     </c-col>
                 </c-row>

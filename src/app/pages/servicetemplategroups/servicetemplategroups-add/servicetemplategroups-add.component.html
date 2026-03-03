@@ -59,9 +59,11 @@
                         oitcFormError [errors]="errors" errorField="container.parent_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="container.parent_id"></oitc-form-feedback>
-                    <div *ngIf="post.container.parent_id === 0" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
+                    @if (post.container.parent_id === 0) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
                 </div>
 
 

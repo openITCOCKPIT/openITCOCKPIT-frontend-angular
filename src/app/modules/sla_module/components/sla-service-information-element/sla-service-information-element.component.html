@@ -127,7 +127,7 @@
                                         {{ t('Achieved') }}(%)
                                     </c-col>
                                     <hr class="mt-1 mb-1 w-100 border-dashed"/>
-                                    <ng-container *ngFor="let log of sla_information.service.log; let i = index">
+                                    @for (log of sla_information.service.log; track log; let i = $index) {
                                         <c-col lg="3" class="ellipsis">
                                             {{ log.evaluation_start }}
                                         </c-col>
@@ -141,19 +141,24 @@
                                         <c-col lg="2" class="text-{{log.state}}">
                                             {{ log.determined_availability_percent }}%
                                         </c-col>
-                                        <c-col lg="2" class="p-0 text-right"
-                                               *ngIf="i < sla_information.service.log.length - 1">
-                                            <span *ngIf="i < sla_information.service.log.length - 1">
-                                                <span
-                                                    *ngIf="sla_information.service.log[i + 1].determined_availability_percent - log.determined_availability_percent > 0"
-                                                    class="small text-red-400">
-                                                    <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
-                                                    {{ ( sla_information.service.log[i + 1].determined_availability_percent - log.determined_availability_percent ) | number: '1.2-2' }}
-                                                    %
-                                                </span>
-                                            </span>
-                                        </c-col>
-                                    </ng-container>
+                                        @if (i < sla_information.service.log.length - 1) {
+                                            <c-col lg="2" class="p-0 text-right"
+                                            >
+                                                @if (i < sla_information.service.log.length - 1) {
+                                                    <span>
+                                                        @if (sla_information.service.log[i + 1].determined_availability_percent - log.determined_availability_percent > 0) {
+                                                            <span
+                                                                class="small text-red-400">
+                                                                <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
+                                                                {{ ( sla_information.service.log[i + 1].determined_availability_percent - log.determined_availability_percent ) | number: '1.2-2' }}
+                                                                %
+                                                            </span>
+                                                        }
+                                                    </span>
+                                                }
+                                            </c-col>
+                                        }
+                                    }
                                 </c-row>
                             </c-col>
                         }
@@ -163,12 +168,18 @@
                             <c-col lg="4" class="px-2">
                                 <div class="sla-info-box bg-{{sla_information.service.state}}">
                                     <span class="sla-info-box-icon">
-                                        <fa-icon [icon]="['fas', 'check']"
-                                                 *ngIf="sla_information.service.state === 'success'"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'exclamation']"
-                                                 *ngIf="sla_information.service.state === 'warning'"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'bolt']"
-                                                 *ngIf="sla_information.service.state === 'danger'"></fa-icon>
+                                        @if (sla_information.service.state === 'success') {
+                                            <fa-icon [icon]="['fas', 'check']"
+                                            ></fa-icon>
+                                        }
+                                        @if (sla_information.service.state === 'warning') {
+                                            <fa-icon [icon]="['fas', 'exclamation']"
+                                            ></fa-icon>
+                                        }
+                                        @if (sla_information.service.state === 'danger') {
+                                            <fa-icon [icon]="['fas', 'bolt']"
+                                            ></fa-icon>
+                                        }
                                     </span>
                                     <div class="sla-info-box-content">
                                         <span class="sla-info-box-text">
@@ -243,116 +254,135 @@
                         </div>
                     }
                 </c-col>
-                <c-col xs="12" sm="12" md="6" class="pt-1" *ngIf="isLoading">
-                    <oitc-table-loader></oitc-table-loader>
-                </c-col>
-                <c-col xs="12" sm="12" md="6" class="pt-1" *ngIf="!isLoading">
-                    <table bordered cTable class="table-sm">
-                        <tbody>
-                        <tr>
-                            <th class="col-3">{{ t('Name') }}</th>
-                            <td>
-                                {{ sla.name }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="col-3">{{ t('Description') }}</th>
-                            <td>{{ sla.description }}</td>
-                        </tr>
-                        <tr>
-                            <th class="col-3">{{ t('Evaluation interval') }}</th>
-                            <td>{{ sla.evaluation_interval }}</td>
-                        </tr>
-                        <tr>
-                            <th>
-                                {{ t('Thresholds') }}
-                            </th>
-                            <td>
-                                <oitc-badge-outline color="warning" [hidden]="!sla.warning_threshold"
-                                                    class="me-1">
-                                    <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
-                                    {{ sla.warning_threshold }} %
-                                </oitc-badge-outline>
-                                <oitc-badge-outline color="danger" [hidden]="!sla.minimal_availability">
-                                    <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
-                                    {{ sla.minimal_availability }} %
-                                </oitc-badge-outline>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>{{ t('Container') }}</th>
-                            <td>
-                                @if (this.PermissionsService.hasPermissionObservable(['browsers', 'index']) | async) {
-                                    <span *ngFor="let container of sla.main_container">
-                                        /
-                                        <a [routerLink]="['/', 'browsers', 'index']"
-                                           [queryParams]="{ containerId: container.id }"
-                                           *ngIf="container.id != null">
-                                            {{ container.name }}
-                                        </a>
-
-                                        <span *ngIf="container.id === null">
-                                            {{ container.name }}
-                                        </span>
+                @if (isLoading) {
+                    <c-col xs="12" sm="12" md="6" class="pt-1">
+                        <oitc-table-loader></oitc-table-loader>
+                    </c-col>
+                }
+                @if (!isLoading) {
+                    <c-col xs="12" sm="12" md="6" class="pt-1">
+                        <table bordered cTable class="table-sm">
+                            <tbody>
+                            <tr>
+                                <th class="col-3">{{ t('Name') }}</th>
+                                <td>
+                                    {{ sla.name }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="col-3">{{ t('Description') }}</th>
+                                <td>{{ sla.description }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-3">{{ t('Evaluation interval') }}</th>
+                                <td>{{ sla.evaluation_interval }}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    {{ t('Thresholds') }}
+                                </th>
+                                <td>
+                                    <oitc-badge-outline color="warning" [hidden]="!sla.warning_threshold"
+                                                        class="me-1">
+                                        <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
+                                        {{ sla.warning_threshold }} %
+                                    </oitc-badge-outline>
+                                    <oitc-badge-outline color="danger" [hidden]="!sla.minimal_availability">
+                                        <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
+                                        {{ sla.minimal_availability }} %
+                                    </oitc-badge-outline>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Container') }}</th>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['browsers', 'index']) | async) {
+                                        @for (container of sla.main_container; track container) {
+                                            <span>
+                                                /
+                                                @if (container.id != null) {
+                                                    <a [routerLink]="['/', 'browsers', 'index']"
+                                                       [queryParams]="{ containerId: container.id }"
+                                                    >
+                                                        {{ container.name }}
+                                                    </a>
+                                                }
+                                                @if (container.id === null) {
+                                                    <span>
+                                                        {{ container.name }}
+                                                    </span>
+                                                }
+                                            </span>
+                                        }
+                                    } @else {
+                                        @for (container of sla.main_container; track container) {
+                                            <span>
+                                                /
+                                                {{ container.name }}
+                                            </span>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Consider downtimes') }}</th>
+                                <td>
+                                    <c-badge color="success" [hidden]="!sla.consider_downtimes">
+                                        {{ t('Yes') }}
+                                    </c-badge>
+                                    <c-badge color="danger" [hidden]="sla.consider_downtimes">
+                                        {{ t('No') }}
+                                    </c-badge>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Reflection state') }}</th>
+                                <td>
+                                    <span [hidden]="sla.hard_state_only">
+                                        {{ t('soft and hard state') }}
                                     </span>
-                                } @else {
-                                    <span *ngFor="let container of sla.main_container">
-                                        /
-                                        {{ container.name }}
+                                    <span [hidden]="!sla.hard_state_only">
+                                        {{ t('hard state only') }}
                                     </span>
+                                </td>
+                            </tr>
+                                @if (sla.timeperiod && sla.timeperiod.name) {
+                                    <tr>
+                                        <th>{{ t('Timeperiod') }}</th>
+                                        <td>{{ sla.timeperiod.name }}</td>
+                                    </tr>
                                 }
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>{{ t('Consider downtimes') }}</th>
-                            <td>
-                                <c-badge color="success" [hidden]="!sla.consider_downtimes">
-                                    {{ t('Yes') }}
-                                </c-badge>
-                                <c-badge color="danger" [hidden]="sla.consider_downtimes">
-                                    {{ t('No') }}
-                                </c-badge>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>{{ t('Reflection state') }}</th>
-                            <td>
-                                <span [hidden]="sla.hard_state_only">
-                                    {{ t('soft and hard state') }}
-                                </span>
-
-                                <span [hidden]="!sla.hard_state_only">
-                                    {{ t('hard state only') }}
-                                </span>
-                            </td>
-                        </tr>
-                        <tr *ngIf="sla.timeperiod && sla.timeperiod.name">
-                            <th>{{ t('Timeperiod') }}</th>
-                            <td>{{ sla.timeperiod.name }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <div class="gridContainer-weekdays">
-                                    <div *ngFor="let weekday of weekdayNames"
-                                         class="child grid bg-primary text-white small">
-                                        {{ weekday.name }}
+                            <tr>
+                                <td colspan="2">
+                                    <div class="gridContainer-weekdays">
+                                        @for (weekday of weekdayNames; track weekday) {
+                                            <div
+                                                class="child grid bg-primary text-white small">
+                                                {{ weekday.name }}
+                                            </div>
+                                        }
+                                        @for (weekDay of weekDays | keyvalue; track weekDay) {
+                                            <div class="child grid">
+                                                <span [hidden]="weekDay.value.length !== 0">
+                                                    <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
+                                                </span>
+                                                <ul class="p-0 inside-list fw-300"
+                                                    [hidden]="!(weekDay.value.length > 0)">
+                                                    @for (timeDetails of weekDay.value; track timeDetails) {
+                                                        <li>
+                                                            {{ timeDetails.start }} - {{ timeDetails.end }}
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }
                                     </div>
-                                    <div class="child grid" *ngFor="let weekDay of weekDays | keyvalue">
-                                        <span [hidden]="weekDay.value.length !== 0">
-                                            <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
-                                        </span>
-                                        <ul class="p-0 inside-list fw-300" [hidden]="!(weekDay.value.length > 0)">
-                                            <li *ngFor="let timeDetails of weekDay.value">
-                                                {{ timeDetails.start }} - {{ timeDetails.end }}
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </c-col>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </c-col>
+                }
             </c-row>
         </c-col>
     </c-row>

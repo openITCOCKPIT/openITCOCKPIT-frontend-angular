@@ -135,40 +135,40 @@
                                     <th>&#216;</th>
                                 </tr>
                                 </thead>
-                                <tbody *ngIf="stats">
-                                <tr>
-                                    <td>{{ t('Execution time') }}</td>
-                                    <td [ngClass]="{'text-warning': stats.MINACTSVCEXT > 20000, 'text-danger': stats.MINACTSVCEXT > 30000}">
-                                        {{ stats.MINACTSVCEXT / 1000 }} sec.
-                                    </td>
-                                    <td [ngClass]="{'text-warning': stats.MAXACTSVCEXT > 20000, 'text-danger': stats.MAXACTSVCEXT > 30000}">
-                                        {{ stats.MAXACTSVCEXT / 1000 }} sec.
-                                    </td>
-                                    <td [ngClass]="{'text-warning': stats.AVGACTSVCEXT > 20000, 'text-danger': stats.AVGACTSVCEXT > 30000}">
-                                        {{ stats.AVGACTSVCEXT / 1000 }} sec.
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>{{ t('Latency') }}</td>
-                                    <td [ngClass]="{'text-warning': stats.MINACTSVCLAT > 20000, 'text-danger': stats.MINACTSVCLAT > 30000}">
-                                        {{ stats.MINACTSVCLAT / 1000 }} sec.
-                                    </td>
-                                    <td [ngClass]="{'text-warning': stats.MAXACTSVCLAT > 20000, 'text-danger': stats.MAXACTSVCLAT > 30000}">
-                                        {{ stats.MAXACTSVCLAT / 1000 }} sec.
-                                    </td>
-                                    <td [ngClass]="{'text-warning': stats.AVGACTSVCLAT > 20000, 'text-danger': stats.AVGACTSVCLAT > 30000}">
-                                        {{ stats.AVGACTSVCLAT / 1000 }} sec.
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>{{ t('State changes') }}</td>
-                                    <td>{{ stats.MINACTSVCPSC }} %</td>
-                                    <td>{{ stats.MAXACTSVCPSC }} %</td>
-                                    <td>{{ stats.AVGACTSVCPSC }} %</td>
-                                </tr>
-                                </tbody>
+                                @if (stats) {
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ t('Execution time') }}</td>
+                                        <td [ngClass]="{'text-warning': stats.MINACTSVCEXT > 20000, 'text-danger': stats.MINACTSVCEXT > 30000}">
+                                            {{ stats.MINACTSVCEXT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.MAXACTSVCEXT > 20000, 'text-danger': stats.MAXACTSVCEXT > 30000}">
+                                            {{ stats.MAXACTSVCEXT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.AVGACTSVCEXT > 20000, 'text-danger': stats.AVGACTSVCEXT > 30000}">
+                                            {{ stats.AVGACTSVCEXT / 1000 }} sec.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Latency') }}</td>
+                                        <td [ngClass]="{'text-warning': stats.MINACTSVCLAT > 20000, 'text-danger': stats.MINACTSVCLAT > 30000}">
+                                            {{ stats.MINACTSVCLAT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.MAXACTSVCLAT > 20000, 'text-danger': stats.MAXACTSVCLAT > 30000}">
+                                            {{ stats.MAXACTSVCLAT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.AVGACTSVCLAT > 20000, 'text-danger': stats.AVGACTSVCLAT > 30000}">
+                                            {{ stats.AVGACTSVCLAT / 1000 }} sec.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('State changes') }}</td>
+                                        <td>{{ stats.MINACTSVCPSC }} %</td>
+                                        <td>{{ stats.MAXACTSVCPSC }} %</td>
+                                        <td>{{ stats.AVGACTSVCPSC }} %</td>
+                                    </tr>
+                                    </tbody>
+                                }
                             </table>
                         </c-card-body>
                     </c-card>
@@ -316,14 +316,16 @@
                                     <th>&#216;</th>
                                 </tr>
                                 </thead>
-                                <tbody *ngIf="stats">
-                                <tr>
-                                    <td>{{ t('State changes') }}</td>
-                                    <td>{{ stats.MINPSVSVCPSC }} %</td>
-                                    <td>{{ stats.MAXPSVSVCPSC }} %</td>
-                                    <td>{{ stats.AVGPSVSVCPSC }} %</td>
-                                </tr>
-                                </tbody>
+                                @if (stats) {
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ t('State changes') }}</td>
+                                        <td>{{ stats.MINPSVSVCPSC }} %</td>
+                                        <td>{{ stats.MAXPSVSVCPSC }} %</td>
+                                        <td>{{ stats.AVGPSVSVCPSC }} %</td>
+                                    </tr>
+                                    </tbody>
+                                }
                             </table>
                         </c-card-body>
                     </c-card>
@@ -430,40 +432,40 @@
                                     <th>&#216;</th>
                                 </tr>
                                 </thead>
-                                <tbody *ngIf="stats">
-                                <tr>
-                                    <td>{{ t('Execution time') }}</td>
-                                    <td [ngClass]="{'text-warning': stats.MINACTHSTEXT > 20000, 'text-danger': stats.MINACTHSTEXT > 30000}">
-                                        {{ stats.MINACTHSTEXT / 1000 }} sec.
-                                    </td>
-                                    <td [ngClass]="{'text-warning': stats.MAXACTHSTEXT > 20000, 'text-danger': stats.MAXACTHSTEXT > 30000}">
-                                        {{ stats.MAXACTHSTEXT / 1000 }} sec.
-                                    </td>
-                                    <td [ngClass]="{'text-warning': stats.AVGACTHSTEXT > 20000, 'text-danger': stats.AVGACTHSTEXT > 30000}">
-                                        {{ stats.AVGACTHSTEXT / 1000 }} sec.
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>{{ t('Latency') }}</td>
-                                    <td [ngClass]="{'text-warning': stats.MINACTHSTLAT > 20000, 'text-danger': stats.MINACTHSTLAT > 30000}">
-                                        {{ stats.MINACTHSTLAT / 1000 }} sec.
-                                    </td>
-                                    <td [ngClass]="{'text-warning': stats.MAXACTHSTLAT > 20000, 'text-danger': stats.MAXACTHSTLAT > 30000}">
-                                        {{ stats.MAXACTHSTLAT / 1000 }} sec.
-                                    </td>
-                                    <td [ngClass]="{'text-warning': stats.AVGACTHSTLAT > 20000, 'text-danger': stats.AVGACTHSTLAT > 30000}">
-                                        {{ stats.AVGACTHSTLAT / 1000 }} sec.
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>{{ t('State changes') }}</td>
-                                    <td>{{ stats.MINACTHSTPSC }} %</td>
-                                    <td>{{ stats.MAXACTHSTPSC }} %</td>
-                                    <td>{{ stats.AVGACTHSTPSC }} %</td>
-                                </tr>
-                                </tbody>
+                                @if (stats) {
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ t('Execution time') }}</td>
+                                        <td [ngClass]="{'text-warning': stats.MINACTHSTEXT > 20000, 'text-danger': stats.MINACTHSTEXT > 30000}">
+                                            {{ stats.MINACTHSTEXT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.MAXACTHSTEXT > 20000, 'text-danger': stats.MAXACTHSTEXT > 30000}">
+                                            {{ stats.MAXACTHSTEXT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.AVGACTHSTEXT > 20000, 'text-danger': stats.AVGACTHSTEXT > 30000}">
+                                            {{ stats.AVGACTHSTEXT / 1000 }} sec.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Latency') }}</td>
+                                        <td [ngClass]="{'text-warning': stats.MINACTHSTLAT > 20000, 'text-danger': stats.MINACTHSTLAT > 30000}">
+                                            {{ stats.MINACTHSTLAT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.MAXACTHSTLAT > 20000, 'text-danger': stats.MAXACTHSTLAT > 30000}">
+                                            {{ stats.MAXACTHSTLAT / 1000 }} sec.
+                                        </td>
+                                        <td [ngClass]="{'text-warning': stats.AVGACTHSTLAT > 20000, 'text-danger': stats.AVGACTHSTLAT > 30000}">
+                                            {{ stats.AVGACTHSTLAT / 1000 }} sec.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('State changes') }}</td>
+                                        <td>{{ stats.MINACTHSTPSC }} %</td>
+                                        <td>{{ stats.MAXACTHSTPSC }} %</td>
+                                        <td>{{ stats.AVGACTHSTPSC }} %</td>
+                                    </tr>
+                                    </tbody>
+                                }
                             </table>
                         </c-card-body>
                     </c-card>
@@ -558,14 +560,16 @@
                                     <th>&#216;</th>
                                 </tr>
                                 </thead>
-                                <tbody *ngIf="stats">
-                                <tr>
-                                    <td>{{ t('State changes') }}</td>
-                                    <td>{{ stats.MINPSVHSTPSC }} %</td>
-                                    <td>{{ stats.MAXPSVHSTPSC }} %</td>
-                                    <td>{{ stats.AVGPSVHSTPSC }} %</td>
-                                </tr>
-                                </tbody>
+                                @if (stats) {
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ t('State changes') }}</td>
+                                        <td>{{ stats.MINPSVHSTPSC }} %</td>
+                                        <td>{{ stats.MAXPSVHSTPSC }} %</td>
+                                        <td>{{ stats.AVGPSVHSTPSC }} %</td>
+                                    </tr>
+                                    </tbody>
+                                }
                             </table>
                         </c-card-body>
                     </c-card>

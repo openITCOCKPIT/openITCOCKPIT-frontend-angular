@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, DOCUMENT } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+    DOCUMENT
+} from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -25,7 +33,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { GenericValidationError } from '../../../generic-responses';
 import { ProfileMaxUploadLimit, ProfileUser } from '../profile.interface';
-import { NgIf } from '@angular/common';
+
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../profile.service';
@@ -63,7 +71,6 @@ import { SelectKeyValueString } from '../../../layouts/primeng/select.interface'
         FormLabelDirective,
         ReactiveFormsModule,
         RequiredIconComponent,
-        NgIf,
         FormsModule,
         FormCheckComponent,
         FormCheckInputDirective,

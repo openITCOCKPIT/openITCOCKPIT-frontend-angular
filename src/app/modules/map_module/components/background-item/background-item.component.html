@@ -6,11 +6,15 @@
          cdkDragBoundary=".map-canvas">
         <div cdkDragHandle
              [ngStyle]="{'width.px': width, 'height.px': height}">
-            <img [src]="'/map_module/img/backgrounds/' + this.item()?.background" class="invalid-image-src"
-                 [ngStyle]="{'width.px': width, 'height.px': height}"
-                 *ngIf="this.item()?.background" [alt]="invalidBackgroundMessage"/>
+            @if (this.item()?.background) {
+                <img [src]="'/map_module/img/backgrounds/' + this.item()?.background" class="invalid-image-src"
+                     [ngStyle]="{'width.px': width, 'height.px': height}"
+                     [alt]="invalidBackgroundMessage"/>
+            }
         </div>
     </div>
-    <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
-                   appendTo="body"></p-contextMenu>
+    @if (!isViewMode()) {
+        <p-contextMenu [target]="container" [model]="contextMenuItems"
+                       appendTo="body"></p-contextMenu>
+    }
 }

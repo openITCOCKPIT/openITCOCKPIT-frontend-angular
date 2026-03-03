@@ -4,7 +4,7 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -56,7 +56,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
         RouterLink,
         PermissionDirective,
         FormLoaderComponent,
-        NgIf,
         FormsModule,
         ReactiveFormsModule,
         CardComponent,

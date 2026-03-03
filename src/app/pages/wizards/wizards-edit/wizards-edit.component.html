@@ -20,35 +20,35 @@
         </ol>
     </nav>
 
-    <oitc-form-loader [isVisible]="post.uuid === ''" />
+    <oitc-form-loader [isVisible]="post.uuid === ''"/>
 
-    <form cForm (ngSubmit)="submit()" *ngIf="post.uuid !== ''">
-        <c-card>
-            <c-card-header>
-                <h5 cCardTitle class="card-title">
-                    {{ t('Assignments') }}
-                    <small class="fw-300">
-                        {{ t('edit service templates assignments') }}
-                    </small>
-                </h5>
-            </c-card-header>
-            <c-card-body>
-
-                <c-row>
-                    <c-col [md]="1">
-                        <div class="wizard-logo-image">
-                            <img [src]="'./assets/images/wizards/'+post.image" [alt]="post.title">
-                        </div>
-                    </c-col>
-                    <c-col [md]="11">
-                        <h3 class="text-primary ng-binding">{{ post.title }}</h3>
-                        <span class="help-block ng-binding">{{ post.description }}</span>
-                        <div class="mb-3">
-                            <label cLabel for="post.servicetemplates._ids">
-                                {{ t('Service templates') }}
-                                <oitc-required-icon/>
-                            </label>
-                            <oitc-multi-select
+    @if (post.uuid !== '') {
+        <form cForm (ngSubmit)="submit()">
+            <c-card>
+                <c-card-header>
+                    <h5 cCardTitle class="card-title">
+                        {{ t('Assignments') }}
+                        <small class="fw-300">
+                            {{ t('edit service templates assignments') }}
+                        </small>
+                    </h5>
+                </c-card-header>
+                <c-card-body>
+                    <c-row>
+                        <c-col [md]="1">
+                            <div class="wizard-logo-image">
+                                <img [src]="'./assets/images/wizards/'+post.image" [alt]="post.title">
+                            </div>
+                        </c-col>
+                        <c-col [md]="11">
+                            <h3 class="text-primary ng-binding">{{ post.title }}</h3>
+                            <span class="help-block ng-binding">{{ post.description }}</span>
+                            <div class="mb-3">
+                                <label cLabel for="post.servicetemplates._ids">
+                                    {{ t('Service templates') }}
+                                    <oitc-required-icon/>
+                                </label>
+                                <oitc-multi-select
                                     name="post.servicetemplates._ids"
                                     id="post.servicetemplates._ids"
                                     [(ngModel)]="post.servicetemplates._ids"
@@ -56,27 +56,25 @@
                                     optionLabel="value"
                                     [options]="serviceTemplates"
                                     oitcFormError [errors]="errors" errorField="servicetemplates">
-                            </oitc-multi-select>
-                            <oitc-form-feedback [errors]="errors" errorField="servicetemplates"></oitc-form-feedback>
-                        </div>
-                    </c-col>
-                </c-row>
-
-            </c-card-body>
-
-            <c-card-footer class="text-end">
-
-                <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Save assignments') }}
-                </button>
-                <button [fallbackUrl]="['wizards', 'assignments']" cButton class="ms-1 ripple" color="default"
-                        oitcBackButton
-                        type="button">
-                    {{ t('Cancel') }}
-                </button>
-
-            </c-card-footer>
-        </c-card>
-    </form>
+                                </oitc-multi-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="servicetemplates"></oitc-form-feedback>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Save assignments') }}
+                    </button>
+                    <button [fallbackUrl]="['wizards', 'assignments']" cButton class="ms-1 ripple" color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        </form>
+    }
 
 </ng-container>

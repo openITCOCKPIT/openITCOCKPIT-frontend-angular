@@ -29,7 +29,7 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ConfigurationFileInformation } from '../configuration-files.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
+
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { PaginatorModule } from 'primeng/paginator';
 import {
@@ -70,7 +70,6 @@ import { FormsModule } from '@angular/forms';
         XsButtonDirective,
         RouterLink,
         FormLoaderComponent,
-        NgIf,
         BackButtonDirective,
         ButtonCloseDirective,
         ColComponent,

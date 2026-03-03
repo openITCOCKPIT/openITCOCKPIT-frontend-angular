@@ -32,33 +32,39 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="let macro of macros">
-                            <td class="text-primary  code-font">
-                                {{ macro.name }}
-                            </td>
-                            <td>
-                                <code [ngClass]="{'text-blur': macro.password > 0}">
-                                    {{ macro.value }}
-                                </code>
-                            </td>
-                            <td>
-                                {{ macro.description }}
-                            </td>
-                            <td class="text-center">
-                                <button (click)="macro.password = 0" *ngIf="macro.password == 1"
-                                        [title]="'Show value' | transloco"
-                                        class="btn btn-primary btn-xs ripple"
-                                        type="button">
-                                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                                </button>
-                                <button (click)="macro.password = 1" *ngIf="macro.password == 0"
-                                        [title]="'Hide value' | transloco"
-                                        class="btn btn-danger btn-xs ripple"
-                                        type="button">
-                                    <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
-                                </button>
-                            </td>
-                        </tr>
+                            @for (macro of macros; track macro) {
+                                <tr>
+                                    <td class="text-primary  code-font">
+                                        {{ macro.name }}
+                                    </td>
+                                    <td>
+                                        <code [ngClass]="{'text-blur': macro.password > 0}">
+                                            {{ macro.value }}
+                                        </code>
+                                    </td>
+                                    <td>
+                                        {{ macro.description }}
+                                    </td>
+                                    <td class="text-center">
+                                        @if (macro.password == 1) {
+                                            <button (click)="macro.password = 0"
+                                                    [title]="'Show value' | transloco"
+                                                    class="btn btn-primary btn-xs ripple"
+                                                    type="button">
+                                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                            </button>
+                                        }
+                                        @if (macro.password == 0) {
+                                            <button (click)="macro.password = 1"
+                                                    [title]="'Hide value' | transloco"
+                                                    class="btn btn-danger btn-xs ripple"
+                                                    type="button">
+                                                <fa-icon [icon]="['fas', 'eye-slash']"></fa-icon>
+                                            </button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>

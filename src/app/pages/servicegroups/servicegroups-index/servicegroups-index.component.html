@@ -165,96 +165,104 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="! servicegroups.all_servicegroups"></oitc-table-loader>
+            @if (!servicegroups.all_servicegroups) {
+                <oitc-table-loader></oitc-table-loader>
+            }
 
-            <table *ngIf="servicegroups" bordered cTable class="mt-2 mb-0" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="text-center col-1" scope="col" style="width: 5px;">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Containers.name">
-                        {{ t('Service group name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicegroups.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th class="text-center col-1 width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let servicegroup of servicegroups.all_servicegroups">
-                    <td class="text-center">
-                        @if (( PermissionsService.hasPermissionObservable(['servicegroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['servicegroups', 'copy'])|async )) {
-                            <oitc-item-select
-                                [disabled]="!servicegroup.allow_edit"
-                                [item]="servicegroup"></oitc-item-select>
-                        }
-                    </td>
-                    <td class="word-break">
-                        <span *oitcPermission="['servicegroups', 'extended']">
-                            <a [routerLink]="['/', 'servicegroups', 'extended', servicegroup.id]">
-                                {{ servicegroup.container.name }}
-                            </a>
-                        </span>
-                        <span *oitcPermission="['servicegroups', 'extended']; negate: true">
-                            {{ servicegroup.container.name }}
-                        </span>
-                    </td>
-                    <td>{{ servicegroup.description }}</td>
-                    <td class="width-50">
-                        <oitc-actions-button [allowEdit]="servicegroup.allow_edit"
-                                             [permission]="'servicegroups.edit'"
-                                             [url]="'/servicegroups/edit/' + servicegroup.id">
-                            <oitc-actions-button-element [permission]="'servicegroups.edit'"
+            @if (servicegroups) {
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="text-center col-1" scope="col" style="width: 5px;">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Containers.name">
+                            {{ t('Service group name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicegroups.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th class="text-center col-1 width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (servicegroup of servicegroups.all_servicegroups; track servicegroup) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (( PermissionsService.hasPermissionObservable(['servicegroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['servicegroups', 'copy'])|async )) {
+                                        <oitc-item-select
+                                            [disabled]="!servicegroup.allow_edit"
+                                            [item]="servicegroup"></oitc-item-select>
+                                    }
+                                </td>
+                                <td class="word-break">
+                                    <span *oitcPermission="['servicegroups', 'extended']">
+                                        <a [routerLink]="['/', 'servicegroups', 'extended', servicegroup.id]">
+                                            {{ servicegroup.container.name }}
+                                        </a>
+                                    </span>
+                                    <span *oitcPermission="['servicegroups', 'extended']; negate: true">
+                                        {{ servicegroup.container.name }}
+                                    </span>
+                                </td>
+                                <td>{{ servicegroup.description }}</td>
+                                <td class="width-50">
+                                    <oitc-actions-button [allowEdit]="servicegroup.allow_edit"
+                                                         [permission]="'servicegroups.edit'"
                                                          [url]="'/servicegroups/edit/' + servicegroup.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                         [url]="'/changelogs/entity/servicegroup/' + servicegroup.id">
-                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                {{ t('Changelog') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'servicegroups.extended'"
-                                                         [url]="'/servicegroups/extended/' + servicegroup.id">
-                                <fa-icon [icon]="['fas', 'plus-square']" [rotate]="90"></fa-icon>
-                                {{ t('Extended view') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'servicegroups.usedBy'"
-                                                         [url]="'/servicegroups/usedBy/' + servicegroup.id">
-                                <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                                {{ t('Used By') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *oitcPermission="['servicegroups', 'copy']"></li>
-                            <oitc-actions-button-element [permission]="'servicegroups.copy'"
-                                                         [url]="'/servicegroups/copy/' + servicegroup.id">
-                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                {{ t('Copy') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *oitcPermission="['servicegroups', 'delete']"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(servicegroup)"
-                                                         [permission]="'servicegroups.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                                        <oitc-actions-button-element [permission]="'servicegroups.edit'"
+                                                                     [url]="'/servicegroups/edit/' + servicegroup.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/servicegroup/' + servicegroup.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'servicegroups.extended'"
+                                                                     [url]="'/servicegroups/extended/' + servicegroup.id">
+                                            <fa-icon [icon]="['fas', 'plus-square']" [rotate]="90"></fa-icon>
+                                            {{ t('Extended view') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'servicegroups.usedBy'"
+                                                                     [url]="'/servicegroups/usedBy/' + servicegroup.id">
+                                            <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                            {{ t('Used By') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *oitcPermission="['servicegroups', 'copy']"></li>
+                                        <oitc-actions-button-element [permission]="'servicegroups.copy'"
+                                                                     [url]="'/servicegroups/copy/' + servicegroup.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *oitcPermission="['servicegroups', 'delete']"></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(servicegroup)"
+                                                                     [permission]="'servicegroups.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-            <oitc-no-records
-                *ngIf="servicegroups && servicegroups.all_servicegroups && servicegroups.all_servicegroups.length === 0"></oitc-no-records>
+            @if (servicegroups && servicegroups.all_servicegroups && servicegroups.all_servicegroups.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
 
 
-            <ng-container *ngIf="servicegroups && servicegroups.all_servicegroups">
+            @if (servicegroups && servicegroups.all_servicegroups) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -277,7 +285,6 @@
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete selected') }}
                                 </button>
-
                                 <c-dropdown>
                                     <button cButton cDropdownToggle color="default">
                                         {{ t('More actions') }}
@@ -295,16 +302,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="servicegroups"
-                            [paginateOrScroll]="servicegroups"></oitc-paginate-or-scroll>
+                        @if (servicegroups) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="servicegroups"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

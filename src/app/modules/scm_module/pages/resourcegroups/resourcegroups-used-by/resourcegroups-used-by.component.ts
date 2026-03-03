@@ -13,7 +13,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ResourcegroupsService } from '../resourcegroups.service';
 import { ResourcegroupWithRelations } from '../resourcegroups.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
@@ -34,10 +34,8 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
         NavComponent,
         TranslocoDirective,
         RouterLink,
-        NgIf,
         NavItemComponent,
         ContainerComponent,
-        NgForOf,
         TableDirective,
         AsyncPipe,
         BackButtonDirective,

@@ -112,146 +112,154 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!organizationalcharts"></oitc-table-loader>
-            <table *ngIf="organizationalcharts" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="OrganizationalCharts.name">
-                        {{ t('Name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="OrganizationalCharts.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th class="width-50 text-center">
-                        <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
-                    </th>
-                    <th scope="col">
-                        {{ t('Containers') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let organizationalchart of organizationalcharts.all_organizationalcharts">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['organizationalcharts', 'delete']"
-                            [disabled]="!Boolean(organizationalchart.allowEdit)"
-                            [item]="organizationalchart"></oitc-item-select>
-                    </td>
-                    <td>
-                        @if (( this.PermissionsService.hasPermissionObservable(['organizationalcharts', 'view'])|async ) && organizationalchart.allowView) {
-                            <a [routerLink]="['/', 'organizationalcharts', 'view', organizationalchart.id]">
-                                {{ organizationalchart.name }}
-                            </a>
-                        } @else {
-                            {{ organizationalchart.name }}
-                        }
-                    </td>
-                    <td>{{ organizationalchart.description }}</td>
-                    <td class="text-center">
-                        @if (organizationalchart.allowView) {
-                            @if (organizationalchart.organizational_chart_nodes !== undefined) {
-                                {{ organizationalchart.organizational_chart_nodes.length }}
-                            }
-
-                        } @else {
-                            <fa-icon [icon]="['fas', 'low-vision']"
-                                     [cTooltip]="'Restricted view' | transloco" cTooltipPlacement="right"></fa-icon>
-                        }
-                    </td>
-                    <td>
-                        <ul class="mb-0 ms-1 ps-2">
-                            @for (container_node of organizationalchart.organizational_chart_nodes; track $index) {
-                                @if (organizationalchart.allowView && container_node.container) {
-                                    <li>
-                                        @if (PermissionsService.hasPermissionObservable(['organizationalcharts', 'view'])|async) {
-                                            <a [routerLink]="['/', 'organizationalcharts', 'browserView']"
-                                               [queryParams]="{'containerId': container_node.container.id}">
-                                                @if (container_node.container.containertype_id == ContainerTypesEnum.CT_GLOBAL) {
-                                                    <fa-icon [icon]="['fas', 'globe']" class="pe-1"></fa-icon>
-                                                }
-                                                @if (container_node.container.containertype_id == ContainerTypesEnum.CT_TENANT) {
-                                                    <fa-icon [icon]="['fas', 'home']" class="pe-1"></fa-icon>
-                                                }
-                                                @if (container_node.container.containertype_id == ContainerTypesEnum.CT_LOCATION) {
-                                                    <fa-icon [icon]="['fas', 'location-arrow']" class="pe-1"></fa-icon>
-                                                }
-                                                @if (container_node.container.containertype_id == ContainerTypesEnum.CT_NODE) {
-                                                    <fa-icon [icon]="['fas', 'link']" class="pe-1"></fa-icon>
-                                                }
-                                                {{ container_node.container.name }}
-                                            </a>
-                                        } @else {
-                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_GLOBAL) {
-                                                <fa-icon [icon]="['fas', 'globe']" class="pe-1"></fa-icon>
-                                            }
-                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_TENANT) {
-                                                <fa-icon [icon]="['fas', 'home']" class="pe-1"></fa-icon>
-                                            }
-                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_LOCATION) {
-                                                <fa-icon [icon]="['fas', 'location-arrow']" class="pe-1"></fa-icon>
-                                            }
-                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_NODE) {
-                                                <fa-icon [icon]="['fas', 'link']" class="pe-1"></fa-icon>
-                                            }
-                                            {{ container_node.container.name }}
+            @if (!organizationalcharts) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (organizationalcharts) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="OrganizationalCharts.name">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="OrganizationalCharts.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th class="width-50 text-center">
+                            <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
+                        </th>
+                        <th scope="col">
+                            {{ t('Containers') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (organizationalchart of organizationalcharts.all_organizationalcharts; track organizationalchart) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['organizationalcharts', 'delete']"
+                                        [disabled]="!Boolean(organizationalchart.allowEdit)"
+                                        [item]="organizationalchart"></oitc-item-select>
+                                </td>
+                                <td>
+                                    @if (( this.PermissionsService.hasPermissionObservable(['organizationalcharts', 'view'])|async ) && organizationalchart.allowView) {
+                                        <a [routerLink]="['/', 'organizationalcharts', 'view', organizationalchart.id]">
+                                            {{ organizationalchart.name }}
+                                        </a>
+                                    } @else {
+                                        {{ organizationalchart.name }}
+                                    }
+                                </td>
+                                <td>{{ organizationalchart.description }}</td>
+                                <td class="text-center">
+                                    @if (organizationalchart.allowView) {
+                                        @if (organizationalchart.organizational_chart_nodes !== undefined) {
+                                            {{ organizationalchart.organizational_chart_nodes.length }}
                                         }
+                                    } @else {
+                                        <fa-icon [icon]="['fas', 'low-vision']"
+                                                 [cTooltip]="'Restricted view' | transloco"
+                                                 cTooltipPlacement="right"></fa-icon>
+                                    }
+                                </td>
+                                <td>
+                                    <ul class="mb-0 ms-1 ps-2">
+                                        @for (container_node of organizationalchart.organizational_chart_nodes; track $index) {
+                                            @if (organizationalchart.allowView && container_node.container) {
+                                                <li>
+                                                    @if (PermissionsService.hasPermissionObservable(['organizationalcharts', 'view'])|async) {
+                                                        <a [routerLink]="['/', 'organizationalcharts', 'browserView']"
+                                                           [queryParams]="{'containerId': container_node.container.id}">
+                                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_GLOBAL) {
+                                                                <fa-icon [icon]="['fas', 'globe']"
+                                                                         class="pe-1"></fa-icon>
+                                                            }
+                                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_TENANT) {
+                                                                <fa-icon [icon]="['fas', 'home']"
+                                                                         class="pe-1"></fa-icon>
+                                                            }
+                                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_LOCATION) {
+                                                                <fa-icon [icon]="['fas', 'location-arrow']"
+                                                                         class="pe-1"></fa-icon>
+                                                            }
+                                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_NODE) {
+                                                                <fa-icon [icon]="['fas', 'link']"
+                                                                         class="pe-1"></fa-icon>
+                                                            }
+                                                            {{ container_node.container.name }}
+                                                        </a>
+                                                    } @else {
+                                                        @if (container_node.container.containertype_id == ContainerTypesEnum.CT_GLOBAL) {
+                                                            <fa-icon [icon]="['fas', 'globe']" class="pe-1"></fa-icon>
+                                                        }
+                                                        @if (container_node.container.containertype_id == ContainerTypesEnum.CT_TENANT) {
+                                                            <fa-icon [icon]="['fas', 'home']" class="pe-1"></fa-icon>
+                                                        }
+                                                        @if (container_node.container.containertype_id == ContainerTypesEnum.CT_LOCATION) {
+                                                            <fa-icon [icon]="['fas', 'location-arrow']"
+                                                                     class="pe-1"></fa-icon>
+                                                        }
+                                                        @if (container_node.container.containertype_id == ContainerTypesEnum.CT_NODE) {
+                                                            <fa-icon [icon]="['fas', 'link']" class="pe-1"></fa-icon>
+                                                        }
+                                                        {{ container_node.container.name }}
+                                                    }
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'organizationalcharts.edit'"
+                                                         [url]="'/organizationalcharts/edit/' + organizationalchart.id"
+                                                         [allowEdit]="organizationalchart.allowEdit">
+                                        <oitc-actions-button-element [permission]="'organizationalcharts.edit'"
+                                                                     [allow]="organizationalchart.allowEdit"
+                                                                     [url]="'/organizationalcharts/edit/' + organizationalchart.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'organizationalcharts.view'"
+                                                                     [url]="'/organizationalcharts/view/'+organizationalchart.id"
+                                                                     [allow]="organizationalchart.allowView">
+                                            <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                            {{ t('View') }}
+                                        </oitc-actions-button-element>
+                                        @if (organizationalchart.allowEdit) {
+                                            <li cDropdownDivider></li>
+                                            <oitc-actions-button-element
+                                                (click)="toggleDeleteAllModal(organizationalchart)"
+                                                [permission]="'organizationalcharts.delete'"
+                                                [allow]="organizationalchart.allowEdit">
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
 
-                                    </li>
-                                }
-                            }
-                        </ul>
-
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'organizationalcharts.edit'"
-                                             [url]="'/organizationalcharts/edit/' + organizationalchart.id"
-                                             [allowEdit]="organizationalchart.allowEdit">
-                            <oitc-actions-button-element [permission]="'organizationalcharts.edit'"
-                                                         [allow]="organizationalchart.allowEdit"
-                                                         [url]="'/organizationalcharts/edit/' + organizationalchart.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-
-                            <oitc-actions-button-element [permission]="'organizationalcharts.view'"
-                                                         [url]="'/organizationalcharts/view/'+organizationalchart.id"
-                                                         [allow]="organizationalchart.allowView">
-                                <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
-                                {{ t('View') }}
-                            </oitc-actions-button-element>
-
-
-                            @if (organizationalchart.allowEdit) {
-                                <li cDropdownDivider></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(organizationalchart)"
-                                                             [permission]="'organizationalcharts.delete'"
-                                                             [allow]="organizationalchart.allowEdit">
-                                    <span class="text-danger">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete') }}
-                                    </span>
-                                </oitc-actions-button-element>
-                            }
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-
-            <oitc-no-records
-                *ngIf="organizationalcharts && organizationalcharts.all_organizationalcharts.length === 0"></oitc-no-records>
-            <ng-container *ngIf="organizationalcharts && organizationalcharts.all_organizationalcharts">
+            @if (organizationalcharts && organizationalcharts.all_organizationalcharts.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (organizationalcharts && organizationalcharts.all_organizationalcharts) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -271,19 +279,19 @@
                         </c-col>
                     </c-row>
                 </c-container>
-
                 <c-container
                     [fluid]="true">
                     <c-row>
                         <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="organizationalcharts"
-                                [paginateOrScroll]="organizationalcharts"></oitc-paginate-or-scroll>
+                            @if (organizationalcharts) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="organizationalcharts"></oitc-paginate-or-scroll>
+                            }
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
         </c-card-body>
         <c-card-footer>
             &nbsp;

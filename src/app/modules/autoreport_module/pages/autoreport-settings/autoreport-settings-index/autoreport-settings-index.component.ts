@@ -14,7 +14,7 @@ import {
     TableDirective, TooltipDirective
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
-import { NgIf, NgFor, KeyValuePipe } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 import {
     DefaultAutoreportSettings,
     AllAutoreportSettings,
@@ -44,8 +44,6 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
         CardBodyComponent,
         FormDirective,
         FormsModule,
-        NgIf,
-        NgFor,
         TableDirective,
         FormCheckComponent,
         FormCheckInputDirective,

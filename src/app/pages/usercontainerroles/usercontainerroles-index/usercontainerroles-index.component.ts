@@ -43,7 +43,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -84,7 +84,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         MatSortHeader,
         NavComponent,
         NavItemComponent,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         RowComponent,
@@ -94,7 +93,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         TranslocoPipe,
         XsButtonDirective,
         AsyncPipe,
-        NgForOf,
         BadgeOutlineComponent,
         LabelLinkComponent
     ],

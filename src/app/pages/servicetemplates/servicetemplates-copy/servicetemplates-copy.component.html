@@ -40,103 +40,99 @@
 
             <oitc-form-loader [isVisible]="servicetemplates.length === 0"></oitc-form-loader>
 
-            <c-card class="mb-3" *ngFor="let servicetemplate of servicetemplates; let i = index">
-                <c-card-header>
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    <span class="ms-1">
-                        {{ t('Source service template:') }}
-                        {{ servicetemplate.Source.name }}
-                    </span>
-                </c-card-header>
-                <c-card-body>
-
-                    <div class="mb-3">
-                        <label cLabel for="template_name{{i}}">
-                            {{ t('Service template name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl required type="text"
-                               name="template_name{{i}}"
-                               id="template_name{{i}}"
-                               [(ngModel)]="servicetemplate.Servicetemplate.template_name"
-                               oitcFormError [errors]="servicetemplate.Error" errorField="template_name">
-                        <oitc-form-feedback [errors]="servicetemplate.Error"
-                                            errorField="template_name"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Name of the new service template') }}
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="name{{i}}">
-                            {{ t('Service name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl required type="text"
-                               name="name{{i}}"
-                               id="name{{i}}"
-                               [(ngModel)]="servicetemplate.Servicetemplate.name"
-                               oitcFormError [errors]="servicetemplate.Error" errorField="name">
-                        <oitc-form-feedback [errors]="servicetemplate.Error" errorField="name"></oitc-form-feedback>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="description{{i}}">
-                            {{ t('Description') }}
-                        </label>
-                        <input cFormControl required type="text"
-                               name="description{{i}}"
-                               id="description{{i}}"
-                               [(ngModel)]="servicetemplate.Servicetemplate.description"
-                               oitcFormError [errors]="servicetemplate.Error" errorField="description">
-                        <oitc-form-feedback [errors]="servicetemplate.Error"
-                                            errorField="description"></oitc-form-feedback>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="description{{i}}">
-                            {{ t('Check command') }}
-                        </label>
-                        <oitc-select
-                            name="ServiceCheckCommandSelect{{i}}"
-                            id="ServiceCheckCommandSelect{{i}}"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="servicetemplate.Servicetemplate.command_id"
-                            [options]="commands"
-                            (onChange)="loadCommandArguments(servicetemplate.Source.id, servicetemplate.Servicetemplate.command_id, i)"
-                            oitcFormError [errors]="servicetemplate.Error" errorField="command_id">
-                        </oitc-select>
-                    </div>
-
-                    <div class="mb-3"
-                         [hidden]="!(servicetemplate.Servicetemplate.command_id && servicetemplate.Servicetemplate.servicetemplatecommandargumentvalues.length == 0)">
-                        <c-alert color="info">
-                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                            {{ t('This command does not have any parameters.') }}
-                        </c-alert>
-                    </div>
-
-                    <div class="mb-3 ms-4"
-                         *ngFor="let servicetemplatecommandargumentvalue of servicetemplate.Servicetemplate.servicetemplatecommandargumentvalues; index as argsIndex">
-                        <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
-                            {{ servicetemplatecommandargumentvalue.commandargument.human_name }}
-                        </label>
-                        <div class="col-xs-12 col-lg-8">
-                            <input
-                                class="form-control"
-                                type="text"
-                                [name]="'servicetemplatecommandargumentvalue_'+argsIndex"
-                                [(ngModel)]="servicetemplatecommandargumentvalue.value">
+            @for (servicetemplate of servicetemplates; track servicetemplate; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source service template:') }}
+                            {{ servicetemplate.Source.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="template_name{{i}}">
+                                {{ t('Service template name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="template_name{{i}}"
+                                   id="template_name{{i}}"
+                                   [(ngModel)]="servicetemplate.Servicetemplate.template_name"
+                                   oitcFormError [errors]="servicetemplate.Error" errorField="template_name">
+                            <oitc-form-feedback [errors]="servicetemplate.Error"
+                                                errorField="template_name"></oitc-form-feedback>
                             <div class="help-block">
-                                {{ servicetemplatecommandargumentvalue.commandargument.name }}
+                                {{ t('Name of the new service template') }}
                             </div>
                         </div>
-                    </div>
-
-
-                </c-card-body>
-            </c-card>
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('Service name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="name{{i}}"
+                                   id="name{{i}}"
+                                   [(ngModel)]="servicetemplate.Servicetemplate.name"
+                                   oitcFormError [errors]="servicetemplate.Error" errorField="name">
+                            <oitc-form-feedback [errors]="servicetemplate.Error" errorField="name"></oitc-form-feedback>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="description{{i}}">
+                                {{ t('Description') }}
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="description{{i}}"
+                                   id="description{{i}}"
+                                   [(ngModel)]="servicetemplate.Servicetemplate.description"
+                                   oitcFormError [errors]="servicetemplate.Error" errorField="description">
+                            <oitc-form-feedback [errors]="servicetemplate.Error"
+                                                errorField="description"></oitc-form-feedback>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="description{{i}}">
+                                {{ t('Check command') }}
+                            </label>
+                            <oitc-select
+                                name="ServiceCheckCommandSelect{{i}}"
+                                id="ServiceCheckCommandSelect{{i}}"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="servicetemplate.Servicetemplate.command_id"
+                                [options]="commands"
+                                (onChange)="loadCommandArguments(servicetemplate.Source.id, servicetemplate.Servicetemplate.command_id, i)"
+                                oitcFormError [errors]="servicetemplate.Error" errorField="command_id">
+                            </oitc-select>
+                        </div>
+                        <div class="mb-3"
+                             [hidden]="!(servicetemplate.Servicetemplate.command_id && servicetemplate.Servicetemplate.servicetemplatecommandargumentvalues.length == 0)">
+                            <c-alert color="info">
+                                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                {{ t('This command does not have any parameters.') }}
+                            </c-alert>
+                        </div>
+                        @for (servicetemplatecommandargumentvalue of servicetemplate.Servicetemplate.servicetemplatecommandargumentvalues; track servicetemplatecommandargumentvalue; let argsIndex = $index) {
+                            <div class="mb-3 ms-4"
+                            >
+                                <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
+                                    {{ servicetemplatecommandargumentvalue.commandargument.human_name }}
+                                </label>
+                                <div class="col-xs-12 col-lg-8">
+                                    <input
+                                        class="form-control"
+                                        type="text"
+                                        [name]="'servicetemplatecommandargumentvalue_'+argsIndex"
+                                        [(ngModel)]="servicetemplatecommandargumentvalue.value">
+                                    <div class="help-block">
+                                        {{ servicetemplatecommandargumentvalue.commandargument.name }}
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </c-card-body>
+                </c-card>
+            }
 
         </c-card-body>
         <c-card-footer class="text-end">

@@ -3,13 +3,11 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective
 } from '@coreui/angular';
-
-
 
 
 import { Subscription } from 'rxjs';
@@ -19,13 +17,13 @@ import { MetricsInfoResponse } from '../metrics.interface';
 @Component({
     selector: 'oitc-metrics-info',
     imports: [
-    FaIconComponent,
-    TranslocoDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective
-],
+        FaIconComponent,
+        TranslocoDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective
+    ],
     templateUrl: './metrics-info.component.html',
     styleUrl: './metrics-info.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

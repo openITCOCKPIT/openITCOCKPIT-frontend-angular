@@ -24,148 +24,144 @@
         </ol>
     </nav>
 
-    <oitc-block-loader [height]="'25rem'" *ngIf="!evcSummaryTree"></oitc-block-loader>
-    <c-card class="mb-3" *ngIf="evcSummaryTree">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Event Correlation as summary:') }}
-                <small class="fw-300">
-                    {{ rootElement?.host?.name }}
-                </small>
-            </h5>
-
-            <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
-                <c-nav-item>
-                    <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'view', id]"
-                       *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'view']"
-                       class="nav-link">
-                        <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"></fa-icon>
-                        {{ t('EVC Tree') }}
-                    </a>
-                </c-nav-item>
-                <c-nav-item>
-                    <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'summary_view', id]"
-                       *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'summary_view']"
-                       class="nav-link active">
-                        <fa-icon [icon]="['fas', 'th-large']"></fa-icon>
-                        {{ t('EVC Summary') }}
-                    </a>
-                </c-nav-item>
-            </c-nav>
-
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <a [href]="'/eventcorrelation_module/eventcorrelations/summary_view_table/'+id+'.pdf'"
-                       cButton
-                       class="ripple"
-                       color="primary"
-                       size="xs">
-                        <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
-                        {{ t('Download as PDF') }}
-                    </a>
-                </c-nav-item>
-
-                <c-nav-item class="px-1">
-                    <button (click)="loadEventcorrelationSummary()" cButton class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
-                        {{ t('Refresh') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['eventcorrelation_module', 'eventcorrelations', 'index']" cButton
-                            class="ripple" color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-
-                <c-nav-item class="px-1" *ngIf="hasWritePermission && rootElement">
-                    <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'editCorrelation']"
-                       [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', rootElement.host.id]"
-                       cButton
-                       class="ripple"
-                       color="primary"
-                       size="xs">
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                        {{ t('Edit Correlation') }}
-                    </a>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
-
-            <c-row>
-                <c-col [xs]="12" [md]="6">
-                    <fa-icon [icon]="['fas', 'square']" class="p-0 ok"></fa-icon>
-                    <em class="pe-1">
-                        {{ t('Ok') }}
-                    </em>
-
-                    <fa-icon [icon]="['fas', 'square']" class="p-0 warning"></fa-icon>
-                    <em class="pe-1">
-                        {{ t('Warning') }}
-                    </em>
-
-                    <fa-icon [icon]="['fas', 'square']" class="p-0 critical"></fa-icon>
-                    <em class="pe-1">
-                        {{ t('Critical') }}
-                    </em>
-
-                    <fa-icon [icon]="['fas', 'square']" class="p-0 unknown"></fa-icon>
-                    <em class="pe-1">
-                        {{ t('Unknown') }}
-                    </em>
-
-                    <fa-icon [icon]="['fas', 'square']" class="p-0 text-primary"></fa-icon>
-                    <em class="pe-1">
-                        {{ t('Not monitored') }}
-                    </em>
-                </c-col>
-                <c-col [xs]="12" [md]="6" *ngIf="showInfoForDisabledService && disabledServices > 0">
-                    <div class="alert border-faded bg-transparent text-secondary">
-                        <div class="d-flex align-items-center">
-                            <div class="alert-icon me-2">
-                                <span class="icon-stack icon-stack-md">
-                                    <i class="base-circle icon-stack-3x text-info"></i>
-                                    <i class="fas fa-info icon-stack-1x text-white"></i>
-                                </span>
+    @if (!evcSummaryTree) {
+        <oitc-block-loader [height]="'25rem'"></oitc-block-loader>
+    }
+    @if (evcSummaryTree) {
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Event Correlation as summary:') }}
+                    <small class="fw-300">
+                        {{ rootElement?.host?.name }}
+                    </small>
+                </h5>
+                <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                    <c-nav-item>
+                        <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'view', id]"
+                           *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'view']"
+                           class="nav-link">
+                            <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"></fa-icon>
+                            {{ t('EVC Tree') }}
+                        </a>
+                    </c-nav-item>
+                    <c-nav-item>
+                        <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'summary_view', id]"
+                           *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'summary_view']"
+                           class="nav-link active">
+                            <fa-icon [icon]="['fas', 'th-large']"></fa-icon>
+                            {{ t('EVC Summary') }}
+                        </a>
+                    </c-nav-item>
+                </c-nav>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <a [href]="'/eventcorrelation_module/eventcorrelations/summary_view_table/'+id+'.pdf'"
+                           cButton
+                           class="ripple"
+                           color="primary"
+                           size="xs">
+                            <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
+                            {{ t('Download as PDF') }}
+                        </a>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="loadEventcorrelationSummary()" cButton class="ripple" color="default"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['eventcorrelation_module', 'eventcorrelations', 'index']" cButton
+                                class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                    @if (hasWritePermission && rootElement) {
+                        <c-nav-item class="px-1">
+                            <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'editCorrelation']"
+                               [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', rootElement.host.id]"
+                               cButton
+                               class="ripple"
+                               color="primary"
+                               size="xs">
+                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                {{ t('Edit Correlation') }}
+                            </a>
+                        </c-nav-item>
+                    }
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <c-row>
+                    <c-col [xs]="12" [md]="6">
+                        <fa-icon [icon]="['fas', 'square']" class="p-0 ok"></fa-icon>
+                        <em class="pe-1">
+                            {{ t('Ok') }}
+                        </em>
+                        <fa-icon [icon]="['fas', 'square']" class="p-0 warning"></fa-icon>
+                        <em class="pe-1">
+                            {{ t('Warning') }}
+                        </em>
+                        <fa-icon [icon]="['fas', 'square']" class="p-0 critical"></fa-icon>
+                        <em class="pe-1">
+                            {{ t('Critical') }}
+                        </em>
+                        <fa-icon [icon]="['fas', 'square']" class="p-0 unknown"></fa-icon>
+                        <em class="pe-1">
+                            {{ t('Unknown') }}
+                        </em>
+                        <fa-icon [icon]="['fas', 'square']" class="p-0 text-primary"></fa-icon>
+                        <em class="pe-1">
+                            {{ t('Not monitored') }}
+                        </em>
+                    </c-col>
+                    @if (showInfoForDisabledService && disabledServices > 0) {
+                        <c-col [xs]="12" [md]="6">
+                            <div class="alert border-faded bg-transparent text-secondary">
+                                <div class="d-flex align-items-center">
+                                    <div class="alert-icon me-2">
+                                        <span class="icon-stack icon-stack-md">
+                                            <i class="base-circle icon-stack-3x text-info"></i>
+                                            <i class="fas fa-info icon-stack-1x text-white"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <span class="text-info">
+                                            {{ t('Event correlation includes disabled services!') }}
+                                        </span>
+                                        <br>
+                                        {{ t('Status for disabled service') }}:
+                                        <fa-icon [icon]="['fas', 'square']" class="p-0"
+                                                 [ngClass]="{'ok': stateForDisabledService == 0, 'warning': stateForDisabledService == 1, 'critical': stateForDisabledService == 2, 'unknown': stateForDisabledService == 3}">
+                                        </fa-icon>
+                                    </div>
+                                    <div class="ms-2"
+                                         *oitcPermission="['EventcorrelationModule', 'EventcorrelationSettings', 'index']">
+                                        <a class="btn btn-outline-info btn-sm ripple"
+                                           [routerLink]="['/','eventcorrelation_module','eventcorrelation_settings','index']">
+                                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                            {{ t('Go to "Event Correlation Globals"') }}
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex-1">
-                                <span class="text-info">
-                                    {{ t('Event correlation includes disabled services!') }}
-                                </span>
-                                <br>
-                                {{ t('Status for disabled service') }}:
-                                <fa-icon [icon]="['fas', 'square']" class="p-0"
-                                         [ngClass]="{'ok': stateForDisabledService == 0, 'warning': stateForDisabledService == 1, 'critical': stateForDisabledService == 2, 'unknown': stateForDisabledService == 3}">
-                                </fa-icon>
-                            </div>
-                            <div class="ms-2"
-                                 *oitcPermission="['EventcorrelationModule', 'EventcorrelationSettings', 'index']">
-                                <a class="btn btn-outline-info btn-sm ripple"
-                                   [routerLink]="['/','eventcorrelation_module','eventcorrelation_settings','index']">
-                                    <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
-                                    {{ t('Go to "Event Correlation Globals"') }}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </c-col>
-            </c-row>
-
-
-            <div class="mt-3">
-                <oitc-evc-table
-                    [evcSummaryTree]="evcSummaryTree"
-                    [stateForDowntimedService]="stateForDowntimedService"
-                    [stateForDisabledService]="stateForDisabledService"></oitc-evc-table>
-            </div>
-
-
-        </c-card-body>
-        <c-card-footer>
-            &nbsp;
-        </c-card-footer>
-    </c-card>
+                        </c-col>
+                    }
+                </c-row>
+                <div class="mt-3">
+                    <oitc-evc-table
+                        [evcSummaryTree]="evcSummaryTree"
+                        [stateForDowntimedService]="stateForDowntimedService"
+                        [stateForDisabledService]="stateForDisabledService"></oitc-evc-table>
+                </div>
+            </c-card-body>
+            <c-card-footer>
+                &nbsp;
+            </c-card-footer>
+        </c-card>
+    }
 </ng-container>

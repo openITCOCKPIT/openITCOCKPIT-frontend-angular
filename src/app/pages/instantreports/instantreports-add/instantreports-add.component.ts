@@ -24,7 +24,7 @@ import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { InstantreportPost } from '../instantreports.interface';
@@ -53,37 +53,36 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-instantreports-add',
     imports: [
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    BackButtonDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    FormDirective,
-    FormsModule,
-    PaginatorModule,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    NgIf,
-    RequiredIconComponent,
-    SelectComponent,
-    FormControlDirective,
-    RouterLink,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    LabelLinkComponent,
-    TrueFalseDirective,
-    MultiSelectComponent,
-    MultiSelectOptgroupComponent,
-    CardFooterComponent
-],
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        BackButtonDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        FormDirective,
+        FormsModule,
+        PaginatorModule,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        FormControlDirective,
+        RouterLink,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        LabelLinkComponent,
+        TrueFalseDirective,
+        MultiSelectComponent,
+        MultiSelectOptgroupComponent,
+        CardFooterComponent
+    ],
     templateUrl: './instantreports-add.component.html',
     styleUrl: './instantreports-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

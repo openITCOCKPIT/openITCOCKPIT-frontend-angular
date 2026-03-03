@@ -46,7 +46,7 @@ import {
 } from '../../../components/actions-button-element/actions-button-element.component';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -61,49 +61,47 @@ import { ServicetemplateTypesEnum } from '../../servicetemplates/servicetemplate
 @Component({
     selector: 'oitc-agentchecks-index',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardBodyComponent,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    PaginatorModule,
-    RowComponent,
-    TranslocoPipe,
-    XsButtonDirective,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    DeleteAllModalComponent,
-    DropdownDividerDirective,
-    ItemSelectComponent,
-    MatSort,
-    MatSortHeader,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    SelectAllComponent,
-    TableDirective,
-    TableLoaderComponent,
-    LabelLinkComponent
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardBodyComponent,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        PaginatorModule,
+        RowComponent,
+        TranslocoPipe,
+        XsButtonDirective,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        DeleteAllModalComponent,
+        DropdownDividerDirective,
+        ItemSelectComponent,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        SelectAllComponent,
+        TableDirective,
+        TableLoaderComponent,
+        LabelLinkComponent
+    ],
     templateUrl: './agentchecks-index.component.html',
     styleUrl: './agentchecks-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: AgentchecksService } // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: AgentchecksService} // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -20,9 +20,11 @@
                         </label>
                     </c-form-check>
                     <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="field.help">
-                        {{ field.help }}
-                    </div>
+                    @if (field.help) {
+                        <div class="help-block">
+                            {{ field.help }}
+                        </div>
+                    }
                 </div>
             }
             @case (ConfigurationFilesFieldTypes.string) {
@@ -41,9 +43,11 @@
                            oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}">
                     <oitc-form-feedback [errors]="errors"
                                         errorField="Configfile.{{field.field}}"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="field.help">
-                        {{ field.help }}
-                    </div>
+                    @if (field.help) {
+                        <div class="help-block">
+                            {{ field.help }}
+                        </div>
+                    }
                 </div>
 
             }

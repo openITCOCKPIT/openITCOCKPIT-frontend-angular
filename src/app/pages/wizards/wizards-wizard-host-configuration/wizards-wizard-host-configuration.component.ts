@@ -26,7 +26,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { HostAddEditSuccessResponse, HostDnsLookup, HostPost } from '../../hosts/hosts.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
@@ -57,7 +57,6 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
         SelectComponent,
         FormErrorDirective,
         FormFeedbackComponent,
-        NgIf,
         AlertComponent,
         FormControlDirective,
         FormLabelDirective,

@@ -16,13 +16,13 @@ import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MapItemRoot, MapItemRootParams, Perfdata, PerformanceData } from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-perfdata-text-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf, NgClass],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgClass],
     templateUrl: './perfdata-text-item.component.html',
     styleUrl: './perfdata-text-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

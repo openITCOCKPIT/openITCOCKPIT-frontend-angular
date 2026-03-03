@@ -17,46 +17,58 @@
                         <span cDropdownItem *oitcPermission="['hosts', 'index']"
                               [ngClass]="{'text-primary': currentSearchType === SearchType.Host}"
                               (click)="setSearchType(SearchType.Host, t('Hosts'))">
-                            <fa-icon [icon]="['fas', 'check']" *ngIf=" currentSearchType === SearchType.Host"></fa-icon>
+                            @if (currentSearchType === SearchType.Host) {
+                                <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                            }
                             {{ t('Hosts') }}
                         </span>
 
                         <span cDropdownItem *oitcPermission="['services', 'index']"
                               [ngClass]="{'text-primary': currentSearchType === SearchType.Service}"
                               (click)="setSearchType(SearchType.Service, t('Services'))">
-                            <fa-icon [icon]="['fas', 'check']"
-                                     *ngIf=" currentSearchType === SearchType.Service"></fa-icon>
+                            @if (currentSearchType === SearchType.Service) {
+                                <fa-icon [icon]="['fas', 'check']"
+                                ></fa-icon>
+                            }
                             {{ t('Services') }}
                         </span>
 
                         <span cDropdownItem *oitcPermission="['hosts', 'index']"
                               [ngClass]="{'text-primary': currentSearchType === SearchType.UUID}"
                               (click)="setSearchType(SearchType.UUID, t('UUID'))">
-                            <fa-icon [icon]="['fas', 'check']" *ngIf=" currentSearchType ===SearchType.UUID"></fa-icon>
+                            @if (currentSearchType === SearchType.UUID) {
+                                <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                            }
                             {{ t('UUID') }}
                         </span>
 
                         <span cDropdownItem *oitcPermission="['hosts', 'index']"
                               [ngClass]="{'text-primary': currentSearchType === SearchType.Address}"
                               (click)="setSearchType(SearchType.Address, t('IP address'))">
-                            <fa-icon [icon]="['fas', 'check']"
-                                     *ngIf=" currentSearchType === SearchType.Address"></fa-icon>
+                            @if (currentSearchType === SearchType.Address) {
+                                <fa-icon [icon]="['fas', 'check']"
+                                ></fa-icon>
+                            }
                             {{ t('IP address') }}
                         </span>
 
                         <span cDropdownItem *oitcPermission="['hosts', 'index']"
                               [ngClass]="{'text-primary': currentSearchType === SearchType.TagsHost}"
                               (click)="setSearchType(SearchType.TagsHost, t('Tags (Host)'))">
-                            <fa-icon [icon]="['fas', 'check']"
-                                     *ngIf=" currentSearchType === SearchType.TagsHost"></fa-icon>
+                            @if (currentSearchType === SearchType.TagsHost) {
+                                <fa-icon [icon]="['fas', 'check']"
+                                ></fa-icon>
+                            }
                             {{ t('Tags (Host)') }}
                         </span>
 
                         <span cDropdownItem *oitcPermission="['services', 'index']"
                               [ngClass]="{'text-primary': currentSearchType === SearchType.TagsService}"
                               (click)="setSearchType(SearchType.TagsService,t('Tags (Service)'))">
-                            <fa-icon [icon]="['fas', 'check']"
-                                     *ngIf=" currentSearchType ===SearchType.TagsService"></fa-icon>
+                            @if (currentSearchType === SearchType.TagsService) {
+                                <fa-icon [icon]="['fas', 'check']"
+                                ></fa-icon>
+                            }
                             {{ t('Tags (Service)') }}
                         </span>
 

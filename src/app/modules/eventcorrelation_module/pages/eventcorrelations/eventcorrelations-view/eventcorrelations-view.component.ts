@@ -2,20 +2,20 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 
 
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  NavComponent,
-  NavItemComponent,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -32,28 +32,27 @@ import { EvcTreeDirection } from './evc-tree/evc-tree.enum';
 @Component({
     selector: 'oitc-eventcorrelations-view',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FaIconComponent,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    BackButtonDirective,
-    BlockLoaderComponent,
-    EvcTreeComponent,
-    NgClass
-],
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        FaIconComponent,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        BackButtonDirective,
+        BlockLoaderComponent,
+        EvcTreeComponent,
+        NgClass
+    ],
     templateUrl: './eventcorrelations-view.component.html',
     styleUrl: './eventcorrelations-view.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -61,7 +60,7 @@ import { EvcTreeDirection } from './evc-tree/evc-tree.enum';
 export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
 
     public id: number = 0;
-    public show:boolean = true;
+    public show: boolean = true;
 
     public evcTree: EvcTree[] = [];
     public evcTreeDirection: EvcTreeDirection = EvcTreeDirection.RIGHT_TO_LEFT;
@@ -98,7 +97,10 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
         this.show = false;
         this.cdr.markForCheck();
         this.evcTreeDirection = $event;
-        setTimeout(() =>{this.show = true; this.cdr.markForCheck();}, 100);
+        setTimeout(() => {
+            this.show = true;
+            this.cdr.markForCheck();
+        }, 100);
     }
 
     public loadEventcorrelation() {

@@ -24,6 +24,8 @@ export interface HostObject {
     description?: string
     hosttemplate_id?: number
     active_checks_enabled?: boolean
+    checkIntervalHuman?: string
+    delayedHuman?: string
     satelliteId?: number
     containerId?: number
     containerIds?: number[]
@@ -40,6 +42,32 @@ export interface HostObject {
     satelliteRestricted?: boolean // hosts/index
     additionalInformationExists?: boolean // hosts/index
     type?: HostOrServiceType // hosts/index
+}
+
+export interface SoftwareInformationHost {
+    SoftwareInformationExists: boolean // hosts/index
+    packagesHostDetails: PackagesBrowserHostDetails
+}
+
+export interface PackagesBrowserHostDetails {
+    id: number
+    host_id: number
+    os_type: string
+    os_name: string
+    os_version: string
+    os_family: string
+    agent_version: string
+    reboot_required: boolean
+    system_uptime: number
+    last_update: string
+    available_updates: number
+    available_security_updates: number
+    last_error: any
+    created: string
+    modified: string
+    total: number
+    last_update_user: string
+    uptime_in_words: string
 }
 
 // Same as HostObject but with "Host" key in between as CakePHP 2 does.

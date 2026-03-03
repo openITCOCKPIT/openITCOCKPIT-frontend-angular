@@ -1,20 +1,20 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent, CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent, CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
@@ -40,7 +40,7 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { NgIf } from '@angular/common';
+
 import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
@@ -48,37 +48,36 @@ import {
 @Component({
     selector: 'oitc-customalert-rules-add',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    RequiredIconComponent,
-    FormCheckComponent,
-    TrueFalseDirective,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NgSelectComponent,
-    FormControlDirective,
-    CardFooterComponent,
-    SelectComponent,
-    NgIf,
-    RegexHelperTooltipComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        FormCheckComponent,
+        TrueFalseDirective,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        NgSelectComponent,
+        FormControlDirective,
+        CardFooterComponent,
+        SelectComponent,
+        RegexHelperTooltipComponent
+    ],
     templateUrl: './customalert-rules-add.component.html',
     styleUrl: './customalert-rules-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

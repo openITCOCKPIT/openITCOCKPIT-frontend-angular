@@ -5,7 +5,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { WelcomeWidgetResponse } from '../widgets.interface';
 import { StatuscountResponse } from '../../../browsers/browsers.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { SystemnameService } from '../../../../services/systemname.service';
 import { Avatar } from 'primeng/avatar';
 import initials from 'initials';
@@ -19,7 +19,6 @@ import { WordLoaderComponent } from '../../../../layouts/primeng/loading/word-lo
         AsyncPipe,
         Avatar,
         LocalNumberPipe,
-        NgIf,
         WordLoaderComponent
     ],
     templateUrl: './welcome-widget.component.html',

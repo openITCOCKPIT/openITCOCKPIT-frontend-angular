@@ -22,7 +22,7 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { FormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { NgIf } from '@angular/common';
+
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -59,7 +59,6 @@ import { GrafanaTimepickerChange } from '../../../components/grafana-timepicker/
         NavItemComponent,
         RequiredIconComponent,
         XsButtonDirective,
-        NgIf,
         SelectComponent,
         TranslocoPipe,
         GrafanaTimepickerComponent,

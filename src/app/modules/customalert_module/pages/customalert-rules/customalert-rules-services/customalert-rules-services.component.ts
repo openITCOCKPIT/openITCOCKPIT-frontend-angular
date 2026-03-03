@@ -3,26 +3,26 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+
 
 import { PaginatorModule } from 'primeng/paginator';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -45,37 +45,35 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 @Component({
     selector: 'oitc-customalert-rules-services',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    MatSort,
-    NgIf,
-    PaginatorModule,
-    RowComponent,
-    TableDirective,
-    TableLoaderComponent,
-    TranslocoPipe,
-    MatSortHeader,
-    NgForOf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    RouterLink
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        MatSort,
+        PaginatorModule,
+        RowComponent,
+        TableDirective,
+        TableLoaderComponent,
+        TranslocoPipe,
+        MatSortHeader,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        RouterLink
+    ],
     templateUrl: './customalert-rules-services.component.html',
     styleUrl: './customalert-rules-services.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

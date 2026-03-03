@@ -34,7 +34,7 @@ import {
     TableDirective,
     TooltipDirective
 } from '@coreui/angular';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-records.component';
 import { ScrollIndexComponent } from '../../../../layouts/coreui/paginator/scroll-index/scroll-index.component';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -51,7 +51,6 @@ import { FormsModule } from '@angular/forms';
         FaIconComponent,
         ColComponent,
         ContainerComponent,
-        NgIf,
         NoRecordsComponent,
         RowComponent,
         ScrollIndexComponent,

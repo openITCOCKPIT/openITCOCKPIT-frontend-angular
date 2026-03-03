@@ -36,7 +36,8 @@
 
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['customalert_module', 'customalert_rules', 'index']" cButton class="ripple" color="default"
+                        <button [fallbackUrl]="['customalert_module', 'customalert_rules', 'index']" cButton
+                                class="ripple" color="default"
                                 oitcBackButton
                                 size="xs">
                             <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
@@ -55,19 +56,21 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
-                            name="container"
-                            id="container"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.container_id"
-                            [options]="containers"
-                            [debounce]="true"
-                            oitcFormError [errors]="errors" errorField="containers">
+                        name="container"
+                        id="container"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.container_id"
+                        [options]="containers"
+                        [debounce]="true"
+                        oitcFormError [errors]="errors" errorField="containers">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
-                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
+                    @if (!post.container_id) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
                 </div>
 
 
@@ -91,7 +94,7 @@
                 <div class="mb-3">
                     <label cLabel for="post.name">
                         {{ t('Name') }}
-                        <oitc-required-icon />
+                        <oitc-required-icon/>
                     </label>
                     <input cFormControl
                            id="post.name"
@@ -116,14 +119,14 @@
                 </div>
 
                 <h5 class="fieldset-legend-border-bottom">
-                    <fa-icon [icon]="['fas', 'desktop']" />
-                    {{t('Host')}}
+                    <fa-icon [icon]="['fas', 'desktop']"/>
+                    {{ t('Host') }}
                 </h5>
 
                 <div class="mb-3">
                     <label cLabel for="hostTags">
                         {{ t('Included tags') }}
-                        <oitc-required-icon />
+                        <oitc-required-icon/>
                     </label>
                     <c-input-group>
                         <span cInputGroupText>
@@ -133,19 +136,19 @@
                             </div>
                         </span>
                         <ng-select
-                                id="hostTags"
-                                name="hostTags"
-                                [items]="[]"
-                                [(ngModel)]="hostTags"
-                                [addTag]="true"
-                                [multiple]="true"
-                                [selectOnTab]="true"
-                                [isOpen]="false">
+                            id="hostTags"
+                            name="hostTags"
+                            [items]="[]"
+                            [(ngModel)]="hostTags"
+                            [addTag]="true"
+                            [multiple]="true"
+                            [selectOnTab]="true"
+                            [isOpen]="false">
                         </ng-select>
                     </c-input-group>
                     <oitc-form-feedback [errors]="errors" errorField="host_keywords"></oitc-form-feedback>
                     <div class="help-block">
-                        {{t('Press return to separate tags')}}
+                        {{ t('Press return to separate tags') }}
                     </div>
                 </div>
                 <div class="mb-3">
@@ -160,25 +163,25 @@
                             </div>
                         </span>
                         <ng-select
-                                id="hostTagsExcluded"
-                                name="hostTagsExcluded"
-                                [items]="[]"
-                                [(ngModel)]="hostTagsExcluded"
-                                [addTag]="true"
-                                [multiple]="true"
-                                [selectOnTab]="true"
-                                [isOpen]="false">
+                            id="hostTagsExcluded"
+                            name="hostTagsExcluded"
+                            [items]="[]"
+                            [(ngModel)]="hostTagsExcluded"
+                            [addTag]="true"
+                            [multiple]="true"
+                            [selectOnTab]="true"
+                            [isOpen]="false">
                         </ng-select>
                     </c-input-group>
                     <div class="help-block">
-                        {{t('Press return to separate tags')}}
+                        {{ t('Press return to separate tags') }}
                     </div>
                 </div>
 
 
                 <h5 class="fieldset-legend-border-bottom">
-                    <fa-icon [icon]="['fas', 'cog']" />
-                    {{t('Service')}}
+                    <fa-icon [icon]="['fas', 'cog']"/>
+                    {{ t('Service') }}
                 </h5>
 
                 <div class="mb-3">
@@ -193,18 +196,18 @@
                             </div>
                         </span>
                         <ng-select
-                                id="serviceTags"
-                                name="serviceTags"
-                                [items]="[]"
-                                [(ngModel)]="serviceTags"
-                                [addTag]="true"
-                                [multiple]="true"
-                                [selectOnTab]="true"
-                                [isOpen]="false">
+                            id="serviceTags"
+                            name="serviceTags"
+                            [items]="[]"
+                            [(ngModel)]="serviceTags"
+                            [addTag]="true"
+                            [multiple]="true"
+                            [selectOnTab]="true"
+                            [isOpen]="false">
                         </ng-select>
                     </c-input-group>
                     <div class="help-block">
-                        {{t('Press return to separate tags')}}
+                        {{ t('Press return to separate tags') }}
                     </div>
                 </div>
                 <div class="mb-3">
@@ -219,18 +222,18 @@
                             </div>
                         </span>
                         <ng-select
-                                id="serviceTagsExcluded"
-                                name="serviceTagsExcluded"
-                                [items]="[]"
-                                [(ngModel)]="serviceTagsExcluded"
-                                [addTag]="true"
-                                [multiple]="true"
-                                [selectOnTab]="true"
-                                [isOpen]="false">
+                            id="serviceTagsExcluded"
+                            name="serviceTagsExcluded"
+                            [items]="[]"
+                            [(ngModel)]="serviceTagsExcluded"
+                            [addTag]="true"
+                            [multiple]="true"
+                            [selectOnTab]="true"
+                            [isOpen]="false">
                         </ng-select>
                     </c-input-group>
                     <div class="help-block">
-                        {{t('Press return to separate tags')}}
+                        {{ t('Press return to separate tags') }}
                     </div>
                 </div>
 
@@ -241,7 +244,7 @@
 
                     <c-input-group>
                         <span cInputGroupText>
-                            <oitc-regex-helper-tooltip />
+                            <oitc-regex-helper-tooltip/>
                         </span>
                         <input cFormControl
                                id="post.servicename_regex"
@@ -264,7 +267,8 @@
                 <button cButton class="ripple" color="primary" type="submit">
                     {{ t('Save') }}
                 </button>
-                <button [fallbackUrl]="['customalert_module', 'customalert_rules', 'index']" cButton class="ms-1 ripple" color="default"
+                <button [fallbackUrl]="['customalert_module', 'customalert_rules', 'index']" cButton class="ms-1 ripple"
+                        color="default"
                         oitcBackButton
                         type="button">
                     {{ t('Cancel') }}

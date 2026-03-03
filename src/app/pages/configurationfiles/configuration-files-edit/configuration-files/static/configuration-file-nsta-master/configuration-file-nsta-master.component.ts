@@ -16,17 +16,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
 import { ConfigurationFilesService } from '../../../../configuration-files.service';
 import {
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormLabelDirective
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormLabelDirective
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { PaginatorModule } from 'primeng/paginator';
 import { RequiredIconComponent } from '../../../../../../components/required-icon/required-icon.component';
-import { NgIf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../../../../directives/true-false.directive';
 import { FormsModule } from '@angular/forms';
@@ -34,20 +34,19 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-configuration-file-nsta-master',
     imports: [
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    PaginatorModule,
-    RequiredIconComponent,
-    NgIf,
-    TranslocoDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    TrueFalseDirective,
-    FormsModule
-],
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        PaginatorModule,
+        RequiredIconComponent,
+        TranslocoDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        FormsModule
+    ],
     templateUrl: './configuration-file-nsta-master.component.html',
     styleUrl: './configuration-file-nsta-master.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

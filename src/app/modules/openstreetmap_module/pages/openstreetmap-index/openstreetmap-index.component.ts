@@ -167,27 +167,27 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     }
 
     public ngAfterViewInit(): void {
-        setTimeout(() =>{
-        this.map = L.map(this.lmap()?.nativeElement, this.leafletOptions);
-        let self = this;
-        const fullscreenControl = leafletFullscreen();
-        const newCustomControl = L.Control.extend({
-            options: {
-                position: "topleft"
-            },
-            onAdd: () => {
-                var container = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-custom");
-                container.title = 'Reset Map';
-                container.onclick = function () {
-                    self.resetMap();
-                };
-                return container;
-            }
-        });
-        this.map.addControl(fullscreenControl);
-        this.map.addControl(new newCustomControl());
+        setTimeout(() => {
+            this.map = L.map(this.lmap()?.nativeElement, this.leafletOptions);
+            let self = this;
+            const fullscreenControl = leafletFullscreen();
+            const newCustomControl = L.Control.extend({
+                options: {
+                    position: "topleft"
+                },
+                onAdd: () => {
+                    var container = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-custom");
+                    container.title = 'Reset Map';
+                    container.onclick = function () {
+                        self.resetMap();
+                    };
+                    return container;
+                }
+            });
+            this.map.addControl(fullscreenControl);
+            this.map.addControl(new newCustomControl());
 
-        this.loadAclsAndSettings();
+            this.loadAclsAndSettings();
         }, 300);
     }
 
@@ -313,7 +313,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
             this.settingsFilter.filter.warning |
             this.settingsFilter.filter.down_critical |
             this.settingsFilter.filter.unreachable_unknown;
-        if(this.settingsFilter.state_filter === 0){
+        if (this.settingsFilter.state_filter === 0) {
             this.settingsFilter.state_filter = 15;
         }
         this.loadMapData();

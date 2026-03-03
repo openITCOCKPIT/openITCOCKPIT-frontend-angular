@@ -3,7 +3,7 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { Subscription } from 'rxjs';
 import { SlasService } from '../slas.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { AsyncPipe, formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, formatDate, NgClass } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -63,7 +63,6 @@ import { getUserDate } from '../../../../../services/timezone.service';
         RequiredIconComponent,
         SelectComponent,
         FormErrorDirective,
-        NgIf,
         FormFeedbackComponent,
         FormsModule,
         FormDirective,
@@ -75,7 +74,6 @@ import { getUserDate } from '../../../../../services/timezone.service';
         CardFooterComponent,
         PermissionDirective,
         NgClass,
-        NgForOf,
         AlertComponent,
         RowComponent,
         ColComponent,

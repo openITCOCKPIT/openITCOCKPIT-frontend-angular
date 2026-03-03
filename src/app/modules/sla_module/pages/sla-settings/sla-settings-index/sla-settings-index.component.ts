@@ -12,24 +12,22 @@ import { HistoryService } from '../../../../../history.service';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  AlertComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormControlDirective,
-  FormDirective,
-  TableDirective,
-  TooltipDirective
+    AlertComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormDirective,
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
-
 
 
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-
 
 
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -38,25 +36,25 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 @Component({
     selector: 'oitc-sla-settings-index',
     imports: [
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    FaIconComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    CardBodyComponent,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormsModule,
-    FormDirective,
-    FormControlDirective,
-    CardFooterComponent,
-    PermissionDirective,
-    AlertComponent,
-    TableDirective,
-    TooltipDirective
-],
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        FaIconComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CardBodyComponent,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormsModule,
+        FormDirective,
+        FormControlDirective,
+        CardFooterComponent,
+        PermissionDirective,
+        AlertComponent,
+        TableDirective,
+        TooltipDirective
+    ],
     templateUrl: './sla-settings-index.component.html',
     styleUrl: './sla-settings-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

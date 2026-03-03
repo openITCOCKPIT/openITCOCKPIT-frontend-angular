@@ -21,7 +21,7 @@ import { ChangelogsEntryComponent } from '../changelogs-entry/changelogs-entry.c
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AsyncPipe, formatDate, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, formatDate } from '@angular/common';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
@@ -64,8 +64,6 @@ import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loa
         InputGroupTextDirective,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         PaginateOrScrollComponent,
         PermissionDirective,
         ReactiveFormsModule,

@@ -110,83 +110,91 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!contactgroups"></oitc-table-loader>
-            <table *ngIf="contactgroups" bordered cTable class="mt-2 mb-0" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="text-center col-1" scope="col" style="width: 5px;">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Containers.name">
-                        {{ t('Contact group name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Contactgroups.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Number of contacts') }}
-                    </th>
-                    <th class="text-center col-1 width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let contactgroup of contactgroups.all_contactgroups">
-                    <td class="text-center">
-                        @if (( PermissionsService.hasPermissionObservable(['contactgroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['contactgroups', 'copy'])|async )) {
-                            <oitc-item-select
-                                [disabled]="!contactgroup.Contactgroup.allow_edit"
-                                [item]="contactgroup"></oitc-item-select>
-                        }
-                    </td>
-                    <td>{{ contactgroup.Container.name }}</td>
-                    <td>{{ contactgroup.Contactgroup.description }}</td>
-                    <td>{{ contactgroup.Contactgroup.contact_count }}</td>
-                    <td class="width-50">
-                        <oitc-actions-button [allowEdit]="contactgroup.Contactgroup.allow_edit"
-                                             [permission]="'contactgroups.edit'"
-                                             [url]="'/contactgroups/edit/' + contactgroup.Contactgroup.id">
-                            <oitc-actions-button-element [permission]="'contactgroups.edit'"
+            @if (!contactgroups) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (contactgroups) {
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="text-center col-1" scope="col" style="width: 5px;">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Containers.name">
+                            {{ t('Contact group name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Contactgroups.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Number of contacts') }}
+                        </th>
+                        <th class="text-center col-1 width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (contactgroup of contactgroups.all_contactgroups; track contactgroup) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (( PermissionsService.hasPermissionObservable(['contactgroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['contactgroups', 'copy'])|async )) {
+                                        <oitc-item-select
+                                            [disabled]="!contactgroup.Contactgroup.allow_edit"
+                                            [item]="contactgroup"></oitc-item-select>
+                                    }
+                                </td>
+                                <td>{{ contactgroup.Container.name }}</td>
+                                <td>{{ contactgroup.Contactgroup.description }}</td>
+                                <td>{{ contactgroup.Contactgroup.contact_count }}</td>
+                                <td class="width-50">
+                                    <oitc-actions-button [allowEdit]="contactgroup.Contactgroup.allow_edit"
+                                                         [permission]="'contactgroups.edit'"
                                                          [url]="'/contactgroups/edit/' + contactgroup.Contactgroup.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                         [url]="'/changelogs/entity/contactgroup/' + contactgroup.Contactgroup.id">
-                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                {{ t('Changelog') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'contactgroups.usedBy'"
-                                                         [url]="'/contactgroups/usedBy/' + contactgroup.Contactgroup.id">
-                                <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                                {{ t('Used By') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *oitcPermission="['contactgroups', 'copy']"></li>
-                            <oitc-actions-button-element [permission]="'contactgroups.copy'"
-                                                         [url]="'/contactgroups/copy/' + contactgroup.Contactgroup.id">
-                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                {{ t('Copy') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *oitcPermission="['contactgroups', 'delete']"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(contactgroup)"
-                                                         [permission]="'contactgroups.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                                        <oitc-actions-button-element [permission]="'contactgroups.edit'"
+                                                                     [url]="'/contactgroups/edit/' + contactgroup.Contactgroup.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/contactgroup/' + contactgroup.Contactgroup.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'contactgroups.usedBy'"
+                                                                     [url]="'/contactgroups/usedBy/' + contactgroup.Contactgroup.id">
+                                            <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                            {{ t('Used By') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *oitcPermission="['contactgroups', 'copy']"></li>
+                                        <oitc-actions-button-element [permission]="'contactgroups.copy'"
+                                                                     [url]="'/contactgroups/copy/' + contactgroup.Contactgroup.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *oitcPermission="['contactgroups', 'delete']"></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(contactgroup)"
+                                                                     [permission]="'contactgroups.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-            <oitc-no-records
-                *ngIf="contactgroups && contactgroups.all_contactgroups.length === 0"></oitc-no-records>
-            <ng-container *ngIf="contactgroups && contactgroups.all_contactgroups">
+            @if (contactgroups && contactgroups.all_contactgroups.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (contactgroups && contactgroups.all_contactgroups) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -213,16 +221,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="contactgroups"
-                            [paginateOrScroll]="contactgroups"></oitc-paginate-or-scroll>
+                        @if (contactgroups) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="contactgroups"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

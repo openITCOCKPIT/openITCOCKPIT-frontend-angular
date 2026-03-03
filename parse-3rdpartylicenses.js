@@ -112,7 +112,8 @@ if(require.main === module) {
         '0BSD',
         'BSD-2-Clause',
         'BSD-3-Clause',
-        '(CC-BY-4.0 AND MIT)' // FontAwesome
+        '(CC-BY-4.0 AND MIT)', // FontAwesome
+        'BlueOak-1.0.0' // lru-cache
     ];
 
     const packages = parse3rdPartyLicenses(filePath);

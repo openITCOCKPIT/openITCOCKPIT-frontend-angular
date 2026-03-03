@@ -24,7 +24,6 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { NgIf } from '@angular/common';
 
 
 @Component({
@@ -47,8 +46,7 @@ import { NgIf } from '@angular/common';
         FormFeedbackComponent,
         CardFooterComponent,
         XsButtonDirective,
-        BackButtonDirective,
-        NgIf
+        BackButtonDirective
     ],
     templateUrl: './profile-change-password.component.html',
     styleUrl: './profile-change-password.component.css',

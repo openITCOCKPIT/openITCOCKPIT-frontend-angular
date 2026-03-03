@@ -3,21 +3,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StatuspagegroupsEditStepOneComponent } from './statuspagegroups-edit-step-one.component';
 
 describe('StatuspagegroupsEditStepOneComponent', () => {
-  let component: StatuspagegroupsEditStepOneComponent;
-  let fixture: ComponentFixture<StatuspagegroupsEditStepOneComponent>;
+    let component: StatuspagegroupsEditStepOneComponent;
+    let fixture: ComponentFixture<StatuspagegroupsEditStepOneComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [StatuspagegroupsEditStepOneComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [StatuspagegroupsEditStepOneComponent]
+        })
+            .compileComponents();
 
-    fixture = TestBed.createComponent(StatuspagegroupsEditStepOneComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(StatuspagegroupsEditStepOneComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

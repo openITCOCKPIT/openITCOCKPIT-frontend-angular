@@ -6,9 +6,9 @@ import { TooltipDirective } from '@coreui/angular';
 @Component({
     selector: 'oitc-object-uuid',
     imports: [
-    TranslocoDirective,
-    TooltipDirective
-],
+        TranslocoDirective,
+        TooltipDirective
+    ],
     templateUrl: './object-uuid.component.html',
     styleUrl: './object-uuid.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

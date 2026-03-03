@@ -161,9 +161,11 @@
 
             <div>
                 <ng-template #contentTemplate let-data>
-                    <span class="h5 text-info" *ngIf="data">
-                        {{ t('Discovering Storages for Services') }}
-                    </span>
+                    @if (data) {
+                        <span class="h5 text-info">
+                            {{ t('Discovering Storages for Services') }}
+                        </span>
+                    }
                     <br>
                     {{ t('Scan Proxmox and find all Storages. Only possible with a valid Proxmox configuration') }}
                 </ng-template>

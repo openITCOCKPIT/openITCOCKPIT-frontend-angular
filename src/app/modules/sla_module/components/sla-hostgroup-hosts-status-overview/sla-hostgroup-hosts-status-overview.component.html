@@ -149,12 +149,13 @@
                                 <div>
                                     <h4 class="d-block l-h-n m-0 fw-500">
                                         <span *oitcPermission="['hosts', 'index']">
-                                            <span class="badge-clickable"
-                                                  *ngIf="hostsNotInSla.ids.length > 0"
-                                                  [routerLink]="['/', 'hosts', 'index']"
-                                                  [queryParams]="{'filter.Hosts.id': hostsNotInSla.ids}">
-                                                {{ hostsNotInSla.count }}
-                                            </span>
+                                            @if (hostsNotInSla.ids.length > 0) {
+                                                <span class="badge-clickable"
+                                                      [routerLink]="['/', 'hosts', 'index']"
+                                                      [queryParams]="{'filter.Hosts.id': hostsNotInSla.ids}">
+                                                    {{ hostsNotInSla.count }}
+                                                </span>
+                                            }
                                             <span [hidden]="hostsNotInSla.ids.length > 0">
                                                 {{ hostsNotInSla.count }}
                                             </span>
@@ -178,12 +179,13 @@
                                 <div>
                                     <h4 class="d-block l-h-n m-0 fw-500">
                                         <span *oitcPermission="['hosts', 'index']">
-                                            <span class="badge-clickable"
-                                                  *ngIf="hostsNotAvailable.ids.length > 0"
-                                                  [routerLink]="['/', 'hosts', 'index']"
-                                                  [queryParams]="{'filter.Hosts.id': hostsNotAvailable.ids}">
-                                                {{ hostsNotAvailable.count }}
-                                            </span>
+                                            @if (hostsNotAvailable.ids.length > 0) {
+                                                <span class="badge-clickable"
+                                                      [routerLink]="['/', 'hosts', 'index']"
+                                                      [queryParams]="{'filter.Hosts.id': hostsNotAvailable.ids}">
+                                                    {{ hostsNotAvailable.count }}
+                                                </span>
+                                            }
                                             <span [hidden]="hostsNotAvailable.ids.length > 0">
                                                 {{ hostsNotAvailable.count }}
                                             </span>
@@ -211,27 +213,30 @@
                             <p-skeleton height="27px"></p-skeleton>
                         </c-col>
                     } @else {
-                        <c-col md="2" lg="1" xs="12" class="badge badge-success m-2 text-truncate"
-                               [ngStyle]="{'background-color': getBackgroundColorGradient(slaStatusHost.heatmapValue)}"
-                               *ngFor="let slaStatusHost of slaStatusOverview"
-                               title="{{slaStatusHost.host_name}} [{{slaStatusHost.sla_name}}]">
-                            <span *oitcPermission="['hosts', 'browser']"
-                                  [routerLink]="['/', 'hosts', 'browser', slaStatusHost.host_id, { selectedTab: 'tab7'}]"
-                                  class="text-white badge-clickable">
-                                {{ slaStatusHost.heatmapLabel }}
-                                <br>
-                                {{ slaStatusHost.host_name }}
-                            </span>
-                            <span *oitcPermission="['hosts', 'browser']; negate: true">
-                                {{ slaStatusHost.heatmapLabel }}
-                                <br>
-                                {{ slaStatusHost.host_name }}
-                            </span>
-                        </c-col>
+                        @for (slaStatusHost of slaStatusOverview; track slaStatusHost) {
+                            <c-col md="2" lg="1" xs="12" class="badge badge-success m-2 text-truncate"
+                                   [ngStyle]="{'background-color': getBackgroundColorGradient(slaStatusHost.heatmapValue)}"
+                                   title="{{slaStatusHost.host_name}} [{{slaStatusHost.sla_name}}]">
+                                <span *oitcPermission="['hosts', 'browser']"
+                                      [routerLink]="['/', 'hosts', 'browser', slaStatusHost.host_id, { selectedTab: 'tab7'}]"
+                                      class="text-white badge-clickable">
+                                    {{ slaStatusHost.heatmapLabel }}
+                                    <br>
+                                    {{ slaStatusHost.host_name }}
+                                </span>
+                                <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                    {{ slaStatusHost.heatmapLabel }}
+                                    <br>
+                                    {{ slaStatusHost.host_name }}
+                                </span>
+                            </c-col>
+                        }
                     }
                 </c-row>
             </c-container>
-            <oitc-no-records *ngIf="slaStatusOverview && slaStatusOverview.length === 0"></oitc-no-records>
+            @if (slaStatusOverview && slaStatusOverview.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
         </c-card-body>
     </c-card>
 </ng-container>

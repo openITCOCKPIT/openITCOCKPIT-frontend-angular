@@ -164,135 +164,152 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!hostgroups"></oitc-table-loader>
+            @if (!hostgroups) {
+                <oitc-table-loader></oitc-table-loader>
+            }
 
-            <table *ngIf="hostgroups" bordered cTable class="mt-2 mb-0" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="text-center col-1" scope="col" style="width: 5px;">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Containers.name">
-                        {{ t('Host group name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Hostgroups.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th class="text-center col-1 width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let hostgroup of hostgroups.all_hostgroups">
-                    <td class="text-center">
-                        @if (( PermissionsService.hasPermissionObservable(['hostgroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['hostgroups', 'copy'])|async )) {
-                            <oitc-item-select
-                                [disabled]="!hostgroup.allowEdit"
-                                [item]="hostgroup"></oitc-item-select>
-                        }
-                    </td>
-                    <td class="word-break">
-                        <span *oitcPermission="['hostgroups', 'extended']">
-                            <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id]">
-                                {{ hostgroup.container.name }}
-                            </a>
-                        </span>
-                        <span *oitcPermission="['hostgroups', 'extended']; negate: true">
-                            {{ hostgroup.container.name }}
-                        </span>
-                        @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
-                            <span *oitcPermission="['slamodule', 'slas', 'slahostgrouphostsstatusoverview']">
-                                <c-badge *ngIf="hostgroup.hasSLAHosts"
-                                         textColor="warning"
-                                         class="badge-border badge-clickable margin-right-5"
-                                         [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id, { selectedTab: HostgroupExtendedTabs.SlaHostsStatus}]">
-                                    <fa-icon [icon]="['fas', 'award']"></fa-icon>
-                                    {{ t('SLA') }}
-                                </c-badge>
-                            </span>
-                        }
-                        @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
-                            <span
-                                *oitcPermission="['importmodule', 'importedhostgroups', 'dependencytree']">
-                                <c-badge *ngIf="hostgroup.additionalInformationExists"
-                                         textColor="info"
-                                         class="badge-border badge-clickable margin-right-5"
-                                         [routerLink]="['/', 'import_module', 'ImportedHostgroups', 'dependencyTree', hostgroup.id]">
-                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                    {{ t('CMDB') }}
-                                </c-badge>
-                            </span>
-                        }
-                    </td>
-                    <td>{{ hostgroup.description }}</td>
-                    <td class="width-50">
-                        <oitc-actions-button [allowEdit]="hostgroup.allowEdit"
-                                             [permission]="'hostgroups.edit'"
-                                             [url]="'/hostgroups/edit/' + hostgroup.id">
-                            <oitc-actions-button-element [permission]="'hostgroups.edit'"
+            @if (hostgroups) {
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="text-center col-1" scope="col" style="width: 5px;">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Containers.name">
+                            {{ t('Host group name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Hostgroups.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th class="text-center col-1 width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (hostgroup of hostgroups.all_hostgroups; track hostgroup) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (( PermissionsService.hasPermissionObservable(['hostgroups', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['hostgroups', 'copy'])|async )) {
+                                        <oitc-item-select
+                                            [disabled]="!hostgroup.allowEdit"
+                                            [item]="hostgroup"></oitc-item-select>
+                                    }
+                                </td>
+                                <td class="word-break">
+                                    <span *oitcPermission="['hostgroups', 'extended']">
+                                        <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id]">
+                                            {{ hostgroup.container.name }}
+                                        </a>
+                                    </span>
+                                    <span *oitcPermission="['hostgroups', 'extended']; negate: true">
+                                        {{ hostgroup.container.name }}
+                                    </span>
+                                    @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
+                                        <span
+                                            *oitcPermission="['slamodule', 'slas', 'slahostgrouphostsstatusoverview']">
+                                            @if (hostgroup.hasSLAHosts) {
+                                                <c-badge
+                                                    textColor="warning"
+                                                    class="badge-border badge-clickable margin-right-5"
+                                                    [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id, { selectedTab: HostgroupExtendedTabs.SlaHostsStatus}]">
+                                                    <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                                                    {{ t('SLA') }}
+                                                </c-badge>
+                                            }
+                                        </span>
+                                    }
+                                    @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
+                                        <span
+                                            *oitcPermission="['importmodule', 'importedhostgroups', 'dependencytree']">
+                                            @if (hostgroup.additionalInformationExists) {
+                                                <c-badge
+                                                    textColor="info"
+                                                    class="badge-border badge-clickable margin-right-5"
+                                                    [routerLink]="['/', 'import_module', 'ImportedHostgroups', 'dependencyTree', hostgroup.id]">
+                                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                                    {{ t('CMDB') }}
+                                                </c-badge>
+                                            }
+                                        </span>
+                                    }
+                                </td>
+                                <td>{{ hostgroup.description }}</td>
+                                <td class="width-50">
+                                    <oitc-actions-button [allowEdit]="hostgroup.allowEdit"
+                                                         [permission]="'hostgroups.edit'"
                                                          [url]="'/hostgroups/edit/' + hostgroup.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                         [url]="'/changelogs/entity/hostgroup/' + hostgroup.id">
-                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                {{ t('Changelog') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'hostgroups.extended'"
-                                                         [url]="'/hostgroups/extended/' + hostgroup.id">
-                                <fa-icon [icon]="['fas', 'plus-square']" [rotate]="90"></fa-icon>
-                                {{ t('Extended view') }}
-                            </oitc-actions-button-element>
-                            @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
-                                <oitc-actions-button-element *ngIf="hostgroup.hasSLAHosts"
-                                                             [permission]="'slamodule.slas.slahostgrouphostsstatusoverview'"
-                                                             [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id, { selectedTab: HostgroupExtendedTabs.SlaHostsStatus}]">
-                                    <fa-icon [icon]="['fas', 'award']"></fa-icon>
-                                    {{ t('SLA Status Overview') }}
-                                </oitc-actions-button-element>
-                            }
-                            @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
-                                <oitc-actions-button-element *ngIf="hostgroup.additionalInformationExists"
-                                                             [permission]="'importmodule.importedhostgroups.dependencytree'"
-                                                             [url]="'import_module/ImportedHostgroups/dependencyTree/' + hostgroup.id">
-                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                    {{ t('CMDB') }}
-                                </oitc-actions-button-element>
-                            }
-                            <oitc-actions-button-element [permission]="'hostgroups.usedBy'"
-                                                         [url]="'/hostgroups/usedBy/' + hostgroup.id">
-                                <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                                {{ t('Used By') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element [permission]="'hostgroups.copy'"
-                                                         [url]="'/hostgroups/copy/' + hostgroup.id">
-                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                {{ t('Copy') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(hostgroup)"
-                                                         [permission]="'hostgroups.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                                        <oitc-actions-button-element [permission]="'hostgroups.edit'"
+                                                                     [url]="'/hostgroups/edit/' + hostgroup.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/hostgroup/' + hostgroup.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'hostgroups.extended'"
+                                                                     [url]="'/hostgroups/extended/' + hostgroup.id">
+                                            <fa-icon [icon]="['fas', 'plus-square']" [rotate]="90"></fa-icon>
+                                            {{ t('Extended view') }}
+                                        </oitc-actions-button-element>
+                                        @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
+                                            @if (hostgroup.hasSLAHosts) {
+                                                <oitc-actions-button-element
+                                                    [permission]="'slamodule.slas.slahostgrouphostsstatusoverview'"
+                                                    [routerLink]="['/', 'hostgroups', 'extended', hostgroup.id, { selectedTab: HostgroupExtendedTabs.SlaHostsStatus}]">
+                                                    <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                                                    {{ t('SLA Status Overview') }}
+                                                </oitc-actions-button-element>
+                                            }
+                                        }
+                                        @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
+                                            @if (hostgroup.additionalInformationExists) {
+                                                <oitc-actions-button-element
+                                                    [permission]="'importmodule.importedhostgroups.dependencytree'"
+                                                    [url]="'import_module/ImportedHostgroups/dependencyTree/' + hostgroup.id">
+                                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                                    {{ t('CMDB') }}
+                                                </oitc-actions-button-element>
+                                            }
+                                        }
+                                        <oitc-actions-button-element [permission]="'hostgroups.usedBy'"
+                                                                     [url]="'/hostgroups/usedBy/' + hostgroup.id">
+                                            <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                            {{ t('Used By') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        <oitc-actions-button-element [permission]="'hostgroups.copy'"
+                                                                     [url]="'/hostgroups/copy/' + hostgroup.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(hostgroup)"
+                                                                     [permission]="'hostgroups.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-            <oitc-no-records
-                *ngIf="hostgroups && hostgroups.all_hostgroups.length === 0"></oitc-no-records>
+            @if (hostgroups && hostgroups.all_hostgroups.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
 
 
-            <ng-container *ngIf="hostgroups && hostgroups.all_hostgroups">
+            @if (hostgroups && hostgroups.all_hostgroups) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -315,7 +332,6 @@
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete selected') }}
                                 </button>
-
                                 <c-dropdown>
                                     <button cButton cDropdownToggle color="default">
                                         {{ t('More actions') }}
@@ -333,16 +349,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="hostgroups"
-                            [paginateOrScroll]="hostgroups"></oitc-paginate-or-scroll>
+                        @if (hostgroups) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="hostgroups"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

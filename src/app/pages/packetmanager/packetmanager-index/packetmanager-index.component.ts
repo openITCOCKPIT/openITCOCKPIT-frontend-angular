@@ -4,7 +4,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
     AlertComponent,
     BadgeComponent,
@@ -60,8 +60,6 @@ import { EolAlertsComponent } from '../../administrators/administrators-debug/eo
         ModalToggleDirective,
         ModalBodyComponent,
         AlertComponent,
-        NgIf,
-        NgForOf,
         TranslocoPipe,
         ColComponent,
         BadgeComponent,

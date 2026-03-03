@@ -15,9 +15,11 @@
                        oitcFormError [errors]="errors" errorField="Configfile.victoria_metrics_storage_path">
                 <oitc-form-feedback [errors]="errors"
                                     errorField="Configfile.victoria_metrics_storage_path"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['victoria_metrics_storage_path'].help">
-                    {{ fieldInfo['victoria_metrics_storage_path'].help }}
-                </div>
+                @if (fieldInfo['victoria_metrics_storage_path'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['victoria_metrics_storage_path'].help }}
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -35,9 +37,11 @@
                        oitcFormError [errors]="errors" errorField="Configfile.victoria_metrics_retention_period">
                 <oitc-form-feedback [errors]="errors"
                                     errorField="Configfile.victoria_metrics_retention_period"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['victoria_metrics_retention_period'].help">
-                    {{ fieldInfo['victoria_metrics_retention_period'].help }}
-                </div>
+                @if (fieldInfo['victoria_metrics_retention_period'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['victoria_metrics_retention_period'].help }}
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -56,9 +60,11 @@
                        oitcFormError [errors]="errors" errorField="Configfile.local_victoria_metrics_http_port">
                 <oitc-form-feedback [errors]="errors"
                                     errorField="Configfile.local_victoria_metrics_http_port"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['local_victoria_metrics_http_port'].help">
-                    {{ fieldInfo['local_victoria_metrics_http_port'].help }}
-                </div>
+                @if (fieldInfo['local_victoria_metrics_http_port'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['local_victoria_metrics_http_port'].help }}
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -74,9 +80,11 @@
                        [(ngModel)]="config.string.carbon_path"
                        oitcFormError [errors]="errors" errorField="Configfile.carbon_path">
                 <oitc-form-feedback [errors]="errors" errorField="Configfile.carbon_path"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['carbon_path'].help">
-                    {{ fieldInfo['carbon_path'].help }}
-                </div>
+                @if (fieldInfo['carbon_path'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['carbon_path'].help }}
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -97,9 +105,11 @@
                 </c-form-check>
                 <oitc-form-feedback [errors]="errors"
                                     errorField="Configfile.WHISPER_FALLOCATE_CREATE"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['WHISPER_FALLOCATE_CREATE'].help">
-                    {{ fieldInfo['WHISPER_FALLOCATE_CREATE'].help }}
-                </div>
+                @if (fieldInfo['WHISPER_FALLOCATE_CREATE'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['WHISPER_FALLOCATE_CREATE'].help }}
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -119,9 +129,11 @@
                        oitcFormError [errors]="errors" errorField="Configfile.default_average_x_files_factor">
                 <oitc-form-feedback [errors]="errors"
                                     errorField="Configfile.default_average_x_files_factor"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['default_average_x_files_factor'].help">
-                    {{ fieldInfo['default_average_x_files_factor'].help }}
-                </div>
+                @if (fieldInfo['default_average_x_files_factor'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['default_average_x_files_factor'].help }}
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -138,9 +150,11 @@
                        oitcFormError [errors]="errors" errorField="Configfile.carbon_storage_schema">
                 <oitc-form-feedback [errors]="errors"
                                     errorField="Configfile.carbon_storage_schema"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['carbon_storage_schema'].help">
-                    {{ fieldInfo['carbon_storage_schema'].help }}
-                </div>
+                @if (fieldInfo['carbon_storage_schema'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['carbon_storage_schema'].help }}
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -158,9 +172,11 @@
                        oitcFormError [errors]="errors" errorField="Configfile.number_of_carbon_cache_instances">
                 <oitc-form-feedback [errors]="errors"
                                     errorField="Configfile.number_of_carbon_cache_instances"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['number_of_carbon_cache_instances'].help">
-                    {{ fieldInfo['number_of_carbon_cache_instances'].help }}
-                </div>
+                @if (fieldInfo['number_of_carbon_cache_instances'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['number_of_carbon_cache_instances'].help }}
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -178,9 +194,11 @@
                        oitcFormError [errors]="errors" errorField="Configfile.number_of_carbon_c_relay_workers">
                 <oitc-form-feedback [errors]="errors"
                                     errorField="Configfile.number_of_carbon_c_relay_workers"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['number_of_carbon_c_relay_workers'].help">
-                    {{ fieldInfo['number_of_carbon_c_relay_workers'].help }}
-                </div>
+                @if (fieldInfo['number_of_carbon_c_relay_workers'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['number_of_carbon_c_relay_workers'].help }}
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -199,9 +217,11 @@
                        oitcFormError [errors]="errors" errorField="Configfile.local_graphite_plaintext_port">
                 <oitc-form-feedback [errors]="errors"
                                     errorField="Configfile.local_graphite_plaintext_port"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['local_graphite_plaintext_port'].help">
-                    {{ fieldInfo['local_graphite_plaintext_port'].help }}
-                </div>
+                @if (fieldInfo['local_graphite_plaintext_port'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['local_graphite_plaintext_port'].help }}
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -220,9 +240,11 @@
                        oitcFormError [errors]="errors" errorField="Configfile.local_graphite_http_port">
                 <oitc-form-feedback [errors]="errors"
                                     errorField="Configfile.local_graphite_http_port"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['local_graphite_http_port'].help">
-                    {{ fieldInfo['local_graphite_http_port'].help }}
-                </div>
+                @if (fieldInfo['local_graphite_http_port'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['local_graphite_http_port'].help }}
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -244,19 +266,23 @@
                     </ng-template>
                 </ng-select>
                 <oitc-form-feedback [errors]="errors" errorField="Configfile.timezone"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['timezone'].help">
-                    {{ fieldInfo['timezone'].help }}
-                </div>
-                <div class="help-block" *ngIf="serverTimezone">
-                    {{ t('Server timezone is:') }}
-                    <strong>
-                        {{ serverTimezone.server_timezone }}.
-                    </strong>
-                    {{ t('Current server time:') }}
-                    <strong>
-                        {{ serverTimezone.server_time }}
-                    </strong>
-                </div>
+                @if (fieldInfo['timezone'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['timezone'].help }}
+                    </div>
+                }
+                @if (serverTimezone) {
+                    <div class="help-block">
+                        {{ t('Server timezone is:') }}
+                        <strong>
+                            {{ serverTimezone.server_timezone }}.
+                        </strong>
+                        {{ t('Current server time:') }}
+                        <strong>
+                            {{ serverTimezone.server_time }}
+                        </strong>
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -277,9 +303,11 @@
                 </c-form-check>
                 <oitc-form-feedback [errors]="errors"
                                     errorField="Configfile.enable_docker_userland_proxy"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['enable_docker_userland_proxy'].help">
-                    {{ fieldInfo['enable_docker_userland_proxy'].help }}
-                </div>
+                @if (fieldInfo['enable_docker_userland_proxy'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['enable_docker_userland_proxy'].help }}
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -299,9 +327,11 @@
                 </select>
                 <oitc-form-feedback [errors]="errors"
                                     errorField="Configfile.USE_AUTO_NETWORKING"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['USE_AUTO_NETWORKING'].help">
-                    {{ fieldInfo['USE_AUTO_NETWORKING'].help }}
-                </div>
+                @if (fieldInfo['USE_AUTO_NETWORKING'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['USE_AUTO_NETWORKING'].help }}
+                    </div>
+                }
             </div>
 
             <div class="mb-3">
@@ -319,9 +349,11 @@
                        oitcFormError [errors]="errors" errorField="Configfile.docker_compose_subnet">
                 <oitc-form-feedback [errors]="errors"
                                     errorField="Configfile.docker_compose_subnet"></oitc-form-feedback>
-                <div class="help-block" *ngIf="fieldInfo['docker_compose_subnet'].help">
-                    {{ fieldInfo['docker_compose_subnet'].help }}
-                </div>
+                @if (fieldInfo['docker_compose_subnet'].help) {
+                    <div class="help-block">
+                        {{ fieldInfo['docker_compose_subnet'].help }}
+                    </div>
+                }
             </div>
 
         }

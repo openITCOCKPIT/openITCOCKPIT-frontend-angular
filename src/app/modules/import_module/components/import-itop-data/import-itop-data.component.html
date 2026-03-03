@@ -25,40 +25,53 @@
                         <legend>
                             <h5>
                                 {{ t('Overview external system configuration') }}
-                                <span *ngIf="externalSystem">
-                                    <a *oitcPermission="['ImportModule','ExternalSystems', 'edit']"
-                                       [routerLink]="['/', 'import_module', 'ExternalSystems', 'edit', externalSystem.id]">
-                                        {{ externalSystem.name }}
-                                    </a>
-                                    <span *oitcPermission="['ImportModule','ExternalSystems', 'edit']; negate: true">
-                                        {{ externalSystem.name }}
+                                @if (externalSystem) {
+                                    <span>
+                                        <a *oitcPermission="['ImportModule','ExternalSystems', 'edit']"
+                                           [routerLink]="['/', 'import_module', 'ExternalSystems', 'edit', externalSystem.id]">
+                                            {{ externalSystem.name }}
+                                        </a>
+                                        <span
+                                            *oitcPermission="['ImportModule','ExternalSystems', 'edit']; negate: true">
+                                            {{ externalSystem.name }}
+                                        </span>
                                     </span>
-                                </span>
-                                <span *ngIf="externalSystem" class="float-end">
-                                    <a *oitcPermission="['ImportModule','ExternalSystems', 'edit']"
-                                       class="btn btn-outline-primary btn-sm ripple"
-                                       [routerLink]="['/', 'import_module', 'ExternalSystems', 'edit', externalSystem.id]">
-                                        {{ t('Go to "External System configuration"') }}
-                                    </a>
-                                </span>
+                                }
+                                @if (externalSystem) {
+                                    <span class="float-end">
+                                        <a *oitcPermission="['ImportModule','ExternalSystems', 'edit']"
+                                           class="btn btn-outline-primary btn-sm ripple"
+                                           [routerLink]="['/', 'import_module', 'ExternalSystems', 'edit', externalSystem.id]">
+                                            {{ t('Go to "External System configuration"') }}
+                                        </a>
+                                    </span>
+                                }
                             </h5>
                         </legend>
                     </fieldset>
                 </c-col>
             </c-row>
-            <oitc-table-loader *ngIf="!iTopData"></oitc-table-loader>
-            <c-row *ngIf="iTopData">
-                <c-col *ngIf="!iTopData.success">
-                    <c-alert color="danger" class="my-3 p-1">
-                        <h5 cAlertHeading> {{ t('Error!') }}</h5>
-                        <p *ngIf="iTopData.data.message">
-                            <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
-                            {{ iTopData.data.message }}
-                        </p>
-                    </c-alert>
-                </c-col>
-            </c-row>
-            <ng-container *ngIf="iTopData && iTopData.success">
+            @if (!iTopData) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (iTopData) {
+                <c-row>
+                    @if (!iTopData.success) {
+                        <c-col>
+                            <c-alert color="danger" class="my-3 p-1">
+                                <h5 cAlertHeading> {{ t('Error!') }}</h5>
+                                @if (iTopData.data.message) {
+                                    <p>
+                                        <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"></fa-icon>
+                                        {{ iTopData.data.message }}
+                                    </p>
+                                }
+                            </c-alert>
+                        </c-col>
+                    }
+                </c-row>
+            }
+            @if (iTopData && iTopData.success) {
                 <c-row class="mt-3">
                     <c-col>
                         <h5>
@@ -96,55 +109,63 @@
                             </thead>
                             <tbody>
                                 @if (applications) {
-                                    <tr *ngFor="let application of applications" class="word-break">
-                                        <td>
-                                            {{ application.identifier }}
-                                        </td>
-                                        <td>
-                                            {{ application.name }}
-                                        </td>
-                                        <td>
-                                            {{ application.description }}
-                                        </td>
-                                        <td class="text-center">
-                                            <code>{{ application.CIs.length }}</code>
-                                        </td>
-                                    </tr>
+                                    @for (application of applications; track application) {
+                                        <tr class="word-break">
+                                            <td>
+                                                {{ application.identifier }}
+                                            </td>
+                                            <td>
+                                                {{ application.name }}
+                                            </td>
+                                            <td>
+                                                {{ application.description }}
+                                            </td>
+                                            <td class="text-center">
+                                                <code>{{ application.CIs.length }}</code>
+                                            </td>
+                                        </tr>
+                                    }
                                 }
                             </tbody>
                         </table>
                     </c-col>
                 </c-row>
-                <c-row class="mt-3" *ngIf="!hasRootPrivileges">
-                    <c-col>
-                        <div class="mb-3">
-                            <c-form-check>
-                                <input
-                                    [(ngModel)]="ignoreExternalSystem" cFormCheckInput
-                                    id="ignoreExternalSystem"
-                                    class="checkbox-lg me-2 mt-0"
-                                    name="ignoreExternalSystem"
-                                    oitcDebounce
-                                    type="checkbox"/>
-                                <label cFormCheckLabel for="ignoreExternalSystem">
-                                    {{ t('Ignore External System') }}
-                                </label>
-                            </c-form-check>
-                            <div class="help-block">
-                                {{ t('Determines if the import will ignore which external system had imported the host. This can be useful if you need to import hosts from different external systems into one host group.') }}
+                @if (!hasRootPrivileges) {
+                    <c-row class="mt-3">
+                        <c-col>
+                            <div class="mb-3">
+                                <c-form-check>
+                                    <input
+                                        [(ngModel)]="ignoreExternalSystem" cFormCheckInput
+                                        id="ignoreExternalSystem"
+                                        class="checkbox-lg me-2 mt-0"
+                                        name="ignoreExternalSystem"
+                                        oitcDebounce
+                                        type="checkbox"/>
+                                    <label cFormCheckLabel for="ignoreExternalSystem">
+                                        {{ t('Ignore External System') }}
+                                    </label>
+                                </c-form-check>
+                                <div class="help-block">
+                                    {{ t('Determines if the import will ignore which external system had imported the host. This can be useful if you need to import hosts from different external systems into one host group.') }}
+                                </div>
                             </div>
-                        </div>
-                    </c-col>
-                </c-row>
-            </ng-container>
+                        </c-col>
+                    </c-row>
+                }
+            }
         </c-modal-body>
         <c-modal-footer>
-            <button cButton class="ripple" color="primary" *ngIf="applications.length > 0"
-                    [disabled]="showSynchronizingSpinner || showSpinner || errors !== null"
-                    (click)="startDataImport()">
-                <fa-icon [icon]="['fas', 'spinner']" animation="spin" *ngIf="showSpinner"></fa-icon>
-                {{ t('Start data import') }}
-            </button>
+            @if (applications.length > 0) {
+                <button cButton class="ripple" color="primary"
+                        [disabled]="showSynchronizingSpinner || showSpinner || errors !== null"
+                        (click)="startDataImport()">
+                    @if (showSpinner) {
+                        <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                    }
+                    {{ t('Start data import') }}
+                </button>
+            }
             <button (click)="hideModal()" cButton class="ripple" color="default">
                 {{ t('Close') }}
             </button>

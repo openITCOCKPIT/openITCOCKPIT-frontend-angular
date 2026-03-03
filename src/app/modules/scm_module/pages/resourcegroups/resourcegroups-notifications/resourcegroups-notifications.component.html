@@ -25,13 +25,14 @@
     </nav>
     <c-card class="mb-3">
         <c-card-header>
-            <h5 cCardTitle *ngIf="resourcegroup">
-                {{ t('Notifications') }}
-
-                <small class="fw-300">
-                    {{ resourcegroup.container.name }}
-                </small>
-            </h5>
+            @if (resourcegroup) {
+                <h5 cCardTitle>
+                    {{ t('Notifications') }}
+                    <small class="fw-300">
+                        {{ resourcegroup.container.name }}
+                    </small>
+                </h5>
+            }
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item class="px-1">
                     <button (click)="load()" cButton class="ripple" color="default" size="xs">
@@ -57,7 +58,9 @@
             </c-nav>
         </c-card-header>
         <c-card-body>
-            <oitc-table-loader *ngIf="!notifications"></oitc-table-loader>
+            @if (!notifications) {
+                <oitc-table-loader></oitc-table-loader>
+            }
             <!-- Filter -->
             <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                 <c-row>
@@ -195,159 +198,178 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <c-container [fluid]="true" *ngIf="notifications">
-
-                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                       (matSortChange)="onSortChange($event)"
-                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                    <thead>
-                    <tr>
-                        <th scope="col" mat-sort-header="ScmNotificationsLog.reason_type" class="col-1">
-                            {{ t('Reason type') }}
-                        </th>
-                        <th scope="col" mat-sort-header="recipient">
-                            {{ t('Recipient') }}
-                        </th>
-                        <th scope="col">
-                            {{ t('Unconfirmed resources') }}
-                        </th>
-                        <th scope="col">
-                            {{ t('Confirmed resources') }}
-                        </th>
-                        <th scope="col" mat-sort-header="ScmNotificationsLog.created">
-                            {{ t('Send time') }}
-                        </th>
-                        <th scope="col" mat-sort-header="ScmNotificationsLog.has_been_sent" class="col-1">
-                            {{ t('Has been sent') }}
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody *ngIf="notifications">
-                    <tr *ngFor="let notification of notifications.notifications">
-                        <td class="text-center">
-                            @switch (notification.reason_type) {
-                                @case (ScmNotificationLogTypesEnum.REMINDER) {
-                                    <span [title]="'Reminder' |transloco">
-                                        ⏰
-                                    </span>
-                                }
-                                @case (ScmNotificationLogTypesEnum.ESCALATION) {
-                                    <span [title]="'Escalation' |transloco">
-                                        ‼️
-                                    </span>
-                                }
-                                @case (ScmNotificationLogTypesEnum.STATUS_OVERVIEW) {
-                                    <span [title]="'Status report' |transloco">
-                                        🗓️
-                                    </span>
-                                }
-                                @case (ScmNotificationLogTypesEnum.CUMULATIVE_STATUS_SUMMARY) {
-                                    <span [title]="'Cumulative status report' |transloco">
-                                        📑
-                                    </span>
-                                }
-                            }
-                        </td>
-                        <td>
-                            @if (notification.object_type === ScmNotificationLogRecipientTypesEnum.USER) {
-                                <oitc-label-link
-                                    [objectId]="notification.object_id"
-                                    [route]="'/users/edit'"
-                                    [permissions]="'users.edit'">
-                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                    {{ notification.recipient }}
-                                </oitc-label-link>
-                            }
-                            @if (notification.object_type === ScmNotificationLogRecipientTypesEnum.MAILINGLIST) {
-                                <oitc-label-link
-                                    [objectId]="notification.object_id"
-                                    [route]="'/scm_module/mailinglists/edit'"
-                                    [permissions]="'ScmModule.mailinglists.edit'">
-                                    <fa-icon [icon]="['fas', 'envelopes-bulk']"></fa-icon>
-                                    {{ notification.recipient }}
-                                </oitc-label-link>
-                            }
-                        </td>
-                        <td>
-                            @if (notification.unconfirmed_resources.length > 0) {
-                                <ul class="mb-0 ms-1 ps-2">
-                                    <li *ngFor="let unconfirmed_resource of notification.unconfirmed_resources"
-                                        class="pb-1">
-                                        <oitc-label-link
-                                            [objectId]="unconfirmed_resource.id"
-                                            [route]="'/scm_module/resources/edit'"
-                                            [permissions]="'scmmodule.resources.edit'">
-                                            {{ unconfirmed_resource.name }}
-                                        </oitc-label-link>
-                                    </li>
-                                </ul>
-                            }
-                        </td>
-
-                        <td>
-                            @if (notification.confirmed_resources.length > 0) {
-                                <ul class="mb-0 ms-1 ps-2">
-                                    <li *ngFor="let confirmed_resource of notification.confirmed_resources"
-                                        class="pb-1">
-                                        <oitc-label-link
-                                            [objectId]="confirmed_resource.id"
-                                            [route]="'/scm_module/resources/edit'"
-                                            [permissions]="'scmmodule.resources.edit'">
-                                            @switch (confirmed_resource.status) {
-                                                @case (1) {
-                                                    <fa-layers [size]="'lg'">
-                                                        <fa-icon [icon]="['fas', 'square']" class="text-success"/>
-                                                        <fa-icon [inverse]="true" [icon]="['fas', 'check']"
-                                                                 transform="shrink-6"/>
-                                                    </fa-layers>
+            @if (notifications) {
+                <c-container [fluid]="true">
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                           (matSortChange)="onSortChange($event)"
+                           [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                        <thead>
+                        <tr>
+                            <th scope="col" mat-sort-header="ScmNotificationsLog.reason_type" class="col-1">
+                                {{ t('Reason type') }}
+                            </th>
+                            <th scope="col" mat-sort-header="recipient">
+                                {{ t('Recipient') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Unconfirmed resources') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Confirmed resources') }}
+                            </th>
+                            <th scope="col" mat-sort-header="ScmNotificationsLog.created">
+                                {{ t('Send time') }}
+                            </th>
+                            <th scope="col" mat-sort-header="ScmNotificationsLog.has_been_sent" class="col-1">
+                                {{ t('Has been sent') }}
+                            </th>
+                        </tr>
+                        </thead>
+                        @if (notifications) {
+                            <tbody>
+                                @for (notification of notifications.notifications; track notification) {
+                                    <tr>
+                                        <td class="text-center">
+                                            @switch (notification.reason_type) {
+                                                @case (ScmNotificationLogTypesEnum.REMINDER) {
+                                                    <span [title]="'Reminder' |transloco">
+                                                        ⏰
+                                                    </span>
                                                 }
-                                                @case (2) {
-                                                    <fa-layers [size]="'lg'">
-                                                        <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
-                                                        <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
-                                                                 transform="shrink-6"/>
-                                                    </fa-layers>
+                                                @case (ScmNotificationLogTypesEnum.ESCALATION) {
+                                                    <span [title]="'Escalation' |transloco">
+                                                        ‼️
+                                                    </span>
                                                 }
-                                                @case (3) {
-                                                    <fa-layers [size]="'lg'">
-                                                        <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
-                                                        <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
-                                                                 transform="shrink-6"/>
-                                                    </fa-layers>
+                                                @case (ScmNotificationLogTypesEnum.STATUS_OVERVIEW) {
+                                                    <span [title]="'Status report' |transloco">
+                                                        🗓️
+                                                    </span>
                                                 }
-                                                @default {
-                                                    <fa-layers [size]="'lg'">
-                                                        <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
-                                                        <fa-icon [inverse]="true" [icon]="['fas', 'question']"
-                                                                 transform="shrink-6"/>
-                                                    </fa-layers>
+                                                @case (ScmNotificationLogTypesEnum.CUMULATIVE_STATUS_SUMMARY) {
+                                                    <span [title]="'Cumulative status report' |transloco">
+                                                        📑
+                                                    </span>
                                                 }
                                             }
-                                            {{ confirmed_resource.name }}
-                                        </oitc-label-link>
-                                    </li>
-                                </ul>
-                            }
-                        </td>
-                        <td>
-                            {{ notification.created }}
-                        </td>
-                        <td class="text-center">
-                            <c-badge *ngIf="notification.has_been_sent" color="success">
-                                {{ t('Yes') }}
-                            </c-badge>
-                            <c-badge *ngIf="!notification.has_been_sent" color="danger">
-                                {{ t('No') }}
-                            </c-badge>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                @if (notifications && notifications.notifications.length === 0) {
-                    <oitc-no-records></oitc-no-records>
-                }
-
-            </c-container>
+                                        </td>
+                                        <td>
+                                            @if (notification.object_type === ScmNotificationLogRecipientTypesEnum.USER) {
+                                                <oitc-label-link
+                                                    [objectId]="notification.object_id"
+                                                    [route]="'/users/edit'"
+                                                    [permissions]="'users.edit'">
+                                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                                    {{ notification.recipient }}
+                                                </oitc-label-link>
+                                            }
+                                            @if (notification.object_type === ScmNotificationLogRecipientTypesEnum.MAILINGLIST) {
+                                                <oitc-label-link
+                                                    [objectId]="notification.object_id"
+                                                    [route]="'/scm_module/mailinglists/edit'"
+                                                    [permissions]="'ScmModule.mailinglists.edit'">
+                                                    <fa-icon [icon]="['fas', 'envelopes-bulk']"></fa-icon>
+                                                    {{ notification.recipient }}
+                                                </oitc-label-link>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (notification.unconfirmed_resources.length > 0) {
+                                                <ul class="mb-0 ms-1 ps-2">
+                                                    @for (unconfirmed_resource of notification.unconfirmed_resources; track unconfirmed_resource) {
+                                                        <li
+                                                            class="pb-1">
+                                                            <oitc-label-link
+                                                                [objectId]="unconfirmed_resource.id"
+                                                                [route]="'/scm_module/resources/edit'"
+                                                                [permissions]="'scmmodule.resources.edit'">
+                                                                {{ unconfirmed_resource.name }}
+                                                            </oitc-label-link>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (notification.confirmed_resources.length > 0) {
+                                                <ul class="mb-0 ms-1 ps-2">
+                                                    @for (confirmed_resource of notification.confirmed_resources; track confirmed_resource) {
+                                                        <li
+                                                            class="pb-1">
+                                                            <oitc-label-link
+                                                                [objectId]="confirmed_resource.id"
+                                                                [route]="'/scm_module/resources/edit'"
+                                                                [permissions]="'scmmodule.resources.edit'">
+                                                                @switch (confirmed_resource.status) {
+                                                                    @case (1) {
+                                                                        <fa-layers [size]="'lg'">
+                                                                            <fa-icon [icon]="['fas', 'square']"
+                                                                                     class="text-success"/>
+                                                                            <fa-icon [inverse]="true"
+                                                                                     [icon]="['fas', 'check']"
+                                                                                     transform="shrink-6"/>
+                                                                        </fa-layers>
+                                                                    }
+                                                                    @case (2) {
+                                                                        <fa-layers [size]="'lg'">
+                                                                            <fa-icon [icon]="['fas', 'square']"
+                                                                                     class="text-warning"/>
+                                                                            <fa-icon [inverse]="true"
+                                                                                     [icon]="['fas', 'bell']"
+                                                                                     transform="shrink-6"/>
+                                                                        </fa-layers>
+                                                                    }
+                                                                    @case (3) {
+                                                                        <fa-layers [size]="'lg'">
+                                                                            <fa-icon [icon]="['fas', 'square']"
+                                                                                     class="text-danger"/>
+                                                                            <fa-icon [inverse]="true"
+                                                                                     [icon]="['fas', 'exclamation']"
+                                                                                     transform="shrink-6"/>
+                                                                        </fa-layers>
+                                                                    }
+                                                                    @default {
+                                                                        <fa-layers [size]="'lg'">
+                                                                            <fa-icon [icon]="['fas', 'square']"
+                                                                                     class="text-primary"/>
+                                                                            <fa-icon [inverse]="true"
+                                                                                     [icon]="['fas', 'question']"
+                                                                                     transform="shrink-6"/>
+                                                                        </fa-layers>
+                                                                    }
+                                                                }
+                                                                {{ confirmed_resource.name }}
+                                                            </oitc-label-link>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
+                                        </td>
+                                        <td>
+                                            {{ notification.created }}
+                                        </td>
+                                        <td class="text-center">
+                                            @if (notification.has_been_sent) {
+                                                <c-badge color="success">
+                                                    {{ t('Yes') }}
+                                                </c-badge>
+                                            }
+                                            @if (!notification.has_been_sent) {
+                                                <c-badge color="danger">
+                                                    {{ t('No') }}
+                                                </c-badge>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                    </table>
+                    @if (notifications && notifications.notifications.length === 0) {
+                        <oitc-no-records></oitc-no-records>
+                    }
+                </c-container>
+            }
             <c-container [fluid]="true">
                 <c-row>
                     <c-col>

@@ -26,7 +26,7 @@ import {
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -64,13 +64,11 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         RequiredIconComponent,
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        NgForOf,
         TableDirective,
         NoRecordsComponent,
         ButtonCloseDirective,

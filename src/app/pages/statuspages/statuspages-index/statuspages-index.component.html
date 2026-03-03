@@ -134,140 +134,171 @@
                 </form>
             </c-container>
             <!--End  Filter -->
-            <oitc-table-loader *ngIf="!statuspages"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="statuspages"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Statuspages.name">
-                        {{ t('Status page name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Statuspages.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Statuspages.show_downtimes">
-                        {{ t('Show downtimes') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Statuspages.show_acknowledgements">
-                        {{ t('Show acknowledgements') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Statuspages.public">
-                        {{ t('Public') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let statuspage of statuspages.all_statuspages">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['statuspages', 'delete']"
-                            [disabled]="!statuspage.allow_edit"
-                            [item]="statuspage"></oitc-item-select>
-                    </td>
-                    <td>
-                        @if (this.PermissionsService.hasPermissionObservable(['statuspages', 'view'])|async) {
-                            <a [routerLink]="['/', 'statuspages', 'view', statuspage.id]">
-                                {{ statuspage.name }}
-                            </a>
-                        } @else {
-                            {{ statuspage.name }}
+            @if (!statuspages) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (statuspages) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Statuspages.name">
+                            {{ t('Status page name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Statuspages.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Statuspages.show_downtimes">
+                            {{ t('Show downtimes') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Statuspages.show_acknowledgements">
+                            {{ t('Show acknowledgements') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Statuspages.public">
+                            {{ t('Public') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (statuspage of statuspages.all_statuspages; track statuspage) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['statuspages', 'delete']"
+                                        [disabled]="!statuspage.allow_edit"
+                                        [item]="statuspage"></oitc-item-select>
+                                </td>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['statuspages', 'view'])|async) {
+                                        <a [routerLink]="['/', 'statuspages', 'view', statuspage.id]">
+                                            {{ statuspage.name }}
+                                        </a>
+                                    } @else {
+                                        {{ statuspage.name }}
+                                    }
+                                </td>
+                                <td>
+                                    {{ statuspage.description }}
+                                </td>
+                                <td class="text-center">
+                                    @if (statuspage.show_downtimes && !statuspage.show_downtime_comments) {
+                                        <oitc-badge-outline color="success"
+                                        >
+                                            {{ t('Yes') }}
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (statuspage.show_downtimes && statuspage.show_downtime_comments) {
+                                        <oitc-badge-outline color="success"
+                                        >
+                                            {{ t('Yes with comments') }}
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (!statuspage.show_downtimes) {
+                                        <oitc-badge-outline color="danger">
+                                            {{ t('No') }}
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (statuspage.show_acknowledgements && !statuspage.show_acknowledgement_comments) {
+                                        <oitc-badge-outline color="success"
+                                        >
+                                            {{ t('Yes') }}
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (statuspage.show_acknowledgements && statuspage.show_acknowledgement_comments) {
+                                        <oitc-badge-outline color="success"
+                                        >
+                                            {{ t('Yes with comments') }}
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (!statuspage.show_acknowledgements) {
+                                        <oitc-badge-outline color="danger">
+                                            {{ t('No') }}
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (statuspage.public) {
+                                        <oitc-badge-outline color="primary">
+                                            {{ t('Yes') }}
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (!statuspage.public) {
+                                        <oitc-badge-outline color="secondary">
+                                            {{ t('No') }}
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'statuspages.edit'"
+                                                         [url]="'/statuspages/edit/' + statuspage.id"
+                                                         [allowEdit]="statuspage.allow_edit">
+                                        @if (statuspage.allow_edit) {
+                                            <oitc-actions-button-element [permission]="'statuspages.edit'"
+                                                                         [url]="'/statuspages/edit/' + statuspage.id">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element [permission]="'statuspages.view'"
+                                                                     [url]="'/statuspages/view/' + statuspage.id">
+                                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                            {{ t('View') }}
+                                        </oitc-actions-button-element>
+                                        @if (statuspage.public) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        @if (statuspage.public) {
+                                            <oitc-actions-button-element
+                                                [permission]="'statuspages.view'"
+                                            >
+                                                @if (statuspage.public_identifier) {
+                                                    <a [href]="'/statuspages/publicView/'+statuspage.public_identifier"
+                                                       target="_blank">
+                                                        <fa-icon [icon]="['fas', 'users-rectangle']"></fa-icon>
+                                                        {{ t('Public view') }}
+                                                    </a>
+                                                } @else {
+                                                    <a [href]="'/statuspages/publicView/'+statuspage.uuid"
+                                                       target="_blank">
+                                                        <fa-icon [icon]="['fas', 'users-rectangle']"></fa-icon>
+                                                        {{ t('Public view') }}
+                                                    </a>
+                                                }
+                                            </oitc-actions-button-element>
+                                        }
+                                        @if (statuspage.allow_edit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        @if (statuspage.allow_edit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(statuspage)"
+                                                                         [permission]="'statuspages.delete'"
+                                            >
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
                         }
-                    </td>
-                    <td>
-                        {{ statuspage.description }}
-                    </td>
-                    <td class="text-center">
-                        <oitc-badge-outline color="success"
-                                            *ngIf="statuspage.show_downtimes && !statuspage.show_downtime_comments">
-                            {{ t('Yes') }}
-                        </oitc-badge-outline>
-                        <oitc-badge-outline color="success"
-                                            *ngIf="statuspage.show_downtimes && statuspage.show_downtime_comments">
-                            {{ t('Yes with comments') }}
-                        </oitc-badge-outline>
-                        <oitc-badge-outline color="danger" *ngIf="!statuspage.show_downtimes">
-                            {{ t('No') }}
-                        </oitc-badge-outline>
-                    </td>
-                    <td class="text-center">
-                        <oitc-badge-outline color="success"
-                                            *ngIf="statuspage.show_acknowledgements && !statuspage.show_acknowledgement_comments">
-                            {{ t('Yes') }}
-                        </oitc-badge-outline>
-                        <oitc-badge-outline color="success"
-                                            *ngIf="statuspage.show_acknowledgements && statuspage.show_acknowledgement_comments">
-                            {{ t('Yes with comments') }}
-                        </oitc-badge-outline>
-                        <oitc-badge-outline color="danger" *ngIf="!statuspage.show_acknowledgements">
-                            {{ t('No') }}
-                        </oitc-badge-outline>
-                    </td>
-                    <td class="text-center">
-                        <oitc-badge-outline color="primary" *ngIf="statuspage.public">
-                            {{ t('Yes') }}
-                        </oitc-badge-outline>
-                        <oitc-badge-outline color="secondary" *ngIf="!statuspage.public">
-                            {{ t('No') }}
-                        </oitc-badge-outline>
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'statuspages.edit'"
-                                             [url]="'/statuspages/edit/' + statuspage.id"
-                                             [allowEdit]="statuspage.allow_edit">
-                            <oitc-actions-button-element [permission]="'statuspages.edit'"
-                                                         *ngIf="statuspage.allow_edit"
-                                                         [url]="'/statuspages/edit/' + statuspage.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-
-                            <oitc-actions-button-element [permission]="'statuspages.view'"
-                                                         [url]="'/statuspages/view/' + statuspage.id">
-                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                                {{ t('View') }}
-                            </oitc-actions-button-element>
-
-                            <li cDropdownDivider *ngIf="statuspage.public"></li>
-                            <oitc-actions-button-element *ngIf="statuspage.public"
-                                                         [permission]="'statuspages.view'"
-                            >
-                                @if (statuspage.public_identifier) {
-                                    <a [href]="'/statuspages/publicView/'+statuspage.public_identifier" target="_blank">
-                                        <fa-icon [icon]="['fas', 'users-rectangle']"></fa-icon>
-                                        {{ t('Public view') }}
-                                    </a>
-                                } @else {
-                                    <a [href]="'/statuspages/publicView/'+statuspage.uuid" target="_blank">
-                                        <fa-icon [icon]="['fas', 'users-rectangle']"></fa-icon>
-                                        {{ t('Public view') }}
-                                    </a>
-                                }
-                            </oitc-actions-button-element>
-
-                            <li cDropdownDivider *ngIf="statuspage.allow_edit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(statuspage)"
-                                                         [permission]="'statuspages.delete'"
-                                                         *ngIf="statuspage.allow_edit">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <oitc-no-records *ngIf="statuspages && statuspages.all_statuspages.length === 0"></oitc-no-records>
-            <ng-container *ngIf="statuspages && statuspages.all_statuspages">
+                    </tbody>
+                </table>
+            }
+            @if (statuspages && statuspages.all_statuspages.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (statuspages && statuspages.all_statuspages) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -288,15 +319,16 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="statuspages"
-                            [paginateOrScroll]="statuspages"></oitc-paginate-or-scroll>
+                        @if (statuspages) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="statuspages"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

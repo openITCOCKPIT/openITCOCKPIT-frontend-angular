@@ -27,26 +27,26 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownDividerDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownDividerDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from "@coreui/angular";
 import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
@@ -59,7 +59,7 @@ import {
     CommandsIndexParams,
     getDefaultCommandsIndexParams
 } from '../commands.interface';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
@@ -103,7 +103,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         XsButtonDirective,
         FaIconComponent,
         PaginateOrScrollComponent,
-        NgIf,
         TableDirective,
         ContainerComponent,
         RowComponent,
@@ -119,7 +118,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         RouterLink,
         FormsModule,
         DebounceDirective,
-        NgForOf,
         PermissionDirective,
         NoRecordsComponent,
         MatCheckboxModule,
@@ -137,7 +135,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
     templateUrl: './commands-index.component.html',
     styleUrl: './commands-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: CommandsService } // Inject the CommandsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: CommandsService} // Inject the CommandsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

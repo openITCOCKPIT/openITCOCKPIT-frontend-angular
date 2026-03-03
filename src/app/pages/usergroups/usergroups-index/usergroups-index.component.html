@@ -107,79 +107,84 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!usergroups"></oitc-table-loader>
-            <table *ngIf="usergroups" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Usergroups.name">
-                        {{ t('Name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Usergroups.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let usergroup of usergroups.allUsergroups">
-                    <td class="text-center">
-                        <oitc-item-select
-                                *oitcPermission="['usergroups', 'delete']"
-                                [disabled]="false"
-                                [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"
-                                [item]="usergroup"></oitc-item-select>
-
-                    </td>
-                    <td>{{ usergroup.name }}</td>
-                    <td>{{ usergroup.description }}</td>
-
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'usergroups.edit'"
-                                             [url]="'/usergroups/edit/' + usergroup.id">
-                            <oitc-actions-button-element [permission]="'usergroups.edit'"
+            @if (!usergroups) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (usergroups) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Usergroups.name">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Usergroups.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (usergroup of usergroups.allUsergroups; track usergroup) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['usergroups', 'delete']"
+                                        [disabled]="false"
+                                        [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"
+                                        [item]="usergroup"></oitc-item-select>
+                                </td>
+                                <td>{{ usergroup.name }}</td>
+                                <td>{{ usergroup.description }}</td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'usergroups.edit'"
                                                          [url]="'/usergroups/edit/' + usergroup.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element [permission]="'usergroups.copy'"
-                                                         [url]="'/usergroups/copy/' + usergroup.id">
-                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                {{ t('Copy') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider
-                                [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(usergroup)"
-                                                         [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"
-                                                         [permission]="'usergroups.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                                        <oitc-actions-button-element [permission]="'usergroups.edit'"
+                                                                     [url]="'/usergroups/edit/' + usergroup.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        <oitc-actions-button-element [permission]="'usergroups.copy'"
+                                                                     [url]="'/usergroups/copy/' + usergroup.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider
+                                            [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(usergroup)"
+                                                                     [hidden]="usergroup.name === 'Administrator' || usergroup.name === 'Viewer' || usergroup.users.length !== 0"
+                                                                     [permission]="'usergroups.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-            <oitc-no-records
-                    *ngIf="usergroups && usergroups.allUsergroups.length === 0"></oitc-no-records>
-            <ng-container *ngIf="usergroups && usergroups.allUsergroups">
+            @if (usergroups && usergroups.allUsergroups.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (usergroups && usergroups.allUsergroups) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                    [itemsCount]="usergroups.allUsergroups.length"></oitc-select-all>
+                                [itemsCount]="usergroups.allUsergroups.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
@@ -200,16 +205,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
-                    [fluid]="true">
+                [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
+                        @if (usergroups) {
+                            <oitc-paginate-or-scroll
                                 (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="usergroups"
                                 [paginateOrScroll]="usergroups"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

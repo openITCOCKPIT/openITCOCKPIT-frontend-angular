@@ -2,18 +2,18 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input } 
 import { AdditionalHostInformationResult } from '../../../../pages/externalsystems/external-systems.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { OnlineOfflineComponent } from '../../online-offline/online-offline.component';
 import { PermissionDirective } from '../../../../../../permissions/permission.directive';
 import { IdoitStatus } from '../idoit.enum';
@@ -22,24 +22,22 @@ import { DependencyTreeComponent } from '../../../dependency-tree/dependency-tre
 @Component({
     selector: 'oitc-idoit-overview',
     imports: [
-    TranslocoDirective,
-    ColComponent,
-    RowComponent,
-    FaIconComponent,
-    NgIf,
-    OnlineOfflineComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    CardBodyComponent,
-    TableDirective,
-    NgForOf,
-    DependencyTreeComponent,
-    NgClass
-],
+        TranslocoDirective,
+        ColComponent,
+        RowComponent,
+        FaIconComponent,
+        OnlineOfflineComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        CardBodyComponent,
+        TableDirective,
+        DependencyTreeComponent,
+        NgClass
+    ],
     templateUrl: './idoit-overview.component.html',
     styleUrl: './idoit-overview.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

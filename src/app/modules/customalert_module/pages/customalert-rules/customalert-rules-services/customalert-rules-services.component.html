@@ -50,33 +50,34 @@
             </c-nav>
         </c-card-header>
         <c-card-body>
-            <div *ngIf="result" class="alert border-faded bg-transparent text-secondary">
-                <div class="d-flex align-items-center">
-                    <div class="alert-icon me-2">
-                        <span class="icon-stack icon-stack-md">
-                            <i class="base-2 icon-stack-3x text-info"></i>
-                            <i class="fas fa-gear icon-stack-1x text-white"></i>
-                        </span>
+            @if (result) {
+                <div class="alert border-faded bg-transparent text-secondary">
+                    <div class="d-flex align-items-center">
+                        <div class="alert-icon me-2">
+                            <span class="icon-stack icon-stack-md">
+                                <i class="base-2 icon-stack-3x text-info"></i>
+                                <i class="fas fa-gear icon-stack-1x text-white"></i>
+                            </span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="h5 text-cyan-500">
+                                {{ t('Custom alert rule:') }}
+                                <a>
+                                    "{{ result.customalertRule.name }}"
+                                </a>
+                            </span>
+                            <br>
+                            {{ t('Overview of all affected services. Please refresh your configuration after configuration changes!') }}
+                        </div>
+                        <a class="btn btn-outline-info btn-sm ripple"
+                           *oitcPermission="['customalertmodule', 'customalertRules', 'index']"
+                           [routerLink]="['/', 'customalert_module', 'customalert_rules', 'edit', CustomAlertRuleId]">
+                            <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                            {{ t('Go to "Custom rule configuration"') }}
+                        </a>
                     </div>
-                    <div class="flex-1">
-                        <span class="h5 text-cyan-500">
-                            {{ t('Custom alert rule:') }}
-                            <a>
-                                "{{ result.customalertRule.name }}"
-                            </a>
-                        </span>
-                        <br>
-                        {{ t('Overview of all affected services. Please refresh your configuration after configuration changes!') }}
-                    </div>
-
-                    <a class="btn btn-outline-info btn-sm ripple"
-                       *oitcPermission="['customalertmodule', 'customalertRules', 'index']"
-                       [routerLink]="['/', 'customalert_module', 'customalert_rules', 'edit', CustomAlertRuleId]">
-                        <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
-                        {{ t('Go to "Custom rule configuration"') }}
-                    </a>
                 </div>
-            </div>
+            }
 
             <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                 <c-row>
@@ -132,58 +133,66 @@
                 </form>
             </c-container>
 
-            <oitc-table-loader *ngIf="!result"></oitc-table-loader>
+            @if (!result) {
+                <oitc-table-loader></oitc-table-loader>
+            }
 
-            <table *ngIf="result" bordered cTable class="mt-2 mb-0" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th scope="col" mat-sort-header="Hosts.name">
-                        {{ t('Host') }}
-                    </th>
-                    <th scope="col" mat-sort-header="servicename">
-                        {{ t('Service') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Services.description">
-                        {{ t('Description') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let service of result.services">
-                    <td class="word-break">
-                        <a *oitcPermission="['hosts', 'browser']"
-                           [routerLink]="['/', 'hosts', 'browser', service.Hosts.id]">
-                            {{ service.Hosts.name }}
-                        </a>
-                    </td>
-                    <td class="word-break">
-                        <a *oitcPermission="['services', 'browser']"
-                           [routerLink]="['/', 'services', 'browser', service.id]">
-                            {{ service.servicename }}
-                        </a>
-                    </td>
-                    <td>
-                        {{ service.description }}
-                    </td>
-                </tr>
+            @if (result) {
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Host') }}
+                        </th>
+                        <th scope="col" mat-sort-header="servicename">
+                            {{ t('Service') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Services.description">
+                            {{ t('Description') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (service of result.services; track service) {
+                            <tr>
+                                <td class="word-break">
+                                    <a *oitcPermission="['hosts', 'browser']"
+                                       [routerLink]="['/', 'hosts', 'browser', service.Hosts.id]">
+                                        {{ service.Hosts.name }}
+                                    </a>
+                                </td>
+                                <td class="word-break">
+                                    <a *oitcPermission="['services', 'browser']"
+                                       [routerLink]="['/', 'services', 'browser', service.id]">
+                                        {{ service.servicename }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{ service.description }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                </tbody>
-            </table>
 
-
-            <oitc-no-records
-                *ngIf="result && result.services.length === 0"></oitc-no-records>
+            @if (result && result.services.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row class="mt-3">
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="result"
-                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        @if (result) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

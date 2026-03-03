@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { PaginatorComponent } from '../paginator/paginator.component';
 import { ScrollIndexComponent } from '../scroll-index/scroll-index.component';
 import { PaginateOrScroll, PaginatorChangeEvent } from '../paginator.interface';
-import { NgIf } from '@angular/common';
+
 import { ColComponent, RowComponent } from '@coreui/angular';
 import { XsButtonDirective } from '../../xsbutton-directive/xsbutton.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -12,7 +12,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
     imports: [
         PaginatorComponent,
         ScrollIndexComponent,
-        NgIf,
         RowComponent,
         ColComponent,
         XsButtonDirective,

@@ -44,12 +44,14 @@
     <rect [attr.width]="width" [attr.height]="height" rx="10" ry="10"
           [attr.fill]="'url(#tlBg_' + id() + ')'" stroke="#444" stroke-width="2"></rect>
 
-    <text *ngIf="showLabel()" x="0" [attr.y]="height - 10"
-          [attr.font-size]="width / 8"
-          font-family="Verdana" fill="#FFF"
-          [attr.transform]="'rotate(-90, 0, ' + (height - 10 - (width / 8)) + ')'">
-        {{ label() }}
-    </text>
+    @if (showLabel()) {
+        <text x="0" [attr.y]="height - 10"
+              [attr.font-size]="width / 8"
+              font-family="Verdana" fill="#FFF"
+              [attr.transform]="'rotate(-90, 0, ' + (height - 10 - (width / 8)) + ')'">
+            {{ label() }}
+        </text>
+    }
 
     <g [attr.id]="'lights_' + id()">
         <g #redLightGroup [attr.id]="'redLightGroup_' + id()">
@@ -63,9 +65,11 @@
                     stroke="#444" stroke-width="2"></circle>
         </g>
         <g [attr.id]="'blueLightGroup_' + id()">
-            <circle *ngIf="showBlue" [attr.cx]="circleX"
-                    [attr.cy]="lightDiameter + lightPadding * 2 + lightRadius" [attr.r]="lightRadius"
-                    fill="#6e99ff"></circle>
+            @if (showBlue) {
+                <circle [attr.cx]="circleX"
+                        [attr.cy]="lightDiameter + lightPadding * 2 + lightRadius" [attr.r]="lightRadius"
+                        fill="#6e99ff"></circle>
+            }
         </g>
         <g #greenLightGroup [attr.id]="'greenLightGroup_' + id()">
             <circle [attr.cx]="circleX" [attr.cy]="lightDiameter * 2 + lightPadding * 3 + lightRadius"

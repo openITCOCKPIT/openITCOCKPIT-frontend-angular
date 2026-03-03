@@ -13,44 +13,60 @@
         </c-modal-header>
         <c-modal-body>
             <c-row>
-                <c-col *ngIf="!deleteMessage" xs="12">
-                    <strong>{{ t('Do you really want delete the selected object?') }}</strong>
-                </c-col>
-                <c-col *ngIf="deleteMessage" xs="12">
-                    <strong>{{ deleteMessage }}</strong>
-                </c-col>
-                <c-col *ngIf="helpMessage" class="help-block" xs="12">
-                    {{ helpMessage }}
-                </c-col>
+                @if (!deleteMessage) {
+                    <c-col xs="12">
+                        <strong>{{ t('Do you really want delete the selected object?') }}</strong>
+                    </c-col>
+                }
+                @if (deleteMessage) {
+                    <c-col xs="12">
+                        <strong>{{ deleteMessage }}</strong>
+                    </c-col>
+                }
+                @if (helpMessage) {
+                    <c-col class="help-block" xs="12">
+                        {{ helpMessage }}
+                    </c-col>
+                }
             </c-row>
 
             <c-row class="pt-2">
-                <c-col *ngFor="let item of items" sm="12">
-                    <ul class="mb-0">
-                        <li>
-                            {{ item.displayName }}
-                            <div *ngIf="hasErrors && currentItemHasErrors(item)">
-                                <div *ngFor="let error of getErrorsForItem(item)" class="text-danger">
-                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                    {{ error.message }}
-                                    <div *ngIf="error.usedBy">
-                                        <ng-container *ngFor="let usedBy of error.usedBy | keyvalue">
-                                            <div
-                                                *ngIf="usedBy.value.module && usedBy.value.state && usedBy.value.message">
-                                                <div>
-                                                    <a [routerLink]="createURL(usedBy.value.state, Number(usedBy.value.id || item.id))">
-                                                        {{ usedBy.value.message }}
-                                                    </a>
-                                                </div>
+                @for (item of items; track item) {
+                    <c-col sm="12">
+                        <ul class="mb-0">
+                            <li>
+                                {{ item.displayName }}
+                                @if (hasErrors && currentItemHasErrors(item)) {
+                                    <div>
+                                        @for (error of getErrorsForItem(item); track error) {
+                                            <div class="text-danger">
+                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                {{ error.message }}
+                                                @if (error.usedBy) {
+                                                    <div>
+                                                        @for (usedBy of error.usedBy | keyvalue; track usedBy) {
+                                                            @if (usedBy.value.module && usedBy.value.state && usedBy.value.message) {
+                                                                <div
+                                                                >
+                                                                    <div>
+                                                                        <a [routerLink]="createURL(usedBy.value.state, Number(usedBy.value.id || item.id))">
+                                                                            {{ usedBy.value.message }}
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                }
+                                                <!-- todo implement usedby link -->
                                             </div>
-                                        </ng-container>
+                                        }
                                     </div>
-                                    <!-- todo implement usedby link -->
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </c-col>
+                                }
+                            </li>
+                        </ul>
+                    </c-col>
+                }
             </c-row>
 
             <c-row [hidden]="!isDeleting" class="pt-4 pb-2">

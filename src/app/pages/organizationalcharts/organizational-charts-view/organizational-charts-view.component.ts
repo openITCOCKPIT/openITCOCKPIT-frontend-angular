@@ -7,7 +7,7 @@ import { OrganizationalChartsService } from '../organizationalcharts.service';
 import { TitleService } from '../../../services/title.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
-import { NgIf } from '@angular/common';
+
 import {
     CardBodyComponent,
     CardComponent,
@@ -37,7 +37,6 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         ReactiveFormsModule,
         TranslocoDirective,

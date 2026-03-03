@@ -20,7 +20,7 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ContainerTypesEnum, ROOT_CONTAINER } from '../../changelogs/object-types.enum';
 
 
-import { CommonModule, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { ContainersIndexContainer, ContainersIndexNested, DataForCreateContainerModal } from '../containers.interface';
@@ -37,34 +37,31 @@ import { EditContainerModalComponent } from './edit-container-modal/edit-contain
 @Component({
     selector: 'oitc-containers-index',
     imports: [
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardBodyComponent,
-    FormLabelDirective,
-    NgIf,
-    SelectComponent,
-    RowComponent,
-    ColComponent,
-    NestLoaderComponent,
-    ContainerNestComponent,
-    LabelLinkComponent,
-    NgSwitchCase,
-    TranslocoPipe,
-    NgSwitch,
-    CommonModule,
-    DeleteAllModalComponent,
-    CreateContainerModalComponent,
-    EditContainerModalComponent
-],
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardBodyComponent,
+        FormLabelDirective,
+        SelectComponent,
+        RowComponent,
+        ColComponent,
+        NestLoaderComponent,
+        ContainerNestComponent,
+        LabelLinkComponent,
+        TranslocoPipe,
+        CommonModule,
+        DeleteAllModalComponent,
+        CreateContainerModalComponent,
+        EditContainerModalComponent
+    ],
     templateUrl: './containers-index.component.html',
     styleUrl: './containers-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: ContainersService } // Inject the ContainersService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ContainersService} // Inject the ContainersService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

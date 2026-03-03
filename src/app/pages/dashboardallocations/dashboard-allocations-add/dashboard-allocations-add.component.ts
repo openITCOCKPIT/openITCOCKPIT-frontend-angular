@@ -11,7 +11,7 @@ import { HistoryService } from '../../../history.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { DashboardAllocationsService } from '../dashboard-allocations.service';
 import { AllocatedDashboardTab, DashboardTabAllocationPost } from '../dashboard-allocations.interface';
-import { NgIf } from '@angular/common';
+
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -61,7 +61,6 @@ import _ from 'lodash';
         MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         ReactiveFormsModule,
         RequiredIconComponent,

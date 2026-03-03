@@ -62,9 +62,11 @@
                         oitcFormError [errors]="errors" errorField="servicetemplategroup">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="servicetemplategroup"></oitc-form-feedback>
-                    <div *ngIf="post.Servicetemplategroup.id === 0" class="text-warning-glow pt-1">
-                        {{ t('Please select a service template group.') }}
-                    </div>
+                    @if (post.Servicetemplategroup.id === 0) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a service template group.') }}
+                        </div>
+                    }
                 </div>
 
                 <c-col xs="12" sm="12" md="12" lg="8">

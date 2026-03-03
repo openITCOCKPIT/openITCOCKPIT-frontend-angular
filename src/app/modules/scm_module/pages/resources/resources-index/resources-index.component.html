@@ -238,7 +238,9 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!resources"></oitc-table-loader>
+            @if (!resources) {
+                <oitc-table-loader></oitc-table-loader>
+            }
             <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -276,138 +278,151 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="resources">
-                    @for (resource of resources.all_resources; track $index) {
-                        <tr>
-                            <td class="text-center">
-                                @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) &&
-                                ( ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'setStatus']) | async ) ||
-                                    ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async ) )) {
-                                    <oitc-item-select
-                                        [disabled]="!(resource.allow_edit || resource.allow_set_status)"
-                                        [item]="resource"></oitc-item-select>
-                                }
-                            </td>
-                            <td class="text-center">
-                                @switch (resource.status) {
-                                    @case (1) {
-                                        <fa-layers [size]="'xl'">
-                                            <fa-icon [icon]="['fas', 'square']" class="text-success"/>
-                                            <fa-icon [inverse]="true" [icon]="['fas', 'check']"
-                                                     transform="shrink-8"/>
-                                        </fa-layers>
+                @if (resources) {
+                    <tbody>
+                        @for (resource of resources.all_resources; track $index) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) &&
+                                    ( ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'setStatus']) | async ) ||
+                                        ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async ) )) {
+                                        <oitc-item-select
+                                            [disabled]="!(resource.allow_edit || resource.allow_set_status)"
+                                            [item]="resource"></oitc-item-select>
                                     }
-                                    @case (2) {
-                                        <fa-layers [size]="'xl'">
-                                            <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
-                                            <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
-                                                     transform="shrink-8"/>
-                                        </fa-layers>
+                                </td>
+                                <td class="text-center">
+                                    @switch (resource.status) {
+                                        @case (1) {
+                                            <fa-layers [size]="'xl'">
+                                                <fa-icon [icon]="['fas', 'square']" class="text-success"/>
+                                                <fa-icon [inverse]="true" [icon]="['fas', 'check']"
+                                                         transform="shrink-8"/>
+                                            </fa-layers>
+                                        }
+                                        @case (2) {
+                                            <fa-layers [size]="'xl'">
+                                                <fa-icon [icon]="['fas', 'square']" class="text-warning"/>
+                                                <fa-icon [inverse]="true" [icon]="['fas', 'bell']"
+                                                         transform="shrink-8"/>
+                                            </fa-layers>
+                                        }
+                                        @case (3) {
+                                            <fa-layers [size]="'xl'">
+                                                <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
+                                                <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
+                                                         transform="shrink-8"/>
+                                            </fa-layers>
+                                        }
+                                        @default {
+                                            <fa-layers [size]="'xl'">
+                                                <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
+                                                <fa-icon [inverse]="true" [icon]="['fas', 'question']"
+                                                         transform="shrink-8"/>
+                                            </fa-layers>
+                                        }
                                     }
-                                    @case (3) {
-                                        <fa-layers [size]="'xl'">
-                                            <fa-icon [icon]="['fas', 'square']" class="text-danger"/>
-                                            <fa-icon [inverse]="true" [icon]="['fas', 'exclamation']"
-                                                     transform="shrink-8"/>
-                                        </fa-layers>
+                                </td>
+                                <td class="text-center">
+                                    @if (resource.is_expired) {
+                                        <c-badge
+                                            textColor="danger"
+                                            class="badge-border">
+                                            {{ t('Yes') }}
+                                        </c-badge>
                                     }
-                                    @default {
-                                        <fa-layers [size]="'xl'">
-                                            <fa-icon [icon]="['fas', 'square']" class="text-primary"/>
-                                            <fa-icon [inverse]="true" [icon]="['fas', 'question']"
-                                                     transform="shrink-8"/>
-                                        </fa-layers>
+                                    @if (!resource.is_expired) {
+                                        <c-badge
+                                            textColor="success"
+                                            class="badge-border">
+                                            {{ t('No') }}
+                                        </c-badge>
                                     }
-                                }
-                            </td>
-                            <td class="text-center">
-                                <c-badge *ngIf="resource.is_expired"
-                                         textColor="danger"
-                                         class="badge-border">
-                                    {{ t('Yes') }}
-                                </c-badge>
-                                <c-badge *ngIf="!resource.is_expired"
-                                         textColor="success"
-                                         class="badge-border">
-                                    {{ t('No') }}
-                                </c-badge>
-                            </td>
-                            <td>
-                                <oitc-label-link
-                                    [objectId]="resource.resourcegroup_id"
-                                    [route]="'/scm_module/resourcegroups/edit'"
-                                    [permissions]="'scmmodule.resourcegroups.edit'">
-                                    {{ resource.resourcegroup.container.name }}
-                                </oitc-label-link>
-                            </td>
-                            <td>
-                                {{ resource.name }}
-                                <c-badge *ngIf="resource.my_resource"
-                                         textColor="info"
-                                         [title]="'My resource' | transloco"
-                                         class="badge-border">
-                                    <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
-                                </c-badge>
-                            </td>
-                            <td>{{ resource.description }}</td>
-
-                            <td>
-                                <span *ngIf="resource.user">
-                                    {{ resource.user.firstname }}  {{ resource.user.lastname }}
-                                </span>
-                            </td>
-                            <td>
-                                {{ resource.comment }}
-                            </td>
-                            <td>
-                                {{ resource.human_last_updated }}
-                            </td>
-                            <td class="width-50">
-                                <oitc-actions-button [permission]="'ScmModule.resources.edit'"
-                                                     [icon]="['fas', 'cog']"
-                                                     [url]="'/scm_module/resources/edit/' + resource.id">
-                                    <oitc-actions-button-element [permission]="'ScmModule.resources.edit'"
-                                                                 *ngIf="resource.allow_edit"
-                                                                 [url]="'/scm_module/resources/edit/' + resource.id">
-                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                        {{ t('Edit') }}
-                                    </oitc-actions-button-element>
-                                    <oitc-actions-button-element [permission]="'ScmModule.resources.setStatus'"
-                                                                 (click)="toggleSetStatusModal(resource)">
-                                        <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
-                                        {{ t('Set status') }}
-                                    </oitc-actions-button-element>
-                                    <oitc-actions-button-element [permission]="'ScmModule.resources.statuslog'"
-                                                                 [url]="'/scm_module/resources/statuslog/' + resource.id">
-                                        <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
-                                        {{ t('Status log') }}
-                                    </oitc-actions-button-element>
-                                    <oitc-actions-button-element [permission]="'ScmModule.scmchangelogs.index'"
-                                                                 [url]="'/scm_module/scm_changelogs/entity/resource/' + resource.id">
-                                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                        {{ t('Changelog') }}
-                                    </oitc-actions-button-element>
-                                    @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) && ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async )) {
-                                        <li cDropdownDivider></li>
-                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(resource)"
-                                                                     *ngIf="resource.allow_edit"
-                                                                     [permission]="'ScmModule.resources.delete'">
-                                            <span class="text-danger">
-                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                {{ t('Delete') }}
-                                            </span>
+                                </td>
+                                <td>
+                                    <oitc-label-link
+                                        [objectId]="resource.resourcegroup_id"
+                                        [route]="'/scm_module/resourcegroups/edit'"
+                                        [permissions]="'scmmodule.resourcegroups.edit'">
+                                        {{ resource.resourcegroup.container.name }}
+                                    </oitc-label-link>
+                                </td>
+                                <td>
+                                    {{ resource.name }}
+                                    @if (resource.my_resource) {
+                                        <c-badge
+                                            textColor="info"
+                                            [title]="'My resource' | transloco"
+                                            class="badge-border">
+                                            <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
+                                        </c-badge>
+                                    }
+                                </td>
+                                <td>{{ resource.description }}</td>
+                                <td>
+                                    @if (resource.user) {
+                                        <span>
+                                            {{ resource.user.firstname }}  {{ resource.user.lastname }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    {{ resource.comment }}
+                                </td>
+                                <td>
+                                    {{ resource.human_last_updated }}
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'ScmModule.resources.edit'"
+                                                         [icon]="['fas', 'cog']"
+                                                         [url]="'/scm_module/resources/edit/' + resource.id">
+                                        @if (resource.allow_edit) {
+                                            <oitc-actions-button-element [permission]="'ScmModule.resources.edit'"
+                                                                         [url]="'/scm_module/resources/edit/' + resource.id">
+                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element [permission]="'ScmModule.resources.setStatus'"
+                                                                     (click)="toggleSetStatusModal(resource)">
+                                            <fa-icon [icon]="['fas', 'person-chalkboard']"></fa-icon>
+                                            {{ t('Set status') }}
                                         </oitc-actions-button-element>
-                                    }
-                                </oitc-actions-button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
+                                        <oitc-actions-button-element [permission]="'ScmModule.resources.statuslog'"
+                                                                     [url]="'/scm_module/resources/statuslog/' + resource.id">
+                                            <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
+                                            {{ t('Status log') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'ScmModule.scmchangelogs.index'"
+                                                                     [url]="'/scm_module/scm_changelogs/entity/resource/' + resource.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        @if (( PermissionsService.hasModuleObservable('ScmModule')|async ) && ( PermissionsService.hasPermissionObservable(['ScmModule', 'resources', 'delete']) | async )) {
+                                            <li cDropdownDivider></li>
+                                            @if (resource.allow_edit) {
+                                                <oitc-actions-button-element (click)="toggleDeleteAllModal(resource)"
+                                                                             [permission]="'ScmModule.resources.delete'">
+                                                    <span class="text-danger">
+                                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                        {{ t('Delete') }}
+                                                    </span>
+                                                </oitc-actions-button-element>
+                                            }
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
             </table>
 
-            <oitc-no-records
-                *ngIf="resources && resources.all_resources.length === 0"></oitc-no-records>
-            <ng-container *ngIf="resources">
+            @if (resources && resources.all_resources.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (resources) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -437,7 +452,7 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">

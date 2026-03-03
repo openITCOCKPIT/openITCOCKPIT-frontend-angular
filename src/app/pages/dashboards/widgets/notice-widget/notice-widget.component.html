@@ -2,32 +2,34 @@
     <div class="d-flex h-100 flex-column" #boxContainer>
         <div>
             <div>
-                <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-                        *ngIf="!isReadonly()">
-                    @if (flipped()) {
-                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                    } @else {
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    }
-                </button>
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())"
+                    >
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        }
+                    </button>
+                }
             </div>
         </div>
 
         <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
              class="box-container">
             <div class="box-x">
-                <ng-container *ngIf="animationStateShowContent">
+                @if (animationStateShowContent) {
                     <!-- Widget Content -->
                     <div class="text-break" [innerHTML]="htmlContent | trustAsHtml"></div>
                     <!-- End Widget Content -->
-                </ng-container>
+                }
             </div>
 
             <div class="box-x">
-                <ng-container *ngIf="animationStateShowConfig">
+                @if (animationStateShowConfig) {
                     <!-- Config area -->
                     @if (config && widget) {
-
                         <div>
                             <label cLabel [for]="'notice_content_'+widget.id">
                                 <fa-icon [icon]="['fas', 'code']" class="text-primary"></fa-icon>
@@ -47,10 +49,9 @@
                                 {{ t('Save') }}
                             </button>
                         </div>
-
                     }
                     <!-- End Config area -->
-                </ng-container>
+                }
             </div>
         </div>
     </div>

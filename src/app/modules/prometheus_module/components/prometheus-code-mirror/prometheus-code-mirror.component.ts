@@ -77,8 +77,6 @@ export class PrometheusCodeMirrorComponent implements AfterViewInit, OnDestroy {
     @Input({transform: numberAttribute}) rows: number = 6;
 
 
-
-
     ngAfterViewInit() {
         const textarea = this.containerRef.nativeElement.querySelector('textarea');
 
@@ -94,7 +92,6 @@ export class PrometheusCodeMirrorComponent implements AfterViewInit, OnDestroy {
                     })
                 );
             }
-
 
 
             if (this.theme === 'dark') {
@@ -169,8 +166,6 @@ export class PrometheusCodeMirrorComponent implements AfterViewInit, OnDestroy {
 
         return updateValueChangeCodemirrorListener;
     }
-
-
 
 
 }

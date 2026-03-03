@@ -35,7 +35,7 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
@@ -60,7 +60,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         SelectComponent,
         FormLabelDirective,
         FormControlDirective,
-        NgIf,
         WizardsDynamicfieldsComponent,
         TranslocoDirective,
         OitcAlertComponent,
@@ -71,7 +70,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         FormCheckInputDirective,
         InputGroupComponent,
         InputGroupTextDirective,
-        NgForOf,
         NgSelectComponent,
         RowComponent,
         BackButtonDirective,

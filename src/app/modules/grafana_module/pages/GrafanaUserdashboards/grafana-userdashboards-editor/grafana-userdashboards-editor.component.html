@@ -33,106 +33,104 @@
         [baseIcon]="'circle'"
         [icon]="['fas', 'info']"></oitc-alert>
 
-    <oitc-block-loader [height]="'25rem'" *ngIf="!data"></oitc-block-loader>
+    @if (!data) {
+        <oitc-block-loader [height]="'25rem'"></oitc-block-loader>
+    }
 
     <form cForm>
-        <c-card class="mb-3" *ngIf="data">
-            <c-card-header>
-                <h5 cCardTitle>
-                    {{ t('Dashboard') }}:
-                    <small class="fw-300">
-                        {{ data.userdashboardData.name }}
-                    </small>
-                </h5>
-
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1" *oitcPermission="['GrafanaModule', 'GrafanaUserdashboards', 'edit']">
-                        <a [routerLink]="[ '/', 'grafana_module', 'grafana_userdashboards', 'edit', data.userdashboardData.id]"
-                           cButton
-                           class="ripple" color="default"
-                           size="xs">
-                            <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                            {{ t('Edit settings') }}
-                        </a>
-                    </c-nav-item>
-
-                    <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['grafana_module', 'grafana_userdashboards', 'index']" cButton
-                                class="ripple" color="default"
-                                oitcBackButton
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                            {{ t('Back') }}
-                        </button>
-                    </c-nav-item>
-
-                    <c-nav-item class="px-1">
-                        <button cButton
-                                class="ripple" color="primary"
-                                type="button"
-                                size="xs"
-                                (click)="synchronizeWithGrafana()">
-                            <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
-                            {{ t('Synchronize with Grafana') }}
-                        </button>
-                    </c-nav-item>
-
-                    <c-nav-item class="px-1" *oitcPermission="['GrafanaModule', 'GrafanaUserdashboards', 'view']">
-                        <a [routerLink]="[ '/', 'grafana_module', 'grafana_userdashboards', 'view', data.userdashboardData.id]"
-                           *ngIf="data.userdashboardData.grafana_url"
-                           cButton
-                           class="ripple" color="primary"
-                           size="xs">
-                            <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
-                            {{ t('View') }}
-                        </a>
-                    </c-nav-item>
-
-                </c-nav>
-
-            </c-card-header>
-            <c-card-body>
-                <!-- Rows -> Panels -> Metrics -->
-                @for (panels of data.userdashboardData.rows; track $index) {
-                    <oitc-grafana-row
-                        [panels]="panels"
-                        [containerId]="data.userdashboardData.container_id"
-                        [grafanaUnits]="data.grafanaUnits"
-                        (panelsChangedEvent)="onRowPanelsChanged($event)"
-                        (removeRowEvent)="onRowRemove($event)"
-                        (createPanelEvent)="onCreatePanelEvent($event)"
-                        [rowIndex]="$index"></oitc-grafana-row>
-                }
-
-                <c-row *ngIf="data.userdashboardData.rows.length === 0">
-                    <c-col xs="12" class="text-info text-center p-2">
-                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Start by adding a new row.') }}
-                    </c-col>
-                </c-row>
-
-
-                <c-row>
-                    <c-col>
-                        <hr class="border-dashed">
-                        <button cButton class="ripple" color="success" size="xs"
-                                (click)="addRow()">
-                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                            {{ t('Add Row') }}
-                        </button>
-                    </c-col>
-                </c-row>
-
-            </c-card-body>
-        </c-card>
+        @if (data) {
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Dashboard') }}:
+                        <small class="fw-300">
+                            {{ data.userdashboardData.name }}
+                        </small>
+                    </h5>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1" *oitcPermission="['GrafanaModule', 'GrafanaUserdashboards', 'edit']">
+                            <a [routerLink]="[ '/', 'grafana_module', 'grafana_userdashboards', 'edit', data.userdashboardData.id]"
+                               cButton
+                               class="ripple" color="default"
+                               size="xs">
+                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                {{ t('Edit settings') }}
+                            </a>
+                        </c-nav-item>
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['grafana_module', 'grafana_userdashboards', 'index']" cButton
+                                    class="ripple" color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                        <c-nav-item class="px-1">
+                            <button cButton
+                                    class="ripple" color="primary"
+                                    type="button"
+                                    size="xs"
+                                    (click)="synchronizeWithGrafana()">
+                                <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                                {{ t('Synchronize with Grafana') }}
+                            </button>
+                        </c-nav-item>
+                        <c-nav-item class="px-1" *oitcPermission="['GrafanaModule', 'GrafanaUserdashboards', 'view']">
+                            @if (data.userdashboardData.grafana_url) {
+                                <a [routerLink]="[ '/', 'grafana_module', 'grafana_userdashboards', 'view', data.userdashboardData.id]"
+                                   cButton
+                                   class="ripple" color="primary"
+                                   size="xs">
+                                    <fa-icon [icon]="['fas', 'area-chart']"></fa-icon>
+                                    {{ t('View') }}
+                                </a>
+                            }
+                        </c-nav-item>
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
+                    <!-- Rows -> Panels -> Metrics -->
+                    @for (panels of data.userdashboardData.rows; track $index) {
+                        <oitc-grafana-row
+                            [panels]="panels"
+                            [containerId]="data.userdashboardData.container_id"
+                            [grafanaUnits]="data.grafanaUnits"
+                            (panelsChangedEvent)="onRowPanelsChanged($event)"
+                            (removeRowEvent)="onRowRemove($event)"
+                            (createPanelEvent)="onCreatePanelEvent($event)"
+                            [rowIndex]="$index"></oitc-grafana-row>
+                    }
+                    @if (data.userdashboardData.rows.length === 0) {
+                        <c-row>
+                            <c-col xs="12" class="text-info text-center p-2">
+                                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                {{ t('Start by adding a new row.') }}
+                            </c-col>
+                        </c-row>
+                    }
+                    <c-row>
+                        <c-col>
+                            <hr class="border-dashed">
+                            <button cButton class="ripple" color="success" size="xs"
+                                    (click)="addRow()">
+                                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                {{ t('Add Row') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </c-card-body>
+            </c-card>
+        }
     </form>
 </ng-container>
 
 <oitc-synchronize-grafana-modal (completed)="onMassActionComplete($event)"
                                 [items]="selectedItems"></oitc-synchronize-grafana-modal>
 
-<oitc-grafana-panel-options-modal
-    *ngIf="data && data.grafanaUnits"
-    [grafanaUnits]="data.grafanaUnits"></oitc-grafana-panel-options-modal>
+@if (data && data.grafanaUnits) {
+    <oitc-grafana-panel-options-modal
+        [grafanaUnits]="data.grafanaUnits"></oitc-grafana-panel-options-modal>
+}
 
 <oitc-grafana-metric-options-modal></oitc-grafana-metric-options-modal>

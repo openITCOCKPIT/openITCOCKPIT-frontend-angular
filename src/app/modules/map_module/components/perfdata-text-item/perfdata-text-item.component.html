@@ -11,8 +11,10 @@
             </text>
         </svg>
     </div>
-    <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
-                   appendTo="body"></p-contextMenu>
+    @if (!isViewMode()) {
+        <p-contextMenu [target]="container" [model]="contextMenuItems"
+                       appendTo="body"></p-contextMenu>
+    }
 } @else {
     <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
         <svg viewBox="0 0 85 18" [attr.width]="width" [attr.height]="height"

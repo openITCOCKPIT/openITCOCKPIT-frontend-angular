@@ -24,7 +24,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 
 
-import { KeyValuePipe, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 
 
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -53,8 +53,6 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         FormControlDirective,
         FormDirective,
         FormsModule,
-        NgForOf,
-        NgIf,
         PermissionDirective,
         TableDirective,
         TranslocoDirective,
@@ -65,10 +63,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         TooltipDirective,
         KeyValuePipe,
         FormSelectDirective,
-        NgSwitch,
-        NgSwitchCase,
         NgSwitchMultiCasePipe,
-        NgSwitchDefault,
         ReloadInterfaceModalComponent,
         TableLoaderComponent
     ],

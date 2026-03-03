@@ -40,7 +40,9 @@ export class ChangeLanguageComponent implements OnDestroy {
             if (data.user && data.user.i18n) {
                 this.TranslocoService.setActiveLang(data.user.i18n);
                 this.currentLanguage = data.user.i18n;
-                setTimeout(() => {this.setSelectConfig();}, 200);
+                setTimeout(() => {
+                    this.setSelectConfig();
+                }, 200);
 
             }
         }));
@@ -59,7 +61,9 @@ export class ChangeLanguageComponent implements OnDestroy {
             this.TranslocoService.setActiveLang(language);
             this.currentLanguage = language;
             this.cdr.markForCheck();
-            setTimeout(() => {this.setSelectConfig();},200);
+            setTimeout(() => {
+                this.setSelectConfig();
+            }, 200);
         }));
         //this.TranslocoService.setActiveLang(langugage);
         //this.currentLanguage = langugage

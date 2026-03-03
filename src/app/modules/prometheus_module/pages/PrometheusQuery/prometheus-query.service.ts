@@ -113,7 +113,7 @@ export class PrometheusQueryService {
             );
     }
 
-    public createServices(PrometheusCreateService: PrometheusCreateService) : Observable<GenericResponseWrapper>{
+    public createServices(PrometheusCreateService: PrometheusCreateService): Observable<GenericResponseWrapper> {
         return this.http.post<GenericResponseWrapper>(`${this.proxyPath}/prometheus_module/PrometheusQuery/createService.json?angular=true`, {
             Service: PrometheusCreateService
         })
@@ -171,7 +171,7 @@ export class PrometheusQueryService {
 
     public updateService(PrometheusEditService: PrometheusEditService): Observable<GenericResponseWrapper> {
         return this.http.post<GenericResponseWrapper>(`${this.proxyPath}/prometheus_module/PrometheusQuery/editService/${PrometheusEditService.Service.id}.json?angular=true`, {
-            Service : PrometheusEditService.Service as {},
+            Service: PrometheusEditService.Service as {},
         })
             .pipe(
                 map(data => {
@@ -190,6 +190,7 @@ export class PrometheusQueryService {
                 })
             );
     }
+
     /*********************************
      *    Services Browser action    *
      *********************************/

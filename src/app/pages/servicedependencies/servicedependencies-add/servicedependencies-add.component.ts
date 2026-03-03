@@ -6,19 +6,19 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  NavComponent,
-  NavItemComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -26,7 +26,7 @@ import { FormsModule } from '@angular/forms';
 
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
@@ -55,36 +55,35 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-servicedependencies-add',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    InputGroupComponent,
-    LabelLinkComponent,
-    MultiSelectComponent,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    RequiredIconComponent,
-    SelectComponent,
-    TrueFalseDirective,
-    XsButtonDirective,
-    FormCheckComponent,
-    MultiSelectOptgroupComponent
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        InputGroupComponent,
+        LabelLinkComponent,
+        MultiSelectComponent,
+        NavComponent,
+        NavItemComponent,
+        RequiredIconComponent,
+        SelectComponent,
+        TrueFalseDirective,
+        XsButtonDirective,
+        FormCheckComponent,
+        MultiSelectOptgroupComponent
+    ],
     templateUrl: './servicedependencies-add.component.html',
     styleUrl: './servicedependencies-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

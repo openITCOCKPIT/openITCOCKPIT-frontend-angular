@@ -106,87 +106,97 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!hostdefaults"></oitc-table-loader>
-            <table *ngIf="hostdefaults" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Hostdefaults.name">
-                        {{ t('Name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Hostdefaults.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Container') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let hostdefault of hostdefaults.hostdefaults">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['importmodule','hostdefaults', 'delete']"
-                            [disabled]="!hostdefault.allowEdit"
-                            [item]="hostdefault"></oitc-item-select>
-
-                    </td>
-                    <td>
-                        <span *oitcPermission="['importmodule','hostdefaults', 'edit']">
-                            @if (hostdefault.allowEdit) {
-                                <a [routerLink]="['/', 'import_module', 'HostDefaults', 'edit',hostdefault.id]">
-                                    {{ hostdefault.name }}
-                                </a>
-                            } @else {
-                                {{ hostdefault.name }}
-                            }
-                        </span>
-                        <span *oitcPermission="['importmodule','hostdefaults', 'edit']; negate: true">
-                            {{ hostdefault.name }}
-                        </span>
-                    </td>
-                    <td>{{ hostdefault.description }}</td>
-                    <td> {{ hostdefault.container }}</td>
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'ImportModule.Hostdefaults.edit'"
-                                             [icon]="['fas', 'cog']"
-                                             [url]="'/import_module/HostDefaults/edit/' + hostdefault.id">
-                            <oitc-actions-button-element [permission]="'ImportModule.HostDefaults.edit'"
-                                                         *ngIf="hostdefault.allowEdit"
+            @if (!hostdefaults) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (hostdefaults) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Hostdefaults.name">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Hostdefaults.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Container') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (hostdefault of hostdefaults.hostdefaults; track hostdefault) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['importmodule','hostdefaults', 'delete']"
+                                        [disabled]="!hostdefault.allowEdit"
+                                        [item]="hostdefault"></oitc-item-select>
+                                </td>
+                                <td>
+                                    <span *oitcPermission="['importmodule','hostdefaults', 'edit']">
+                                        @if (hostdefault.allowEdit) {
+                                            <a [routerLink]="['/', 'import_module', 'HostDefaults', 'edit',hostdefault.id]">
+                                                {{ hostdefault.name }}
+                                            </a>
+                                        } @else {
+                                            {{ hostdefault.name }}
+                                        }
+                                    </span>
+                                    <span *oitcPermission="['importmodule','hostdefaults', 'edit']; negate: true">
+                                        {{ hostdefault.name }}
+                                    </span>
+                                </td>
+                                <td>{{ hostdefault.description }}</td>
+                                <td> {{ hostdefault.container }}</td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'ImportModule.Hostdefaults.edit'"
+                                                         [icon]="['fas', 'cog']"
                                                          [url]="'/import_module/HostDefaults/edit/' + hostdefault.id">
-                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'ImportModule.importchangelogs.index'"
-                                                         [url]="'/import_module/import_changelogs/entity/Hostdefault/' + hostdefault.id">
-                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                {{ t('Changelog') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(hostdefault)"
-                                                         *ngIf="hostdefault.allowEdit"
-                                                         [permission]="'ImportModule.hostdefaults.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                                        @if (hostdefault.allowEdit) {
+                                            <oitc-actions-button-element [permission]="'ImportModule.HostDefaults.edit'"
+                                                                         [url]="'/import_module/HostDefaults/edit/' + hostdefault.id">
+                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element
+                                            [permission]="'ImportModule.importchangelogs.index'"
+                                            [url]="'/import_module/import_changelogs/entity/Hostdefault/' + hostdefault.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        @if (hostdefault.allowEdit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(hostdefault)"
+                                                                         [permission]="'ImportModule.hostdefaults.delete'">
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-            <oitc-no-records
-                *ngIf="hostdefaults && hostdefaults.hostdefaults.length === 0"></oitc-no-records>
-            <ng-container *ngIf="hostdefaults">
+            @if (hostdefaults && hostdefaults.hostdefaults.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (hostdefaults) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -206,7 +216,7 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">

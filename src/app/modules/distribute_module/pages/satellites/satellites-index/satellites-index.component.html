@@ -135,15 +135,15 @@
                                 </span>
 
                                 <oitc-multi-select
-                                        name="SyncMethodFilter"
-                                        id="SyncMethodFilter"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        [(ngModel)]="params['filter[Satellites.sync_method][]']"
-                                        [options]="syncMethods"
-                                        [debounce]="true"
-                                        [placeholder]="'Filter by sync method' | transloco"
-                                        (onChange)="onFilterChange(true)"
+                                    name="SyncMethodFilter"
+                                    id="SyncMethodFilter"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="params['filter[Satellites.sync_method][]']"
+                                    [options]="syncMethods"
+                                    [debounce]="true"
+                                    [placeholder]="'Filter by sync method' | transloco"
+                                    (onChange)="onFilterChange(true)"
                                 >
                                 </oitc-multi-select>
                             </c-input-group>
@@ -161,104 +161,118 @@
             <!-- End Filter -->
 
 
-            <oitc-table-loader *ngIf="! result"></oitc-table-loader>
+            @if (!result) {
+                <oitc-table-loader></oitc-table-loader>
+            }
 
 
-            <table *ngIf="result" bordered cTable class="mt-2 mb-0" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="text-center col-1" scope="col" style="width: 5px;">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Satellites.name">
-                        {{ t('Instance name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Satellites.address">
-                        {{ t('IP address') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Satellites.sync_method">
-                        {{ t('Sync method') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Satellites.timezone">
-                        {{ t('Time zone') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Container') }}
-                    </th>
-                    <th class="text-center col-1 width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let satellite of result.all_satellites">
-                    <td class="text-center">
-                        <oitc-item-select
-                                *oitcPermission="['distributeModule', 'satellites', 'delete']"
-                                [disabled]="!satellite.allow_edit"
-                                [item]="satellite"></oitc-item-select>
-                    </td>
-                    <td>
-                        {{ satellite.name }}
-                        <oitc-badge-outline color="info">
-                            ID {{ satellite.id }}
-                        </oitc-badge-outline>
-                    </td>
-                    <td>
-                        {{ satellite.address }}
-                    </td>
-                    <td>
-                        {{ satellite.sync_method_name }}
-                    </td>
-                    <td>
-                        {{ satellite.timezone }}
-                    </td>
-                    <td>
-                        {{ satellite.container }}
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'distributeModule.satellites.edit'"
-                                             [url]="'/distribute_module/satellites/edit/' + satellite.id">
-                            <oitc-actions-button-element [permission]="'distributeModule.satellites.edit'"
-                                                         [url]="'/distribute_module/satellites/edit/' + satellite.id"
-                                                         *ngIf="satellite.allow_edit">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'distributeModule.satellites.usedBy'"
-                                                         [url]="'/distribute_module/satellites/usedBy/' + satellite.id">
-                                <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                                {{ t('Used By') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider
-                                *ngIf="satellite.allow_edit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(satellite)"
-                                                         *ngIf="satellite.allow_edit"
-                                                         [permission]="'distributeModule.satellites.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            @if (result) {
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="text-center col-1" scope="col" style="width: 5px;">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Satellites.name">
+                            {{ t('Instance name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Satellites.address">
+                            {{ t('IP address') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Satellites.sync_method">
+                            {{ t('Sync method') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Satellites.timezone">
+                            {{ t('Time zone') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Container') }}
+                        </th>
+                        <th class="text-center col-1 width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (satellite of result.all_satellites; track satellite) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['distributeModule', 'satellites', 'delete']"
+                                        [disabled]="!satellite.allow_edit"
+                                        [item]="satellite"></oitc-item-select>
+                                </td>
+                                <td>
+                                    {{ satellite.name }}
+                                    <oitc-badge-outline color="info">
+                                        ID {{ satellite.id }}
+                                    </oitc-badge-outline>
+                                </td>
+                                <td>
+                                    {{ satellite.address }}
+                                </td>
+                                <td>
+                                    {{ satellite.sync_method_name }}
+                                </td>
+                                <td>
+                                    {{ satellite.timezone }}
+                                </td>
+                                <td>
+                                    {{ satellite.container }}
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'distributeModule.satellites.edit'"
+                                                         [url]="'/distribute_module/satellites/edit/' + satellite.id">
+                                        @if (satellite.allow_edit) {
+                                            <oitc-actions-button-element
+                                                [permission]="'distributeModule.satellites.edit'"
+                                                [url]="'/distribute_module/satellites/edit/' + satellite.id"
+                                            >
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element [permission]="'distributeModule.satellites.usedBy'"
+                                                                     [url]="'/distribute_module/satellites/usedBy/' + satellite.id">
+                                            <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                            {{ t('Used By') }}
+                                        </oitc-actions-button-element>
+                                        @if (satellite.allow_edit) {
+                                            <li cDropdownDivider
+                                            ></li>
+                                        }
+                                        @if (satellite.allow_edit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(satellite)"
+                                                                         [permission]="'distributeModule.satellites.delete'">
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
 
-            <oitc-no-records
-                    *ngIf="result && result.all_satellites.length === 0"></oitc-no-records>
+            @if (result && result.all_satellites.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
 
-            <ng-container *ngIf="result && result.all_satellites">
+            @if (result && result.all_satellites) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                    [itemsCount]="result.all_satellites.length"></oitc-select-all>
+                                [itemsCount]="result.all_satellites.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
@@ -269,7 +283,6 @@
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                     {{ t('Delete selected') }}
                                 </button>
-
                                 <c-dropdown *oitcPermission="['hosts', 'externalcommands']">
                                     <button cButton cDropdownToggle color="default">
                                         {{ t('More actions') }}
@@ -296,16 +309,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
-                    [fluid]="true">
+                [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
+                        @if (result) {
+                            <oitc-paginate-or-scroll
                                 (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="result"
                                 [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

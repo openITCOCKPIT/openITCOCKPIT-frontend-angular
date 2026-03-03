@@ -22,7 +22,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { RouterLink } from '@angular/router';
@@ -46,7 +46,6 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
         FormFeedbackComponent,
         FormLabelDirective,
         FormsModule,
-        NgIf,
         PermissionDirective,
         RequiredIconComponent,
         RouterLink,
@@ -58,7 +57,7 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
         FormCheckComponent,
         FormCheckInputDirective,
         TrueFalseDirective,
-        FormCheckLabelDirective,
+        FormCheckLabelDirective
     ],
     templateUrl: './servicenow-settings-index.component.html',
     styleUrl: './servicenow-settings-index.component.css',

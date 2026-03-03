@@ -6,7 +6,7 @@
         @if (statusCounts && statusCounts.hoststatusCount.length === 3) {
             <div class="w-100 text-center">
 
-            <div echarts [options]="chartOption"
+                <div echarts [options]="chartOption"
                      [theme]="theme"
                      (chartInit)="onChartInit($event)"
                      class="w-100 h-100"></div>

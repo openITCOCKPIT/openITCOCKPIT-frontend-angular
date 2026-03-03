@@ -4,7 +4,7 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -31,7 +31,6 @@ import {
         TranslocoDirective,
         RouterLink,
         FormLoaderComponent,
-        NgIf,
         BackButtonDirective,
         CardComponent,
         CardHeaderComponent,
@@ -40,7 +39,6 @@ import {
         NavItemComponent,
         XsButtonDirective,
         CardBodyComponent,
-        NgForOf,
         TableDirective,
         NotUsedByObjectComponent
     ],

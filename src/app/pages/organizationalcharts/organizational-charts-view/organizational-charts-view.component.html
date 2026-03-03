@@ -46,22 +46,26 @@
                     </button>
                 </c-nav-item>
 
-                <c-nav-item class="px-1" *ngIf="organizationalChart && allowEdit">
-                    <a *oitcPermission="['organizationalcharts', 'edit']"
-                       [routerLink]="['/', 'organizationalcharts', 'edit', organizationalChart.id]"
-                       cButton
-                       class="ripple"
-                       color="primary"
-                       size="xs">
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                        {{ t('Edit Organizational Chart') }}
-                    </a>
-                </c-nav-item>
+                @if (organizationalChart && allowEdit) {
+                    <c-nav-item class="px-1">
+                        <a *oitcPermission="['organizationalcharts', 'edit']"
+                           [routerLink]="['/', 'organizationalcharts', 'edit', organizationalChart.id]"
+                           cButton
+                           class="ripple"
+                           color="primary"
+                           size="xs">
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                            {{ t('Edit Organizational Chart') }}
+                        </a>
+                    </c-nav-item>
+                }
             </c-nav>
         </c-card-header>
         <c-card-body class="d-flex h-100">
 
-            <oitc-block-loader *ngIf="!organizationalChart" [height]="'25rem'"></oitc-block-loader>
+            @if (!organizationalChart) {
+                <oitc-block-loader [height]="'25rem'"></oitc-block-loader>
+            }
             @if (organizationalChart) {
                 <oitc-organizational-charts-viewer
                     class="flex-1"

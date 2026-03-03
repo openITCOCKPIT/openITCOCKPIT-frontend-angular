@@ -130,9 +130,11 @@
                                 oitcFormError [errors]="errors" errorField="container_id">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-                            <div *ngIf="!hostPost.container_id" class="text-warning-glow pt-1">
-                                {{ t('Please select a container.') }}
-                            </div>
+                            @if (!hostPost.container_id) {
+                                <div class="text-warning-glow pt-1">
+                                    {{ t('Please select a container.') }}
+                                </div>
+                            }
                         </div>
 
                         <div class="mb-3">
@@ -151,9 +153,11 @@
                                 oitcFormError [errors]="errors" errorField="hosttemplate_id">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="hosttemplate_id"></oitc-form-feedback>
-                            <div *ngIf="!hostPost.hosttemplate_id" class="text-warning-glow pt-1">
-                                {{ t('Please select a host template.') }}
-                            </div>
+                            @if (!hostPost.hosttemplate_id) {
+                                <div class="text-warning-glow pt-1">
+                                    {{ t('Please select a host template.') }}
+                                </div>
+                            }
                         </div>
 
                         <div class="mb-2">
@@ -180,20 +184,23 @@
                                 </label>
                             </c-form-check>
                         </div>
-                        <div class="help-block text-info" *ngIf="data.dnsHostnameNotFound">
-                            <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
-                            {{ t('Could not resolve hostname.') }}
-                        </div>
+                        @if (data.dnsHostnameNotFound) {
+                            <div class="help-block text-info">
+                                <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
+                                {{ t('Could not resolve hostname.') }}
+                            </div>
+                        }
 
-                        <c-alert color="warning" *ngIf="data.isHostnameInUse">
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                            {{
-                                t('A host with the name {0} already exists. Duplicate host names could lead to confusion.', {
-                                    '0': hostPost.name
-                                })
-                            }}
-
-                        </c-alert>
+                        @if (data.isHostnameInUse) {
+                            <c-alert color="warning">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                {{
+                                    t('A host with the name {0} already exists. Duplicate host names could lead to confusion.', {
+                                        '0': hostPost.name
+                                    })
+                                }}
+                            </c-alert>
+                        }
 
                         <div class="mb-3">
                             <label cLabel for="HostAddress">
@@ -208,29 +215,34 @@
                                    (blur)="runDnsLookup(false)">
                             <oitc-form-feedback [errors]="errors" errorField="address"></oitc-form-feedback>
                         </div>
-                        <div class="help-block text-info" *ngIf="data.dnsAddressNotFound">
-                            <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
-                            {{ t('Could not resolve address.') }}
-                        </div>
+                        @if (data.dnsAddressNotFound) {
+                            <div class="help-block text-info">
+                                <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
+                                {{ t('Could not resolve address.') }}
+                            </div>
+                        }
 
 
-                        <div class="mb-3" *ngIf="hostPost.hosttemplate_id">
-                            <label cLabel for="description">
-                                {{ t('Description') }}
-                            </label>
-                            <c-input-group>
-                                <input cFormControl id="description" type="text"
-                                       name="description"
-                                       oitcFormError [errors]="errors" errorField="description"
-                                       [(ngModel)]="hostPost.description">
-                                <oitc-template-diff cInputGroupText
-                                                    *ngIf="hosttemplate"
-                                                    [templateValue]="hosttemplate.description"
-                                                    [(value)]="hostPost.description"
-                                                    class="bg-transparent p-0"></oitc-template-diff>
-                            </c-input-group>
-                            <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-                        </div>
+                        @if (hostPost.hosttemplate_id) {
+                            <div class="mb-3">
+                                <label cLabel for="description">
+                                    {{ t('Description') }}
+                                </label>
+                                <c-input-group>
+                                    <input cFormControl id="description" type="text"
+                                           name="description"
+                                           oitcFormError [errors]="errors" errorField="description"
+                                           [(ngModel)]="hostPost.description">
+                                    @if (hosttemplate) {
+                                        <oitc-template-diff cInputGroupText
+                                                            [templateValue]="hosttemplate.description"
+                                                            [(value)]="hostPost.description"
+                                                            class="bg-transparent p-0"></oitc-template-diff>
+                                    }
+                                </c-input-group>
+                                <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                            </div>
+                        }
 
                         @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
                             <div class="mb-3">

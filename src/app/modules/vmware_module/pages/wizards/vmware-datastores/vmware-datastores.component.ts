@@ -37,7 +37,7 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -72,8 +72,6 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         FormCheckLabelDirective,
         InputGroupComponent,
         InputGroupTextDirective,
-        NgForOf,
-        NgIf,
         NgSelectComponent,
         OitcAlertComponent,
         RowComponent,

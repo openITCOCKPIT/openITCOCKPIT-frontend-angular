@@ -13,50 +13,52 @@
         </c-modal-header>
         <c-modal-body>
             <ng-container>
-                <div class="alert border-warning bg-warning-opacity-10 text-secondary" *ngIf="items.length === 0">
-                    <div class="d-flex align-items-center">
-                        <div class="alert-icon me-2">
-                            <span class="icon-stack icon-stack-md">
-                                <i class="base base-2 icon-stack-3x opacity-100 text-warning"></i>
-                                <i class="base base-10 icon-stack-2x opacity-100 text-white"></i>
-                                <i class="far fa-exclamation icon-stack-1x opacity-100 text-warning-900"></i>
-                            </span>
-                        </div>
-                        <div class="flex-1">
-                            <ng-container>
-                                <span class="h5 text-warning">
-                                    {{ t('Warning') }}
+                @if (items.length === 0) {
+                    <div class="alert border-warning bg-warning-opacity-10 text-secondary">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack icon-stack-md">
+                                    <i class="base base-2 icon-stack-3x opacity-100 text-warning"></i>
+                                    <i class="base base-10 icon-stack-2x opacity-100 text-white"></i>
+                                    <i class="far fa-exclamation icon-stack-1x opacity-100 text-warning-900"></i>
                                 </span>
-
-                                <br>
-                                {{ t('No items are selected for status!') }}
-                            </ng-container>
+                            </div>
+                            <div class="flex-1">
+                                <ng-container>
+                                    <span class="h5 text-warning">
+                                        {{ t('Warning') }}
+                                    </span>
+                                    <br>
+                                    {{ t('No items are selected for status!') }}
+                                </ng-container>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
 
-                <div *ngIf="items.length > 0 && containNotAssignedObjects"
-                     class="alert bg-danger bg-opacity-10 text-red-700 border-danger text-secondary">
-                    <div class="d-flex align-items-center">
-                        <div class="alert-icon me-2">
-                            <span class="icon-stack icon-stack-md">
-                                <i class="base base-2 icon-stack-3x opacity-100 text-danger"></i>
-                                <i class="base base-10 icon-stack-2x opacity-100 text-white"></i>
-                                <i class="far fa-bell-slash icon-stack-1x opacity-100 text-red-900"></i>
-                            </span>
-                        </div>
-                        <div class="flex-1">
-                            <ng-container>
-                                <span class="h5 text-danger">
-                                    {{ t('Attention!') }}
+                @if (items.length > 0 && containNotAssignedObjects) {
+                    <div
+                        class="alert bg-danger bg-opacity-10 text-red-700 border-danger text-secondary">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack icon-stack-md">
+                                    <i class="base base-2 icon-stack-3x opacity-100 text-danger"></i>
+                                    <i class="base base-10 icon-stack-2x opacity-100 text-white"></i>
+                                    <i class="far fa-bell-slash icon-stack-1x opacity-100 text-red-900"></i>
                                 </span>
-
-                                <br>
-                                {{ t('The list contains resources that are not assigned to you!') }}
-                            </ng-container>
+                            </div>
+                            <div class="flex-1">
+                                <ng-container>
+                                    <span class="h5 text-danger">
+                                        {{ t('Attention!') }}
+                                    </span>
+                                    <br>
+                                    {{ t('The list contains resources that are not assigned to you!') }}
+                                </ng-container>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
                 <c-row class="pt-2">
                     <c-col>
                         {{ t('Do you want set status for the selected objects?') }}
@@ -72,30 +74,40 @@
                                         {{ item.name }}
                                     </span>
                                     <ul>
-                                        <li *ngIf="!item.my_resource">
-                                            <span class="text-danger pl-2">
-                                                <i class="far fa-bell-slash"></i>
-                                                {{ t('Not assigned to you') }}
-                                            </span>
-                                        </li>
-                                        <li *ngIf="!item.is_expired && !settings.allow_overwriting">
-                                            <span class="text-danger pl-2">
-                                                <i class="fas fa-person-chalkboard"></i>
-                                                {{ t('Status has already been set') }}
-                                            </span>
-                                        </li>
+                                        @if (!item.my_resource) {
+                                            <li>
+                                                <span class="text-danger pl-2">
+                                                    <i class="far fa-bell-slash"></i>
+                                                    {{ t('Not assigned to you') }}
+                                                </span>
+                                            </li>
+                                        }
+                                        @if (!item.is_expired && !settings.allow_overwriting) {
+                                            <li>
+                                                <span class="text-danger pl-2">
+                                                    <i class="fas fa-person-chalkboard"></i>
+                                                    {{ t('Status has already been set') }}
+                                                </span>
+                                            </li>
+                                        }
                                     </ul>
                                 </li>
                             }
                         </ul>
-                        <ul class="m-0 list-unstyled mb-3" *ngIf="settings">
-                            <li *ngIf="!settings.allow_overwriting">
-                                ⚠️ {{ t('Resources, where a status has already been submitted will be ignored') }}
-                            </li>
-                            <li *ngIf="settings.require_user_assigment">
-                                ⚠️ {{ t('Ressources where you are not assigend to will be ignored') }}
-                            </li>
-                        </ul>
+                        @if (settings) {
+                            <ul class="m-0 list-unstyled mb-3">
+                                @if (!settings.allow_overwriting) {
+                                    <li>
+                                        ⚠️ {{ t('Resources, where a status has already been submitted will be ignored') }}
+                                    </li>
+                                }
+                                @if (settings.require_user_assigment) {
+                                    <li>
+                                        ⚠️ {{ t('Ressources where you are not assigend to will be ignored') }}
+                                    </li>
+                                }
+                            </ul>
+                        }
 
                     </c-col>
                 </c-row>
@@ -123,7 +135,9 @@
                         <div class="mb-3">
                             <label cLabel [for]="'statusComment'">
                                 {{ t('Comment') }}
-                                <oitc-required-icon *ngIf="status && status > 1"></oitc-required-icon>
+                                @if (status && status > 1) {
+                                    <oitc-required-icon></oitc-required-icon>
+                                }
                             </label>
                             <textarea cFormControl
                                       [(ngModel)]="comment"

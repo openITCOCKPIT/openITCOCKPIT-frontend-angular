@@ -15,12 +15,11 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
@@ -28,14 +27,14 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import { GenericValidationError } from '../../../generic-responses';
 import { SystemdowntimesGet, SystemdowntimesPost } from '../systemdowntimes.interface';
 import { HostgroupsLoadHostgroupsByStringParams } from '../../hostgroups/hostgroups.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { HostgroupsService } from '../../hostgroups/hostgroups.service';
 import { SystemdowntimesService } from '../systemdowntimes.service';
-import { NgIf } from '@angular/common';
+
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import _ from 'lodash';
@@ -45,35 +44,34 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-add-hostgroupdowntime',
     imports: [
-    CardComponent,
-    FaIconComponent,
-    FormDirective,
-    FormsModule,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    BackButtonDirective,
-    CardBodyComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    InputGroupComponent,
-    MultiSelectComponent,
-    RequiredIconComponent,
-    FormCheckComponent,
-    FormCheckLabelDirective,
-    FormCheckInputDirective,
-    FormControlDirective,
-    TrueFalseDirective,
-    CardFooterComponent,
-    NgIf,
-    DurationInputComponent
-],
+        CardComponent,
+        FaIconComponent,
+        FormDirective,
+        FormsModule,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        BackButtonDirective,
+        CardBodyComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        InputGroupComponent,
+        MultiSelectComponent,
+        RequiredIconComponent,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        FormCheckInputDirective,
+        FormControlDirective,
+        TrueFalseDirective,
+        CardFooterComponent,
+        DurationInputComponent
+    ],
     templateUrl: './add-hostgroupdowntime.component.html',
     styleUrl: './add-hostgroupdowntime.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -190,6 +188,7 @@ export class AddHostgroupdowntimeComponent implements OnInit, OnDestroy {
 
                     if (!this.createAnother) {
                         this.HistoryService.navigateWithFallback(['/downtimes/host']);
+                        return;
                     }
                     // Create another
                     this.post = this.getClearForm();

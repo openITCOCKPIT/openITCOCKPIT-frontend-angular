@@ -26,68 +26,66 @@
 
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
     <form cForm (ngSubmit)="submit()">
-        <c-card class="mb-3" *ngIf="post">
-            <c-card-header>
-                <h5 cCardTitle>
-                    {{ t('MSTeams') }}
-                    <small class="fw-300">
-                        {{ t('Configuration') }}
-                    </small>
-                </h5>
-            </c-card-header>
-            <c-card-body>
-
-                <div class="row">
-                    <div class="col-12">
-
-                        <div class="mb-3">
-                            <label cLabel for="post.webhook_url">
-                                {{ t('Webhook URL') }}
-                                <oitc-required-icon></oitc-required-icon>
-                            </label>
-                            <input cFormControl required
-                                   [(ngModel)]="post.webhook_url"
-                                   id="post.webhook_url"
-                                   name="post.webhook_url"
-                                   placeholder="https://mysite.office365.com/myteam-id/channel/mychannel-id/"
-                                   type="text"
-                                   oitcFormError [errors]="errors" errorField="ipaddress">
-                            <oitc-form-feedback [errors]="errors" errorField="webhook_url"></oitc-form-feedback>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <c-form-check>
-                                <input cFormCheckInput
-                                       name="post.use_proxy"
-                                       id="post.use_proxy"
-                                       type="checkbox"
-                                       trueFalseValue
-                                       [(ngModel)]="post.use_proxy"
-                                       oitcFormError [errors]="errors" errorField="use_proxy"/>
-                                <oitc-form-feedback [errors]="errors" errorField="use_proxy"></oitc-form-feedback>
-                                <label cFormCheckLabel
-                                       for="post.use_proxy">{{ t('Use Proxy Server') }}</label>
-                                <div class="help-block">
-                            <span *oitcPermission="['proxy', 'index']">
-                                {{ t('Determine if the ') }}
-                                <a [routerLink]="['/', 'proxy', 'index']">{{ t('configured proxy') }}</a>
-                                {{ t(' should be used.') }}
-                            </span>
-                                    <span *oitcPermission="['proxy', 'index']; negate: true">
-                                {{ t('Determine if the configured proxy should be used.') }}
-                            </span>
-                                </div>
-                            </c-form-check>
+        @if (post) {
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('MSTeams') }}
+                        <small class="fw-300">
+                            {{ t('Configuration') }}
+                        </small>
+                    </h5>
+                </c-card-header>
+                <c-card-body>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label cLabel for="post.webhook_url">
+                                    {{ t('Webhook URL') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <input cFormControl required
+                                       [(ngModel)]="post.webhook_url"
+                                       id="post.webhook_url"
+                                       name="post.webhook_url"
+                                       placeholder="https://mysite.office365.com/myteam-id/channel/mychannel-id/"
+                                       type="text"
+                                       oitcFormError [errors]="errors" errorField="ipaddress">
+                                <oitc-form-feedback [errors]="errors" errorField="webhook_url"></oitc-form-feedback>
+                            </div>
+                            <div class="mb-3">
+                                <c-form-check>
+                                    <input cFormCheckInput
+                                           name="post.use_proxy"
+                                           id="post.use_proxy"
+                                           type="checkbox"
+                                           trueFalseValue
+                                           [(ngModel)]="post.use_proxy"
+                                           oitcFormError [errors]="errors" errorField="use_proxy"/>
+                                    <oitc-form-feedback [errors]="errors" errorField="use_proxy"></oitc-form-feedback>
+                                    <label cFormCheckLabel
+                                           for="post.use_proxy">{{ t('Use Proxy Server') }}</label>
+                                    <div class="help-block">
+                                        <span *oitcPermission="['proxy', 'index']">
+                                            {{ t('Determine if the ') }}
+                                            <a [routerLink]="['/', 'proxy', 'index']">{{ t('configured proxy') }}</a>
+                                            {{ t(' should be used.') }}
+                                        </span>
+                                        <span *oitcPermission="['proxy', 'index']; negate: true">
+                                            {{ t('Determine if the configured proxy should be used.') }}
+                                        </span>
+                                    </div>
+                                </c-form-check>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </c-card-body>
-            <c-card-footer class="text-end">
-                <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Save configuration') }}
-                </button>
-            </c-card-footer>
-        </c-card>
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Save configuration') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        }
     </form>
 </ng-container>

@@ -12,7 +12,7 @@ import {
     OnInit,
     ViewChild
 } from '@angular/core';
-import { NgClass, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { TranslocoService } from '@jsverse/transloco';
 import { Helplines } from '../../pages/mapeditors/mapeditors.interface';
@@ -24,7 +24,6 @@ import { BackgroundItemComponent } from '../background-item/background-item.comp
     standalone: true,
     imports: [
         NgClass,
-        NgIf,
         NgStyle
     ],
     templateUrl: './map-canvas.component.html',

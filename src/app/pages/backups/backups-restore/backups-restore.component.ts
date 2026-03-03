@@ -19,7 +19,7 @@ import {
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
 import { ProgressBar } from 'primeng/progressbar';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -55,7 +55,6 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
         ColComponent,
         FormLabelDirective,
         FormsModule,
-        NgIf,
         OitcAlertComponent,
         ProgressBar,
         RequiredIconComponent,

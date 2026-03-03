@@ -9,18 +9,18 @@ import {
     signal,
     ViewChild
 } from '@angular/core';
-import {TranslocoDirective} from '@jsverse/transloco';
-import {FullCalendarComponent, FullCalendarModule} from '@fullcalendar/angular';
-import {CalendarOptions, EventApi, EventClickArg} from '@fullcalendar/core';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarOptions, EventApi, EventClickArg } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import {CalendarEvent} from '../../../../pages/calendars/calendars.interface';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {XsButtonDirective} from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {formatDate, NgIf, NgStyle} from '@angular/common';
-import {ChangecalendarEventMove} from "../../pages/changecalendars/changecalendars.interface";
+import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { formatDate, NgStyle } from '@angular/common';
+import { ChangecalendarEventMove } from "../../pages/changecalendars/changecalendars.interface";
 
 @Component({
     selector: 'oitc-changecalendars-calendar-editor',
@@ -29,7 +29,6 @@ import {ChangecalendarEventMove} from "../../pages/changecalendars/changecalenda
         FullCalendarModule,
         FaIconComponent,
         XsButtonDirective,
-        NgIf,
         NgStyle
     ],
     templateUrl: './changecalendars-calendar-editor.component.html',

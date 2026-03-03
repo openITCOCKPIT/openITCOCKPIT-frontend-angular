@@ -2,22 +2,18 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 
 
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  NavComponent,
-  NavItemComponent,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    NavComponent,
+    NavItemComponent,
+    TableDirective
 } from '@coreui/angular';
 
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-
-
-import { NgIf } from '@angular/common';
 
 
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -37,24 +33,23 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
     selector: 'oitc-imported-files-view',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PermissionDirective,
-    ReactiveFormsModule,
-    TableDirective,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    BlockLoaderComponent,
-    BackButtonDirective
-],
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        TableDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        BlockLoaderComponent,
+        BackButtonDirective
+    ],
     templateUrl: './imported-files-view.component.html',
     styleUrl: './imported-files-view.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

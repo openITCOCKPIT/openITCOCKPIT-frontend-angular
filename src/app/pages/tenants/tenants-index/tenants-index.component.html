@@ -34,16 +34,18 @@
                         {{ t('Refresh') }}
                     </button>
                 </c-nav-item>
-                <c-nav-item class="px-1" *ngIf="tenants?.hasRootPrivileges">
-                    <button *oitcPermission="['tenants', 'add']" [routerLink]="['/', 'tenants', 'add']"
-                            cButton
-                            class="ripple"
-                            color="success"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                        {{ t('New') }}
-                    </button>
-                </c-nav-item>
+                @if (tenants?.hasRootPrivileges) {
+                    <c-nav-item class="px-1">
+                        <button *oitcPermission="['tenants', 'add']" [routerLink]="['/', 'tenants', 'add']"
+                                cButton
+                                class="ripple"
+                                color="success"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            {{ t('New') }}
+                        </button>
+                    </c-nav-item>
+                }
                 <c-nav-item class="px-1">
                     <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -111,77 +113,86 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!tenants"></oitc-table-loader>
-            <table *ngIf="tenants" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Containers.name">
-                        {{ t('Tenant name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Tenants.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let tenant of tenants.all_tenants">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['tenants', 'delete']"
-                            [disabled]="!Boolean(tenant.Tenant.allowEdit)"
-                            [item]="tenant"></oitc-item-select>
-                    </td>
+            @if (!tenants) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (tenants) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Containers.name">
+                            {{ t('Tenant name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Tenants.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (tenant of tenants.all_tenants; track tenant) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['tenants', 'delete']"
+                                        [disabled]="!Boolean(tenant.Tenant.allowEdit)"
+                                        [item]="tenant"></oitc-item-select>
+                                </td>
+                                <td>{{ tenant.Container.name }}</td>
+                                <td>{{ tenant.Tenant.description }}</td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'tenants.edit'"
+                                                         [url]="'/tenants/edit/' + tenant.Tenant.id"
+                                                         [allowEdit]="tenant.Tenant.allowEdit">
+                                        <oitc-actions-button-element [permission]="'tenants.edit'"
+                                                                     [url]="'/tenants/edit/' + tenant.Tenant.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/tenant/' + tenant.Tenant.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'containers.showDetails'"
+                                                                     [url]="'/containers/showDetails/' + tenant.Tenant.container_id">
+                                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                                            {{ t('Show details') }}
+                                        </oitc-actions-button-element>
+                                        @if (tenant.Tenant.allowEdit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        @if (tenant.Tenant.allowEdit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(tenant)"
+                                                                         [permission]="'tenants.delete'"
+                                            >
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                    <td>{{ tenant.Container.name }}</td>
 
-                    <td>{{ tenant.Tenant.description }}</td>
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'tenants.edit'"
-                                             [url]="'/tenants/edit/' + tenant.Tenant.id"
-                                             [allowEdit]="tenant.Tenant.allowEdit">
-                            <oitc-actions-button-element [permission]="'tenants.edit'"
-                                                         [url]="'/tenants/edit/' + tenant.Tenant.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                         [url]="'/changelogs/entity/tenant/' + tenant.Tenant.id">
-                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                {{ t('Changelog') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'containers.showDetails'"
-                                                         [url]="'/containers/showDetails/' + tenant.Tenant.container_id">
-                                <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                                {{ t('Show details') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *ngIf="tenant.Tenant.allowEdit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(tenant)"
-                                                         [permission]="'tenants.delete'"
-                                                         *ngIf="tenant.Tenant.allowEdit">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-
-            <oitc-no-records
-                *ngIf="tenants && tenants.all_tenants.length === 0"></oitc-no-records>
-            <ng-container *ngIf="tenants && tenants.all_tenants">
+            @if (tenants && tenants.all_tenants.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (tenants && tenants.all_tenants) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -189,7 +200,7 @@
                             <oitc-select-all
                                 [itemsCount]="tenants.all_tenants.length"></oitc-select-all>
                         </c-col>
-                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3" *oitcPermission="['tenants', 'delete']" >
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3" *oitcPermission="['tenants', 'delete']">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleDeleteAllModal()"
                                         class="btn btn-outline-danger col-3 border-0"
@@ -201,19 +212,19 @@
                         </c-col>
                     </c-row>
                 </c-container>
-
                 <c-container
                     [fluid]="true">
                     <c-row>
                         <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="tenants"
-                                [paginateOrScroll]="tenants"></oitc-paginate-or-scroll>
+                            @if (tenants) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="tenants"></oitc-paginate-or-scroll>
+                            }
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
         </c-card-body>
 

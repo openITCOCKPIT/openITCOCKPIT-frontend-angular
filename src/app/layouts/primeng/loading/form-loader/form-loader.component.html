@@ -1,15 +1,17 @@
-<div class="card" *ngIf="isVisible">
-    <div class="border-round border-1 surface-border p-4 surface-card">
-        <div class="d-flex mb-3">
-            <div>
-                <p-skeleton width="10rem" styleClass="mb-2"/>
-                <p-skeleton width="5rem" styleClass="mb-2"/>
+@if (isVisible) {
+    <div class="card">
+        <div class="border-round border-1 surface-border p-4 surface-card">
+            <div class="d-flex mb-3">
+                <div>
+                    <p-skeleton width="10rem" styleClass="mb-2"/>
+                    <p-skeleton width="5rem" styleClass="mb-2"/>
+                </div>
+            </div>
+            <p-skeleton width="100%" height="150px"/>
+            <div class="d-flex flex-nowrap align-items-end mt-3">
+                <p-skeleton width="4rem" height="2rem" class="me-2 ms-auto"/>
+                <p-skeleton width="4rem" height="2rem"/>
             </div>
         </div>
-        <p-skeleton width="100%" height="150px"/>
-        <div class="d-flex flex-nowrap align-items-end mt-3">
-            <p-skeleton width="4rem" height="2rem" class="me-2 ms-auto"/>
-            <p-skeleton width="4rem" height="2rem"/>
-        </div>
     </div>
-</div>
+}

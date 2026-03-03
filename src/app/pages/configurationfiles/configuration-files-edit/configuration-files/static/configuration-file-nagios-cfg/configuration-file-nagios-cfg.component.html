@@ -16,9 +16,11 @@
                            [(ngModel)]="field.value"
                            oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}">
                     <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="field.help">
-                        {{ field.help }}
-                    </div>
+                    @if (field.help) {
+                        <div class="help-block">
+                            {{ field.help }}
+                        </div>
+                    }
                 </div>
             }
             @case (ConfigurationFilesFieldTypes.int) {
@@ -35,9 +37,11 @@
                            [(ngModel)]="field.value"
                            oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}">
                     <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="field.help">
-                        {{ field.help }}
-                    </div>
+                    @if (field.help) {
+                        <div class="help-block">
+                            {{ field.help }}
+                        </div>
+                    }
                 </div>
             }
             @case (ConfigurationFilesFieldTypes.bool) {
@@ -58,9 +62,11 @@
                         </label>
                     </c-form-check>
                     <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="field.help">
-                        {{ field.help }}
-                    </div>
+                    @if (field.help) {
+                        <div class="help-block">
+                            {{ field.help }}
+                        </div>
+                    }
                 </div>
             }
             @case (ConfigurationFilesFieldTypes.text) {
@@ -100,9 +106,11 @@
                         </select>
                         <oitc-form-feedback [errors]="errors"
                                             errorField="Configfile.{{field.field}}"></oitc-form-feedback>
-                        <div class="help-block" *ngIf="field.help">
-                            {{ field.help }}
-                        </div>
+                        @if (field.help) {
+                            <div class="help-block">
+                                {{ field.help }}
+                            </div>
+                        }
                     </div>
                 } @else {
                     <div class="mb-3">
@@ -119,9 +127,11 @@
                                oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}">
                         <oitc-form-feedback [errors]="errors"
                                             errorField="Configfile.{{field.field}}"></oitc-form-feedback>
-                        <div class="help-block" *ngIf="field.help">
-                            {{ field.help }}
-                        </div>
+                        @if (field.help) {
+                            <div class="help-block">
+                                {{ field.help }}
+                            </div>
+                        }
                     </div>
                 }
             }

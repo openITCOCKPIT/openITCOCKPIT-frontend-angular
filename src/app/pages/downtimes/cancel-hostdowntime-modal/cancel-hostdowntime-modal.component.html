@@ -13,9 +13,11 @@
         </c-modal-header>
         <c-modal-body>
             <c-row>
-                <c-col *ngIf="!deleteMessage" xs="12">
-                    <strong>{{ t('Do you really want to cancel the selected host downtimes?') }}</strong>
-                </c-col>
+                @if (!deleteMessage) {
+                    <c-col xs="12">
+                        <strong>{{ t('Do you really want to cancel the selected host downtimes?') }}</strong>
+                    </c-col>
+                }
                 <c-col class="mt-1">
                     <c-form-check>
                         <input
@@ -34,12 +36,16 @@
                         </label>
                     </c-form-check>
                 </c-col>
-                <c-col *ngIf="deleteMessage" xs="12">
-                    <strong>{{ deleteMessage }}</strong>
-                </c-col>
-                <c-col *ngIf="helpMessage" class="help-block" xs="12">
-                    {{ helpMessage }}
-                </c-col>
+                @if (deleteMessage) {
+                    <c-col xs="12">
+                        <strong>{{ deleteMessage }}</strong>
+                    </c-col>
+                }
+                @if (helpMessage) {
+                    <c-col class="help-block" xs="12">
+                        {{ helpMessage }}
+                    </c-col>
+                }
             </c-row>
 
 

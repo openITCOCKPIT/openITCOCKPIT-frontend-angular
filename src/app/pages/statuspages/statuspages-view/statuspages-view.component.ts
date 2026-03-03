@@ -15,7 +15,7 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { StatuspageRoot } from '../statuspage.interface';
@@ -38,11 +38,9 @@ import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loa
         XsButtonDirective,
         BackButtonDirective,
         CardBodyComponent,
-        NgIf,
-        NgForOf,
         AsyncPipe,
         RowComponent,
-        BlockLoaderComponent,
+        BlockLoaderComponent
     ],
     templateUrl: './statuspages-view.component.html',
     styleUrl: './statuspages-view.component.css',

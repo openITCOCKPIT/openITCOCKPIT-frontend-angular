@@ -11,7 +11,7 @@ import {
 import { AutomapsViewRoot } from '../../automaps.interface';
 import { PaginatorChangeEvent } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { ColComponent, ContainerComponent, ModalService, RowComponent } from '@coreui/angular';
-import { NgForOf, NgIf } from '@angular/common';
+
 import {
     PaginateOrScrollComponent
 } from '../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
@@ -38,7 +38,6 @@ import {
     imports: [
         ColComponent,
         ContainerComponent,
-        NgIf,
         PaginateOrScrollComponent,
         RowComponent,
         TranslocoDirective,
@@ -46,7 +45,6 @@ import {
         ServicestatusIconAutomapComponent,
         FaIconComponent,
         LabelLinkComponent,
-        NgForOf,
         ServiceBrowserModalComponent
     ],
     templateUrl: './automap-viewer.component.html',

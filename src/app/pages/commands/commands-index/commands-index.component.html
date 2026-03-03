@@ -142,80 +142,87 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!commands"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="commands"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Commands.name">
-                        {{ t('Command name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Commands.command_type">
-                        {{ t('Command type') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody *ngIf="commands">
-                <tr *ngFor="let command of commands.all_commands">
-                    <td class="text-center">
-                        @if (( PermissionsService.hasPermissionObservable(['commands', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['commands', 'copy'])|async )) {
-                            <oitc-item-select
-                                [disabled]="false"
-                                [item]="command"></oitc-item-select>
-                        }
-                    </td>
-                    <td>{{ command.Command.name }}</td>
-                    <td>{{ command.Command.type }}</td>
+            @if (!commands) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (commands) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Commands.name">
+                            {{ t('Command name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Commands.command_type">
+                            {{ t('Command type') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    @if (commands) {
+                        <tbody>
+                            @for (command of commands.all_commands; track command) {
+                                <tr>
+                                    <td class="text-center">
+                                        @if (( PermissionsService.hasPermissionObservable(['commands', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['commands', 'copy'])|async )) {
+                                            <oitc-item-select
+                                                [disabled]="false"
+                                                [item]="command"></oitc-item-select>
+                                        }
+                                    </td>
+                                    <td>{{ command.Command.name }}</td>
+                                    <td>{{ command.Command.type }}</td>
+                                    <td class="width-50">
+                                        <oitc-actions-button [permission]="'commands.edit'"
+                                                             [url]="'/commands/edit/' + command.Command.id">
+                                            <oitc-actions-button-element [permission]="'commands.edit'"
+                                                                         [url]="'/commands/edit/' + command.Command.id">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                            <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                         [url]="'/changelogs/entity/command/' + command.Command.id">
+                                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                                {{ t('Changelog') }}
+                                            </oitc-actions-button-element>
+                                            <oitc-actions-button-element [permission]="'commands.usedBy'"
+                                                                         [url]="'/commands/usedBy/' + command.Command.id">
+                                                <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                                {{ t('Used By') }}
+                                            </oitc-actions-button-element>
+                                            <li cDropdownDivider></li>
+                                            <oitc-actions-button-element [permission]="'commands.copy'"
+                                                                         [url]="'/commands/copy/' + command.Command.id">
+                                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                                {{ t('Copy') }}
+                                            </oitc-actions-button-element>
+                                            <li cDropdownDivider></li>
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(command)"
+                                                                         [permission]="'commands.delete'">
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        </oitc-actions-button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+            }
 
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'commands.edit'"
-                                             [url]="'/commands/edit/' + command.Command.id">
-                            <oitc-actions-button-element [permission]="'commands.edit'"
-                                                         [url]="'/commands/edit/' + command.Command.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                         [url]="'/changelogs/entity/command/' + command.Command.id">
-                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                {{ t('Changelog') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'commands.usedBy'"
-                                                         [url]="'/commands/usedBy/' + command.Command.id">
-                                <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                                {{ t('Used By') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element [permission]="'commands.copy'"
-                                                         [url]="'/commands/copy/' + command.Command.id">
-                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                {{ t('Copy') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(command)"
-                                                         [permission]="'commands.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records *ngIf="commands && commands.all_commands.length === 0"></oitc-no-records>
-            <ng-container *ngIf="commands && commands.all_commands">
+            @if (commands && commands.all_commands.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (commands && commands.all_commands) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -242,16 +249,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="commands"
-                            [paginateOrScroll]="commands"></oitc-paginate-or-scroll>
+                        @if (commands) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="commands"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

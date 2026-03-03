@@ -5,7 +5,9 @@
             class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
             [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.SelectHost, 'wizard-success': stepCount() > 1}">
             <span>
-                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 1"></fa-icon>
+                @if (stepCount() > 1) {
+                    <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+                }
                 {{ t('Select host') }}
             </span>
         </div>
@@ -13,7 +15,9 @@
             class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
             [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.ConfigureAgent, 'wizard-success': stepCount() > 2}">
             <span>
-                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 2"></fa-icon>
+                @if (stepCount() > 2) {
+                    <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+                }
                 {{ t('Configure Agent') }}
             </span>
         </div>
@@ -21,7 +25,9 @@
             class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
             [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.InstallAgent, 'wizard-success': stepCount() > 3}">
             <span>
-                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 3"></fa-icon>
+                @if (stepCount() > 3) {
+                    <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+                }
                 {{ t('Install Agent') }}
             </span>
         </div>
@@ -30,7 +36,9 @@
                 class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
                 [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.AutoTls, 'wizard-success': stepCount() > 4}">
                 <span>
-                    <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 4"></fa-icon>
+                    @if (stepCount() > 4) {
+                        <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+                    }
                     {{ t('Exchange TLS Certificate') }}
                 </span>
             </div>
@@ -39,7 +47,9 @@
                 class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
                 [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.SelectHost, 'wizard-success': stepCount() > 4}">
                 <span>
-                    <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 4"></fa-icon>
+                    @if (stepCount() > 4) {
+                        <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+                    }
                     {{ t('Select Agent') }}
                 </span>
             </div>
@@ -48,7 +58,9 @@
             class="col-xs-12 col-md-4 col-lg-2  wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
             [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.CreateServices,  'wizard-success': stepCount() > 5}">
             <span>
-                <fa-icon [icon]="['fas', 'check-circle']" *ngIf="stepCount() > 5"></fa-icon>
+                @if (stepCount() > 5) {
+                    <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+                }
                 {{ t('Create services') }}
             </span>
         </div>

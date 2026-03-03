@@ -1,8 +1,9 @@
 <ng-container *transloco="let t">
 
-    <oitc-services-browser-menu
-        *ngIf="serviceBrowserConfig"
-        [config]="serviceBrowserConfig"></oitc-services-browser-menu>
+    @if (serviceBrowserConfig) {
+        <oitc-services-browser-menu
+            [config]="serviceBrowserConfig"></oitc-services-browser-menu>
+    }
 
     <c-card class="mb-3 mt-3">
         <c-card-header>
@@ -202,101 +203,112 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!servicechecks"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="servicechecks"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col" mat-sort-header="Servicechecks.state">
-                        {{ t('State') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicechecks.start_time">
-                        {{ t('Date') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicechecks.execution_time">
-                        {{ t('Execution time') }}
-                        &nbsp;
-                        <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
-                                 [cTooltip]="'Time in seconds required by the plugin to collect the status information' | transloco"
-                                 cTooltipPlacement="bottom"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Servicechecks.current_check_attempt">
-                        {{ t('Check attempt') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicechecks.is_hardstate">
-                        {{ t('State type') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicechecks.output">
-                        {{ t('Service output') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicechecks.perfdata">
-                        {{ t('Performance data') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let servicecheck of servicechecks.all_servicechecks">
-                    <td class="text-center">
-                        <oitc-servicestatus-simple-icon
-                            [servicestatus]="servicecheck.Servicecheck.state"
-                            [hardstate]="servicecheck.Servicecheck.is_hardstate">
-                        </oitc-servicestatus-simple-icon>
-                    </td>
-                    <td>
-                        {{ servicecheck.Servicecheck.start_time }}
-                    </td>
-                    <td>
-                        {{ servicecheck.Servicecheck.execution_time|localNumber }}s
-                    </td>
-                    <td class="text-center">
-                        {{ servicecheck.Servicecheck.current_check_attempt }}/
-                        {{ servicecheck.Servicecheck.max_check_attempts }}
-                    </td>
-                    <td class="text-center">
-                        <span class="badge text-uppercase"
-                              [ngClass]="{
+            @if (!servicechecks) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (servicechecks) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col" mat-sort-header="Servicechecks.state">
+                            {{ t('State') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicechecks.start_time">
+                            {{ t('Date') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicechecks.execution_time">
+                            {{ t('Execution time') }}
+                            &nbsp;
+                            <fa-icon [icon]="['fas', 'info-circle']" class="text-info"
+                                     [cTooltip]="'Time in seconds required by the plugin to collect the status information' | transloco"
+                                     cTooltipPlacement="bottom"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Servicechecks.current_check_attempt">
+                            {{ t('Check attempt') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicechecks.is_hardstate">
+                            {{ t('State type') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicechecks.output">
+                            {{ t('Service output') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicechecks.perfdata">
+                            {{ t('Performance data') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (servicecheck of servicechecks.all_servicechecks; track servicecheck) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-servicestatus-simple-icon
+                                        [servicestatus]="servicecheck.Servicecheck.state"
+                                        [hardstate]="servicecheck.Servicecheck.is_hardstate">
+                                    </oitc-servicestatus-simple-icon>
+                                </td>
+                                <td>
+                                    {{ servicecheck.Servicecheck.start_time }}
+                                </td>
+                                <td>
+                                    {{ servicecheck.Servicecheck.execution_time|localNumber }}s
+                                </td>
+                                <td class="text-center">
+                                    {{ servicecheck.Servicecheck.current_check_attempt }}/
+                                    {{ servicecheck.Servicecheck.max_check_attempts }}
+                                </td>
+                                <td class="text-center">
+                                    @if (servicecheck.Servicecheck.is_hardstate) {
+                                        <span class="badge text-uppercase"
+                                              [ngClass]="{
                                     'bg-ok': servicecheck.Servicecheck.state == 0,
                                     'bg-warning': servicecheck.Servicecheck.state == 1,
                                     'bg-critical': servicecheck.Servicecheck.state == 2,
                                     'bg-unknown': servicecheck.Servicecheck.state == 3
                                     }"
-                              *ngIf="servicecheck.Servicecheck.is_hardstate">
-                            {{ 'Hard' | transloco }}
-                        </span>
-                        <span class="badge text-uppercase opacity-50"
-                              [ngClass]="{
+                                        >
+                                            {{ 'Hard' | transloco }}
+                                        </span>
+                                    }
+                                    @if (!servicecheck.Servicecheck.is_hardstate) {
+                                        <span class="badge text-uppercase opacity-50"
+                                              [ngClass]="{
                                     'bg-ok': servicecheck.Servicecheck.state == 0,
                                     'bg-warning': servicecheck.Servicecheck.state == 1,
                                     'bg-critical': servicecheck.Servicecheck.state == 2,
                                     'bg-unknown': servicecheck.Servicecheck.state == 3
                                     }"
-                              *ngIf="!servicecheck.Servicecheck.is_hardstate">
-                            {{ 'Soft' | transloco }}
-                        </span>
-                    </td>
-                    <td>
-                        <div class="word-break"
-                             [innerHTML]="servicecheck.Servicecheck.outputHtml | trustAsHtml "></div>
-                    </td>
-                    <td>
-                        {{ servicecheck.Servicecheck.perfdata }}
-                    </td>
-
-                </tr>
-                </tbody>
-            </table>
-            <oitc-no-records
-                *ngIf="servicechecks && servicechecks.all_servicechecks.length === 0"></oitc-no-records>
+                                        >
+                                            {{ 'Soft' | transloco }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="word-break"
+                                         [innerHTML]="servicecheck.Servicecheck.outputHtml | trustAsHtml "></div>
+                                </td>
+                                <td>
+                                    {{ servicecheck.Servicecheck.perfdata }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @if (servicechecks && servicechecks.all_servicechecks.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
             <c-container
                 [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="servicechecks"
-                            [paginateOrScroll]="servicechecks"></oitc-paginate-or-scroll>
+                        @if (servicechecks) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="servicechecks"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

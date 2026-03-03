@@ -28,13 +28,13 @@ import { RouterModule } from "@angular/router";
 
 
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardImgDirective,
-  CardTextDirective,
-  CardTitleDirective,
-  ColComponent,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardImgDirective,
+    CardTextDirective,
+    CardTitleDirective,
+    ColComponent,
+    RowComponent
 } from '@coreui/angular';
 
 
@@ -43,27 +43,24 @@ import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { TranslocoDirective } from "@jsverse/transloco";
 
 
-
-
-
 import { ProgressBarModule } from 'primeng/progressbar';
 
 
 @Component({
     selector: 'app-start-page',
     imports: [
-    RouterModule,
-    CardComponent,
-    CardBodyComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    TranslocoDirective,
-    ProgressBarModule,
-    RowComponent,
-    ColComponent,
-    CardImgDirective,
-    CardTextDirective
-],
+        RouterModule,
+        CardComponent,
+        CardBodyComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        TranslocoDirective,
+        ProgressBarModule,
+        RowComponent,
+        ColComponent,
+        CardImgDirective,
+        CardTextDirective
+    ],
     templateUrl: './start-page.component.html',
     styleUrl: './start-page.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

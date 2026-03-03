@@ -101,160 +101,166 @@
             </c-nav>
         </c-card-header>
         <c-card-body>
-            <c-row *ngIf="result" class="wizard-card-group">
-                <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
-                       *ngFor="let wizard of result.wizards | keyvalue"
-                       [hidden]="hidden(wizard.value)">
-                    <c-card class="mb-3">
-                        <c-card-body class="wizard-card-body cursor-pointer"
-                                     [routerLink]="['/', 'wizards', 'wizardHostConfiguration', wizard.value.type_id, wizard.value.title, 0, wizard.value.state, wizard.value.selected_os]">
-                            <div class="d-flex align-items-center">
-                                <div class="wizard-logo-image">
-                                    <img [src]="'./assets/images/wizards/'+wizard.value.image"
-                                         [alt]="wizard.value.title">
-                                </div>
-                                <div class="pl-10">
-                                    <h5>
-                                        {{ wizard.value.title }}
-                                    </h5>
-                                    <br/>
-                                    {{ wizard.value.description }}
-                                </div>
-                            </div>
-                        </c-card-body>
-                        <c-card-footer class="text-end text-info">
-                            <i class="fas fa-tags wizard-info-tags"></i>
-                            {{ wizard.value.category.join(', ') }}
-                        </c-card-footer>
-                    </c-card>
-                </c-col>
-                <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
-                       *ngFor="let wizard of result.possibleWizards | keyvalue"
-                       [hidden]="hidden(wizard.value)">
-                    <c-card class="mb-3">
-                        <c-card-body class="wizard-card-body bg-placeholder-wizard">
-                            <div class="d-flex align-items-center">
-                                <div class="wizard-logo-image wizard-logo-image-placeholder">
-                                    <img [src]="'./assets/images/wizards/'+wizard.value.image"
-                                         [alt]="wizard.value.title">
-                                </div>
-                                <div class="pl-10">
-                                    <h5>
-                                        {{ wizard.value.title }}
-                                    </h5>
-                                    <br/>
-                                    {{ wizard.value.description }}
-                                </div>
-                            </div>
-                        </c-card-body>
-                        <c-card-footer>
-                            <c-row>
-                                <c-col>
-
-                                    <oitc-badge-outline color="warning">
-                                        <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                                        {{ t('Requires module') }}
-                                    </oitc-badge-outline>
-                                </c-col>
-                                <c-col class="text-end">
-
+            @if (result) {
+                <c-row class="wizard-card-group">
+                    @for (wizard of result.wizards | keyvalue; track wizard) {
+                        <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
+                               [hidden]="hidden(wizard.value)">
+                            <c-card class="mb-3">
+                                <c-card-body class="wizard-card-body cursor-pointer"
+                                             [routerLink]="['/', 'wizards', 'wizardHostConfiguration', wizard.value.type_id, wizard.value.title, 0, wizard.value.state, wizard.value.selected_os]">
+                                    <div class="d-flex align-items-center">
+                                        <div class="wizard-logo-image">
+                                            <img [src]="'./assets/images/wizards/'+wizard.value.image"
+                                                 [alt]="wizard.value.title">
+                                        </div>
+                                        <div class="pl-10">
+                                            <h5>
+                                                {{ wizard.value.title }}
+                                            </h5>
+                                            <br/>
+                                            {{ wizard.value.description }}
+                                        </div>
+                                    </div>
+                                </c-card-body>
+                                <c-card-footer class="text-end text-info">
                                     <i class="fas fa-tags wizard-info-tags"></i>
                                     {{ wizard.value.category.join(', ') }}
-                                </c-col>
-                            </c-row>
-                        </c-card-footer>
-                    </c-card>
-                </c-col>
-            </c-row>
-
-
-            <c-accordion class="mb-3"
-                         *ngIf="this.deprecatedWizards.deprecatedWizards || this.deprecatedWizards.possibleDeprecatedWizards">
-                <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
-                    <ng-template cTemplateId="accordionHeaderTemplate">
-                        <div class="bg-primary-subtle" (click)="accordionItem.toggleItem()"
-                             [collapsed]="!accordionItem.visible" cAccordionButton>
-                            <h5>{{ t('Obsolete Wizards') }}</h5>
-                        </div>
-                    </ng-template>
-                    <ng-template cTemplateId="accordionBodyTemplate">
-                        <c-row class="wizard-card-group accordion-body">
-                            <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
-                                   *ngFor="let wizard of this.deprecatedWizards.deprecatedWizards | keyvalue"
-                                   [hidden]="hidden(wizard.value)">
-                                <c-card class="mb-3">
-                                    <c-card-body class="wizard-card-body cursor-pointer"
-                                                 [routerLink]="['/', 'wizards', 'wizardHostConfiguration', wizard.value.type_id, wizard.value.title, 0, wizard.value.state, wizard.value.selected_os]">
-                                        <div class="d-flex align-items-center">
-                                            <div class="wizard-logo-image">
-                                                <img [src]="'./assets/images/wizards/'+wizard.value.image"
-                                                     [alt]="wizard.value.title">
-                                            </div>
-                                            <div class="pl-10">
-                                                <h5>
-                                                    {{ wizard.value.title }}
-                                                    <oitc-badge-outline color="warning" class="font-xs">
-                                                        <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
-                                                        {{ t('Obsolete') }}
-                                                    </oitc-badge-outline>
-                                                </h5>
-                                                <br/>
-                                                {{ wizard.value.description }}
-                                            </div>
+                                </c-card-footer>
+                            </c-card>
+                        </c-col>
+                    }
+                    @for (wizard of result.possibleWizards | keyvalue; track wizard) {
+                        <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
+                               [hidden]="hidden(wizard.value)">
+                            <c-card class="mb-3">
+                                <c-card-body class="wizard-card-body bg-placeholder-wizard">
+                                    <div class="d-flex align-items-center">
+                                        <div class="wizard-logo-image wizard-logo-image-placeholder">
+                                            <img [src]="'./assets/images/wizards/'+wizard.value.image"
+                                                 [alt]="wizard.value.title">
                                         </div>
-                                    </c-card-body>
-                                    <c-card-footer class="text-end text-info">
-                                        <i class="fas fa-tags wizard-info-tags"></i>
-                                        {{ wizard.value.category.join(', ') }}
-                                    </c-card-footer>
-                                </c-card>
-                            </c-col>
-                            <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
-                                   *ngFor="let wizard of this.deprecatedWizards.possibleDeprecatedWizards | keyvalue"
-                                   [hidden]="hidden(wizard.value)">
-                                <c-card class="mb-3">
-                                    <c-card-body class="wizard-card-body bg-placeholder-wizard">
-                                        <div class="d-flex align-items-center">
-                                            <div class="wizard-logo-image wizard-logo-image-placeholder">
-                                                <img [src]="'./assets/images/wizards/'+wizard.value.image"
-                                                     [alt]="wizard.value.title">
-                                            </div>
-                                            <div class="pl-10">
-                                                <h5>
-                                                    {{ wizard.value.title }}
-                                                    <oitc-badge-outline color="warning"
-                                                                        class="ms-1">
-                                                        <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
-                                                        {{ t('Deprecated') }}
-                                                    </oitc-badge-outline>
-                                                </h5>
-                                                <br/>
-                                                {{ wizard.value.description }}
-                                            </div>
+                                        <div class="pl-10">
+                                            <h5>
+                                                {{ wizard.value.title }}
+                                            </h5>
+                                            <br/>
+                                            {{ wizard.value.description }}
                                         </div>
-                                    </c-card-body>
-                                    <c-card-footer>
-                                        <c-row>
-                                            <c-col>
+                                    </div>
+                                </c-card-body>
+                                <c-card-footer>
+                                    <c-row>
+                                        <c-col>
+                                            <oitc-badge-outline color="warning">
+                                                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                                                {{ t('Requires module') }}
+                                            </oitc-badge-outline>
+                                        </c-col>
+                                        <c-col class="text-end">
+                                            <i class="fas fa-tags wizard-info-tags"></i>
+                                            {{ wizard.value.category.join(', ') }}
+                                        </c-col>
+                                    </c-row>
+                                </c-card-footer>
+                            </c-card>
+                        </c-col>
+                    }
+                </c-row>
+            }
 
-                                                <oitc-badge-outline color="warning">
-                                                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
-                                                    {{ t('Requires module') }}
-                                                </oitc-badge-outline>
-                                            </c-col>
-                                            <c-col class="text-end">
 
+            @if (this.deprecatedWizards.deprecatedWizards || this.deprecatedWizards.possibleDeprecatedWizards) {
+                <c-accordion class="mb-3"
+                >
+                    <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
+                        <ng-template cTemplateId="accordionHeaderTemplate">
+                            <div class="bg-primary-subtle" (click)="accordionItem.toggleItem()"
+                                 [collapsed]="!accordionItem.visible" cAccordionButton>
+                                <h5>{{ t('Obsolete Wizards') }}</h5>
+                            </div>
+                        </ng-template>
+                        <ng-template cTemplateId="accordionBodyTemplate">
+                            <c-row class="wizard-card-group accordion-body">
+                                @for (wizard of this.deprecatedWizards.deprecatedWizards | keyvalue; track wizard) {
+                                    <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
+                                           [hidden]="hidden(wizard.value)">
+                                        <c-card class="mb-3">
+                                            <c-card-body class="wizard-card-body cursor-pointer"
+                                                         [routerLink]="['/', 'wizards', 'wizardHostConfiguration', wizard.value.type_id, wizard.value.title, 0, wizard.value.state, wizard.value.selected_os]">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="wizard-logo-image">
+                                                        <img [src]="'./assets/images/wizards/'+wizard.value.image"
+                                                             [alt]="wizard.value.title">
+                                                    </div>
+                                                    <div class="pl-10">
+                                                        <h5>
+                                                            {{ wizard.value.title }}
+                                                            <oitc-badge-outline color="warning" class="font-xs">
+                                                                <fa-icon
+                                                                    [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                                                                {{ t('Obsolete') }}
+                                                            </oitc-badge-outline>
+                                                        </h5>
+                                                        <br/>
+                                                        {{ wizard.value.description }}
+                                                    </div>
+                                                </div>
+                                            </c-card-body>
+                                            <c-card-footer class="text-end text-info">
                                                 <i class="fas fa-tags wizard-info-tags"></i>
                                                 {{ wizard.value.category.join(', ') }}
-                                            </c-col>
-                                        </c-row>
-                                    </c-card-footer>
-                                </c-card>
-                            </c-col>
-                        </c-row>
-                    </ng-template>
-                </c-accordion-item>
-            </c-accordion>
+                                            </c-card-footer>
+                                        </c-card>
+                                    </c-col>
+                                }
+                                @for (wizard of this.deprecatedWizards.possibleDeprecatedWizards | keyvalue; track wizard) {
+                                    <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
+                                           [hidden]="hidden(wizard.value)">
+                                        <c-card class="mb-3">
+                                            <c-card-body class="wizard-card-body bg-placeholder-wizard">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="wizard-logo-image wizard-logo-image-placeholder">
+                                                        <img [src]="'./assets/images/wizards/'+wizard.value.image"
+                                                             [alt]="wizard.value.title">
+                                                    </div>
+                                                    <div class="pl-10">
+                                                        <h5>
+                                                            {{ wizard.value.title }}
+                                                            <oitc-badge-outline color="warning"
+                                                                                class="ms-1">
+                                                                <fa-icon
+                                                                    [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                                                                {{ t('Deprecated') }}
+                                                            </oitc-badge-outline>
+                                                        </h5>
+                                                        <br/>
+                                                        {{ wizard.value.description }}
+                                                    </div>
+                                                </div>
+                                            </c-card-body>
+                                            <c-card-footer>
+                                                <c-row>
+                                                    <c-col>
+                                                        <oitc-badge-outline color="warning">
+                                                            <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                                                            {{ t('Requires module') }}
+                                                        </oitc-badge-outline>
+                                                    </c-col>
+                                                    <c-col class="text-end">
+                                                        <i class="fas fa-tags wizard-info-tags"></i>
+                                                        {{ wizard.value.category.join(', ') }}
+                                                    </c-col>
+                                                </c-row>
+                                            </c-card-footer>
+                                        </c-card>
+                                    </c-col>
+                                }
+                            </c-row>
+                        </ng-template>
+                    </c-accordion-item>
+                </c-accordion>
+            }
         </c-card-body>
     </c-card>
 </ng-container>

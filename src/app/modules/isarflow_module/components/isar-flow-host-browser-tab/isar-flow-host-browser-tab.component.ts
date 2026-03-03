@@ -7,7 +7,7 @@ import {
     IsarFlowHostInformationResponse,
     IsarFlowInterfaceInformationResponse
 } from '../../pages/isarflow-hosts/isarflow-hosts.interface';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
     CardBodyComponent,
     CardComponent,
@@ -30,7 +30,6 @@ import { IsarFlowTimepickerChange } from '../isar-flow-timepicker.interface';
 @Component({
     selector: 'oitc-isar-flow-host-browser-tab',
     imports: [
-        NgIf,
         TranslocoDirective,
         RowComponent,
         CardComponent,

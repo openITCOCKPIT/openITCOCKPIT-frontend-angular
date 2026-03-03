@@ -62,9 +62,11 @@
                         oitcFormError [errors]="errors" errorField="containers">
                     </oitc-multi-select>
 
-                    <div *ngIf="post.Rotation.container_id.length === 0" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
+                    @if (post.Rotation.container_id.length === 0) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
                     <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
                 </div>
 

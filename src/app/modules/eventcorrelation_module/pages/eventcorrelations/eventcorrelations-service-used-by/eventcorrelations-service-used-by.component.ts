@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -53,8 +53,6 @@ import { ServiceEntity } from '../../../../../pages/services/services.interface'
         FormLoaderComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NotUsedByObjectComponent,
         PermissionDirective,
         TableDirective,

@@ -136,7 +136,7 @@
                                     optionValue="key"
                                     optionLabel="value"
                                     class="flex-1"
-                                    [(ngModel)]="params['filter[Logentries.logentry_type]']"
+                                    [(ngModel)]="params['filter[Logentries.logentry_type][]']"
                                     [options]="entryTypesForSelect"
                                     [debounce]="true"
                                     [placeholder]="'Filter by entry type' | transloco"
@@ -156,47 +156,57 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!logentries"></oitc-table-loader>
-            <table *ngIf="logentries" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col" mat-sort-header="Logentries.entry_time">
-                        {{ t('Date') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Logentries.logentry_type">
-                        {{ t('Type') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Logentries.logentry_data">
-                        {{ t('Record') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let logentry of logentries.logentries">
-                    <td>
-                        {{ logentry.entry_time }}
-                    </td>
-                    <td>
-                        {{ logentry.logentry_type_string }}
-                    </td>
-                    <td>
-                        <oitc-server-link [linkHtml]="logentry.logentry_data_angular_html"></oitc-server-link>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <oitc-no-records
-                *ngIf="logentries && logentries.logentries.length === 0"></oitc-no-records>
+            @if (!logentries) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (logentries) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col" mat-sort-header="Logentries.entry_time">
+                            {{ t('Date') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Logentries.logentry_type">
+                            {{ t('Type') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Logentries.logentry_data">
+                            {{ t('Record') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (logentry of logentries.logentries; track logentry) {
+                            <tr>
+                                <td>
+                                    {{ logentry.entry_time }}
+                                </td>
+                                <td>
+                                    {{ logentry.logentry_type_string }}
+                                </td>
+                                <td>
+                                    <oitc-server-link
+                                        [linkHtml]="logentry.logentry_data_angular_html"></oitc-server-link>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @if (logentries && logentries.logentries.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
             <c-container
                 [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="logentries"
-                            [paginateOrScroll]="logentries"></oitc-paginate-or-scroll>
+                        @if (logentries) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="logentries"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

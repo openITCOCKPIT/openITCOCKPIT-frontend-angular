@@ -1,21 +1,31 @@
-<div *ngIf="isPrintable(customInfo)">
-    {{ customInfo }}
-</div>
-
-<div *ngIf="isObject(customInfo)">
-    <div *ngFor="let entry of objectEntries(customInfo); let i = index" class="row mt-1 mb-1"
-         [ngClass]="{'odd': i % 2 != 0}">
-        <div class="col-xs-12 col-md-3 col-lg-3 bold">
-            {{ entry.key }}:
-        </div>
-        <div class="col-xs-12 col-md-9 col-lg-9">
-            <oitc-custom-class-information [customInfo]="entry.value"></oitc-custom-class-information>
-        </div>
+@if (isPrintable(customInfo)) {
+    <div>
+        {{ customInfo }}
     </div>
-</div>
+}
 
-<div *ngIf="isArray(customInfo)">
-    <div *ngFor="let item of customInfo" class="mt-1 mb-1">
-        <oitc-custom-class-information [customInfo]="item"></oitc-custom-class-information>
+@if (isObject(customInfo)) {
+    <div>
+        @for (entry of objectEntries(customInfo); track entry; let i = $index) {
+            <div class="row mt-1 mb-1"
+                 [ngClass]="{'odd': i % 2 != 0}">
+                <div class="col-xs-12 col-md-3 col-lg-3 bold">
+                    {{ entry.key }}:
+                </div>
+                <div class="col-xs-12 col-md-9 col-lg-9">
+                    <oitc-custom-class-information [customInfo]="entry.value"></oitc-custom-class-information>
+                </div>
+            </div>
+        }
     </div>
-</div>
+}
+
+@if (isArray(customInfo)) {
+    <div>
+        @for (item of customInfo; track item) {
+            <div class="mt-1 mb-1">
+                <oitc-custom-class-information [customInfo]="item"></oitc-custom-class-information>
+            </div>
+        }
+    </div>
+}

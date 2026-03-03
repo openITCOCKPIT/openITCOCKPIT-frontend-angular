@@ -39,7 +39,7 @@ import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { formatDate } from '@angular/common';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 
@@ -84,9 +84,7 @@ import { NotificationReasonTypeComponent } from '../notification-reason-type/not
         TrueFalseDirective,
         MatSort,
         MatSortHeader,
-        NgIf,
         TableDirective,
-        NgForOf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         ServicestatusSimpleIconComponent,

@@ -130,86 +130,95 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!messagesOfTheDay"></oitc-table-loader>
+            @if (!messagesOfTheDay) {
+                <oitc-table-loader></oitc-table-loader>
+            }
 
-            <table *ngIf="messagesOfTheDay" bordered cTable class="mt-2 mb-0" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="text-center col-1" scope="col" style="width: 5px;">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="MessagesOtd.title">
-                        {{ t('Title') }}
-                    </th>
-                    <th scope="col" mat-sort-header="MessagesOtd.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col" mat-sort-header="MessagesOtd.date">
-                        {{ t('Date') }}
-                    </th>
-                    <th scope="col" mat-sort-header="MessagesOtd.expiration_duration">
-                        {{ t('Expiration duration (in days)') }}
-                    </th>
-                    <th class="text-center col-1 width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let messageOfTheDay of messagesOfTheDay.messagesOtd">
-                    <td class="text-center">
-                        <oitc-item-select
-                                *oitcPermission="['messagesOtd', 'delete']"
-                                [disabled]="false"
-                                [item]="messageOfTheDay"></oitc-item-select>
-
-                    </td>
-                    <td>{{ messageOfTheDay.title }}</td>
-                    <td>{{ messageOfTheDay.description }}</td>
-                    <td>{{ messageOfTheDay.date }}</td>
-                    <td>
-                        <span
-                                *ngIf="messageOfTheDay.expiration_duration">{{ messageOfTheDay.expiration_duration }}</span>
-                        <span *ngIf="! messageOfTheDay.expiration_duration">
-                            <fa-icon [icon]="['fas', 'infinity']" class="text-primary"></fa-icon>
-                        </span>
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [allowEdit]="messageOfTheDay.id"
-                                             [permission]="'messagesOtd.edit'"
-                                             [url]="'/messagesOtd/edit/' + messageOfTheDay.id">
-                            <oitc-actions-button-element [permission]="'messagesOtd.edit'"
+            @if (messagesOfTheDay) {
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="text-center col-1" scope="col" style="width: 5px;">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="MessagesOtd.title">
+                            {{ t('Title') }}
+                        </th>
+                        <th scope="col" mat-sort-header="MessagesOtd.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="MessagesOtd.date">
+                            {{ t('Date') }}
+                        </th>
+                        <th scope="col" mat-sort-header="MessagesOtd.expiration_duration">
+                            {{ t('Expiration duration (in days)') }}
+                        </th>
+                        <th class="text-center col-1 width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (messageOfTheDay of messagesOfTheDay.messagesOtd; track messageOfTheDay) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['messagesOtd', 'delete']"
+                                        [disabled]="false"
+                                        [item]="messageOfTheDay"></oitc-item-select>
+                                </td>
+                                <td>{{ messageOfTheDay.title }}</td>
+                                <td>{{ messageOfTheDay.description }}</td>
+                                <td>{{ messageOfTheDay.date }}</td>
+                                <td>
+                                    @if (messageOfTheDay.expiration_duration) {
+                                        <span
+                                        >{{ messageOfTheDay.expiration_duration }}</span>
+                                    }
+                                    @if (!messageOfTheDay.expiration_duration) {
+                                        <span>
+                                            <fa-icon [icon]="['fas', 'infinity']" class="text-primary"></fa-icon>
+                                        </span>
+                                    }
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [allowEdit]="messageOfTheDay.id"
+                                                         [permission]="'messagesOtd.edit'"
                                                          [url]="'/messagesOtd/edit/' + messageOfTheDay.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'messagesOtd.edit'"
+                                                                     [url]="'/messagesOtd/edit/' + messageOfTheDay.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(messageOfTheDay)"
+                                                                     [permission]="'messagesOtd.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(messageOfTheDay)"
-                                                         [permission]="'messagesOtd.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records
-                    *ngIf="messagesOfTheDay && messagesOfTheDay.messagesOtd.length === 0"></oitc-no-records>
-            <ng-container *ngIf="messagesOfTheDay && messagesOfTheDay">
+            @if (messagesOfTheDay && messagesOfTheDay.messagesOtd.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (messagesOfTheDay && messagesOfTheDay) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                    [itemsCount]="messagesOfTheDay.messagesOtd.length"></oitc-select-all>
+                                [itemsCount]="messagesOfTheDay.messagesOtd.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
@@ -224,16 +233,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
-                    [fluid]="true">
+                [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
+                        @if (messagesOfTheDay) {
+                            <oitc-paginate-or-scroll
                                 (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="messagesOfTheDay"
                                 [paginateOrScroll]="messagesOfTheDay"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

@@ -22,7 +22,7 @@ import { ChangelogsEntryComponent } from '../../../../../pages/changelogs/change
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { formatDate } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -61,8 +61,6 @@ import { getDefaultScmChangelogsEntityParams, ScmChangelogsEntityParams } from '
         InputGroupTextDirective,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         ReactiveFormsModule,

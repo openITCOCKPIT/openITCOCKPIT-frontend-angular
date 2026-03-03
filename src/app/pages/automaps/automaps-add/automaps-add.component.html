@@ -50,9 +50,11 @@
                         [(ngModel)]="post.container_id"
                         (onChange)="getMatchingHostAndServices($event)">
                     </oitc-select>
-                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
+                    @if (!post.container_id) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                 </div>
 
@@ -109,13 +111,15 @@
                            oitcDebounce
                            (debouncedValue)="getMatchingHostAndServices($event)">
                     <oitc-form-feedback [errors]="errors" errorField="host_regex"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="post.container_id > 0">
-                        {{
-                            t('{0} hosts matching to regular expression.', {
-                                '0': hostAndServiceCount.hostCount
-                            })
-                        }}
-                    </div>
+                    @if (post.container_id > 0) {
+                        <div class="help-block">
+                            {{
+                                t('{0} hosts matching to regular expression.', {
+                                    '0': hostAndServiceCount.hostCount
+                                })
+                            }}
+                        </div>
+                    }
                 </div>
 
                 <div class="mb-3">
@@ -131,13 +135,15 @@
                            oitcDebounce
                            (debouncedValue)="getMatchingHostAndServices($event)">
                     <oitc-form-feedback [errors]="errors" errorField="service_regex"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="post.container_id > 0">
-                        {{
-                            t('{0} services matching to regular expression.', {
-                                '0': hostAndServiceCount.serviceCount
-                            })
-                        }}
-                    </div>
+                    @if (post.container_id > 0) {
+                        <div class="help-block">
+                            {{
+                                t('{0} services matching to regular expression.', {
+                                    '0': hostAndServiceCount.serviceCount
+                                })
+                            }}
+                        </div>
+                    }
                 </div>
 
                 <div class="mb-3">
@@ -151,13 +157,15 @@
                            oitcDebounce
                            (debouncedValue)="getMatchingHostAndServices($event)">
                     <oitc-form-feedback [errors]="errors" errorField="hostgroup_regex"></oitc-form-feedback>
-                    <div class="help-block" *ngIf="post.container_id > 0">
-                        {{
-                            t('{0} host groups matching to regular expression.', {
-                                '0': hostAndServiceCount.hostgroupCount
-                            })
-                        }}
-                    </div>
+                    @if (post.container_id > 0) {
+                        <div class="help-block">
+                            {{
+                                t('{0} host groups matching to regular expression.', {
+                                    '0': hostAndServiceCount.hostgroupCount
+                                })
+                            }}
+                        </div>
+                    }
                 </div>
 
                 <c-row>
@@ -401,83 +409,91 @@
                             </c-card-header>
                             <c-card-body>
 
-                                <c-row *ngIf="post.show_label && post.group_by_host">
-                                    <c-col [xs]="12">
-                                        <h3>
-                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                            <strong>
-                                                {{ t('Example host') }}
-                                            </strong>
-                                        </h3>
-                                    </c-col>
-                                    <c-col [xs]="6" class="text-truncate"
-                                           [style.font-size]="currentHtmlFontsize">
-                                        <fa-icon [icon]="['fas', 'square']"
-                                                 class="up"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                        <span>
-                                            {{ t('Example host') }}/{{ t('Service 1') }}
-                                        </span>
-                                    </c-col>
-                                    <c-col [xs]="6" class="text-truncate"
-                                           [style.font-size]="currentHtmlFontsize">
-                                        <fa-icon [icon]="['fas', 'square']" class="critical"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                        <span>
-                                            {{ t('Example host') }}/{{ t('Service 2') }}
-                                        </span>
-                                    </c-col>
-                                </c-row>
+                                @if (post.show_label && post.group_by_host) {
+                                    <c-row>
+                                        <c-col [xs]="12">
+                                            <h3>
+                                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                <strong>
+                                                    {{ t('Example host') }}
+                                                </strong>
+                                            </h3>
+                                        </c-col>
+                                        <c-col [xs]="6" class="text-truncate"
+                                               [style.font-size]="currentHtmlFontsize">
+                                            <fa-icon [icon]="['fas', 'square']"
+                                                     class="up"
+                                                     title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                                            <span>
+                                                {{ t('Example host') }}/{{ t('Service 1') }}
+                                            </span>
+                                        </c-col>
+                                        <c-col [xs]="6" class="text-truncate"
+                                               [style.font-size]="currentHtmlFontsize">
+                                            <fa-icon [icon]="['fas', 'square']" class="critical"
+                                                     title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                                            <span>
+                                                {{ t('Example host') }}/{{ t('Service 2') }}
+                                            </span>
+                                        </c-col>
+                                    </c-row>
+                                }
 
-                                <c-row *ngIf="!post.show_label && post.group_by_host">
-                                    <c-col [xs]="12">
-                                        <h3>
-                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                            <strong>
-                                                {{ t('Example host') }}
-                                            </strong>
-                                        </h3>
-                                    </c-col>
-                                    <c-col [xs]="12" class="text-truncate"
-                                           [style.font-size]="currentHtmlFontsize">
-                                        <fa-icon [icon]="['fas', 'square']"
-                                                 class="up me-1"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'square']" class="critical me-1"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                    </c-col>
-                                </c-row>
+                                @if (!post.show_label && post.group_by_host) {
+                                    <c-row>
+                                        <c-col [xs]="12">
+                                            <h3>
+                                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                <strong>
+                                                    {{ t('Example host') }}
+                                                </strong>
+                                            </h3>
+                                        </c-col>
+                                        <c-col [xs]="12" class="text-truncate"
+                                               [style.font-size]="currentHtmlFontsize">
+                                            <fa-icon [icon]="['fas', 'square']"
+                                                     class="up me-1"
+                                                     title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'square']" class="critical me-1"
+                                                     title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                                        </c-col>
+                                    </c-row>
+                                }
 
-                                <c-row *ngIf="!post.show_label && !post.group_by_host">
-                                    <c-col [xs]="12" class="text-truncate"
-                                           [style.font-size]="currentHtmlFontsize">
-                                        <fa-icon [icon]="['fas', 'square']"
-                                                 class="up me-1"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'square']" class="critical me-1"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                    </c-col>
-                                </c-row>
+                                @if (!post.show_label && !post.group_by_host) {
+                                    <c-row>
+                                        <c-col [xs]="12" class="text-truncate"
+                                               [style.font-size]="currentHtmlFontsize">
+                                            <fa-icon [icon]="['fas', 'square']"
+                                                     class="up me-1"
+                                                     title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'square']" class="critical me-1"
+                                                     title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                                        </c-col>
+                                    </c-row>
+                                }
 
-                                <c-row *ngIf="post.show_label && !post.group_by_host">
-                                    <c-col [xs]="6" class="text-truncate"
-                                           [style.font-size]="currentHtmlFontsize">
-                                        <fa-icon [icon]="['fas', 'square']"
-                                                 class="up"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                        <span>
-                                            {{ t('Example host') }}/{{ t('Service 1') }}
-                                        </span>
-                                    </c-col>
-                                    <c-col [xs]="6" class="text-truncate"
-                                           [style.font-size]="currentHtmlFontsize">
-                                        <fa-icon [icon]="['fas', 'square']" class="critical"
-                                                 title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
-                                        <span>
-                                            {{ t('Example host') }}/{{ t('Service 2') }}
-                                        </span>
-                                    </c-col>
-                                </c-row>
+                                @if (post.show_label && !post.group_by_host) {
+                                    <c-row>
+                                        <c-col [xs]="6" class="text-truncate"
+                                               [style.font-size]="currentHtmlFontsize">
+                                            <fa-icon [icon]="['fas', 'square']"
+                                                     class="up"
+                                                     title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                                            <span>
+                                                {{ t('Example host') }}/{{ t('Service 1') }}
+                                            </span>
+                                        </c-col>
+                                        <c-col [xs]="6" class="text-truncate"
+                                               [style.font-size]="currentHtmlFontsize">
+                                            <fa-icon [icon]="['fas', 'square']" class="critical"
+                                                     title="{{ t('Example host') }}/{{ t('Service 1') }}"></fa-icon>
+                                            <span>
+                                                {{ t('Example host') }}/{{ t('Service 2') }}
+                                            </span>
+                                        </c-col>
+                                    </c-row>
+                                }
 
 
                             </c-card-body>

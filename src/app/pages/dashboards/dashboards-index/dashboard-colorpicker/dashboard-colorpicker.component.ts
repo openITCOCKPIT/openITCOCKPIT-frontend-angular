@@ -14,7 +14,7 @@ import {
     DropdownToggleDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-dashboard-colorpicker',
@@ -24,7 +24,6 @@ import { NgClass, NgForOf } from '@angular/common';
         DropdownMenuDirective,
         DropdownToggleDirective,
         FaIconComponent,
-        NgForOf,
         NgClass
     ],
     templateUrl: './dashboard-colorpicker.component.html',

@@ -5,8 +5,10 @@
          cdkDragBoundary=".map-canvas">
         <img [src]="'/map_module/img/icons/' + item()?.icon"/>
     </div>
-    <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
-                   appendTo="body"></p-contextMenu>
+    @if (!isViewMode()) {
+        <p-contextMenu [target]="container" [model]="contextMenuItems"
+                       appendTo="body"></p-contextMenu>
+    }
 } @else {
     <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
         <img [src]="'/map_module/img/icons/' + item()?.icon"/>

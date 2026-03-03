@@ -1,5 +1,7 @@
 <ng-container *transloco="let t">
-    <oitc-table-loader *ngIf="!result"></oitc-table-loader>
+    @if (!result) {
+        <oitc-table-loader></oitc-table-loader>
+    }
     @if (result) {
         @switch (result.data_source) {
             @case ('idoit') {

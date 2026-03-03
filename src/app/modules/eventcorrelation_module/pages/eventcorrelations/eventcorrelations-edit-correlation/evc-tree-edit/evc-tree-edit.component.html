@@ -43,25 +43,29 @@
 
                 @if (node.evcNode.type === 'service') {
                     <div class="service-node">
-                        <div class="evc-service-edit-box" *ngIf="node.evcNode.layerIndex > 0">
-                            <c-button-group aria-label="Basic example" role="group">
-                                <button cButton color="primary" size="xs"
-                                        (click)="toggleVServiceModalFunc(node.evcNode.layerIndex, 'edit', node.evcNode.evcTreeItem)">
-                                    <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
-                                </button>
-                                <button cButton color="danger" size="xs"
-                                        *ngIf="!node.evcNode.usedBy || node.evcNode.usedBy.length === 0"
-                                        (click)="toggleDeleteEvcNodeFunc(node.evcNode.layerIndex, node.evcNode)">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                </button>
-                                <button cButton color="warning" size="xs"
-                                        *ngIf="node.evcNode.usedBy && node.evcNode.usedBy.length > 0"
-                                        [cTooltip]="'Used by: ' + node.evcNode.usedBy.join(', ') | transloco"
-                                        cTooltipPlacement="top">
-                                    <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                                </button>
-                            </c-button-group>
-                        </div>
+                        @if (node.evcNode.layerIndex > 0) {
+                            <div class="evc-service-edit-box">
+                                <c-button-group aria-label="Basic example" role="group">
+                                    <button cButton color="primary" size="xs"
+                                            (click)="toggleVServiceModalFunc(node.evcNode.layerIndex, 'edit', node.evcNode.evcTreeItem)">
+                                        <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                    </button>
+                                    @if (!node.evcNode.usedBy || node.evcNode.usedBy.length === 0) {
+                                        <button cButton color="danger" size="xs"
+                                                (click)="toggleDeleteEvcNodeFunc(node.evcNode.layerIndex, node.evcNode)">
+                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        </button>
+                                    }
+                                    @if (node.evcNode.usedBy && node.evcNode.usedBy.length > 0) {
+                                        <button cButton color="warning" size="xs"
+                                                [cTooltip]="'Used by: ' + node.evcNode.usedBy.join(', ') | transloco"
+                                                cTooltipPlacement="top">
+                                            <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                                        </button>
+                                    }
+                                </c-button-group>
+                            </div>
+                        }
                         <!-- vService container -->
 
                         <!-- Disable Badge -->
@@ -85,24 +89,29 @@
                             </span>
                         }
 
-                        <c-row *ngIf="node.evcNode.service" class="m-0">
-                            <c-col [xs]="12" class="text-truncate p-0 ps-1 evc-tree-hostname"
-                                   [ngClass]="{'text-muted':node.evcNode.service.disabled}"
-                                   [cTooltip]="node.evcNode.service.host.name" cTooltipPlacement="top">
-                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                {{ node.evcNode.service.host.name }}
-                            </c-col>
-                            <c-col [xs]="12" class="text-truncate p-0 ps-1"
-                                   [cTooltip]="node.evcNode.service.servicename " cTooltipPlacement="top"
-                                   [ngClass]="{'text-muted':node.evcNode.service.disabled}">
-                                <fa-icon [icon]="['fas', 'cog']"
-                                         *ngIf="node.evcNode.service.service_type !== ServiceTypesEnum.EVK_SERVICE"></fa-icon>
-                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
-                                         *ngIf="node.evcNode.service.service_type === ServiceTypesEnum.EVK_SERVICE"
-                                         class="text-primary"></fa-icon>
-                                {{ node.evcNode.service.servicename }}
-                            </c-col>
-                        </c-row>
+                        @if (node.evcNode.service) {
+                            <c-row class="m-0">
+                                <c-col [xs]="12" class="text-truncate p-0 ps-1 evc-tree-hostname"
+                                       [ngClass]="{'text-muted':node.evcNode.service.disabled}"
+                                       [cTooltip]="node.evcNode.service.host.name" cTooltipPlacement="top">
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    {{ node.evcNode.service.host.name }}
+                                </c-col>
+                                <c-col [xs]="12" class="text-truncate p-0 ps-1"
+                                       [cTooltip]="node.evcNode.service.servicename " cTooltipPlacement="top"
+                                       [ngClass]="{'text-muted':node.evcNode.service.disabled}">
+                                    @if (node.evcNode.service.service_type !== ServiceTypesEnum.EVK_SERVICE) {
+                                        <fa-icon [icon]="['fas', 'cog']"
+                                        ></fa-icon>
+                                    }
+                                    @if (node.evcNode.service.service_type === ServiceTypesEnum.EVK_SERVICE) {
+                                        <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
+                                                 class="text-primary"></fa-icon>
+                                    }
+                                    {{ node.evcNode.service.servicename }}
+                                </c-col>
+                            </c-row>
+                        }
                     </div>
                 }
 

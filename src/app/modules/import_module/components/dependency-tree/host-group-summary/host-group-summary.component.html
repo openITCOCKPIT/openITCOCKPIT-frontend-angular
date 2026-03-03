@@ -5,24 +5,28 @@
             <span class="text-primary">
                 {{ selectedNode.key }}
             </span>
-            <span *ngIf="selectedNode.external_link" class="ng-scope">
-                <a target="_blank" [href]="selectedNode.external_link">
-                    <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
-                </a>
-            </span>
+            @if (selectedNode.external_link) {
+                <span class="ng-scope">
+                    <a target="_blank" [href]="selectedNode.external_link">
+                        <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
+                    </a>
+                </span>
+            }
         </h4>
     </header>
-    <h5 class="pt-1" *ngIf="selectedNode.hostgroup">
-        <fa-icon [icon]="['fas', 'server']" class="ps-1"></fa-icon>
-        <span *oitcPermission="['hostgroups', 'extended']">
-            <a [routerLink]="['/', 'hostgroups', 'extended',selectedNode.hostgroup.Hostgroups.id]">
+    @if (selectedNode.hostgroup) {
+        <h5 class="pt-1">
+            <fa-icon [icon]="['fas', 'server']" class="ps-1"></fa-icon>
+            <span *oitcPermission="['hostgroups', 'extended']">
+                <a [routerLink]="['/', 'hostgroups', 'extended',selectedNode.hostgroup.Hostgroups.id]">
+                    {{ selectedNode.hostgroup.Containers.name }}
+                </a>
+            </span>
+            <span *oitcPermission="['hostgroups', 'extended']; negate: true">
                 {{ selectedNode.hostgroup.Containers.name }}
-            </a>
-        </span>
-        <span *oitcPermission="['hostgroups', 'extended']; negate: true">
-            {{ selectedNode.hostgroup.Containers.name }}
-        </span>
-    </h5>
+            </span>
+        </h5>
+    }
     <table cTable bordered hover small [striped]="true" class="small">
         <tbody>
         <tr>
@@ -40,30 +44,33 @@
                 </c-badge>
             </th>
         </tr>
-        <tr *ngFor="let hostSummaryRowLabel of hostSummaryRowLabels">
-            <th>{{ hostSummaryRowLabel.label }}</th>
-            @if (hostSummaryRowLabel.key !== 'total') {
-                <td *ngFor="let key of GetKeys(hostgroupSummeryState['hosts'][hostSummaryRowLabel.key])"
-                    class="text-center">
-                    @if (key !== 'hostIds') {
-                        @if (hostgroupSummeryState['hosts'][hostSummaryRowLabel.key][key] > 0) {
-                            <a *oitcPermission="['hosts', 'index']"
-                               [routerLink]="['/', 'hosts', 'index']"
-
-                               [queryParams]=" Object.assign({}, hostSummaryRowLabel.queryParams,
+            @for (hostSummaryRowLabel of hostSummaryRowLabels; track hostSummaryRowLabel) {
+                <tr>
+                    <th>{{ hostSummaryRowLabel.label }}</th>
+                    @if (hostSummaryRowLabel.key !== 'total') {
+                        @for (key of GetKeys(hostgroupSummeryState['hosts'][hostSummaryRowLabel.key]); track key) {
+                            <td
+                                class="text-center">
+                                @if (key !== 'hostIds') {
+                                    @if (hostgroupSummeryState['hosts'][hostSummaryRowLabel.key][key] > 0) {
+                                        <a *oitcPermission="['hosts', 'index']"
+                                           [routerLink]="['/', 'hosts', 'index']"
+                                           [queryParams]=" Object.assign({}, hostSummaryRowLabel.queryParams,
                         {hoststate: key, id: hostgroupSummeryState['hosts'][hostSummaryRowLabel.key]['hostIds'][key]})">
-                                {{ hostgroupSummeryState['hosts'][hostSummaryRowLabel.key][key] }}
-                            </a>
-                            <span *oitcPermission="['hosts', 'index']; negate: true">
-                                {{ hostgroupSummeryState['hosts'][hostSummaryRowLabel.key][key] }}
-                            </span>
-                        } @else {
-                            ---
+                                            {{ hostgroupSummeryState['hosts'][hostSummaryRowLabel.key][key] }}
+                                        </a>
+                                        <span *oitcPermission="['hosts', 'index']; negate: true">
+                                            {{ hostgroupSummeryState['hosts'][hostSummaryRowLabel.key][key] }}
+                                        </span>
+                                    } @else {
+                                        ---
+                                    }
+                                }
+                            </td>
                         }
                     }
-                </td>
+                </tr>
             }
-        </tr>
         <tr>
             <th colspan="5" class="text-end">{{ t('TOTAL:') }}
                 {{ hostgroupSummeryState['hosts']['total'] }}
@@ -88,29 +95,33 @@
                 </c-badge>
             </th>
         </tr>
-        <tr *ngFor="let hostSummaryRowLabel of hostSummaryRowLabels">
-            <th>{{ hostSummaryRowLabel.label }}</th>
-            @if (hostSummaryRowLabel.key !== 'total') {
-                <td *ngFor="let key of GetKeys(hostgroupSummeryState['services'][hostSummaryRowLabel.key])"
-                    class="text-center">
-                    @if (key !== 'serviceIds') {
-                        @if (hostgroupSummeryState['services'][hostSummaryRowLabel.key][key] > 0) {
-                            <a *oitcPermission="['services', 'index']"
-                               [routerLink]="['/', 'services', 'index']"
-                               [queryParams]=" Object.assign({}, hostSummaryRowLabel.queryParams,
+            @for (hostSummaryRowLabel of hostSummaryRowLabels; track hostSummaryRowLabel) {
+                <tr>
+                    <th>{{ hostSummaryRowLabel.label }}</th>
+                    @if (hostSummaryRowLabel.key !== 'total') {
+                        @for (key of GetKeys(hostgroupSummeryState['services'][hostSummaryRowLabel.key]); track key) {
+                            <td
+                                class="text-center">
+                                @if (key !== 'serviceIds') {
+                                    @if (hostgroupSummeryState['services'][hostSummaryRowLabel.key][key] > 0) {
+                                        <a *oitcPermission="['services', 'index']"
+                                           [routerLink]="['/', 'services', 'index']"
+                                           [queryParams]=" Object.assign({}, hostSummaryRowLabel.queryParams,
                         {servicestate: key, id: hostgroupSummeryState['services'][hostSummaryRowLabel.key]['serviceIds'][key]})">
-                                {{ hostgroupSummeryState['services'][hostSummaryRowLabel.key][key] }}
-                            </a>
-                            <span *oitcPermission="['services', 'index']; negate: true">
-                                {{ hostgroupSummeryState['services'][hostSummaryRowLabel.key][key] }}
-                            </span>
-                        } @else {
-                            ---
+                                            {{ hostgroupSummeryState['services'][hostSummaryRowLabel.key][key] }}
+                                        </a>
+                                        <span *oitcPermission="['services', 'index']; negate: true">
+                                            {{ hostgroupSummeryState['services'][hostSummaryRowLabel.key][key] }}
+                                        </span>
+                                    } @else {
+                                        ---
+                                    }
+                                }
+                            </td>
                         }
                     }
-                </td>
+                </tr>
             }
-        </tr>
         <tr>
             <th colspan="5" class="text-end">{{ t('TOTAL:') }}
                 {{ hostgroupSummeryState['services']['total'] }}

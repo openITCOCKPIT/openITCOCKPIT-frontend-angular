@@ -46,34 +46,34 @@
 
             <oitc-form-loader [isVisible]="dashboards.length === 0"></oitc-form-loader>
 
-            <c-card class="mb-3" *ngFor="let dashboard of dashboards; let i = index">
-                <c-card-header>
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    <span class="ms-1">
-                        {{ t('Source dashboard:') }}
-                        {{ dashboard.Source.name }}
-                    </span>
-                </c-card-header>
-                <c-card-body>
-
-                    <div class="mb-3">
-                        <label cLabel for="name{{i}}">
-                            {{ t('Name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl required type="text"
-                               name="name{{i}}"
-                               id="name{{i}}"
-                               [(ngModel)]="dashboard.Dashboard.name"
-                               oitcFormError [errors]="dashboard.Error" errorField="name">
-                        <oitc-form-feedback [errors]="dashboard.Error" errorField="name"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t(' Name of the new user defined Grafana dashboard') }}
+            @for (dashboard of dashboards; track dashboard; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source dashboard:') }}
+                            {{ dashboard.Source.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('Name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="name{{i}}"
+                                   id="name{{i}}"
+                                   [(ngModel)]="dashboard.Dashboard.name"
+                                   oitcFormError [errors]="dashboard.Error" errorField="name">
+                            <oitc-form-feedback [errors]="dashboard.Error" errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t(' Name of the new user defined Grafana dashboard') }}
+                            </div>
                         </div>
-                    </div>
-
-                </c-card-body>
-            </c-card>
+                    </c-card-body>
+                </c-card>
+            }
 
         </c-card-body>
         <c-card-footer class="text-end">

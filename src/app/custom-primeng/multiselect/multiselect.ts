@@ -86,7 +86,7 @@ import {
     MultiSelectSelectAllChangeEvent
 } from './multiselect.interface';
 import { MultiSelectStyle } from './style/multiselectstyle';
-import {StyleClass} from "primeng/styleclass";
+import { StyleClass } from "primeng/styleclass";
 
 export const MULTISELECT_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,

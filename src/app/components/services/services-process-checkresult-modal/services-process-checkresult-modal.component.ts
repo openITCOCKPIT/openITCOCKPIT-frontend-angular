@@ -32,7 +32,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -55,7 +55,6 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         ModalFooterComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
-        NgIf,
         ReactiveFormsModule,
         RequiredIconComponent,
         RowComponent,

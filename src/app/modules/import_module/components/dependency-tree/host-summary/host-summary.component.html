@@ -5,11 +5,13 @@
             <span class="text-primary">
                 {{ selectedNode.key }}
             </span>
-            <span *ngIf="selectedNode.external_link" class="ng-scope">
-                <a target="_blank" [href]="selectedNode.external_link">
-                    <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
-                </a>
-            </span>
+            @if (selectedNode.external_link) {
+                <span class="ng-scope">
+                    <a target="_blank" [href]="selectedNode.external_link">
+                        <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
+                    </a>
+                </span>
+            }
         </h4>
     </header>
     <h5 class="pt-1">
@@ -22,12 +24,14 @@
         <span *oitcPermission="['hosts', 'browser']; negate: true">
             {{ selectedNode.host?.name }}
         </span>
-        <span *ngIf="selectedNode.host?.disabled == 1" class="italic text-danger fw-lighter small">
-            [
-            <fa-icon [icon]="['fas', 'plug']" class="text-danger italic fw-lighter small"></fa-icon>
-            ]
-            {{ t('disabled') }}
-        </span>
+        @if (selectedNode.host?.disabled == 1) {
+            <span class="italic text-danger fw-lighter small">
+                [
+                <fa-icon [icon]="['fas', 'plug']" class="text-danger italic fw-lighter small"></fa-icon>
+                ]
+                {{ t('disabled') }}
+            </span>
+        }
     </h5>
     <table cTable bordered hover small [striped]="true" class="small">
         <tbody>
@@ -50,24 +54,28 @@
                 </c-badge>
             </th>
         </tr>
-        <tr *ngFor="let hostSummaryRowLabel of hostSummaryRowLabels">
-            <th>{{ hostSummaryRowLabel.label }}</th>
-            <td *ngFor="let stateIndex of[0,1,2,3]" class="text-center">
-                @if (hostSummaryRowLabel.key !== 'total' && hostSummaryStat[hostSummaryRowLabel.key][stateIndex] > 0) {
-                    <a *oitcPermission="['services', 'index']"
-                       [routerLink]="['/', 'services', 'index']"
-                       [queryParams]=" Object.assign({}, hostSummaryRowLabel.queryParams,
+            @for (hostSummaryRowLabel of hostSummaryRowLabels; track hostSummaryRowLabel) {
+                <tr>
+                    <th>{{ hostSummaryRowLabel.label }}</th>
+                    @for (stateIndex of [0, 1, 2, 3]; track $index) {
+                        <td class="text-center">
+                            @if (hostSummaryRowLabel.key !== 'total' && hostSummaryStat[hostSummaryRowLabel.key][stateIndex] > 0) {
+                                <a *oitcPermission="['services', 'index']"
+                                   [routerLink]="['/', 'services', 'index']"
+                                   [queryParams]=" Object.assign({}, hostSummaryRowLabel.queryParams,
                         {servicestate: stateIndex, host_id: selectedNode.host?.id})">
-                        {{ hostSummaryStat[hostSummaryRowLabel.key][stateIndex] }}
-                    </a>
-                    <span *oitcPermission="['services', 'index']; negate: true">
-                        {{ hostSummaryStat[hostSummaryRowLabel.key][stateIndex] }}
-                    </span>
-                } @else {
-                    ---
-                }
-            </td>
-        </tr>
+                                    {{ hostSummaryStat[hostSummaryRowLabel.key][stateIndex] }}
+                                </a>
+                                <span *oitcPermission="['services', 'index']; negate: true">
+                                    {{ hostSummaryStat[hostSummaryRowLabel.key][stateIndex] }}
+                                </span>
+                            } @else {
+                                ---
+                            }
+                        </td>
+                    }
+                </tr>
+            }
         <tr>
             <th colspan="5" class="text-end">{{ t('TOTAL:') }}
                 {{ hostSummaryStat['total'] }}

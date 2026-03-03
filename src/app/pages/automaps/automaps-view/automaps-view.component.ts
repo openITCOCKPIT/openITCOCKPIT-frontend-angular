@@ -20,7 +20,7 @@ import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loa
 import { AutomapsViewParams, AutomapsViewRoot, getDefaultAutomapsViewParams } from '../automaps.interface';
 import { Subscription } from 'rxjs';
 import { AutomapsService } from '../automaps.service';
-import { NgIf } from '@angular/common';
+
 import { AutomapViewerComponent } from './automap-viewer/automap-viewer.component';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 
@@ -41,7 +41,6 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
         XsButtonDirective,
         BackButtonDirective,
         BlockLoaderComponent,
-        NgIf,
         AutomapViewerComponent
     ],
     templateUrl: './automaps-view.component.html',

@@ -15,7 +15,6 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
-import { NgIf } from '@angular/common';
 
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ChartAbsolutValue, PieChartMetric } from '../../../../components/charts/charts.interface';
@@ -42,7 +41,6 @@ import {
         CardTitleDirective,
         ColComponent,
         FaIconComponent,
-        NgIf,
         RowComponent,
         TranslocoDirective,
         HostPieEchartComponent,
@@ -113,7 +111,7 @@ export class InstantreportViewerComponent {
                         }
                         service.Service._chartAbsolutValues = serviceChartAbsolutValues;
                     });
-                    
+
                     this.hostsWithServices.push({
                             Host: host.Host,
                             Services: services

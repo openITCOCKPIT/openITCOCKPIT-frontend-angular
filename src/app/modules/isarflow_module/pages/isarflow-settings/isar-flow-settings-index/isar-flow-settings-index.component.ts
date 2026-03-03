@@ -23,7 +23,7 @@ import {
     InputGroupComponent,
     InputGroupTextDirective
 } from '@coreui/angular';
-import { NgIf } from '@angular/common';
+
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { IsarFlowSettingsPost } from '../isar-flow-settings.interface';
@@ -49,7 +49,6 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
         FormLoaderComponent,
         FormsModule,
         CardComponent,
-        NgIf,
         CardHeaderComponent,
         CardTitleDirective,
         CardFooterComponent,

@@ -82,9 +82,11 @@
                                     {{ t('Additional help') }}
                                 </h4>
 
-                                <div *ngIf="records.length === 0">
-                                    <oitc-block-loader height="10rem"></oitc-block-loader>
-                                </div>
+                                @if (records.length === 0) {
+                                    <div>
+                                        <oitc-block-loader height="10rem"></oitc-block-loader>
+                                    </div>
+                                }
 
                                 <div>
                                     <c-row>
@@ -120,18 +122,20 @@
         id="wikiModalRecord"
         [fullscreen]="false"
         size="lg">
-        <c-modal-header *ngIf="modalRecord">
-            <h5 cModalTitle>
-                <fa-icon [icon]="modalRecord.documentation.icon"></fa-icon>
-                {{ modalRecord.documentation.name }}
-            </h5>
-            <button cButtonClose [cModalToggle]="modal.id"></button>
-        </c-modal-header>
-        <c-modal-body *ngIf="modalRecord">
-
-            <div class="text-break" [innerHTML]="modalRecord.html | trustAsHtml"></div>
-
-        </c-modal-body>
+        @if (modalRecord) {
+            <c-modal-header>
+                <h5 cModalTitle>
+                    <fa-icon [icon]="modalRecord.documentation.icon"></fa-icon>
+                    {{ modalRecord.documentation.name }}
+                </h5>
+                <button cButtonClose [cModalToggle]="modal.id"></button>
+            </c-modal-header>
+        }
+        @if (modalRecord) {
+            <c-modal-body>
+                <div class="text-break" [innerHTML]="modalRecord.html | trustAsHtml"></div>
+            </c-modal-body>
+        }
     </c-modal>
 
 </ng-container>

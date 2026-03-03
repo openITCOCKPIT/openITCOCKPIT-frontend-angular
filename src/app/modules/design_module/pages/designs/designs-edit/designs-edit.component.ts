@@ -18,7 +18,7 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 import { DesignsService } from '../designs.service';
 import { Design, DesignsEditRoot, Manipulations, MaxUploadLimit } from '../designs.interface';
 import Dropzone from 'dropzone';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 import { AuthService } from '../../../../../auth/auth.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -103,14 +103,12 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         IconDirective,
         ColourLocatorPickerComponent,
         TranslocoPipe,
-        NgForOf,
         KeyValuePipe,
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
-        FormLoaderComponent,
-        NgIf
+        FormLoaderComponent
     ],
     templateUrl: './designs-edit.component.html',
     styleUrl: './designs-edit.component.css',

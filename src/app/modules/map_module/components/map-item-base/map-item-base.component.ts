@@ -20,13 +20,13 @@ import { MenuItem } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
 import { Mapitem, Mapline } from '../../pages/mapeditors/mapeditors.interface';
 import { ContextActionType, MapItemType } from './map-item-base.enum';
-import { NgIf } from '@angular/common';
+
 import { MapItemBaseService } from './map-item-base.service';
 
 @Component({
     selector: 'oitc-map-item-base',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, NgIf],
+    imports: [CdkDrag, ContextMenuModule],
     templateUrl: './map-item-base.component.html',
     styleUrl: './map-item-base.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -23,7 +23,7 @@ import {
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgForOf } from '@angular/common';
+
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { PaginatorModule } from 'primeng/paginator';
@@ -49,7 +49,6 @@ import { FormsModule } from '@angular/forms';
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
-        NgForOf,
         PaginatorModule,
         RequiredIconComponent,
         CardFooterComponent,

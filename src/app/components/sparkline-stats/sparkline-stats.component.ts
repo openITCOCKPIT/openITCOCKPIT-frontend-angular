@@ -33,7 +33,7 @@ export class SparklineStatsComponent implements OnChanges {
     public values: number[] = [];
 
     private cdr = inject(ChangeDetectorRef);
-    
+
 
     ngOnChanges(changes: SimpleChanges) {
         /* The "value" input is a number that is pushed into the "values" array. The "value" is the last value we want to display

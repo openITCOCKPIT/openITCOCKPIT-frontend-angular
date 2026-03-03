@@ -20,7 +20,7 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { OpenPanelOptionsEvent } from '../grafana-panel/grafana-panel.component';
 import { FormsModule } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
     GrafanaChartTypesEnum,
     GrafanaStackingModesEnum
@@ -52,7 +52,6 @@ import { GrafanaEditorService } from '../grafana-editor.service';
         FormControlDirective,
         FormLabelDirective,
         FormsModule,
-        NgIf,
         NgClass,
         UiBlockerComponent,
         SelectOptgroupComponent

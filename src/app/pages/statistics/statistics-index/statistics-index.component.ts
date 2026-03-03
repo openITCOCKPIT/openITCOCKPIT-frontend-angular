@@ -1,13 +1,13 @@
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  inject,
-  OnDestroy,
-  ViewChild,
-  DOCUMENT
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    inject,
+    OnDestroy,
+    ViewChild,
+    DOCUMENT
 } from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -18,15 +18,15 @@ import { createJSONEditor, Mode } from 'vanilla-jsoneditor'
 
 
 import {
-  AlertComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  RowComponent
+    AlertComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    RowComponent
 } from '@coreui/angular';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { StatisticsService } from '../statistics.service';
 import { StatisticsIndex } from '../statistics.interface';
@@ -36,21 +36,20 @@ import { LayoutService } from '../../../layouts/coreui/layout.service';
 @Component({
     selector: 'oitc-statistics-index',
     imports: [
-    TranslocoDirective,
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    AlertComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    RowComponent,
-    ColComponent,
-    NgIf,
-    NgClass,
-    AsyncPipe
-],
+        TranslocoDirective,
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        AlertComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        RowComponent,
+        ColComponent,
+        NgClass,
+        AsyncPipe
+    ],
     templateUrl: './statistics-index.component.html',
     styleUrl: './statistics-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

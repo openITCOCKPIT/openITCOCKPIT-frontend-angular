@@ -1,5 +1,6 @@
 // If you want to override variables do it here
 @use "sass:color";
+@use "sass:meta";
 
 // MIT License
 // Copyright 2025 creativeLabs Łukasz Holeczek.
@@ -22,9 +23,12 @@
 
 // Shade the color if the weight is positive, else tint it
 @function shift-color($color, $weight) {
-    @return if($weight > 0, shade-color($color, $weight), tint-color($color, -$weight));
+    @if $weight > 0 {
+        @return shade-color($color, $weight);
+    } @else {
+        @return tint-color($color, -$weight);
+    }
 }
-
 // scss-docs-end color-functions
 
 // scss-docs-start gray-color-variables

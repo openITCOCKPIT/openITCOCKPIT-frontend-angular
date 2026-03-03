@@ -15,19 +15,19 @@ import {
     AgentconnectorWizardProgressbarComponent
 } from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormLabelDirective,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormLabelDirective,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { AgentConfig } from '../agentconfig.interface';
@@ -41,8 +41,6 @@ import { DividerModule } from 'primeng/divider';
 import { FormsModule } from '@angular/forms';
 
 
-
-
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
@@ -51,28 +49,27 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
     selector: 'oitc-agentconnector-create-services',
     imports: [
-    AgentconnectorWizardProgressbarComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FaIconComponent,
-    NgIf,
-    PermissionDirective,
-    RowComponent,
-    TranslocoDirective,
-    RouterLink,
-    ProgressBarModule,
-    DividerModule,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormsModule,
-    FormLabelDirective,
-    MultiSelectComponent,
-    UiBlockerComponent
-],
+        AgentconnectorWizardProgressbarComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        FaIconComponent,
+        PermissionDirective,
+        RowComponent,
+        TranslocoDirective,
+        RouterLink,
+        ProgressBarModule,
+        DividerModule,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormsModule,
+        FormLabelDirective,
+        MultiSelectComponent,
+        UiBlockerComponent
+    ],
     templateUrl: './agentconnector-create-services.component.html',
     styleUrl: './agentconnector-create-services.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

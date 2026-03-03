@@ -126,79 +126,84 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!mkchecks"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="mkchecks"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Mkchecks.name">
-                        {{ t('Check name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Servicetemplates.name">
-                        {{ t('Service template name') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let mkcheck of mkchecks.mkchecks">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['CheckmkModule', 'mkchecks', 'delete']"
-                            [disabled]="false"
-                            [item]="mkcheck"></oitc-item-select>
-
-                    </td>
-                    <td>{{ mkcheck.name }}</td>
-                    <td>
-                        @if (mkcheck.servicetemplate) {
-                            <oitc-label-link
-                                [objectId]="mkcheck.servicetemplate.id"
-                                [route]="'/servicetemplates/edit'"
-                                [permissions]="'servicetemplates.edit'"
-                            >
-                                {{ mkcheck.servicetemplate.template_name }}
-                            </oitc-label-link>
-                        } @else {
-                            <span class="italic text-secondary">
-                                <!-- this was a bug until ITC-3533 -->
-                                {{ t('No service template assignment defined') }}
-                            </span>
-                        }
-                    </td>
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'CheckmkModule.mkchecks.edit'"
-                                             [url]="'/checkmk_module/mkchecks/edit/' + mkcheck.id">
-                            <oitc-actions-button-element [permission]="'CheckmkModule.mkchecks.edit'"
+            @if (!mkchecks) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (mkchecks) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Mkchecks.name">
+                            {{ t('Check name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Servicetemplates.name">
+                            {{ t('Service template name') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (mkcheck of mkchecks.mkchecks; track mkcheck) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['CheckmkModule', 'mkchecks', 'delete']"
+                                        [disabled]="false"
+                                        [item]="mkcheck"></oitc-item-select>
+                                </td>
+                                <td>{{ mkcheck.name }}</td>
+                                <td>
+                                    @if (mkcheck.servicetemplate) {
+                                        <oitc-label-link
+                                            [objectId]="mkcheck.servicetemplate.id"
+                                            [route]="'/servicetemplates/edit'"
+                                            [permissions]="'servicetemplates.edit'"
+                                        >
+                                            {{ mkcheck.servicetemplate.template_name }}
+                                        </oitc-label-link>
+                                    } @else {
+                                        <span class="italic text-secondary">
+                                            <!-- this was a bug until ITC-3533 -->
+                                            {{ t('No service template assignment defined') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'CheckmkModule.mkchecks.edit'"
                                                          [url]="'/checkmk_module/mkchecks/edit/' + mkcheck.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'CheckmkModule.mkchecks.edit'"
+                                                                     [url]="'/checkmk_module/mkchecks/edit/' + mkcheck.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider
+                                            *oitcPermission="['CheckmkModule', 'mkchecks', 'delete']"></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(mkcheck)"
+                                                                     [permission]="'CheckmkModule.mkchecks.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                            <li cDropdownDivider *oitcPermission="['CheckmkModule', 'mkchecks', 'delete']"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(mkcheck)"
-                                                         [permission]="'CheckmkModule.mkchecks.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records *ngIf="mkchecks && mkchecks.mkchecks.length === 0"></oitc-no-records>
-            <ng-container *ngIf="mkchecks && mkchecks.mkchecks">
+            @if (mkchecks && mkchecks.mkchecks.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (mkchecks && mkchecks.mkchecks) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -219,16 +224,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="mkchecks"
-                            [paginateOrScroll]="mkchecks"></oitc-paginate-or-scroll>
+                        @if (mkchecks) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="mkchecks"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

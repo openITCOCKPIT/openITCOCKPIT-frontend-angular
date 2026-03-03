@@ -41,7 +41,7 @@ import {
 import {
     HostsSendCustomNotificationModalComponent
 } from '../../../../components/hosts/hosts-send-custom-notification-modal/hosts-send-custom-notification-modal.component';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
     ServiceAcknowledgeModalComponent
 } from '../../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
@@ -114,7 +114,6 @@ import { ServiceBrowserModalService } from './service-browser-modal.service';
         ModalFooterComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
-        NgIf,
         RowComponent,
         ServiceAcknowledgeModalComponent,
         ServiceMaintenanceModalComponent,

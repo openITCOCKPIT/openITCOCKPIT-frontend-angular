@@ -1,6 +1,7 @@
 .multi-select-input-group oitc-multi-select {
     flex-grow: 1;
 }
+
 .padding-right-10 {
     padding-right: 10px;
 }
@@ -97,6 +98,7 @@ h6 small,
 .inside-list {
     list-style-position: inside;
 }
+
 .new-flame-bg {
     background-color: #ff0000;
     background: linear-gradient(0deg, #f00 0%, #ffa700 100%) !important;

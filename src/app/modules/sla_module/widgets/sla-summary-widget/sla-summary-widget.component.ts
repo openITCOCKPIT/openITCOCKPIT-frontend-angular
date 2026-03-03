@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, effect, inject, OnDe
 import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
 import { SlaSummaryWidgetService } from './sla-summary-widget.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SlasService } from '../../pages/slas/slas.service';
 import {
@@ -26,7 +26,6 @@ import { SlaConfig, SlaHostsAndServicesWithContainer, SlaSummaryWidgetResponse }
     selector: 'oitc-sla-summary-widget',
     imports: [
         FaIconComponent,
-        NgIf,
         TranslocoDirective,
         RowComponent,
         ColComponent,

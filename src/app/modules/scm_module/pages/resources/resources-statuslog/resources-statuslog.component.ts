@@ -10,7 +10,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
     CardBodyComponent,
     CardComponent,
@@ -37,7 +37,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         TranslocoDirective,
         RouterLink,
         BlockLoaderComponent,
-        NgIf,
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
@@ -45,7 +44,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         ContainerComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
         NoRecordsComponent,
         XsButtonDirective,
         NgClass,

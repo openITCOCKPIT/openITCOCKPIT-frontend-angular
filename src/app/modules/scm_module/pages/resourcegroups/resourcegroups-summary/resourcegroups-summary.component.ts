@@ -34,7 +34,7 @@ import {
     ResourcegroupsSummaryMap,
     ResourceMap
 } from './resourcegroups-summary.interface';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import Sunburst from 'sunburst-chart';
@@ -61,7 +61,6 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
         RowComponent,
         ColComponent,
         AsyncPipe,
-        NgIf,
         BlockLoaderComponent,
         ButtonGroupComponent,
         NgClass,

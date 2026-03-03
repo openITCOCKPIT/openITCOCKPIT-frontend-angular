@@ -28,9 +28,9 @@ export interface OpenstreetmapIndexParams {
 }
 
 export interface OpenstreetmapAcls {
-    hosts:{index: boolean}
-    location: {edit: boolean}
-    services:{index: boolean}
+    hosts: { index: boolean }
+    location: { edit: boolean }
+    services: { index: boolean }
 }
 
 export interface OpenstreetmapSettings {
@@ -69,17 +69,17 @@ export interface OpenstreetmapSettingsPostResponse {
 
 export interface OpenstreetmapSettingsFilter {
     state_filter: number | null,
-        filter: {
+    filter: {
         up_ok: number,
-            warning: number,
-            down_critical: number,
-            unreachable_unknown: number
+        warning: number,
+        down_critical: number,
+        unreachable_unknown: number
     },
     id?: number | null,
     server_url?: string | null,
     reload_interval?: number | null,
     hide_empty_locations: number | null,
-    hide_not_monitored_locations: number |null
+    hide_not_monitored_locations: number | null
     highlight_down_ack?: number | null
 }
 

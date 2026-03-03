@@ -440,25 +440,34 @@
                 </form>
             </c-container>
 
-            <oitc-block-loader *ngIf="!changes" [height]="'30rem'"></oitc-block-loader>
+            @if (!changes) {
+                <oitc-block-loader [height]="'30rem'"></oitc-block-loader>
+            }
 
-            <c-container
-                [fluid]="true" *ngIf="changes && changes.all_changes">
-                <ul class="cbp_tmtimeline">
-                    <li *ngFor="let changeLogEntry of changes.all_changes">
-                        <oitc-changelogs-entry [changelogentry]="changeLogEntry"></oitc-changelogs-entry>
-                    </li>
-                </ul>
-            </c-container>
-            <oitc-no-records *ngIf="changes && changes.all_changes.length === 0"></oitc-no-records>
+            @if (changes && changes.all_changes) {
+                <c-container
+                    [fluid]="true">
+                    <ul class="cbp_tmtimeline">
+                        @for (changeLogEntry of changes.all_changes; track changeLogEntry) {
+                            <li>
+                                <oitc-changelogs-entry [changelogentry]="changeLogEntry"></oitc-changelogs-entry>
+                            </li>
+                        }
+                    </ul>
+                </c-container>
+            }
+            @if (changes && changes.all_changes.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="changes"
-                            [paginateOrScroll]="changes"></oitc-paginate-or-scroll>
+                        @if (changes) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="changes"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

@@ -109,140 +109,165 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!automaps"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="automaps"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Automaps.name">
-                        {{ t('Name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Automaps.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Automaps.host_regex">
-                        {{ t('Host RegEx') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Automaps.hostgroup_regex">
-                        {{ t('Host group RegEx') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Automaps.service_regex">
-                        {{ t('Service RegEx') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Status filters') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Recursive container') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let automap of automaps.all_automaps">
-                    <td class="text-center">
-                        @if (( PermissionsService.hasPermissionObservable(['automaps', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['automaps', 'copy'])|async )) {
-                            <oitc-item-select
-                                [disabled]="!automap.allow_edit"
-                                [item]="automap"></oitc-item-select>
+            @if (!automaps) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (automaps) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Automaps.name">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Automaps.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Automaps.host_regex">
+                            {{ t('Host RegEx') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Automaps.hostgroup_regex">
+                            {{ t('Host group RegEx') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Automaps.service_regex">
+                            {{ t('Service RegEx') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Status filters') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Recursive container') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (automap of automaps.all_automaps; track automap) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (( PermissionsService.hasPermissionObservable(['automaps', 'delete'])|async ) || ( PermissionsService.hasPermissionObservable(['automaps', 'copy'])|async )) {
+                                        <oitc-item-select
+                                            [disabled]="!automap.allow_edit"
+                                            [item]="automap"></oitc-item-select>
+                                    }
+                                </td>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['automaps', 'view'])|async) {
+                                        <a [routerLink]="['/', 'automaps', 'view', automap.id]">
+                                            {{ automap.name }}
+                                        </a>
+                                    } @else {
+                                        {{ automap.name }}
+                                    }
+                                </td>
+                                <td class="word-break code-font">{{ automap.description }}</td>
+                                <td class="word-break code-font">{{ automap.host_regex }}</td>
+                                <td class="word-break code-font">{{ automap.hostgroup_regex }}</td>
+                                <td class="word-break code-font">{{ automap.service_regex }}</td>
+                                <td>
+                                    @if (automap.show_ok) {
+                                        <oitc-badge-outline color="success" class="me-1"
+                                                            [cTooltip]="'Ok'|transloco">
+                                            {{ t('O') }}
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (automap.show_warning) {
+                                        <oitc-badge-outline color="warning" class="me-1"
+                                                            [cTooltip]="'Warning'|transloco">
+                                            {{ t('W') }}
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (automap.show_critical) {
+                                        <oitc-badge-outline color="danger" class="me-1"
+                                                            [cTooltip]="'Critical'|transloco">
+                                            {{ t('C') }}
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (automap.show_unknown) {
+                                        <oitc-badge-outline color="secondary" class="me-1"
+                                                            [cTooltip]="'Unknown'|transloco">
+                                            {{ t('U') }}
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (automap.show_acknowledged) {
+                                        <oitc-badge-outline color="primary" class="me-1"
+                                                            [cTooltip]="'Acknowledged'|transloco">
+                                            <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (automap.show_downtime) {
+                                        <oitc-badge-outline color="primary" class="me-1"
+                                                            [cTooltip]="'In downtime'|transloco">
+                                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (!automap.recursive) {
+                                        <oitc-badge-outline color="danger">
+                                            {{ t('Disabled') }}
+                                        </oitc-badge-outline>
+                                    }
+                                    @if (automap.recursive) {
+                                        <oitc-badge-outline color="success">
+                                            {{ t('Enabled') }}
+                                        </oitc-badge-outline>
+                                    }
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'automaps.edit'"
+                                                         [url]="'/automaps/edit/' + automap.id"
+                                                         [allowEdit]="automap.allow_edit">
+                                        @if (automap.allow_edit) {
+                                            <oitc-actions-button-element [permission]="'automaps.edit'"
+                                                                         [url]="'/automaps/edit/' + automap.id">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element [permission]="'automaps.view'"
+                                                                     [url]="'/automaps/view/' + automap.id">
+                                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                            {{ t('View') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        <oitc-actions-button-element [permission]="'automaps.copy'"
+                                                                     [url]="'/automaps/copy/' + automap.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                        @if (automap.allow_edit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        @if (automap.allow_edit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(automap)"
+                                                                         [permission]="'automaps.delete'"
+                                            >
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
                         }
-                    </td>
-                    <td>
-                        @if (this.PermissionsService.hasPermissionObservable(['automaps', 'view'])|async) {
-                            <a [routerLink]="['/', 'automaps', 'view', automap.id]">
-                                {{ automap.name }}
-                            </a>
-                        } @else {
-                            {{ automap.name }}
-                        }
-                    </td>
-                    <td class="word-break code-font">{{ automap.description }}</td>
-                    <td class="word-break code-font">{{ automap.host_regex }}</td>
-                    <td class="word-break code-font">{{ automap.hostgroup_regex }}</td>
-                    <td class="word-break code-font">{{ automap.service_regex }}</td>
-                    <td>
-                        <oitc-badge-outline color="success" *ngIf="automap.show_ok" class="me-1"
-                                            [cTooltip]="'Ok'|transloco">
-                            {{ t('O') }}
-                        </oitc-badge-outline>
-                        <oitc-badge-outline color="warning" *ngIf="automap.show_warning" class="me-1"
-                                            [cTooltip]="'Warning'|transloco">
-                            {{ t('W') }}
-                        </oitc-badge-outline>
-                        <oitc-badge-outline color="danger" *ngIf="automap.show_critical" class="me-1"
-                                            [cTooltip]="'Critical'|transloco">
-                            {{ t('C') }}
-                        </oitc-badge-outline>
-                        <oitc-badge-outline color="secondary" *ngIf="automap.show_unknown" class="me-1"
-                                            [cTooltip]="'Unknown'|transloco">
-                            {{ t('U') }}
-                        </oitc-badge-outline>
-                        <oitc-badge-outline color="primary" *ngIf="automap.show_acknowledged" class="me-1"
-                                            [cTooltip]="'Acknowledged'|transloco">
-                            <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                        </oitc-badge-outline>
-                        <oitc-badge-outline color="primary" *ngIf="automap.show_downtime" class="me-1"
-                                            [cTooltip]="'In downtime'|transloco">
-                            <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                        </oitc-badge-outline>
-                    </td>
-                    <td class="text-center">
-                        <oitc-badge-outline color="danger" *ngIf="!automap.recursive">
-                            {{ t('Disabled') }}
-                        </oitc-badge-outline>
-                        <oitc-badge-outline color="success" *ngIf="automap.recursive">
-                            {{ t('Enabled') }}
-                        </oitc-badge-outline>
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'automaps.edit'"
-                                             [url]="'/automaps/edit/' + automap.id"
-                                             [allowEdit]="automap.allow_edit">
-                            <oitc-actions-button-element [permission]="'automaps.edit'"
-                                                         *ngIf="automap.allow_edit"
-                                                         [url]="'/automaps/edit/' + automap.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
+                    </tbody>
+                </table>
+            }
 
-                            <oitc-actions-button-element [permission]="'automaps.view'"
-                                                         [url]="'/automaps/view/' + automap.id">
-                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                                {{ t('View') }}
-                            </oitc-actions-button-element>
-
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element [permission]="'automaps.copy'"
-                                                         [url]="'/automaps/copy/' + automap.id">
-                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                {{ t('Copy') }}
-                            </oitc-actions-button-element>
-
-                            <li cDropdownDivider *ngIf="automap.allow_edit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(automap)"
-                                                         [permission]="'automaps.delete'"
-                                                         *ngIf="automap.allow_edit">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records
-                *ngIf="automaps && automaps.all_automaps.length === 0"></oitc-no-records>
-            <ng-container *ngIf="automaps && automaps.all_automaps">
+            @if (automaps && automaps.all_automaps.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (automaps && automaps.all_automaps) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -267,17 +292,18 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="automaps"
-                            [paginateOrScroll]="automaps"></oitc-paginate-or-scroll>
+                        @if (automaps) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="automaps"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

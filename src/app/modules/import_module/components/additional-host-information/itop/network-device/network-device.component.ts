@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AdditionalHostInformationResult } from '../../../../pages/externalsystems/external-systems.interface';
 import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+
 import { TableDirective } from '@coreui/angular';
 
 @Component({
@@ -10,10 +10,7 @@ import { TableDirective } from '@coreui/angular';
     imports: [
         FaIconComponent,
         TranslocoPipe,
-        NgSwitch,
         FaLayersComponent,
-        NgSwitchCase,
-        NgIf,
         TableDirective,
         TranslocoDirective
     ],

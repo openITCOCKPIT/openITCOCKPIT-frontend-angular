@@ -287,7 +287,9 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!hostDowntimes"></oitc-table-loader>
+            @if (!hostDowntimes) {
+                <oitc-table-loader></oitc-table-loader>
+            }
             <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -328,75 +330,87 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="hostDowntimes">
-                <tr *ngFor="let hostDowntime of hostDowntimes.all_host_downtimes">
-                    <td class="text-center">
-                        <div *ngIf="hostDowntime.DowntimeHost.allowEdit && hostDowntime.DowntimeHost.isCancellable">
-                            <oitc-item-select
-                                *oitcPermission="['downtimes', 'delete']"
-                                [disabled]="false"
-                                [item]="hostDowntime.DowntimeHost.internalDowntimeId"></oitc-item-select>
-                        </div>
-
-
-                    </td>
-                    <td class="text-center">
-                        <oitc-downtime-simple-icon
-                            [downtime]="hostDowntime.DowntimeHost"></oitc-downtime-simple-icon>
-                    </td>
-                    <td class="word-break">
-                        <a *oitcPermission="['hosts', 'browser']"
-                           [routerLink]="['/', 'hosts', 'browser', hostDowntime.Host.id]">
-                            {{ hostDowntime.Host.hostname }}
-                        </a>
-                        <span *oitcPermission="['hosts', 'browser']; negate: true">
-                            {{ hostDowntime.Host.hostname }}
-                        </span>
-                    </td>
-                    <td>
-                        {{ hostDowntime.DowntimeHost.authorName }}
-                    </td>
-                    <td>
-                        {{ hostDowntime.DowntimeHost.commentData }}
-                    </td>
-                    <td>
-                        {{ hostDowntime.DowntimeHost.entryTime }}
-                    </td>
-                    <td>
-                        {{ hostDowntime.DowntimeHost.scheduledStartTime }}
-                    </td>
-                    <td>
-                        {{ hostDowntime.DowntimeHost.scheduledEndTime }}
-                    </td>
-                    <td>
-                        {{ hostDowntime.DowntimeHost.durationHuman }}
-                    </td>
-                    <td class="text-center">
-                        <span class="badge bg-danger mx-1" title="{{ t('Yes') }}"
-                              *ngIf="hostDowntime.DowntimeHost.wasCancelled">
-                            {{ t('Yes') }}
-                        </span>
-                        <span class="badge bg-success mx-1" title="{{ t('No') }}"
-                              *ngIf="!hostDowntime.DowntimeHost.wasCancelled">
-                            {{ t('No') }}
-                        </span>
-                    </td>
-                    <td>
-                        <div *ngIf="hostDowntime.DowntimeHost.allowEdit && hostDowntime.DowntimeHost.isCancellable">
-                            <button (click)="toggleCancelDowntimeModal(hostDowntime.DowntimeHost)"
-                                    *oitcPermission="['downtimes', 'delete']"
-                                    cButton class="ripple" color="danger" size="xs">
-                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                {{ t('Cancel') }}
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
+                @if (hostDowntimes) {
+                    <tbody>
+                        @for (hostDowntime of hostDowntimes.all_host_downtimes; track hostDowntime) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (hostDowntime.DowntimeHost.allowEdit && hostDowntime.DowntimeHost.isCancellable) {
+                                        <div>
+                                            <oitc-item-select
+                                                *oitcPermission="['downtimes', 'delete']"
+                                                [disabled]="false"
+                                                [item]="hostDowntime.DowntimeHost.internalDowntimeId"></oitc-item-select>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <oitc-downtime-simple-icon
+                                        [downtime]="hostDowntime.DowntimeHost"></oitc-downtime-simple-icon>
+                                </td>
+                                <td class="word-break">
+                                    <a *oitcPermission="['hosts', 'browser']"
+                                       [routerLink]="['/', 'hosts', 'browser', hostDowntime.Host.id]">
+                                        {{ hostDowntime.Host.hostname }}
+                                    </a>
+                                    <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                        {{ hostDowntime.Host.hostname }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {{ hostDowntime.DowntimeHost.authorName }}
+                                </td>
+                                <td>
+                                    {{ hostDowntime.DowntimeHost.commentData }}
+                                </td>
+                                <td>
+                                    {{ hostDowntime.DowntimeHost.entryTime }}
+                                </td>
+                                <td>
+                                    {{ hostDowntime.DowntimeHost.scheduledStartTime }}
+                                </td>
+                                <td>
+                                    {{ hostDowntime.DowntimeHost.scheduledEndTime }}
+                                </td>
+                                <td>
+                                    {{ hostDowntime.DowntimeHost.durationHuman }}
+                                </td>
+                                <td class="text-center">
+                                    @if (hostDowntime.DowntimeHost.wasCancelled) {
+                                        <span class="badge bg-danger mx-1" title="{{ t('Yes') }}"
+                                        >
+                                            {{ t('Yes') }}
+                                        </span>
+                                    }
+                                    @if (!hostDowntime.DowntimeHost.wasCancelled) {
+                                        <span class="badge bg-success mx-1" title="{{ t('No') }}"
+                                        >
+                                            {{ t('No') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (hostDowntime.DowntimeHost.allowEdit && hostDowntime.DowntimeHost.isCancellable) {
+                                        <div>
+                                            <button (click)="toggleCancelDowntimeModal(hostDowntime.DowntimeHost)"
+                                                    *oitcPermission="['downtimes', 'delete']"
+                                                    cButton class="ripple" color="danger" size="xs">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Cancel') }}
+                                            </button>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
             </table>
-            <oitc-no-records
-                *ngIf="hostDowntimes && hostDowntimes.all_host_downtimes.length === 0"></oitc-no-records>
-            <ng-container *ngIf="hostDowntimes && hostDowntimes.all_host_downtimes">
+            @if (hostDowntimes && hostDowntimes.all_host_downtimes.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (hostDowntimes && hostDowntimes.all_host_downtimes) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -417,15 +431,16 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
             <c-container
                 [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="hostDowntimes"
-                            [paginateOrScroll]="hostDowntimes"></oitc-paginate-or-scroll>
+                        @if (hostDowntimes) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="hostDowntimes"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

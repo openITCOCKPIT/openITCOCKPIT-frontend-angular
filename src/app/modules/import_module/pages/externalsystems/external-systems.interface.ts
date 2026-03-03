@@ -502,6 +502,6 @@ export interface HostgroupMapping {
     container_id: number
 }
 
-export interface ExternalSystemsAsList{
+export interface ExternalSystemsAsList {
     externalsystems: SelectKeyValue[]
 }

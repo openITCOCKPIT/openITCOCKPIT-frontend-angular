@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, inject, OnDestroy } from '@angular/core';
 import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
     AccordionButtonDirective,
     AccordionComponent,
@@ -20,7 +20,6 @@ import { PermissionDirective } from '../../../../permissions/permission.directiv
 @Component({
     selector: 'oitc-my-resources-summary-widget',
     imports: [
-        NgIf,
         RowComponent,
         ColComponent,
         TranslocoDirective,

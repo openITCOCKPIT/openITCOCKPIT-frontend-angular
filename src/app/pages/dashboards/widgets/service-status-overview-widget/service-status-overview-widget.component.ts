@@ -15,7 +15,7 @@ import { ServiceStatusOverviewWidgetService } from './service-status-overview-wi
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { GenericValidationError } from '../../../../generic-responses';
 import {
@@ -35,7 +35,6 @@ import { TrueFalseDirective } from '../../../../directives/true-false.directive'
     selector: 'oitc-service-status-overview-widget',
     imports: [
         FaIconComponent,
-        NgIf,
         TranslocoDirective,
         RowComponent,
         NgClass,

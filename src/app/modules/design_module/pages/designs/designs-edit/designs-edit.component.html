@@ -104,19 +104,23 @@
                                 </div>
 
                                 <c-row>
-                                    <c-col class="mb-3" md="3"
-                                           *ngFor="let manipulation of manipulations | keyvalue: keepOrder">
-                                        <h5>{{ manipulation.key | transloco }}</h5>
-                                        <div class="mb-3 pr-1" *ngFor="let manipulator of manipulation.value">
-                                            <oitc-colour-locator-picker
-                                                [selector]="manipulator.selector"
-                                                [attribute]="manipulator.attribute"
-                                                [name]="manipulator.name"
-                                                [value]="getManipulatorValue(manipulator.name)"
-                                                (valueChange)="setManipulatorValue(manipulator.name, $event)"
-                                                [title]="manipulator.title | transloco"/>
-                                        </div>
-                                    </c-col>
+                                    @for (manipulation of manipulations | keyvalue: keepOrder; track manipulation) {
+                                        <c-col class="mb-3" md="3"
+                                        >
+                                            <h5>{{ manipulation.key | transloco }}</h5>
+                                            @for (manipulator of manipulation.value; track manipulator) {
+                                                <div class="mb-3 pr-1">
+                                                    <oitc-colour-locator-picker
+                                                        [selector]="manipulator.selector"
+                                                        [attribute]="manipulator.attribute"
+                                                        [name]="manipulator.name"
+                                                        [value]="getManipulatorValue(manipulator.name)"
+                                                        (valueChange)="setManipulatorValue(manipulator.name, $event)"
+                                                        [title]="manipulator.title | transloco"/>
+                                                </div>
+                                            }
+                                        </c-col>
+                                    }
                                 </c-row>
                             </c-card-body>
                             <c-card-footer class="text-end">
@@ -302,9 +306,11 @@
                                 <h6 cCardTitle>{{ t('Status Page Header') }}</h6>
                             </c-card-header>
                             <c-card-body>
-                                <img *ngIf="isCustomStatusPageHeader" [src]="customStatusPageHeaderHtml"
-                                     class="card-img-top" alt="">
-                                <ng-container *ngIf="! isCustomStatusPageHeader">
+                                @if (isCustomStatusPageHeader) {
+                                    <img [src]="customStatusPageHeaderHtml"
+                                         class="card-img-top" alt="">
+                                }
+                                @if (!isCustomStatusPageHeader) {
                                     <div class="text-center">
                                         <fa-icon [icon]="['fas', 'info-circle']" size="3x"
                                                  class="text-info"></fa-icon>
@@ -312,7 +318,7 @@
                                             {{ t('No custom status page header image uploaded. Public status pages will not show an image.') }}
                                         </p>
                                     </div>
-                                </ng-container>
+                                }
                                 <hr/>
                                 <div class="form-group">
                                     <c-button-group>
@@ -348,12 +354,12 @@
                             </c-card-header>
                             <c-card-body>
                                 <div class="mb-3">
-                                <textarea cFormControl
-                                          cols="120"
-                                          class="code-font"
-                                          rows="15"
-                                          [(ngModel)]="post.customcsstext"
-                                          id="post.customcsstext"></textarea>
+                      <textarea cFormControl
+                                cols="120"
+                                class="code-font"
+                                rows="15"
+                                [(ngModel)]="post.customcsstext"
+                                id="post.customcsstext"></textarea>
                                 </div>
                             </c-card-body>
                             <c-card-footer class="text-end">

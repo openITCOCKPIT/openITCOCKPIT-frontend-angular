@@ -20,7 +20,7 @@ import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import {
     AcknowledgementIconComponent
 } from '../../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
     ColComponent,
     ContainerComponent,
@@ -84,7 +84,6 @@ import {
         InputGroupTextDirective,
         MatSort,
         MatSortHeader,
-        NgIf,
         NgSelectComponent,
         NoRecordsComponent,
         ReactiveFormsModule,

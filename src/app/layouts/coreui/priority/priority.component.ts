@@ -5,9 +5,9 @@ import { NgClass } from '@angular/common';
 @Component({
     selector: 'oitc-priority',
     imports: [
-    FaIconComponent,
-    NgClass
-],
+        FaIconComponent,
+        NgClass
+    ],
     templateUrl: './priority.component.html',
     styleUrl: './priority.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

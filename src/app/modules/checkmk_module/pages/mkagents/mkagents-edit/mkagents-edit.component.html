@@ -27,110 +27,108 @@
     <oitc-form-loader [isVisible]="! post"/>
 
     <form cForm (ngSubmit)="submit()">
-        <c-card class="mb-3" *ngIf="post">
-            <c-card-header>
-                <h5 cCardTitle>
-                    {{ t('Edit Checkmk agent') }}
-                    <small class="fw-300">
-                        {{ post.name }}
-                    </small>
-                </h5>
-
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['checkmk_module', 'mkagents', 'index']" cButton class="ripple"
-                                color="default"
-                                oitcBackButton
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                            {{ t('Back') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-            </c-card-header>
-            <c-card-body>
-                <c-alert color="warning" *ngIf="post.container_id == ROOT_CONTAINER">
-                    <h4 cAlertHeading>
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                        {{ t('/root container selected!') }}
-                    </h4>
-                    <p>{{ t('Choosing a tenant container is recommended for later permission purposes') }}</p>
-                </c-alert>
-
-                <div class="mb-3">
-                    <label cLabel for="container_id">
-                        {{ t('Container') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <oitc-select
-                        name="container_id"
-                        id="container_id"
-                        [(ngModel)]="post.container_id"
-                        optionValue="key"
-                        optionLabel="value"
-                        [options]="containers"
-                        oitcFormError [errors]="errors" errorField="container_id">
-                    </oitc-select>
-                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-                    <div *ngIf="post.container_id === 0" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
+        @if (post) {
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Edit Checkmk agent') }}
+                        <small class="fw-300">
+                            {{ post.name }}
+                        </small>
+                    </h5>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['checkmk_module', 'mkagents', 'index']" cButton class="ripple"
+                                    color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
+                    @if (post.container_id == ROOT_CONTAINER) {
+                        <c-alert color="warning">
+                            <h4 cAlertHeading>
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                {{ t('/root container selected!') }}
+                            </h4>
+                            <p>{{ t('Choosing a tenant container is recommended for later permission purposes') }}</p>
+                        </c-alert>
+                    }
+                    <div class="mb-3">
+                        <label cLabel for="container_id">
+                            {{ t('Container') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-select
+                            name="container_id"
+                            id="container_id"
+                            [(ngModel)]="post.container_id"
+                            optionValue="key"
+                            optionLabel="value"
+                            [options]="containers"
+                            oitcFormError [errors]="errors" errorField="container_id">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                        @if (post.container_id === 0) {
+                            <div class="text-warning-glow pt-1">
+                                {{ t('Please select a container.') }}
+                            </div>
+                        }
                     </div>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="agentName">
-                        {{ t('Name') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <input cFormControl required type="text"
-                           id="agentName"
-                           name="agentName"
-                           [(ngModel)]="post.name"
-                           oitcFormError [errors]="errors" errorField="name">
-                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="agentDescription">
-                        {{ t('Description') }}
-                    </label>
-                    <input cFormControl required type="text"
-                           id="agentDescription"
-                           name="agentDescription"
-                           [(ngModel)]="post.description"
-                           oitcFormError [errors]="errors" errorField="description">
-                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="commandLine">
-                        {{ t('Command line') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-                    <textarea cFormControl
-                              id="commandLine"
-                              name="command_line"
-                              class="code-font"
-                              oitcFormError [errors]="errors" errorField="command_line"
-                              [(ngModel)]="post.command_line"
-                              rows="6"></textarea>
-                    <oitc-form-feedback [errors]="errors" errorField="command_line"></oitc-form-feedback>
-
-                </div>
-
-            </c-card-body>
-            <c-card-footer class="text-end">
-                <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Update Checkmk agent') }}
-                </button>
-                <button [fallbackUrl]="['checkmk_module', 'mkagents', 'index']" cButton class="ms-1 ripple"
-                        color="default"
-                        oitcBackButton
-                        type="button">
-                    {{ t('Cancel') }}
-                </button>
-
-            </c-card-footer>
-        </c-card>
+                    <div class="mb-3">
+                        <label cLabel for="agentName">
+                            {{ t('Name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl required type="text"
+                               id="agentName"
+                               name="agentName"
+                               [(ngModel)]="post.name"
+                               oitcFormError [errors]="errors" errorField="name">
+                        <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="agentDescription">
+                            {{ t('Description') }}
+                        </label>
+                        <input cFormControl required type="text"
+                               id="agentDescription"
+                               name="agentDescription"
+                               [(ngModel)]="post.description"
+                               oitcFormError [errors]="errors" errorField="description">
+                        <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="commandLine">
+                            {{ t('Command line') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <textarea cFormControl
+                                  id="commandLine"
+                                  name="command_line"
+                                  class="code-font"
+                                  oitcFormError [errors]="errors" errorField="command_line"
+                                  [(ngModel)]="post.command_line"
+                                  rows="6"></textarea>
+                        <oitc-form-feedback [errors]="errors" errorField="command_line"></oitc-form-feedback>
+                    </div>
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Update Checkmk agent') }}
+                    </button>
+                    <button [fallbackUrl]="['checkmk_module', 'mkagents', 'index']" cButton class="ms-1 ripple"
+                            color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        }
     </form>
 </ng-container>

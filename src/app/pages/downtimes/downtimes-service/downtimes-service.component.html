@@ -303,7 +303,9 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!serviceDowntimes"></oitc-table-loader>
+            @if (!serviceDowntimes) {
+                <oitc-table-loader></oitc-table-loader>
+            }
             <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -347,84 +349,98 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="serviceDowntimes">
-                <tr *ngFor="let serviceDowntime of serviceDowntimes.all_service_downtimes">
-                    <td class="text-center">
-                        <div
-                            *ngIf="serviceDowntime.DowntimeService.allowEdit && serviceDowntime.DowntimeService.isCancellable">
-                            <oitc-item-select
-                                *oitcPermission="['downtimes', 'delete']"
-                                [disabled]="false"
-                                [item]="serviceDowntime.DowntimeService.internalDowntimeId"></oitc-item-select>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <oitc-downtime-simple-icon
-                            [downtime]="serviceDowntime.DowntimeService"></oitc-downtime-simple-icon>
-                    </td>
-                    <td class="word-break">
-                        <a *oitcPermission="['hosts', 'browser']"
-                           [routerLink]="['/', 'hosts', 'browser', serviceDowntime.Host.id]">
-                            {{ serviceDowntime.Host.hostname }}
-                        </a>
-                        <span *oitcPermission="['hosts', 'browser']; negate: true">
-                            {{ serviceDowntime.Host.hostname }}
-                        </span>
-                    </td>
-                    <td class="word-break">
-                        <a *oitcPermission="['services', 'browser']"
-                           [routerLink]="['/', 'services', 'browser', serviceDowntime.Service.id]">
-                            {{ serviceDowntime.Service.servicename }}
-                        </a>
-                        <span *oitcPermission="['services', 'browser']; negate: true">
-                            {{ serviceDowntime.Service.servicename }}
-                        </span>
-                    </td>
-                    <td>
-                        {{ serviceDowntime.DowntimeService.authorName }}
-                    </td>
-                    <td>
-                        {{ serviceDowntime.DowntimeService.commentData }}
-                    </td>
-                    <td>
-                        {{ serviceDowntime.DowntimeService.entryTime }}
-                    </td>
-                    <td>
-                        {{ serviceDowntime.DowntimeService.scheduledStartTime }}
-                    </td>
-                    <td>
-                        {{ serviceDowntime.DowntimeService.scheduledEndTime }}
-                    </td>
-                    <td>
-                        {{ serviceDowntime.DowntimeService.durationHuman }}
-                    </td>
-                    <td class="text-center">
-                        <span class="badge bg-danger mx-1" title="{{ t('Yes') }}"
-                              *ngIf="serviceDowntime.DowntimeService.wasCancelled">
-                            {{ t('Yes') }}
-                        </span>
-                        <span class="badge bg-success mx-1" title="{{ t('No') }}"
-                              *ngIf="!serviceDowntime.DowntimeService.wasCancelled">
-                            {{ t('No') }}
-                        </span>
-                    </td>
-                    <td>
-                        <div
-                            *ngIf="serviceDowntime.DowntimeService.allowEdit && serviceDowntime.DowntimeService.isCancellable">
-                            <button (click)="toggleCancelDowntimeModal(serviceDowntime.DowntimeService)"
-                                    *oitcPermission="['downtimes', 'delete']"
-                                    cButton class="ripple" color="danger" size="xs">
-                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                {{ t('Cancel') }}
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
+                @if (serviceDowntimes) {
+                    <tbody>
+                        @for (serviceDowntime of serviceDowntimes.all_service_downtimes; track serviceDowntime) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (serviceDowntime.DowntimeService.allowEdit && serviceDowntime.DowntimeService.isCancellable) {
+                                        <div
+                                        >
+                                            <oitc-item-select
+                                                *oitcPermission="['downtimes', 'delete']"
+                                                [disabled]="false"
+                                                [item]="serviceDowntime.DowntimeService.internalDowntimeId"></oitc-item-select>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <oitc-downtime-simple-icon
+                                        [downtime]="serviceDowntime.DowntimeService"></oitc-downtime-simple-icon>
+                                </td>
+                                <td class="word-break">
+                                    <a *oitcPermission="['hosts', 'browser']"
+                                       [routerLink]="['/', 'hosts', 'browser', serviceDowntime.Host.id]">
+                                        {{ serviceDowntime.Host.hostname }}
+                                    </a>
+                                    <span *oitcPermission="['hosts', 'browser']; negate: true">
+                                        {{ serviceDowntime.Host.hostname }}
+                                    </span>
+                                </td>
+                                <td class="word-break">
+                                    <a *oitcPermission="['services', 'browser']"
+                                       [routerLink]="['/', 'services', 'browser', serviceDowntime.Service.id]">
+                                        {{ serviceDowntime.Service.servicename }}
+                                    </a>
+                                    <span *oitcPermission="['services', 'browser']; negate: true">
+                                        {{ serviceDowntime.Service.servicename }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {{ serviceDowntime.DowntimeService.authorName }}
+                                </td>
+                                <td>
+                                    {{ serviceDowntime.DowntimeService.commentData }}
+                                </td>
+                                <td>
+                                    {{ serviceDowntime.DowntimeService.entryTime }}
+                                </td>
+                                <td>
+                                    {{ serviceDowntime.DowntimeService.scheduledStartTime }}
+                                </td>
+                                <td>
+                                    {{ serviceDowntime.DowntimeService.scheduledEndTime }}
+                                </td>
+                                <td>
+                                    {{ serviceDowntime.DowntimeService.durationHuman }}
+                                </td>
+                                <td class="text-center">
+                                    @if (serviceDowntime.DowntimeService.wasCancelled) {
+                                        <span class="badge bg-danger mx-1" title="{{ t('Yes') }}"
+                                        >
+                                            {{ t('Yes') }}
+                                        </span>
+                                    }
+                                    @if (!serviceDowntime.DowntimeService.wasCancelled) {
+                                        <span class="badge bg-success mx-1" title="{{ t('No') }}"
+                                        >
+                                            {{ t('No') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (serviceDowntime.DowntimeService.allowEdit && serviceDowntime.DowntimeService.isCancellable) {
+                                        <div
+                                        >
+                                            <button (click)="toggleCancelDowntimeModal(serviceDowntime.DowntimeService)"
+                                                    *oitcPermission="['downtimes', 'delete']"
+                                                    cButton class="ripple" color="danger" size="xs">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Cancel') }}
+                                            </button>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
             </table>
-            <oitc-no-records
-                *ngIf="serviceDowntimes && serviceDowntimes.all_service_downtimes.length === 0"></oitc-no-records>
-            <ng-container *ngIf="serviceDowntimes && serviceDowntimes.all_service_downtimes">
+            @if (serviceDowntimes && serviceDowntimes.all_service_downtimes.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (serviceDowntimes && serviceDowntimes.all_service_downtimes) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -445,15 +461,16 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
             <c-container
                 [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="serviceDowntimes"
-                            [paginateOrScroll]="serviceDowntimes"></oitc-paginate-or-scroll>
+                        @if (serviceDowntimes) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="serviceDowntimes"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

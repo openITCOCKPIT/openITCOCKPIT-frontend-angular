@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     AlertComponent,
+    AlertHeadingDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -23,7 +24,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -40,7 +41,12 @@ import { ContainersService } from '../../../../../pages/containers/containers.se
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
 import { ExternalMonitoringsService } from '../external-monitorings.service';
 import { HistoryService } from '../../../../../history.service';
-import { ExternalMonitoringConfig, ExternalMonitoringPost } from '../external-monitorings.interface';
+import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import {
+    ExternalMonitoringConfig,
+    ExternalMonitoringConnect,
+    ExternalMonitoringPost
+} from '../external-monitorings.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { SystemnameService } from '../../../../../services/systemname.service';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
@@ -67,8 +73,6 @@ import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         PaginatorModule,
         PermissionDirective,
         RequiredIconComponent,
@@ -79,7 +83,9 @@ import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
         FormLoaderComponent,
         RowComponent,
         ColComponent,
-        AlertComponent
+        AlertComponent,
+        MultiSelectComponent,
+        AlertHeadingDirective
     ],
     templateUrl: './external-monitorings-edit.component.html',
     styleUrl: './external-monitorings-edit.component.css',
@@ -100,6 +106,11 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     public readonly SystemnameService = inject(SystemnameService);
     public formFields?: DynamicalFormFields;
+
+    public connectStatus: boolean | null = null;
+    public connectMessage: string = '';
+
+    public messageTemplates: SelectKeyValue[] = [];
 
     protected readonly ExternalMonitoringTypes = [
         {
@@ -164,6 +175,7 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
                 this.loadContainers();
                 this.loadConfigFieldsBySystemType();
+                this.checkConnection();
             }));
     }
 
@@ -189,6 +201,20 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
+            }));
+    }
+
+    public checkConnection() {
+        this.subscriptions.add(this.ExternalMonitoringsService.testConnection(this.post)
+            .subscribe((result: ExternalMonitoringConnect) => {
+                this.connectStatus = result.status.status;
+                if (result.status.msg) {
+                    this.connectMessage = result.status.msg.message;
+                }
+                if (result.messageTemplates) {
+                    this.messageTemplates = result.messageTemplates;
+                }
+                this.cdr.markForCheck();
             }));
     }
 

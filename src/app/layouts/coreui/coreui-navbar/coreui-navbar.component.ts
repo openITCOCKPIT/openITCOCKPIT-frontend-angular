@@ -15,7 +15,7 @@ import { SidebarService } from './sidebar.service';
 import { NavigationService } from '../../../components/navigation/navigation.service';
 import { Subscription } from 'rxjs';
 import { MenuHeadline, NavigationInterface } from '../../../components/navigation/navigation.interface';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NavbarGroupComponent } from './navbar-group/navbar-group.component';
 import { SidebarAction } from './sidebar.interface';
@@ -32,7 +32,6 @@ import { Skeleton } from 'primeng/skeleton';
         FaIconComponent,
         NavbarGroupComponent,
         NgClass,
-        NgIf,
         NavbarSearchComponent,
         AsyncPipe,
         Skeleton

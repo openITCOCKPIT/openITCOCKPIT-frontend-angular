@@ -43,7 +43,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
 import {
     AcknowledgementIconComponent
@@ -145,8 +145,6 @@ import { HoststatusObject } from '../hosts.interface';
         ItemSelectComponent,
         MatSort,
         MatSortHeader,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         PopoverGraphComponent,
@@ -643,9 +641,9 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             this.router.navigate(['/', 'services', 'copy', ids]);
         } else {
 
-                const message = this.TranslocoService.translate('No items selected!');
-                this.notyService.genericError(message);
-                return;
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 

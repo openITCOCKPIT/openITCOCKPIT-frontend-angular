@@ -52,9 +52,11 @@
                         (onChange)="onContainerChange()"
                         oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
-                    <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
+                    @if (!post.container_id) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                 </div>
                 <div class="mb-2">
@@ -143,8 +145,8 @@
                                 </li>
                                 @if (post.public_identifier) {
                                     <!-- @formatter:off -->
-                                    <li>https://{{ hostname }}/statuspages/publicView/<b>{{ post.public_identifier }}</b></li>
-                                    <!-- @formatter:on -->
+                    <li>https://{{ hostname }}/statuspages/publicView/<b>{{ post.public_identifier }}</b></li>
+                    <!-- @formatter:on -->
                                 }
                             </ul>
                         </div>
@@ -238,10 +240,12 @@
                             [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">
                         <h5>
                             {{ t('Status page items') }}
-                            <span class="text-danger font-xs pl-1 fw-300"
-                                  *ngIf="noItemsSelected">
-                                {{ t('You must select at least one configuration item for status page.') }}
-                            </span>
+                            @if (noItemsSelected) {
+                                <span class="text-danger font-xs pl-1 fw-300"
+                                >
+                                    {{ t('You must select at least one configuration item for status page.') }}
+                                </span>
+                            }
                         </h5>
                     </legend>
                 </fieldset>
@@ -260,45 +264,47 @@
                         [options]="hostgroups">
                     </oitc-multi-select>
 
-                    <div class="form-group" *ngIf="post.selected_hostgroups._ids.length > 0">
-                        <c-row class="pt-2 pb-2">
-                            <c-col lg="4" md="4" xs="4" class="bold">
-                                {{ t('Hostgroup name') }}
-                            </c-col>
-                            <c-col lg="8" md="8" xs="8" class="bold">
-                                {{ t('Display name') }}
-                            </c-col>
-                        </c-row>
-                        @for (hostgroup of hostgroups; track $index) {
-                            @if (post.selected_hostgroups._ids.indexOf(hostgroup.id) !== -1) {
-                                <c-row class="mb-2">
-                                    <c-col lg="4" md="4" xs="4" class="statuspage-item-box">
-                                        @if (this.PermissionsService.hasPermissionObservable(['hostgroups', 'extended'])|async) {
-                                            <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.key]">
+                    @if (post.selected_hostgroups._ids.length > 0) {
+                        <div class="form-group">
+                            <c-row class="pt-2 pb-2">
+                                <c-col lg="4" md="4" xs="4" class="bold">
+                                    {{ t('Hostgroup name') }}
+                                </c-col>
+                                <c-col lg="8" md="8" xs="8" class="bold">
+                                    {{ t('Display name') }}
+                                </c-col>
+                            </c-row>
+                            @for (hostgroup of hostgroups; track $index) {
+                                @if (post.selected_hostgroups._ids.indexOf(hostgroup.id) !== -1) {
+                                    <c-row class="mb-2">
+                                        <c-col lg="4" md="4" xs="4" class="statuspage-item-box">
+                                            @if (this.PermissionsService.hasPermissionObservable(['hostgroups', 'extended'])|async) {
+                                                <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.key]">
+                                                    {{ hostgroup.value }}
+                                                </a>
+                                            } @else {
                                                 {{ hostgroup.value }}
-                                            </a>
-                                        } @else {
-                                            {{ hostgroup.value }}
-                                        }
-                                    </c-col>
-                                    <c-col lg="8" md="8" xs="8">
-                                        <c-input-group>
-                                            <span cInputGroupText id="basic-addon1">
-                                                <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
-                                            </span>
-                                            <input
-                                                cFormControl
-                                                [attr.id]="'hostgroup_alias'+$index"
-                                                [name]="'hostgroup_alias'+$index"
-                                                [(ngModel)]="hostgroups[$index]._joinData.display_alias"
-                                                placeholder="Set alias for hosthostgroup"
-                                            />
-                                        </c-input-group>
-                                    </c-col>
-                                </c-row>
+                                            }
+                                        </c-col>
+                                        <c-col lg="8" md="8" xs="8">
+                                            <c-input-group>
+                                                <span cInputGroupText id="basic-addon1">
+                                                    <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
+                                                </span>
+                                                <input
+                                                    cFormControl
+                                                    [attr.id]="'hostgroup_alias'+$index"
+                                                    [name]="'hostgroup_alias'+$index"
+                                                    [(ngModel)]="hostgroups[$index]._joinData.display_alias"
+                                                    placeholder="Set alias for hosthostgroup"
+                                                />
+                                            </c-input-group>
+                                        </c-col>
+                                    </c-row>
+                                }
                             }
-                        }
-                    </div>
+                        </div>
+                    }
                 </div>
                 <div class="mb-3">
                     <label cLabel for="post.servicegroups._ids">

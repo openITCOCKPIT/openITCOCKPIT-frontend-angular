@@ -37,7 +37,7 @@ import {
 import { NgSelectModule } from '@ng-select/ng-select';
 import { HosttemplateTypesEnum } from '../hosttemplate-types.enum';
 import { HosttemplatesService } from '../hosttemplates.service';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -91,8 +91,6 @@ import { IndexPage } from '../../../pages.interface';
         ItemSelectComponent,
         MatSort,
         MatSortHeader,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         SelectAllComponent,

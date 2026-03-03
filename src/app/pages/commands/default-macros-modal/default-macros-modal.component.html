@@ -14,7 +14,7 @@
         <c-modal-body>
             <div class="row">
                 <div class="col-12">
-                    <ng-container *ngFor="let macroCategory of defaultMacros(); let last = last">
+                    @for (macroCategory of defaultMacros(); track macroCategory; let last = $last) {
                         <h4>
                             {{ macroCategory.category }}
                         </h4>
@@ -30,18 +30,22 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let macro of macroCategory.macros">
-                                <td class="text-primary bold">
-                                    {{ macro.macro }}
-                                </td>
-                                <td>
-                                    {{ macro.description }}
-                                </td>
-                            </tr>
+                                @for (macro of macroCategory.macros; track macro) {
+                                    <tr>
+                                        <td class="text-primary bold">
+                                            {{ macro.macro }}
+                                        </td>
+                                        <td>
+                                            {{ macro.description }}
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
-                        <hr *ngIf="!last">
-                    </ng-container>
+                        @if (!last) {
+                            <hr>
+                        }
+                    }
                 </div>
             </div>
         </c-modal-body>

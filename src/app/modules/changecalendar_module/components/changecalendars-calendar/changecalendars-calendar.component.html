@@ -6,14 +6,13 @@
                 <div class="fc-event-title-container"
                      [ngStyle]="{ 'width': '100%', 'height':'100%', 'background-color': arg.event.extendedProps.colour? arg.event.extendedProps.colour : null }">
                     <div class="fc-event-title fc-sticky  text-white">
-                        <ng-container *ngIf="arg.event.start">
-
+                        @if (arg.event.start) {
                             {{ formatTime(arg.event.start.getTime()) }}
                             -
-                        </ng-container>
-                        <ng-container *ngIf="arg.event.end">
+                        }
+                        @if (arg.event.end) {
                             {{ formatTime(arg.event.end.getTime()) }}
-                        </ng-container>
+                        }
                         {{ arg.event.title }}
                     </div>
                 </div>

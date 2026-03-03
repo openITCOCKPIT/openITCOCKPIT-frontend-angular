@@ -2,6 +2,7 @@
     border: 1px solid #fff;
     margin: 1px 0px;
 }
+
 .ellipsis {
     text-overflow: ellipsis;
     white-space: nowrap;

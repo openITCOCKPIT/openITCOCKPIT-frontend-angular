@@ -110,100 +110,111 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!autoreports"></oitc-table-loader>
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   *ngIf="autoreports"
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Autoreports.name">
-                        {{ t('Name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Autoreports.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Autoreports.report_interval">
-                        {{ t('Report interval') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Autoreports.report_send_interval">
-                        {{ t('Report send interval') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Autoreports.min_availability">
-                        {{ t('Min. availability') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Autoreports.max_number_of_outages">
-                        {{ t('Max number of outages') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let autoreport of autoreports.autoreports">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['AutoreportModule', 'autoreports', 'delete']"
-                            [disabled]="!autoreport.allowEdit"
-                            [item]="autoreport"></oitc-item-select>
-                    </td>
-                    <td>
-                        {{ autoreport.name }}
-                    </td>
-                    <td>
-                        {{ autoreport.description }}
-                    </td>
-                    <td>
-                        {{ autoreport.report_interval }}
-                    </td>
-                    <td>
-                        {{ autoreport.report_send_interval }}
-                    </td>
-                    <td>
-                        {{ autoreport.min_availability | number:'1.3-3' }}
-                    </td>
-                    <td>
-                        {{ autoreport.max_number_of_outages }}
-                    </td>
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'autoreportmodule.autoreports.edit'"
-                                             [url]="'/autoreport_module/autoreports/editStepOne/' + autoreport.id"
-                                             [allowEdit]="autoreport.allowEdit">
-                            <oitc-actions-button-element [permission]="'autoreportmodule.autoreports.edit'"
-                                                         *ngIf="autoreport.allowEdit"
-                                                         [url]="'/autoreport_module/autoreports/editStepOne/' + autoreport.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
+            @if (!autoreports) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (autoreports) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Autoreports.name">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Autoreports.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Autoreports.report_interval">
+                            {{ t('Report interval') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Autoreports.report_send_interval">
+                            {{ t('Report send interval') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Autoreports.min_availability">
+                            {{ t('Min. availability') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Autoreports.max_number_of_outages">
+                            {{ t('Max number of outages') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (autoreport of autoreports.autoreports; track autoreport) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['AutoreportModule', 'autoreports', 'delete']"
+                                        [disabled]="!autoreport.allowEdit"
+                                        [item]="autoreport"></oitc-item-select>
+                                </td>
+                                <td>
+                                    {{ autoreport.name }}
+                                </td>
+                                <td>
+                                    {{ autoreport.description }}
+                                </td>
+                                <td>
+                                    {{ autoreport.report_interval }}
+                                </td>
+                                <td>
+                                    {{ autoreport.report_send_interval }}
+                                </td>
+                                <td>
+                                    {{ autoreport.min_availability | number:'1.3-3' }}
+                                </td>
+                                <td>
+                                    {{ autoreport.max_number_of_outages }}
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'autoreportmodule.autoreports.edit'"
+                                                         [url]="'/autoreport_module/autoreports/editStepOne/' + autoreport.id"
+                                                         [allowEdit]="autoreport.allowEdit">
+                                        @if (autoreport.allowEdit) {
+                                            <oitc-actions-button-element
+                                                [permission]="'autoreportmodule.autoreports.edit'"
+                                                [url]="'/autoreport_module/autoreports/editStepOne/' + autoreport.id">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element
+                                            [permission]="'autoreportmodule.autoreports.generate'"
+                                            [url]="'/autoreport_module/autoreports/generate/' + autoreport.id">
+                                            <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
+                                            {{ t('Generate report') }}
+                                        </oitc-actions-button-element>
+                                        @if (autoreport.allowEdit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        @if (autoreport.allowEdit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(autoreport)"
+                                                                         [permission]="'autoreportmodule.autoreports.delete'"
+                                            >
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @if (autoreports && autoreports.autoreports.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
 
-                            <oitc-actions-button-element [permission]="'autoreportmodule.autoreports.generate'"
-                                                         [url]="'/autoreport_module/autoreports/generate/' + autoreport.id">
-                                <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
-                                {{ t('Generate report') }}
-                            </oitc-actions-button-element>
-
-                            <li cDropdownDivider *ngIf="autoreport.allowEdit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(autoreport)"
-                                                         [permission]="'autoreportmodule.autoreports.delete'"
-                                                         *ngIf="autoreport.allowEdit">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <oitc-no-records *ngIf="autoreports && autoreports.autoreports.length === 0"></oitc-no-records>
-
-            <ng-container *ngIf="autoreports && autoreports.autoreports">
+            @if (autoreports && autoreports.autoreports) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -224,16 +235,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="autoreports"
-                            [paginateOrScroll]="autoreports"></oitc-paginate-or-scroll>
+                        @if (autoreports) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="autoreports"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

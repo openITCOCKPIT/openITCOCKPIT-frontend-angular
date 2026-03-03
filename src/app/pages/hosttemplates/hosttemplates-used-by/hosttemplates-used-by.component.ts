@@ -22,7 +22,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NotUsedByObjectComponent } from '../../../layouts/coreui/not-used-by-object/not-used-by-object.component';
 import { HostObjectCake2 } from '../../hosts/hosts.interface';
 import { HosttemplateEntity } from '../hosttemplates.interface';
@@ -54,11 +54,9 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        NgIf,
         NotUsedByObjectComponent,
         NavItemComponent,
         ContainerComponent,
-        NgForOf,
         TableDirective,
         ItemSelectComponent,
         TranslocoPipe,
@@ -75,7 +73,7 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
     templateUrl: './hosttemplates-used-by.component.html',
     styleUrl: './hosttemplates-used-by.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService } // Inject the ContactsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ContactsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

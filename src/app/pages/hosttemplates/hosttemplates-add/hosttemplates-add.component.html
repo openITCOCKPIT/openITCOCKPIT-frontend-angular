@@ -25,13 +25,15 @@
 
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <span *ngIf="typeDetails"
-                              class="badge border margin-right-10"
-                              [ngClass]="[typeDetails.class, typeDetails.color]">
-                            <fa-icon [icon]="typeDetails.icon"
-                                     [rotate]="typeDetails.rotate"></fa-icon>
-                            {{ typeDetails.title }}
-                        </span>
+                        @if (typeDetails) {
+                            <span
+                                class="badge border margin-right-10"
+                                [ngClass]="[typeDetails.class, typeDetails.color]">
+                                <fa-icon [icon]="typeDetails.icon"
+                                         [rotate]="typeDetails.rotate"></fa-icon>
+                                {{ typeDetails.title }}
+                            </span>
+                        }
                     </c-nav-item>
 
                     <c-nav-item class="px-1">
@@ -74,9 +76,11 @@
                                 oitcFormError [errors]="errors" errorField="container_id">
                             </oitc-select>
 
-                            <div *ngIf="!post.container_id" class="text-warning-glow pt-1">
-                                {{ t('Please select a container.') }}
-                            </div>
+                            @if (!post.container_id) {
+                                <div class="text-warning-glow pt-1">
+                                    {{ t('Please select a container.') }}
+                                </div>
+                            }
                             <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                         </div>
 
@@ -265,21 +269,23 @@
                             </div>
                         </div>
 
-                        <div class="mb-3"
-                             *ngIf="post.active_checks_enabled == 0 && post.freshness_checks_enabled == 1">
-                            <label cFormCheckLabel for="freshness_threshold">
-                                {{ t('Freshness threshold') }}
-                                <oitc-required-icon></oitc-required-icon>
-                            </label>
-                            <oitc-interval-input
-                                id="freshness_threshold"
-                                name="freshness_threshold"
-                                [selectedInterval]="post.freshness_threshold"
-                                (selectedIntervalChange)="post.freshness_threshold = $event"
-                            ></oitc-interval-input>
-                            <oitc-form-feedback [errors]="errors"
-                                                errorField="freshness_threshold"></oitc-form-feedback>
-                        </div>
+                        @if (post.active_checks_enabled == 0 && post.freshness_checks_enabled == 1) {
+                            <div class="mb-3"
+                            >
+                                <label cFormCheckLabel for="freshness_threshold">
+                                    {{ t('Freshness threshold') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <oitc-interval-input
+                                    id="freshness_threshold"
+                                    name="freshness_threshold"
+                                    [selectedInterval]="post.freshness_threshold"
+                                    (selectedIntervalChange)="post.freshness_threshold = $event"
+                                ></oitc-interval-input>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="freshness_threshold"></oitc-form-feedback>
+                            </div>
+                        }
 
 
                         <div class="mb-3">
@@ -319,22 +325,24 @@
                             </c-alert>
                         </div>
 
-                        <div class="mb-3 ms-4"
-                             *ngFor="let hosttemplatecommandargumentvalue of post.hosttemplatecommandargumentvalues; index as i">
-                            <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
-                                {{ hosttemplatecommandargumentvalue.commandargument.human_name }}
-                            </label>
-                            <div class="col-xs-12 col-lg-8">
-                                <input
-                                    class="form-control"
-                                    type="text"
-                                    [name]="'hosttemplatecommandargumentvalue_'+i"
-                                    [(ngModel)]="hosttemplatecommandargumentvalue.value">
-                                <div class="help-block">
-                                    {{ hosttemplatecommandargumentvalue.commandargument.name }}
+                        @for (hosttemplatecommandargumentvalue of post.hosttemplatecommandargumentvalues; track hosttemplatecommandargumentvalue; let i = $index) {
+                            <div class="mb-3 ms-4"
+                            >
+                                <label class="col-xs-12 col-lg-offset-2 col-lg-10 control-label text-purple">
+                                    {{ hosttemplatecommandargumentvalue.commandargument.human_name }}
+                                </label>
+                                <div class="col-xs-12 col-lg-8">
+                                    <input
+                                        class="form-control"
+                                        type="text"
+                                        [name]="'hosttemplatecommandargumentvalue_'+i"
+                                        [(ngModel)]="hosttemplatecommandargumentvalue.value">
+                                    <div class="help-block">
+                                        {{ hosttemplatecommandargumentvalue.commandargument.name }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        }
 
                         <div class="mb-3">
                             <label cFormCheckLabel for="check_interval">
@@ -672,67 +680,67 @@
                                                 errorField="flap_detection_enabled"></oitc-form-feedback>
                         </div>
 
-                        <div class="mb-3 d-inline-flex w-100" *ngIf="post.flap_detection_enabled">
-                            <div class="input-group mx-1">
-                                <span class="input-group-text">
-                                    <input
-                                        cFormCheckInput
-                                        class="checkbox-success"
-                                        name="flap_detection_on_up"
-                                        id="flap_detection_on_up"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        [(ngModel)]="post.flap_detection_on_up"/>
-                                </span>
-                                <div class="form-control bg-success text-white text-center">
-                                    <label for="flap_detection_on_up">
-                                        {{ t('Recovery') }}
-                                    </label>
+                        @if (post.flap_detection_enabled) {
+                            <div class="mb-3 d-inline-flex w-100">
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-success"
+                                            name="flap_detection_on_up"
+                                            id="flap_detection_on_up"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.flap_detection_on_up"/>
+                                    </span>
+                                    <div class="form-control bg-success text-white text-center">
+                                        <label for="flap_detection_on_up">
+                                            {{ t('Recovery') }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-danger"
+                                            name="flap_detection_on_down"
+                                            id="flap_detection_on_down"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.flap_detection_on_down"/>
+                                    </span>
+                                    <div class="form-control bg-danger text-white text-center">
+                                        <label for="flap_detection_on_down">
+                                            {{ t('Down') }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="input-group mx-1">
+                                    <span class="input-group-text">
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-secondary"
+                                            name="flap_detection_on_unreachable"
+                                            id="flap_detection_on_unreachable"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            [falseValue]="0"
+                                            [trueValue]="1"
+                                            [(ngModel)]="post.flap_detection_on_unreachable"/>
+                                    </span>
+                                    <div class="form-control bg-unknown text-white text-center">
+                                        <label for="flap_detection_on_unreachable">
+                                            {{ t('Unreachable') }}
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="input-group mx-1">
-                                <span class="input-group-text">
-                                    <input
-                                        cFormCheckInput
-                                        class="checkbox-danger"
-                                        name="flap_detection_on_down"
-                                        id="flap_detection_on_down"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        [(ngModel)]="post.flap_detection_on_down"/>
-                                </span>
-                                <div class="form-control bg-danger text-white text-center">
-                                    <label for="flap_detection_on_down">
-                                        {{ t('Down') }}
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="input-group mx-1">
-                                <span class="input-group-text">
-                                    <input
-                                        cFormCheckInput
-                                        class="checkbox-secondary"
-                                        name="flap_detection_on_unreachable"
-                                        id="flap_detection_on_unreachable"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        [falseValue]="0"
-                                        [trueValue]="1"
-                                        [(ngModel)]="post.flap_detection_on_unreachable"/>
-                                </span>
-                                <div class="form-control bg-unknown text-white text-center">
-                                    <label for="flap_detection_on_unreachable">
-                                        {{ t('Unreachable') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                        }
 
                     </c-card-body>
                 </c-card>
@@ -750,23 +758,26 @@
 
                         <div class="row">
                             <div class="col-12">
-                                <oitc-form-feedback [errors]="errors" errorField="customvariables"
-                                                    *ngIf="hasMacroErrors"></oitc-form-feedback>
+                                @if (hasMacroErrors) {
+                                    <oitc-form-feedback [errors]="errors" errorField="customvariables"
+                                    ></oitc-form-feedback>
+                                }
                             </div>
                         </div>
 
-                        <div class="row"
-                             *ngFor="let customVariable of post.customvariables;let i = index;">
-                            <oitc-macros
-                                [macro]="customVariable"
-                                [macroName]="'HOST'"
-                                [index]="i"
-                                [deleteMacroCallback]="deleteMacro"
-                                [errors]="errors"
-                                class="col-lg-12"
-                            />
-
-                        </div>
+                        @for (customVariable of post.customvariables; track customVariable; let i = $index) {
+                            <div class="row"
+                            >
+                                <oitc-macros
+                                    [macro]="customVariable"
+                                    [macroName]="'HOST'"
+                                    [index]="i"
+                                    [deleteMacroCallback]="deleteMacro"
+                                    [errors]="errors"
+                                    class="col-lg-12"
+                                />
+                            </div>
+                        }
 
                         <div class="row mt-3">
                             <div class="col-12 text-end">
@@ -783,79 +794,78 @@
                 <!-- HOST MACRO CONFIGURATION END -->
 
                 <!-- PROMETHEUS CONFIGURATION START -->
-                <c-card class="mb-3" *ngIf="PermissionsService.hasModuleObservable('PrometheusModule')|async">
-                    <c-card-header>
-                        <fa-icon [icon]="['fas', 'broadcast-tower']"></fa-icon>
-                        <span class="ms-1">
-                            {{ t('Prometheus Exporters') }}
-                        </span>
-                    </c-card-header>
-                    <c-card-body>
-
-                        <div class="mb-3">
-                            <label cLabel for="ExportersSelect">
-                                {{ t('Exporters') }}
-                            </label>
-                            <oitc-multi-select
-                                name="ExportersSelect"
-                                id="ExportersSelect"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="post.prometheus_exporters._ids"
-                                [options]="exporters"
-                                oitcFormError [errors]="errors" errorField="prometheus_exporters">
-                            </oitc-multi-select>
-                            <oitc-form-feedback [errors]="errors"
-                                                errorField="prometheus_exporters"></oitc-form-feedback>
-                            <div class="help-block">
-                                {{ t('To monitor this host using Prometheus please select the exporters that are installed on the host.') }}
+                @if (PermissionsService.hasModuleObservable('PrometheusModule')|async) {
+                    <c-card class="mb-3">
+                        <c-card-header>
+                            <fa-icon [icon]="['fas', 'broadcast-tower']"></fa-icon>
+                            <span class="ms-1">
+                                {{ t('Prometheus Exporters') }}
+                            </span>
+                        </c-card-header>
+                        <c-card-body>
+                            <div class="mb-3">
+                                <label cLabel for="ExportersSelect">
+                                    {{ t('Exporters') }}
+                                </label>
+                                <oitc-multi-select
+                                    name="ExportersSelect"
+                                    id="ExportersSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.prometheus_exporters._ids"
+                                    [options]="exporters"
+                                    oitcFormError [errors]="errors" errorField="prometheus_exporters">
+                                </oitc-multi-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="prometheus_exporters"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('To monitor this host using Prometheus please select the exporters that are installed on the host.') }}
+                                </div>
                             </div>
-                        </div>
-
-                    </c-card-body>
-                </c-card>
+                        </c-card-body>
+                    </c-card>
+                }
                 <!-- PROMETHEUS CONFIGURATION END -->
 
                 <!-- SLA CONFIGURATION START -->
-                <c-card class="mb-3" *ngIf="PermissionsService.hasModuleObservable('SLAModule')|async">
-                    <c-card-header>
-                        <fa-icon [icon]="['fas', 'award']"></fa-icon>
-                        <span class="ms-1">
-                            {{ t('Service Level Agreement') }}
-                        </span>
-                    </c-card-header>
-                    <c-card-body>
-
-                        <div class="mb-3">
-                            <label cLabel for="SlasSelect">
-                                <oitc-label-link
-                                    [objectId]="post.sla_id"
-                                    [route]="'/sla_module/slas/edit'"
-                                    [permissions]="'SLAModule.slas.edit'"
-                                >
-                                    {{ t('Service class') }}
-                                </oitc-label-link>
-                            </label>
-
-                            <oitc-select
-                                name="SlasSelect"
-                                id="SlasSelect"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="post.sla_id"
-                                [options]="slas"
-                                [showClear]="true"
-                                oitcFormError [errors]="errors" errorField="sla_id">
-                            </oitc-select>
-                            <oitc-form-feedback [errors]="errors"
-                                                errorField="sla_id"></oitc-form-feedback>
-                            <div class="help-block">
-                                {{ t('You can define service levels for all hosts using this host template.') }}
+                @if (PermissionsService.hasModuleObservable('SLAModule')|async) {
+                    <c-card class="mb-3">
+                        <c-card-header>
+                            <fa-icon [icon]="['fas', 'award']"></fa-icon>
+                            <span class="ms-1">
+                                {{ t('Service Level Agreement') }}
+                            </span>
+                        </c-card-header>
+                        <c-card-body>
+                            <div class="mb-3">
+                                <label cLabel for="SlasSelect">
+                                    <oitc-label-link
+                                        [objectId]="post.sla_id"
+                                        [route]="'/sla_module/slas/edit'"
+                                        [permissions]="'SLAModule.slas.edit'"
+                                    >
+                                        {{ t('Service class') }}
+                                    </oitc-label-link>
+                                </label>
+                                <oitc-select
+                                    name="SlasSelect"
+                                    id="SlasSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.sla_id"
+                                    [options]="slas"
+                                    [showClear]="true"
+                                    oitcFormError [errors]="errors" errorField="sla_id">
+                                </oitc-select>
+                                <oitc-form-feedback [errors]="errors"
+                                                    errorField="sla_id"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('You can define service levels for all hosts using this host template.') }}
+                                </div>
                             </div>
-                        </div>
-
-                    </c-card-body>
-                </c-card>
+                        </c-card-body>
+                    </c-card>
+                }
                 <!-- SLA CONFIGURATION END -->
 
 

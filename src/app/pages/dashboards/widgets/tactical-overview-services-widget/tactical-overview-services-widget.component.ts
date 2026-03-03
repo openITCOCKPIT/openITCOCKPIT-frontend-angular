@@ -10,7 +10,7 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
 import { ServicegroupsService } from '../../../servicegroups/servicegroups.service';
 import { TacticalOverviewServicesConfig } from './tactical-overview-services-widget.interface';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { RouterLink } from '@angular/router';
 import {
@@ -37,7 +37,6 @@ import { HostgroupsService } from '../../../hostgroups/hostgroups.service';
         ReactiveFormsModule,
         FormsModule,
         TranslocoDirective,
-        NgIf,
         FaIconComponent,
         AsyncPipe,
         RouterLink,
@@ -56,7 +55,6 @@ import { HostgroupsService } from '../../../hostgroups/hostgroups.service';
         FaStackComponent,
         FaStackItemSizeDirective,
         XsButtonDirective
-
     ],
     templateUrl: './tactical-overview-services-widget.component.html',
     styleUrl: './tactical-overview-services-widget.component.css',

@@ -22,15 +22,21 @@
     <c-card>
         <c-card-header>
             <h5 cCardTitle>{{ t('Downtime report') }}:
-                <small class="fw-300" *ngIf="selectedTab === DowntimereportsEnum.Edit">
-                    {{ t('Generator') }}
-                </small>
-                <small class="fw-300" *ngIf="report && selectedTab === DowntimereportsEnum.Calendar">
-                    {{ t('Calendar view') }}
-                </small>
-                <small class="fw-300" *ngIf="report && selectedTab === DowntimereportsEnum.PieChart">
-                    {{ t('Chart view') }}
-                </small>
+                @if (selectedTab === DowntimereportsEnum.Edit) {
+                    <small class="fw-300">
+                        {{ t('Generator') }}
+                    </small>
+                }
+                @if (report && selectedTab === DowntimereportsEnum.Calendar) {
+                    <small class="fw-300">
+                        {{ t('Calendar view') }}
+                    </small>
+                }
+                @if (report && selectedTab === DowntimereportsEnum.PieChart) {
+                    <small class="fw-300">
+                        {{ t('Chart view') }}
+                    </small>
+                }
             </h5>
 
             <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
@@ -43,31 +49,37 @@
                         {{ t('Generator') }}
                     </button>
                 </c-nav-item>
-                <c-nav-item *ngIf="report.downtimeReport">
-                    <button
-                        class="nav-link"
-                        [ngClass]="{'active': selectedTab === DowntimereportsEnum.Calendar}"
-                        (click)="changeTab(DowntimereportsEnum.Calendar)">
-                        <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
-                        {{ t('Calendar view') }}
-                    </button>
-                </c-nav-item>
-                <c-nav-item *ngIf="report.downtimeReport">
-                    <button
-                        class="nav-link"
-                        [ngClass]="{'active': selectedTab === DowntimereportsEnum.PieChart}"
-                        (click)="changeTab(DowntimereportsEnum.PieChart)">
-                        <fa-icon [icon]="['fas', 'pie-chart']"></fa-icon>
-                        {{ t('Chart view') }}
-                    </button>
-                </c-nav-item>
+                @if (report.downtimeReport) {
+                    <c-nav-item>
+                        <button
+                            class="nav-link"
+                            [ngClass]="{'active': selectedTab === DowntimereportsEnum.Calendar}"
+                            (click)="changeTab(DowntimereportsEnum.Calendar)">
+                            <fa-icon [icon]="['fas', 'calendar']"></fa-icon>
+                            {{ t('Calendar view') }}
+                        </button>
+                    </c-nav-item>
+                }
+                @if (report.downtimeReport) {
+                    <c-nav-item>
+                        <button
+                            class="nav-link"
+                            [ngClass]="{'active': selectedTab === DowntimereportsEnum.PieChart}"
+                            (click)="changeTab(DowntimereportsEnum.PieChart)">
+                            <fa-icon [icon]="['fas', 'pie-chart']"></fa-icon>
+                            {{ t('Chart view') }}
+                        </button>
+                    </c-nav-item>
+                }
             </c-nav>
         </c-card-header>
         <c-card-body>
-            <ng-container *ngIf="selectedTab === DowntimereportsEnum.Edit">
-                <c-alert color="info" *ngIf="errors['no_downtimes'] && errors['no_downtimes']['empty']">
-                    {{ errors['no_downtimes']['empty'] }}
-                </c-alert>
+            @if (selectedTab === DowntimereportsEnum.Edit) {
+                @if (errors['no_downtimes'] && errors['no_downtimes']['empty']) {
+                    <c-alert color="info">
+                        {{ errors['no_downtimes']['empty'] }}
+                    </c-alert>
+                }
                 <!-- EVALUATION -->
                 <label cLabel>
                     {{ t('Evaluation') }}
@@ -83,7 +95,6 @@
                             {{ t('Hosts') }}
                         </label>
                     </c-form-check>
-
                     <c-form-check [inline]="true">
                         <input cFormCheckInput type="radio" [value]="1"
                                id="evaluation_type1"
@@ -94,7 +105,6 @@
                         </label>
                     </c-form-check>
                 </div>
-
                 <!-- REPORT FORMAT DROPDOWN -->
                 <div class="mb-3">
                     <label cLabel for="post.report_format">
@@ -112,11 +122,10 @@
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="report_format"></oitc-form-feedback>
                 </div>
-
                 <!-- TIMEPERIOD DROPDOWN" -->
                 <div class="mb-3">
                     <label cLabel for="post.timeperiod_id">
-                        <ng-container *ngIf="post.timeperiod_id">
+                        @if (post.timeperiod_id) {
                             <a *oitcPermission="['timeperiods', 'edit']"
                                [routerLink]="['/', 'timeperiods', 'edit', post.timeperiod_id]">
                                 {{ t('Timeperiod') }}
@@ -124,10 +133,10 @@
                             <span *oitcPermission="['timeperiods', 'edit']; negate: true">
                                 {{ t('Timeperiod') }}
                             </span>
-                        </ng-container>
-                        <ng-container *ngIf="!post.timeperiod_id">
+                        }
+                        @if (!post.timeperiod_id) {
                             {{ t('Timeperiod') }}
-                        </ng-container>
+                        }
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
@@ -142,7 +151,6 @@
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="timeperiod_id"></oitc-form-feedback>
                 </div>
-
                 <!-- FROM DATE -->
                 <div class="mb-3">
                     <label cLabel for="post.from_date">
@@ -157,7 +165,6 @@
                            [(ngModel)]="post.from_date">
                     <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
                 </div>
-
                 <!-- TO DATE -->
                 <div class="mb-3">
                     <label cLabel for="post.to_date">
@@ -172,7 +179,6 @@
                            [(ngModel)]="post.to_date">
                     <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
                 </div>
-
                 <!-- REFLECTION STATE -->
                 <div class="mb-3">
                     <label cLabel for="post.reflection_state">
@@ -190,43 +196,40 @@
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="reflection_state"></oitc-form-feedback>
                 </div>
-
                 <!-- Dynamic color -->
-                <div class="mb-3" *ngIf="post.report_format === 2">
-
-                    <label cLabel for="post.reflection_state">
-                        {{ t('Dynamic color') }}
-                    </label>
-
-                    <c-form-check>
-                        <input cFormCheckInput
-                               name="dynamicColour"
-                               id="dynamicColour"
-                               type="checkbox"
-                               [(ngModel)]="dynamicColour"/>
-                        <label cFormCheckLabel for="dynamicColour">
-                            {{ t('Yes') }}
-                            <span class="margin-left-10 label-group-width-auto">
-                                <c-badge class="badge-medium" style="background:#00c851;">100%</c-badge>
-                                <c-badge class="badge-medium" style="background:#33c54b;">90%</c-badge>
-                                <c-badge class="badge-medium" style="background:#66c345;">80%</c-badge>
-                                <c-badge class="badge-medium" style="background:#94c140;">70%</c-badge>
-                                <c-badge class="badge-medium" style="background:#cabe3a;">60%</c-badge>
-                                <c-badge class="badge-medium" style="background:#ffbb33;">50%</c-badge>
-                                <c-badge class="badge-medium" style="background:#f79d2b;">40%</c-badge>
-                                <c-badge class="badge-medium" style="background:#eb721f;">30%</c-badge>
-                                <c-badge class="badge-medium" style="background:#e14c15;">20%</c-badge>
-                                <c-badge class="badge-medium" style="background:#d7260b;">10%</c-badge>
-                                <c-badge class="badge-medium" style="background:#cc0000;">0%</c-badge>
-                            </span>
+                @if (post.report_format === 2) {
+                    <div class="mb-3">
+                        <label cLabel for="post.reflection_state">
+                            {{ t('Dynamic color') }}
                         </label>
-                    </c-form-check>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="report && selectedTab === DowntimereportsEnum.Calendar">
-
+                        <c-form-check>
+                            <input cFormCheckInput
+                                   name="dynamicColour"
+                                   id="dynamicColour"
+                                   type="checkbox"
+                                   [(ngModel)]="dynamicColour"/>
+                            <label cFormCheckLabel for="dynamicColour">
+                                {{ t('Yes') }}
+                                <span class="margin-left-10 label-group-width-auto">
+                                    <c-badge class="badge-medium" style="background:#00c851;">100%</c-badge>
+                                    <c-badge class="badge-medium" style="background:#33c54b;">90%</c-badge>
+                                    <c-badge class="badge-medium" style="background:#66c345;">80%</c-badge>
+                                    <c-badge class="badge-medium" style="background:#94c140;">70%</c-badge>
+                                    <c-badge class="badge-medium" style="background:#cabe3a;">60%</c-badge>
+                                    <c-badge class="badge-medium" style="background:#ffbb33;">50%</c-badge>
+                                    <c-badge class="badge-medium" style="background:#f79d2b;">40%</c-badge>
+                                    <c-badge class="badge-medium" style="background:#eb721f;">30%</c-badge>
+                                    <c-badge class="badge-medium" style="background:#e14c15;">20%</c-badge>
+                                    <c-badge class="badge-medium" style="background:#d7260b;">10%</c-badge>
+                                    <c-badge class="badge-medium" style="background:#cc0000;">0%</c-badge>
+                                </span>
+                            </label>
+                        </c-form-check>
+                    </div>
+                }
+            }
+            @if (report && selectedTab === DowntimereportsEnum.Calendar) {
                 <full-calendar #fullCalendar [options]="calendarOptions()">
-
                     <!-- eventContent Content Injection -->
                     <!-- https://fullcalendar.io/docs/event-render-hooks-->
                     <ng-template #eventContent let-arg>
@@ -235,20 +238,28 @@
                             <div class="fc-event-title fc-sticky" [className]="arg.event.classNames"
                                  [title]="arg.event.title">
                                 {{ formatTime(arg.event.start.getTime()) }} - {{ formatTime(arg.event.end.getTime()) }}
-                                <i *ngIf="arg.event.extendedProps.type === 'host'"
-                                   class="fa fa-desktop"></i>
-                                <i *ngIf="arg.event.extendedProps.type === 'service'"
-                                   class="fa fa-cog"></i>
+                                @if (arg.event.extendedProps.type === 'host') {
+                                    <i
+                                        class="fa fa-desktop"></i>
+                                }
+                                @if (arg.event.extendedProps.type === 'service') {
+                                    <i
+                                        class="fa fa-cog"></i>
+                                }
                                 {{ arg.event.title }}
                             </div>
                             <ng-template #popoverHtml>
                                 <c-card>
                                     <c-card-header>
                                         <h6 cCardTitle>
-                                            <i *ngIf="arg.event.extendedProps.type === 'host'"
-                                               class="fa fa-desktop"></i>
-                                            <i *ngIf="arg.event.extendedProps.type === 'service'"
-                                               class="fa fa-cog"></i>
+                                            @if (arg.event.extendedProps.type === 'host') {
+                                                <i
+                                                    class="fa fa-desktop"></i>
+                                            }
+                                            @if (arg.event.extendedProps.type === 'service') {
+                                                <i
+                                                    class="fa fa-cog"></i>
+                                            }
                                             {{ arg.event.title }}
                                         </h6>
                                     </c-card-header>
@@ -263,76 +274,77 @@
                             </ng-template>
                         </div>
                     </ng-template>
-
                 </full-calendar>
-            </ng-container>
-            <ng-container *ngIf="report && selectedTab === DowntimereportsEnum.PieChart">
-                <c-card *ngIf="report.downtimeReport.hostsWithOutages" class="mb-3">
-                    <c-card-header>
-                        <h5 cCardTitle>
-
-                            <fa-stack [size]="'2xl'" class="me-2">
-                                <fa-icon [icon]="['fas', 'desktop']"
-                                         stackItemSize="1x"></fa-icon>
-                                <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
-                                         stackItemSize="1x"
-                                         [style.position]="'absolute'"
-                                         [style.bottom.px]="3"
-                                         transform="shrink-10 right-0"></fa-icon>
-                            </fa-stack>
-                            {{ t('Involved in outages (Hosts):') }}
-                        </h5>
-                    </c-card-header>
-                    <c-card-body>
-                        <ng-container
-                            *ngFor="let hostsWithOutages of report.downtimeReport.hostsWithOutages; let i = index">
-
-                            <oitc-hosts-bar-chart
-                                [chartId]="'host-bar-chart-' + i"
-                                [barChartData]="hostsWithOutages.hostBarChartData"></oitc-hosts-bar-chart>
-
-                            <oitc-host-availability-overview
-                                *ngFor="let host of hostsWithOutages.hosts"
-                                [host]="host"
-                                [evaluationType]="post.evaluation_type"
-                                [dynamicColour]="dynamicColour"
-                            />
-                        </ng-container>
-                    </c-card-body>
-                </c-card>
-                <c-card *ngIf="report.downtimeReport.hostsWithoutOutages" class="mb-3">
-                    <c-card-header>
-                        <h5 cCardTitle>
-                            <fa-stack [size]="'2xl'" class="me-2">
-                                <fa-icon [icon]="['fas', 'desktop']"
-                                         stackItemSize="1x"></fa-icon>
-                                <fa-icon [icon]="['fas', 'check-circle']" class="text-success"
-                                         stackItemSize="1x"
-                                         [style.position]="'absolute'"
-                                         [style.bottom.px]="3"
-                                         transform="shrink-10 right-0"></fa-icon>
-                            </fa-stack>
-
-                            {{ t('Hosts without outages:') }}
-                        </h5>
-                    </c-card-header>
-                    <c-card-body>
-                        <oitc-host-availability-overview
-                            *ngFor="let host of report.downtimeReport.hostsWithoutOutages.hosts"
-                            [host]="host"
-                            [evaluationType]="post.evaluation_type"
-                            [dynamicColour]="dynamicColour"
-                        />
-                    </c-card-body>
-                </c-card>
-            </ng-container>
+            }
+            @if (report && selectedTab === DowntimereportsEnum.PieChart) {
+                @if (report.downtimeReport.hostsWithOutages) {
+                    <c-card class="mb-3">
+                        <c-card-header>
+                            <h5 cCardTitle>
+                                <fa-stack [size]="'2xl'" class="me-2">
+                                    <fa-icon [icon]="['fas', 'desktop']"
+                                             stackItemSize="1x"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" class="text-danger"
+                                             stackItemSize="1x"
+                                             [style.position]="'absolute'"
+                                             [style.bottom.px]="3"
+                                             transform="shrink-10 right-0"></fa-icon>
+                                </fa-stack>
+                                {{ t('Involved in outages (Hosts):') }}
+                            </h5>
+                        </c-card-header>
+                        <c-card-body>
+                            @for (hostsWithOutages of report.downtimeReport.hostsWithOutages; track hostsWithOutages; let i = $index) {
+                                <oitc-hosts-bar-chart
+                                    [chartId]="'host-bar-chart-' + i"
+                                    [barChartData]="hostsWithOutages.hostBarChartData"></oitc-hosts-bar-chart>
+                                @for (host of hostsWithOutages.hosts; track host) {
+                                    <oitc-host-availability-overview
+                                        [host]="host"
+                                        [evaluationType]="post.evaluation_type"
+                                        [dynamicColour]="dynamicColour"
+                                    />
+                                }
+                            }
+                        </c-card-body>
+                    </c-card>
+                }
+                @if (report.downtimeReport.hostsWithoutOutages) {
+                    <c-card class="mb-3">
+                        <c-card-header>
+                            <h5 cCardTitle>
+                                <fa-stack [size]="'2xl'" class="me-2">
+                                    <fa-icon [icon]="['fas', 'desktop']"
+                                             stackItemSize="1x"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'check-circle']" class="text-success"
+                                             stackItemSize="1x"
+                                             [style.position]="'absolute'"
+                                             [style.bottom.px]="3"
+                                             transform="shrink-10 right-0"></fa-icon>
+                                </fa-stack>
+                                {{ t('Hosts without outages:') }}
+                            </h5>
+                        </c-card-header>
+                        <c-card-body>
+                            @for (host of report.downtimeReport.hostsWithoutOutages.hosts; track host) {
+                                <oitc-host-availability-overview
+                                    [host]="host"
+                                    [evaluationType]="post.evaluation_type"
+                                    [dynamicColour]="dynamicColour"
+                                />
+                            }
+                        </c-card-body>
+                    </c-card>
+                }
+            }
         </c-card-body>
-        <c-card-footer class="text-end" *ngIf="selectedTab === DowntimereportsEnum.Edit">
-
-            <button cButton type="button" color="primary" (click)="submit()">
-                {{ t('Create downtime report') }}
-            </button>
-        </c-card-footer>
+        @if (selectedTab === DowntimereportsEnum.Edit) {
+            <c-card-footer class="text-end">
+                <button cButton type="button" color="primary" (click)="submit()">
+                    {{ t('Create downtime report') }}
+                </button>
+            </c-card-footer>
+        }
     </c-card>
 
 </ng-container>

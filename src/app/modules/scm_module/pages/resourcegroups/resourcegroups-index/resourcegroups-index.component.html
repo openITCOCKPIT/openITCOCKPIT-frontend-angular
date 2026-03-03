@@ -273,8 +273,7 @@
                                             {{ resourcegroup.timeperiod?.name }}
                                         </oitc-label-link>
                                         <ul class="list-unstyled my-1 weekdays-ul-padding-inline-start">
-                                            @for (
-                                                timerange of resourcegroup.timeperiod?.timeperiod_timeranges; track $index) {
+                                            @for (timerange of resourcegroup.timeperiod?.timeperiod_timeranges; track $index) {
                                                 <li>
                                                     <div class="row">
                                                         <div class="col-5 p-0">
@@ -331,8 +330,7 @@
                                             <hr class="border-dashed my-1"/>
                                         }
                                         <ul class="mb-0 ms-1 ps-2 list-unstyled">
-                                            @for (
-                                                mailinglist_region_manager of resourcegroup.mailinglist_region_managers; track $index) {
+                                            @for (mailinglist_region_manager of resourcegroup.mailinglist_region_managers; track $index) {
                                                 <li>
                                                     <fa-icon [icon]="['fas', 'envelopes-bulk']"
                                                              [cTextColor]="'primary'"></fa-icon>
@@ -357,8 +355,7 @@
                                             <hr class="border-dashed my-1"/>
                                         }
                                         <ul class="mb-0 ms-1 ps-2 list-unstyled">
-                                            @for (
-                                                mailinglist_manager of resourcegroup.mailinglist_managers; track $index) {
+                                            @for (mailinglist_manager of resourcegroup.mailinglist_managers; track $index) {
                                                 <li>
                                                     <fa-icon [icon]="['fas', 'envelopes-bulk']"
                                                              [cTextColor]="'primary'"></fa-icon>

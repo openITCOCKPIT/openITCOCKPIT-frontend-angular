@@ -217,7 +217,9 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!satelliteSystemdowntimes"></oitc-table-loader>
+            @if (!satelliteSystemdowntimes) {
+                <oitc-table-loader></oitc-table-loader>
+            }
             <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
                    (matSortChange)="onSortChange($event)"
                    [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -255,64 +257,73 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody *ngIf="satelliteSystemdowntimes">
-                <tr *ngFor="let satelliteSystemdowntime of satelliteSystemdowntimes.all_satellite_recurring_downtimes">
-                    <td class="text-center">
-                        <div *ngIf="satelliteSystemdowntime.Satellite.allow_edit">
-                            <oitc-item-select
-                                *oitcPermission="['systemdowntimes', 'delete']"
-                                [disabled]="false"
-                                [item]="satelliteSystemdowntime"></oitc-item-select>
-                        </div>
-                    </td>
-                    <td class="word-break">
-                        {{ satelliteSystemdowntime.Satellite.name }}
-                    </td>
-                    <td>
-                        @if (satelliteSystemdowntime.Systemdowntime.downtimeTypeId == 1) {
-                            {{ t('Yes') }}
-                        } @else {
-                            {{ t('No') }}
+                @if (satelliteSystemdowntimes) {
+                    <tbody>
+                        @for (satelliteSystemdowntime of satelliteSystemdowntimes.all_satellite_recurring_downtimes; track satelliteSystemdowntime) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (satelliteSystemdowntime.Satellite.allow_edit) {
+                                        <div>
+                                            <oitc-item-select
+                                                *oitcPermission="['systemdowntimes', 'delete']"
+                                                [disabled]="false"
+                                                [item]="satelliteSystemdowntime"></oitc-item-select>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="word-break">
+                                    {{ satelliteSystemdowntime.Satellite.name }}
+                                </td>
+                                <td>
+                                    @if (satelliteSystemdowntime.Systemdowntime.downtimeTypeId == 1) {
+                                        {{ t('Yes') }}
+                                    } @else {
+                                        {{ t('No') }}
+                                    }
+                                </td>
+                                <td>
+                                    {{ satelliteSystemdowntime.Systemdowntime.author }}
+                                </td>
+                                <td>
+                                    <span class="text-muted">
+                                        AUTO[{{ satelliteSystemdowntime.Systemdowntime.id }}]:
+                                    </span>
+                                    {{ satelliteSystemdowntime.Systemdowntime.comment }}
+                                </td>
+                                <td>
+                                    {{ satelliteSystemdowntime.Systemdowntime.weekdaysHuman.join(', ') }}
+                                </td>
+                                <td>
+                                    {{ satelliteSystemdowntime.Systemdowntime.dayOfMonth.join(', ') }}
+                                </td>
+                                <td>
+                                    {{ satelliteSystemdowntime.Systemdowntime.startTime }}
+                                </td>
+                                <td>
+                                    {{ satelliteSystemdowntime.Systemdowntime.duration }}
+                                </td>
+                                <td>
+                                    @if (satelliteSystemdowntime.Satellite.allow_edit) {
+                                        <div>
+                                            <button (click)="toggleDeleteAllModal(satelliteSystemdowntime)"
+                                                    *oitcPermission="['downtimes', 'delete']"
+                                                    cButton class="ripple" color="danger" size="xs">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </button>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
                         }
-                    </td>
-                    <td>
-                        {{ satelliteSystemdowntime.Systemdowntime.author }}
-                    </td>
-                    <td>
-                        <span class="text-muted">
-                            AUTO[{{ satelliteSystemdowntime.Systemdowntime.id }}]:
-                        </span>
-                        {{ satelliteSystemdowntime.Systemdowntime.comment }}
-                    </td>
-                    <td>
-                        {{ satelliteSystemdowntime.Systemdowntime.weekdaysHuman.join(', ') }}
-                    </td>
-                    <td>
-                        {{ satelliteSystemdowntime.Systemdowntime.dayOfMonth.join(', ') }}
-                    </td>
-                    <td>
-                        {{ satelliteSystemdowntime.Systemdowntime.startTime }}
-                    </td>
-                    <td>
-                        {{ satelliteSystemdowntime.Systemdowntime.duration }}
-                    </td>
-                    <td>
-                        <div *ngIf="satelliteSystemdowntime.Satellite.allow_edit">
-                            <button (click)="toggleDeleteAllModal(satelliteSystemdowntime)"
-                                    *oitcPermission="['downtimes', 'delete']"
-                                    cButton class="ripple" color="danger" size="xs">
-                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                {{ t('Delete') }}
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
+                    </tbody>
+                }
             </table>
-            <oitc-no-records
-                *ngIf="satelliteSystemdowntimes && satelliteSystemdowntimes.all_satellite_recurring_downtimes.length === 0"></oitc-no-records>
-            <ng-container
-                *ngIf="satelliteSystemdowntimes && satelliteSystemdowntimes.all_satellite_recurring_downtimes">
+            @if (satelliteSystemdowntimes && satelliteSystemdowntimes.all_satellite_recurring_downtimes.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (satelliteSystemdowntimes && satelliteSystemdowntimes.all_satellite_recurring_downtimes) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -333,14 +344,15 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
             <c-container [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="satelliteSystemdowntimes"
-                            [paginateOrScroll]="satelliteSystemdowntimes"></oitc-paginate-or-scroll>
+                        @if (satelliteSystemdowntimes) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="satelliteSystemdowntimes"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

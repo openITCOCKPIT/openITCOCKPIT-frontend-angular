@@ -10,7 +10,7 @@ import {
 import {
     AcknowledgementIconComponent
 } from '../../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
     ColComponent,
     ContainerComponent,
@@ -81,7 +81,6 @@ import { HostsBrowserModalService } from '../../../hosts/hosts-browser/hosts-bro
         InputGroupTextDirective,
         MatSort,
         MatSortHeader,
-        NgIf,
         NgSelectComponent,
         NoRecordsComponent,
         ReactiveFormsModule,

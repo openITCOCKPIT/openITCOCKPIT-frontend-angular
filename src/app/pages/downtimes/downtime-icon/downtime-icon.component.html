@@ -24,12 +24,12 @@
                         </c-row>
                     } @else {
                         <h3 class="popover-header">
-                            <ng-container *ngIf="type === 'hosts'">
+                            @if (type === 'hosts') {
                                 {{ t('The host is currently in a planned maintenance period') }}
-                            </ng-container>
-                            <ng-container *ngIf="type === 'services'">
+                            }
+                            @if (type === 'services') {
                                 {{ t('The service is currently in a planned maintenance period') }}
-                            </ng-container>
+                            }
                         </h3>
                         <div class="popover-body">
                             <dl class="row">

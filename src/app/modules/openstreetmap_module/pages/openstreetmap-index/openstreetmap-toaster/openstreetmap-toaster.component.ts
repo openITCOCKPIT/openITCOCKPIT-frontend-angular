@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
 
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
     ColComponent,
     ProgressBarComponent,
@@ -25,8 +25,6 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'oitc-openstreetmap-toaster',
     imports: [
-        NgIf,
-        NgFor,
         ProgressBarComponent,
         ProgressComponent,
         ToastBodyComponent,

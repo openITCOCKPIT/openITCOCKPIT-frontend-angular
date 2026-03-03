@@ -51,13 +51,13 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                            name="post.Satellite.container_id"
-                            id="post.Satellite.container_id"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.Satellite.container_id"
-                            [options]="containers"
-                            oitcFormError [errors]="errors" errorField="container_id">
+                        name="post.Satellite.container_id"
+                        id="post.Satellite.container_id"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.Satellite.container_id"
+                        [options]="containers"
+                        oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                 </div>
@@ -119,12 +119,12 @@
                         <oitc-required-icon/>
                     </label>
                     <oitc-select
-                            name="post.Satellite.sync_method"
-                            id="post.Satellite.sync_method"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.Satellite.sync_method"
-                            [options]="syncMethods"
+                        name="post.Satellite.sync_method"
+                        id="post.Satellite.sync_method"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.Satellite.sync_method"
+                        [options]="syncMethods"
                     >
                     </oitc-select>
                     <div class="help-block">
@@ -134,8 +134,7 @@
                     </div>
                 </div>
 
-                <ng-container *ngIf="post.Satellite.sync_method === 'https_pull'">
-
+                @if (post.Satellite.sync_method === 'https_pull') {
                     <!-- URL -->
                     <div class="mb-3">
                         <label cLabel for="post.frontendUrl">
@@ -144,16 +143,20 @@
                         </label>
                         <c-input-group>
                             <c-dropdown variant="btn-group">
-                                <button *ngIf="post.protocol === 'http'"
+                                @if (post.protocol === 'http') {
+                                    <button
                                         cButton cDropdownToggle color="primary">
-                                    <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                                    {{ t('HTTP') }}
-                                </button>
-                                <button *ngIf="post.protocol === 'https'"
+                                        <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+                                        {{ t('HTTP') }}
+                                    </button>
+                                }
+                                @if (post.protocol === 'https') {
+                                    <button
                                         cButton cDropdownToggle color="primary">
-                                    <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                                    {{ t('HTTPS') }}
-                                </button>
+                                        <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                                        {{ t('HTTPS') }}
+                                    </button>
+                                }
                                 <ul cDropdownMenu>
                                     <li cDropdownItem (click)="setUrlProtocol('http')">
                                         <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
@@ -186,7 +189,6 @@
                         </c-input-group>
                         <oitc-form-feedback [errors]="errors" errorField="url"></oitc-form-feedback>
                     </div>
-
                     <!-- Verify Certificate -->
                     <div class="mb-3">
                         <c-form-check>
@@ -205,7 +207,6 @@
                             </label>
                         </c-form-check>
                     </div>
-
                     <!-- Use Proxy -->
                     <div class="mb-3">
                         <c-form-check>
@@ -227,25 +228,30 @@
                             </div>
                         </c-form-check>
                     </div>
-
                     <!-- Proxy URL -->
                     <div class="mb-3">
                         <label cLabel for="this.post.proxyUrl">
                             {{ t('Proxy URL') }}
-                            <oitc-required-icon *ngIf="post.Satellite.use_proxy"/>
+                            @if (post.Satellite.use_proxy) {
+                                <oitc-required-icon/>
+                            }
                         </label>
                         <c-input-group>
                             <c-dropdown>
-                                <button *ngIf="post.proxyProtocol === 'http'"
+                                @if (post.proxyProtocol === 'http') {
+                                    <button
                                         cButton cDropdownToggle color="primary">
-                                    <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
-                                    {{ t('HTTP') }}
-                                </button>
-                                <button *ngIf="post.proxyProtocol === 'https'"
+                                        <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+                                        {{ t('HTTP') }}
+                                    </button>
+                                }
+                                @if (post.proxyProtocol === 'https') {
+                                    <button
                                         cButton cDropdownToggle color="primary">
-                                    <fa-icon [icon]="['fas', 'lock']"></fa-icon>
-                                    {{ t('HTTPS') }}
-                                </button>
+                                        <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                                        {{ t('HTTPS') }}
+                                    </button>
+                                }
                                 <ul cDropdownMenu>
                                     <li cDropdownItem (click)="setProxyProtocol('http')">
                                         <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
@@ -272,18 +278,15 @@
                         </c-input-group>
                         <oitc-form-feedback [errors]="errors" errorField="proxy_url"></oitc-form-feedback>
                     </div>
+                }
 
-
-                </ng-container>
-
-                <ng-container *ngIf="post.Satellite.sync_method !== 'ssh'">
+                @if (post.Satellite.sync_method !== 'ssh') {
                     <!-- API Key -->
                     <div class="mb-3">
                         <label cLabel for="post.Satellite.api_key">
                             {{ t('API Key') }}
                             <oitc-required-icon/>
                         </label>
-
                         <c-input-group>
                             <input cFormControl
                                    required
@@ -300,9 +303,7 @@
                         </c-input-group>
                         <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
                     </div>
-
-                    <ng-container *ngIf="post.Satellite.sync_method === 'https_pull'">
-
+                    @if (post.Satellite.sync_method === 'https_pull') {
                         <!-- interval -->
                         <div class="mb-3">
                             <label cLabel for="post.Satellite.interval">
@@ -321,8 +322,7 @@
                                 {{ t('Time interval in seconds the master system will pickup check results') }}
                             </div>
                         </div>
-                    </ng-container>
-
+                    }
                     <!-- Timeout -->
                     <div class="mb-3">
                         <label cLabel for="post.Satellite.timeout">
@@ -341,9 +341,9 @@
                             {{ t('Time limit in seconds which defines when the satellite should be marked as OFFLINE .') }}
                         </div>
                     </div>
-                </ng-container>
+                }
 
-                <ng-container *ngIf="post.Satellite.sync_method === 'ssh'">
+                @if (post.Satellite.sync_method === 'ssh') {
                     <!-- Login -->
                     <div class="mb-3">
                         <label cLabel for="post.Satellite.login">
@@ -360,7 +360,6 @@
                                oitcFormError [errors]="errors" errorField="login">
                         <oitc-form-feedback [errors]="errors" errorField="login"></oitc-form-feedback>
                     </div>
-
                     <!-- Port -->
                     <div class="mb-3">
                         <label cLabel for="post.Satellite.port">
@@ -380,8 +379,6 @@
                             {{ t('SSH port of remote machine.') }}
                         </div>
                     </div>
-
-
                     <!-- Private Key Path -->
                     <div class="mb-3">
                         <label cLabel for="post.Satellite.private_key_path">
@@ -401,8 +398,6 @@
                             {{ t('We will use a default path to private key if this field left empty') }}
                         </div>
                     </div>
-
-
                     <!-- Remote Port -->
                     <div class="mb-3">
                         <label cLabel for="post.Satellite.remote_port">
@@ -422,7 +417,7 @@
                             {{ t('Gearman port of remote machine.') }}
                         </div>
                     </div>
-                </ng-container>
+                }
 
                 <!-- Time zone -->
                 <div class="mb-3">

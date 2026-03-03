@@ -100,10 +100,10 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-code-mirror-container [macros]="{'defaultMacros': defaultMacros, 'macros': macros}">
-                        <textarea cFormControl id="commandLine"
-                                  name="command_line"
-                                  oitcFormError [errors]="errors" errorField="command_line"
-                                  [(ngModel)]="post.command_line"></textarea>
+                <textarea cFormControl id="commandLine"
+                          name="command_line"
+                          oitcFormError [errors]="errors" errorField="command_line"
+                          [(ngModel)]="post.command_line"></textarea>
                     </oitc-code-mirror-container>
                     <oitc-form-feedback [errors]="errors" errorField="command_line"></oitc-form-feedback>
 
@@ -141,41 +141,45 @@
                     <h5>{{ t('Arguments') }}:</h5>
                 </c-form-check>
 
-                <div class="row"
-                     *ngFor="let argument of post.commandarguments; let i = index; trackBy: trackByIndex">
-                    <div class="col-12">
-                        <div class="row mb-2">
-                            <div class="col-lg-1">
-                                <div class="text-purple argname-margin-top">
-                                    {{ argument.name }}
+                @for (argument of post.commandarguments; track trackByIndex(i, argument); let i = $index) {
+                    <div class="row"
+                    >
+                        <div class="col-12">
+                            <div class="row mb-2">
+                                <div class="col-lg-1">
+                                    <div class="text-purple argname-margin-top">
+                                        {{ argument.name }}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-10 form-group">
-                                <label class="form-label">
-                                    {{ t('Name') }}
-                                </label>
-                                <input class="form-control w-100" type="text"
-                                       [placeholder]="'Please enter a name' | transloco"
-                                       name="human_name_{{i}}"
-                                       [(ngModel)]="argument.human_name">
-                            </div>
-                            <div class="col-md-1 col-lg-1">
-                                <a class="btn btn-danger ripple command-delete-margin-top"
-                                   href="javascript:void(0);"
-                                   (click)="removeArgument(i)">
-                                    <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
-                                </a>
+                                <div class="col-lg-10 form-group">
+                                    <label class="form-label">
+                                        {{ t('Name') }}
+                                    </label>
+                                    <input class="form-control w-100" type="text"
+                                           [placeholder]="'Please enter a name' | transloco"
+                                           name="human_name_{{i}}"
+                                           [(ngModel)]="argument.human_name">
+                                </div>
+                                <div class="col-md-1 col-lg-1">
+                                    <a class="btn btn-danger ripple command-delete-margin-top"
+                                       href="javascript:void(0);"
+                                       (click)="removeArgument(i)">
+                                        <fa-icon [icon]="['fas', 'trash']" size="lg"></fa-icon>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
 
                 <div class="row mt-3">
                     <div class="col-12 col-md-6 text-danger">
-                        <div *ngIf="post.commandarguments.length > 0">
-                            <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
-                            {{ t('empty arguments will be removed automatically ') }}
-                        </div>
+                        @if (post.commandarguments.length > 0) {
+                            <div>
+                                <fa-icon [icon]="['fas', 'exclamation-circle']"></fa-icon>
+                                {{ t('empty arguments will be removed automatically ') }}
+                            </div>
+                        }
                     </div>
                     <div class="col-12 col-md-6 text-end">
                         <button cButton class="ripple" color="success" size="xs" type="button"
@@ -237,19 +241,23 @@
                     <strong>{{ argumentMissmatch.definedCommandArguments.length }}</strong>&nbsp;
                 </div>
 
-                <div class="col-12 pt-2" *ngIf="argumentMissmatch.missingArgumentDefenitions.length > 0">
-                    {{
-                        t('Used in command line, but missing in arguments definition')
-                    }}
-                    <code>{{ argumentMissmatch.missingArgumentDefenitions.join(', ') }}</code>&nbsp;
-                </div>
+                @if (argumentMissmatch.missingArgumentDefenitions.length > 0) {
+                    <div class="col-12 pt-2">
+                        {{
+                            t('Used in command line, but missing in arguments definition')
+                        }}
+                        <code>{{ argumentMissmatch.missingArgumentDefenitions.join(', ') }}</code>&nbsp;
+                    </div>
+                }
 
-                <div class="col-12 pt-2" *ngIf="argumentMissmatch.missingArgumentUsageInCommandLine.length > 0">
-                    {{
-                        t('Defined in arguments definition, but not used in command line')
-                    }}
-                    <code>{{ argumentMissmatch.missingArgumentUsageInCommandLine.join(', ') }}</code>&nbsp;
-                </div>
+                @if (argumentMissmatch.missingArgumentUsageInCommandLine.length > 0) {
+                    <div class="col-12 pt-2">
+                        {{
+                            t('Defined in arguments definition, but not used in command line')
+                        }}
+                        <code>{{ argumentMissmatch.missingArgumentUsageInCommandLine.join(', ') }}</code>&nbsp;
+                    </div>
+                }
 
 
             </div>

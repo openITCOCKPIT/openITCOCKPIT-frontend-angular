@@ -7,10 +7,10 @@ import { TableDirective } from '@coreui/angular';
 @Component({
     selector: 'oitc-table-loader',
     imports: [
-    TableModule,
-    SkeletonModule,
-    TableDirective
-],
+        TableModule,
+        SkeletonModule,
+        TableDirective
+    ],
     templateUrl: './table-loader.component.html',
     styleUrl: './table-loader.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

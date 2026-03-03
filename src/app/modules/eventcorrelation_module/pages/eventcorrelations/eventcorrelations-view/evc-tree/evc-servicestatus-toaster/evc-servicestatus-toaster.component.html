@@ -28,42 +28,47 @@
 
                                     <div class="align-self-center flex-1 font-h4 ms-2">
                                         {{ t('Host') }}
-                                        <span class="text-danger" *ngIf="result && result.host.disabled">
-                                            {{ t(' (DISABLED)') }}
-                                        </span>
+                                        @if (result && result.host.disabled) {
+                                            <span class="text-danger">
+                                                {{ t(' (DISABLED)') }}
+                                            </span>
+                                        }
                                     </div>
                                 </div>
                             </header>
 
-                            <oitc-toaster-loader *ngIf="!result"></oitc-toaster-loader>
-                            <table cTable bordered hover small [striped]="true" class="small pt-1" *ngIf="result">
-                                <tbody>
-                                <tr>
-                                    <td>{{ t('Host name') }}</td>
-                                    <td>
-                                        <oitc-label-link
-                                            [objectId]="result.host.id"
-                                            [route]="'/hosts/browser'"
-                                            [permissions]="'hosts.browser'"
-                                        >
-                                            {{ result.host.name }}
-                                        </oitc-label-link>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>{{ t('Last check') }}</td>
-                                    <td>{{ result.hoststatus.lastCheck }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ t('Output') }}</td>
-                                    <td>
-                                        <div class="word-break"
-                                             [innerHTML]="String(result.hoststatus.outputHtml) | trustAsHtml "></div>
-                                    </td>
-                                </tr>
-                                </tbody>
-
-                            </table>
+                            @if (!result) {
+                                <oitc-toaster-loader></oitc-toaster-loader>
+                            }
+                            @if (result) {
+                                <table cTable bordered hover small [striped]="true" class="small pt-1">
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ t('Host name') }}</td>
+                                        <td>
+                                            <oitc-label-link
+                                                [objectId]="result.host.id"
+                                                [route]="'/hosts/browser'"
+                                                [permissions]="'hosts.browser'"
+                                            >
+                                                {{ result.host.name }}
+                                            </oitc-label-link>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Last check') }}</td>
+                                        <td>{{ result.hoststatus.lastCheck }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Output') }}</td>
+                                        <td>
+                                            <div class="word-break"
+                                                 [innerHTML]="String(result.hoststatus.outputHtml) | trustAsHtml "></div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            }
                         </c-col>
                     </c-row>
 
@@ -81,63 +86,69 @@
 
                                     <div class="align-self-center flex-1 font-h4 ms-2">
                                         {{ t('Service') }}
-                                        <span class="text-danger" *ngIf="result && result.service.disabled">
-                                            {{ t(' (DISABLED)') }}
-                                        </span>
+                                        @if (result && result.service.disabled) {
+                                            <span class="text-danger">
+                                                {{ t(' (DISABLED)') }}
+                                            </span>
+                                        }
                                     </div>
                                 </div>
                             </header>
 
-                            <oitc-toaster-loader *ngIf="!result"></oitc-toaster-loader>
-                            <table cTable bordered hover small [striped]="true" class="small pt-1" *ngIf="result">
-                                <tbody>
-                                <tr>
-                                    <td>{{ t('Service name') }}</td>
-                                    <td>
-                                        <oitc-label-link
-                                            [objectId]="result.service.id"
-                                            [route]="'/services/browser'"
-                                            [permissions]="'services.browser'"
-                                        >
-                                            {{ result.service.servicename }}
-                                        </oitc-label-link>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>{{ t('Description') }}</td>
-                                    <td>{{ result.service.description }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ t('Current attempt') }}</td>
-                                    <td>{{ result.servicestatus.current_check_attempt }}
-                                        /{{ result.servicestatus.max_check_attempts }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>{{ t('Last check') }}</td>
-                                    <td>{{ result.servicestatus.lastCheck }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ t('Next check') }}</td>
-                                    <td>{{ result.servicestatus.nextCheck }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ t('Last state change') }}</td>
-                                    <td>{{ result.servicestatus.last_state_change }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ t('Output') }}</td>
-                                    <td>
-                                        <div class="word-break"
-                                             [innerHTML]="String(result.servicestatus.outputHtml) | trustAsHtml "></div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>{{ t('Perfdata') }}</td>
-                                    <td>{{ result.servicestatus.perfdata }}</td>
-                                </tr>
-                                </tbody>
-                            </table>
+                            @if (!result) {
+                                <oitc-toaster-loader></oitc-toaster-loader>
+                            }
+                            @if (result) {
+                                <table cTable bordered hover small [striped]="true" class="small pt-1">
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ t('Service name') }}</td>
+                                        <td>
+                                            <oitc-label-link
+                                                [objectId]="result.service.id"
+                                                [route]="'/services/browser'"
+                                                [permissions]="'services.browser'"
+                                            >
+                                                {{ result.service.servicename }}
+                                            </oitc-label-link>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Description') }}</td>
+                                        <td>{{ result.service.description }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Current attempt') }}</td>
+                                        <td>{{ result.servicestatus.current_check_attempt }}
+                                            /{{ result.servicestatus.max_check_attempts }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Last check') }}</td>
+                                        <td>{{ result.servicestatus.lastCheck }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Next check') }}</td>
+                                        <td>{{ result.servicestatus.nextCheck }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Last state change') }}</td>
+                                        <td>{{ result.servicestatus.last_state_change }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Output') }}</td>
+                                        <td>
+                                            <div class="word-break"
+                                                 [innerHTML]="String(result.servicestatus.outputHtml) | trustAsHtml "></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ t('Perfdata') }}</td>
+                                        <td>{{ result.servicestatus.perfdata }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            }
                         </c-col>
                     </c-row>
 

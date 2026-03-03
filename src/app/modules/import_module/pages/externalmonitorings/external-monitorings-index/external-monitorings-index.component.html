@@ -106,105 +106,119 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <oitc-table-loader *ngIf="!externalMonitorings"></oitc-table-loader>
-            <table *ngIf="externalMonitorings" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="ExternalMonitorings.name">
-                        {{ t('Name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="ExternalMonitorings.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('System type') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Container') }}
-                    </th>
-
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let externalMonitoring of externalMonitorings.externalMonitorings">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['importmodule','externalmonitorings', 'delete']"
-                            [disabled]="!externalMonitoring.allowEdit"
-                            [item]="externalMonitoring"></oitc-item-select>
-
-                    </td>
-                    <td>
-                        <span *oitcPermission="['importmodule','externalmonitorings', 'edit']">
-                            @if (externalMonitoring.allowEdit) {
-                                <a [routerLink]="['/', 'import_module', 'ExternalMonitorings', 'edit',externalMonitoring.id]">
-                                    {{ externalMonitoring.name }}
-                                </a>
-                            } @else {
-                                {{ externalMonitoring.name }}
-                            }
-                        </span>
-                        <span *oitcPermission="['importmodule','externalmonitorings', 'edit']; negate: true">
-                            {{ externalMonitoring.name }}
-                        </span>
-                    </td>
-                    <td>{{ externalMonitoring.description }}</td>
-                    <td>
-                        <span class="badge border border-info text-info fw-light"
-                              *ngIf="externalMonitoring.system_type">
-                            {{ externalMonitoring.system_type }}
-                        </span>
-                    </td>
-                    <td> {{ externalMonitoring.container }}</td>
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'ImportModule.ExternalMonitorings.edit'"
-                                             [icon]="['fas', 'cog']"
-                                             [url]="'/import_module/ExternalMonitorings/edit/' + externalMonitoring.id">
-                            <oitc-actions-button-element [permission]="'ImportModule.ExternalMonitorings.edit'"
-                                                         *ngIf="externalMonitoring.allowEdit"
+            @if (!externalMonitorings) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (externalMonitorings) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="ExternalMonitorings.name">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="ExternalMonitorings.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('System type') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Container') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (externalMonitoring of externalMonitorings.externalMonitorings; track externalMonitoring) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['importmodule','externalmonitorings', 'delete']"
+                                        [disabled]="!externalMonitoring.allowEdit"
+                                        [item]="externalMonitoring"></oitc-item-select>
+                                </td>
+                                <td>
+                                    <span *oitcPermission="['importmodule','externalmonitorings', 'edit']">
+                                        @if (externalMonitoring.allowEdit) {
+                                            <a [routerLink]="['/', 'import_module', 'ExternalMonitorings', 'edit',externalMonitoring.id]">
+                                                {{ externalMonitoring.name }}
+                                            </a>
+                                        } @else {
+                                            {{ externalMonitoring.name }}
+                                        }
+                                    </span>
+                                    <span
+                                        *oitcPermission="['importmodule','externalmonitorings', 'edit']; negate: true">
+                                        {{ externalMonitoring.name }}
+                                    </span>
+                                </td>
+                                <td>{{ externalMonitoring.description }}</td>
+                                <td>
+                                    @if (externalMonitoring.system_type) {
+                                        <span class="badge border border-info text-info fw-light"
+                                        >
+                                            {{ externalMonitoring.system_type }}
+                                        </span>
+                                    }
+                                </td>
+                                <td> {{ externalMonitoring.container }}</td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'ImportModule.ExternalMonitorings.edit'"
+                                                         [icon]="['fas', 'cog']"
                                                          [url]="'/import_module/ExternalMonitorings/edit/' + externalMonitoring.id">
-                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            @if (externalMonitoring.system_type === ExternalMonitoringSystems.FlowChief && externalMonitoring.allowEdit) {
-                                <oitc-actions-button-element
-                                    [permission]="'ImportModule.ExternalMonitorings.flowchiefNodeSelection'"
-                                    [url]="'/import_module/ExternalMonitorings/flowchiefNodeSelection/' + externalMonitoring.id">
-                                    <fa-icon [icon]="['fas', 'folder-tree']"></fa-icon>
-                                    {{ t('Select FlowChef Nodes') }}
-                                </oitc-actions-button-element>
-                            }
-                            <oitc-actions-button-element [permission]="'ImportModule.importchangelogs.index'"
-                                                         [url]="'/import_module/import_changelogs/entity/ExternalMonitoring/' + externalMonitoring.id">
-                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                {{ t('Changelog') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(externalMonitoring)"
-                                                         *ngIf="externalMonitoring.allowEdit"
-                                                         [permission]="'ImportModule.importedhostgroups.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                                        @if (externalMonitoring.allowEdit) {
+                                            <oitc-actions-button-element
+                                                [permission]="'ImportModule.ExternalMonitorings.edit'"
+                                                [url]="'/import_module/ExternalMonitorings/edit/' + externalMonitoring.id">
+                                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        @if (externalMonitoring.system_type === ExternalMonitoringSystems.FlowChief && externalMonitoring.allowEdit) {
+                                            <oitc-actions-button-element
+                                                [permission]="'ImportModule.ExternalMonitorings.flowchiefNodeSelection'"
+                                                [url]="'/import_module/ExternalMonitorings/flowchiefNodeSelection/' + externalMonitoring.id">
+                                                <fa-icon [icon]="['fas', 'folder-tree']"></fa-icon>
+                                                {{ t('Select FlowChef Nodes') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element
+                                            [permission]="'ImportModule.importchangelogs.index'"
+                                            [url]="'/import_module/import_changelogs/entity/ExternalMonitoring/' + externalMonitoring.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider></li>
+                                        @if (externalMonitoring.allowEdit) {
+                                            <oitc-actions-button-element
+                                                (click)="toggleDeleteAllModal(externalMonitoring)"
+                                                [permission]="'ImportModule.importedhostgroups.delete'">
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-            <oitc-no-records
-                *ngIf="externalMonitorings && externalMonitorings.externalMonitorings.length === 0"></oitc-no-records>
-            <ng-container *ngIf="externalMonitorings">
+            @if (externalMonitorings && externalMonitorings.externalMonitorings.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (externalMonitorings) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -224,7 +238,7 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">

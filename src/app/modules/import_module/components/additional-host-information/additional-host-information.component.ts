@@ -14,7 +14,7 @@ import { ExternalSystemsService } from '../../pages/externalsystems/external-sys
 import { AdditionalHostInformationResult } from '../../pages/externalsystems/external-systems.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { NgIf } from '@angular/common';
+
 import { IdoitOverviewComponent } from './idoit/idoit-overview/idoit-overview.component';
 import { ItopOverviewComponent } from './itop/itop-overview/itop-overview.component';
 
@@ -23,7 +23,6 @@ import { ItopOverviewComponent } from './itop/itop-overview/itop-overview.compon
     imports: [
         TranslocoDirective,
         TableLoaderComponent,
-        NgIf,
         IdoitOverviewComponent,
         ItopOverviewComponent
     ],

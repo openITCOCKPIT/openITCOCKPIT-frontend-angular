@@ -38,7 +38,7 @@ import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ROOT_CONTAINER } from '../../changelogs/object-types.enum';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { ContainersLoadContainersByStringParams } from '../../containers/containers.interface';
-import { NgIf } from '@angular/common';
+
 import _, { parseInt } from 'lodash';
 import { PermissionLevel } from '../../users/permission-level';
 
@@ -79,8 +79,7 @@ import { PermissionLevel } from '../../users/permission-level';
         RowComponent,
         ColComponent,
         FormCheckComponent,
-        FormCheckLabelDirective,
-        NgIf
+        FormCheckLabelDirective
     ],
     templateUrl: './usercontainerroles-add.component.html',
     styleUrl: './usercontainerroles-add.component.css',

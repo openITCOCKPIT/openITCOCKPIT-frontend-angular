@@ -62,10 +62,12 @@
                         oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
 
-                    <div *ngIf="post.container_id === null || (post.container_id && post.container_id < 0)"
-                         class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
+                    @if (post.container_id === null || ( post.container_id && post.container_id < 0 )) {
+                        <div
+                            class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                 </div>
 
@@ -178,13 +180,17 @@
                 <div class="mb-3">
                     <label cLabel for="SlaTimeperiod">
                         @if (this.PermissionsService.hasPermissionObservable(['timeperiods', 'edit'])|async) {
-                            <a *ngIf="post.timeperiod_id && post.timeperiod_id > 0"
-                               [routerLink]="['/', 'timeperiods', 'edit', post.timeperiod_id]">
-                                {{ t('Operating time') }}
-                            </a>
-                            <span *ngIf="!post.timeperiod_id">
-                                {{ t('Operating time') }}
-                            </span>
+                            @if (post.timeperiod_id && post.timeperiod_id > 0) {
+                                <a
+                                    [routerLink]="['/', 'timeperiods', 'edit', post.timeperiod_id]">
+                                    {{ t('Operating time') }}
+                                </a>
+                            }
+                            @if (!post.timeperiod_id) {
+                                <span>
+                                    {{ t('Operating time') }}
+                                </span>
+                            }
                         } @else {
                             {{ t('Operating time') }}
                         }
@@ -205,8 +211,10 @@
                         </oitc-select>
                         <span cInputGroupText>
                             @if (this.PermissionsService.hasPermissionObservable(['timeperiods', 'viewdetails'])|async) {
-                                <oitc-timeperiod-details-tooltip [timeperiodId]="post.timeperiod_id"
-                                                                 *ngIf="post.timeperiod_id != null"></oitc-timeperiod-details-tooltip>
+                                @if (post.timeperiod_id != null) {
+                                    <oitc-timeperiod-details-tooltip [timeperiodId]="post.timeperiod_id"
+                                    ></oitc-timeperiod-details-tooltip>
+                                }
                                 <fa-icon [icon]="['fas', 'clock']"
                                          [hidden]="post.timeperiod_id && post.timeperiod_id > 0"></fa-icon>
                             } @else {

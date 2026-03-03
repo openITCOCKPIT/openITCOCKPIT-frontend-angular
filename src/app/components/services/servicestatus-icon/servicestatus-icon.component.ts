@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { TooltipDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoService } from '@jsverse/transloco';
@@ -8,7 +8,7 @@ import { ServicestatusObject } from '../../../pages/services/services.interface'
 
 @Component({
     selector: 'oitc-servicestatus-icon',
-    imports: [NgClass, NgIf, TooltipDirective, FaIconComponent],
+    imports: [NgClass, TooltipDirective, FaIconComponent],
     templateUrl: './servicestatus-icon.component.html',
     styleUrl: './servicestatus-icon.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

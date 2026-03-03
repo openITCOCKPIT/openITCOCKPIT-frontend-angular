@@ -43,13 +43,15 @@
                 </c-nav>
             </c-card-header>
             <c-card-body>
-                <c-alert color="warning" *ngIf="post.container_id == ROOT_CONTAINER">
-                    <h4 cAlertHeading>
-                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                        {{ t('/root container selected!') }}
-                    </h4>
-                    <p>{{ t('Choosing a tenant container is recommended for later permission purposes') }}</p>
-                </c-alert>
+                @if (post.container_id == ROOT_CONTAINER) {
+                    <c-alert color="warning">
+                        <h4 cAlertHeading>
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                            {{ t('/root container selected!') }}
+                        </h4>
+                        <p>{{ t('Choosing a tenant container is recommended for later permission purposes') }}</p>
+                    </c-alert>
+                }
 
                 <div class="mb-3">
                     <label cLabel for="container_id">
@@ -66,9 +68,11 @@
                         oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-                    <div *ngIf="post.container_id === 0" class="text-warning-glow pt-1">
-                        {{ t('Please select a container.') }}
-                    </div>
+                    @if (post.container_id === 0) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
                 </div>
 
                 <div class="mb-3">

@@ -30,7 +30,9 @@
                       'tab-allocated': tab.dashboard_tab_allocation?.id || !tab.isOwner,
                       'tab-shared-and-allocated-gradient': tab.shared && tab.dashboard_tab_allocation?.id
                       }">
-                            <fa-icon [icon]="['fas', 'thumbtack']" *ngIf="tab.pinned"></fa-icon>
+                            @if (tab.pinned) {
+                                <fa-icon [icon]="['fas', 'thumbtack']"></fa-icon>
+                            }
                             {{ tab.name }}
                         </span>
 
@@ -44,28 +46,34 @@
                                 </span>
                             </li>
                             @if (( PermissionsService.hasPermissionObservable(['DashboardAllocations', 'add'])|async ) && ( PermissionsService.hasPermissionObservable(['DashboardAllocations', 'edit'])|async )) {
-                                <li *ngIf="tab.isOwner" class="cursor-pointer"
-                                    (click)="allocateDashboard(tab)">
-                                    <span cDropdownItem>
-                                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                        {{ t('Allocate Dashboard') }}
+                                @if (tab.isOwner) {
+                                    <li class="cursor-pointer"
+                                        (click)="allocateDashboard(tab)">
+                                        <span cDropdownItem>
+                                            <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                            {{ t('Allocate Dashboard') }}
+                                        </span>
+                                    </li>
+                                }
+                            }
+                            @if (!tab.shared) {
+                                <li>
+                                    <span cDropdownItem class="cursor-pointer"
+                                          (click)="startSharing(tab.id)">
+                                        <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+                                        {{ t('Start sharing') }}
                                     </span>
                                 </li>
                             }
-                            <li *ngIf="!tab.shared">
-                                <span cDropdownItem class="cursor-pointer"
-                                      (click)="startSharing(tab.id)">
-                                    <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
-                                    {{ t('Start sharing') }}
-                                </span>
-                            </li>
-                            <li *ngIf="tab.shared">
-                                <span cDropdownItem class="cursor-pointer"
-                                      (click)="stopSharing(tab.id)">
-                                    <fa-icon [icon]="['fas', 'code-merge']"></fa-icon>
-                                    {{ t('Stop sharing') }}
-                                </span>
-                            </li>
+                            @if (tab.shared) {
+                                <li>
+                                    <span cDropdownItem class="cursor-pointer"
+                                          (click)="stopSharing(tab.id)">
+                                        <fa-icon [icon]="['fas', 'code-merge']"></fa-icon>
+                                        {{ t('Stop sharing') }}
+                                    </span>
+                                </li>
+                            }
                             <li cDropdownDivider></li>
                             <li>
                                 <span cDropdownItem
@@ -80,7 +88,7 @@
                 </c-nav-item>
             } @else {
                 <!-- For users who got this tab by allocation (no drop down menu with options)
-                     Or the this tab is currently not displayed as we only add the dropdown menu to the current tab -->
+                Or the this tab is currently not displayed as we only add the dropdown menu to the current tab -->
                 <c-nav-item cdkDrag [cdkDragDisabled]="tab.pinned">
                     <span class="nav-link"
                           [ngClass]="{
@@ -91,7 +99,9 @@
                       'tab-shared-and-allocated-gradient': tab.shared && tab.dashboard_tab_allocation?.id
                       }"
                           (click)="changeTab(tab.id)">
-                        <fa-icon [icon]="['fas', 'thumbtack']" *ngIf="tab.pinned"></fa-icon>
+                        @if (tab.pinned) {
+                            <fa-icon [icon]="['fas', 'thumbtack']"></fa-icon>
+                        }
                         {{ tab.name }}
                     </span>
                 </c-nav-item>
