@@ -292,12 +292,12 @@
                                         {{ t('Services') }}
                                     </h6>
                                 </legend>
-                                @if (evcTree[this.modalVService.current_evc.layerIndex - 1] && modalVService.current_evc.evc_node_id) {
-                                    @for (service of evcTree[this.modalVService.current_evc.layerIndex - 1][modalVService.current_evc.evc_node_id]; track $index) {
+                                @if (modalVService.current_evc.service_scrores) {
+                                    @for (service of modalVService.current_evc.service_scrores; track service) {
                                         <c-row class="pb-1"
                                                [ngClass]="{odd: $index % 2 === 0, even: $index % 2 !== 0}">
                                             <c-col [xs]="12" [md]="12" [lg]="6">
-                                                {{ service.service.host.name }}/{{ service.service.servicename }}
+                                                {{ service.display_name }}
                                             </c-col>
                                             <c-col [xs]="12" [md]="12" [lg]="2">
                                                 <c-input-group sizing="sm">
@@ -306,8 +306,9 @@
                                                                  [cTextColor]="'warning'"></fa-icon>
                                                     </span>
                                                     <input cFormControl type="number"
-                                                           [name]="'score_warning_' + service.id"
-                                                           [ngModel]="service.score_warning"
+                                                           [id]="'score_warning_' + service.service_id + '_'+$index"
+                                                           [name]="'score_warning_' + service.service_id + '_'+$index"
+                                                           [(ngModel)]="service.score_warning"
                                                            [placeholder]="'Warning score' | transloco"/>
                                                 </c-input-group>
                                             </c-col>
@@ -318,8 +319,8 @@
                                                                  [cTextColor]="'danger'"></fa-icon>
                                                     </span>
                                                     <input cFormControl type="number"
-                                                           [name]="'score_critical_' + service.id"
-                                                           [ngModel]="service.score_critical"
+                                                           [name]="'score_critical_' + service.service_id"
+                                                           [(ngModel)]="service.score_critical"
                                                            [placeholder]="'Critical score' | transloco"/>
                                                 </c-input-group>
                                             </c-col>
@@ -330,8 +331,8 @@
                                                                  [cTextColor]="'secondary'"></fa-icon>
                                                     </span>
                                                     <input cFormControl type="number"
-                                                           [name]="'score_unknown_' + service.id"
-                                                           [ngModel]="service.score_unknown"
+                                                           [name]="'score_unknown_' + service.service_id"
+                                                           [(ngModel)]="service.score_unknown"
                                                            [placeholder]="'Unknown score' | transloco"/>
                                                 </c-input-group>
                                             </c-col>

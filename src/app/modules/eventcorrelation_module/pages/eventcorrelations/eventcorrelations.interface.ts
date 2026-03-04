@@ -241,6 +241,13 @@ export interface EventcorrelationsEditCorrelationRoot {
     _csrfToken: string | null
 }
 
+export interface EvcModalServiceScore {
+    service_id: number | string
+    display_name: string
+    score_warning: number | null
+    score_critical: number | null
+    score_unknown: number | null
+}
 
 export interface EvcModalService {
     servicename: string
@@ -263,6 +270,7 @@ export interface EvcModalService {
         mode: EvcVServiceModalMode
         evc_node_id?: string | number // edit only
         old_service_ids?: (number | string)[] // edit only // 1 or 2_vService
+        service_scrores: EvcModalServiceScore[] // The server only use this data for validation.
     }
 }
 
@@ -285,7 +293,8 @@ export function getDefaultEvcModalService(evcId: number, layerIndex: number): Ev
         current_evc: {
             id: evcId,
             layerIndex: layerIndex,
-            mode: 'add'
+            mode: 'add',
+            service_scrores: []
         }
     }
 }
