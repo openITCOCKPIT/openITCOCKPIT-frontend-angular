@@ -58,6 +58,7 @@ import { paloAltoModuleRoutes } from './modules/palo_alto_module/palo_alto_modul
 import { msWindowsAgentlessModuleRoutes } from './modules/mswindowsagentless_module/mswindowsagentless_module.routes';
 import { kubernetesModuleRoutes } from './modules/kubernetes_module/kubernetes_module.routes';
 import { broadcomModuleRoutes } from './modules/broadcom_module/broadcom_module.routes';
+import { redfishModuleRoutes } from './modules/redfish_module/redfish_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -137,6 +138,7 @@ const moduleRoutes: Routes = [
     ...paloAltoModuleRoutes,
     ...kubernetesModuleRoutes,
     ...broadcomModuleRoutes,
+    ...redfishModuleRoutes,
     ...msWindowsAgentlessModuleRoutes
 ];
 /***    Core routes   ***/
