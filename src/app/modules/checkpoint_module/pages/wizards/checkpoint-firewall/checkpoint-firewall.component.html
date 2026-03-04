@@ -14,7 +14,7 @@
                 </a></li>
             <li aria-current="page" class="breadcrumb-item active">
                 <fa-icon [icon]="['fas', 'shield']"></fa-icon>
-                {{ t('Palo Alto Firewall') }}
+                {{ t('Checkpoint Firewall') }}
             </li>
         </ol>
     </nav>
@@ -22,7 +22,7 @@
     <c-card>
         <c-card-header>
             <h5 cCardTitle>
-                {{ t('Configuration Wizard: Palo Alto Firewall') }}
+                {{ t('Configuration Wizard: Checkpoint Firewall') }}
             </h5>
         </c-card-header>
         <c-card-body class="p-0">
@@ -39,7 +39,7 @@
                     class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Configure SNMP for Palo Alto Firewall Monitoring') }}
+                        {{ t('Configure SNMP for Checkpoint Firewall Monitoring') }}
                     </span>
                 </div>
                 <div class="col-lg-6 wizard-bg-inactive d-inline-flex">
@@ -109,13 +109,16 @@
                         <oitc-form-feedback [errors]="errors" errorField="securityLevel"></oitc-form-feedback>
                         <div class="help-block text-primary-light">
                             @if (post.securityLevel === '1') {
-                                <span>{{ t('Communication with authentication and privacy. The protocols used for Authentication are MD5 and SHA and for Privacy, DES (Data Encryption Standard) and AES (Advanced Encryption Standard).') }}</span>
+                                <span
+                                >{{ t('Communication with authentication and privacy. The protocols used for Authentication are MD5 and SHA and for Privacy, DES (Data Encryption Standard) and AES (Advanced Encryption Standard).') }}</span>
                             }
                             @if (post.securityLevel === '2') {
-                                <span>{{ t('Communication with authentication and without privacy. The protocols used for Authentication are MD5 and SHA (Secure Hash Algorithm).') }}</span>
+                                <span
+                                >{{ t('Communication with authentication and without privacy. The protocols used for Authentication are MD5 and SHA (Secure Hash Algorithm).') }}</span>
                             }
                             @if (post.securityLevel === '3') {
-                                <span>{{ t('Communication without authentication and privacy.') }}</span>
+                                <span
+                                >{{ t('Communication without authentication and privacy.') }}</span>
                             }
                         </div>
                     </div>
@@ -225,7 +228,7 @@
                 [(post)]="post.services"
                 [errors]="errors"
                 [titleErrorField]="'services'"
-                [title]="'SNMP services'|transloco"
+                [title]="'Checkpoint Firewall services'|transloco"
             />
 
 

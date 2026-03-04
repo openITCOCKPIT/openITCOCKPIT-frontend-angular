@@ -59,6 +59,8 @@ import { msWindowsAgentlessModuleRoutes } from './modules/mswindowsagentless_mod
 import { kubernetesModuleRoutes } from './modules/kubernetes_module/kubernetes_module.routes';
 import { broadcomModuleRoutes } from './modules/broadcom_module/broadcom_module.routes';
 import { redfishModuleRoutes } from './modules/redfish_module/redfish_module.routes';
+import { checkpointModuleRoutes } from './modules/checkpoint_module/checkpoint_module.routes';
+
 
 @Component({
     selector: 'legacy-redirect',
@@ -139,7 +141,8 @@ const moduleRoutes: Routes = [
     ...kubernetesModuleRoutes,
     ...broadcomModuleRoutes,
     ...redfishModuleRoutes,
-    ...msWindowsAgentlessModuleRoutes
+    ...msWindowsAgentlessModuleRoutes,
+    ...checkpointModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
