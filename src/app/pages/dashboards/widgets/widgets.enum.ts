@@ -30,6 +30,8 @@ export enum WidgetTypes {
     WebsiteWidget = 18,
     StatuspagegroupWidget = 37,
     OrganizationalchartsWidget = 38,
+    DelayedPassiveHostsWidget = 39,
+    DelayedPassiveServicesWidget = 40,
 
     // MapModule Widgets.php (Core Module)
     MapWidget = 100,

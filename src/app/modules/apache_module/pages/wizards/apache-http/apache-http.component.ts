@@ -8,9 +8,9 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
-import { ApacheHttpWizardPost } from './apache-http-wizard.interface';
 import { ApacheHttpWizardService } from './apache-http-wizard.service';
 import { RouterLink } from '@angular/router';
+import { WizardPost } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-apache-http',
@@ -38,9 +38,9 @@ export class ApacheHttpComponent extends WizardsAbstractComponent {
     protected override WizardService: ApacheHttpWizardService = inject(ApacheHttpWizardService);
     public checked: boolean = false;
 
-    protected override post: ApacheHttpWizardPost = {
+    protected override post: WizardPost = {
         host_id: 0,
         services: [],
-    } as ApacheHttpWizardPost;
+    } as WizardPost;
 
 }

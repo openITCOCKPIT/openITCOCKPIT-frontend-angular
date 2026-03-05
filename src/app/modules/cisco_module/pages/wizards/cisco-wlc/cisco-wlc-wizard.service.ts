@@ -2,15 +2,16 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { WizardsService } from '../../../../../pages/wizards/wizards.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { CiscoWlcWizardGet, CiscoWlcWizardPost } from './cisco-wlc-wizard.interface';
+import { CiscoWlcWizardPost } from './cisco-wlc-wizard.interface';
+import { WizardGet } from '../../../../../pages/wizards/wizards.interface';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CiscoWlcWizardService extends WizardsService {
-    public fetch(hostId: number): Observable<CiscoWlcWizardGet> {
-        return this.http.get<CiscoWlcWizardGet>(`${this.proxyPath}/cisco_module/wizards/cisco_wlc/${hostId}.json?angular=true`).pipe(
-            map((data: CiscoWlcWizardGet): CiscoWlcWizardGet => {
+    public fetch(hostId: number): Observable<WizardGet> {
+        return this.http.get<WizardGet>(`${this.proxyPath}/cisco_module/wizards/cisco_wlc/${hostId}.json?angular=true`).pipe(
+            map((data: WizardGet): WizardGet => {
                 return data;
             })
         );

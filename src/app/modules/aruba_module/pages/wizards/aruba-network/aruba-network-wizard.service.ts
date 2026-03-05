@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { WizardsService } from '../../../../../pages/wizards/wizards.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { ArubaNetworkWizardPost } from './aruba-network-wizard.interface';
-import { WizardGet } from '../../../../../pages/wizards/wizards.interface';
+import { SNMPWizardPost, WizardGet } from '../../../../../pages/wizards/wizards.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +17,7 @@ export class ArubaNetworkWizardService extends WizardsService {
         );
     }
 
-    public submit(post: ArubaNetworkWizardPost): Observable<GenericResponseWrapper> {
+    public submit(post: SNMPWizardPost): Observable<GenericResponseWrapper> {
         return this.http.post<any>(`${this.proxyPath}/aruba_module/wizards/arubaNetwork.json?angular=true`, post)
             .pipe(
                 map(data => {

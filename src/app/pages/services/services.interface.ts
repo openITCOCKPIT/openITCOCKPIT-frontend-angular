@@ -241,6 +241,8 @@ export interface ServiceObject {
     hostname: string
     description: any
     active_checks_enabled: boolean
+    checkIntervalHuman?: string
+    delayedHuman?: string
     tags?: string
     host_id: number
     allow_edit: boolean

@@ -24,6 +24,8 @@ export interface HostObject {
     description?: string
     hosttemplate_id?: number
     active_checks_enabled?: boolean
+    checkIntervalHuman?: string
+    delayedHuman?: string
     satelliteId?: number
     containerId?: number
     containerIds?: number[]
