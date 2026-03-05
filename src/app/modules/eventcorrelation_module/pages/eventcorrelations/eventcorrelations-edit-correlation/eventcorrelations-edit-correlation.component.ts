@@ -73,6 +73,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { FormsModule } from '@angular/forms';
 import { ScoreThresholdsComponent } from '../../../components/score-thresholds/score-thresholds.component';
 import { NgClass } from '@angular/common';
+import { ScoreSumPipe } from './score-sum.pipe';
 
 @Component({
     selector: 'oitc-eventcorrelations-edit-correlation',
@@ -115,7 +116,8 @@ import { NgClass } from '@angular/common';
         ScoreThresholdsComponent,
         InputGroupTextDirective,
         TranslocoPipe,
-        NgClass
+        NgClass,
+        ScoreSumPipe
     ],
     templateUrl: './eventcorrelations-edit-correlation.component.html',
     styleUrl: './eventcorrelations-edit-correlation.component.css',

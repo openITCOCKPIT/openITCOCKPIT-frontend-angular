@@ -295,7 +295,7 @@
                                 @if (modalVService.current_evc.service_scrores) {
                                     @for (service of modalVService.current_evc.service_scrores; track service) {
                                         <c-row class="pb-1"
-                                               [ngClass]="{odd: $index % 2 === 0, even: $index % 2 !== 0}">
+                                               [ngClass]="{odd: $odd, even: $even}">
                                             <c-col [xs]="12" [md]="12" [lg]="6">
                                                 {{ service.display_name }}
                                             </c-col>
@@ -338,6 +338,22 @@
                                             </c-col>
                                         </c-row>
                                     }
+                                    <c-row class="pt-1 pb-1"
+                                           [ngClass]="{odd: modalVService.current_evc.service_scrores.length % 2 === 1, even: modalVService.current_evc.service_scrores.length % 2 === 0}">
+                                        <c-col [xs]="12" [md]="12" [lg]="6" class="text-end"
+                                               [title]="'Sum' | transloco">
+                                            &Sigma;
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="12" [lg]="2" class="text-center">
+                                            {{ modalVService.current_evc.service_scrores | scoreSum:'warning' }}
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="12" [lg]="2" class="text-center">
+                                            {{ modalVService.current_evc.service_scrores | scoreSum:'critical' }}
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="12" [lg]="2" class="text-center">
+                                            {{ modalVService.current_evc.service_scrores | scoreSum:'unknown' }}
+                                        </c-col>
+                                    </c-row>
                                 }
                             </fieldset>
                         }
