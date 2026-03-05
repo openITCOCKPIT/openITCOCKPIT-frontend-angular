@@ -76,7 +76,7 @@ body.dark-theme :host .evc-summary-disabled-service {
     bottom: 1px;
     font-size: 14px;
     /*text-shadow: 1px 1px #7d7d7d;*/
-    font-family: "Courier New", monospace;
+    font-family: monospace, 'Courier New', Arial;
     text-transform: uppercase;
     color: #FFFFFF;
 }
@@ -85,7 +85,7 @@ body.dark-theme :host .evc-summary-disabled-service {
     padding: 5px 10px 5px 20px;
     display: inline-block;
     font-size: 13px;
-    font-family: 'Courier New', Arial;
+    font-family: monospace, 'Courier New', Arial;
     color: #FFFFFF;
 }
 
@@ -99,6 +99,11 @@ body.dark-theme :host .evc-summary-disabled-service {
 }
 
 .operator-color {
+    color: #FFFFFF;
+}
+
+.operator-color-emoji {
+    /* Disable colors for the score emoji and make it white https://stackoverflow.com/a/39776303/11885414 */
     color: transparent;
-    text-shadow: 0 0 0 var(--cui-body-color);
+    text-shadow: 0 0 0 #FFFFFF;
 }
