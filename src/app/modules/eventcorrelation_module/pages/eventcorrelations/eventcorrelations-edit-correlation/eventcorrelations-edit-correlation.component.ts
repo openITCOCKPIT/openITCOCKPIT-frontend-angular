@@ -5,6 +5,7 @@ import {
     EvcDeleteNodeDetails,
     EvcEditVServiceValidationResult,
     EvcModalService,
+    EvcModalServiceScore,
     EvcServiceSelect,
     EvcToggleModal,
     EvcTree,
@@ -300,7 +301,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                 mode: 'edit',
                 evc_node_id: eventCorrelation.id,
                 old_service_ids: this.getServicesIdsByLayerIndexAndParentId(layerIndexToLoadServicesFrom, eventCorrelation.id),
-                service_scrores: [], // todo load from tree on edit like above
+                service_scrores: this.getServiceScoresForCurrentVService(layerIndexToLoadServicesFrom, eventCorrelation.id)
             }
         };
 
@@ -450,32 +451,13 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
      */
     private getParsedOperator(operatorString: string | null): {
         operator: EventcorrelationOperators | null,
-        modifier: number,
-        operator_warning_min: null,
-        operator_warning_max: null,
-        operator_critical_min: null,
-        operator_critical_max: null,
-        operator_unknown_min: null,
-        operator_unknown_max: null,
-        score_warning: null,
-        score_critical: null,
-        score_unknown: null,
-
+        modifier: number
     } {
 
         if (operatorString === null) {
             return {
                 operator: null,
-                modifier: 0,
-                operator_warning_min: null,
-                operator_warning_max: null,
-                operator_critical_min: null,
-                operator_critical_max: null,
-                operator_unknown_min: null,
-                operator_unknown_max: null,
-                score_warning: null,
-                score_critical: null,
-                score_unknown: null
+                modifier: 0
             };
         }
 
@@ -487,32 +469,14 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                 //min1, min 10, min300
                 return {
                     operator: EventcorrelationOperators.MIN,
-                    modifier: parseInt(operatorString.substring(3), 10),
-                    operator_warning_min: null,
-                    operator_warning_max: null,
-                    operator_critical_min: null,
-                    operator_critical_max: null,
-                    operator_unknown_min: null,
-                    operator_unknown_max: null,
-                    score_warning: null,
-                    score_critical: null,
-                    score_unknown: null,
+                    modifier: parseInt(operatorString.substring(3), 10)
                 };
 
             default:
                 //AND, OR, EQ
                 return {
                     operator: operatorString as EventcorrelationOperators,
-                    modifier: 0,
-                    operator_warning_min: null,
-                    operator_warning_max: null,
-                    operator_critical_min: null,
-                    operator_critical_max: null,
-                    operator_unknown_min: null,
-                    operator_unknown_max: null,
-                    score_warning: null,
-                    score_critical: null,
-                    score_unknown: null,
+                    modifier: 0
                 };
         }
     }
@@ -906,6 +870,38 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                     }
                 }
 
+                // ITC-3587 Update scoring thresholds from the modal
+                // The scoring values for each service is stored in the service itself on the previous layer (left side of the operator).
+                // When a service in the layerIndex === 1 gets edited, the server returns the complete new service
+                // object for layer 0.
+                // When a service in the layerIndex > 1 gets edited, the server does not return the complete new service object.
+                // To have the same behavior for all layers, we patch the scoring values manually for all layers.
+                // We have to the same in add mode anyways.
+                let isScoringOperator: boolean = false;
+                if (this.modalVService && [EventcorrelationOperators.SCORESCLALARGREATER,
+                    EventcorrelationOperators.SCORESCLALARLESSER,
+                    EventcorrelationOperators.SCORERANGEINCLUSIVE,
+                    EventcorrelationOperators.SCORERANGEINCLUSIVE].includes(this.modalVService.operator as EventcorrelationOperators)) {
+                    isScoringOperator = true;
+                }
+                if (isScoringOperator && this.modalVService && this.modalVService.current_evc.service_scrores.length > 0) {
+                    // Now we need to find the services in the previous layer (left side) and update the scores
+                    let previousLayerIndex = this.modalVService.current_evc.layerIndex - 1;
+                    this.modalVService.current_evc.service_scrores.forEach((service_scrore) => {
+
+                        for (let parentEvcId in this.evcTree[previousLayerIndex]) {
+                            for (let k in this.evcTree[previousLayerIndex][parentEvcId]) {
+                                //Find the evcNode by the given id
+                                if (this.evcTree[previousLayerIndex][parentEvcId][k].service_id == service_scrore.service_id) {
+                                    this.evcTree[previousLayerIndex][parentEvcId][k].score_warning = service_scrore.score_warning;
+                                    this.evcTree[previousLayerIndex][parentEvcId][k].score_critical = service_scrore.score_critical;
+                                    this.evcTree[previousLayerIndex][parentEvcId][k].score_unknown = service_scrore.score_unknown;
+                                }
+                            }
+                        }
+                    });
+                }
+
 
                 // Important for the Angular Change Detection
                 // Signals Need to be Immutable
@@ -1210,7 +1206,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             this.modalVService.current_evc.service_scrores = [];
         }
 
-        // Add selected services to services_scopes array
+        // ITC-3587 Add selected services to services_scopes array
         if (this.modalVService.service_ids) {
             for (let serviceId of this.modalVService.service_ids) {
 
@@ -1246,5 +1242,33 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                 return false;
             });
         }
+    }
+
+    /**
+     * Used to get the configured values from the services to build the score matrix in edit modal.
+     * This loads the values from the left side of the operator.
+     *
+     * @param layerIndex
+     * @param vServiceId
+     * @private
+     */
+    private getServiceScoresForCurrentVService(layerIndex: number, vServiceId: string | number): EvcModalServiceScore[] {
+        let scores: EvcModalServiceScore[] = [];
+
+        if (!this.evcTree[layerIndex][vServiceId]) {
+            return scores;
+        }
+
+        for (let service of this.evcTree[layerIndex][vServiceId]) {
+            scores.push({
+                service_id: service.service_id,
+                display_name: service.service.host.name + '/' + service.service.servicename,
+                score_warning: service.score_warning,
+                score_critical: service.score_critical,
+                score_unknown: service.score_unknown
+            });
+        }
+
+        return scores;
     }
 }
