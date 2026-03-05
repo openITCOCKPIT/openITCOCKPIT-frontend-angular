@@ -80,7 +80,7 @@
                                                          EventcorrelationOperators.SCORESCLALARLESSER,
                                                          EventcorrelationOperators.SCORERANGEINCLUSIVE,
                                                          EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(column.operator)) {
-                                    {{ 'score' | transloco }} ⚖️
+                                    {{ 'score' | transloco }} <span class="operator-color-emoji">⚖️</span>
                                 } @else {
                                     {{ column.operator }}
                                 }
