@@ -9,6 +9,7 @@ import {
     inject,
     input,
     InputSignal,
+    OnDestroy,
     OnInit,
     ViewChild
 } from '@angular/core';
@@ -18,6 +19,8 @@ import { TranslocoService } from '@jsverse/transloco';
 import { Helplines } from '../../pages/mapeditors/mapeditors.interface';
 import { Map } from '../../pages/maps/maps.interface';
 import { BackgroundItemComponent } from '../background-item/background-item.component';
+import { fromEvent, Observable, Subscription } from 'rxjs';
+
 
 @Component({
     selector: 'oitc-map-canvas',
@@ -30,13 +33,15 @@ import { BackgroundItemComponent } from '../background-item/background-item.comp
     styleUrl: './map-canvas.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapCanvasComponent implements OnInit, AfterViewInit {
+export class MapCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('mapCanvasContainer', {static: true}) canvasContainerRef!: ElementRef<HTMLDivElement>;
     @ViewChild('backgroundImageContainer', {static: true}) backgroundImageRef!: ElementRef<HTMLDivElement>;
     @ContentChild(BackgroundItemComponent) backgroundItem!: BackgroundItemComponent;
 
     private cdr = inject(ChangeDetectorRef);
     private readonly TranslocoService = inject(TranslocoService);
+    private resizeObservable$?: Observable<Event>;
+    private readonly subscriptions: Subscription = new Subscription();
 
     public helplines = input<Helplines>({enabled: true, size: 15});
     public map = input<Map | null | undefined>();
@@ -62,7 +67,15 @@ export class MapCanvasComponent implements OnInit, AfterViewInit {
         });
     }
 
+    ngOnDestroy(): void {
+        this.subscriptions?.unsubscribe()
+    }
+
     public ngOnInit(): void {
+        this.resizeObservable$ = fromEvent(window, 'resize');
+        this.subscriptions.add(this.resizeObservable$.subscribe(e => {
+            this.setCanvasMinHeight();
+        }));
         this.updateBackgroundSizeAndPosition();
     }
 
