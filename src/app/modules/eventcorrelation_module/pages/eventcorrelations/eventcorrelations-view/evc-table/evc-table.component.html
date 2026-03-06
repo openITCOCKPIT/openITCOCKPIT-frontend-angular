@@ -23,16 +23,41 @@
 
                             @if (Number(column.scheduledDowntimeDepth) > 0 || column.problemHasBeenAcknowledged) {
                                 <span
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary z-1">
                                     @if (Number(column.scheduledDowntimeDepth) > 0) {
-                                        <fa-icon [icon]="['fas', 'power-off']" size="lg" class="me-1"
-                                        ></fa-icon>
+                                        <fa-icon [icon]="['fas', 'power-off']" size="lg" class="me-1"></fa-icon>
                                     }
                                     @if (column.problemHasBeenAcknowledged) {
-                                        <fa-icon [icon]="['far', 'user']"
-                                        ></fa-icon>
+                                        <fa-icon [icon]="['far', 'user']"></fa-icon>
                                     }
                                 </span>
+                            }
+
+                            @if (column.isUsedInScoringOperator) {
+                                @if (column.current_state === 0) {
+                                    <span
+                                        class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-ok z-1">
+                                        0
+                                    </span>
+                                }
+                                @if (column.current_state === 1) {
+                                    <span
+                                        class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-warning z-1">
+                                        {{ column.score_warning | localNumber }}
+                                    </span>
+                                }
+                                @if (column.current_state === 2) {
+                                    <span
+                                        class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-critical z-1">
+                                        {{ column.score_critical | localNumber }}
+                                    </span>
+                                }
+                                @if (column.current_state === 3) {
+                                    <span
+                                        class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-unknown z-1">
+                                        {{ column.score_unknown | localNumber }}
+                                    </span>
+                                }
                             }
 
                             <div class="evc-summary-first-layser-service code-font">
@@ -84,9 +109,35 @@
                                 } @else {
                                     {{ column.operator }}
                                 }
-
                             </div>
                             <span class="evc-summary-vservice">{{ column.serviceName }}</span>
+
+                            @if (column.isUsedInScoringOperator) {
+                                @if (column.current_state === 0) {
+                                    <span
+                                        class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-dark ok z-1">
+                                        0
+                                    </span>
+                                }
+                                @if (column.current_state === 1) {
+                                    <span
+                                        class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-dark warning z-1">
+                                        {{ column.score_warning | localNumber }}
+                                    </span>
+                                }
+                                @if (column.current_state === 2) {
+                                    <span
+                                        class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-darak critical z-1">
+                                        {{ column.score_critical | localNumber }}
+                                    </span>
+                                }
+                                @if (column.current_state === 3) {
+                                    <span
+                                        class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-dark text-white z-1">
+                                        {{ column.score_unknown | localNumber }}
+                                    </span>
+                                }
+                            }
                         </td>
                     }
 

@@ -1,5 +1,5 @@
 .evc-summary-table {
-    border-spacing: 5px;
+    border-spacing: 10px; /* was 5px until ITC-3587 */
     border-collapse: separate;
 }
 

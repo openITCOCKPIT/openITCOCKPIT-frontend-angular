@@ -14,6 +14,7 @@ import {
     EvcServicestatusToasterService
 } from '../evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.service';
 import { EventcorrelationOperators } from '../../eventcorrelations.enum';
+import { LocalNumberPipe } from '../../../../../../pipes/local-number.pipe';
 
 @Component({
     selector: 'oitc-evc-table',
@@ -26,7 +27,8 @@ import { EventcorrelationOperators } from '../../eventcorrelations.enum';
         NgClass,
         FaIconComponent,
         TooltipDirective,
-        EvcServicestatusToasterComponent
+        EvcServicestatusToasterComponent,
+        LocalNumberPipe
     ],
     templateUrl: './evc-table.component.html',
     styleUrl: './evc-table.component.css',
