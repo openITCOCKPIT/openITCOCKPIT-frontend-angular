@@ -106,6 +106,7 @@ export interface EvcTreeItem {
     score_warning: number | null
     score_critical: number | null
     score_unknown: number | null
+    isUsedInScoringOperator?: boolean
 
     service: EvcService,
     usedBy?: string[], //editCorrelation only
