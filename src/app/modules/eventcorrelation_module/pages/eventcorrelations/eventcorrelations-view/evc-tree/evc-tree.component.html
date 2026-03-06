@@ -132,6 +132,38 @@
                             </span>
                         }
 
+                        <!-- Display scoring value if available -->
+                        @if (node.evcNode.scoringInformation && node.evcNode.scoringInformation.isUsedInScoringOperator) {
+                            <!-- warning score -->
+                            @if (node.evcNode.service?.servicestatus?.currentState === 0) {
+                                <span
+                                    class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-ok">
+                                    0
+                                </span>
+                            }
+                            <!-- warning score -->
+                            @if (node.evcNode.service?.servicestatus?.currentState === 1) {
+                                <span
+                                    class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-warning">
+                                    {{ node.evcNode.scoringInformation.score_warning |localNumber }}
+                                </span>
+                            }
+                            <!-- critical score -->
+                            @if (node.evcNode.service?.servicestatus?.currentState === 2) {
+                                <span
+                                    class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-critical">
+                                    {{ node.evcNode.scoringInformation.score_critical }}
+                                </span>
+                            }
+                            <!-- unknown score -->
+                            @if (node.evcNode.service?.servicestatus?.currentState === 3) {
+                                <span
+                                    class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-unknown">
+                                    {{ node.evcNode.scoringInformation.score_unknown }}
+                                </span>
+                            }
+                        }
+
                         @if (node.evcNode.service) {
                             <c-row class="m-0">
                                 <c-col [xs]="12" class="text-truncate p-0 ps-1 evc-tree-hostname"
@@ -176,15 +208,37 @@
 
                 @if (node.evcNode.type === 'operator') {
                     <!-- Operator container -->
-                    <div class="operator-node operator-color">
-                        <div class="d-flex align-items-center h-100">
-                            <fa-icon [icon]="['fas', 'microchip']" class="evc-operator-icon ps-1"></fa-icon>
 
-                            <div class="flex-1 text-center">
-                                {{ node.evcNode.operator }}
+                    @if (node.evcNode.scoringInformation) {
+                        <!-- This is a scoring operator and we add a tooltip for more details -->
+                        <ng-template #popoverHtml>
+                            <oitc-operator-score-tooltip
+                                [scoringInformationInput]="node.evcNode.scoringInformation"></oitc-operator-score-tooltip>
+                        </ng-template>
+
+                        <div class="operator-node operator-color"
+                             [cPopover]="popoverHtml"
+                             cPopoverPlacement="right"
+                             [cPopoverTrigger]="'hover'">
+                            <div class="d-flex align-items-center h-100">
+                                <fa-icon [icon]="['fas', 'microchip']" class="evc-operator-icon ps-1"></fa-icon>
+
+                                <div class="flex-1 text-center">
+                                    {{ node.evcNode.operator }}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    } @else {
+                        <!-- normale AND, OR, EQ operator -->
+                        <div class="operator-node operator-color">
+                            <div class="d-flex align-items-center h-100">
+                                <fa-icon [icon]="['fas', 'microchip']" class="evc-operator-icon ps-1"></fa-icon>
+                                <div class="flex-1 text-center">
+                                    {{ node.evcNode.operator }}
+                                </div>
+                            </div>
+                        </div>
+                    }
                 }
 
             </div>
