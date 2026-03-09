@@ -19,8 +19,7 @@
                 }
             }
         </h3>
-        <div class="popover-body">
-
+        <div class="popover-body pt-1">
             @switch (scorignInformation.operator) {
                 @case ('scorescalargreater') {
                     <c-row>
@@ -34,7 +33,9 @@
                         <c-col>
                             ≥ {{ scorignInformation.operator_warning_min }}
                             @if (scorignInformation.servicestatus?.currentState === 1) {
-                                 <span class="text-info">←</span>
+                                <span class="text-info">
+                                    <fa-icon [icon]="['fas', 'left-long']" [cTextColor]="'info'"></fa-icon>
+                                </span>
                             }
                         </c-col>
                     </c-row>
@@ -49,7 +50,9 @@
                         <c-col>
                             ≥ {{ scorignInformation.operator_critical_min }}
                             @if (scorignInformation.servicestatus?.currentState === 2) {
-                                 <span class="text-info">←</span>
+                                <span class="text-info">
+                                    <fa-icon [icon]="['fas', 'left-long']" [cTextColor]="'info'"></fa-icon>
+                                </span>
                             }
                         </c-col>
                     </c-row>
@@ -64,7 +67,9 @@
                         <c-col>
                             ≥ {{ scorignInformation.operator_unknown_min }}
                             @if (scorignInformation.servicestatus?.currentState === 3) {
-                                 <span class="text-info">←</span>
+                                <span class="text-info">
+                                    <fa-icon [icon]="['fas', 'left-long']" [cTextColor]="'info'"></fa-icon>
+                                </span>
                             }
                         </c-col>
                     </c-row>
@@ -81,7 +86,9 @@
                         <c-col>
                             ≤ {{ scorignInformation.operator_warning_min }}
                             @if (scorignInformation.servicestatus?.currentState === 1) {
-                                 <span class="text-info">←</span>
+                                <span class="text-info">
+                                    <fa-icon [icon]="['fas', 'left-long']" [cTextColor]="'info'"></fa-icon>
+                                </span>
                             }
                         </c-col>
                     </c-row>
@@ -96,7 +103,9 @@
                         <c-col>
                             ≤ {{ scorignInformation.operator_critical_min }}
                             @if (scorignInformation.servicestatus?.currentState === 2) {
-                                 <span class="text-info">←</span>
+                                <span class="text-info">
+                                    <fa-icon [icon]="['fas', 'left-long']" [cTextColor]="'info'"></fa-icon>
+                                </span>
                             }
                         </c-col>
                     </c-row>
@@ -111,7 +120,9 @@
                         <c-col>
                             ≤ {{ scorignInformation.operator_unknown_min }}
                             @if (scorignInformation.servicestatus?.currentState === 3) {
-                                 <span class="text-info">←</span>
+                                <span class="text-info">
+                                    <fa-icon [icon]="['fas', 'left-long']" [cTextColor]="'info'"></fa-icon>
+                                </span>
                             }
                         </c-col>
                     </c-row>
@@ -125,7 +136,9 @@
                         <c-col [lg]="7" [cTextColor]="'warning'">
                             {{ t('Score for warning') }}
                             @if (scorignInformation.servicestatus?.currentState === 1) {
-                                 <span class="text-info">←</span>
+                                <span class="text-info">
+                                    <fa-icon [icon]="['fas', 'left-long']" [cTextColor]="'info'"></fa-icon>
+                                </span>
                             }
                         </c-col>
                     </c-row>
@@ -140,7 +153,7 @@
 
                         </c-col>
                     </c-row>
-                    <c-row>
+                    <c-row class="pt-2 pb-1">
                         <c-col [lg]="1">
                             <fa-icon [icon]="['fas', 'exclamation-triangle']"
                                      [cTextColor]="'danger'"></fa-icon>
@@ -148,7 +161,9 @@
                         <c-col [lg]="7" [cTextColor]="'danger'">
                             {{ t('Score for critical') }}
                             @if (scorignInformation.servicestatus?.currentState === 2) {
-                                 <span class="text-info">←</span>
+                                <span class="text-info">
+                                    <fa-icon [icon]="['fas', 'left-long']" [cTextColor]="'info'"></fa-icon>
+                                </span>
                             }
                         </c-col>
                     </c-row>
@@ -163,7 +178,7 @@
 
                         </c-col>
                     </c-row>
-                    <c-row>
+                    <c-row class="pt-2 pb-1">
                         <c-col [lg]="1">
                             <fa-icon [icon]="['fas', 'circle-question']"
                                      [cTextColor]="'secondary'"></fa-icon>
@@ -171,7 +186,9 @@
                         <c-col [lg]="7" [cTextColor]="'secondary'">
                             {{ t('Score for unknown') }}
                             @if (scorignInformation.servicestatus?.currentState === 3) {
-                                 <span class="text-info">←</span>
+                                <span class="text-info">
+                                    <fa-icon [icon]="['fas', 'left-long']" [cTextColor]="'info'"></fa-icon>
+                                </span>
                             }
                         </c-col>
                     </c-row>
@@ -195,7 +212,9 @@
                         <c-col [cTextColor]="'warning'">
                             {{ t('Score for warning') }}
                             @if (scorignInformation.servicestatus?.currentState === 1) {
-                                <span class="text-info">←</span>
+                                <span class="text-info">
+                                    <fa-icon [icon]="['fas', 'left-long']" [cTextColor]="'info'"></fa-icon>
+                                </span>
                             }
                         </c-col>
                     </c-row>
@@ -209,7 +228,7 @@
                             </oitc-score-thresholds>
                         </c-col>
                     </c-row>
-                    <c-row>
+                    <c-row class="pt-2 pb-1">
                         <c-col [lg]="1">
                             <fa-icon [icon]="['fas', 'exclamation-triangle']"
                                      [cTextColor]="'danger'"></fa-icon>
@@ -217,7 +236,9 @@
                         <c-col [cTextColor]="'danger'">
                             {{ t('Score for critical') }}
                             @if (scorignInformation.servicestatus?.currentState === 2) {
-                                 <span class="text-info">←</span>
+                                <span class="text-info">
+                                    <fa-icon [icon]="['fas', 'left-long']" [cTextColor]="'info'"></fa-icon>
+                                </span>
                             }
                         </c-col>
                     </c-row>
@@ -231,7 +252,7 @@
                             </oitc-score-thresholds>
                         </c-col>
                     </c-row>
-                    <c-row>
+                    <c-row class="pt-2 pb-1">
                         <c-col [lg]="1">
                             <fa-icon [icon]="['fas', 'circle-question']"
                                      [cTextColor]="'secondary'"></fa-icon>
@@ -239,7 +260,9 @@
                         <c-col [cTextColor]="'secondary'">
                             {{ t('Score for unknown') }}
                             @if (scorignInformation.servicestatus?.currentState === 3) {
-                                 <span class="text-info">←</span>
+                                <span class="text-info">
+                                    <fa-icon [icon]="['fas', 'left-long']" [cTextColor]="'info'"></fa-icon>
+                                </span>
                             }
                         </c-col>
                     </c-row>
