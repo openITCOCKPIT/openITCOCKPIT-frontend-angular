@@ -291,6 +291,8 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             return;
         }
 
+        this.SelectionServiceService.deselectAll();
+
         this.params['filter[Hosts.id]'] = this.hostId;
         this.params['filter[servicename]'] = this.filter.Services.name;
         this.params['filter[servicename_regex]'] = this.filter.Services.name_regex;
@@ -311,6 +313,8 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             return;
         }
 
+        this.SelectionServiceService.deselectAll();
+
         this.params['filter[Hosts.id]'] = this.hostId;
 
         this.subscriptions.add(this.ServicesService.getNotMonitored(this.params)
@@ -326,6 +330,8 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             return;
         }
 
+        this.SelectionServiceService.deselectAll();
+
         this.params['filter[Hosts.id]'] = this.hostId;
 
         this.subscriptions.add(this.ServicesService.getDisabled(this.params)
@@ -340,6 +346,8 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
         if (!this.hostId) {
             return;
         }
+
+        this.SelectionServiceService.deselectAll();
 
         this.params['filter[DeletedServices.host_id]'] = this.hostId;
 

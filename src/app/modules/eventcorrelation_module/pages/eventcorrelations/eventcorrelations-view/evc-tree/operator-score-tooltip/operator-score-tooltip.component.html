@@ -1,6 +1,274 @@
-<h3 class="popover-header ok">
-    Popover Title
-</h3>
-<div class="popover-body">
-    {{ scorignInformation | json }}
-</div>
+<ng-container *transloco="let t">
+    @if (scorignInformation && scorignInformation.operator) {
+        <h3 class="popover-header">
+            <fa-icon [icon]="['fas', 'square']" class="text-primary"
+                     [ngClass]="{'ok': scorignInformation.servicestatus?.currentState == 0, 'warning': scorignInformation.servicestatus?.currentState == 1, 'critical': scorignInformation.servicestatus?.currentState == 2, 'unknown': scorignInformation.servicestatus?.currentState == 3}">
+            </fa-icon>
+            @switch (scorignInformation.operator) {
+                @case ('scorescalargreater') {
+                    {{ t('Score scalar greater operator') }}
+                }
+                @case ('scorescalarlesser') {
+                    {{ t('Score scalar lesser operator') }}
+                }
+                @case ('scorerangeinclusive') {
+                    {{ t('Score range inclusive operator') }}
+                }
+                @case ('scorerangeexclusive') {
+                    {{ t('Score range exclusive operator') }}
+                }
+            }
+        </h3>
+        <div class="popover-body">
+
+            @switch (scorignInformation.operator) {
+                @case ('scorescalargreater') {
+                    <c-row>
+                        <c-col [lg]="1">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                     [cTextColor]="'warning'"></fa-icon>
+                        </c-col>
+                        <c-col [lg]="7" [cTextColor]="'warning'">
+                            {{ t('Score for warning') }}
+                        </c-col>
+                        <c-col>
+                            ≥ {{ scorignInformation.operator_warning_min }}
+                            @if (scorignInformation.servicestatus?.currentState === 1) {
+                                <span class="text-info">◄</span>
+                            }
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col [lg]="1">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                     [cTextColor]="'danger'"></fa-icon>
+                        </c-col>
+                        <c-col [lg]="7" [cTextColor]="'danger'">
+                            {{ t('Score for critical') }}
+                        </c-col>
+                        <c-col>
+                            ≥ {{ scorignInformation.operator_critical_min }}
+                            @if (scorignInformation.servicestatus?.currentState === 2) {
+                                <span class="text-info">◄</span>
+                            }
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col [lg]="1">
+                            <fa-icon [icon]="['fas', 'circle-question']"
+                                     [cTextColor]="'secondary'"></fa-icon>
+                        </c-col>
+                        <c-col [lg]="7" [cTextColor]="'secondary'">
+                            {{ t('Score for unknown') }}
+                        </c-col>
+                        <c-col>
+                            ≥ {{ scorignInformation.operator_unknown_min }}
+                            @if (scorignInformation.servicestatus?.currentState === 3) {
+                                <span class="text-info">◄</span>
+                            }
+                        </c-col>
+                    </c-row>
+                }
+                @case ('scorescalarlesser') {
+                    <c-row>
+                        <c-col [lg]="1">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                     [cTextColor]="'warning'"></fa-icon>
+                        </c-col>
+                        <c-col [lg]="7" [cTextColor]="'warning'">
+                            {{ t('Score for warning') }}
+                        </c-col>
+                        <c-col>
+                            ≤ {{ scorignInformation.operator_warning_min }}
+                            @if (scorignInformation.servicestatus?.currentState === 1) {
+                                <span class="text-info">◄</span>
+                            }
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col [lg]="1">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                     [cTextColor]="'danger'"></fa-icon>
+                        </c-col>
+                        <c-col [lg]="7" [cTextColor]="'danger'">
+                            {{ t('Score for critical') }}
+                        </c-col>
+                        <c-col>
+                            ≤ {{ scorignInformation.operator_critical_min }}
+                            @if (scorignInformation.servicestatus?.currentState === 2) {
+                                <span class="text-info">◄</span>
+                            }
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col [lg]="1">
+                            <fa-icon [icon]="['fas', 'circle-question']"
+                                     [cTextColor]="'secondary'"></fa-icon>
+                        </c-col>
+                        <c-col [lg]="7" [cTextColor]="'secondary'">
+                            {{ t('Score for unknown') }}
+                        </c-col>
+                        <c-col>
+                            ≤ {{ scorignInformation.operator_unknown_min }}
+                            @if (scorignInformation.servicestatus?.currentState === 3) {
+                                <span class="text-info">◄</span>
+                            }
+                        </c-col>
+                    </c-row>
+                }
+                @case ('scorerangeinclusive') {
+                    <c-row>
+                        <c-col [lg]="1">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                     [cTextColor]="'warning'"></fa-icon>
+                        </c-col>
+                        <c-col [lg]="7" [cTextColor]="'warning'">
+                            {{ t('Score for warning') }}
+                        </c-col>
+                        <c-col>
+                            @if (scorignInformation.servicestatus?.currentState === 1) {
+                                <span class="text-info">◄</span>
+                            }
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col>
+                            <oitc-score-thresholds
+                                [inclusive]="true"
+                                [min]="scorignInformation.operator_warning_min ?? null"
+                                [max]="scorignInformation.operator_warning_max ?? null"
+                                [type]="'warning'">
+                            </oitc-score-thresholds>
+
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col [lg]="1">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                     [cTextColor]="'danger'"></fa-icon>
+                        </c-col>
+                        <c-col [lg]="7" [cTextColor]="'danger'">
+                            {{ t('Score for critical') }}
+                        </c-col>
+                        <c-col>
+                            @if (scorignInformation.servicestatus?.currentState === 2) {
+                                <span class="text-info">◄</span>
+                            }
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col>
+                            <oitc-score-thresholds
+                                [inclusive]="true"
+                                [min]="scorignInformation.operator_critical_min ?? null"
+                                [max]="scorignInformation.operator_critical_max ?? null"
+                                [type]="'critical'">
+                            </oitc-score-thresholds>
+
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col [lg]="1">
+                            <fa-icon [icon]="['fas', 'circle-question']"
+                                     [cTextColor]="'secondary'"></fa-icon>
+                        </c-col>
+                        <c-col [lg]="7" [cTextColor]="'secondary'">
+                            {{ t('Score for unknown') }}
+                        </c-col>
+                        <c-col>
+                            @if (scorignInformation.servicestatus?.currentState === 3) {
+                                <span class="text-info">◄</span>
+                            }
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col>
+                            <oitc-score-thresholds
+                                [inclusive]="true"
+                                [min]="scorignInformation.operator_unknown_min ?? null"
+                                [max]="scorignInformation.operator_unknown_max ?? null"
+                                [type]="'unknown'">
+                            </oitc-score-thresholds>
+                        </c-col>
+                    </c-row>
+                }
+                @case ('scorerangeexclusive') {
+                    <c-row>
+                        <c-col [lg]="1">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                     [cTextColor]="'warning'"></fa-icon>
+                        </c-col>
+                        <c-col [lg]="7" [cTextColor]="'warning'">
+                            {{ t('Score for warning') }}
+                        </c-col>
+                        <c-col>
+                            @if (scorignInformation.servicestatus?.currentState === 1) {
+                                <span class="text-info">◄</span>
+                            }
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col>
+                            <oitc-score-thresholds
+                                [inclusive]="false"
+                                [min]="scorignInformation.operator_warning_min ?? null"
+                                [max]="scorignInformation.operator_warning_max ?? null"
+                                [type]="'warning'">
+                            </oitc-score-thresholds>
+
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col [lg]="1">
+                            <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                     [cTextColor]="'danger'"></fa-icon>
+                        </c-col>
+                        <c-col [lg]="7" [cTextColor]="'danger'">
+                            {{ t('Score for critical') }}
+                        </c-col>
+                        <c-col>
+                            @if (scorignInformation.servicestatus?.currentState === 2) {
+                                <span class="text-info">◄</span>
+                            }
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col>
+                            <oitc-score-thresholds
+                                [inclusive]="false"
+                                [min]="scorignInformation.operator_critical_min ?? null"
+                                [max]="scorignInformation.operator_critical_max ?? null"
+                                [type]="'critical'">
+                            </oitc-score-thresholds>
+
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col [lg]="1">
+                            <fa-icon [icon]="['fas', 'circle-question']"
+                                     [cTextColor]="'secondary'"></fa-icon>
+                        </c-col>
+                        <c-col [lg]="7" [cTextColor]="'secondary'">
+                            {{ t('Score for unknown') }}
+                        </c-col>
+                        <c-col>
+                            @if (scorignInformation.servicestatus?.currentState === 3) {
+                                <span class="text-info">◄</span>
+                            }
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col>
+                            <oitc-score-thresholds
+                                [inclusive]="false"
+                                [min]="scorignInformation.operator_unknown_min ?? null"
+                                [max]="scorignInformation.operator_unknown_max ?? null"
+                                [type]="'unknown'">
+                            </oitc-score-thresholds>
+                        </c-col>
+                    </c-row>
+                }
+            }
+        </div>
+    }
+</ng-container>
