@@ -63,8 +63,6 @@
                         </c-col>
                         <c-col [lg]="7" [cTextColor]="'secondary'">
                             {{ t('Score for unknown') }}
-                        </c-col>
-                        <c-col>
                             ≥ {{ scorignInformation.operator_unknown_min }}
                             @if (scorignInformation.servicestatus?.currentState === 3) {
                                 <span class="text-info">
@@ -183,7 +181,7 @@
                             <fa-icon [icon]="['fas', 'circle-question']"
                                      [cTextColor]="'secondary'"></fa-icon>
                         </c-col>
-                        <c-col [lg]="7" [cTextColor]="'secondary'">
+                        <c-col [cTextColor]="'secondary'">
                             {{ t('Score for unknown') }}
                             @if (scorignInformation.servicestatus?.currentState === 3) {
                                 <span class="text-info">
