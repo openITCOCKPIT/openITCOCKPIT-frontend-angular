@@ -1,16 +1,16 @@
-<div class="threshold-container padding-top-10">
+<div class="threshold-container pt-2">
 
     <!-- Range Inclusive (≥ 10 and ≤ 20 - inside the range of 10 to 20) -->
     @if (!inclusive) {
         <div class="subcontainer-{{type}}">
             <div class="value-container">
-                <div class="values-left-container">
+                <div class="values-left-container w-50">
                     <div class="speech-bubble-ds">
                         <p>{{ min }}</p>
                         <div class="speech-bubble-ds-arrow-left" [ngClass]="{'bottom-14': Number.isInteger(min)}"></div>
                     </div>
                 </div>
-                <div class="values-right-container">
+                <div class="values-right-container w-50">
                     <div class="speech-bubble-ds">
                         <p>{{ max }}</p>
                         <div class="speech-bubble-ds-arrow-right"
@@ -30,14 +30,14 @@
     @if (inclusive) {
         <div class="subcontainer-{{type}}-inclusive">
             <div class="value-container">
-                <div class="values-left-container">
+                <div class="values-left-container w-50">
                     <div class="speech-bubble-ds">
                         <p>{{ min }}</p>
                         <div class="speech-bubble-ds-arrow-left"
                              [ngClass]="{'bottom-14': Number.isInteger(min) }"></div>
                     </div>
                 </div>
-                <div class="values-right-container">
+                <div class="values-right-container w-50">
                     <div class="speech-bubble-ds">
                         <p>{{ max }}</p>
                         <div class="speech-bubble-ds-arrow-right"

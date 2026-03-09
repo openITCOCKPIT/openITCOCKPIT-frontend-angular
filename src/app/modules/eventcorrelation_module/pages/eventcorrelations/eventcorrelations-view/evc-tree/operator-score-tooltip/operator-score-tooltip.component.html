@@ -34,7 +34,7 @@
                         <c-col>
                             ≥ {{ scorignInformation.operator_warning_min }}
                             @if (scorignInformation.servicestatus?.currentState === 1) {
-                                <span class="text-info">◄</span>
+                                 <span class="text-info">←</span>
                             }
                         </c-col>
                     </c-row>
@@ -49,7 +49,7 @@
                         <c-col>
                             ≥ {{ scorignInformation.operator_critical_min }}
                             @if (scorignInformation.servicestatus?.currentState === 2) {
-                                <span class="text-info">◄</span>
+                                 <span class="text-info">←</span>
                             }
                         </c-col>
                     </c-row>
@@ -64,7 +64,7 @@
                         <c-col>
                             ≥ {{ scorignInformation.operator_unknown_min }}
                             @if (scorignInformation.servicestatus?.currentState === 3) {
-                                <span class="text-info">◄</span>
+                                 <span class="text-info">←</span>
                             }
                         </c-col>
                     </c-row>
@@ -81,7 +81,7 @@
                         <c-col>
                             ≤ {{ scorignInformation.operator_warning_min }}
                             @if (scorignInformation.servicestatus?.currentState === 1) {
-                                <span class="text-info">◄</span>
+                                 <span class="text-info">←</span>
                             }
                         </c-col>
                     </c-row>
@@ -96,7 +96,7 @@
                         <c-col>
                             ≤ {{ scorignInformation.operator_critical_min }}
                             @if (scorignInformation.servicestatus?.currentState === 2) {
-                                <span class="text-info">◄</span>
+                                 <span class="text-info">←</span>
                             }
                         </c-col>
                     </c-row>
@@ -111,7 +111,7 @@
                         <c-col>
                             ≤ {{ scorignInformation.operator_unknown_min }}
                             @if (scorignInformation.servicestatus?.currentState === 3) {
-                                <span class="text-info">◄</span>
+                                 <span class="text-info">←</span>
                             }
                         </c-col>
                     </c-row>
@@ -124,10 +124,8 @@
                         </c-col>
                         <c-col [lg]="7" [cTextColor]="'warning'">
                             {{ t('Score for warning') }}
-                        </c-col>
-                        <c-col>
                             @if (scorignInformation.servicestatus?.currentState === 1) {
-                                <span class="text-info">◄</span>
+                                 <span class="text-info">←</span>
                             }
                         </c-col>
                     </c-row>
@@ -149,10 +147,8 @@
                         </c-col>
                         <c-col [lg]="7" [cTextColor]="'danger'">
                             {{ t('Score for critical') }}
-                        </c-col>
-                        <c-col>
                             @if (scorignInformation.servicestatus?.currentState === 2) {
-                                <span class="text-info">◄</span>
+                                 <span class="text-info">←</span>
                             }
                         </c-col>
                     </c-row>
@@ -174,10 +170,8 @@
                         </c-col>
                         <c-col [lg]="7" [cTextColor]="'secondary'">
                             {{ t('Score for unknown') }}
-                        </c-col>
-                        <c-col>
                             @if (scorignInformation.servicestatus?.currentState === 3) {
-                                <span class="text-info">◄</span>
+                                 <span class="text-info">←</span>
                             }
                         </c-col>
                     </c-row>
@@ -198,12 +192,10 @@
                             <fa-icon [icon]="['fas', 'exclamation-triangle']"
                                      [cTextColor]="'warning'"></fa-icon>
                         </c-col>
-                        <c-col [lg]="7" [cTextColor]="'warning'">
+                        <c-col [cTextColor]="'warning'">
                             {{ t('Score for warning') }}
-                        </c-col>
-                        <c-col>
                             @if (scorignInformation.servicestatus?.currentState === 1) {
-                                <span class="text-info">◄</span>
+                                <span class="text-info">←</span>
                             }
                         </c-col>
                     </c-row>
@@ -215,7 +207,6 @@
                                 [max]="scorignInformation.operator_warning_max ?? null"
                                 [type]="'warning'">
                             </oitc-score-thresholds>
-
                         </c-col>
                     </c-row>
                     <c-row>
@@ -223,12 +214,10 @@
                             <fa-icon [icon]="['fas', 'exclamation-triangle']"
                                      [cTextColor]="'danger'"></fa-icon>
                         </c-col>
-                        <c-col [lg]="7" [cTextColor]="'danger'">
+                        <c-col [cTextColor]="'danger'">
                             {{ t('Score for critical') }}
-                        </c-col>
-                        <c-col>
                             @if (scorignInformation.servicestatus?.currentState === 2) {
-                                <span class="text-info">◄</span>
+                                 <span class="text-info">←</span>
                             }
                         </c-col>
                     </c-row>
@@ -240,7 +229,6 @@
                                 [max]="scorignInformation.operator_critical_max ?? null"
                                 [type]="'critical'">
                             </oitc-score-thresholds>
-
                         </c-col>
                     </c-row>
                     <c-row>
@@ -248,12 +236,10 @@
                             <fa-icon [icon]="['fas', 'circle-question']"
                                      [cTextColor]="'secondary'"></fa-icon>
                         </c-col>
-                        <c-col [lg]="7" [cTextColor]="'secondary'">
+                        <c-col [cTextColor]="'secondary'">
                             {{ t('Score for unknown') }}
-                        </c-col>
-                        <c-col>
                             @if (scorignInformation.servicestatus?.currentState === 3) {
-                                <span class="text-info">◄</span>
+                                 <span class="text-info">←</span>
                             }
                         </c-col>
                     </c-row>

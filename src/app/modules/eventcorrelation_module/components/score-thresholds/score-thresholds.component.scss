@@ -3,55 +3,46 @@
 /* Thresholds Warning / Critical consider min/max values and inclusive setting*/
 
 .threshold-container {
-    padding-top: 45px;
-    width: 130px;
     border-bottom: 1px solid #cccccc;
 }
 
 .subcontainer-warning {
-    width: 130px;
     border-bottom: 11px solid;
-    border-image: linear-gradient(to right, #DF8F1D 40px, #cccccc 41px, transparent 42px, transparent 88px, #cccccc 89px, #DF8F1D 90px);
+    border-image: linear-gradient(to right, #DF8F1D 25%, #cccccc 25%, transparent 25%, transparent 75%, #cccccc 75%, #DF8F1D 75%);
     border-image-slice: 1;
 }
 
 .subcontainer-critical {
-    width: 130px;
     border-bottom: 11px solid;
-    border-image: linear-gradient(to right, #C9302C 40px, #cccccc 41px, transparent 42px, transparent 88px, #cccccc 89px, #C9302C 90px);
+    border-image: linear-gradient(to right, #C9302C 25%, #cccccc 26%, transparent 26%, transparent 75%, #cccccc 75%, #C9302C 75%);
     border-image-slice: 1;
 }
 
 .subcontainer-unknown {
-    width: 130px;
     border-bottom: 11px solid;
-    border-image: linear-gradient(to right, #6b7785 40px, #cccccc 41px, transparent 42px, transparent 88px, #cccccc 89px, #6b7785 90px);
+    border-image: linear-gradient(to right, #6b7785 25%, #cccccc 26%, transparent 26%, transparent 75%, #cccccc 75%, #6b7785 75%);
     border-image-slice: 1;
 }
 
 .subcontainer-warning-inclusive {
-    width: 130px;
     border-bottom: 11px solid;
-    border-image: linear-gradient(to right, transparent 0%, transparent 40px, #cccccc 41px, #DF8F1D 42px, #DF8F1D 88px, #cccccc 89px, transparent 90px);
+    border-image: linear-gradient(to right, transparent 0%, transparent 25%, #cccccc 26%, #DF8F1D 26%, #DF8F1D 75%, #cccccc 75%, transparent 75%);
     border-image-slice: 1;
 }
 
 .subcontainer-critical-inclusive {
-    width: 130px;
     border-bottom: 11px solid;
-    border-image: linear-gradient(to right, transparent 0%, transparent 40px, #cccccc 41px, #C9302C 42px, #C9302C 88px, #cccccc 89px, transparent 90px);
+    border-image: linear-gradient(to right, transparent 0%, transparent 25%, #cccccc 26%, #C9302C 26%, #C9302C 75%, #cccccc 75%, transparent 75%);
     border-image-slice: 1;
 }
 
 .subcontainer-unknown-inclusive {
-    width: 130px;
     border-bottom: 11px solid;
-    border-image: linear-gradient(to right, transparent 0%, transparent 40px, #cccccc 41px, #6b7785 42px, #6b7785 88px, #cccccc 89px, transparent 90px);
+    border-image: linear-gradient(to right, transparent 0%, transparent 25%, #cccccc 26%, #6b7785 26%, #6b7785 75%, #cccccc 75%, transparent 75%);
     border-image-slice: 1;
 }
 
 .label-container {
-    width: 130px;
     position: relative;
 }
 
@@ -117,7 +108,6 @@
     position: absolute;
     padding: 2px;
     left: 0px;
-    width: 60px;
 }
 
 .values-right-container {
@@ -125,7 +115,6 @@
     position: absolute;
     padding: 2px 1px;
     right: 0px;
-    width: 60px;
 }
 
 .speech-bubble-ds {
@@ -152,7 +141,7 @@
     border-top: 14px solid rgba(0, 0, 0, 0.2);
     bottom: -28px;
     position: absolute;
-    right: 16px;
+    right: 49%;
 }
 
 .speech-bubble-ds-arrow-left::before {
@@ -169,7 +158,7 @@
     border-top: 14px solid rgba(0, 0, 0, 0.2);
     bottom: -28px;
     position: absolute;
-    right: 38px;
+    right: 49%;
 }
 
 .speech-bubble-ds-arrow-right::before {
@@ -209,7 +198,7 @@
     border-top: 14px solid rgba(0, 0, 0, 0.2);
     bottom: -28px;
     position: absolute;
-    right: 38px;
+    right: 49%;
 }
 
 .speech-bubble-ds-arrow-right-inside::before {

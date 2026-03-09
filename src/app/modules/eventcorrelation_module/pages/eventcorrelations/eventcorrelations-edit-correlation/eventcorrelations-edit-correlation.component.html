@@ -406,13 +406,16 @@
                                                                 errorField="operator_warning_max"></oitc-form-feedback>
                                         </div>
                                     </c-col>
-                                    <c-col xs="2">
-                                        <oitc-score-thresholds
-                                            [inclusive]="(modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE)"
-                                            [min]="modalVService.operator_warning_min"
-                                            [max]="modalVService.operator_warning_max"
-                                            [type]="'warning'">
-                                        </oitc-score-thresholds>
+                                    <c-col xs="2" class="d-flex">
+                                        <div class="w-100 align-content-end pb-2">
+                                            <oitc-score-thresholds
+                                                [inclusive]="(modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE)"
+                                                [min]="modalVService.operator_warning_min"
+                                                [max]="modalVService.operator_warning_max"
+                                                [type]="'warning'">
+                                            </oitc-score-thresholds>
+                                        </div>
+
                                     </c-col>
                                 }
                                 <div class="help-block">
@@ -468,13 +471,15 @@
                                                                 errorField="operator_critical_max"></oitc-form-feedback>
                                         </div>
                                     </c-col>
-                                    <c-col xs="2">
-                                        <oitc-score-thresholds
-                                            [inclusive]="(modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE)"
-                                            [min]="modalVService.operator_critical_min"
-                                            [max]="modalVService.operator_critical_max"
-                                            [type]="'critical'">
-                                        </oitc-score-thresholds>
+                                    <c-col xs="2" class="d-flex">
+                                        <div class="w-100 align-content-end pb-2">
+                                            <oitc-score-thresholds
+                                                [inclusive]="(modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE)"
+                                                [min]="modalVService.operator_critical_min"
+                                                [max]="modalVService.operator_critical_max"
+                                                [type]="'critical'">
+                                            </oitc-score-thresholds>
+                                        </div>
                                     </c-col>
                                 }
                                 <div class="help-block">
@@ -530,13 +535,15 @@
                                                                 errorField="operator_unknown_max"></oitc-form-feedback>
                                         </div>
                                     </c-col>
-                                    <c-col xs="2">
-                                        <oitc-score-thresholds
-                                            [inclusive]="(modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE)"
-                                            [min]="modalVService.operator_unknown_min"
-                                            [max]="modalVService.operator_unknown_max"
-                                            [type]="'unknown'">
-                                        </oitc-score-thresholds>
+                                    <c-col xs="2" class="d-flex">
+                                        <div class="w-100 align-content-end pb-2">
+                                            <oitc-score-thresholds
+                                                [inclusive]="(modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE)"
+                                                [min]="modalVService.operator_unknown_min"
+                                                [max]="modalVService.operator_unknown_max"
+                                                [type]="'unknown'">
+                                            </oitc-score-thresholds>
+                                        </div>
                                     </c-col>
                                 }
                                 <div class="help-block">
