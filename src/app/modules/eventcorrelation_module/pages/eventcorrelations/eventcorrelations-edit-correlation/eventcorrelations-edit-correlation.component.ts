@@ -716,12 +716,14 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                                 this.modalVService.current_evc.service_scores.forEach((service_score) => {
 
                                     for (let parentEvcId in this.evcTree[previousLayerIndex]) {
-                                        for (let k in this.evcTree[previousLayerIndex][parentEvcId]) {
-                                            //Find the evcNode by the given id
-                                            if (this.evcTree[previousLayerIndex][parentEvcId][k].service_id == service_score.vService_id) {
-                                                this.evcTree[previousLayerIndex][parentEvcId][k].score_warning = service_score.score_warning;
-                                                this.evcTree[previousLayerIndex][parentEvcId][k].score_critical = service_score.score_critical;
-                                                this.evcTree[previousLayerIndex][parentEvcId][k].score_unknown = service_score.score_unknown;
+                                        if (parentEvcId === newParentIdWithoutvServiceSuffix) {
+                                            for (let k in this.evcTree[previousLayerIndex][parentEvcId]) {
+                                                //Find the evcNode by the given id
+                                                if (this.evcTree[previousLayerIndex][parentEvcId][k].service_id == service_score.vService_id) {
+                                                    this.evcTree[previousLayerIndex][parentEvcId][k].score_warning = service_score.score_warning;
+                                                    this.evcTree[previousLayerIndex][parentEvcId][k].score_critical = service_score.score_critical;
+                                                    this.evcTree[previousLayerIndex][parentEvcId][k].score_unknown = service_score.score_unknown;
+                                                }
                                             }
                                         }
                                     }
@@ -817,6 +819,8 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                     return;
                 }
 
+                const parentIdForScoreCheck = evcNode.id
+
                 if (this.modalVService.current_evc.layerIndex === 1) {
                     //Server returned all 1st layer services - simply replace the old services in the json with the new one
                     //layerIndexToUpdate = 0;
@@ -898,30 +902,30 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                     isScoringOperator = true;
                 }
 
-                console.log(this.modalVService.current_evc.service_scores);
-
                 if (isScoringOperator && this.modalVService && this.modalVService.current_evc.service_scores.length > 0) {
                     // Now we need to find the services in the previous layer (left side) and update the scores
                     let previousLayerIndex = this.modalVService.current_evc.layerIndex - 1;
                     this.modalVService.current_evc.service_scores.forEach((service_score) => {
 
                         for (let parentEvcId in this.evcTree[previousLayerIndex]) {
-                            for (let k in this.evcTree[previousLayerIndex][parentEvcId]) {
-                                //Find the evcNode by the given id
-                                if (this.modalVService && this.modalVService.current_evc.layerIndex > 1) {
-                                    // Update services of layer 2 or higher
-                                    // here we need to use .id and add "_vService" suffix
-                                    if (this.evcTree[previousLayerIndex][parentEvcId][k].id + '_vService' == service_score.vService_id) {
-                                        this.evcTree[previousLayerIndex][parentEvcId][k].score_warning = service_score.score_warning;
-                                        this.evcTree[previousLayerIndex][parentEvcId][k].score_critical = service_score.score_critical;
-                                        this.evcTree[previousLayerIndex][parentEvcId][k].score_unknown = service_score.score_unknown;
-                                    }
-                                } else {
-                                    // update layer 0 services because the score is stored in the previous layer
-                                    if (this.evcTree[previousLayerIndex][parentEvcId][k].service_id == service_score.vService_id) {
-                                        this.evcTree[previousLayerIndex][parentEvcId][k].score_warning = service_score.score_warning;
-                                        this.evcTree[previousLayerIndex][parentEvcId][k].score_critical = service_score.score_critical;
-                                        this.evcTree[previousLayerIndex][parentEvcId][k].score_unknown = service_score.score_unknown;
+                            if (parentEvcId === parentIdForScoreCheck) {
+                                for (let k in this.evcTree[previousLayerIndex][parentEvcId]) {
+                                    //Find the evcNode by the given id
+                                    if (this.modalVService && this.modalVService.current_evc.layerIndex > 1) {
+                                        // Update services of layer 2 or higher
+                                        // here we need to use .id and add "_vService" suffix
+                                        if (this.evcTree[previousLayerIndex][parentEvcId][k].id + '_vService' == service_score.vService_id) {
+                                            this.evcTree[previousLayerIndex][parentEvcId][k].score_warning = service_score.score_warning;
+                                            this.evcTree[previousLayerIndex][parentEvcId][k].score_critical = service_score.score_critical;
+                                            this.evcTree[previousLayerIndex][parentEvcId][k].score_unknown = service_score.score_unknown;
+                                        }
+                                    } else {
+                                        // update layer 0 services because the score is stored in the previous layer
+                                        if (this.evcTree[previousLayerIndex][parentEvcId][k].service_id == service_score.vService_id) {
+                                            this.evcTree[previousLayerIndex][parentEvcId][k].score_warning = service_score.score_warning;
+                                            this.evcTree[previousLayerIndex][parentEvcId][k].score_critical = service_score.score_critical;
+                                            this.evcTree[previousLayerIndex][parentEvcId][k].score_unknown = service_score.score_unknown;
+                                        }
                                     }
                                 }
                             }
