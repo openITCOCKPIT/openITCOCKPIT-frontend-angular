@@ -134,7 +134,7 @@
 
                         <!-- Display scoring value if available -->
                         @if (node.evcNode.scoringInformation && node.evcNode.scoringInformation.isUsedInScoringOperator) {
-                            <!-- warning score -->
+                            <!-- ok score -->
                             @if (node.evcNode.service?.servicestatus?.currentState === 0) {
                                 <span
                                     class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-ok">
@@ -152,14 +152,14 @@
                             @if (node.evcNode.service?.servicestatus?.currentState === 2) {
                                 <span
                                     class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-critical">
-                                    {{ node.evcNode.scoringInformation.score_critical }}
+                                    {{ node.evcNode.scoringInformation.score_critical |localNumber }}
                                 </span>
                             }
                             <!-- unknown score -->
                             @if (node.evcNode.service?.servicestatus?.currentState === 3) {
                                 <span
                                     class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-unknown">
-                                    {{ node.evcNode.scoringInformation.score_unknown }}
+                                    {{ node.evcNode.scoringInformation.score_unknown |localNumber }}
                                 </span>
                             }
                         }

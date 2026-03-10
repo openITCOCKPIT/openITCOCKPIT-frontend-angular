@@ -281,7 +281,7 @@ export interface EvcModalService {
         mode: EvcVServiceModalMode
         evc_node_id?: string | number // edit only
         old_service_ids?: (number | string)[] // edit only // 1 or 2_vService
-        service_scrores: EvcModalServiceScore[] // The server only use this data for validation.
+        service_scores: EvcModalServiceScore[] // The server only use this data for validation.
     }
 }
 
@@ -305,7 +305,7 @@ export function getDefaultEvcModalService(evcId: number, layerIndex: number): Ev
             id: evcId,
             layerIndex: layerIndex,
             mode: 'add',
-            service_scrores: []
+            service_scores: []
         }
     }
 }

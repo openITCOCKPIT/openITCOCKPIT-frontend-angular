@@ -292,8 +292,8 @@
                                         {{ t('Services') }}
                                     </h6>
                                 </legend>
-                                @if (modalVService.current_evc.service_scrores) {
-                                    @for (service of modalVService.current_evc.service_scrores; track service) {
+                                @if (modalVService.current_evc.service_scores) {
+                                    @for (service of modalVService.current_evc.service_scores; track service) {
                                         <c-row class="pb-1"
                                                [ngClass]="{odd: $odd, even: $even}">
                                             <c-col [xs]="12" [md]="12" [lg]="6">
@@ -339,19 +339,19 @@
                                         </c-row>
                                     }
                                     <c-row class="pt-1 pb-1"
-                                           [ngClass]="{odd: modalVService.current_evc.service_scrores.length % 2 === 1, even: modalVService.current_evc.service_scrores.length % 2 === 0}">
+                                           [ngClass]="{odd: modalVService.current_evc.service_scores.length % 2 === 1, even: modalVService.current_evc.service_scores.length % 2 === 0}">
                                         <c-col [xs]="12" [md]="12" [lg]="6" class="text-end"
                                                [title]="'Sum' | transloco">
                                             &Sigma;
                                         </c-col>
                                         <c-col [xs]="12" [md]="12" [lg]="2" class="text-center">
-                                            {{ modalVService.current_evc.service_scrores | scoreSum:'warning' }}
+                                            {{ modalVService.current_evc.service_scores | scoreSum:'warning' }}
                                         </c-col>
                                         <c-col [xs]="12" [md]="12" [lg]="2" class="text-center">
-                                            {{ modalVService.current_evc.service_scrores | scoreSum:'critical' }}
+                                            {{ modalVService.current_evc.service_scores | scoreSum:'critical' }}
                                         </c-col>
                                         <c-col [xs]="12" [md]="12" [lg]="2" class="text-center">
-                                            {{ modalVService.current_evc.service_scrores | scoreSum:'unknown' }}
+                                            {{ modalVService.current_evc.service_scores | scoreSum:'unknown' }}
                                         </c-col>
                                     </c-row>
                                 }

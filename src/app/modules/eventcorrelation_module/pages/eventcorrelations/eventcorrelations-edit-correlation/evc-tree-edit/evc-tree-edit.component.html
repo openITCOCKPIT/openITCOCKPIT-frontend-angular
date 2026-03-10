@@ -43,6 +43,33 @@
 
                 @if (node.evcNode.type === 'service') {
                     <div class="service-node">
+
+                        <!-- warning score -->
+                        @if (node.evcNode.evcTreeItem && ( node.evcNode.evcTreeItem.score_warning || node.evcNode.evcTreeItem.score_critical || node.evcNode.evcTreeItem.score_unknown )) {
+                            <div class="position-absolute bottom-0 start-100 translate-middle d-flex">
+                                @if (node.evcNode.evcTreeItem && node.evcNode.evcTreeItem.score_warning) {
+                                    <span
+                                        class="badge rounded-pill bg-warning">
+                                        {{ node.evcNode.evcTreeItem.score_warning |localNumber }}
+                                    </span>
+                                }
+                                <!-- critical score -->
+                                @if (node.evcNode.evcTreeItem && node.evcNode.evcTreeItem.score_critical) {
+                                    <span
+                                        class="badge rounded-pill bg-critical">
+                                        {{ node.evcNode.evcTreeItem.score_critical |localNumber }}
+                                    </span>
+                                }
+                                <!-- unknown score -->
+                                @if (node.evcNode.evcTreeItem && node.evcNode.evcTreeItem.score_unknown) {
+                                    <span
+                                        class="badge rounded-pill bg-unknown">
+                                        {{ node.evcNode.evcTreeItem.score_unknown |localNumber }}
+                                    </span>
+                                }
+                            </div>
+                        }
+
                         @if (node.evcNode.layerIndex > 0) {
                             <div class="evc-service-edit-box">
                                 <c-button-group aria-label="Basic example" role="group">
