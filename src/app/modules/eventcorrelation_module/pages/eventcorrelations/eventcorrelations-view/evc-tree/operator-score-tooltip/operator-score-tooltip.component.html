@@ -63,6 +63,8 @@
                         </c-col>
                         <c-col [lg]="7" [cTextColor]="'secondary'">
                             {{ t('Score for unknown') }}
+                        </c-col>
+                        <c-col>
                             ≥ {{ scorignInformation.operator_unknown_min }}
                             @if (scorignInformation.servicestatus?.currentState === 3) {
                                 <span class="text-info">
@@ -131,7 +133,7 @@
                             <fa-icon [icon]="['fas', 'exclamation-triangle']"
                                      [cTextColor]="'warning'"></fa-icon>
                         </c-col>
-                        <c-col [lg]="7" [cTextColor]="'warning'">
+                        <c-col [cTextColor]="'warning'">
                             {{ t('Score for warning') }}
                             @if (scorignInformation.servicestatus?.currentState === 1) {
                                 <span class="text-info">
@@ -156,7 +158,7 @@
                             <fa-icon [icon]="['fas', 'exclamation-triangle']"
                                      [cTextColor]="'danger'"></fa-icon>
                         </c-col>
-                        <c-col [lg]="7" [cTextColor]="'danger'">
+                        <c-col [cTextColor]="'danger'">
                             {{ t('Score for critical') }}
                             @if (scorignInformation.servicestatus?.currentState === 2) {
                                 <span class="text-info">
