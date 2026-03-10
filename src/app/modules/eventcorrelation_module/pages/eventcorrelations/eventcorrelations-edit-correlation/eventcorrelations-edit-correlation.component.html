@@ -306,8 +306,8 @@
                                                                  [cTextColor]="'warning'"></fa-icon>
                                                     </span>
                                                     <input cFormControl type="number"
-                                                           [id]="'score_warning_' + service.service_id + '_'+$index"
-                                                           [name]="'score_warning_' + service.service_id + '_'+$index"
+                                                           [id]="'score_warning_' + service.vService_id + '_'+$index"
+                                                           [name]="'score_warning_' + service.vService_id + '_'+$index"
                                                            [(ngModel)]="service.score_warning"
                                                            [placeholder]="'Warning score' | transloco"/>
                                                 </c-input-group>
@@ -319,7 +319,7 @@
                                                                  [cTextColor]="'danger'"></fa-icon>
                                                     </span>
                                                     <input cFormControl type="number"
-                                                           [name]="'score_critical_' + service.service_id"
+                                                           [name]="'score_critical_' + service.vService_id"
                                                            [(ngModel)]="service.score_critical"
                                                            [placeholder]="'Critical score' | transloco"/>
                                                 </c-input-group>
@@ -331,7 +331,7 @@
                                                                  [cTextColor]="'secondary'"></fa-icon>
                                                     </span>
                                                     <input cFormControl type="number"
-                                                           [name]="'score_unknown_' + service.service_id"
+                                                           [name]="'score_unknown_' + service.vService_id"
                                                            [(ngModel)]="service.score_unknown"
                                                            [placeholder]="'Unknown score' | transloco"/>
                                                 </c-input-group>

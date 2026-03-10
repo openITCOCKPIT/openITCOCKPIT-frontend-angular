@@ -253,7 +253,7 @@ export interface EventcorrelationsEditCorrelationRoot {
 }
 
 export interface EvcModalServiceScore {
-    service_id: number | string
+    vService_id: number | string
     display_name: string
     score_warning: number | null
     score_critical: number | null
