@@ -74,7 +74,7 @@
                         <!-- vService container -->
 
                         <!-- Downtime overwrites current state badge -->
-                        @if (Number(node.evcNode.service?.servicestatus?.scheduledDowntimeDepth) > 0 && downtimedServices() > 0 && !node.evcNode.service?.disabled && stateForDowntimedService() != node.evcNode.service?.servicestatus?.currentState) {
+                        @if (Number(node.evcNode.service?.servicestatus?.scheduledDowntimeDepth) > 0 && downtimedServices() > 0 && !node.evcNode.service?.disabled && stateForDowntimedService() != node.evcNode.service?.servicestatus?.currentState && stateForDowntimedService() !== -1) {
                             <span
                                 class="position-absolute top-0 start-0 translate-middle badge rounded-circle"
                                 [ngClass]="{'bg-ok':stateForDowntimedService() == 0,'bg-warning':stateForDowntimedService() == 1,'bg-critical':stateForDowntimedService() == 2,'bg-unknown':stateForDowntimedService() == 3}"

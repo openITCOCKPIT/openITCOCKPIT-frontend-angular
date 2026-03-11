@@ -43,6 +43,8 @@ export class EvcTableComponent {
     public downtimeStateTitle: string = '';
     public disabledStateTitle: string = '';
 
+    public evcSummaryTreeForView: EvcSummaryService[][] = [];
+
     private readonly TranslocoService = inject(TranslocoService);
     private readonly EvcServicestatusToasterService = inject(EvcServicestatusToasterService);
     private cdr = inject(ChangeDetectorRef);
@@ -54,6 +56,31 @@ export class EvcTableComponent {
         this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered unknown');
 
         effect(() => {
+            // ITC-3587 we need to patch in the currentStateConsiderDowntimeOrDisabled field for the score operator
+            const evcTree = this.evcSummaryTree();
+            for (let layerNumber in evcTree) {
+                for (let parentId in evcTree[layerNumber]) {
+                    let vService = evcTree[layerNumber][parentId];
+                    if (vService.isUsedInScoringOperator) {
+                        vService.scheduledDowntimeDepth
+                        // true, if this service is used in a scoring operator in the next level.
+                        let currentState: number | null = vService.current_state;
+                        if (vService.scheduledDowntimeDepth && vService.scheduledDowntimeDepth > 0) {
+                            if (this.stateForDowntimedService() !== -1) {
+                                // -1 == actual service state
+                                currentState = this.stateForDowntimedService();
+                            }
+
+                        }
+                        if (vService.disabled) {
+                            currentState = this.stateForDisabledService();
+                        }
+                        evcTree[layerNumber][parentId].currentStateConsiderDowntimeOrDisabled = currentState;
+                    }
+                }
+
+            }
+
             switch (this.stateForDowntimedService()) {
                 case 0:
                     this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered ok');

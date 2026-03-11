@@ -350,7 +350,11 @@ export class EvcTreeComponent {
                         // true, if this service is used in a scoring operator in the next level.
                         let currentState: number | undefined = vService.service.servicestatus.currentState;
                         if (vService.service.servicestatus.scheduledDowntimeDepth && vService.service.servicestatus.scheduledDowntimeDepth > 0) {
-                            currentState = this.stateForDowntimedService();
+                            if (this.stateForDowntimedService() !== -1) {
+                                // -1 == actual service state
+                                currentState = this.stateForDowntimedService();
+                            }
+
                         }
                         if (vService.service.disabled) {
                             currentState = this.stateForDisabledService();
