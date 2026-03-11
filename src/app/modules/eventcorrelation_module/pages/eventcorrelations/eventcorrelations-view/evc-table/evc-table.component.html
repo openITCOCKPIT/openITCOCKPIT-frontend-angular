@@ -96,25 +96,25 @@
                             @if (column.isUsedInScoringOperator) {
                                 @if (column.currentStateConsiderDowntimeOrDisabled === 0) {
                                     <span
-                                        class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-dark ok z-1">
+                                        class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-ok z-1">
                                         0
                                     </span>
                                 }
                                 @if (column.currentStateConsiderDowntimeOrDisabled === 1) {
                                     <span
-                                        class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-dark warning z-1">
+                                        class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-warning z-1">
                                         {{ column.score_warning | localNumber }}
                                     </span>
                                 }
                                 @if (column.currentStateConsiderDowntimeOrDisabled === 2) {
                                     <span
-                                        class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-dark critical z-1">
+                                        class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-critical z-1">
                                         {{ column.score_critical | localNumber }}
                                     </span>
                                 }
                                 @if (column.currentStateConsiderDowntimeOrDisabled === 3) {
                                     <span
-                                        class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-dark text-white z-1">
+                                        class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-unknown z-1">
                                         {{ column.score_unknown | localNumber }}
                                     </span>
                                 }
@@ -130,7 +130,7 @@
                             <!-- Disabled vService -->
                             @if (column.disabled) {
                                 <span
-                                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill"
+                                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill z-2"
                                     [ngClass]="{'bg-ok':stateForDisabledService() == 0,'bg-warning':stateForDisabledService() == 1,'bg-critical':stateForDisabledService() == 2,'bg-unknown':stateForDisabledService() == 3}">
                                     <fa-icon [icon]="['fas', 'plug']" size="lg"
                                              [cTooltip]="disabledStateTitle"
@@ -141,7 +141,7 @@
                             <!-- vService in Downtime -->
                             @if (Number(column.scheduledDowntimeDepth) > 0 && stateForDowntimedService() !== column.current_state && stateForDowntimedService() !== -1) {
                                 <span
-                                    class="position-absolute top-0 start-0 translate-middle badge rounded-circle"
+                                    class="position-absolute top-0 start-0 translate-middle badge rounded-circle z-2"
                                     [ngClass]="{'bg-ok':stateForDowntimedService() == 0,'bg-warning':stateForDowntimedService() == 1,'bg-critical':stateForDowntimedService() == 2,'bg-unknown':stateForDowntimedService() == 3}"
                                     [cTooltip]="downtimeStateTitle"
                                     cTooltipPlacement="top">
