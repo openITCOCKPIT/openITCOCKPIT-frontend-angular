@@ -819,7 +819,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                     return;
                 }
 
-                const parentIdForScoreCheck = evcNode.id
+                const parentIdForScoreCheck = String(evcNode.id);
 
                 if (this.modalVService.current_evc.layerIndex === 1) {
                     //Server returned all 1st layer services - simply replace the old services in the json with the new one
