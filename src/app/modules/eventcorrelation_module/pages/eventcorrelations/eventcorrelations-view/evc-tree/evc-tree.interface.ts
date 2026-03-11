@@ -24,4 +24,5 @@ export interface EvcScoringInformationForRendering {
     operator?: EventcorrelationOperators
     servicestatus?: ServicestatusObject
     isUsedInScoringOperator: boolean
+    currentStateConsiderDowntimeOrDisabled?: number
 }

@@ -135,28 +135,28 @@
                         <!-- Display scoring value if available -->
                         @if (node.evcNode.scoringInformation && node.evcNode.scoringInformation.isUsedInScoringOperator) {
                             <!-- ok score -->
-                            @if (node.evcNode.service?.servicestatus?.currentState === 0) {
+                            @if (node.evcNode.scoringInformation.currentStateConsiderDowntimeOrDisabled === 0) {
                                 <span
                                     class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-ok">
                                     0
                                 </span>
                             }
                             <!-- warning score -->
-                            @if (node.evcNode.service?.servicestatus?.currentState === 1) {
+                            @if (node.evcNode.scoringInformation.currentStateConsiderDowntimeOrDisabled === 1) {
                                 <span
                                     class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-warning">
                                     {{ node.evcNode.scoringInformation.score_warning |localNumber }}
                                 </span>
                             }
                             <!-- critical score -->
-                            @if (node.evcNode.service?.servicestatus?.currentState === 2) {
+                            @if (node.evcNode.scoringInformation.currentStateConsiderDowntimeOrDisabled === 2) {
                                 <span
                                     class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-critical">
                                     {{ node.evcNode.scoringInformation.score_critical | localNumber }}
                                 </span>
                             }
                             <!-- unknown score -->
-                            @if (node.evcNode.service?.servicestatus?.currentState === 3) {
+                            @if (node.evcNode.scoringInformation.currentStateConsiderDowntimeOrDisabled === 3) {
                                 <span
                                     class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-unknown">
                                     {{ node.evcNode.scoringInformation.score_unknown | localNumber }}

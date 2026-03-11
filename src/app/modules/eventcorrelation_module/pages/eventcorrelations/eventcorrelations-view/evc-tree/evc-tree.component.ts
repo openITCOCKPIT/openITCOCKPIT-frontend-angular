@@ -348,11 +348,20 @@ export class EvcTreeComponent {
                     let scoringInformation: undefined | EvcScoringInformationForRendering = undefined;
                     if (vService.isUsedInScoringOperator) {
                         // true, if this service is used in a scoring operator in the next level.
+                        let currentState: number | undefined = vService.service.servicestatus.currentState;
+                        if (vService.service.servicestatus.scheduledDowntimeDepth && vService.service.servicestatus.scheduledDowntimeDepth > 0) {
+                            currentState = this.stateForDowntimedService();
+                        }
+                        if (vService.service.disabled) {
+                            currentState = this.stateForDisabledService();
+                        }
+
                         scoringInformation = {
                             isUsedInScoringOperator: vService.isUsedInScoringOperator,
                             score_warning: vService.score_warning,
                             score_critical: vService.score_critical,
-                            score_unknown: vService.score_unknown
+                            score_unknown: vService.score_unknown,
+                            currentStateConsiderDowntimeOrDisabled: currentState
                         };
                     }
 
