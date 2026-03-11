@@ -706,7 +706,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                             if (this.modalVService && [EventcorrelationOperators.SCORESCLALARGREATER,
                                 EventcorrelationOperators.SCORESCLALARLESSER,
                                 EventcorrelationOperators.SCORERANGEINCLUSIVE,
-                                EventcorrelationOperators.SCORERANGEINCLUSIVE].includes(this.modalVService.operator as EventcorrelationOperators)) {
+                                EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(this.modalVService.operator as EventcorrelationOperators)) {
                                 isScoringOperator = true;
                             }
 
@@ -898,7 +898,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                 if (this.modalVService && [EventcorrelationOperators.SCORESCLALARGREATER,
                     EventcorrelationOperators.SCORESCLALARLESSER,
                     EventcorrelationOperators.SCORERANGEINCLUSIVE,
-                    EventcorrelationOperators.SCORERANGEINCLUSIVE].includes(this.modalVService.operator as EventcorrelationOperators)) {
+                    EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(this.modalVService.operator as EventcorrelationOperators)) {
                     isScoringOperator = true;
                 }
 
@@ -1215,7 +1215,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
         if (![EventcorrelationOperators.SCORESCLALARGREATER,
             EventcorrelationOperators.SCORESCLALARLESSER,
             EventcorrelationOperators.SCORERANGEINCLUSIVE,
-            EventcorrelationOperators.SCORERANGEINCLUSIVE].includes(this.modalVService.operator)) {
+            EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(this.modalVService.operator)) {
 
             // Not a score operator - nothing to do
             return;
