@@ -52,7 +52,7 @@
                 </c-row>
             </c-col>
             <c-col [xs]="12">
-                @if (config) {
+                @if (config && widget) {
                     <c-row>
                         <c-col [xs]="12" [md]="6">
                             {{ t('Alert status') }}
@@ -280,6 +280,109 @@
                                             </ul>
                                         </c-dropdown>
                                     </c-input-group>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" lg="2">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Priority') }}
+                                    </h5>
+                                    <c-form-check>
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            [name]="'Hosts.Priority_1-'+widget.id"
+                                            [attr.id]="'Hosts.Priority_1-'+widget.id"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="priorityFilter['1']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_1'+widget.id"
+                                               class="ms-1 mt-1 ok-soft">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            [name]="'Hosts.Priority_2-'+widget.id"
+                                            [attr.id]="'Hosts.Priority_2-'+widget.id"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="priorityFilter['2']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_2-'+widget.id" class="ms-1 mt-1 ok">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            [name]="'Hosts.Priority_3-'+widget.id"
+                                            [attr.id]="'Hosts.Priority_3-'+widget.id"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="priorityFilter['3']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_3-'+widget.id"
+                                               class="ms-1 mt-1 warning">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            [name]="'Hosts.Priority_4-'+widget.id"
+                                            [attr.id]="'Hosts.Priority_4-'+widget.id"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="priorityFilter['4']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_4-'+widget.id"
+                                               class="ms-1 mt-1 critical-soft">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            [name]="'Hosts.Priority_5-'+widget.id"
+                                            [attr.id]="'Hosts.Priority_5-'+widget.id"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [(ngModel)]="priorityFilter['5']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_5-'+widget.id"
+                                               class="ms-1 mt-1 critical">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
                                 </fieldset>
                             </c-col>
                         </c-row>

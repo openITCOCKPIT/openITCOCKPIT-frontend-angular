@@ -44,6 +44,8 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SliderTimeComponent } from '../../../../components/slider-time/slider-time.component';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule } from '@angular/forms';
+import { DebounceDirective } from '../../../../directives/debounce.directive';
+import { TrueFalseDirective } from '../../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-hosts-top-alerts-widget',
@@ -76,7 +78,9 @@ import { FormsModule } from '@angular/forms';
         DropdownComponent,
         DropdownToggleDirective,
         DropdownMenuDirective,
-        DropdownItemDirective
+        DropdownItemDirective,
+        DebounceDirective,
+        TrueFalseDirective
     ],
     templateUrl: './hosts-top-alerts-widget.component.html',
     styleUrl: './hosts-top-alerts-widget.component.css',
@@ -101,6 +105,14 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
 
 
     private readonly HostsTopAlertsService = inject(HostsTopAlertsService);
+
+    public priorityFilter: { [key: string]: boolean } = {
+        '1': false,
+        '2': false,
+        '3': false,
+        '4': false,
+        '5': false
+    };
 
 
     public override load() {
@@ -193,6 +205,18 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
         this.subscriptions.add(this.HostsTopAlertsService.loadWidgetConfig(this.widget.id).subscribe(config => {
             // Save the widget config
             this.config = config;
+
+            this.priorityFilter = {
+                '1': false,
+                '2': false,
+                '3': false,
+                '4': false,
+                '5': false
+            }
+            for (let index in this.config.hostpriority) {
+                this.priorityFilter[this.config.hostpriority[index]] = true;
+            }
+
             this.loadDowntimes();
             this.cdr.markForCheck();
 
@@ -208,6 +232,15 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
             return;
         }
 
+        let priorityFilter = [];
+        for (var key in this.priorityFilter) {
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(key);
+            }
+        }
+
+        this.config.hostpriority = priorityFilter;
+
         this.subscriptions.add(this.HostsTopAlertsService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
             this.flipped.set(false);
@@ -222,6 +255,13 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
             return;
         }
 
+        let priorityFilter: string[] = [];
+        for (let key in this.priorityFilter) {
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(key);
+            }
+        }
+
         // Apply the config to the filter
         const params: HostsTopAlertsWidgetParams = {
             angular: true,
@@ -230,6 +270,7 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
             limit: this.limit,
             'filter[NotificationHosts.state][]': [this.config.state],
             'filter[not_older_than]': this.getOlderThanInMinutes(),
+            'filter[hostpriority][]': priorityFilter
         };
 
         this.subscriptions.add(this.HostsTopAlertsService.loadHostTopAlerts(params).subscribe(alerts => {
