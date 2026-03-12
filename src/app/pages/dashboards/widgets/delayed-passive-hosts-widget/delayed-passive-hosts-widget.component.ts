@@ -37,7 +37,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-records.component';
 import { ScrollIndexComponent } from '../../../../layouts/coreui/paginator/scroll-index/scroll-index.component';
 import { SliderTimeComponent } from '../../../../components/slider-time/slider-time.component';
@@ -55,6 +55,8 @@ import {
     RegexHelperTooltipComponent
 } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { DebounceDirective } from '../../../../directives/debounce.directive';
+import { TrueFalseDirective } from '../../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-delayed-passive-hosts-widget',
@@ -96,7 +98,10 @@ import { NgSelectComponent } from '@ng-select/ng-select';
         FormCheckComponent,
         FormCheckLabelDirective,
         FaStackComponent,
-        FaStackItemSizeDirective
+        FaStackItemSizeDirective,
+        DebounceDirective,
+        TrueFalseDirective,
+        NgClass
     ],
     templateUrl: './delayed-passive-hosts-widget.component.html',
     styleUrl: './delayed-passive-hosts-widget.component.css',
@@ -123,6 +128,14 @@ export class DelayedPassiveHostsWidgetComponent extends BaseWidgetComponent impl
 
 
     private readonly DelayedPassiveHostsWidgetService = inject(DelayedPassiveHostsWidgetService);
+
+    public priorityFilter: { [key: string]: boolean } = {
+        '1': false,
+        '2': false,
+        '3': false,
+        '4': false,
+        '5': false
+    };
 
     public override load() {
         // Handled by ngAfterViewInit as we need the widget height for the correct limit
@@ -221,6 +234,17 @@ export class DelayedPassiveHostsWidgetComponent extends BaseWidgetComponent impl
             this.configKeyWords = (config.Host.keywords !== '') ? config.Host.keywords.split(',') : [];
             this.configNotKeyWords = (config.Host.not_keywords !== '') ? config.Host.not_keywords.split(',') : [];
 
+            this.priorityFilter = {
+                '1': false,
+                '2': false,
+                '3': false,
+                '4': false,
+                '5': false
+            }
+            for (let index in this.config.hostpriority) {
+                this.priorityFilter[this.config.hostpriority[index]] = true;
+            }
+
 
             this.loadHosts();
             this.cdr.markForCheck();
@@ -239,6 +263,15 @@ export class DelayedPassiveHostsWidgetComponent extends BaseWidgetComponent impl
 
         this.config.Host.keywords = this.configKeyWords.join(',');
         this.config.Host.not_keywords = this.configNotKeyWords.join(',');
+
+        let priorityFilter = [];
+        for (var key in this.priorityFilter) {
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(key);
+            }
+        }
+
+        this.config.hostpriority = priorityFilter;
 
         this.subscriptions.add(this.DelayedPassiveHostsWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -302,6 +335,13 @@ export class DelayedPassiveHostsWidgetComponent extends BaseWidgetComponent impl
             }
         }
 
+        let priorityFilter: string[] = [];
+        for (let key in this.priorityFilter) {
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(key);
+            }
+        }
+
         // Apply the config to the filter
         const params: DelayedPassiveHostsWidgetParams = {
             angular: true,
@@ -319,7 +359,8 @@ export class DelayedPassiveHostsWidgetComponent extends BaseWidgetComponent impl
             'filter[Hoststatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
             'filter[Hoststatus.scheduled_downtime_depth]': inDowntime,
             'filter[Hoststatus.last_state_change][]': lastStateChange,
-            'filter[delayed][]': delayed
+            'filter[delayed][]': delayed,
+            'filter[hostpriority][]': priorityFilter
         };
 
         this.subscriptions.add(this.DelayedPassiveHostsWidgetService.loadHosts(params).subscribe(hosts => {

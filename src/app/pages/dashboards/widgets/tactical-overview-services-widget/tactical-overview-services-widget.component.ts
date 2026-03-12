@@ -16,7 +16,9 @@ import { RouterLink } from '@angular/router';
 import {
     ButtonDirective,
     ColComponent,
+    FormCheckComponent,
     FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     InputGroupComponent,
     InputGroupTextDirective,
@@ -54,7 +56,9 @@ import { HostgroupsService } from '../../../hostgroups/hostgroups.service';
         ButtonDirective,
         FaStackComponent,
         FaStackItemSizeDirective,
-        XsButtonDirective
+        XsButtonDirective,
+        FormCheckComponent,
+        FormCheckLabelDirective
     ],
     templateUrl: './tactical-overview-services-widget.component.html',
     styleUrl: './tactical-overview-services-widget.component.css',
@@ -77,6 +81,14 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
     public hostgroupNotKeywords: string[] = [];
     private readonly TacticalOverviewServicesWidgetService = inject(TacticalOverviewServicesWidgetService);
     private readonly notyService = inject(NotyService);
+
+    public priorityFilter: { 1: boolean; 2: boolean; 3: boolean; 4: boolean; 5: boolean } = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
+    };
 
     constructor() {
         super();
@@ -102,6 +114,19 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
                     this.servicegroupNotKeywords = this.config.Servicegroup.not_keywords.split(',').filter(Boolean);
                     this.servicestatusSummary = result.servicestatusSummary;
                     this.servicestatusCountPercentage = result.servicestatusCountPercentage;
+
+                    this.priorityFilter = {
+                        1: false,
+                        2: false,
+                        3: false,
+                        4: false,
+                        5: false
+                    };
+                    for (let index in this.config.servicepriority) {
+                        // @ts-ignore
+                        this.priorityFilter[this.config.servicepriority[index]] = true;
+                    }
+
                     this.cdr.markForCheck();
                 }));
         }
@@ -151,6 +176,16 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
         this.config.Hostgroup.not_keywords = this.hostgroupNotKeywords.join(',');
         this.config.Servicegroup.keywords = this.servicegroupKeywords.join(',');
         this.config.Servicegroup.not_keywords = this.servicegroupNotKeywords.join(',');
+
+        let priorityFilter: number[] = [];
+        for (let key in this.priorityFilter) {
+            // @ts-ignore
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(Number(key));
+            }
+        }
+
+        this.config.servicepriority = priorityFilter;
 
         this.subscriptions.add(this.TacticalOverviewServicesWidgetService.saveWidget(this.widget, this.config)
             .subscribe({

@@ -22,7 +22,7 @@ export interface DelayedPassiveHostsWidgetConfig {
         keywords: string
         not_keywords: string
     }
-
+    hostpriority: string[]
     sort: string
     direction: 'asc' | 'desc'
     useScroll: boolean
@@ -52,4 +52,5 @@ export interface DelayedPassiveHostsWidgetParams {
             number | null,
             'SECOND' | 'MINUTE' | 'HOUR' | 'DAY' | null
     ],
+    'filter[hostpriority][]': string[]
 }
