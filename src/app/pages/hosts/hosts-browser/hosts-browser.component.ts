@@ -256,26 +256,28 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             if (theme === 'dark') {
                 this.theme = 'dark';
             }
-//          this.renderVisNetwork();
             this.cdr.markForCheck();
         }));
     }
 
     public ngOnInit(): void {
-        const idOrUuid = String(this.route.snapshot.paramMap.get('idOrUuid'));
 
-        const uuid = new UUID();
-        if (uuid.isUuid(idOrUuid)) {
-            // UUID was passed via URL
-            this.subscriptions.add(this.HostsService.getHostByUuid(idOrUuid).subscribe((host) => {
-                this.id = host.id;
+        // If you change the hostId, the subscription needs to come from paramMap.
+        this.route.paramMap.subscribe(params => {
+            const idOrUuid = String(this.route.snapshot.paramMap.get('idOrUuid'));
+            const uuid = new UUID();
+            if (uuid.isUuid(idOrUuid)) {
+                // UUID was passed via URL
+                this.subscriptions.add(this.HostsService.getHostByUuid(idOrUuid).subscribe((host) => {
+                    this.id = host.id;
+                    this.loadHost();
+                }));
+            } else {
+                // ID was passed via URL
+                this.id = Number(idOrUuid);
                 this.loadHost();
-            }));
-        } else {
-            // ID was passed via URL
-            this.id = Number(idOrUuid);
-            this.loadHost();
-        }
+            }
+        });
 
         this.route.queryParams.subscribe(params => {
             let selectedTab = params['selectedTab'] || undefined;
