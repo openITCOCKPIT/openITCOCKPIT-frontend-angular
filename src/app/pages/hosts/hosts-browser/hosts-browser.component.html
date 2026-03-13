@@ -1,5 +1,4 @@
 <ng-container *transloco="let t">
-    <c-col xs="12" id="statusmapNetwork"></c-col>
 
     @if (hostBrowserConfig) {
         <oitc-hosts-browser-menu
@@ -1185,12 +1184,9 @@
                                 </c-col>
                                 <!-- Relations -->
 
-                                <c-col [xs]="12" [md]="6">
-                                    <pre>{{ result.parentChildRelations   | json }}</pre>
-                                    <div>
-
-                                    </div>
-                                </c-col>
+                                <parent-child-host-map
+                                    [result]="result"
+                                />
                             </c-row>
                         }
                     </div>
