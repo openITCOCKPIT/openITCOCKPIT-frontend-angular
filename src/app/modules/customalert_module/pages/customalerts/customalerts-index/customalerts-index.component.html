@@ -423,7 +423,7 @@
                                                     class="fa-solid fa-folder-closed text-primary"></i>
                                             }
                                         </td>
-                                        <td>
+                                        <td class="word-break">
                                             <span *oitcPermission="['services', 'browser']">
                                                 <a [routerLink]="['/', 'services', 'browser',customAlertRule.service.id]">
                                                     {{ customAlertRule.servicename }}
@@ -554,7 +554,7 @@
                                     <td>
                                         {{ customAlertRule.service.container }}
                                     </td>
-                                    <td>
+                                    <td class="word-break">
                                         <span *oitcPermission="['hosts', 'browser']">
                                             <a [routerLink]="['/', 'hosts', 'browser',customAlertRule.service.host.id]">
                                                 {{ customAlertRule.service.host.name }}
@@ -564,7 +564,7 @@
                                             {{ customAlertRule.service.host.name }}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td class="word-break">
                                         <span *oitcPermission="['services', 'browser']">
                                             <a [routerLink]="['/', 'services', 'browser',customAlertRule.service.id]">
                                                 {{ customAlertRule.servicename }}
