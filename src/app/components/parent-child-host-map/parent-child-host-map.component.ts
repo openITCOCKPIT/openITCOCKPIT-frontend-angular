@@ -335,6 +335,7 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges {
 
         network.on('click', (properties) => {
             if (properties.nodes[0]) {
+                // @todo: Achtun bullshit detected (replace...) Geht doch irgendwie auch mit nem zusätzlichen Feld ?
                 this.router.navigate(['hosts', 'browser', properties.nodes[0].replace('Host_', '')]);
             }
         });
