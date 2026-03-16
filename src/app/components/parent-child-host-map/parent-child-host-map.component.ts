@@ -16,6 +16,7 @@ import { Edge, Network, Node, Options } from 'vis-network';
 import { StatusmapExtendedNode } from '../../pages/statusmaps/statusmap.interface';
 import { DataSet } from 'vis-data';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'parent-child-host-map',
@@ -30,6 +31,7 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges {
 
     private cdr = inject(ChangeDetectorRef);
     private readonly document = inject(DOCUMENT);
+    private subscriptions: Subscription = new Subscription();
     private readonly LayoutService: LayoutService = inject(LayoutService);
     private readonly router = inject(Router);
     public theme: string = '';
@@ -37,6 +39,16 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges {
     private edges: DataSet<Edge> = new DataSet<Edge>();
 
     @Input() result?: HostBrowserResult;
+
+    constructor() {
+        this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
+            this.theme = '';
+            if (theme === 'dark') {
+                this.theme = 'dark';
+            }
+            this.ngAfterViewInit();
+        }));
+    }
 
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -83,8 +95,9 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges {
         const colorDown = '#CC0000';
         const colorUnreachable = '#727b84';
         const colorNotMonitored = '#4285F4';
-
-        const labelFontColor: string = this.theme === 'dark' ? "rgba(255, 255, 255, 0.87)" : "rgba(37, 43, 54, 0.95)";
+        // Hier dark /Light switch wichtig
+        const colorBackground: string = this.theme === 'dark' ? "rgba(37, 43, 54, 1)" : "rgba(255, 255, 255, 1)";
+        const colorText: string = this.theme === 'dark' ? "rgba(255, 255, 255, 0.87)" : "rgba(37, 43, 54, 0.95)";
 
         let options: Options = {
             autoResize: true,
@@ -103,177 +116,177 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges {
                 },
                 notMonitored: {
                     shape: 'dot',
-                    color: colorNotMonitored,
+                    color: {
+                        border: colorNotMonitored,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf070',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
                 disabled: {
                     shape: 'dot',
-                    color: colorNotMonitored,
+                    color: {
+                        border: colorNotMonitored,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf1e6',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
                 hostUp: {
                     shape: 'dot',
-                    color: colorUp,
+                    color: {
+                        border: colorUp,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf058',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
                 hostDown: {
                     shape: 'dot',
-                    color: colorDown,
+                    color: {
+                        border: colorDown,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf06a',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
                 hostUnreachable: {
                     shape: 'dot',
-                    color: colorDown,
+                    color: {
+                        border: colorDown,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf059',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
                 isInDowntimeUp: {
                     shape: 'dot',
-                    color: colorUp,
+                    color: {
+                        border: colorUp,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf011',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
                 isInDowntimeDown: {
                     shape: 'dot',
-                    color: colorDown,
+                    color: {
+                        border: colorDown,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf011',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
                 isInDowntimeUnreachable: {
                     shape: 'dot',
-                    color: colorUnreachable,
+                    color: {
+                        border: colorUnreachable,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf011',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
                 isAcknowledgedUp: {
                     shape: 'dot',
-                    color: colorUp,
+                    color: {
+                        border: colorUp,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf007',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
                 isAcknowledgedDown: {
                     shape: 'dot',
-                    color: colorDown,
+                    color: {
+                        border: colorDown,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf007',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
                 isAcknowledgedUnreachable: {
                     shape: 'dot',
-                    color: colorUnreachable,
+                    color: {
+                        border: colorUnreachable,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf007',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
                 isAcknowledgedAndIsInDowntimeUp: {
                     shape: 'dot',
-                    color: colorUp,
+                    color: {
+                        border: colorUp,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf0f0',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
                 isAcknowledgedAndIsInDowntimeDown: {
                     shape: 'dot',
-                    color: colorDown,
+                    color: {
+                        border: colorDown,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf0f0',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
                 isAcknowledgedAndIsInDowntimeUnreachable: {
                     shape: 'dot',
-                    color: colorUnreachable,
+                    color: {
+                        border: colorUnreachable,
+                        background: colorBackground
+                    },
+                    borderWidth: 2,
+                    font: {
+                        color: colorText
+                    },
                     size: 15,
-                    icon: {
-                        face: '"Font Awesome 7 Free Solid"',
-                        code: '\uf0f0',
-                        color: '#ffffff',
-                        size: 5,
-                        weight: "900", // Font Awesome 5 doesn't work properly unless bold.
-                    }
                 },
             },
             nodes: {
                 borderWidth: 0.5,
                 font: {
-                    color: labelFontColor,
+                    color: colorText,
                     align: "left" // GEHT NICHT
                 }
             },
