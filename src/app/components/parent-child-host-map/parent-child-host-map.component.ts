@@ -331,9 +331,9 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges {
         });
 
         network.on('click', (properties) => {
-            console.warn(properties.nodes[0].replace('Host_', ''));
-
-            this.router.navigate(['hosts', 'browser', properties.nodes[0].replace('Host_', '')]);
+            if (properties.nodes[0]) {
+                this.router.navigate(['hosts', 'browser', properties.nodes[0].replace('Host_', '')]);
+            }
         });
         this.cdr.markForCheck();
     }
