@@ -1183,10 +1183,11 @@
                                     </table>
                                 </c-col>
                                 <!-- Relations -->
-
-                                <parent-child-host-map
-                                    [result]="result"
-                                />
+                                @if (result.parentChildRelations.nodes.length > 1) {
+                                    <parent-child-host-map
+                                        [result]="result"
+                                    />
+                                }
                             </c-row>
                         }
                     </div>
