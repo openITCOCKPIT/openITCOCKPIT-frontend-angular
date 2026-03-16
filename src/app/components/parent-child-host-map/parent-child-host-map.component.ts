@@ -300,7 +300,9 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges {
                 }
             },
             interaction: {
-                hover: true,
+                hover: false,
+                zoomView: false,   // disables zooming (mouse wheel + pinch)
+                dragView: false,   // disables moving/panning the canvas
                 dragNodes: false,
                 keyboard: {
                     enabled: false
@@ -312,12 +314,13 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges {
                 improvedLayout: false,
                 hierarchical: {
                     enabled: true,
-                    direction: 'RL',
+                    direction: 'LR',
                     nodeSpacing: 40,
                     levelSeparation: 500,
                     sortMethod: "directed",
                     shakeTowards: "roots",
-                    parentCentralization: false
+                    parentCentralization: false,
+                    treeSpacing: 200,
                 }
             },
             physics: false
