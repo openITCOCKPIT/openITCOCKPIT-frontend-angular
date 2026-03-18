@@ -23,7 +23,7 @@
             </li>
         </ol>
     </nav>
-    <c-card class="mb-3">
+    <c-card class="mb-3 min-vh-100">
         <c-card-header>
             <h5 cCardTitle>{{ t('Resource groups') }}
                 <small class="fw-300">
@@ -55,7 +55,9 @@
             <c-row>
                 <c-col [xs]="12" [md]="12" [lg]="4">
                     <div #scmSummaryContainer id="sunburstchart">
-                        &nbsp;
+                        @if (mapSummary) {
+                            <oitc-sunburst-echart [chartData]="mapSummary"></oitc-sunburst-echart>
+                        }
                     </div>
                 </c-col>
                 @if (globalStatusSummary) {

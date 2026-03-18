@@ -18,7 +18,8 @@ import {
     ColComponent,
     NavComponent,
     NavItemComponent,
-    RowComponent, TextColorDirective
+    RowComponent,
+    TextColorDirective
 } from '@coreui/angular';
 import { FaIconComponent, FaLayersComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -41,6 +42,7 @@ import Sunburst from 'sunburst-chart';
 import _ from 'lodash';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
+import { SunburstEchartComponent } from '../../../../../components/charts/sunburst-echart/sunburst-echart.component';
 
 
 @Component({
@@ -68,7 +70,8 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
         TranslocoPipe,
         NoRecordsComponent,
         FaLayersComponent,
-        TextColorDirective
+        TextColorDirective,
+        SunburstEchartComponent
     ],
     templateUrl: './resourcegroups-summary.component.html',
     styleUrl: './resourcegroups-summary.component.scss',
@@ -82,7 +85,7 @@ export class ResourcegroupsSummaryComponent implements OnInit, OnDestroy {
     private readonly document = inject(DOCUMENT);
     private readonly ResourcegroupsSummaryService = inject(ResourcegroupsSummaryService);
     public resourcegroups!: ResourcegroupMap[];
-    public mapSummary!: ResourcegroupsSummaryMap;
+    public mapSummary: ResourcegroupsSummaryMap[] = [];
     public globalStatusSummary!: GlobalStatusSummary;
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private containerWidth: number = 0;
@@ -113,7 +116,7 @@ export class ResourcegroupsSummaryComponent implements OnInit, OnDestroy {
                 this.resourcegroups = result.resourcegroups;
                 this.mapSummary = result.mapSummary;
                 this.globalStatusSummary = result.globalStatusSummary;
-                this.renderSunburstChart();
+                //this.renderSunburstChart();
                 this.cdr.markForCheck();
             })
         );

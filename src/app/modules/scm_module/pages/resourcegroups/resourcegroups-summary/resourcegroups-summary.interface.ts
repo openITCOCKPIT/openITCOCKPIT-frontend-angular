@@ -6,7 +6,7 @@ import { GenericIdAndName } from '../../../../../generic.interfaces';
 export interface ResourcegroupsSummaryResponse extends PaginateOrScroll {
     resourcegroups: ResourcegroupMap[]
     globalStatusSummary: GlobalStatusSummary
-    mapSummary: ResourcegroupsSummaryMap
+    mapSummary: ResourcegroupsSummaryMap[]
     _csrfToken: any
 }
 
