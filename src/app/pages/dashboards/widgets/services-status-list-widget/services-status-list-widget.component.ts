@@ -57,6 +57,7 @@ import {
     ServicestatusIconComponent
 } from '../../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { RouterLink } from '@angular/router';
+import { DebounceDirective } from '../../../../directives/debounce.directive';
 
 @Component({
     selector: 'oitc-services-status-list-widget',
@@ -97,7 +98,8 @@ import { RouterLink } from '@angular/router';
         TooltipDirective,
         ServicestatusIconComponent,
         RouterLink,
-        NgClass
+        NgClass,
+        DebounceDirective
     ],
     templateUrl: './services-status-list-widget.component.html',
     styleUrl: './services-status-list-widget.component.css',
@@ -126,6 +128,14 @@ export class ServicesStatusListWidgetComponent extends BaseWidgetComponent imple
 
 
     private readonly ServicesStatusListWidgetService = inject(ServicesStatusListWidgetService);
+
+    public priorityFilter: { 1: boolean; 2: boolean; 3: boolean; 4: boolean; 5: boolean } = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
+    };
 
     public override load() {
         // Handled by ngAfterViewInit as we need the widget height for the correct limit
@@ -228,6 +238,18 @@ export class ServicesStatusListWidgetComponent extends BaseWidgetComponent imple
             this.configServiceKeyWords = (config.Service.keywords !== '') ? config.Service.keywords.split(',') : [];
             this.configServiceNotKeyWords = (config.Service.not_keywords !== '') ? config.Service.not_keywords.split(',') : [];
 
+            this.priorityFilter = {
+                1: false,
+                2: false,
+                3: false,
+                4: false,
+                5: false
+            };
+            for (let index in this.config.servicepriority) {
+                // @ts-ignore
+                this.priorityFilter[this.config.servicepriority[index]] = true;
+            }
+
 
             this.loadServices();
             this.cdr.markForCheck();
@@ -248,6 +270,16 @@ export class ServicesStatusListWidgetComponent extends BaseWidgetComponent imple
         this.config.Host.not_keywords = this.configHostNotKeyWords.join(',');
         this.config.Service.keywords = this.configServiceKeyWords.join(',');
         this.config.Service.not_keywords = this.configServiceNotKeyWords.join(',');
+
+        let priorityFilter: number[] = [];
+        for (let key in this.priorityFilter) {
+            // @ts-ignore
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(Number(key));
+            }
+        }
+
+        this.config.servicepriority = priorityFilter;
 
         this.subscriptions.add(this.ServicesStatusListWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -301,6 +333,14 @@ export class ServicesStatusListWidgetComponent extends BaseWidgetComponent imple
             }
         }
 
+        let priorityFilter: number[] = [];
+        for (let key in this.priorityFilter) {
+            //@ts-ignore
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(Number(key));
+            }
+        }
+
         // Apply the config to the filter
         const params: ServicesStatusListWidgetParams = {
             angular: true,
@@ -321,7 +361,8 @@ export class ServicesStatusListWidgetComponent extends BaseWidgetComponent imple
             'filter[Servicestatus.current_state][]': currentState,
             'filter[Servicestatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
             'filter[Servicestatus.scheduled_downtime_depth]': inDowntime,
-            'filter[Servicestatus.last_state_change][]': lastStateChange
+            'filter[Servicestatus.last_state_change][]': lastStateChange,
+            'filter[servicepriority][]': priorityFilter
         };
 
         this.subscriptions.add(this.ServicesStatusListWidgetService.loadServices(params).subscribe(services => {

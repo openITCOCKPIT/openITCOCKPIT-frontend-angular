@@ -6,6 +6,7 @@ export interface ServicesTopAlertsWidgetConfig {
     state: 'ok' | 'warning' | 'critical' | 'unknown',
     not_older_than: number,
     not_older_than_unit: 'DAY' | 'HOUR' | 'MINUTE',
+    servicepriority: number[]
     scroll_interval: number,
     useScroll: boolean
 }
@@ -16,6 +17,7 @@ export interface ServicesTopAlertsWidgetParams {
     page: number
     'filter[NotificationServices.state][]': ['ok' | 'warning' | 'critical' | 'unknown']
     'filter[not_older_than]': number // in minutes
+    'filter[servicepriority][]': number[]
     limit: number
 }
 

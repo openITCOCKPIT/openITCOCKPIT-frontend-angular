@@ -142,6 +142,7 @@ import { IndexPage } from '../../../pages.interface';
 import { HostgroupsService } from '../../hostgroups/hostgroups.service';
 import { ServicegroupsService } from '../../servicegroups/servicegroups.service';
 import { HostgroupsLoadHostgroupsByStringParams } from '../../hostgroups/hostgroups.interface';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-services-index',
@@ -208,7 +209,8 @@ import { HostgroupsLoadHostgroupsByStringParams } from '../../hostgroups/hostgro
         DropdownDividerDirective,
         TableLoaderComponent,
         ServiceAddToServicegroupModalComponent,
-        AsyncPipe
+        AsyncPipe,
+        TrueFalseDirective
     ],
     templateUrl: './services-index.component.html',
     styleUrl: './services-index.component.css',
@@ -557,6 +559,14 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             }
         }
 
+        let state_type: string = '';
+        if (this.filter.Servicestatus.state_type.soft !== this.filter.Servicestatus.state_type.hard) {
+            state_type = '0';
+            if (this.filter.Servicestatus.state_type.hard) {
+                state_type = '1';
+            }
+        }
+
         let urlParams = {
             'angular': true,
             'sort': this.params.sort,
@@ -581,7 +591,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             'filter[Servicestatus.notifications_enabled]': notificationsEnabled,
             'filter[servicepriority][]': priorityFilter,
             'filter[Hostgroups.id][]': this.filter.Hostgroups.id,
-            'filter[Servicegroups.id][]': this.filter.Servicegroups.id
+            'filter[Servicegroups.id][]': this.filter.Servicegroups.id,
+            'filter[Servicestatus.is_hardstate]': state_type,
         };
 
 
@@ -821,6 +832,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
         if (filterstring && filterstring.length > 0) {
             //cnditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
+            if(!bookmarkfilter.Hostgroups) Object.assign(bookmarkfilter, {'Hostgroups': {'id' : [] }}); //new Filter not in old filters ITC-3738
+            if(!bookmarkfilter.Servicegroups)  Object.assign(bookmarkfilter, {'Servicegroups' : {'id': [] }}); // new Filter not in old filters ITC-3738
             this.params = getDefaultServiceIndexParams();
             this.filter = bookmarkfilter;
             this.setFilterAndLoad(this.filter);
@@ -842,10 +855,17 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             }
         }
 
+        let state_type: string = '';
+        if (this.filter.Servicestatus.state_type.soft !== this.filter.Servicestatus.state_type.hard) {
+            state_type = '0';
+            if (this.filter.Servicestatus.state_type.hard) {
+                state_type = '1';
+            }
+        }
+
         this.RequestFilter['Hosts.id'] = filter.Hosts.id;
         this.RequestFilter['Hosts.name'] = filter.Hosts.name;
         this.RequestFilter['Hosts.name_regex'] = !!(filter.Hosts.name_regex);
-        this.RequestFilter['Hosts.satellite_id'] = filter.Hosts.satellite_id;
         this.RequestFilter['Hostgroups.id'] = filter.Hostgroups.id;
         this.RequestFilter['Servicegroups.id'] = filter.Servicegroups.id;
         this.RequestFilter['Hosts.satellite_id'] = filter.Hosts.satellite_id;
@@ -858,6 +878,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.RequestFilter['servicedescription'] = filter.Services.servicedescription;
         this.RequestFilter['servicepriority'] = priorityFilter
         this.RequestFilter['Services.service_type'] = filter.Services.service_type;
+        this.RequestFilter['Servicestatus.is_hardstate'] = state_type;
 
         this.RequestFilter['Servicestatus.current_state'] = getServiceCurrentStateForApi(filter.Servicestatus.current_state);
         this.RequestFilter['Servicestatus.output'] = filter.Servicestatus.output;

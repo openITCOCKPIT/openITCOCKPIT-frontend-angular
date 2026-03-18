@@ -22,6 +22,7 @@ export interface TacticalOverviewHostsConfig {
         keywords: string
         not_keywords: string
     }
+    hostpriority: string[],
 }
 
 export interface TacticalOverviewHostConfig {

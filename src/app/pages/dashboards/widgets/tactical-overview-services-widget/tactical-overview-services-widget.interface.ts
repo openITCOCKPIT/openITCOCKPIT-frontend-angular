@@ -20,6 +20,7 @@ export interface TacticalOverviewServicesConfig {
         keywords: string
         not_keywords: string
     }
+    servicepriority: number[]
 }
 
 export interface TacticalOverviewHostConfig {

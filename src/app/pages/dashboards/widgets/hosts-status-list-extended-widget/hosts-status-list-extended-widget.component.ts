@@ -10,7 +10,7 @@ import {
 import {
     AcknowledgementIconComponent
 } from '../../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
     ColComponent,
     ContainerComponent,
@@ -56,6 +56,8 @@ import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { HostsStatusListWidgetService } from '../hosts-status-list-widget/hosts-status-list-widget.service';
 import { RouterLink } from '@angular/router';
 import { HostsBrowserModalService } from '../../../hosts/hosts-browser/hosts-browser-modal/hosts-browser-modal.service';
+import { DebounceDirective } from '../../../../directives/debounce.directive';
+import { TrueFalseDirective } from '../../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-hosts-status-list-extended-widget',
@@ -95,7 +97,10 @@ import { HostsBrowserModalService } from '../../../hosts/hosts-browser/hosts-bro
         TrustAsHtmlPipe,
         XsButtonDirective,
         TooltipDirective,
-        RouterLink
+        RouterLink,
+        DebounceDirective,
+        TrueFalseDirective,
+        NgClass
     ],
     templateUrl: './hosts-status-list-extended-widget.component.html',
     styleUrl: './hosts-status-list-extended-widget.component.css',
@@ -122,6 +127,14 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
     public config?: HostsStatusListWidgetConfig;
     public configKeyWords: string[] = [];
     public configNotKeyWords: string[] = [];
+
+    public priorityFilter: { [key: string]: boolean } = {
+        '1': false,
+        '2': false,
+        '3': false,
+        '4': false,
+        '5': false
+    };
 
 
     private readonly HostsStatusListWidgetService = inject(HostsStatusListWidgetService);
@@ -224,6 +237,16 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
             this.configKeyWords = (config.Host.keywords !== '') ? config.Host.keywords.split(',') : [];
             this.configNotKeyWords = (config.Host.not_keywords !== '') ? config.Host.not_keywords.split(',') : [];
 
+            this.priorityFilter = {
+                '1': false,
+                '2': false,
+                '3': false,
+                '4': false,
+                '5': false
+            }
+            for (let index in this.config.hostpriority) {
+                this.priorityFilter[this.config.hostpriority[index]] = true;
+            }
 
             this.loadHosts();
             this.cdr.markForCheck();
@@ -242,6 +265,15 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
 
         this.config.Host.keywords = this.configKeyWords.join(',');
         this.config.Host.not_keywords = this.configNotKeyWords.join(',');
+
+        let priorityFilter = [];
+        for (var key in this.priorityFilter) {
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(key);
+            }
+        }
+
+        this.config.hostpriority = priorityFilter;
 
         this.subscriptions.add(this.HostsStatusListWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -293,6 +325,13 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
             }
         }
 
+        let priorityFilter: string[] = [];
+        for (let key in this.priorityFilter) {
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(key);
+            }
+        }
+
         // Apply the config to the filter
         const params: HostsStatusListWidgetParams = {
             angular: true,
@@ -309,7 +348,8 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
             'filter[Hoststatus.current_state][]': currentState,
             'filter[Hoststatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
             'filter[Hoststatus.scheduled_downtime_depth]': inDowntime,
-            'filter[Hoststatus.last_state_change][]': lastStateChange
+            'filter[Hoststatus.last_state_change][]': lastStateChange,
+            'filter[hostpriority][]': priorityFilter
         };
 
         this.subscriptions.add(this.HostsStatusListWidgetService.loadHosts(params).subscribe(hosts => {

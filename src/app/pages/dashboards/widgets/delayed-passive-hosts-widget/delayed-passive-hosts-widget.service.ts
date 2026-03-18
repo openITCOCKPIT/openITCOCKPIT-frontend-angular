@@ -45,6 +45,7 @@ export class DelayedPassiveHostsWidgetService {
                 keywords: '',
                 not_keywords: '',
             },
+            hostpriority: [],
             sort: 'Hoststatus.current_state',
             direction: 'desc',
             useScroll: true,

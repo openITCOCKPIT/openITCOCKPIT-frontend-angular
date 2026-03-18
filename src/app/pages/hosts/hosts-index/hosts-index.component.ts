@@ -899,6 +899,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
             //cnditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
+            if(!bookmarkfilter['Hostgroups.id']) Object.assign(bookmarkfilter, {'Hostgroups.id': [] }); //new filter ITC-3738
             this.filter['Hosts.id'] = bookmarkfilter['Hosts.id'];
             this.filter['Hosts.name'] = bookmarkfilter['Hosts.name'];
             this.filter['Hosts.name_regex'] = bookmarkfilter['Hosts.name_regex'];

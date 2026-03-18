@@ -14,6 +14,7 @@ export interface HostsStatusListWidgetConfig {
         state_older_than: null | number,
         state_older_than_unit: 'SECOND' | 'MINUTE' | 'HOUR' | 'DAY'
     }
+    hostpriority: string[],
     Host: {
         name: string
         name_regex: boolean,
@@ -45,4 +46,5 @@ export interface HostsStatusListWidgetParams {
             number | null,
             'SECOND' | 'MINUTE' | 'HOUR' | 'DAY' | null
     ],
+    'filter[hostpriority][]': string[],
 }
