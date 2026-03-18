@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    effect,
+    EventEmitter,
+    inject,
+    input,
+    OnDestroy,
+    Output
+} from '@angular/core';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
 import { EChartsOption } from 'echarts';
@@ -11,8 +21,11 @@ import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/compo
 
 import { SunburstChart } from 'echarts/charts';
 import {
-    ResourcegroupsSummaryMap
+    ResourcegroupMap,
+    ResourcegroupsSummaryMap,
+    ResourceMap
 } from '../../../modules/scm_module/pages/resourcegroups/resourcegroups-summary/resourcegroups-summary.interface';
+import _ from 'lodash';
 
 echarts.use([SunburstChart, LegendComponent, TitleComponent, TooltipComponent, CanvasRenderer]);
 
@@ -35,6 +48,7 @@ export class SunburstEchartComponent implements OnDestroy {
     public chartData = input<ResourcegroupsSummaryMap[]>([]);
     public scaleSize = input<number>(20);
     public scale = input<boolean>(true);
+    public resourcegroups = input<ResourcegroupMap[]>([]);
 
     public theme: string = '';
     public chartOption: EChartsOption = {};
@@ -45,6 +59,11 @@ export class SunburstEchartComponent implements OnDestroy {
     private readonly LayoutService = inject(LayoutService);
     private readonly TranslocoService = inject(TranslocoService);
     private cdr = inject(ChangeDetectorRef);
+
+    @Output() selectedResouceId = new EventEmitter<number | null>();
+    @Output() selectedResoucegroup = new EventEmitter<ResourcegroupMap | undefined>();
+    @Output() selectedResource = new EventEmitter<ResourceMap | undefined>();
+
 
     public constructor() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
@@ -68,6 +87,51 @@ export class SunburstEchartComponent implements OnDestroy {
 
     onChartInit(ec: any) {
         this.echartsInstance = ec;
+        this.echartsInstance.on('click', (params: any) => {
+            if (params.data) {
+                if (params.data['type'] && params.data['type'] === 'resourcegroup') {
+                    this.selectedResouceId.emit(null);
+
+                    this.selectedResoucegroup.emit(_.find(this.resourcegroups(), function (resourcegroup) {
+                            return resourcegroup.id == params.data['id'];
+                        })
+                    );
+                    this.cdr.markForCheck();
+
+                } else if (params.data['type'] && params.data['type'] === 'resource') {
+                    let resourcegroupMap = _.find(this.resourcegroups(), function (resourcegroup) {
+                        return resourcegroup.id == params.data['type']['resourcegroup_id'];
+                    });
+                    this.selectedResoucegroup.emit(resourcegroupMap);
+                    console.log(resourcegroupMap);
+                    if (resourcegroupMap && resourcegroupMap.resources) {
+                        this.selectedResource.emit(_.find(resourcegroupMap.resources, function (resource) {
+                                return resource.id == params.data['resource_id'];
+                            })
+                        );
+                    }
+
+
+                    //set focus on resource group as parent of resource
+                    /*
+                    if (params.data.__dataNode && params.data.__dataNode.parent) {
+                        this.sunburstChartInstance.focusOnNode(params.data.__dataNode.parent.data);
+                        this.selectedResouceId = params.data['resource_id'];
+                    }
+
+                     */
+                    this.cdr.markForCheck();
+
+                }
+                //   else {
+                //       this.selectedResouceId = null;
+                //       this.sunburstChartInstance.focusOnNode(null);
+                //       this.cdr.markForCheck();
+                //   }
+            }
+            // Implement custom logic here
+        });
+
         this.cdr.markForCheck();
     }
 

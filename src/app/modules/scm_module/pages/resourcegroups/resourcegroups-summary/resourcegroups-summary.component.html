@@ -56,7 +56,11 @@
                 <c-col [xs]="12" [md]="12" [lg]="4">
                     <div #scmSummaryContainer id="sunburstchart">
                         @if (mapSummary) {
-                            <oitc-sunburst-echart [chartData]="mapSummary"></oitc-sunburst-echart>
+                            <oitc-sunburst-echart [chartData]="mapSummary" [resourcegroups]="resourcegroups"
+                                                  (selectedResoucegroup)="selectResourcegroup($event)"
+                                                  (selectedResource)="selectResource($event)">
+
+                            </oitc-sunburst-echart>
                         }
                     </div>
                 </c-col>

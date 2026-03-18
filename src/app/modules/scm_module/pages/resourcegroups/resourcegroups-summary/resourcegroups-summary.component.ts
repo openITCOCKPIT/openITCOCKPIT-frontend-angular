@@ -39,7 +39,6 @@ import { AsyncPipe, NgClass } from '@angular/common';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import Sunburst from 'sunburst-chart';
-import _ from 'lodash';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import { SunburstEchartComponent } from '../../../../../components/charts/sunburst-echart/sunburst-echart.component';
@@ -91,7 +90,7 @@ export class ResourcegroupsSummaryComponent implements OnInit, OnDestroy {
     private containerWidth: number = 0;
 
     public selectedResoucegroup: ResourcegroupMap | undefined = undefined;
-    public selectedResouce: ResourceMap | undefined = undefined;
+    public selectedResource: ResourceMap | undefined = undefined;
     public selectedResouceId: number | null = null;
     public sunburstChartInstance: any = null;
 
@@ -105,6 +104,16 @@ export class ResourcegroupsSummaryComponent implements OnInit, OnDestroy {
             this.load();
         }));
     }
+
+    public selectResourcegroup(event: ResourcegroupMap | undefined) {
+        this.selectedResoucegroup = event;
+    }
+
+    public selectResource(event: ResourceMap | undefined) {
+        console.log(event);
+        this.selectedResource = event;
+    }
+
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
@@ -150,6 +159,7 @@ export class ResourcegroupsSummaryComponent implements OnInit, OnDestroy {
                             : `${label.slice(0, Math.round(numFitChars) - 3)}...`;
                     })
                     .onClick((node, event) => {
+                        /*
                         if (node) {
                             if (node['type'] === 'resourcegroup') {
                                 this.selectedResouceId = null;
@@ -184,6 +194,8 @@ export class ResourcegroupsSummaryComponent implements OnInit, OnDestroy {
                                 this.cdr.markForCheck();
                             }
                         }
+
+                         */
                     });
             }
             this.cdr.markForCheck();
