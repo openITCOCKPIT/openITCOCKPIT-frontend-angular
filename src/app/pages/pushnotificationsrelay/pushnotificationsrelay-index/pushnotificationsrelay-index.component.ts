@@ -1,0 +1,119 @@
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { PermissionDirective } from '../../../permissions/permission.directive';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { RouterLink } from '@angular/router';
+import {
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective
+} from '@coreui/angular';
+import { FormsModule } from '@angular/forms';
+import { RelayPost } from '../pushnotificationsrelay.interface';
+import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
+import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
+import { GenericValidationError } from '../../../generic-responses';
+
+import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { Subscription } from 'rxjs';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { PushnotificationsrelayService } from '../pushnotificationsrelay.service';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { v4 as uuidv4 } from 'uuid';
+
+@Component({
+  selector: 'oitc-pushnotificationsrelay-index',
+    imports: [
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FormDirective,
+        FormsModule,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        BackButtonDirective,
+        CardFooterComponent,
+        XsButtonDirective,
+        FormLoaderComponent
+    ],
+  templateUrl: './pushnotificationsrelay-index.component.html',
+  styleUrl: './pushnotificationsrelay-index.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class PushnotificationsrelayIndexComponent {
+
+    public post: RelayPost = {
+        id: 1, //its 1 every time
+        address: "",
+        port: 443,
+        auth_key: "",
+        enabled: false
+    }
+    public errors: GenericValidationError | null = null;
+
+    private readonly subscriptions: Subscription = new Subscription();
+    private RelayService = inject(PushnotificationsrelayService);
+    private readonly notyService = inject(NotyService);
+    private cdr = inject(ChangeDetectorRef);
+    protected isLoading: boolean = true;
+
+    public ngOnInit() {
+        this.isLoading = true;
+        this.subscriptions.add(
+            this.RelayService.getRelaySettings().subscribe(data => {
+                this.post = data;
+                this.isLoading = false;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
+    protected createAuth() {
+        const uuid = uuidv4();
+        this.post.auth_key = uuid;
+        this.cdr.markForCheck();
+    }
+
+    public submit() {
+        this.errors = null;
+
+        this.subscriptions.add(
+            this.RelayService.saveRelaySettings(this.post).subscribe(data => {
+                this.cdr.markForCheck();
+
+                if (data.success) {
+                    this.notyService.genericSuccess();
+                } else {
+                    this.notyService.genericError();
+                    this.errors = data.data as GenericValidationError;
+                }
+            })
+        );
+    }
+
+}
