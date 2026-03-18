@@ -51,6 +51,7 @@ export class ServicesStatusListWidgetService {
                 keywords: '',
                 not_keywords: '',
             },
+            servicepriority: [],
             sort: 'Servicestatus.current_state',
             direction: 'desc',
             useScroll: true,
