@@ -60,10 +60,10 @@ export class SunburstEchartComponent implements OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private cdr = inject(ChangeDetectorRef);
 
-    @Output() selectedResouceId = new EventEmitter<number | null>();
+
+    @Output() selectedResourceId = new EventEmitter<number | null>();
     @Output() selectedResoucegroup = new EventEmitter<ResourcegroupMap | undefined>();
     @Output() selectedResource = new EventEmitter<ResourceMap | undefined>();
-
 
     public constructor() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
@@ -90,7 +90,7 @@ export class SunburstEchartComponent implements OnDestroy {
         this.echartsInstance.on('click', (params: any) => {
             if (params.data) {
                 if (params.data['type'] && params.data['type'] === 'resourcegroup') {
-                    this.selectedResouceId.emit(null);
+                    this.selectedResourceId.emit(null);
 
                     this.selectedResoucegroup.emit(_.find(this.resourcegroups(), function (resourcegroup) {
                             return resourcegroup.id == params.data['id'];
@@ -100,38 +100,27 @@ export class SunburstEchartComponent implements OnDestroy {
 
                 } else if (params.data['type'] && params.data['type'] === 'resource') {
                     let resourcegroupMap = _.find(this.resourcegroups(), function (resourcegroup) {
-                        return resourcegroup.id == params.data['type']['resourcegroup_id'];
+                        return resourcegroup.id == params.data['resourcegroup_id'];
                     });
                     this.selectedResoucegroup.emit(resourcegroupMap);
-                    console.log(resourcegroupMap);
                     if (resourcegroupMap && resourcegroupMap.resources) {
-                        this.selectedResource.emit(_.find(resourcegroupMap.resources, function (resource) {
-                                return resource.id == params.data['resource_id'];
-                            })
-                        );
+                        let resource = _.find(resourcegroupMap.resources, function (resource) {
+                            return resource.id == params.data['resource_id'];
+                        });
+                        this.selectedResource.emit(resource);
+                        if (resource) {
+                            this.selectedResourceId.emit(resource['id']);
+                        }
                     }
-
-
-                    //set focus on resource group as parent of resource
-                    /*
-                    if (params.data.__dataNode && params.data.__dataNode.parent) {
-                        this.sunburstChartInstance.focusOnNode(params.data.__dataNode.parent.data);
-                        this.selectedResouceId = params.data['resource_id'];
-                    }
-
-                     */
                     this.cdr.markForCheck();
-
+                } else {
+                    this.selectedResoucegroup.emit(undefined);
+                    this.selectedResource.emit(undefined);
+                    this.selectedResourceId.emit(null);
+                    this.cdr.markForCheck();
                 }
-                //   else {
-                //       this.selectedResouceId = null;
-                //       this.sunburstChartInstance.focusOnNode(null);
-                //       this.cdr.markForCheck();
-                //   }
             }
-            // Implement custom logic here
         });
-
         this.cdr.markForCheck();
     }
 
@@ -141,13 +130,17 @@ export class SunburstEchartComponent implements OnDestroy {
             tooltip: {
                 trigger: 'item',
                 position: 'top',
-                formatter: '{b}'
+                formatter: (params: any) => {
+                    if (params.name.length === 0) {
+                        return this.TranslocoService.translate('Back');
+                    }
+                    return params.name;
+                }
             },
             series: {
                 type: 'sunburst',
                 data: this.chartData(),
                 radius: [0, '100%'],
-                sort: undefined,
                 emphasis: {
                     focus: 'ancestor'
                 },
@@ -164,11 +157,17 @@ export class SunburstEchartComponent implements OnDestroy {
                 levels: [
                     {
                         r0: 0,
-                        r: '60%',
+                        r: '8%',
                         label: {
-                            show: false,
-                            silent: true
-                        },
+                            fontSize: 20,
+                            formatter: (params: any) => {
+                                return '↩';
+                            },
+                            rotate: 0,
+                            color: '#ffffff',
+                            verticalAlign: 'middle',
+                            align: 'center'
+                        }
                     },
                     {
                         r0: '8%',
@@ -193,41 +192,16 @@ export class SunburstEchartComponent implements OnDestroy {
                 ]
             }
         };
-
-    }
-
-    private getLegend(): any {
-        if (!this.showLegend()) {
-            return undefined;
-        }
-        return {
-            orient: 'vertical',
-            left: 'left'
-        };
-    }
-
-    private getTitle(): any {
-        if (this.title().length === 0) {
-            return undefined;
-        }
-        return {
-            text: this.TranslocoService.translate(this.title()),
-            //subtext: 'Fake Data',
-            left: 'center'
-        }
     }
 
     public truncate(fullStr: string, strLen: number, separator: string): string {
         if (fullStr.length <= strLen) return fullStr;
-
         separator = separator || '...';
-
-        var sepLen = separator.length,
+        let sepLen = separator.length,
             charsToShow = strLen - sepLen,
             frontChars = Math.ceil(charsToShow / 2),
             backChars = Math.floor(charsToShow / 2);
 
-        return fullStr.substr(0, frontChars) + separator + fullStr.substr(fullStr.length - backChars);
+        return fullStr.substring(0, frontChars) + separator + fullStr.substring(fullStr.length - backChars);
     }
-
 }

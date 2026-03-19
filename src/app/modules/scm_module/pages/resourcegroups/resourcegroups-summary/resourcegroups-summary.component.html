@@ -53,19 +53,21 @@
                 <oitc-block-loader></oitc-block-loader>
             }
             <c-row>
-                <c-col [xs]="12" [md]="12" [lg]="4">
+                <c-col [xs]="12" [md]="12" [lg]="5">
                     <div #scmSummaryContainer id="sunburstchart">
                         @if (mapSummary) {
-                            <oitc-sunburst-echart [chartData]="mapSummary" [resourcegroups]="resourcegroups"
+                            <oitc-sunburst-echart [chartData]="mapSummary"
+                                                  [resourcegroups]="resourcegroups"
                                                   (selectedResoucegroup)="selectResourcegroup($event)"
-                                                  (selectedResource)="selectResource($event)">
+                                                  (selectedResource)="selectResource($event)"
+                                                  (selectedResourceId)="selectResourceId($event)">
 
                             </oitc-sunburst-echart>
                         }
                     </div>
                 </c-col>
                 @if (globalStatusSummary) {
-                    <c-col [xs]="12" [md]="12" [lg]="8">
+                    <c-col [xs]="12" [md]="12" [lg]="7">
                         <c-row>
                             <c-col class="fieldset-legend-border-bottom mb-3">
                                 <h4>
@@ -227,7 +229,7 @@
                                     <ul class="list-unstyled my-2 ps-4">
                                         @for (resource of selectedResoucegroup.resources; track $index) {
                                             <li class="ps-1 my-1"
-                                                [ngClass]="{'border-unconfirmed':  resource.current_status==0, 'border-ok': resource.current_status==1, 'border-warning': resource.current_status==2, 'border-danger': resource.current_status==3, 'shadow-lg p-3 mb-5': resource.id == selectedResouceId}">
+                                                [ngClass]="{'border-unconfirmed':  resource.current_status==0, 'border-ok': resource.current_status==1, 'border-warning': resource.current_status==2, 'border-danger': resource.current_status==3, 'shadow-lg p-3 mb-5': resource.id == selectedResourceId}">
                                                 <oitc-label-link [objectId]="resource.id"
                                                                  [route]="'/scm_module/resources/edit'"
                                                                  [permissions]="'scmmodule.resources.edit'">
