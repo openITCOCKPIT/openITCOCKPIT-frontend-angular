@@ -92,7 +92,7 @@ export class EventcorrelationsUsedByComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly modalService = inject(ModalService);
-    private id: number = 0;
+    public id: number = 0;
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {

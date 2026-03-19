@@ -147,7 +147,7 @@
                                         name="select_all_types"
                                         [indeterminate]="allSelectedIndeterminate"
                                         oitcDebounce
-                                        [ngModel]="allSelected"
+                                        [(ngModel)]="allSelected"
                                         (ngModelChange)="toggleSelectAllTypes($event)"
                                         type="checkbox"/>
                                     <label cFormCheckLabel for="select_all_types"

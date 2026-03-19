@@ -81,7 +81,8 @@
                                     <tr>
                                         <td>
                                             @if (( PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'view'])|async ) && host.EvcHosts.hasViewPermission) {
-                                                <a [routerLink]="['/','eventcorrelation_module','eventcorrelations','view', + host.EvcHosts.id]">
+                                                <a [routerLink]="['/','eventcorrelation_module','eventcorrelations','view', + host.EvcHosts.id]"
+                                                   [queryParams]="{'highlightHostId': id}">
                                                     {{ host.EvcHosts.name }}
                                                 </a>
                                             } @else {

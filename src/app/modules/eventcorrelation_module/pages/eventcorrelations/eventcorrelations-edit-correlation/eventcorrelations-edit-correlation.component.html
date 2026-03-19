@@ -80,18 +80,22 @@
                         <em class="pe-1">
                             {{ t('Ok') }}
                         </em>
+
                         <fa-icon [icon]="['fas', 'square']" class="p-0 warning"></fa-icon>
                         <em class="pe-1">
                             {{ t('Warning') }}
                         </em>
+
                         <fa-icon [icon]="['fas', 'square']" class="p-0 critical"></fa-icon>
                         <em class="pe-1">
                             {{ t('Critical') }}
                         </em>
+
                         <fa-icon [icon]="['fas', 'square']" class="p-0 unknown"></fa-icon>
                         <em class="pe-1">
                             {{ t('Unknown') }}
                         </em>
+
                         <fa-icon [icon]="['fas', 'square']" class="p-0 text-primary"></fa-icon>
                         <em class="pe-1">
                             {{ t('Not monitored') }}
@@ -119,6 +123,7 @@
             </c-card-footer>
         </c-card>
     }
+
 
     <!-- Service / vService modal -->
     <c-modal
@@ -196,6 +201,8 @@
                                 [searchCallback]="loadServicesForModal"
                                 class="flex-1"
                                 [appendTo]="''"
+                                (onChange)="updateServiceScores()"
+
                                 oitcFormError [errors]="errors" errorField="service_ids">
                             </oitc-multi-select-optgroup>
                         </c-input-group>
@@ -223,6 +230,7 @@
                                 [searchCallback]="loadServicesForModal"
                                 class="flex-1"
                                 [appendTo]="''"
+                                (onChange)="updateServiceScores()"
                                 oitcFormError [errors]="errors" errorField="service_ids">
                             </oitc-multi-select-optgroup>
                         </c-input-group>
@@ -245,6 +253,8 @@
                         [(ngModel)]="modalVService.operator"
                         [options]="modalOperators"
                         [appendTo]="''"
+                        (onChange)="updateServiceScores()"
+
                         oitcFormError [errors]="errors" errorField="operator">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="operator"></oitc-form-feedback>
@@ -263,6 +273,286 @@
                         <oitc-form-feedback [errors]="errors" errorField="operator_modifier"></oitc-form-feedback>
                     </div>
                 }
+
+                @if (modalVService.operator && [EventcorrelationOperators.SCORESCLALARGREATER,
+                                                EventcorrelationOperators.SCORESCLALARLESSER,
+                                                EventcorrelationOperators.SCORERANGEINCLUSIVE,
+                                                EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(modalVService.operator)) {
+                    <fieldset class="mt-10">
+                        <legend class="fieldset-legend-border-bottom">
+                            <h5>
+                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                {{ t('Score settings') }}
+                            </h5>
+                        </legend>
+                        @if (modalVService.service_ids.length > 0) {
+                            <fieldset class="mt-4">
+                                <legend class="small m-0">
+                                    <h6>
+                                        {{ t('Services') }}
+                                    </h6>
+                                </legend>
+                                @if (modalVService.current_evc.service_scores) {
+                                    @for (service of modalVService.current_evc.service_scores; track service) {
+                                        <c-row class="pb-1"
+                                               [ngClass]="{odd: $odd, even: $even}">
+                                            <c-col [xs]="12" [md]="12" [lg]="6">
+                                                {{ service.display_name }}
+                                            </c-col>
+                                            <c-col [xs]="12" [md]="12" [lg]="2">
+                                                <c-input-group sizing="sm">
+                                                    <span cInputGroupText>
+                                                        <fa-icon [icon]="['fas', 'weight-hanging']"
+                                                                 [cTextColor]="'warning'"></fa-icon>
+                                                    </span>
+                                                    <input cFormControl type="number"
+                                                           [id]="'score_warning_' + service.vService_id + '_'+$index"
+                                                           [name]="'score_warning_' + service.vService_id + '_'+$index"
+                                                           [(ngModel)]="service.score_warning"
+                                                           [placeholder]="'Warning score' | transloco"/>
+                                                </c-input-group>
+                                            </c-col>
+                                            <c-col [xs]="12" [md]="12" [lg]="2">
+                                                <c-input-group sizing="sm">
+                                                    <span cInputGroupText>
+                                                        <fa-icon [icon]="['fas', 'weight-hanging']"
+                                                                 [cTextColor]="'danger'"></fa-icon>
+                                                    </span>
+                                                    <input cFormControl type="number"
+                                                           [name]="'score_critical_' + service.vService_id"
+                                                           [(ngModel)]="service.score_critical"
+                                                           [placeholder]="'Critical score' | transloco"/>
+                                                </c-input-group>
+                                            </c-col>
+                                            <c-col [xs]="12" [md]="12" [lg]="2">
+                                                <c-input-group sizing="sm">
+                                                    <span cInputGroupText>
+                                                        <fa-icon [icon]="['fas', 'weight-hanging']"
+                                                                 [cTextColor]="'secondary'"></fa-icon>
+                                                    </span>
+                                                    <input cFormControl type="number"
+                                                           [name]="'score_unknown_' + service.vService_id"
+                                                           [(ngModel)]="service.score_unknown"
+                                                           [placeholder]="'Unknown score' | transloco"/>
+                                                </c-input-group>
+                                            </c-col>
+                                        </c-row>
+                                    }
+                                    <c-row class="pt-1 pb-1"
+                                           [ngClass]="{odd: modalVService.current_evc.service_scores.length % 2 === 1, even: modalVService.current_evc.service_scores.length % 2 === 0}">
+                                        <c-col [xs]="12" [md]="12" [lg]="6" class="text-end"
+                                               [title]="'Sum' | transloco">
+                                            &Sigma;
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="12" [lg]="2" class="text-center">
+                                            {{ modalVService.current_evc.service_scores | scoreSum:'warning' }}
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="12" [lg]="2" class="text-center">
+                                            {{ modalVService.current_evc.service_scores | scoreSum:'critical' }}
+                                        </c-col>
+                                        <c-col [xs]="12" [md]="12" [lg]="2" class="text-center">
+                                            {{ modalVService.current_evc.service_scores | scoreSum:'unknown' }}
+                                        </c-col>
+                                    </c-row>
+                                }
+                            </fieldset>
+                        }
+                        <fieldset class="mt-2">
+                            <legend class="small m-0">
+                                <h6 class="text-warning">
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                             [cTextColor]="'warning'"></fa-icon>
+                                    {{ t('Score for warning') }}
+                                </h6>
+                            </legend>
+                            <c-row>
+                                <c-col>
+                                    <div>
+                                        <label cLabel for="ValidateService.warning_min">
+                                            {{ t('Warning') }}
+                                            @if (modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE ||
+                                            modalVService.operator === EventcorrelationOperators.SCORERANGEEXCLUSIVE) {
+                                                <span>
+                                                    {{ t('min') }}
+                                                </span>
+                                            }
+                                            <oitc-required-icon/>
+                                        </label>
+                                        <input cFormControl
+                                               id="ValidateService.warning_min"
+                                               type="number"
+                                               name="ValidateService.warning_min"
+                                               [(ngModel)]="modalVService.operator_warning_min"
+                                               oitcFormError [errors]="errors" errorField="operator_warning_min">
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="operator_warning_min"></oitc-form-feedback>
+                                    </div>
+                                </c-col>
+                                @if (modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE ||
+                                modalVService.operator === EventcorrelationOperators.SCORERANGEEXCLUSIVE) {
+                                    <c-col [xs]="5">
+                                        <div>
+                                            <label cLabel for="ValidateService.warning_max">
+                                                {{ t('Warning max') }}
+                                                <oitc-required-icon/>
+                                            </label>
+                                            <input cFormControl
+                                                   id="ValidateService.warning_max"
+                                                   type="number"
+                                                   name="ValidateService.warning_max"
+                                                   [(ngModel)]="modalVService.operator_warning_max"
+                                                   oitcFormError [errors]="errors" errorField="operator_warning_max">
+                                            <oitc-form-feedback [errors]="errors"
+                                                                errorField="operator_warning_max"></oitc-form-feedback>
+                                        </div>
+                                    </c-col>
+                                    <c-col xs="2" class="d-flex">
+                                        <div class="w-100 align-content-end pb-2">
+                                            <oitc-score-thresholds
+                                                [inclusive]="(modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE)"
+                                                [min]="modalVService.operator_warning_min"
+                                                [max]="modalVService.operator_warning_max"
+                                                [type]="'warning'">
+                                            </oitc-score-thresholds>
+                                        </div>
+
+                                    </c-col>
+                                }
+                                <div class="help-block">
+                                    {{ t('Determines the total score that has to be reached, to result in a warning state.') }}
+                                </div>
+                            </c-row>
+                        </fieldset>
+                        <fieldset class="mt-2">
+                            <legend class="small m-0">
+                                <h6 class="text-danger">
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']" [cTextColor]="'danger'"></fa-icon>
+                                    {{ t('Score for critical') }}
+                                </h6>
+                            </legend>
+                            <c-row>
+                                <c-col>
+                                    <div>
+                                        <label cLabel for="ValidateService.critical_min">
+                                            {{ t('Critical') }}
+                                            @if (modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE ||
+                                            modalVService.operator === EventcorrelationOperators.SCORERANGEEXCLUSIVE) {
+                                                <span>
+                                                    {{ t('min') }}
+                                                </span>
+                                            }
+                                            <oitc-required-icon/>
+                                        </label>
+                                        <input cFormControl
+                                               id="ValidateService.critical_min"
+                                               type="number"
+                                               name="ValidateService.critical_min"
+                                               [(ngModel)]="modalVService.operator_critical_min"
+                                               oitcFormError [errors]="errors" errorField="operator_critical_min">
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="operator_critical_min"></oitc-form-feedback>
+                                    </div>
+                                </c-col>
+                                @if (modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE ||
+                                modalVService.operator === EventcorrelationOperators.SCORERANGEEXCLUSIVE) {
+                                    <c-col [xs]="5">
+                                        <div>
+                                            <label cLabel for="ValidateService.critical_max">
+                                                {{ t('Critical max') }}
+                                                <oitc-required-icon/>
+                                            </label>
+                                            <input cFormControl
+                                                   id="ValidateService.critical_max"
+                                                   type="number"
+                                                   name="ValidateService.critical_max"
+                                                   [(ngModel)]="modalVService.operator_critical_max"
+                                                   oitcFormError [errors]="errors" errorField="operator_critical_max">
+                                            <oitc-form-feedback [errors]="errors"
+                                                                errorField="operator_critical_max"></oitc-form-feedback>
+                                        </div>
+                                    </c-col>
+                                    <c-col xs="2" class="d-flex">
+                                        <div class="w-100 align-content-end pb-2">
+                                            <oitc-score-thresholds
+                                                [inclusive]="(modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE)"
+                                                [min]="modalVService.operator_critical_min"
+                                                [max]="modalVService.operator_critical_max"
+                                                [type]="'critical'">
+                                            </oitc-score-thresholds>
+                                        </div>
+                                    </c-col>
+                                }
+                                <div class="help-block">
+                                    {{ t('Determines the total score that has to be reached, to result in a critical state.') }}
+                                </div>
+                            </c-row>
+                        </fieldset>
+                        <fieldset class="mt-2">
+                            <legend class="small m-0">
+                                <h6 class="text-secondary">
+                                    <fa-icon [icon]="['fas', 'circle-question']" [cTextColor]="'secondary'"></fa-icon>
+                                    {{ t('Score for unknown') }}
+                                </h6>
+                            </legend>
+                            <c-row>
+                                <c-col>
+                                    <div>
+                                        <label cLabel for="ValidateService.unknown_min">
+                                            {{ t('Unknown') }}
+                                            @if (modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE ||
+                                            modalVService.operator === EventcorrelationOperators.SCORERANGEEXCLUSIVE) {
+                                                <span>
+                                                    {{ t('min') }}
+                                                </span>
+                                            }
+                                            <oitc-required-icon/>
+                                        </label>
+                                        <input cFormControl
+                                               id="ValidateService.unknown_min"
+                                               type="number"
+                                               name="ValidateService.unknown_min"
+                                               [(ngModel)]="modalVService.operator_unknown_min"
+                                               oitcFormError [errors]="errors" errorField="operator_unknown_min">
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="operator_unknown_min"></oitc-form-feedback>
+                                    </div>
+                                </c-col>
+                                @if (modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE ||
+                                modalVService.operator === EventcorrelationOperators.SCORERANGEEXCLUSIVE) {
+                                    <c-col xs="5">
+                                        <div>
+                                            <label cLabel for="ValidateService.unknown_max">
+                                                {{ t('Unknown max') }}
+                                                <oitc-required-icon/>
+                                            </label>
+                                            <input cFormControl
+                                                   id="ValidateService.unknown_max"
+                                                   type="number"
+                                                   name="ValidateService.unknown_max"
+                                                   [(ngModel)]="modalVService.operator_unknown_max"
+                                                   oitcFormError [errors]="errors" errorField="operator_unknown_max">
+                                            <oitc-form-feedback [errors]="errors"
+                                                                errorField="operator_unknown_max"></oitc-form-feedback>
+                                        </div>
+                                    </c-col>
+                                    <c-col xs="2" class="d-flex">
+                                        <div class="w-100 align-content-end pb-2">
+                                            <oitc-score-thresholds
+                                                [inclusive]="(modalVService.operator === EventcorrelationOperators.SCORERANGEINCLUSIVE)"
+                                                [min]="modalVService.operator_unknown_min"
+                                                [max]="modalVService.operator_unknown_max"
+                                                [type]="'unknown'">
+                                            </oitc-score-thresholds>
+                                        </div>
+                                    </c-col>
+                                }
+                                <div class="help-block">
+                                    {{ t('Determines the total score that has to be reached, to result in a unknown state.') }}
+                                </div>
+                            </c-row>
+                        </fieldset>
+                    </fieldset>
+                }
             </c-modal-body>
         }
         <c-modal-footer>
@@ -279,5 +569,4 @@
             </button>
         </c-modal-footer>
     </c-modal>
-
 </ng-container>

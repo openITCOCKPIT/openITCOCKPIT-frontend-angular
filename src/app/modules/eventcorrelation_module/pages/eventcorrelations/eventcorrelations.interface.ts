@@ -96,7 +96,18 @@ export interface EvcTreeItem {
     parent_id: null | number | string // string in editCorrelation for new items "ui-id-f9fbdaab-70d1-4af1-a571-14d20b5657f"
     host_id: number
     service_id: number | string // new created vServices "ui-id-780d1d4d-e90d-4cf4-aa09-e344bdaa04d5_vService"
-    operator: EventcorrelationOperators | string | null, // min1, min10, min300
+    operator: EventcorrelationOperators | string | null // min1, min10, min300
+    operator_warning_min: number | null
+    operator_warning_max: number | null
+    operator_critical_min: number | null
+    operator_critical_max: number | null
+    operator_unknown_min: number | null
+    operator_unknown_max: number | null
+    score_warning: number | null
+    score_critical: number | null
+    score_unknown: number | null
+    isUsedInScoringOperator?: boolean
+
     service: EvcService,
     usedBy?: string[], //editCorrelation only
 }
@@ -158,7 +169,18 @@ export interface EvcSummaryService {
     current_state: number | null
     disabled: number
     serviceCounter: number,
-    modified_state?: number
+    modified_state?: number,
+    operator_warning_min?: number | null
+    operator_warning_max?: number | null
+    operator_critical_min?: number | null
+    operator_critical_max?: number | null
+    operator_unknown_min?: number | null
+    operator_unknown_max?: number | null
+    score_warning?: number | null
+    score_critical?: number | null
+    score_unknown?: number | null
+    isUsedInScoringOperator?: boolean
+    currentStateConsiderDowntimeOrDisabled?: number | null
 }
 
 export interface EvcHostUsedBy extends HostEntity {
@@ -231,19 +253,36 @@ export interface EventcorrelationsEditCorrelationRoot {
     _csrfToken: string | null
 }
 
+export interface EvcModalServiceScore {
+    vService_id: number | string
+    display_name: string
+    score_warning: number | null
+    score_critical: number | null
+    score_unknown: number | null
+}
 
 export interface EvcModalService {
-    servicename: string,
-    servicetemplate_id: number,
-    service_ids: (number | string)[], // 1 or 2_vService
-    operator: EventcorrelationOperators | null,
-    operator_modifier: number,
+    servicename: string
+    servicetemplate_id: number
+    service_ids: (number | string)[] // 1 or 2_vService
+    operator: EventcorrelationOperators | null
+    operator_modifier: number
+    operator_warning_min: number | null
+    operator_warning_max: number | null
+    operator_critical_min: number | null
+    operator_critical_max: number | null
+    operator_unknown_min: number | null
+    operator_unknown_max: number | null
+    score_warning: number | null
+    score_critical: number | null
+    score_unknown: number | null
     current_evc: {
-        id: number,
-        layerIndex: number,
-        mode: EvcVServiceModalMode,
-        evc_node_id?: string | number, // edit only
+        id: number
+        layerIndex: number
+        mode: EvcVServiceModalMode
+        evc_node_id?: string | number // edit only
         old_service_ids?: (number | string)[] // edit only // 1 or 2_vService
+        service_scores: EvcModalServiceScore[] // The server only use this data for validation.
     }
 }
 
@@ -254,10 +293,20 @@ export function getDefaultEvcModalService(evcId: number, layerIndex: number): Ev
         service_ids: [],
         operator: null,
         operator_modifier: 0,
+        operator_warning_min: null,
+        operator_warning_max: null,
+        operator_critical_min: null,
+        operator_critical_max: null,
+        operator_unknown_min: null,
+        operator_unknown_max: null,
+        score_warning: null,
+        score_critical: null,
+        score_unknown: null,
         current_evc: {
             id: evcId,
             layerIndex: layerIndex,
-            mode: 'add'
+            mode: 'add',
+            service_scores: []
         }
     }
 }
@@ -315,12 +364,21 @@ export interface EvcEditVServiceValidationResult {
     success: boolean,
     // updates."0".uu-id."0" = EvcTreeItem
     services: {
-        id: number | string,
-        parent_id: number | string,
-        host_id: number,
-        service_id: number | string,
-        operator: EventcorrelationOperators | string | null,
-        service: EvcService,
+        id: number | string
+        parent_id: number | string
+        host_id: number
+        service_id: number | string
+        operator: EventcorrelationOperators | string | null
+        operator_warning_min: number | null
+        operator_warning_max: number | null
+        operator_critical_min: number | null
+        operator_critical_max: number | null
+        operator_unknown_min: number | null
+        operator_unknown_max: number | null
+        score_warning: number | null
+        score_critical: number | null
+        score_unknown: number | null
+        service: EvcService
     }[]
 
 }
