@@ -58,6 +58,7 @@ import {
 } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ExternalSystems } from '../../externalsystems/external-systems.enum';
 
 @Component({
     selector: 'oitc-importers-edit',
@@ -145,7 +146,7 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
             value: this.TranslocoService.translate('CSV without header')
         },
         {
-            key: 'idoit',
+            key: ExternalSystems.Idoit,
             value: this.TranslocoService.translate('i-doit')
         },
         {
@@ -153,7 +154,7 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
             value: this.TranslocoService.translate('openITCOCKPIT Agent')
         },
         {
-            key: 'itop',
+            key: ExternalSystems.Itop,
             value: this.TranslocoService.translate('iTop')
         },
         {
@@ -365,4 +366,5 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
     }
 
     protected readonly Boolean = Boolean;
+    protected readonly ExternalSystems = ExternalSystems;
 }

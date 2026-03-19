@@ -125,7 +125,7 @@
                                 [route]="'/import_module/ExternalSystems/edit'"
                                 [permissions]="'importmodule.ExternalSystems.edit'">
                                 {{ t('External system') }}
-                                @if (post.data_source === 'idoit' || post.data_source === 'itop') {
+                                @if (post.data_source === ExternalSystems.Idoit || post.data_source === ExternalSystems.Itop) {
                                     <oitc-required-icon></oitc-required-icon>
                                 }
                             </oitc-label-link>
@@ -326,13 +326,13 @@
                                             @case ('json') {
                                                 {{ t('JSON') }}
                                             }
-                                            @case ('idoit') {
+                                            @case (ExternalSystems.Idoit) {
                                                 {{ t('i-doit') }}
                                             }
                                             @case ('openitcockpit_agent') {
                                                 {{ t('openITCOCKPIT Agent') }}
                                             }
-                                            @case ('itop') {
+                                            @case (ExternalSystems.Itop) {
                                                 {{ t('iTop') }}
                                             }
                                             @case ('external_monitoring') {

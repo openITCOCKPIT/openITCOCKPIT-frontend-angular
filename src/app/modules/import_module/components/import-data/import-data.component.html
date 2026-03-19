@@ -8,7 +8,7 @@
             <c-modal-header>
                 <h5 cModalTitle>
                     @switch (importer.data_source) {
-                        @case ('idoit') {
+                        @case (ExternalSystems.Idoit) {
                             <!-- Import i-doit data -->
                             <fa-stack [size]="'2xl'" class="me-2">
                                 <fa-icon [icon]="['fas', 'database']"
@@ -30,7 +30,7 @@
                             </fa-stack>
                             {{ t('Import data from openITCOCKPIT Agent') }}
                         }
-                        @case ('itop') {
+                        @case (ExternalSystems.Itop) {
                             <!-- Import iTop data -->
                             <fa-stack [size]="'2xl'" class="me-2">
                                 <fa-icon [icon]="['fas', 'database']"
@@ -146,7 +146,7 @@
             @if (importData && importData.success && importer) {
                 <c-row class="mt-3">
                     @switch (importer.data_source) {
-                        @case ('idoit') {
+                        @case (ExternalSystems.Idoit) {
                             <c-col>
                                 <h5>
                                     {{ t('i-doit Data preview') }}
@@ -162,7 +162,7 @@
                                 </div>
                             </c-col>
                         }
-                        @case ('itop') {
+                        @case (ExternalSystems.Itop) {
                             <c-col>
                                 <h5>
                                     {{ t('iTop Data preview!') }}

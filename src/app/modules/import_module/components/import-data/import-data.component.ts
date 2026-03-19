@@ -42,6 +42,7 @@ import {
 } from '../../pages/importers/importers.interface';
 import { ImportDataResponse, ImportedHostRawData } from '../../pages/importedhosts/importedhosts.interface';
 import _ from 'lodash';
+import { ExternalSystems } from '../../pages/externalsystems/external-systems.enum';
 
 @Component({
     selector: 'oitc-import-data',
@@ -139,7 +140,7 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                         });
                 }
                 switch (this.importer.data_source) {
-                    case 'idoit':
+                    case ExternalSystems.Idoit:
                         this.ImporterService.loadDataFromIdoit(this.importer).subscribe(data => {
                             if (data.success) {
                                 let response = data.data as ImportDataResponse;
@@ -200,7 +201,7 @@ export class ImportDataComponent implements OnInit, OnDestroy {
 
                         });
                         break;
-                    case 'itop':
+                    case ExternalSystems.Itop:
                         this.ImporterService.loadDataFromITop(this.importer).subscribe(data => {
                             if (data.success) {
                                 let response = data.data as ImportDataResponse;
@@ -301,4 +302,6 @@ export class ImportDataComponent implements OnInit, OnDestroy {
             });
         }
     }
+
+    protected readonly ExternalSystems = ExternalSystems;
 }

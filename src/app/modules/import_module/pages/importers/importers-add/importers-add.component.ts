@@ -57,6 +57,7 @@ import {
     DynamicalFormFieldsComponent
 } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ExternalSystems } from '../../externalsystems/external-systems.enum';
 
 @Component({
     selector: 'oitc-importers-add',
@@ -142,7 +143,7 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
             value: this.TranslocoService.translate('CSV without header')
         },
         {
-            key: 'idoit',
+            key: ExternalSystems.Idoit,
             value: this.TranslocoService.translate('i-doit')
         },
         {
@@ -150,7 +151,7 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
             value: this.TranslocoService.translate('openITCOCKPIT Agent')
         },
         {
-            key: 'itop',
+            key: ExternalSystems.Itop,
             value: this.TranslocoService.translate('iTop')
         },
         {
@@ -370,4 +371,5 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
 
     protected readonly Boolean = Boolean;
 
+    protected readonly ExternalSystems = ExternalSystems;
 }

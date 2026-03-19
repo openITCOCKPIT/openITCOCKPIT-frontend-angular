@@ -27,7 +27,6 @@ import {
 } from '@coreui/angular';
 import { AsyncPipe } from '@angular/common';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -65,6 +64,7 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
 import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { ExternalSystems } from '../external-systems.enum';
 
 @Component({
     selector: 'oitc-external-systems-edit',
@@ -137,12 +137,12 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
 
     protected readonly ExternalSystemTypes = [
         {
-            key: 'idoit',
+            key: ExternalSystems.Idoit,
             value: this.TranslocoService.translate('i-doit System'),
             placeholder: 'i-doit.system/src/jsonrpc.php'
         },
         {
-            key: 'itop',
+            key: ExternalSystems.Itop,
             value: this.TranslocoService.translate('iTop System'),
             placeholder: 'itop/webservices/rest.php?version=1.3'
         }
@@ -281,4 +281,6 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
+
+    protected readonly ExternalSystems = ExternalSystems;
 }

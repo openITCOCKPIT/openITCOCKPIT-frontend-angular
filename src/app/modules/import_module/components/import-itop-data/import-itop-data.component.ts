@@ -117,7 +117,7 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
                 }
 
                 switch (this.externalSystem.system_type) {
-                    case 'itop':
+                    case ExternalSystems.Itop:
                         this.ExternalSystemService.loadDataFromITop(this.externalSystem).subscribe(data => {
                             this.iTopData = data;
                             this.cdr.markForCheck();
