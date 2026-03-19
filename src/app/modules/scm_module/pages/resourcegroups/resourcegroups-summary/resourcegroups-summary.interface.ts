@@ -50,17 +50,21 @@ export interface ResourceMap {
 
 export interface ResourcegroupsSummaryMap {
     name: string
-    color: string
+    itemStyle: {
+        color:string
+    }
     children: ResourcegroupMapChildren[]
 }
 
 export interface ResourcegroupMapChildren {
-    id: number
+    resource_id: number
     resourcegroup_id: number
     name: string
-    size: number
+    value: number
     state: number
-    color: string
+    itemStyle: {
+        color:string
+    }
     type: string
 }
 
