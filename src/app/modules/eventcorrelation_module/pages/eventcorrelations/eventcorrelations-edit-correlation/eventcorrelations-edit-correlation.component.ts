@@ -5,6 +5,7 @@ import {
     EvcDeleteNodeDetails,
     EvcEditVServiceValidationResult,
     EvcModalService,
+    EvcModalServiceScore,
     EvcServiceSelect,
     EvcToggleModal,
     EvcTree,
@@ -29,6 +30,7 @@ import {
     FormControlDirective,
     FormLabelDirective,
     InputGroupComponent,
+    InputGroupTextDirective,
     ModalBodyComponent,
     ModalComponent,
     ModalFooterComponent,
@@ -37,13 +39,13 @@ import {
     ModalTitleDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent
+    RowComponent,
+    TextColorDirective
 } from '@coreui/angular';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { EvcTreeEditComponent } from './evc-tree-edit/evc-tree-edit.component';
 import {
@@ -69,6 +71,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { EvcTreeValidationErrors } from '../eventcorrelations-view/evc-tree/evc-tree.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { FormsModule } from '@angular/forms';
+import { ScoreThresholdsComponent } from '../../../components/score-thresholds/score-thresholds.component';
+import { NgClass } from '@angular/common';
+import { ScoreSumPipe } from './score-sum.pipe';
 
 @Component({
     selector: 'oitc-eventcorrelations-edit-correlation',
@@ -106,7 +111,13 @@ import { FormsModule } from '@angular/forms';
         SelectComponent,
         MultiSelectOptgroupComponent,
         BadgeComponent,
-        FormsModule
+        FormsModule,
+        TextColorDirective,
+        ScoreThresholdsComponent,
+        InputGroupTextDirective,
+        TranslocoPipe,
+        NgClass,
+        ScoreSumPipe
     ],
     templateUrl: './eventcorrelations-edit-correlation.component.html',
     styleUrl: './eventcorrelations-edit-correlation.component.css',
@@ -139,13 +150,32 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     public modalCurrentLayerIndex: number = 0;
     public modalVService?: EvcModalService;
     public modalServicesForSelect: SelectItemOptionGroup[] = [];
+    // Key/Value list so that we can display the service name in the score thresholds matrix in the add/edit modal
+    public modalServicesList: SelectKeyValueString[] = [];
     public showSpinner: boolean = false;
+    protected readonly EventcorrelationOperators = EventcorrelationOperators;
 
     public modalOperators: SelectKeyValueString[] = [
         {key: EventcorrelationOperators.AND, value: this.TranslocoService.translate('AND')},
         {key: EventcorrelationOperators.OR, value: this.TranslocoService.translate('OR')},
         {key: EventcorrelationOperators.EQ, value: this.TranslocoService.translate('EQUAL')},
-        {key: EventcorrelationOperators.MIN, value: this.TranslocoService.translate('MIN')}
+        {key: EventcorrelationOperators.MIN, value: this.TranslocoService.translate('MIN')},
+        {
+            key: EventcorrelationOperators.SCORESCLALARGREATER,
+            value: this.TranslocoService.translate('SCORE scalar >= (greater-or-equal)')
+        },
+        {
+            key: EventcorrelationOperators.SCORESCLALARLESSER,
+            value: this.TranslocoService.translate('SCORE scalar <= (lesser-or-equal)')
+        },
+        {
+            key: EventcorrelationOperators.SCORERANGEINCLUSIVE,
+            value: this.TranslocoService.translate('SCORE Range Inclusive (≥ 10 and ≤ 20 - inside the range of 10 to 20)')
+        },
+        {
+            key: EventcorrelationOperators.SCORERANGEEXCLUSIVE,
+            value: this.TranslocoService.translate('SCORE Range Exclusive (< 10 or > 20 - outside the range of 10 to 20)')
+        }
     ];
     public errors: GenericValidationError | null = null;
 
@@ -210,15 +240,19 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     }
 
     public showAddVServiceModal(layerIndex: number): void {
+        this.errors = null; // reset previous errors
         this.modalCurrentLayerIndex = layerIndex;
 
         this.modalVService = getDefaultEvcModalService(this.id, layerIndex);
+
+        this.modalServicesList = [];
 
         if (layerIndex === 0) {
             //Load "real" services for the first layer
             //Use "real" service ids from the database (services.id)
             this.subscriptions.add(this.EventcorrelationsService.loadServices('', this.id, this.getServicesIdsByLayerIndex(0)).subscribe((services) => {
                 this.modalServicesForSelect = this.reformatServicesForOptionGroupSelect(services);
+                this.modalServicesList = this.reformatServicesForScoreMatrix(layerIndex, services);
                 this.cdr.markForCheck();
             }));
         }
@@ -231,6 +265,8 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             const services = this.getServicesByLayerIndexForSelect(layerIndex);
             this.modalServicesForSelect = this.reformatServicesForOptionGroupSelect(services);
 
+            this.modalServicesList = this.reformatServicesForScoreMatrix(layerIndex, services);
+
             this.cdr.markForCheck();
         }
 
@@ -241,6 +277,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     }
 
     public showEditVServiceModal(layerIndex: number, eventCorrelation: EvcTreeItem) {
+        this.errors = null; // reset previous errors
         this.modalCurrentLayerIndex = layerIndex - 1;
         let layerIndexToLoadServicesFrom = layerIndex - 1;
 
@@ -251,21 +288,38 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             service_ids: this.getServicesIdsByLayerIndexAndParentId(layerIndexToLoadServicesFrom, eventCorrelation.id),
             operator: operator.operator,
             operator_modifier: operator.modifier,
+            operator_warning_min: eventCorrelation.operator_warning_min,
+            operator_warning_max: eventCorrelation.operator_warning_max,
+            operator_critical_min: eventCorrelation.operator_critical_min,
+            operator_critical_max: eventCorrelation.operator_critical_max,
+            operator_unknown_min: eventCorrelation.operator_unknown_min,
+            operator_unknown_max: eventCorrelation.operator_unknown_max,
+            score_warning: eventCorrelation.score_warning,
+            score_critical: eventCorrelation.score_critical,
+            score_unknown: eventCorrelation.score_unknown,
             current_evc: {
                 id: this.id,
                 layerIndex: layerIndex,
                 mode: 'edit',
                 evc_node_id: eventCorrelation.id,
-                old_service_ids: this.getServicesIdsByLayerIndexAndParentId(layerIndexToLoadServicesFrom, eventCorrelation.id)
+                old_service_ids: this.getServicesIdsByLayerIndexAndParentId(layerIndexToLoadServicesFrom, eventCorrelation.id),
+                service_scores: this.getServiceScoresForCurrentVService(layerIndexToLoadServicesFrom, eventCorrelation.id)
             }
         };
 
+        this.modalServicesList = [];
         if (layerIndexToLoadServicesFrom === 0) {
             //Load "real" services for the first layer
             //Use "real" service ids from the database (services.id)
             this.subscriptions.add(this.EventcorrelationsService.loadServices('', this.id, this.getServicesIdsByLayerIndex(0)).subscribe((services) => {
                 this.modalServicesForSelect = this.reformatServicesForOptionGroupSelect(services);
+                this.modalServicesList = this.reformatServicesForScoreMatrix(this.modalCurrentLayerIndex, services);
                 this.cdr.markForCheck();
+
+                this.modalService.toggle({
+                    show: true,
+                    id: 'evcVServicesModal'
+                });
             }));
         }
 
@@ -277,12 +331,14 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
             const services = this.getServicesByLayerIndexForSelect(layerIndexToLoadServicesFrom, eventCorrelation.id);
             this.modalServicesForSelect = this.reformatServicesForOptionGroupSelect(services);
+            this.modalServicesList = this.reformatServicesForScoreMatrix(this.modalCurrentLayerIndex, services);
+
+            this.modalService.toggle({
+                show: true,
+                id: 'evcVServicesModal'
+            });
         }
 
-        this.modalService.toggle({
-            show: true,
-            id: 'evcVServicesModal'
-        });
     }
 
     /**
@@ -402,8 +458,8 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
      * @private
      */
     private getParsedOperator(operatorString: string | null): {
-        modifier: number,
-        operator: EventcorrelationOperators | null
+        operator: EventcorrelationOperators | null,
+        modifier: number
     } {
 
         if (operatorString === null) {
@@ -415,7 +471,6 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
         operatorString = operatorString.toLowerCase();
         const first3Chars = operatorString.substring(0, 3);
-
         // switch in case we add more operators in the future
         switch (first3Chars) {
             case 'min':
@@ -477,12 +532,13 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
         this.subscriptions.add(this.EventcorrelationsService.loadServices(searchString, this.id, selected).subscribe((services) => {
             this.modalServicesForSelect = this.reformatServicesForOptionGroupSelect(services);
+            this.modalServicesList = this.reformatServicesForScoreMatrix(this.modalCurrentLayerIndex, services);
             this.cdr.markForCheck();
         }));
     }
 
     /**
-     * Reformat the services data provieded by the API (and EVC Tree JSON) to be compatible with the open group select component
+     * Reformat the services data provided by the API (and EVC Tree JSON) to be compatible with the open group select component
      * @param services
      * @private
      */
@@ -522,6 +578,30 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                 result.push(host);
             }
         }
+
+        return result;
+    }
+
+    /**
+     * Reformat the services data provieded by the API (and EVC Tree JSON) so that we can display the service name in the add/edit modal
+     * @param layerIndex
+     * @param services
+     * @private
+     */
+    private reformatServicesForScoreMatrix(layerIndex: number, services: EvcServiceSelect[]): SelectKeyValueString[] {
+        const result: SelectKeyValueString[] = [];
+
+        services.forEach((service) => {
+            let servicename = service.value.Host.name + '/' + service.value.Service.servicename;
+            if (Number(service.value.Service.disabled) === 1) {
+                servicename += ' 🔌';
+            }
+
+            result.push({
+                key: String(service.value.Service.id),
+                value: servicename
+            });
+        });
 
         return result;
     }
@@ -618,6 +698,37 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                                     }
                                 }
                             }
+
+                            // ITC-3587 Update scoring thresholds from the modal
+                            // The operator is stored in the new created vService.
+                            // However, we need to go to the previous layer (left side of the operator), find the service and store the service related thresholds there.
+                            let isScoringOperator: boolean = false;
+                            if (this.modalVService && [EventcorrelationOperators.SCORESCLALARGREATER,
+                                EventcorrelationOperators.SCORESCLALARLESSER,
+                                EventcorrelationOperators.SCORERANGEINCLUSIVE,
+                                EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(this.modalVService.operator as EventcorrelationOperators)) {
+                                isScoringOperator = true;
+                            }
+
+                            if (isScoringOperator && this.modalVService && this.modalVService.current_evc.service_scores.length > 0) {
+                                // Now we need to find the services in the previous layer (left side) and update the scores
+                                const previousLayerIndex = this.modalVService.current_evc.layerIndex;
+                                this.modalVService.current_evc.service_scores.forEach((service_score) => {
+
+                                    for (let parentEvcId in this.evcTree[previousLayerIndex]) {
+                                        if (parentEvcId === newParentIdWithoutvServiceSuffix) {
+                                            for (let k in this.evcTree[previousLayerIndex][parentEvcId]) {
+                                                //Find the evcNode by the given id
+                                                if (this.evcTree[previousLayerIndex][parentEvcId][k].service_id == service_score.vService_id) {
+                                                    this.evcTree[previousLayerIndex][parentEvcId][k].score_warning = service_score.score_warning;
+                                                    this.evcTree[previousLayerIndex][parentEvcId][k].score_critical = service_score.score_critical;
+                                                    this.evcTree[previousLayerIndex][parentEvcId][k].score_unknown = service_score.score_unknown;
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            }
                         }
                     }
                 }
@@ -685,6 +796,15 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                             //Find the vService node that was edited
                             if (evcNode.id === this.modalVService.current_evc.evc_node_id) {
                                 this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator = this.getOperatorString(this.modalVService.operator, this.modalVService.operator_modifier);
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator_warning_min = this.modalVService.operator_warning_min;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator_warning_max = this.modalVService.operator_warning_max;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator_critical_min = this.modalVService.operator_critical_min;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator_critical_max = this.modalVService.operator_critical_max;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator_unknown_min = this.modalVService.operator_unknown_min;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].operator_unknown_max = this.modalVService.operator_unknown_max;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].score_warning = this.modalVService.score_warning;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].score_critical = this.modalVService.score_critical;
+                                this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].score_unknown = this.modalVService.score_unknown;
                                 this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].service.servicename = this.modalVService.servicename;
                                 this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].service.name = this.modalVService.servicename;
                                 this.evcTree[this.modalVService.current_evc.layerIndex][services][eventCorrelation].service.servicetemplate_id = this.modalVService.servicetemplate_id;
@@ -698,6 +818,8 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                     this.notyService.genericError(this.TranslocoService.translate('Error: Could not find parent node!'));
                     return;
                 }
+
+                const parentIdForScoreCheck = String(evcNode.id);
 
                 if (this.modalVService.current_evc.layerIndex === 1) {
                     //Server returned all 1st layer services - simply replace the old services in the json with the new one
@@ -751,6 +873,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
                                 let vServiceJsonKey = evcServiceToMove.id + '_vService';
                                 evcServiceToMove.parent_id = null;
+                                evcServiceToMove.score_warning = null;
+                                evcServiceToMove.score_critical = null;
+                                evcServiceToMove.score_unknown = null;
 
                                 this.evcTree[previousLayerIndex][vServiceJsonKey] = [
                                     evcServiceToMove
@@ -760,6 +885,52 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
                         this.evcTree[previousLayerIndex][evcNode.id] = evcsToKeep;
                     }
+                }
+
+                // ITC-3587 Update scoring thresholds from the modal
+                // The scoring values for each service is stored in the service itself on the previous layer (left side of the operator).
+                // When a service in the layerIndex === 1 gets edited, the server returns the complete new service
+                // object for layer 0.
+                // When a service in the layerIndex > 1 gets edited, the server does not return the complete new service object.
+                // To have the same behavior for all layers, we patch the scoring values manually for all layers.
+                // We have to do the same in add mode anyways.
+                let isScoringOperator: boolean = false;
+                if (this.modalVService && [EventcorrelationOperators.SCORESCLALARGREATER,
+                    EventcorrelationOperators.SCORESCLALARLESSER,
+                    EventcorrelationOperators.SCORERANGEINCLUSIVE,
+                    EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(this.modalVService.operator as EventcorrelationOperators)) {
+                    isScoringOperator = true;
+                }
+
+                if (isScoringOperator && this.modalVService && this.modalVService.current_evc.service_scores.length > 0) {
+                    // Now we need to find the services in the previous layer (left side) and update the scores
+                    let previousLayerIndex = this.modalVService.current_evc.layerIndex - 1;
+                    this.modalVService.current_evc.service_scores.forEach((service_score) => {
+
+                        for (let parentEvcId in this.evcTree[previousLayerIndex]) {
+                            if (parentEvcId === parentIdForScoreCheck) {
+                                for (let k in this.evcTree[previousLayerIndex][parentEvcId]) {
+                                    //Find the evcNode by the given id
+                                    if (this.modalVService && this.modalVService.current_evc.layerIndex > 1) {
+                                        // Update services of layer 2 or higher
+                                        // here we need to use .id and add "_vService" suffix
+                                        if (this.evcTree[previousLayerIndex][parentEvcId][k].id + '_vService' == service_score.vService_id) {
+                                            this.evcTree[previousLayerIndex][parentEvcId][k].score_warning = service_score.score_warning;
+                                            this.evcTree[previousLayerIndex][parentEvcId][k].score_critical = service_score.score_critical;
+                                            this.evcTree[previousLayerIndex][parentEvcId][k].score_unknown = service_score.score_unknown;
+                                        }
+                                    } else {
+                                        // update layer 0 services because the score is stored in the previous layer
+                                        if (this.evcTree[previousLayerIndex][parentEvcId][k].service_id == service_score.vService_id) {
+                                            this.evcTree[previousLayerIndex][parentEvcId][k].score_warning = service_score.score_warning;
+                                            this.evcTree[previousLayerIndex][parentEvcId][k].score_critical = service_score.score_critical;
+                                            this.evcTree[previousLayerIndex][parentEvcId][k].score_unknown = service_score.score_unknown;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
                 }
 
 
@@ -821,7 +992,6 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                             evcNodeWithErrors[evcTreeItem.id] = true;
                         }
                     }
-
                 }
             }
 
@@ -853,7 +1023,8 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             this.notyService.genericError();
             return;
         }
-
+        //console.log(this.evcTree);
+        //return;
         this.subscriptions.add(this.EventcorrelationsService.saveCorrelation(this.id, this.evcTree)
             .subscribe((result) => {
                 this.cdr.markForCheck();
@@ -949,7 +1120,7 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
         // find the parent id in evcTree
         const nodeDetails = this.findEvcNodeInTreeForDelete(layerIndex, evcNodeId);
-
+        this.cdr.markForCheck();
         //delete real services from 1st layer in evcTree
         if (layerIndex === 1) {
             delete this.evcTree[0][evcNodeId];
@@ -1018,6 +1189,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
                     delete this.evcTree[layerIndex][parentEvcId];
                     for (let evcService in container) {
                         container[evcService].parent_id = null;
+                        container[evcService].score_warning = null; // If the parent is gone, we can not have any scores
+                        container[evcService].score_critical = null;
+                        container[evcService].score_unknown = null;
                         // for example: Layer 1{1} with oldKey => 60 [2 Elements with parent_id = 60]
                         // after delete node with id 60
                         // Layer 1{2} with keys =>  61_vService[1] and 66_vService[1] and parent_id = null
@@ -1030,5 +1204,121 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
         }
     }
 
-    protected readonly EventcorrelationOperators = EventcorrelationOperators;
+    public updateServiceScores = () => {
+        if (!this.modalVService) {
+            return;
+        }
+        if (!this.modalVService.operator) {
+            return;
+        }
+
+        if (![EventcorrelationOperators.SCORESCLALARGREATER,
+            EventcorrelationOperators.SCORESCLALARLESSER,
+            EventcorrelationOperators.SCORERANGEINCLUSIVE,
+            EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(this.modalVService.operator)) {
+
+            // Not a score operator - nothing to do
+            return;
+        }
+
+        if (this.modalVService.service_ids) {
+            this.updateServiceScoresForCurrentVService();
+        }
+    }
+
+    /**
+     * This method will update the service scores for the current edited vService in the add/edit modal.
+     * The this.modalVService.current_evc.service_scores holds the score configuration for each services
+     * so that it can be rendered as matrix and with input fields
+     */
+    public updateServiceScoresForCurrentVService() {
+        if (!this.modalVService) {
+            return;
+        }
+
+        if (this.modalVService.service_ids.length === 0) {
+            this.modalVService.current_evc.service_scores = [];
+        }
+
+        // ITC-3587 Add selected services to services_scopes array
+        if (this.modalVService.service_ids) {
+            for (let serviceId of this.modalVService.service_ids) {
+                const serviceIdStr = String(serviceId);
+
+                // find serviceId in services_scores array
+                let score = this.modalVService.current_evc.service_scores.find(svc => {
+                    return String(svc.vService_id) === serviceIdStr;
+                });
+
+                let service = this.modalServicesList.find(svc => svc.key === serviceIdStr);
+
+                if (!service) {
+                    console.log('Could not find service for id ' + serviceId);
+                    continue;
+                }
+
+                if (!score) {
+                    // Services does not exist in service_scores array - add it with default scores
+                    this.modalVService.current_evc.service_scores.push({
+                        vService_id: service.key, //serviceId,
+                        display_name: service.value,
+                        score_warning: null,
+                        score_critical: null,
+                        score_unknown: null
+                    });
+                }
+            }
+        }
+
+        // Removed unselected services from services_scores array
+        // This will happen, if a user deselect a service in the dropdown
+        if (this.modalVService.current_evc.service_scores) {
+            this.modalVService.current_evc.service_scores = this.modalVService.current_evc.service_scores.filter(score => {
+                if (this.modalVService?.service_ids) {
+                    // .includes uses a strict comparison (===) - we need to convert both sides to string to avoid type issues
+                    return this.modalVService.service_ids.some(id => id == score.vService_id);
+                }
+                return false;
+            });
+        }
+    }
+
+    /**
+     * Used to get the configured values from the services to build the score matrix in edit modal.
+     * This loads the values from the left side of the operator.
+     *
+     * @param layerIndex
+     * @param vServiceId
+     * @private
+     */
+    private getServiceScoresForCurrentVService(layerIndex: number, vServiceId: string | number): EvcModalServiceScore[] {
+        let scores: EvcModalServiceScore[] = [];
+
+        if (!this.evcTree[layerIndex][vServiceId]) {
+            return scores;
+        }
+
+        for (let service of this.evcTree[layerIndex][vServiceId]) {
+            let servicename = service.service.host.name + '/' + service.service.servicename;
+            if (Number(service.service.disabled) === 1) {
+                servicename += ' 🔌';
+            }
+
+            // layerIndex == 0
+            let evcId = service.service_id;
+            if (layerIndex > 0) {
+                evcId = service.id + '_vService';
+            }
+
+            scores.push({
+                vService_id: evcId,
+                display_name: servicename,
+                score_warning: service.score_warning,
+                score_critical: service.score_critical,
+                score_unknown: service.score_unknown
+            });
+        }
+
+        return scores;
+    }
 }

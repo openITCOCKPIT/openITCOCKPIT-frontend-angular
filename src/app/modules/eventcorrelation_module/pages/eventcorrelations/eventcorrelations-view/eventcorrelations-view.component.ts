@@ -15,9 +15,8 @@ import {
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgClass } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
@@ -27,6 +26,11 @@ import { EvcTree, EventcorrelationRootElement } from '../eventcorrelations.inter
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { EvcTreeComponent } from './evc-tree/evc-tree.component';
 import { EvcTreeDirection } from './evc-tree/evc-tree.enum';
+import { ExternalCommandsService, HostRescheduleItem } from '../../../../../services/external-commands.service';
+import { ExternalCommandsEnum } from '../../../../../enums/external-commands.enum';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { PermissionsService } from '../../../../../permissions/permissions.service';
 
 
 @Component({
@@ -51,7 +55,8 @@ import { EvcTreeDirection } from './evc-tree/evc-tree.enum';
         BackButtonDirective,
         BlockLoaderComponent,
         EvcTreeComponent,
-        NgClass
+        NgClass,
+        AsyncPipe
     ],
     templateUrl: './eventcorrelations-view.component.html',
     styleUrl: './eventcorrelations-view.component.css',
@@ -81,10 +86,28 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private cdr = inject(ChangeDetectorRef);
+    public highlightHostId: number = 0;
+    public highlightServiceId: number = 0;
+    private readonly notyService = inject(NotyService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly ExternalCommandsService = inject(ExternalCommandsService);
+    public readonly PermissionsService = inject(PermissionsService);
+
 
     public ngOnInit(): void {
         this.route.queryParams.subscribe(params => {
             this.id = Number(this.route.snapshot.paramMap.get('id'));
+            // Query String Parameters
+            const highlightHostId = Number(params['highlightHostId']) || 0;
+            if (highlightHostId > 0) {
+                this.highlightHostId = highlightHostId;
+            }
+
+            const highlightServiceId = Number(params['highlightServiceId']) || 0;
+            if (highlightServiceId > 0) {
+                this.highlightServiceId = highlightServiceId;
+            }
+
             this.loadEventcorrelation();
         });
     }
@@ -120,5 +143,30 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
             this.stateForDowntimedService = result.stateForDowntimedService;
 
         }));
+    }
+
+    public resetChecktime(rootElement: EventcorrelationRootElement) {
+
+        const commands: HostRescheduleItem[] = [
+            {
+                command: ExternalCommandsEnum.rescheduleHost,
+                hostUuid: String(rootElement.host.uuid),
+                satelliteId: 0, // evc is master only, so satelliteId is always 0
+                type: 'hostOnly'
+            }
+        ];
+
+        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
+            if (result.message) {
+                const title = this.TranslocoService.translate('Reschedule');
+                this.notyService.genericSuccess(result.message, title);
+            } else {
+                this.notyService.genericError();
+            }
+        }));
+
+        setTimeout(() => {
+            this.loadEventcorrelation()
+        }, 5000);
     }
 }

@@ -11,13 +11,14 @@ import {
     ViewChild
 } from '@angular/core';
 import { EFConnectableSide, EFMarkerType, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
-import * as dagre from "@dagrejs/dagre"
+import dagre from '@dagrejs/dagre';
+
 import { IPoint, PointExtensions } from '@foblex/2d';
 import { generateGuid } from '@foblex/utils';
 import { EvcTreeDirection } from './evc-tree.enum';
 import { EvcService, EvcTree } from '../../eventcorrelations.interface';
 import { AsyncPipe, NgClass } from '@angular/common';
-import { ButtonGroupComponent, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
+import { ButtonGroupComponent, ColComponent, PopoverDirective, RowComponent, TooltipDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum';
 import { DowntimeIconComponent } from '../../../../../../pages/downtimes/downtime-icon/downtime-icon.component';
@@ -29,7 +30,7 @@ import {
 import { AcknowledgementTypes } from '../../../../../../pages/acknowledgements/acknowledgement-types.enum';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
-import { ConnectionOperator } from './evc-tree.interface'
+import { ConnectionOperator, EvcScoringInformationForRendering } from './evc-tree.interface'
 import { EventcorrelationOperators } from '../../eventcorrelations.enum';
 import { RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -37,6 +38,12 @@ import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-dir
 import { EvcServicestatusToasterService } from './evc-servicestatus-toaster/evc-servicestatus-toaster.service';
 import { EvcServicestatusToasterComponent } from './evc-servicestatus-toaster/evc-servicestatus-toaster.component';
 import { FormsModule } from '@angular/forms';
+import { LocalNumberPipe } from '../../../../../../pipes/local-number.pipe';
+import { OperatorScoreTooltipComponent } from './operator-score-tooltip/operator-score-tooltip.component';
+
+// Dagre is currently working on the TypeScript modules, maybe we need this in the future
+// import dagre, { Node } from '@dagrejs/dagre';
+// import { Edge } from '@dagrejs/graphlib';
 //import { NgxResizeObserverModule } from 'ngx-resize-observer';
 
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
@@ -50,13 +57,16 @@ interface EvcGraphNode {
     service?: EvcService
     operator?: EventcorrelationOperators | string | null,
     type: 'service' | 'operator'
+    scoringInformation?: EvcScoringInformationForRendering // Only relevant to render the evcTree
 }
+
 
 interface INodeViewModel {
     id: string
     connectorId: string
     position: IPoint,
     evcNode: EvcGraphNode
+    highlight: boolean
 }
 
 
@@ -107,7 +117,10 @@ const OPERATOR_WIDTH = 100;
         XsButtonDirective,
         ButtonGroupComponent,
         EvcServicestatusToasterComponent,
-        FormsModule
+        FormsModule,
+        LocalNumberPipe,
+        PopoverDirective,
+        OperatorScoreTooltipComponent
     ],
     templateUrl: './evc-tree.component.html',
     styleUrl: './evc-tree.component.scss',
@@ -150,6 +163,9 @@ export class EvcTreeComponent {
     private isInitialized = false;
 
     private toasterTimeout: any = null;
+
+    public highlightHostId = input<number>(0);
+    public highlightServiceId = input<number>(0);
 
     constructor() {
         this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered unknown');
@@ -295,6 +311,13 @@ export class EvcTreeComponent {
                 // This centers the operator node between the service nodes
                 xpos = xpos + (SERVICE_WIDTH - OPERATOR_WIDTH) / 2;
             }
+            let highlight = false;
+
+            if (node.evcNode.type === 'service') {
+                if (node.evcNode.service?.host.id == this.highlightHostId() || node.evcNode.service?.id == this.highlightServiceId()) {
+                    highlight = true;
+                }
+            }
 
             return {
                 id: generateGuid(),
@@ -303,6 +326,7 @@ export class EvcTreeComponent {
                     x: xpos,//evcNode.x,
                     y: evcNode.y
                 },
+                highlight: highlight,
                 evcNode: evcNode.evcNode
             }
         });
@@ -321,20 +345,70 @@ export class EvcTreeComponent {
             for (const vServiceKey in layer) {
                 const vServices = layer[vServiceKey];
                 vServices.forEach((vService, vServiceIndex: number) => {
+                    let scoringInformation: undefined | EvcScoringInformationForRendering = undefined;
+                    if (vService.isUsedInScoringOperator) {
+                        // true, if this service is used in a scoring operator in the next level.
+                        let currentState: number | undefined = vService.service.servicestatus.currentState;
+                        if (vService.service.servicestatus.scheduledDowntimeDepth && vService.service.servicestatus.scheduledDowntimeDepth > 0) {
+                            if (this.stateForDowntimedService() !== -1) {
+                                // -1 == actual service state
+                                currentState = this.stateForDowntimedService();
+                            }
+
+                        }
+                        if (vService.service.disabled) {
+                            currentState = this.stateForDisabledService();
+                        }
+
+                        scoringInformation = {
+                            isUsedInScoringOperator: vService.isUsedInScoringOperator,
+                            score_warning: vService.score_warning,
+                            score_critical: vService.score_critical,
+                            score_unknown: vService.score_unknown,
+                            currentStateConsiderDowntimeOrDisabled: currentState
+                        };
+                    }
+
                     nodes.push({
                         id: vService.id.toString(),
                         //parentId: vService.parent_id === null ? null : vService.parent_id.toString(),
                         parentId: vService.parent_id === null ? null : `${vService.parent_id}_operator`,
                         service: vService.service,
-                        type: 'service'
+                        type: 'service',
+                        scoringInformation: scoringInformation
                     });
 
                     if (vService.operator !== null) {
+                        let operator: EventcorrelationOperators = vService.operator as EventcorrelationOperators;
+                        let operatorText = vService.operator;
+
+                        let scoringInformation: undefined | EvcScoringInformationForRendering = undefined;
+                        if ([EventcorrelationOperators.SCORESCLALARGREATER,
+                            EventcorrelationOperators.SCORESCLALARLESSER,
+                            EventcorrelationOperators.SCORERANGEINCLUSIVE,
+                            EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(operator)) {
+                            operatorText = this.TranslocoService.translate('score') + ' ⚖️';
+
+                            // This is a scoring operator. We store some addition information to render a tooltip for the operator
+                            scoringInformation = {
+                                isUsedInScoringOperator: false, // No this is the operator  itself.
+                                operator_warning_min: vService.operator_warning_min,
+                                operator_warning_max: vService.operator_warning_max,
+                                operator_critical_min: vService.operator_critical_min,
+                                operator_critical_max: vService.operator_critical_max,
+                                operator_unknown_min: vService.operator_unknown_min,
+                                operator_unknown_max: vService.operator_unknown_max,
+                                operator: vService.operator as EventcorrelationOperators,
+                                servicestatus: vService.service.servicestatus
+                            };
+
+                        }
                         nodes.push({
                             id: `${vService.id}_operator`,
                             parentId: vService.id.toString(),
-                            operator: vService.operator,
-                            type: 'operator'
+                            operator: operatorText,
+                            type: 'operator',
+                            scoringInformation: scoringInformation
                         });
                     }
 
