@@ -138,6 +138,11 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             key: ExternalSystems.Itop,
             value: this.TranslocoService.translate('iTop System'),
             placeholder: 'itop/webservices/rest.php?version=1.3'
+        },
+        {
+            key: ExternalSystems.Proxmox,
+            value: this.TranslocoService.translate('Proxmox VE'),
+            placeholder: 'proxmox.example.com:8006'
         }
     ];
 
