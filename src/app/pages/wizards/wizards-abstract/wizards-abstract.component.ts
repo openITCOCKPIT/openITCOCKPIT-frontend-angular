@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { Service, WizardGet, WizardPost } from '../wizards.interface';
+import { ServiceForWizard, WizardGet, WizardPost } from '../wizards.interface';
 import { WizardsService } from '../wizards.service';
 import {
     WizardsDynamicfieldsComponent
@@ -69,7 +69,7 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
                             description: result.servicetemplates[key].description,
                             servicecommandargumentvalues: result.servicetemplates[key].servicetemplatecommandargumentvalues,
                             createService: !this.isServiceAlreadyPresent(result.servicesNamesForExistCheck, result.servicetemplates[key].name)
-                        } as Service);
+                        } as ServiceForWizard);
                 }
 
                 // Call custom implementation that may import specific fields from the given result.
@@ -92,11 +92,11 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
         const updatedPost = JSON.parse(JSON.stringify(this.post));
 
         // Remove all services from the copied object where createService is false
-        updatedPost.services = updatedPost.services.filter((service: Service) => {
+        updatedPost.services = updatedPost.services.filter((service: ServiceForWizard) => {
             return service.createService;
         });
         // Remove all services that have been filtered out
-        updatedPost.services = updatedPost.services.filter((service: Service) => {
+        updatedPost.services = updatedPost.services.filter((service: ServiceForWizard) => {
             return this.childComponent.hasName(service.name);
         });
 

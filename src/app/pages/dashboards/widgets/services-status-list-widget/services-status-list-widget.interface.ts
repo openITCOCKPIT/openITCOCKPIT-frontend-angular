@@ -26,6 +26,7 @@ export interface ServicesStatusListWidgetConfig {
         keywords: string,
         not_keywords: string,
     }
+    servicepriority: number[]
     sort: string
     direction: 'asc' | 'desc'
     useScroll: boolean
@@ -55,4 +56,5 @@ export interface ServicesStatusListWidgetParams {
             number | null,
             'SECOND' | 'MINUTE' | 'HOUR' | 'DAY' | null
     ],
+    'filter[servicepriority][]': number[]
 }

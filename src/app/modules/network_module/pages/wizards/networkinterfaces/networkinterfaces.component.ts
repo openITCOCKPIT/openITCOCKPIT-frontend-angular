@@ -2,12 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, ViewChild, ViewChildren } f
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { NetworkinterfacesWizardService } from './networkinterfaces-wizard.service';
-import {
-    InterfaceServicetemplate,
-    N0,
-    NetworkinterfacesWizardGet,
-    NetworkinterfacesWizardPost
-} from './networkinterfaces-wizard.interface';
+import { NetworkinterfacesWizardGet, NetworkinterfacesWizardPost } from './networkinterfaces-wizard.interface';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -44,7 +39,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { Service } from '../../../../../pages/wizards/wizards.interface';
+import { ServiceForWizard, ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
@@ -134,7 +129,7 @@ export class NetworkinterfacesComponent extends WizardsAbstractComponent {
         {key: '3DES', value: '3des'},
         {key: '3DESDE', value: '3desde'},
     ];
-    protected interfaceServicetemplate: InterfaceServicetemplate = {} as InterfaceServicetemplate;
+    protected interfaceServicetemplate: ServicetemplateForWizard = {} as ServicetemplateForWizard;
 
     protected override wizardLoad(result: NetworkinterfacesWizardGet): void {
         this.interfaceServicetemplate = result.interfaceServicetemplate;
@@ -147,12 +142,12 @@ export class NetworkinterfacesComponent extends WizardsAbstractComponent {
         let request: NetworkinterfacesWizardPost = JSON.parse(JSON.stringify(this.post));
 
         // Remove all services from request where createService is false.
-        request.services = request.services.filter((service: Service) => {
+        request.services = request.services.filter((service: ServiceForWizard) => {
             return service.createService && this.childComponent.hasName(service.name);
         });
         // Remove all interfaces from request where createService is false.
         request.interfaces = request.interfaces.filter(
-            (networkInterface: N0) => networkInterface.createService && this.hasName(networkInterface.name)
+            (networkInterface: ServiceForWizard) => networkInterface.createService && this.hasName(networkInterface.name)
         );
 
         this.subscriptions.add(this.WizardService.submit(request)
@@ -182,7 +177,7 @@ export class NetworkinterfacesComponent extends WizardsAbstractComponent {
 
     protected toggleCheck(checked: boolean): void {
         this.checked = checked;
-        this.post.interfaces.forEach((service: N0) => {
+        this.post.interfaces.forEach((service: ServiceForWizard) => {
             if (!this.hasName(service.name)) {
                 return;
             }

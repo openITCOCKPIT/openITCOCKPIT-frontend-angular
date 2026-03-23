@@ -10,7 +10,9 @@ import { HostgroupsService } from '../../../hostgroups/hostgroups.service';
 import { RouterLink } from '@angular/router';
 import {
     ColComponent,
+    FormCheckComponent,
     FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     InputGroupComponent,
     InputGroupTextDirective,
@@ -28,6 +30,7 @@ import { TacticalOverviewHostsWidgetService } from './tactical-overview-hosts-wi
 import { TacticalOverviewHostsConfig } from './tactical-overview-hosts-widget.interface';
 import { GenericValidationError } from '../../../../generic-responses';
 import { NotyService } from '../../../../layouts/coreui/noty.service';
+import { TrueFalseDirective } from '../../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-tactical-overview-hosts-widget',
@@ -51,7 +54,10 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
         MultiSelectComponent,
         XsButtonDirective,
         FaStackComponent,
-        FaStackItemSizeDirective
+        FaStackItemSizeDirective,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        TrueFalseDirective
     ],
     templateUrl: './tactical-overview-hosts-widget.component.html',
     styleUrl: './tactical-overview-hosts-widget.component.css',
@@ -70,6 +76,14 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
     public hostgroupNotKeywords: string[] = [];
     private readonly TacticalOverviewHostsWidgetService = inject(TacticalOverviewHostsWidgetService);
     private readonly notyService = inject(NotyService);
+
+    public priorityFilter: { [key: string]: boolean } = {
+        '1': false,
+        '2': false,
+        '3': false,
+        '4': false,
+        '5': false
+    };
 
 
     constructor() {
@@ -93,6 +107,18 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
                     this.hostgroupNotKeywords = this.config.Hostgroup.not_keywords.split(',').filter(Boolean);
                     this.hoststatusSummary = result.hoststatusSummary;
                     this.hoststatusCountPercentage = result.hoststatusCountPercentage;
+
+                    this.priorityFilter = {
+                        '1': false,
+                        '2': false,
+                        '3': false,
+                        '4': false,
+                        '5': false
+                    }
+                    for (let index in this.config.hostpriority) {
+                        this.priorityFilter[this.config.hostpriority[index]] = true;
+                    }
+
                     this.cdr.markForCheck();
                 }));
         }
@@ -121,6 +147,15 @@ export class TacticalOverviewHostsWidgetComponent extends BaseWidgetComponent {
         this.config.Host.not_keywords = this.notKeywords.join(',');
         this.config.Hostgroup.keywords = this.hostgroupKeywords.join(',');
         this.config.Hostgroup.not_keywords = this.hostgroupNotKeywords.join(',');
+
+        let priorityFilter = [];
+        for (var key in this.priorityFilter) {
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(key);
+            }
+        }
+
+        this.config.hostpriority = priorityFilter;
 
         this.subscriptions.add(this.TacticalOverviewHostsWidgetService.saveWidget(this.widget, this.config)
             .subscribe({

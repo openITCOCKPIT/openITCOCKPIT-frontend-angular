@@ -195,6 +195,7 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-slas-summary-widget>
         }
+
         @case (WidgetTypes.ChangecalendarWidget) {
             <oitc-changecalendar-widget
                 [widgetInput]="widget"
@@ -212,9 +213,21 @@
         }
         @case (WidgetTypes.ResourcegroupsCronjobStatusWidget) {
             <oitc-resourcegroups-cronjob-status-widget
-                [widgetInput]="widget">
+                    [widgetInput]="widget"
                 [isReadonly]="isReadonly()">
             </oitc-resourcegroups-cronjob-status-widget>
+        }
+        @case (WidgetTypes.DelayedPassiveHostsWidget) {
+            <oitc-delayed-passive-hosts-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()">
+            </oitc-delayed-passive-hosts-widget>
+        }
+        @case (WidgetTypes.DelayedPassiveServicesWidget) {
+            <oitc-delayed-passive-services-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()">
+            </oitc-delayed-passive-services-widget>
         }
 
         <!-- Fallback Widget -->

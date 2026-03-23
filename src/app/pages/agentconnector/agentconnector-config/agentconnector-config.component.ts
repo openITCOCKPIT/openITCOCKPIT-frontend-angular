@@ -224,6 +224,12 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
             this.config.bool.use_autossl = false; // no autotls in push mode
             this.config.bool.use_https = false; // the agent push the data to oitc this variable is for pull mode
             this.config.bool.use_https_verify = false; // the agent push the data to oitc this variable is for pull mode
+
+            this.config.bool.push_webserver_use_https = true;
+            if (this.webserverType === AgentconnectorWebserverTypes.Http) {
+                this.config.bool.push_webserver_use_https = false;
+            }
+
         }
     }
 

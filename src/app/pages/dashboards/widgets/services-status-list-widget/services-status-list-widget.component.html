@@ -81,6 +81,10 @@
                                     [cTooltip]="'is in downtime' | transloco" cTooltipPlacement="top">
                                     <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                                 </th>
+                                <th class="text-center" scope="col" mat-sort-header="servicepriority"
+                                    [cTooltip]="'Priority' | transloco" cTooltipPlacement="top">
+                                    <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                </th>
                                 <th mat-sort-header="Hosts.name">
                                     {{ t('Host name') }}
                                 </th>
@@ -118,6 +122,13 @@
                                                         [objectId]="service.Service.id"></oitc-downtime-icon>
                                                 }
                                             </td>
+                                            @if (service.Service.priority) {
+                                                <td class="width-50 text-center">
+                                                    <fa-icon [icon]="['fas', 'fire']" size="lg" [ngClass]="{'ok-soft' : service.Service.priority==1,
+                                                    'ok' : service.Service.priority==2, 'warning' : service.Service.priority==3,
+                                                    'critical-soft' : service.Service.priority==4, 'critical' : service.Service.priority==5}"></fa-icon>
+                                                </td>
+                                            }
                                             <td [ngClass]="{'bg-up': service.Hoststatus.currentState === 0, 'bg-down': service.Hoststatus.currentState === 1, 'bg-unreachable': service.Hoststatus.currentState === 2, 'text-white': service.Hoststatus.isInMonitoring}"
                                                 class="word-break">
                                                 @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
@@ -524,6 +535,94 @@
                                                            [for]="'Servicestatus.not_in_downtime-'+widget.id">{{ t('Not in downtime') }}</label>
                                                 </c-form-check>
                                             </fieldset>
+                                        </c-col>
+                                        <c-col [xs]="12" lg="2">
+                                            <h5>{{ t('Priority') }}</h5>
+                                            <c-form-check>
+                                                <input cFormCheckInput type="checkbox"
+                                                       class="checkbox-lg custom-check-default"
+                                                       [name]="'Services.Priority_1-'+widget.id"
+                                                       [attr.id]="'Services.Priority_1-'+widget.id"
+                                                       [(ngModel)]="priorityFilter[1]"
+                                                       oitcDebounce/>
+                                                <label cFormCheckLabel class="ms-1 mt-1"
+                                                       [for]="'Services.Priority_1-'+widget.id">
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="ok-soft"></fa-icon>
+                                                </label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input cFormCheckInput type="checkbox"
+                                                       class="checkbox-lg custom-check-default"
+                                                       [name]="'Services.Priority_2-'+widget.id"
+                                                       [attr.id]="'Services.Priority_2-'+widget.id"
+                                                       [(ngModel)]="priorityFilter[2]"
+                                                       oitcDebounce/>
+                                                <label cFormCheckLabel class="ms-1  mt-1"
+                                                       [for]="'Services.Priority_2-'+widget.id">
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="ok"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="ok"></fa-icon>
+                                                </label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input cFormCheckInput type="checkbox"
+                                                       class="checkbox-lg custom-check-default"
+                                                       [name]="'Services.Priority_3-'+widget.id"
+                                                       [attr.id]="'Services.Priority_3-'+widget.id"
+                                                       [(ngModel)]="priorityFilter[3]"
+                                                       oitcDebounce/>
+                                                <label cFormCheckLabel class="ms-1  mt-1"
+                                                       [for]="'Services.Priority_3-'+widget.id">
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="warning"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="warning"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="warning"></fa-icon>
+                                                </label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input cFormCheckInput type="checkbox"
+                                                       class="checkbox-lg custom-check-default"
+                                                       [name]="'Services.Priority_4-'+widget.id"
+                                                       [attr.id]="'Services.Priority_4-'+widget.id"
+                                                       [(ngModel)]="priorityFilter[4]"
+                                                       oitcDebounce/>
+                                                <label cFormCheckLabel class="ms-1 mt-1"
+                                                       [for]="'Services.Priority_4-'+widget.id">
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="critical-soft"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="critical-soft"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="critical-soft"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="critical-soft"></fa-icon>
+                                                </label>
+                                            </c-form-check>
+                                            <c-form-check>
+                                                <input cFormCheckInput type="checkbox"
+                                                       class="checkbox-lg custom-check-default"
+                                                       [name]="'Services.Priority_5-'+widget.id"
+                                                       [attr.id]="'Services.Priority_5-'+widget.id"
+                                                       [(ngModel)]="priorityFilter[5]"
+                                                       oitcDebounce/>
+                                                <label cFormCheckLabel class="ms-1 mt-1"
+                                                       [for]="'Services.Priority_5-'+widget.id">
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="critical"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="critical"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="critical"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="critical"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'fire']"
+                                                             class="critical"></fa-icon>
+                                                </label>
+                                            </c-form-check>
                                         </c-col>
                                     </c-row>
                                 }

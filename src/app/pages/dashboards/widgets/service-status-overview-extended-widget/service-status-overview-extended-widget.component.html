@@ -361,6 +361,96 @@
                                             </c-form-check>
                                         </fieldset>
                                     </c-col>
+                                    <c-col [xs]="12" [md]="6" [lg]="6">
+                                        <legend class="fs-5">
+                                            {{ t('Priority') }}
+                                        </legend>
+                                        <c-form-check>
+                                            <input cFormCheckInput type="checkbox"
+                                                   class="checkbox-lg custom-check-default"
+                                                   [name]="'Services.Priority_1-'+widget.id"
+                                                   [attr.id]="'Services.Priority_1-'+widget.id"
+                                                   [(ngModel)]="priorityFilter[1]"
+                                                   oitcDebounce/>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   [for]="'Services.Priority_1-'+widget.id">
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="ok-soft"></fa-icon>
+                                            </label>
+                                        </c-form-check>
+                                        <c-form-check>
+                                            <input cFormCheckInput type="checkbox"
+                                                   class="checkbox-lg custom-check-default"
+                                                   [name]="'Services.Priority_2-'+widget.id"
+                                                   [attr.id]="'Services.Priority_2-'+widget.id"
+                                                   [(ngModel)]="priorityFilter[2]"
+                                                   oitcDebounce/>
+                                            <label cFormCheckLabel class="ms-1  mt-1"
+                                                   [for]="'Services.Priority_2-'+widget.id">
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="ok"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="ok"></fa-icon>
+                                            </label>
+                                        </c-form-check>
+                                        <c-form-check>
+                                            <input cFormCheckInput type="checkbox"
+                                                   class="checkbox-lg custom-check-default"
+                                                   [name]="'Services.Priority_3-'+widget.id"
+                                                   [attr.id]="'Services.Priority_3-'+widget.id"
+                                                   [(ngModel)]="priorityFilter[3]"
+                                                   oitcDebounce/>
+                                            <label cFormCheckLabel class="ms-1  mt-1"
+                                                   [for]="'Services.Priority_3-'+widget.id">
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="warning"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="warning"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="warning"></fa-icon>
+                                            </label>
+                                        </c-form-check>
+                                        <c-form-check>
+                                            <input cFormCheckInput type="checkbox"
+                                                   class="checkbox-lg custom-check-default"
+                                                   [name]="'Services.Priority_4-'+widget.id"
+                                                   [attr.id]="'Services.Priority_4-'+widget.id"
+                                                   [(ngModel)]="priorityFilter[4]"
+                                                   oitcDebounce/>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   [for]="'Services.Priority_4-'+widget.id">
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="critical-soft"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="critical-soft"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="critical-soft"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="critical-soft"></fa-icon>
+                                            </label>
+                                        </c-form-check>
+                                        <c-form-check>
+                                            <input cFormCheckInput type="checkbox"
+                                                   class="checkbox-lg custom-check-default"
+                                                   [name]="'Services.Priority_5-'+widget.id"
+                                                   [attr.id]="'Services.Priority_5-'+widget.id"
+                                                   [(ngModel)]="priorityFilter[5]"
+                                                   oitcDebounce/>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   [for]="'Services.Priority_5-'+widget.id">
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="critical"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="critical"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="critical"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="critical"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'fire']"
+                                                         class="critical"></fa-icon>
+                                            </label>
+                                        </c-form-check>
+                                    </c-col>
                                     @if (config.Servicestatus.current_state > 0) {
                                         <c-col [xs]="12" [md]="6" [lg]="6">
                                             <fieldset class="mt-2">
@@ -491,7 +581,7 @@
                                     </c-col>
                                 </c-row>
                                 <c-row>
-                                    <c-col class="text-end">
+                                    <c-col class="text-end py-2">
                                         <button cButton class="ripple" color="primary" (click)="submit()">
                                             {{ t('Save') }}
                                         </button>
