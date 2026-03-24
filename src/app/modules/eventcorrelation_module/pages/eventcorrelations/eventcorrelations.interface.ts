@@ -155,6 +155,7 @@ export interface EvcServicestatusToast {
     service: ServiceObject,
     servicestatus: ServicestatusObject,
     hoststatus: HoststatusObject,
+    considerStateType: number,
     _csrfToken: string | null
 }
 

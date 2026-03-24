@@ -135,24 +135,39 @@ export class SunburstEchartComponent implements OnDestroy {
                         return this.TranslocoService.translate('Back');
                     }
                     return params.name;
-                }
+                },
+                padding: [2, 5],
+                textStyle: {
+                    fontSize: 12,
+                    align: 'right'
+                },
+                appendToBody: true
             },
             series: {
                 type: 'sunburst',
                 data: this.chartData(),
                 radius: [0, '100%'],
+                center: ['50%', '50%'],
                 emphasis: {
                     focus: 'ancestor'
                 },
                 label: {
                     fontSize: 10,
                     formatter: (params: any) => {
-                        let maxLength = 14;
+                        let maxLength = 22;
                         if (params.data && params.data.type && params.data.type === 'resourcegroup') {
                             maxLength = 18;
                         }
                         return this.truncate(params.name, maxLength, '...');
-                    }
+                    },
+                    lineOverflow: 'truncate'
+
+                },
+                labelLine: {
+                    show: true
+                },
+                labelLayout: {
+                    hideOverlap: false
                 },
                 levels: [
                     {
@@ -175,6 +190,7 @@ export class SunburstEchartComponent implements OnDestroy {
                         label: {
                             align: 'center',
                             padding: 0,
+                            verticalAlign: 'middle',
                         }
                     },
                     {
@@ -182,8 +198,11 @@ export class SunburstEchartComponent implements OnDestroy {
                         r: '65%',
                         label: {
                             position: 'outside',
-                            padding: 0,
-                            silent: false
+                            distance: 25,
+                            silent: false,
+                            rotate: 0,
+                            align: 'center',
+                            verticalAlign: 'top',
                         },
                         itemStyle: {
                             borderWidth: 3
