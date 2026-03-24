@@ -7,6 +7,7 @@ import {
     inject,
     Input,
     OnChanges,
+    OnDestroy,
     SimpleChanges
 } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -27,7 +28,7 @@ import { Subscription } from 'rxjs';
     styleUrl: './parent-child-host-map.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ParentChildHostMapComponent implements AfterViewInit, OnChanges {
+export class ParentChildHostMapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     private cdr = inject(ChangeDetectorRef);
     private readonly document = inject(DOCUMENT);
@@ -53,6 +54,10 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         this.ngAfterViewInit();
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public ngAfterViewInit() {
@@ -282,6 +287,14 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges {
                     },
                     size: 15,
                 },
+                headline: {
+                    color: 'rgba(0,0,0,0)', // transparent
+                    borderWidth: 0,
+                    font: {
+                        color: colorText,
+                        size: 12
+                    }
+                }
             },
             nodes: {
                 borderWidth: 0.5,
@@ -320,7 +333,7 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges {
                     sortMethod: "directed",
                     shakeTowards: "roots",
                     parentCentralization: false,
-                    treeSpacing: 200,
+                    treeSpacing: 50,
                 }
             },
             physics: false
@@ -334,11 +347,22 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges {
         });
 
         network.on('click', (properties) => {
-            if (properties.nodes[0]) {
+            // remove highlighting during click
+            network.unselectAll();
+            if (properties.nodes[0] && properties.nodes[0].toString().startsWith('Host_')) {
                 // @todo: Achtun bullshit detected (replace...) Geht doch irgendwie auch mit nem zusätzlichen Feld ?
                 this.router.navigate(['hosts', 'browser', properties.nodes[0].replace('Host_', '')]);
             }
         });
+
+        // center the node of the host from the host browser view
+        for (let index in this.result.parentChildRelations.nodes) {
+            if (String(this.result.parentChildRelations.nodes[index].id) === 'Host_' + this.result.mergedHost.id) {
+                network.focus(this.result.parentChildRelations.nodes[index].id!)
+                break;
+            }
+        }
+
         this.cdr.markForCheck();
     }
 
