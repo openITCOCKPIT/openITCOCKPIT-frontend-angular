@@ -765,8 +765,9 @@ export interface HostBrowserMenu {
     hostAddress: string
     docuExists: boolean
     hostUrl: string
+    hostType: number
     allowEdit: boolean
-    includeHoststatus: boolean,
+    includeHoststatus: boolean
     Hoststatus: HoststatusObject
 }
 

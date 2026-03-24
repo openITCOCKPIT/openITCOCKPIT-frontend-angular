@@ -739,6 +739,7 @@ export interface ServiceBrowserMenu {
     hostName: string
     serviceName: string
     hostAddress: string
+    hostType: number
     docuExists: boolean
     serviceUrl: string | null
     allowEdit: boolean

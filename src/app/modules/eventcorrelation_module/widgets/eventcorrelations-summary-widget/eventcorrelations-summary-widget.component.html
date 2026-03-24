@@ -18,11 +18,38 @@
         <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
              class="box-container">
             <div class="box-x">
-                @if (animationStateShowContent) {
-                    <!-- Widget Content -->
+                <div class="d-flex flex-row flex-wrap">
+                    @if (animationStateShowContent) {
+                        <!-- Widget Content -->
+                        @for (summaryItem of summary; track $index) {
+                            <div (mouseenter)="toggleToaster(Number(summaryItem.service_id))"
+                                 (mouseleave)="cancelToaster()" class="d-inline my-2">
+                                @if (summaryItem.Servicestatus) {
+                                    <fa-stack [size]="'2xl'">
+                                        <fa-icon [icon]="['fas', 'square']" [stackItemSize]="'1x'"
+                                                 [ngClass]="{'text-success': summaryItem.Servicestatus.currentState === 0,
+                                 'text-warning': summaryItem.Servicestatus.currentState === 1,
+                                 'text-danger': summaryItem.Servicestatus.currentState === 2,
+                                 'text-muted': summaryItem.Servicestatus.currentState === 3,
+                                 'opacity-50': !summaryItem.Servicestatus.isHardstate}"></fa-icon>
 
+                                        @if (summaryItem.Servicestatus.problemHasBeenAcknowledged && summaryItem.Servicestatus.scheduledDowntimeDepth) {
+                                            <fa-icon [icon]="['fas', 'user-doctor']" [stackItemSize]="'1x'"
+                                                     [cTextColor]="'white'" transform="shrink-5"></fa-icon>
+                                        } @else if (summaryItem.Servicestatus.problemHasBeenAcknowledged) {
+                                            <fa-icon [icon]="['fas', 'user-check']" [stackItemSize]="'1x'"
+                                                     [cTextColor]="'white'" transform="shrink-5"></fa-icon>
+                                        } @else if (summaryItem.Servicestatus.scheduledDowntimeDepth) {
+                                            <fa-icon [icon]="['fas', 'power-off']" [stackItemSize]="'1x'"
+                                                     [cTextColor]="'white'" transform="shrink-5"></fa-icon>
+                                        }
+                                    </fa-stack>
+                                }
+                            </div>
+                        }
                         <!-- End Widget Content -->
-                }
+                    }
+                </div>
             </div>
 
             <div class="box-x">
@@ -34,7 +61,7 @@
                                     <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                 </span>
                                 <input [(ngModel)]="config['Host']['name']"
-                                       [placeholder]="'Filter by host name' | transloco"
+                                       [placeholder]="'Filter by event correlation name' | transloco"
                                        cFormControl
                                        [id]="'Hosts.name-'+widget.id"
                                        [name]="'Hosts.name-'+widget.id"
@@ -62,7 +89,7 @@
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                 </span>
                                 <input [(ngModel)]="config['Service']['servicename']"
-                                       [placeholder]="'Filter by service name' | transloco"
+                                       [placeholder]="'Filter by virtual service name' | transloco"
                                        cFormControl
                                        [id]="'Service.servicename-'+widget.id"
                                        [name]="'Service.servicename-'+widget.id"
@@ -371,5 +398,5 @@
             </div>
         </div>
     </div>
-
 </ng-container>
+<oitc-evc-servicestatus-toaster></oitc-evc-servicestatus-toaster>

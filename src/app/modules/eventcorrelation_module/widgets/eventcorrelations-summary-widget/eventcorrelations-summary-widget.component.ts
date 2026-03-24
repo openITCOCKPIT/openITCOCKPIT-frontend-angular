@@ -6,7 +6,8 @@ import {
     FormControlDirective,
     InputGroupComponent,
     InputGroupTextDirective,
-    RowComponent
+    RowComponent,
+    TextColorDirective
 } from '@coreui/angular';
 import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
@@ -17,7 +18,7 @@ import { AnimationEvent } from '@angular/animations';
 import { EventcorrelationsSummaryWidgetService } from './eventcorrelations-summary-widget.service';
 
 import { EvcTreeDirection } from '../../pages/eventcorrelations/eventcorrelations-view/evc-tree/evc-tree.enum';
-import { EventcorrelationsSummaryWidgetConfig } from './eventcorrelations-summary-widget.interface';
+import { EvcsSummary, EventcorrelationsSummaryWidgetConfig } from './eventcorrelations-summary-widget.interface';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
@@ -41,6 +42,14 @@ import {
 import { HostgroupsLoadHostgroupsByStringParams } from '../../../../pages/hostgroups/hostgroups.interface';
 import { HostgroupsService } from '../../../../pages/hostgroups/hostgroups.service';
 import { ServicegroupsService } from '../../../../pages/servicegroups/servicegroups.service';
+import _ from 'lodash';
+import { NgClass } from '@angular/common';
+import {
+    EvcServicestatusToasterService
+} from '../../pages/eventcorrelations/eventcorrelations-view/evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.service';
+import {
+    EvcServicestatusToasterComponent
+} from '../../pages/eventcorrelations/eventcorrelations-view/evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.component';
 
 
 @Component({
@@ -64,7 +73,10 @@ import { ServicegroupsService } from '../../../../pages/servicegroups/servicegro
         FaStackItemSizeDirective,
         FormControlDirective,
         FormCheckInputDirective,
-        RegexHelperTooltipComponent
+        RegexHelperTooltipComponent,
+        NgClass,
+        EvcServicestatusToasterComponent,
+        TextColorDirective
     ],
     templateUrl: './eventcorrelations-summary-widget.component.html',
     styleUrl: './eventcorrelations-summary-widget.component.css',
@@ -80,11 +92,13 @@ export class EventcorrelationsSummaryWidgetComponent extends BaseWidgetComponent
 
 
     private readonly EventcorrelationsSummaryWidgetService = inject(EventcorrelationsSummaryWidgetService);
+    private readonly EvcServicestatusToasterService = inject(EvcServicestatusToasterService);
 
     public readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
     public readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
     // widget config will be loaded from the server
     public config!: EventcorrelationsSummaryWidgetConfig;
+    public summary!: EvcsSummary[];
     protected hostgroups: SelectKeyValue[] = [];
     protected servicegroups: SelectKeyValue[] = [];
     public keywords: string[] = [];
@@ -93,6 +107,8 @@ export class EventcorrelationsSummaryWidgetComponent extends BaseWidgetComponent
     public servicegroupNotKeywords: string[] = [];
     public hostgroupKeywords: string[] = [];
     public hostgroupNotKeywords: string[] = [];
+    protected hostgroupsIds: number[] = [];
+
     private readonly notyService = inject(NotyService);
     public priorityFilter: { 1: boolean; 2: boolean; 3: boolean; 4: boolean; 5: boolean } = {
         1: false,
@@ -101,6 +117,7 @@ export class EventcorrelationsSummaryWidgetComponent extends BaseWidgetComponent
         4: false,
         5: false
     };
+    private toasterTimeout: any = null;
 
     constructor() {
         super();
@@ -117,10 +134,21 @@ export class EventcorrelationsSummaryWidgetComponent extends BaseWidgetComponent
         if (this.widget) {
             this.EventcorrelationsSummaryWidgetService.loadWidgetConfig(this.widget.id).subscribe((response: any) => {
                 this.config = response.config;
+                this.keywords = this.config.Service.keywords.split(',').filter(Boolean);
+                this.notKeywords = this.config.Service.not_keywords.split(',').filter(Boolean);
+                this.hostgroupKeywords = this.config.Hostgroup.keywords.split(',').filter(Boolean);
+                this.hostgroupNotKeywords = this.config.Hostgroup.not_keywords.split(',').filter(Boolean);
+                this.servicegroupKeywords = this.config.Servicegroup.keywords.split(',').filter(Boolean);
+                this.servicegroupNotKeywords = this.config.Servicegroup.not_keywords.split(',').filter(Boolean);
+                this.summary = response.summary;
 
-                // if (this.host_id) {
-                //     this.loadEventcorrelation();
-                // }
+                _.map(this.config.servicepriority,
+                    (value) => {
+                        if (this.priorityFilter.hasOwnProperty(value)) {
+                            this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                        }
+                    }
+                );
 
                 this.cdr.markForCheck();
             });
@@ -231,15 +259,14 @@ export class EventcorrelationsSummaryWidgetComponent extends BaseWidgetComponent
         this.config.Servicegroup.keywords = this.servicegroupKeywords.join(',');
         this.config.Servicegroup.not_keywords = this.servicegroupNotKeywords.join(',');
 
-        let priorityFilter: number[] = [];
-        for (let key in this.priorityFilter) {
-            // @ts-ignore
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(Number(key));
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
             }
-        }
-
-        this.config.servicepriority = priorityFilter;
+        );
 
         this.subscriptions.add(this.EventcorrelationsSummaryWidgetService.saveWidgetConfig(this.widget.id, this.config)
             .subscribe({
@@ -275,4 +302,24 @@ export class EventcorrelationsSummaryWidgetComponent extends BaseWidgetComponent
     public override layoutUpdate(event: KtdGridLayout) {
 
     }
+
+    public toggleToaster(serviceId: number | undefined): void {
+        this.cancelToaster();
+        if (serviceId) {
+            this.toasterTimeout = setTimeout(() => {
+                this.EvcServicestatusToasterService.setServiceIdToaster(serviceId);
+            }, 500);
+        }
+    }
+
+    public cancelToaster() {
+        if (this.toasterTimeout) {
+            clearTimeout(this.toasterTimeout);
+        }
+
+        this.toasterTimeout = null;
+    }
+
+    protected readonly Number = Number;
+    protected readonly alert = alert;
 }

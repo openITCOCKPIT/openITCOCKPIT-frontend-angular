@@ -41,22 +41,21 @@ export class EventcorrelationsSummaryWidgetService {
             Widget: {
                 id: widgetId
             }
-        })
-            .pipe(
-                map(data => {
-                    // Return true on 200 Ok
-                    return {
-                        success: true,
-                        data: data as GenericResponse
-                    };
-                }),
-                catchError((error: any) => {
-                    const err = error.error.error as GenericValidationError;
-                    return of({
-                        success: false,
-                        data: err
-                    });
-                })
-            );
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data as GenericResponse
+                };
+            }),
+            catchError((error: any) => {
+                const err = error.error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
+            })
+        );
     }
 }

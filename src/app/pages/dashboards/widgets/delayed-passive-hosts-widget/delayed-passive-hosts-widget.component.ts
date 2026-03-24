@@ -57,6 +57,7 @@ import {
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { TrueFalseDirective } from '../../../../directives/true-false.directive';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-delayed-passive-hosts-widget',
@@ -122,7 +123,7 @@ export class DelayedPassiveHostsWidgetComponent extends BaseWidgetComponent impl
 
 
     // widget config will be loaded from the server
-    public config?: DelayedPassiveHostsWidgetConfig;
+    public config!: DelayedPassiveHostsWidgetConfig;
     public configKeyWords: string[] = [];
     public configNotKeyWords: string[] = [];
 
@@ -130,11 +131,11 @@ export class DelayedPassiveHostsWidgetComponent extends BaseWidgetComponent impl
     private readonly DelayedPassiveHostsWidgetService = inject(DelayedPassiveHostsWidgetService);
 
     public priorityFilter: { [key: string]: boolean } = {
-        '1': false,
-        '2': false,
-        '3': false,
-        '4': false,
-        '5': false
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
     };
 
     public override load() {
@@ -234,16 +235,13 @@ export class DelayedPassiveHostsWidgetComponent extends BaseWidgetComponent impl
             this.configKeyWords = (config.Host.keywords !== '') ? config.Host.keywords.split(',') : [];
             this.configNotKeyWords = (config.Host.not_keywords !== '') ? config.Host.not_keywords.split(',') : [];
 
-            this.priorityFilter = {
-                '1': false,
-                '2': false,
-                '3': false,
-                '4': false,
-                '5': false
-            }
-            for (let index in this.config.hostpriority) {
-                this.priorityFilter[this.config.hostpriority[index]] = true;
-            }
+            _.map(this.config.hostpriority,
+                (value) => {
+                    if (this.priorityFilter.hasOwnProperty(value)) {
+                        this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                    }
+                }
+            );
 
 
             this.loadHosts();
@@ -263,15 +261,15 @@ export class DelayedPassiveHostsWidgetComponent extends BaseWidgetComponent impl
 
         this.config.Host.keywords = this.configKeyWords.join(',');
         this.config.Host.not_keywords = this.configNotKeyWords.join(',');
-
-        let priorityFilter = [];
-        for (var key in this.priorityFilter) {
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(key);
+        this.config.hostpriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.hostpriority.push(Number(key));
+                }
             }
-        }
+        );
 
-        this.config.hostpriority = priorityFilter;
 
         this.subscriptions.add(this.DelayedPassiveHostsWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -335,12 +333,14 @@ export class DelayedPassiveHostsWidgetComponent extends BaseWidgetComponent impl
             }
         }
 
-        let priorityFilter: string[] = [];
-        for (let key in this.priorityFilter) {
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(key);
+        this.config.hostpriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.hostpriority.push(Number(key));
+                }
             }
-        }
+        );
 
         // Apply the config to the filter
         const params: DelayedPassiveHostsWidgetParams = {
@@ -360,7 +360,7 @@ export class DelayedPassiveHostsWidgetComponent extends BaseWidgetComponent impl
             'filter[Hoststatus.scheduled_downtime_depth]': inDowntime,
             'filter[Hoststatus.last_state_change][]': lastStateChange,
             'filter[delayed][]': delayed,
-            'filter[hostpriority][]': priorityFilter
+            'filter[hostpriority][]': this.config.hostpriority
         };
 
         this.subscriptions.add(this.DelayedPassiveHostsWidgetService.loadHosts(params).subscribe(hosts => {
