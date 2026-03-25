@@ -354,8 +354,7 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges, On
             // remove highlighting during click
             network.unselectAll();
             if (properties.nodes[0] && properties.nodes[0].toString().startsWith('Host_')) {
-                // @todo: Achtun bullshit detected (replace...) Geht doch irgendwie auch mit nem zusätzlichen Feld ?
-                this.router.navigate(['hosts', 'browser', properties.nodes[0].replace('Host_', '')]);
+                this.router.navigate(['hosts', 'browser', (this.nodes.get(properties.nodes[0]) as unknown as StatusmapExtendedNode).hostId]);
             }
         });
 
