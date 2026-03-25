@@ -106,6 +106,14 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
 
     @ViewChild('boxContainer') boxContainer?: ElementRef;
 
+    public priorityFilter: { [key: string]: boolean } = {
+        '1': false,
+        '2': false,
+        '3': false,
+        '4': false,
+        '5': false
+    };
+
     constructor() {
         super();
         effect(() => {
@@ -129,6 +137,18 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
                     this.containerIds = this.config.Container._ids.split(',').map(Number).filter(Boolean);
                     this.hostgroupsIds = this.config.Hostgroup._ids.split(',').map(Number).filter(Boolean);
                     this.hostIds = result.hostIds;
+
+                    this.priorityFilter = {
+                        '1': false,
+                        '2': false,
+                        '3': false,
+                        '4': false,
+                        '5': false
+                    }
+                    for (let index in this.config.hostpriority) {
+                        this.priorityFilter[this.config.hostpriority[index]] = true;
+                    }
+
                     this.cdr.markForCheck();
                 }));
         }
@@ -199,6 +219,15 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
         this.config.Host.not_keywords = this.notKeywords.join(',');
         this.config.Container._ids = this.containerIds.join(',');
         this.config.Hostgroup._ids = this.hostgroupsIds.join(',');
+
+        let priorityFilter = [];
+        for (var key in this.priorityFilter) {
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(key);
+            }
+        }
+
+        this.config.hostpriority = priorityFilter;
 
         this.subscriptions.add(this.HostStatusOverviewExtendedWidgetService.saveWidgetConfig(this.widget.id, this.config)
             .subscribe({

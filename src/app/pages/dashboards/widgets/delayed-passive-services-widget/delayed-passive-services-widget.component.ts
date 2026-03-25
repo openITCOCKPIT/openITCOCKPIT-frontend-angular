@@ -43,7 +43,9 @@ import { SliderTimeComponent } from '../../../../components/slider-time/slider-t
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ServicestatusIconComponent } from '../../../../components/services/servicestatus-icon/servicestatus-icon.component';
+import {
+    ServicestatusIconComponent
+} from '../../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import {
     AcknowledgementIconComponent
 } from '../../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
@@ -55,6 +57,7 @@ import {
 } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { ServicesIndexRoot } from '../../../services/services.interface';
+import { DebounceDirective } from '../../../../directives/debounce.directive';
 
 @Component({
     selector: 'oitc-delayed-passive-services-widget',
@@ -97,7 +100,8 @@ import { ServicesIndexRoot } from '../../../services/services.interface';
         FormCheckLabelDirective,
         NgClass,
         FaStackComponent,
-        FaStackItemSizeDirective
+        FaStackItemSizeDirective,
+        DebounceDirective
     ],
     templateUrl: './delayed-passive-services-widget.component.html',
     styleUrl: './delayed-passive-services-widget.component.css',
@@ -126,6 +130,14 @@ export class DelayedPassiveServicesWidgetComponent extends BaseWidgetComponent i
 
 
     private readonly DelayedPassiveServicesWidgetService = inject(DelayedPassiveServicesWidgetService);
+
+    public priorityFilter: { 1: boolean; 2: boolean; 3: boolean; 4: boolean; 5: boolean } = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
+    };
 
     public override load() {
         // Handled by ngAfterViewInit as we need the widget height for the correct limit
@@ -224,6 +236,18 @@ export class DelayedPassiveServicesWidgetComponent extends BaseWidgetComponent i
             this.configServiceKeyWords = (config.Service.keywords !== '') ? config.Service.keywords.split(',') : [];
             this.configServiceNotKeyWords = (config.Service.not_keywords !== '') ? config.Service.not_keywords.split(',') : [];
 
+            this.priorityFilter = {
+                1: false,
+                2: false,
+                3: false,
+                4: false,
+                5: false
+            };
+            for (let index in this.config.servicepriority) {
+                // @ts-ignore
+                this.priorityFilter[this.config.servicepriority[index]] = true;
+            }
+
 
             this.loadServices();
             this.cdr.markForCheck();
@@ -242,6 +266,16 @@ export class DelayedPassiveServicesWidgetComponent extends BaseWidgetComponent i
 
         this.config.Service.keywords = this.configServiceKeyWords.join(',');
         this.config.Service.not_keywords = this.configServiceNotKeyWords.join(',');
+
+        let priorityFilter: number[] = [];
+        for (let key in this.priorityFilter) {
+            // @ts-ignore
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(Number(key));
+            }
+        }
+
+        this.config.servicepriority = priorityFilter;
 
         this.subscriptions.add(this.DelayedPassiveServicesWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -306,6 +340,14 @@ export class DelayedPassiveServicesWidgetComponent extends BaseWidgetComponent i
             }
         }
 
+        let priorityFilter: number[] = [];
+        for (let key in this.priorityFilter) {
+            //@ts-ignore
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(Number(key));
+            }
+        }
+
         // Apply the config to the filter
         const params: DelayedPassiveServicesWidgetParams = {
             angular: true,
@@ -327,7 +369,8 @@ export class DelayedPassiveServicesWidgetComponent extends BaseWidgetComponent i
             'filter[Servicestatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
             'filter[Servicestatus.scheduled_downtime_depth]': inDowntime,
             'filter[Servicestatus.last_state_change][]': lastStateChange,
-            'filter[delayed][]': delayed
+            'filter[delayed][]': delayed,
+            'filter[servicepriority][]': priorityFilter
         };
 
         this.subscriptions.add(this.DelayedPassiveServicesWidgetService.loadServices(params).subscribe(services => {
@@ -335,6 +378,7 @@ export class DelayedPassiveServicesWidgetComponent extends BaseWidgetComponent i
             this.cdr.markForCheck();
         }));
     }
+
     public onPaginatorChange(page: number): void {
         this.currentPage = page;
         this.loadServices();

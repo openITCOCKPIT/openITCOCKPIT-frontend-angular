@@ -46,6 +46,7 @@ import {
     ServicestatusSimpleIconComponent
 } from '../../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
 import { RouterLink } from '@angular/router';
+import { DebounceDirective } from '../../../../directives/debounce.directive';
 
 @Component({
     selector: 'oitc-services-top-alerts-widget',
@@ -79,7 +80,8 @@ import { RouterLink } from '@angular/router';
         ServicestatusSimpleIconComponent,
         RouterLink,
         FormsModule,
-        TooltipDirective
+        TooltipDirective,
+        DebounceDirective
     ],
     templateUrl: './services-top-alerts-widget.component.html',
     styleUrl: './services-top-alerts-widget.component.css',
@@ -105,6 +107,13 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
 
     private readonly ServicesTopAlertsService = inject(ServicesTopAlertsService);
 
+    public priorityFilter: { 1: boolean; 2: boolean; 3: boolean; 4: boolean; 5: boolean } = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
+    };
 
     public override load() {
         // Handled by ngAfterViewInit as we need the widget height for the correct limit
@@ -197,6 +206,19 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
             // Save the widget config
             this.config = config;
             this.loadDowntimes();
+
+            this.priorityFilter = {
+                1: false,
+                2: false,
+                3: false,
+                4: false,
+                5: false
+            };
+            for (let index in this.config.servicepriority) {
+                // @ts-ignore
+                this.priorityFilter[this.config.servicepriority[index]] = true;
+            }
+
             this.cdr.markForCheck();
 
             if (this.config.useScroll) {
@@ -210,6 +232,16 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
         if (!this.widget || !this.config) {
             return;
         }
+
+        let priorityFilter: number[] = [];
+        for (let key in this.priorityFilter) {
+            // @ts-ignore
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(Number(key));
+            }
+        }
+
+        this.config.servicepriority = priorityFilter;
 
         this.subscriptions.add(this.ServicesTopAlertsService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -225,6 +257,14 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
             return;
         }
 
+        let priorityFilter: number[] = [];
+        for (let key in this.priorityFilter) {
+            //@ts-ignore
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(Number(key));
+            }
+        }
+
         // Apply the config to the filter
         const params: ServicesTopAlertsWidgetParams = {
             angular: true,
@@ -233,6 +273,7 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
             limit: this.limit,
             'filter[NotificationServices.state][]': [this.config.state],
             'filter[not_older_than]': this.getOlderThanInMinutes(),
+            'filter[servicepriority][]': priorityFilter
         };
 
         this.subscriptions.add(this.ServicesTopAlertsService.loadServiceTopAlerts(params).subscribe(alerts => {

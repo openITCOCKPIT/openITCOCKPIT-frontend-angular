@@ -1,4 +1,4 @@
-import { inject, Injectable, DOCUMENT } from '@angular/core';
+import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { ActiveToast, ToastrService } from 'ngx-toastr';
 import { TranslocoService } from '@jsverse/transloco';
 import { LocationStrategy } from '@angular/common';
@@ -137,7 +137,7 @@ export class NotyService {
 
     noty(message: string, type: string, options: any, title?: string, url?: any[]) {
 
-        let toast!: ActiveToast<any>;
+        let toast!: ActiveToast<any> | null;
         if (!title) {
             title = '';
         }
@@ -159,7 +159,7 @@ export class NotyService {
                 toast = this.toastr.show(message, title, options);
         }
 
-        if (url) {
+        if (url && toast) {
             toast
                 .onTap
                 .pipe(take(1)) // auto unsubscribe

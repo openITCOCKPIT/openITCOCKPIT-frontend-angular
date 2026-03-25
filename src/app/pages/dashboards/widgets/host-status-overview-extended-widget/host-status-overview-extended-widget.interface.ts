@@ -20,7 +20,8 @@ export interface HostStatusOverviewExtendedWidgetConfig {
     }
     Container: {
         _ids: string
-    }
+    },
+    hostpriority: string[]
 }
 
 export interface HoststatusExtendedWidgetConfig {

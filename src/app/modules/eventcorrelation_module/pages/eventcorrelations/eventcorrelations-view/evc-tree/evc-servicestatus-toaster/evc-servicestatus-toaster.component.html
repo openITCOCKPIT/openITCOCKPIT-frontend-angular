@@ -94,6 +94,13 @@
                                     </div>
                                 </div>
                             </header>
+                            @if (result?.considerStateType && result?.servicestatus?.isHardstate === false && Number(result?.servicestatus?.currentState) > 0) {
+                                <div
+                                    class="help-block text-warning text-warning-glow mb-2">
+                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                    {{ t('"Consider state type" option from event correlation settings is enabled') }}
+                                </div>
+                            }
 
                             @if (!result) {
                                 <oitc-toaster-loader></oitc-toaster-loader>

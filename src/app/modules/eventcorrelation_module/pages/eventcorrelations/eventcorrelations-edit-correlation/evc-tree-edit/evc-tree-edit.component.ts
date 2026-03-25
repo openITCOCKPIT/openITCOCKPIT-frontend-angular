@@ -36,6 +36,7 @@ import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum
 import { ISize } from '@foblex/2d/size/i-size';
 import { Subscription } from 'rxjs';
 import { EventcorrelationsService } from '../../eventcorrelations.service';
+import { LocalNumberPipe } from '../../../../../../pipes/local-number.pipe';
 
 interface LayerDetails {
     [key: string]: {
@@ -126,7 +127,8 @@ const GROUP_HEIGHT = 50;
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        ButtonGroupComponent
+        ButtonGroupComponent,
+        LocalNumberPipe
     ],
     templateUrl: './evc-tree-edit.component.html',
     styleUrl: './evc-tree-edit.component.scss',
@@ -179,6 +181,11 @@ export class EvcTreeEditComponent implements OnDestroy {
         this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered unknown');
 
         effect(() => {
+
+            // Whenever one of the inputs changes, we need to update the graph
+            // This read will "register" this effect to run whenever the evcTree input changes
+            const evcTree = this.evcTree();
+
             if (this.isInitialized) {
                 this.updateGraph();
             }
@@ -414,10 +421,18 @@ export class EvcTreeEditComponent implements OnDestroy {
 
                         // Add the operator
                         if (evcTreeItem.operator !== null) {
+                            let operator: EventcorrelationOperators = evcTreeItem.operator as EventcorrelationOperators;
+                            let operatorText = evcTreeItem.operator;
+                            if ([EventcorrelationOperators.SCORESCLALARGREATER,
+                                EventcorrelationOperators.SCORESCLALARLESSER,
+                                EventcorrelationOperators.SCORERANGEINCLUSIVE,
+                                EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(operator)) {
+                                operatorText = this.TranslocoService.translate('score') + ' ⚖️';
+                            }
                             nodes.push({
                                 id: `${evcTreeItem.id}_operator`,
                                 parentId: evcTreeItem.id.toString(),
-                                operator: evcTreeItem.operator,
+                                operator: operatorText,
                                 type: 'operator',
                                 layerIndex: layerIndex,
                                 totalHeight: totalHeight,
@@ -530,4 +545,5 @@ export class EvcTreeEditComponent implements OnDestroy {
     protected readonly Number = Number;
     protected readonly EFConnectableSide = EFConnectableSide;
 
+    protected readonly EventcorrelationOperators = EventcorrelationOperators;
 }

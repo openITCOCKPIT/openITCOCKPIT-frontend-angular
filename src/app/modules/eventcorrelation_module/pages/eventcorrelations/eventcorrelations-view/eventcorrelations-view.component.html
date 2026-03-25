@@ -65,6 +65,15 @@
                             {{ t('Documentation') }}
                         </a>
                     </c-nav-item>
+                    @if (rootElement.host && ( PermissionsService.hasPermissionObservable(['hosts', 'externalcommands'])|async )) {
+                        <c-nav-item class="px-1">
+                            <button (click)="resetChecktime(rootElement)" cButton class="ripple" color="success"
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                                {{ t('Reset check time') }}
+                            </button>
+                        </c-nav-item>
+                    }
                     <c-nav-item class="px-1">
                         <button (click)="loadEventcorrelation()" cButton class="ripple" color="default" size="xs">
                             <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
@@ -84,6 +93,7 @@
                         <c-nav-item class="px-1">
                             <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'editCorrelation']"
                                [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', rootElement.host.id]"
+                               [queryParams]="{'highlightHostId': this.highlightHostId, 'highlightServiceId': this.highlightServiceId}"
                                cButton
                                class="ripple"
                                color="primary"
@@ -165,7 +175,10 @@
                             [connectionLine]="connectionLine"
                             [evcDirection]="evcTreeDirection"
                             (resetEvent)="resetHandler($event)"
-                            [isWidget]="false"></oitc-evc-tree>
+                            [isWidget]="false"
+                            [highlightHostId]="highlightHostId"
+                            [highlightServiceId]="highlightServiceId">
+                        </oitc-evc-tree>
                     </div>
                 }
             </c-card-body>

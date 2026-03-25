@@ -232,7 +232,6 @@ export class ChangelogsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public toggleSelectAllTypes(event: boolean) {
         for (let model in this.tmpFilter.Models) {
-            console.log(event);
             this.tmpFilter.Models[model as keyof typeof this.tmpFilter.Models] = event;
         }
 

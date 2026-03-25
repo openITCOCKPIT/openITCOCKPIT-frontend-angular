@@ -60,6 +60,7 @@ import { RouterLink } from '@angular/router';
 import {
     ServiceBrowserModalService
 } from '../../../services/services-browser/service-browser-modal/service-browser-modal.service';
+import { DebounceDirective } from '../../../../directives/debounce.directive';
 
 @Component({
     selector: 'oitc-services-status-list-extended-widget',
@@ -100,7 +101,8 @@ import {
         XsButtonDirective,
         RouterLink,
         NgClass,
-        TooltipDirective
+        TooltipDirective,
+        DebounceDirective
     ],
     templateUrl: './services-status-list-extended-widget.component.html',
     styleUrl: './services-status-list-extended-widget.component.css',
@@ -133,6 +135,14 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
 
     private readonly ServicesStatusListWidgetService = inject(ServicesStatusListWidgetService);
     private readonly ServiceBrowserModalService = inject(ServiceBrowserModalService);
+
+    public priorityFilter: { 1: boolean; 2: boolean; 3: boolean; 4: boolean; 5: boolean } = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
+    };
 
     public override load() {
         // Handled by ngAfterViewInit as we need the widget height for the correct limit
@@ -235,6 +245,18 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
             this.configServiceKeyWords = (config.Service.keywords !== '') ? config.Service.keywords.split(',') : [];
             this.configServiceNotKeyWords = (config.Service.not_keywords !== '') ? config.Service.not_keywords.split(',') : [];
 
+            this.priorityFilter = {
+                1: false,
+                2: false,
+                3: false,
+                4: false,
+                5: false
+            };
+            for (let index in this.config.servicepriority) {
+                // @ts-ignore
+                this.priorityFilter[this.config.servicepriority[index]] = true;
+            }
+
 
             this.loadServices();
             this.cdr.markForCheck();
@@ -255,6 +277,16 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
         this.config.Host.not_keywords = this.configHostNotKeyWords.join(',');
         this.config.Service.keywords = this.configServiceKeyWords.join(',');
         this.config.Service.not_keywords = this.configServiceNotKeyWords.join(',');
+
+        let priorityFilter: number[] = [];
+        for (let key in this.priorityFilter) {
+            // @ts-ignore
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(Number(key));
+            }
+        }
+
+        this.config.servicepriority = priorityFilter;
 
         this.subscriptions.add(this.ServicesStatusListWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -308,6 +340,14 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
             }
         }
 
+        let priorityFilter: number[] = [];
+        for (let key in this.priorityFilter) {
+            //@ts-ignore
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(Number(key));
+            }
+        }
+
         // Apply the config to the filter
         const params: ServicesStatusListWidgetParams = {
             angular: true,
@@ -328,7 +368,8 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
             'filter[Servicestatus.current_state][]': currentState,
             'filter[Servicestatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
             'filter[Servicestatus.scheduled_downtime_depth]': inDowntime,
-            'filter[Servicestatus.last_state_change][]': lastStateChange
+            'filter[Servicestatus.last_state_change][]': lastStateChange,
+            'filter[servicepriority][]': priorityFilter
         };
 
         this.subscriptions.add(this.ServicesStatusListWidgetService.loadServices(params).subscribe(services => {
