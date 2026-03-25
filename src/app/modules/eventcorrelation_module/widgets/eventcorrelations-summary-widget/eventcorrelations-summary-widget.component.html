@@ -16,7 +16,7 @@
         </div>
 
         <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
-             class="box-container">
+             class="box-container" [ngClass]="{'overflow-hidden': !flipped()}">
             <div class="box-x">
                 <div class="d-flex flex-row flex-wrap">
                     @if (animationStateShowContent) {
@@ -51,7 +51,6 @@
                     }
                 </div>
             </div>
-
             <div class="box-x">
                 @if (animationStateShowConfig && config && widget) {
                     <c-row class="mb-1">
@@ -110,41 +109,99 @@
                             </c-input-group>
                         </c-col>
                     </c-row>
-                    <c-row class="mb-1">
+                    <c-row class="my-2">
                         <c-col [xs]="12" [lg]="12">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    <div class="icon-stack">
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']"
+                                                 class="text-success cornered cornered-lr"></fa-icon>
+                                    </div>
                                 </span>
                                 <ng-select
-                                    [id]="'ServiceKeywordsInput-'+widget.id"
-                                    [name]="'ServiceKeywordsInput-'+widget.id"
+                                    [name]="'Hosts.HostKeywordsInput_'+widget.id"
+                                    [attr.id]="'Hosts.HostKeywordsInput_'+widget.id"
                                     [items]="[]"
-                                    [(ngModel)]="keywords"
+                                    [(ngModel)]="configHostKeyWords"
                                     [addTag]="true"
                                     [multiple]="true"
                                     [selectOnTab]="true"
-                                    [placeholder]="'Filter by tags'|transloco"
+                                    [placeholder]="'Filter by host tags'|transloco"
                                     [isOpen]="false">
                                 </ng-select>
                             </c-input-group>
                         </c-col>
                     </c-row>
-                    <c-row class="mb-1">
+                    <c-row class="my-2">
                         <c-col [xs]="12" [lg]="12">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    <div class="icon-stack">
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']"
+                                                 class="text-danger cornered cornered-lr"></fa-icon>
+                                    </div>
                                 </span>
                                 <ng-select
-                                    [id]="'ServiceNotKeywordsInput-'+widget.id"
-                                    [name]="'ServiceNotKeywordsInput-'+widget.id"
+                                    [name]="'Hosts.HostNotKeywordsInput_'+widget.id"
+                                    [attr.id]="'Hosts.HostNotKeywordsInput_'+widget.id"
                                     [items]="[]"
-                                    [(ngModel)]="notKeywords"
+                                    [(ngModel)]="configHostNotKeyWords"
                                     [addTag]="true"
                                     [multiple]="true"
                                     [selectOnTab]="true"
-                                    [placeholder]="'Filter by excluded tags'|transloco"
+                                    [placeholder]="'Filter by excluded host tags'|transloco"
+                                    [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                }
+                @if (config && widget) {
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [lg]="12">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']"
+                                                 class="text-success cornered cornered-lr"></fa-icon>
+                                    </div>
+                                </span>
+                                <ng-select
+                                    [name]="'Services.ServiceKeywordsInput_'+widget.id"
+                                    [attr.id]="'Services.ServiceKeywordsInput_'+widget.id"
+                                    [items]="[]"
+                                    [(ngModel)]="configServiceKeyWords"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by service tags'|transloco"
+                                    [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="my-2">
+                        <c-col [xs]="12" [lg]="12">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']"
+                                                 class="text-danger cornered cornered-lr"></fa-icon>
+                                    </div>
+                                </span>
+                                <ng-select
+                                    [name]="'Services.ServiceNotKeywordsInput_'+widget.id"
+                                    [attr.id]="'Services.ServiceNotKeywordsInput_'+widget.id"
+                                    [items]="[]"
+                                    [(ngModel)]="configServiceNotKeyWords"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by excluded service tags'|transloco"
                                     [isOpen]="false">
                                 </ng-select>
                             </c-input-group>

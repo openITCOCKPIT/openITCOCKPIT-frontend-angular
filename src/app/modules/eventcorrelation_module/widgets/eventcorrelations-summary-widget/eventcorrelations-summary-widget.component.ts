@@ -101,8 +101,10 @@ export class EventcorrelationsSummaryWidgetComponent extends BaseWidgetComponent
     public summary!: EvcsSummary[];
     protected hostgroups: SelectKeyValue[] = [];
     protected servicegroups: SelectKeyValue[] = [];
-    public keywords: string[] = [];
-    public notKeywords: string[] = [];
+    public configHostKeyWords: string[] = [];
+    public configHostNotKeyWords: string[] = [];
+    public configServiceKeyWords: string[] = [];
+    public configServiceNotKeyWords: string[] = [];
     public servicegroupKeywords: string[] = [];
     public servicegroupNotKeywords: string[] = [];
     public hostgroupKeywords: string[] = [];
@@ -134,8 +136,10 @@ export class EventcorrelationsSummaryWidgetComponent extends BaseWidgetComponent
         if (this.widget) {
             this.EventcorrelationsSummaryWidgetService.loadWidgetConfig(this.widget.id).subscribe((response: any) => {
                 this.config = response.config;
-                this.keywords = this.config.Service.keywords.split(',').filter(Boolean);
-                this.notKeywords = this.config.Service.not_keywords.split(',').filter(Boolean);
+                this.configHostKeyWords = this.config.Host.keywords.split(',').filter(Boolean);
+                this.configHostNotKeyWords = this.config.Host.not_keywords.split(',').filter(Boolean);
+                this.configServiceKeyWords = this.config.Service.keywords.split(',').filter(Boolean);
+                this.configServiceNotKeyWords = this.config.Service.not_keywords.split(',').filter(Boolean);
                 this.hostgroupKeywords = this.config.Hostgroup.keywords.split(',').filter(Boolean);
                 this.hostgroupNotKeywords = this.config.Hostgroup.not_keywords.split(',').filter(Boolean);
                 this.servicegroupKeywords = this.config.Servicegroup.keywords.split(',').filter(Boolean);
@@ -252,8 +256,10 @@ export class EventcorrelationsSummaryWidgetComponent extends BaseWidgetComponent
             return;
         }
 
-        this.config.Service.keywords = this.keywords.join(',');
-        this.config.Service.not_keywords = this.notKeywords.join(',');
+        this.config.Host.keywords = this.configHostKeyWords.join(',');
+        this.config.Host.not_keywords = this.configHostNotKeyWords.join(',');
+        this.config.Service.keywords = this.configServiceKeyWords.join(',');
+        this.config.Service.not_keywords = this.configServiceNotKeyWords.join(',');
         this.config.Hostgroup.keywords = this.hostgroupKeywords.join(',');
         this.config.Hostgroup.not_keywords = this.hostgroupNotKeywords.join(',');
         this.config.Servicegroup.keywords = this.servicegroupKeywords.join(',');
