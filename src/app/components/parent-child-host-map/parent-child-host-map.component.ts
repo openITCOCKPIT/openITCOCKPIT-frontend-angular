@@ -38,6 +38,7 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges, On
     public theme: string = '';
     private nodes: DataSet<Node> = new DataSet<StatusmapExtendedNode>();
     private edges: DataSet<Edge> = new DataSet<Edge>();
+    private maxLabelLength: number = 64;
 
     @Input() result?: HostBrowserResult;
 
@@ -84,7 +85,15 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges, On
         this.nodes.clear();
         this.edges.clear();
 
-        this.nodes.add(this.result.parentChildRelations.nodes);
+        // truncate all node labels before adding it to the map
+        let nodesWithTruncatedLabels: StatusmapExtendedNode[] = [];
+        this.result.parentChildRelations.nodes.forEach((node) => {
+            let newNode = structuredClone(node);
+            newNode.label = this.truncate(node.label!, this.maxLabelLength, '...');
+            nodesWithTruncatedLabels.push(newNode);
+        });
+
+        this.nodes.add(nodesWithTruncatedLabels);
         this.edges.add(this.result.parentChildRelations.edges);
 
         const rect = elem.getBoundingClientRect();
@@ -328,23 +337,18 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges, On
                 hierarchical: {
                     enabled: true,
                     direction: 'LR',
-                    nodeSpacing: 40,
+                    nodeSpacing: 45,
                     levelSeparation: 500,
                     sortMethod: "directed",
                     shakeTowards: "roots",
                     parentCentralization: false,
-                    treeSpacing: 50,
+                    treeSpacing: 50
                 }
             },
             physics: false
         };
         const network = new Network(elem, {nodes: this.nodes, edges: this.edges}, options);
-        network.fit({
-            animation: {
-                duration: 500,
-                easingFunction: 'linear'
-            }
-        });
+        network.fit();
 
         network.on('click', (properties) => {
             // remove highlighting during click
@@ -364,6 +368,17 @@ export class ParentChildHostMapComponent implements AfterViewInit, OnChanges, On
         }
 
         this.cdr.markForCheck();
+    }
+
+    public truncate(fullStr: string, strLen: number, separator: string): string {
+        if (fullStr.length <= strLen) return fullStr;
+        separator = separator || '...';
+        let sepLen = separator.length,
+            charsToShow = strLen - sepLen,
+            frontChars = Math.ceil(charsToShow / 2),
+            backChars = Math.floor(charsToShow / 2);
+
+        return fullStr.substring(0, frontChars) + separator + fullStr.substring(fullStr.length - backChars);
     }
 
 }
