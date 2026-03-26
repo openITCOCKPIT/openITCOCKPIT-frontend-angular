@@ -87,12 +87,12 @@ export interface ProxmoxBalloonInfo {
 }
 
 export interface ProxmoxQemuAgent {
-    "kernel-version": string // #106-Ubuntu SMP PREEMPT_DYNAMIC Fri Mar  6 07:58:08 UTC 2026 | 10.0
+    "kernel-version": string // #106-Ubuntu SMP PREEMPT_DYNAMIC Fri Mar  6 07:58:08 UTC 2026 | 10.0 | #1 SMP Sun Mar 8 20:06:07 EDT 2026 | #1 SMP PREEMPT_DYNAMIC Debian 6.12.73-1 (2026-02-17)
     machine: string // x86_64
-    "version-id": string // 24.04 | 2025
-    name: string // Ubuntu | Microsoft Windows
-    "kernel-release": string // 6.8.0-106-generic | 26100
-    version: string // 24.04.4 LTS (Noble Numbat) | Microsoft Windows Server 2025
-    id: string // ubuntu | mswindows
-    "pretty-name": string // Ubuntu 24.04.4 LTS | Windows Server 2025 Standard
+    "version-id": string // 24.04 | 2025 | 8.10 | 13
+    name: string // Ubuntu | Microsoft Windows | AlmaLinux | Debian GNU/Linux
+    "kernel-release": string // 6.8.0-106-generic | 26100 | 4.18.0-553.111.1.el8_10.x86_64 | 6.12.73+deb13-amd64
+    version: string // 24.04.4 LTS (Noble Numbat) | Microsoft Windows Server 2025 | 8.10 (Cerulean Leopard) | 13 (trixie)
+    id: string // ubuntu | mswindows | almalinux | debian
+    "pretty-name": string // Ubuntu 24.04.4 LTS | Windows Server 2025 Standard | AlmaLinux 8.10 (Cerulean Leopard) | Debian GNU/Linux 13 (trixie)
 }
