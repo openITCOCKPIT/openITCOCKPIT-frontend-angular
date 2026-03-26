@@ -14,9 +14,16 @@
             <c-card-body class="align-items-center d-flex">
                 <div class="me-3 p-3 text-white">
                     @if (result.response.info?.status === 'running') {
-                        <fa-icon [icon]="['fas', 'play']"
-                                 size="2x"
-                                 class="up"></fa-icon>
+                        @if (result.response.current?.qmpstatus === "paused") {
+                            <fa-icon [icon]="['fas', 'pause']"
+                                     size="2x"
+                                     class="warning"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'play']"
+                                     size="2x"
+                                     class="up"></fa-icon>
+                        }
+
                     } @else {
                         <fa-icon [icon]="['fas', 'stop']"
                                  size="2x"
@@ -32,7 +39,7 @@
                         {{ t('State:') }}
                         @if (result.response.info && result.response.current) {
                             @if (result.response.info.status !== result.response.current.qmpstatus) {
-                                {{ result.response.info.status }} (result.response.current.qmpstatus)
+                                {{ result.response.info.status }} ({{ result.response.current.qmpstatus }})
                             } @else {
                                 {{ result.response.info.status }}
                             }

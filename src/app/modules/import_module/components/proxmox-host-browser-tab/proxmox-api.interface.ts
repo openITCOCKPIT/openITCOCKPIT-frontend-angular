@@ -70,6 +70,7 @@ export interface ProxmoxQemuStatusCurrentRunning extends ProxmoxQemuStatusCurren
     "proxmox-support"?: any
     pressureiosome?: number
     pressurecpusome?: number
+    lock?: string
 }
 
 export interface ProxmoxBalloonInfo {
