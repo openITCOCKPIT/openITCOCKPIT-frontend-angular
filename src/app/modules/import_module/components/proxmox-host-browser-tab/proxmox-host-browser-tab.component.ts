@@ -20,25 +20,21 @@ import {
     CardTitleDirective,
     ColComponent,
     ProgressComponent,
-    RowComponent,
-    TemplateIdDirective,
-    WidgetStatAComponent,
-    WidgetStatBComponent
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { AdditionalHostInformationProxmoxResult } from './proxmox-api.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
+import { PatchstatusIconComponent } from '../../../../pages/patchstatus/patchstatus-icon/patchstatus-icon.component';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
     selector: 'oitc-proxmox-host-browser-tab',
     imports: [
         RowComponent,
         ColComponent,
-        WidgetStatBComponent,
         ProgressComponent,
-        WidgetStatAComponent,
-        TemplateIdDirective,
         CardComponent,
         CardBodyComponent,
         CardTitleDirective,
@@ -47,7 +43,9 @@ import { TranslocoDirective } from '@jsverse/transloco';
         CardTextDirective,
         XsButtonDirective,
         TranslocoDirective,
-        AlertComponent
+        AlertComponent,
+        PatchstatusIconComponent,
+        DecimalPipe
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',
