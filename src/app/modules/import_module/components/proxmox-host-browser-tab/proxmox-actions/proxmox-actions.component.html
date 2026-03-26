@@ -1,0 +1,78 @@
+<ng-container *transloco="let t">
+    <c-dropdown>
+        <button cButton cDropdownToggle color="secondary">
+            {{ t('Actions') }}
+        </button>
+        <ul cDropdownMenu>
+            <li [hidden]="[ProxmoxStatus.Running, ProxmoxStatus.Suspended].includes(status())">
+                <button cDropdownItem
+                        [title]="'Start VM' | transloco">
+                    <fa-icon [icon]="['fas', 'play']"></fa-icon>
+                    {{ t('Start') }}
+                </button>
+            </li>
+            <li [hidden]="[ProxmoxStatus.Stopped, ProxmoxStatus.Suspended].includes(status())">
+                <button cDropdownItem
+                        [title]="'Pause the VM and keep the state in RAM' | transloco"
+                        (click)="getConfirmation('pause')">
+                    <fa-icon [icon]="['fas', 'pause']"></fa-icon>
+                    {{ t('Pause') }}
+                </button>
+            </li>
+            <li [hidden]="[ProxmoxStatus.Stopped, ProxmoxStatus.Suspended].includes(status())">
+                <button cDropdownItem
+                        [title]="'Suspend to Disk' | transloco"
+                        (click)="getConfirmation('suspend')">
+                    <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                    {{ t('Hibernate') }}
+                </button>
+            </li>
+            <li [hidden]="status() !==  ProxmoxStatus.Suspended">
+                <button cDropdownItem
+                        [title]="'Start VM' | transloco">
+                    <fa-icon [icon]="['fas', 'play']"></fa-icon>
+                    {{ t('Resume') }}
+                </button>
+            </li>
+            <li [hidden]="[ProxmoxStatus.Stopped, ProxmoxStatus.Suspended].includes(status())">
+                <button cDropdownItem
+                        [title]="'Shutdown the VM gracefully via ACPI-Signal' | transloco"
+                        (click)="getConfirmation('shutdown')">
+                    <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                    {{ t('Shutdown') }}
+                </button>
+            </li>
+            <li [hidden]="status() === ProxmoxStatus.Stopped">
+                <button cDropdownItem
+                        [title]="'Force stop of the VM (pull the plug)' | transloco"
+                        (click)="getConfirmation('stop')">
+                    <fa-icon [icon]="['fas', 'stop']"></fa-icon>
+                    {{ t('Stop') }}
+                </button>
+            </li>
+            <li [hidden]="status() === ProxmoxStatus.Stopped">
+                <button cDropdownItem
+                        [title]="'Gracefully shutdown the VM, apply hardware changes and start the VM.' | transloco"
+                        (click)="getConfirmation('reboot')">
+                    <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                    {{ t('Reboot') }}
+                </button>
+            </li>
+            <li>
+                <button cDropdownItem
+                        [title]="'Force reset of the VM.' | transloco"
+                        (click)="getConfirmation('reset')">
+                    <fa-icon [icon]="['fas', 'bolt']"></fa-icon>
+                    {{ t('Reset') }}
+                </button>
+            </li>
+        </ul>
+    </c-dropdown>
+
+    <oitc-confirm-modal
+        (confirmation)="onConfirmation($event)"
+        [message]="'????????????????????????????'"
+        [helpMessage]="'sadsadsadsad'"
+    ></oitc-confirm-modal>
+
+</ng-container>

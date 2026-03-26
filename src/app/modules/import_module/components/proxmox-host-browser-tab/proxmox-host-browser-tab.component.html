@@ -54,9 +54,12 @@
                     </p>
                 </div>
                 <div class="">
-                    <button cButton color="default">
-                        Knöbbe!!
-                    </button>
+                    @if (vmid && nodeName) {
+                        <oitc-proxmox-actions
+                            [vmid]="vmid"
+                            [nodeName]="nodeName"
+                            [status]="status"></oitc-proxmox-actions>
+                    }
                 </div>
 
 

@@ -26,9 +26,10 @@ import {
     WidgetStatBComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { AdditionalHostInformationProxmoxResult } from './proxmox-api.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
+import { ProxmoxStatus } from './proxmox-status.enum';
+import { ProxmoxActionsComponent } from './proxmox-actions/proxmox-actions.component';
 
 @Component({
     selector: 'oitc-proxmox-host-browser-tab',
@@ -45,9 +46,9 @@ import { TranslocoDirective } from '@jsverse/transloco';
         CardSubtitleDirective,
         FaIconComponent,
         CardTextDirective,
-        XsButtonDirective,
         TranslocoDirective,
-        AlertComponent
+        AlertComponent,
+        ProxmoxActionsComponent
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',
@@ -63,6 +64,7 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
 
     public vmid?: string
     public nodeName?: string
+    public status: ProxmoxStatus = ProxmoxStatus.Stopped;
 
     private subscriptions: Subscription = new Subscription();
 
@@ -99,6 +101,34 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
                 this.result = result;
                 this.nodeName = result.response.info?.node;
                 this.vmid = result.response.info?.vmid.toString();
+
+                // Determine the VM status
+                this.status = ProxmoxStatus.Stopped;
+                if (result.response.info) {
+                    switch (result.response.info.status) {
+                        case 'running':
+                            this.status = ProxmoxStatus.Running;
+                            break;
+
+                        case 'paused':
+                            this.status = ProxmoxStatus.Paused;
+                            break;
+
+                        case 'stopped':
+                            this.status = ProxmoxStatus.Stopped;
+                    }
+                    if (result.response.current && "lock" in result.response.current) {
+                        switch (result.response.current.lock) {
+                            case 'migrate':
+                                this.status = ProxmoxStatus.Migrate;
+                                break;
+                            case 'suspended':
+                                this.status = ProxmoxStatus.Suspended; // Hibernation
+                                break;
+                        }
+                    }
+                }
+
                 this.cdr.markForCheck();
             })
         );
