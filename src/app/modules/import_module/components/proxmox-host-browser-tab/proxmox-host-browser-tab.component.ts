@@ -20,7 +20,7 @@ import {
     CardTitleDirective,
     ColComponent,
     ProgressComponent,
-    RowComponent
+    RowComponent, TextColorDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -45,7 +45,8 @@ import { DecimalPipe } from '@angular/common';
         TranslocoDirective,
         AlertComponent,
         PatchstatusIconComponent,
-        DecimalPipe
+        DecimalPipe,
+        TextColorDirective
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',

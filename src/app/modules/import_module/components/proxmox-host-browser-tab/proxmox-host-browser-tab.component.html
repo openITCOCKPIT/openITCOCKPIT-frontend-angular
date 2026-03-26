@@ -149,12 +149,55 @@
             <c-col md="12" xl="3">
                 <c-card class="h-100">
                     <c-card-body>
-                        <div class="fs-4 fw-semibold">
-                            SYSTEM
-                        </div>
-                        <div>
-                            Widget title
-                        </div>
+                        <h5 class="fs-5 fw-semibold text-uppercase">
+                            {{ t('System') }}
+                        </h5>
+                        @if (result.response.current && result.response.current.ha) {
+                            <c-row class="my-1 odd">
+                                <c-col lg="7">
+                                    <fa-icon [icon]="['fas', 'heart-pulse']" [cTextColor]="'primary'"></fa-icon>
+                                    {{ t('HA State') }}
+                                    @if (result.response.current.ha.state) {
+                                        <span class="text-muted">
+                                            ({{ result.response.current.ha.state }})
+                                        </span>
+                                    }
+                                </c-col>
+                                <c-col class="text-end">
+                                    @if (result.response.current.ha.managed) {
+                                        <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
+                                    } @else {
+                                        <fa-icon [icon]="['fas', 'xmark']" class="text-danger"></fa-icon>
+                                    }
+                                </c-col>
+                            </c-row>
+                        }
+                        @if (result.response.info?.node) {
+                            <c-row class="my-1 even">
+                                <c-col lg="7">
+                                    <fa-icon [icon]="['fas', 'building']" [cTextColor]="'primary'"></fa-icon>
+                                    {{ t('Node') }}
+
+                                </c-col>
+                                <c-col class="text-end">
+                                    {{ result.response.info?.node }}
+                                </c-col>
+                            </c-row>
+                        }
+                        @if (result.response.current && result.response.current.cpu && result.response.current.cpus) {
+                            <c-row class="my-1 odd">
+                                <c-col lg="7">
+                                    <fa-icon [icon]="['fas', 'microchip']" [cTextColor]="'primary'"></fa-icon>
+                                    {{ t('CPU usage') }}
+
+                                </c-col>
+                                <c-col class="text-end">
+                                    {{ result.response.current.cpu * 100|  number: '1.3-3' }} % {{ t('of') }}
+                                    {{ result.response.current.cpus }}{{ t('CPU(s)') }}
+                                </c-col>
+                            </c-row>
+                        }
+
                         <br><br><br>
                         <small class="text-body-secondary ng-star-inserted"> Lorem ipsum dolor sit amet enim. </small>
                     </c-card-body>
@@ -164,8 +207,8 @@
             <c-col md="12" xl="3">
                 <c-card class="h-100">
                     <c-card-body>
-                        <div class="fs-4 fw-semibold">
-                            SYSTEM
+                        <div class="fs-5 fw-semibold text-uppercase">
+                            {{ t('Hardware') }}
                         </div>
                         <div class="ng-star-inserted">Widget title</div>
                         <br><br><br>
