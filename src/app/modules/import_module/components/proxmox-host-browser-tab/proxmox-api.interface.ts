@@ -18,6 +18,7 @@ export interface AdditionalHostInformationProxmoxResult {
             ipaddress: string
         },
         current: null | ProxmoxQemuStatusCurrentMinimal | ProxmoxQemuStatusCurrentRunning
+        agent: null | ProxmoxQemuAgent
     },
     data_source: ExternalSystems.Proxmox,
     _csrfToken: null | string
