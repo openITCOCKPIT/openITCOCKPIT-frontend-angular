@@ -108,3 +108,7 @@ export interface IpAddress {
     ip_address_type: string
     prefix: number
 }
+
+export interface RunProxmoxCommandApiResult {
+    upid: false | string // Unique identifier for the task, used to track its progress. False if the command failed to start.
+}

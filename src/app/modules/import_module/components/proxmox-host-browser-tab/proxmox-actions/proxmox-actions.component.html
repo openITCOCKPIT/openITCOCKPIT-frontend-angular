@@ -4,9 +4,10 @@
             {{ t('Actions') }}
         </button>
         <ul cDropdownMenu>
-            <li [hidden]="[ProxmoxStatus.Running, ProxmoxStatus.Suspended].includes(status())">
+            <li [hidden]="[ProxmoxStatus.Paused, ProxmoxStatus.Running, ProxmoxStatus.Suspended].includes(status())">
                 <button cDropdownItem
-                        [title]="'Start VM' | transloco">
+                        [title]="'Start VM' | transloco"
+                        (click)="runCommand('start');">
                     <fa-icon [icon]="['fas', 'play']"></fa-icon>
                     {{ t('Start') }}
                 </button>
@@ -27,9 +28,10 @@
                     {{ t('Hibernate') }}
                 </button>
             </li>
-            <li [hidden]="status() !==  ProxmoxStatus.Suspended">
+            <li [hidden]="![ProxmoxStatus.Paused, ProxmoxStatus.Suspended].includes(status())">
                 <button cDropdownItem
-                        [title]="'Start VM' | transloco">
+                        [title]="'Start VM' | transloco"
+                        (click)="runCommand('resume');">
                     <fa-icon [icon]="['fas', 'play']"></fa-icon>
                     {{ t('Resume') }}
                 </button>
@@ -58,7 +60,7 @@
                     {{ t('Reboot') }}
                 </button>
             </li>
-            <li>
+            <li [hidden]="status() === ProxmoxStatus.Stopped">
                 <button cDropdownItem
                         [title]="'Force reset of the VM.' | transloco"
                         (click)="getConfirmation('reset')">
