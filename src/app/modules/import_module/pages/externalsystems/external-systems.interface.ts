@@ -56,7 +56,7 @@ export interface AdditionalHostInformationResult {
         externalLink?: string
 
     },
-    data_source: ExternalSystems.Itop | ExternalSystems.Idoit,
+    data_source: ExternalSystems.Itop | ExternalSystems.Idoit | ExternalSystems.Proxmox,
 }
 
 

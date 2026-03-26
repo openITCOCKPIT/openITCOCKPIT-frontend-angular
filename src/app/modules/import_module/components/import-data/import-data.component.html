@@ -216,6 +216,57 @@
                                 </div>
                             </c-col>
                         }
+                        @case (ExternalSystems.Proxmox) {
+                            <c-col>
+                                <h5>
+                                    {{ t('Proxmox VE Data preview!') }}
+                                </h5>
+                                @if (importData.message && importData.message.length > 0) {
+                                    <figure class="text-info">
+                                        <blockquote class="blockquote">
+                                            <p>
+                                                <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                                                {{ importData.message }}
+                                            </p>
+                                        </blockquote>
+                                    </figure>
+                                }
+                                @if (importData.errors && !importData.errors.notValidRawData.error) {
+                                    <figure
+                                        class="text-danger">
+                                        <blockquote class="blockquote">
+                                            <p>
+                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                {{ importData.errors }}
+                                            </p>
+                                        </blockquote>
+                                    </figure>
+                                }
+                                @if (importData.errors && importData.errors.notValidRawData.error) {
+                                    <figure
+                                        class="text-danger">
+                                        <blockquote class="blockquote">
+                                            <p>
+                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                {{ importData.errors.notValidRawData.error }}
+                                            </p>
+                                        </blockquote>
+                                        @if (importData.errors.notValidRawData.description) {
+                                            <figcaption class="blockquote-footer mb-1"
+                                            >
+                                                {{ importData.errors.notValidRawData.description }}
+                                            </figcaption>
+                                        }
+                                    </figure>
+                                }
+                                <div class="help-block text-info pb-2 small">
+                                    {{ t('This preview shows maximal 10 first valid records from Proxmox VE system.') }}
+                                    <span>
+                                        {{ t('Furthermore are all objects displayed and no filter rules get applied.') }}
+                                    </span>
+                                </div>
+                            </c-col>
+                        }
                         @case ('openitcockpit_agent') {
                             <c-col>
                                 <h5>

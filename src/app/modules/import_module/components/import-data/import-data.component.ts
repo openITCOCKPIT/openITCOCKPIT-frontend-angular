@@ -230,6 +230,35 @@ export class ImportDataComponent implements OnInit, OnDestroy {
 
                         });
                         break;
+                    case ExternalSystems.Proxmox:
+                        this.ImporterService.loadDataFromProxmox(this.importer).subscribe(data => {
+                            if (data.success) {
+                                let response = data.data as ImportDataResponse;
+                                this.importData = {
+                                    success: true,
+                                    data: response.response.rawData,
+                                    errors: response.response.errors || null,
+                                    message: response.response.message
+                                }
+                                this.cdr.markForCheck();
+                            }
+                            if (!data.success) {
+                                let response = data.data as ImportersErrorMessageResponse;
+                                let notValidData: any = [];
+                                if (response.errors && response.errors.notValidRawData) {
+                                    notValidData = response.errors.notValidRawData;
+                                }
+                                this.importData = {
+                                    success: false,
+                                    errorMessage: response.message,
+                                    errors: notValidData
+                                }
+                                this.cdr.markForCheck();
+                            }
+                            this.cdr.markForCheck();
+
+                        });
+                        break;
                     case 'external_monitoring':
                         this.ImporterService.loadDataFromExternalMonitoring(this.importer).subscribe(data => {
                             if (data.success) {

@@ -45,8 +45,12 @@ export class ExternalSystemsService {
      *    Hosts browser    *
      **********************/
     public getAdditionalHostInformation(hostId: number): Observable<AdditionalHostInformationResult> {
+        return this.getAdditionalHostInformationWithType<AdditionalHostInformationResult>(hostId);
+    }
+
+    public getAdditionalHostInformationWithType<T>(hostId: number): Observable<T> {
         const proxyPath = this.proxyPath;
-        return this.http.get<AdditionalHostInformationResult>(`${proxyPath}/import_module/ExternalSystems/additionalHostInformation/${hostId}.json`, {
+        return this.http.get<T>(`${proxyPath}/import_module/ExternalSystems/additionalHostInformation/${hostId}.json`, {
             params: {
                 angular: true
             }

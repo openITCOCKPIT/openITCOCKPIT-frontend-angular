@@ -157,7 +157,11 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
         {
             key: 'external_monitoring',
             value: this.TranslocoService.translate('External Monitoring')
-        }
+        },
+        {
+            key: ExternalSystems.Proxmox,
+            value: this.TranslocoService.translate('Proxmox VE'),
+        },
     ];
 
     protected readonly matchFields = [

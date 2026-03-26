@@ -15,6 +15,7 @@ import { TimeperiodEnity } from '../timeperiods/timeperiods.interface';
 import { ContainerWithHostJoinData } from '../containers/containers.interface';
 import { HostgroupEntityWithJoinData } from '../hostgroups/hostgroups.interface';
 import { ContactgroupEntity } from '../contactgroups/contactgroups.interface';
+import { ExternalSystems } from '../../modules/import_module/pages/externalsystems/external-systems.enum';
 
 export interface HostObject {
     id?: number
@@ -841,4 +842,10 @@ export interface HostBrowserSlaOverview {
     determined_availability_percent?: number,
     warning_threshold?: number | null,
     minimal_availability?: number,
+}
+
+export interface LoadAdditionalInformationResult {
+    AdditionalInformationExists: boolean,
+    externalSystemType: null | ExternalSystems,
+    _csrfToken: string
 }

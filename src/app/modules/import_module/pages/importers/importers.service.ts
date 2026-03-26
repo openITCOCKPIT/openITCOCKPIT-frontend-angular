@@ -195,6 +195,34 @@ export class ImportersService {
         }
     }
 
+
+    public loadDataFromProxmox(importer: Importer): Observable<{
+        success: boolean;
+        data: ImportDataResponse | GenericMessageResponse;
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ImportDataResponse>(`${proxyPath}/import_module/imported_hosts/loadDataFromProxmox/${importer.id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                let errorMessage: GenericMessageResponse = {message: error.error.response.error};
+                return of({
+                    success: false,
+                    data: errorMessage
+                });
+            })
+        );
+    }
+
     public loadDataFromITop(importer: Importer): Observable<{
         success: boolean;
         data: ImportDataResponse | GenericMessageResponse;

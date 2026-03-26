@@ -1,0 +1,108 @@
+<ng-container *transloco="let t">
+
+    @if (result && result.response && !result.response.found) {
+        <c-alert color="danger" class="d-flex align-items-center">
+            <fa-icon [icon]="['fas', 'exclamation-triangle']" size="2x" class="me-3"></fa-icon>
+            <div>
+                {{ t('Virtual maschin or LXC container could not be found in Proxmox VE!') }}
+            </div>
+        </c-alert>
+    }
+
+    @if (result && result.response && result.response.found) {
+        <c-card>
+            <c-card-body class="align-items-center d-flex">
+                <div class="me-3 p-3 text-white">
+                    @if (result.response.info?.status === 'running') {
+                        <fa-icon [icon]="['fas', 'play']"
+                                 size="2x"
+                                 class="up"></fa-icon>
+                    } @else {
+                        <fa-icon [icon]="['fas', 'stop']"
+                                 size="2x"
+                                 class="down"></fa-icon>
+                    }
+
+                </div>
+                <div class="flex-1">
+                    <h5 cCardTitle>
+                        {{ result.response.info?.name }} [{{ result.response.info?.vmid }}]
+                    </h5>
+                    <h6 cCardSubtitle class="mb-2 mt-1 text-medium-emphasis">
+                        {{ t('State:') }}
+                        @if (result.response.info && result.response.current) {
+                            @if (result.response.info.status !== result.response.current.qmpstatus) {
+                                {{ result.response.info.status }} (result.response.current.qmpstatus)
+                            } @else {
+                                {{ result.response.info.status }}
+                            }
+                        }
+                    </h6>
+                    <p cCardText>
+                        Some quick example text to build on the card title and make up the
+                        bulk of the card content.
+                    </p>
+                </div>
+                <div class="">
+                    <button cButton color="default">
+                        Knöbbe!!
+                    </button>
+                </div>
+
+
+            </c-card-body>
+        </c-card>
+
+        <c-row>
+            <c-col md="12" xl="6">
+                <c-widget-stat-a
+                    class="mb-4"
+                    color="primary"
+                    [title]="'Widget Title'"
+                >
+                    <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
+                        $9000
+                        <span class="fs-6 fw-normal">
+                            hier alles value template
+                        </span>
+                    </ng-template>
+                    <ng-template cTemplateId="widgetActionTemplate">
+                        hioer action
+                    </ng-template>
+                    <ng-template cTemplateId="widgetChartTemplate">
+                        hier chart
+                    </ng-template>
+                </c-widget-stat-a>
+            </c-col>
+        </c-row>
+
+
+        <c-row>
+            <c-col md="12" xl="6">
+                <c-widget-stat-b
+                    [title]="'Widget title'"
+                    class="mb-4"
+                    text="Lorem ipsum dolor sit amet enim."
+                    [value]="'20'"
+                >
+                    <br><br><br>
+                    <c-progress class="my-2" thin [value]="12" color="success"/>
+                </c-widget-stat-b>
+            </c-col>
+            <c-col md="12" xl="6">
+                <c-widget-stat-b
+                    #widgetStatB1inv="cWidgetStatB"
+                    [title]="'Widget title'"
+                    class="mb-4"
+                    color="primary"
+                    inverse
+                    text="Lorem ipsum dolor sit amet enim."
+                    [value]="'20'"
+                >
+                    <br><br><br>
+                    <c-progress [white]="widgetStatB1inv.inverse" class="my-2" thin [value]="10"/>
+                </c-widget-stat-b>
+            </c-col>
+        </c-row>
+    }
+</ng-container>

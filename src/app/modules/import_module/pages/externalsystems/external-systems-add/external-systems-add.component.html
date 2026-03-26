@@ -252,331 +252,335 @@
                         </c-row>
                     </fieldset>
                 </c-container>
-                <c-container
-                    [fluid]="true" class="shadow-sm px-2 py-4 mb-4 bg-body rounded">
-                    <fieldset>
-                        <legend class="small fieldset-legend-border-bottom">
-                            <h4>
-                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
-                                {{ t('Object type settings') }}
-                            </h4>
-                            <div class="help-block">
-                                {{ t('Please select all object types you want to import or leave them blank to include all available object types.') }}
-                            </div>
-                        </legend>
-                        <c-row>
-                            <c-col [xs]="12" class="mt-3">
-                                <div class="alert border-faded bg-transparent text-secondary mt-2">
-                                    <div class="d-flex align-items-center">
-                                        <div class="alert-icon me-2">
-                                            <span class="icon-stack icon-stack-md">
-                                                <i class="base-circle icon-stack-3x text-primary-500"></i>
-                                                <i class="fas fa-info icon-stack-1x text-white"></i>
-                                            </span>
-                                        </div>
-                                        <div class="flex-1">
-                                            <span class="h5 text-primary">
-                                                {{ t('Load object types for import') }}
-                                            </span>
-                                            <br>
-                                            {{ t('Selecting the object types can take some time if the number of config items is too large.') }}
-                                        </div>
 
-                                        <button class="btn btn-outline-primary btn-sm ripple" type="button"
-                                                (click)="checkConnection()">
-                                            {{ t('Check External System Connection and load available object types"') }}
-                                        </button>
-                                    </div>
+                @if (post.system_type == ExternalSystems.Idoit || post.system_type == ExternalSystems.Itop) {
+                    <c-container
+                        [fluid]="true" class="shadow-sm px-2 py-4 mb-4 bg-body rounded">
+                        <fieldset>
+                            <legend class="small fieldset-legend-border-bottom">
+                                <h4>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    {{ t('Object type settings') }}
+                                </h4>
+                                <div class="help-block">
+                                    {{ t('Please select all object types you want to import or leave them blank to include all available object types.') }}
                                 </div>
-                            </c-col>
-                        </c-row>
-                        @if (connectStatus === false) {
+                            </legend>
                             <c-row>
                                 <c-col [xs]="12" class="mt-3">
-                                    <c-alert color="danger">
-                                        <h4 cAlertHeading>{{ t('404 Bad Request') }}</h4>
-                                        <p>{{ connectMessage }}</p>
-                                    </c-alert>
-                                </c-col>
-                            </c-row>
-                        }
-                        @if (connectStatus === true) {
-                            <c-row>
-                                <c-col [xs]="12" class="mt-3">
-                                    <c-alert color="success">
-                                        <fa-icon [icon]="['fas', 'check']"></fa-icon>
-                                        {{ t('Connection established successfully.') }}
-                                    </c-alert>
-                                </c-col>
-                            </c-row>
-                        }
-                        @if (objectTypes.length > 0) {
-                            <c-row class="px-2">
-                                <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
-                                    <h4 cAlertHeading class="text-primary">
-                                        {{ t('Detected object types') }}
-                                        <span class="help-block small">
-                                            ({{ objectTypes.length }})
-                                        </span>
-                                    </h4>
-                                    <div class="mb-3">
-                                        <label cLabel for="objectTypes">
-                                            {{ t('Object types') }}
-                                            <oitc-required-icon></oitc-required-icon>
-                                        </label>
-                                        <oitc-multi-select-optgroup
-                                            name="objectTypes"
-                                            id="objectTypes"
-                                            optionValue="value"
-                                            optionLabel="label"
-                                            [(ngModel)]="post.object_type_ids"
-                                            [options]="objectTypesForOptionGroup"
-                                            [debounce]="true"
-                                            [group]="true"
-                                            class="flex-1"
-                                            oitcFormError [errors]="errors" errorField="object_type_ids">
-                                        </oitc-multi-select-optgroup>
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="object_type_ids"></oitc-form-feedback>
+                                    <div class="alert border-faded bg-transparent text-secondary mt-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="alert-icon me-2">
+                                                <span class="icon-stack icon-stack-md">
+                                                    <i class="base-circle icon-stack-3x text-primary-500"></i>
+                                                    <i class="fas fa-info icon-stack-1x text-white"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <span class="h5 text-primary">
+                                                    {{ t('Load object types for import') }}
+                                                </span>
+                                                <br>
+                                                {{ t('Selecting the object types can take some time if the number of config items is too large.') }}
+                                            </div>
+
+                                            <button class="btn btn-outline-primary btn-sm ripple" type="button"
+                                                    (click)="checkConnection()">
+                                                {{ t('Check External System Connection and load available object types"') }}
+                                            </button>
+                                        </div>
                                     </div>
                                 </c-col>
                             </c-row>
-                        }
-                    </fieldset>
-                    <fieldset>
-                        <!-- ITC-2918 iTop only mapping for custom classes -->
-                        @if (post.system_type == ExternalSystems.Itop && objectTypes.length > 0) {
-                            <c-row class="px-2">
-                                <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
-                                    <h4 cAlertHeading class="text-primary">
-                                        {{ t('Custom object type mappings') }}
-                                    </h4>
-                                    @for (custom_mapping of post.custom_data.custom_mappings; track $index) {
+                            @if (connectStatus === false) {
+                                <c-row>
+                                    <c-col [xs]="12" class="mt-3">
+                                        <c-alert color="danger">
+                                            <h4 cAlertHeading>{{ t('404 Bad Request') }}</h4>
+                                            <p>{{ connectMessage }}</p>
+                                        </c-alert>
+                                    </c-col>
+                                </c-row>
+                            }
+                            @if (connectStatus === true) {
+                                <c-row>
+                                    <c-col [xs]="12" class="mt-3">
+                                        <c-alert color="success">
+                                            <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                                            {{ t('Connection established successfully.') }}
+                                        </c-alert>
+                                    </c-col>
+                                </c-row>
+                            }
+                            @if (objectTypes.length > 0) {
+                                <c-row class="px-2">
+                                    <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
+                                        <h4 cAlertHeading class="text-primary">
+                                            {{ t('Detected object types') }}
+                                            <span class="help-block small">
+                                                ({{ objectTypes.length }})
+                                            </span>
+                                        </h4>
+                                        <div class="mb-3">
+                                            <label cLabel for="objectTypes">
+                                                {{ t('Object types') }}
+                                                <oitc-required-icon></oitc-required-icon>
+                                            </label>
+                                            <oitc-multi-select-optgroup
+                                                name="objectTypes"
+                                                id="objectTypes"
+                                                optionValue="value"
+                                                optionLabel="label"
+                                                [(ngModel)]="post.object_type_ids"
+                                                [options]="objectTypesForOptionGroup"
+                                                [debounce]="true"
+                                                [group]="true"
+                                                class="flex-1"
+                                                oitcFormError [errors]="errors" errorField="object_type_ids">
+                                            </oitc-multi-select-optgroup>
+                                            <oitc-form-feedback [errors]="errors"
+                                                                errorField="object_type_ids"></oitc-form-feedback>
+                                        </div>
+                                    </c-col>
+                                </c-row>
+                            }
+                        </fieldset>
+                        <fieldset>
+                            <!-- ITC-2918 iTop only mapping for custom classes -->
+                            @if (post.system_type == ExternalSystems.Itop && objectTypes.length > 0) {
+                                <c-row class="px-2">
+                                    <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
+                                        <h4 cAlertHeading class="text-primary">
+                                            {{ t('Custom object type mappings') }}
+                                        </h4>
+                                        @for (custom_mapping of post.custom_data.custom_mappings; track $index) {
+                                            <c-row>
+                                                <c-col [xs]="12" [md]="6" [lg]="3">
+                                                    <div class="mb-3">
+                                                        <label cLabel>
+                                                            {{ t('Class name') }}
+                                                            <oitc-required-icon></oitc-required-icon>
+                                                        </label>
+                                                        <input cFormControl
+                                                               type="text"
+                                                               name="classname{{$index}}"
+                                                               id="classname{{$index}}"
+                                                               placeholder=" {{ t('WANLine') }}"
+                                                               [(ngModel)]="custom_mapping.classname">
+                                                    </div>
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="6" [lg]="3">
+                                                    <div class="mb-3">
+                                                        <label cLabel for="interface_type{{$index}}">
+                                                            {{ t('Interface type') }}
+                                                            <oitc-required-icon></oitc-required-icon>
+                                                        </label>
+                                                        <oitc-select
+                                                            name="interface_type{{$index}}"
+                                                            id="interface_type{{$index}}"
+                                                            optionValue="key"
+                                                            optionLabel="value"
+                                                            [options]="InterfaceTypes"
+                                                            [(ngModel)]="custom_mapping.interface_type"
+                                                            [showClear]="false">
+                                                        </oitc-select>
+                                                    </div>
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="6" [lg]="6">
+                                                    <button cButton class="ripple btn-outline-danger float-end mt-4"
+                                                            color="danger" type="button" variant="outline"
+                                                            (click)="removeCustomMapping($index)">
+                                                        {{ t('Remove mapping') }}
+                                                    </button>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col [xs]="12" [md]="6" [lg]="3">
+                                                    <div class="mb-3">
+                                                        <label cLabel>
+                                                            {{ t('Hostname') }}
+                                                            <oitc-required-icon></oitc-required-icon>
+                                                        </label>
+                                                        <input cFormControl
+                                                               type="text"
+                                                               name="name{{$index}}"
+                                                               id="name{{$index}}"
+                                                               placeholder="{{ t('name') }}"
+                                                               [(ngModel)]="custom_mapping.hostname">
+                                                    </div>
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="6" [lg]="3">
+                                                    <div class="mb-3">
+                                                        <label cLabel>
+                                                            {{ t('IP-Address') }}
+                                                            <oitc-required-icon></oitc-required-icon>
+                                                        </label>
+                                                        <input cFormControl
+                                                               type="text"
+                                                               name="address{{$index}}"
+                                                               id="address{{$index}}"
+                                                               placeholder="{{ t('address') }}"
+                                                               [disabled]="custom_mapping.interface_type !== 'custom'"
+                                                               [(ngModel)]="custom_mapping.address">
+                                                    </div>
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="6" [lg]="3">
+                                                    <div class="mb-3">
+                                                        <label cLabel>
+                                                            {{ t('Description') }}
+                                                        </label>
+                                                        <input cFormControl
+                                                               type="text"
+                                                               name="description{{$index}}"
+                                                               id="description{{$index}}"
+                                                               placeholder="description"
+                                                               [(ngModel)]="custom_mapping.description">
+                                                    </div>
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="6" [lg]="3">
+                                                    <div class="mb-3">
+                                                        <label cLabel>
+                                                            {{ t('Software') }}
+                                                        </label>
+                                                        <input cFormControl
+                                                               type="text"
+                                                               name="software{{$index}}"
+                                                               id="software{{$index}}"
+                                                               placeholder="software"
+                                                               [(ngModel)]="custom_mapping.software">
+                                                    </div>
+                                                </c-col>
+                                            </c-row>
+                                        }
                                         <c-row>
-                                            <c-col [xs]="12" [md]="6" [lg]="3">
-                                                <div class="mb-3">
-                                                    <label cLabel>
-                                                        {{ t('Class name') }}
-                                                        <oitc-required-icon></oitc-required-icon>
-                                                    </label>
-                                                    <input cFormControl
-                                                           type="text"
-                                                           name="classname{{$index}}"
-                                                           id="classname{{$index}}"
-                                                           placeholder=" {{ t('WANLine') }}"
-                                                           [(ngModel)]="custom_mapping.classname">
-                                                </div>
-                                            </c-col>
-                                            <c-col [xs]="12" [md]="6" [lg]="3">
-                                                <div class="mb-3">
-                                                    <label cLabel for="interface_type{{$index}}">
-                                                        {{ t('Interface type') }}
-                                                        <oitc-required-icon></oitc-required-icon>
-                                                    </label>
-                                                    <oitc-select
-                                                        name="interface_type{{$index}}"
-                                                        id="interface_type{{$index}}"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [options]="InterfaceTypes"
-                                                        [(ngModel)]="custom_mapping.interface_type"
-                                                        [showClear]="false">
-                                                    </oitc-select>
-                                                </div>
-                                            </c-col>
-                                            <c-col [xs]="12" [md]="6" [lg]="6">
-                                                <button cButton class="ripple btn-outline-danger float-end mt-4"
-                                                        color="danger" type="button" variant="outline"
-                                                        (click)="removeCustomMapping($index)">
-                                                    {{ t('Remove mapping') }}
+                                            <c-col class="col-12 pt-1 pb-2">
+                                                <button cButton class="ripple float-end"
+                                                        color="success" type="button"
+                                                        (click)="addCustomMapping()">
+                                                    {{ t('Add custom mapping') }}
                                                 </button>
                                             </c-col>
                                         </c-row>
+                                    </c-col>
+                                </c-row>
+                            }
+                        </fieldset>
+                        <fieldset>
+                            <!-- ITC-3098 iTop only mapping for import of applications into host groups -->
+                            @if (post.system_type == ExternalSystems.Itop && objectTypes.length > 0) {
+                                <c-row class="px-2">
+                                    <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
+                                        <h4 cAlertHeading class="text-primary">
+                                            {{ t('Mapping of Applications into host groups') }}
+                                        </h4>
+                                        <div class="help-block small">
+                                            {{
+                                                t('This mapping can be used to import host groups from the iTop CMDB into {0}', {
+                                                    '0': SystemnameService.systemName$ | async
+                                                })
+                                            }}
+                                        </div>
+                                        @for (hostgroup_mapping of post.custom_data.hostgroup_mappings; track $index) {
+                                            <c-row>
+                                                <c-col [xs]="12" [md]="6" [lg]="3">
+                                                    <div class="mb-3">
+                                                        <label cLabel>
+                                                            {{ t('Class name') }}
+                                                            <oitc-required-icon></oitc-required-icon>
+                                                        </label>
+                                                        <input cFormControl
+                                                               type="text"
+                                                               name="classname{{$index}}"
+                                                               placeholder=" {{ t('ApplicationSolution') }}"
+                                                               [(ngModel)]="hostgroup_mapping.classname">
+                                                    </div>
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="6" [lg]="9">
+                                                    <button cButton class="ripple btn-outline-danger float-end mt-4"
+                                                            color="danger" type="button" variant="outline"
+                                                            (click)="removeCustomHostgroupMapping($index)">
+                                                        {{ t('Remove mapping') }}
+                                                    </button>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col [xs]="12" [md]="6" [lg]="3">
+                                                    <div class="mb-3">
+                                                        <label cLabel>
+                                                            {{ t('Name RegEx') }}
+                                                        </label>
+                                                        <c-input-group>
+                                                            <input cFormControl
+                                                                   type="text"
+                                                                   name="name_regex{{$index}}"
+                                                                   placeholder=""
+                                                                   [(ngModel)]="hostgroup_mapping.name_regex">
+                                                            <span cInputGroupText>
+                                                                <oitc-regex-helper-tooltip/>
+                                                            </span>
+                                                        </c-input-group>
+                                                        <div class="help-block small">
+                                                            {{ t('Regex to filter by CIs by name (members of the host group)') }}
+                                                        </div>
+                                                    </div>
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="6" [lg]="3">
+                                                    <div class="mb-3">
+                                                        <label cLabel>
+                                                            {{ t('CI RegEx') }}
+                                                        </label>
+                                                        <c-input-group>
+                                                            <input cFormControl
+                                                                   type="text"
+                                                                   name="ci_regex{{$index}}"
+                                                                   placeholder=""
+                                                                   [(ngModel)]="hostgroup_mapping.ci_regex">
+                                                            <span cInputGroupText>
+                                                                <oitc-regex-helper-tooltip/>
+                                                            </span>
+                                                        </c-input-group>
+                                                        <div class="help-block small">
+                                                            {{ t('Regex to filter by CIs by name (members of the host group)') }}
+                                                        </div>
+                                                    </div>
+                                                </c-col>
+                                                <c-col [xs]="12" [md]="6" [lg]="3">
+                                                    <div class="mb-3">
+                                                        <label cLabel for="hostgroup_containers{{$index}}">
+                                                            {{ t('Hostgroup container') }}
+                                                            <oitc-required-icon></oitc-required-icon>
+                                                        </label>
+                                                        <oitc-select
+                                                            name="hostgroup_containers{{$index}}"
+                                                            id="hostgroup_containers{{$index}}"
+                                                            optionValue="key"
+                                                            optionLabel="value"
+                                                            [options]="hostgroup_containers"
+                                                            [(ngModel)]="hostgroup_mapping.container_id">
+                                                        </oitc-select>
+                                                        <div class="help-block small">
+                                                            {{ t('Container of the host group that will be created') }}
+                                                        </div>
+                                                    </div>
+                                                </c-col>
+                                            </c-row>
+                                        }
                                         <c-row>
-                                            <c-col [xs]="12" [md]="6" [lg]="3">
-                                                <div class="mb-3">
-                                                    <label cLabel>
-                                                        {{ t('Hostname') }}
-                                                        <oitc-required-icon></oitc-required-icon>
-                                                    </label>
-                                                    <input cFormControl
-                                                           type="text"
-                                                           name="name{{$index}}"
-                                                           id="name{{$index}}"
-                                                           placeholder="{{ t('name') }}"
-                                                           [(ngModel)]="custom_mapping.hostname">
-                                                </div>
-                                            </c-col>
-                                            <c-col [xs]="12" [md]="6" [lg]="3">
-                                                <div class="mb-3">
-                                                    <label cLabel>
-                                                        {{ t('IP-Address') }}
-                                                        <oitc-required-icon></oitc-required-icon>
-                                                    </label>
-                                                    <input cFormControl
-                                                           type="text"
-                                                           name="address{{$index}}"
-                                                           id="address{{$index}}"
-                                                           placeholder="{{ t('address') }}"
-                                                           [disabled]="custom_mapping.interface_type !== 'custom'"
-                                                           [(ngModel)]="custom_mapping.address">
-                                                </div>
-                                            </c-col>
-                                            <c-col [xs]="12" [md]="6" [lg]="3">
-                                                <div class="mb-3">
-                                                    <label cLabel>
-                                                        {{ t('Description') }}
-                                                    </label>
-                                                    <input cFormControl
-                                                           type="text"
-                                                           name="description{{$index}}"
-                                                           id="description{{$index}}"
-                                                           placeholder="description"
-                                                           [(ngModel)]="custom_mapping.description">
-                                                </div>
-                                            </c-col>
-                                            <c-col [xs]="12" [md]="6" [lg]="3">
-                                                <div class="mb-3">
-                                                    <label cLabel>
-                                                        {{ t('Software') }}
-                                                    </label>
-                                                    <input cFormControl
-                                                           type="text"
-                                                           name="software{{$index}}"
-                                                           id="software{{$index}}"
-                                                           placeholder="software"
-                                                           [(ngModel)]="custom_mapping.software">
-                                                </div>
-                                            </c-col>
-                                        </c-row>
-                                    }
-                                    <c-row>
-                                        <c-col class="col-12 pt-1 pb-2">
-                                            <button cButton class="ripple float-end"
-                                                    color="success" type="button"
-                                                    (click)="addCustomMapping()">
-                                                {{ t('Add custom mapping') }}
-                                            </button>
-                                        </c-col>
-                                    </c-row>
-                                </c-col>
-                            </c-row>
-                        }
-                    </fieldset>
-                    <fieldset>
-                        <!-- ITC-3098 iTop only mapping for import of applications into host groups -->
-                        @if (post.system_type == ExternalSystems.Itop && objectTypes.length > 0) {
-                            <c-row class="px-2">
-                                <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
-                                    <h4 cAlertHeading class="text-primary">
-                                        {{ t('Mapping of Applications into host groups') }}
-                                    </h4>
-                                    <div class="help-block small">
-                                        {{
-                                            t('This mapping can be used to import host groups from the iTop CMDB into {0}', {
-                                                '0': SystemnameService.systemName$ | async
-                                            })
-                                        }}
-                                    </div>
-                                    @for (hostgroup_mapping of post.custom_data.hostgroup_mappings; track $index) {
-                                        <c-row>
-                                            <c-col [xs]="12" [md]="6" [lg]="3">
-                                                <div class="mb-3">
-                                                    <label cLabel>
-                                                        {{ t('Class name') }}
-                                                        <oitc-required-icon></oitc-required-icon>
-                                                    </label>
-                                                    <input cFormControl
-                                                           type="text"
-                                                           name="classname{{$index}}"
-                                                           placeholder=" {{ t('ApplicationSolution') }}"
-                                                           [(ngModel)]="hostgroup_mapping.classname">
-                                                </div>
-                                            </c-col>
-                                            <c-col [xs]="12" [md]="6" [lg]="9">
-                                                <button cButton class="ripple btn-outline-danger float-end mt-4"
-                                                        color="danger" type="button" variant="outline"
-                                                        (click)="removeCustomHostgroupMapping($index)">
-                                                    {{ t('Remove mapping') }}
+                                            <c-col class="col-12 pt-1 pb-2">
+                                                <button cButton class="ripple float-end"
+                                                        color="success" type="button"
+                                                        (click)="addCustomHostgroupMapping()">
+                                                    {{ t('Add custom mapping') }}
                                                 </button>
                                             </c-col>
                                         </c-row>
-                                        <c-row>
-                                            <c-col [xs]="12" [md]="6" [lg]="3">
-                                                <div class="mb-3">
-                                                    <label cLabel>
-                                                        {{ t('Name RegEx') }}
-                                                    </label>
-                                                    <c-input-group>
-                                                        <input cFormControl
-                                                               type="text"
-                                                               name="name_regex{{$index}}"
-                                                               placeholder=""
-                                                               [(ngModel)]="hostgroup_mapping.name_regex">
-                                                        <span cInputGroupText>
-                                                            <oitc-regex-helper-tooltip/>
-                                                        </span>
-                                                    </c-input-group>
-                                                    <div class="help-block small">
-                                                        {{ t('Regex to filter by CIs by name (members of the host group)') }}
-                                                    </div>
-                                                </div>
-                                            </c-col>
-                                            <c-col [xs]="12" [md]="6" [lg]="3">
-                                                <div class="mb-3">
-                                                    <label cLabel>
-                                                        {{ t('CI RegEx') }}
-                                                    </label>
-                                                    <c-input-group>
-                                                        <input cFormControl
-                                                               type="text"
-                                                               name="ci_regex{{$index}}"
-                                                               placeholder=""
-                                                               [(ngModel)]="hostgroup_mapping.ci_regex">
-                                                        <span cInputGroupText>
-                                                            <oitc-regex-helper-tooltip/>
-                                                        </span>
-                                                    </c-input-group>
-                                                    <div class="help-block small">
-                                                        {{ t('Regex to filter by CIs by name (members of the host group)') }}
-                                                    </div>
-                                                </div>
-                                            </c-col>
-                                            <c-col [xs]="12" [md]="6" [lg]="3">
-                                                <div class="mb-3">
-                                                    <label cLabel for="hostgroup_containers{{$index}}">
-                                                        {{ t('Hostgroup container') }}
-                                                        <oitc-required-icon></oitc-required-icon>
-                                                    </label>
-                                                    <oitc-select
-                                                        name="hostgroup_containers{{$index}}"
-                                                        id="hostgroup_containers{{$index}}"
-                                                        optionValue="key"
-                                                        optionLabel="value"
-                                                        [options]="hostgroup_containers"
-                                                        [(ngModel)]="hostgroup_mapping.container_id">
-                                                    </oitc-select>
-                                                    <div class="help-block small">
-                                                        {{ t('Container of the host group that will be created') }}
-                                                    </div>
-                                                </div>
-                                            </c-col>
-                                        </c-row>
-                                    }
-                                    <c-row>
-                                        <c-col class="col-12 pt-1 pb-2">
-                                            <button cButton class="ripple float-end"
-                                                    color="success" type="button"
-                                                    (click)="addCustomHostgroupMapping()">
-                                                {{ t('Add custom mapping') }}
-                                            </button>
-                                        </c-col>
-                                    </c-row>
-                                </c-col>
-                            </c-row>
-                        }
-                    </fieldset>
-                </c-container>
+                                    </c-col>
+                                </c-row>
+                            }
+                        </fieldset>
+                    </c-container>
+                }
+
             </c-card-body>
 
             <c-card-footer class="text-end">
