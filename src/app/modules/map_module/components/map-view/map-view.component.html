@@ -1,5 +1,6 @@
 @if (map) {
     <oitc-map-canvas [map]="map.Map"
+                     [widgetHeight]="this.widgetHeight()"
                      [isViewMode]="true">
         @for (item of map.Mapitems; track item) {
             <oitc-map-item [item]="item" [refreshInterval]="refreshInterval"
