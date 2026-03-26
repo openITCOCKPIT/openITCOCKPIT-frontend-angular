@@ -61,6 +61,9 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
 
     public result?: AdditionalHostInformationProxmoxResult;
 
+    public vmid?: string
+    public nodeName?: string
+
     private subscriptions: Subscription = new Subscription();
 
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
@@ -94,6 +97,8 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
                 // We use the same API endpoint as the other external systems do, but the data we receive is different.
 
                 this.result = result;
+                this.nodeName = result.response.info?.node;
+                this.vmid = result.response.info?.vmid.toString();
                 this.cdr.markForCheck();
             })
         );
