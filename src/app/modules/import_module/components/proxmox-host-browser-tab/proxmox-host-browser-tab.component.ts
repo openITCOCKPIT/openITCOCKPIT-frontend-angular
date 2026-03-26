@@ -30,6 +30,7 @@ import { ProxmoxStatus } from './proxmox-status.enum';
 import { ProxmoxActionsComponent } from './proxmox-actions/proxmox-actions.component';
 import { PatchstatusIconComponent } from '../../../../pages/patchstatus/patchstatus-icon/patchstatus-icon.component';
 import { DecimalPipe, NgClass } from '@angular/common';
+import { ByteToHumanPipe } from '../../../../pipes/byte-to-human.pipe';
 
 @Component({
     selector: 'oitc-proxmox-host-browser-tab',
@@ -49,7 +50,8 @@ import { DecimalPipe, NgClass } from '@angular/common';
         PatchstatusIconComponent,
         DecimalPipe,
         TextColorDirective,
-        NgClass
+        NgClass,
+        ByteToHumanPipe
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',

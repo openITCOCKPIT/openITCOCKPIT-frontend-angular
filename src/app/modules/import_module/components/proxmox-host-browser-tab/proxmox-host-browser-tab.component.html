@@ -79,7 +79,7 @@
                                                 [type]="'suse'"
                                             ></oitc-patchstatus-icon>
                                         }
-                                        @case ('windows') {
+                                        @case ('mswindows') {
                                             <oitc-patchstatus-icon
                                                 [platform]="result.response.agent.id"
                                                 [type]="'windows'"
@@ -123,14 +123,14 @@
                                     {{ t('Memory') }}
                                 </h5>
                                 <h6 cCardSubtitle class="mb-2 mt-1 text-medium-emphasis">
-                                    {{ result.response.current.maxmem / 1024 / 1024 / 1024 |  number: '1.3-3' }}    {{ t('GiB') }}
+                                    {{ result.response.current.maxmem | byteToHuman }}
                                 </h6>
                                 <p cCardText>
                                     {{ result.response.current.mem / result.response.current.maxmem * 100|  number: '1.3-3' }}
                                     %
-                                    ({{ result.response.current.mem / 1024 / 1024  |  number: '1.3-3' }}    {{ t('MiB') }}
+                                    ({{ result.response.current.mem | byteToHuman }}
                                     {{ t('of') }}
-                                    {{ result.response.current.maxmem / 1024 / 1024 / 1024 |  number: '1.3-3' }}    {{ t('GiB') }}
+                                    {{ result.response.current.maxmem | byteToHuman }}
                                     )
                                 </p>
                             </div>
