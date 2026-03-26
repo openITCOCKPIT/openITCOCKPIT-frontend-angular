@@ -1,0 +1,43 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="confirmModal"
+        size="lg"
+    >
+        <c-modal-header class="bg-warning">
+            <h5 cModalTitle>
+                {{ t('Confirm') }}
+            </h5>
+            <button (click)="no()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                @if (!message) {
+                    <c-col xs="12">
+                        <strong>{{ t('Do you really want to do this action?') }}</strong>
+                    </c-col>
+                }
+                @if (message) {
+                    <c-col xs="12">
+                        <strong>{{ message }}</strong>
+                    </c-col>
+                }
+                @if (helpMessage) {
+                    <c-col class="help-block" xs="12">
+                        {{ helpMessage }}
+                    </c-col>
+                }
+            </c-row>
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="yes()" cButton class="ripple" color="primary">
+                {{ t('Yes') }}
+            </button>
+            <button (click)="no()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
