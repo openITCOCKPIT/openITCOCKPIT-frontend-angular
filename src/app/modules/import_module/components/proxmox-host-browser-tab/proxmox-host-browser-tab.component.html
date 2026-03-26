@@ -13,21 +13,24 @@
         <c-card>
             <c-card-body class="align-items-center d-flex">
                 <div class="me-3 p-3 text-white">
-                    @if (result.response.info?.status === 'running') {
-                        @if (result.response.current?.qmpstatus === "paused") {
-                            <fa-icon [icon]="['fas', 'pause']"
-                                     size="2x"
-                                     class="warning"></fa-icon>
-                        } @else {
-                            <fa-icon [icon]="['fas', 'play']"
-                                     size="2x"
-                                     class="up"></fa-icon>
-                        }
-
+                    @if (result.response.current && 'lock' in result.response.current && result.response.current.lock === 'migrate') {
+                        <fa-icon [icon]="['far', 'paper-plane']"
+                                 size="3x"
+                                 class="unknown unknown-glow-svg"></fa-icon>
                     } @else {
-                        <fa-icon [icon]="['fas', 'stop']"
-                                 size="2x"
-                                 class="down"></fa-icon>
+                        @if (result.response.info?.status === 'running') {
+                            <fa-icon [icon]="['fas', 'play']"
+                                     size="3x"
+                                     class="up up-glow-svg"></fa-icon>
+                        } @else if (result.response.info?.status === 'paused') {
+                            <fa-icon [icon]="['fas', 'pause']"
+                                     size="3x"
+                                     class="warning warning-glow-svg"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'stop']"
+                                     size="3x"
+                                     class="down down-glow-svg"></fa-icon>
+                        }
                     }
 
                 </div>

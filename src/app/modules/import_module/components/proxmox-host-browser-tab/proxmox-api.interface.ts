@@ -13,7 +13,7 @@ export interface AdditionalHostInformationProxmoxResult {
             node: string
             vmid: number
             name: string
-            status: string
+            status: 'running' | 'stopped' | 'paused' | string
             identifier: string
             ipaddress: string
         },
@@ -70,7 +70,7 @@ export interface ProxmoxQemuStatusCurrentRunning extends ProxmoxQemuStatusCurren
     "proxmox-support"?: any
     pressureiosome?: number
     pressurecpusome?: number
-    lock?: string
+    lock?: 'migrate' | string
 }
 
 export interface ProxmoxBalloonInfo {
