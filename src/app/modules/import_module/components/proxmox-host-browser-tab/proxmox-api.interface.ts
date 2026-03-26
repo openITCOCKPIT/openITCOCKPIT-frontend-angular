@@ -6,8 +6,8 @@ export interface AdditionalHostInformationProxmoxResult {
     response: {
         result?: null // only null if the Proxmox is offline - does not exist in successful for Proxmox Reponse
         status: boolean // true = online, false = offline
+        ipaddresses: Ipaddress[]
         found: boolean
-
         // Generic VM info
         info: null | {
             node: string
@@ -95,4 +95,16 @@ export interface ProxmoxQemuAgent {
     version: string // 24.04.4 LTS (Noble Numbat) | Microsoft Windows Server 2025
     id: string // ubuntu | mswindows
     "pretty-name": string // Ubuntu 24.04.4 LTS | Windows Server 2025 Standard
+}
+
+export interface Ipaddress {
+    hardware_address: string
+    name: string
+    ip_address: IpAddress[]
+}
+
+export interface IpAddress {
+    ip_address: string
+    ip_address_type: string
+    prefix: number
 }

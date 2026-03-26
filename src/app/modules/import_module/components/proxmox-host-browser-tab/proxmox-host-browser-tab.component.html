@@ -187,22 +187,112 @@
                                 </c-col>
                             </c-row>
                         }
-                        @if (result.response.current && result.response.current.cpu && result.response.current.cpus) {
-                            <c-row class="my-1 odd">
-                                <c-col lg="7">
-                                    <fa-icon [icon]="['fas', 'microchip']" [cTextColor]="'primary'"></fa-icon>
-                                    {{ t('CPU usage') }}
 
-                                </c-col>
-                                <c-col class="text-end">
-                                    {{ result.response.current.cpu * 100|  number: '1.3-3' }} % {{ t('of') }}
-                                    {{ result.response.current.cpus }}{{ t('CPU(s)') }}
+                        @if (result.response.current) {
+                            @if (result.response.current.cpu && result.response.current.cpus) {
+                                <c-row class="my-1 odd">
+                                    <c-col lg="7">
+                                        <fa-icon [icon]="['fas', 'microchip']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ t('CPU usage') }}
+
+                                    </c-col>
+                                    <c-col class="text-end">
+                                        {{ result.response.current.cpu * 100|  number: '1.3-3' }} % {{ t('of') }}
+                                        {{ result.response.current.cpus }}{{ t('CPU(s)') }}
+                                    </c-col>
+                                </c-row>
+                            }
+                            @if (result.response.current.maxmem && result.response.current.mem) {
+                                <c-row class="my-1 even">
+                                    <c-col lg="7">
+                                        <fa-icon [icon]="['fas', 'memory']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ t('Memory usage') }}
+
+                                    </c-col>
+                                    <c-col class="text-end">
+                                        {{ result.response.current.mem / result.response.current.maxmem * 100|  number: '1.3-3' }}
+                                        %
+                                        ({{ result.response.current.mem / 1024 / 1024  |  number: '1.3-3' }}    {{ t('MiB') }}
+                                        {{ t('of') }}
+                                        {{ result.response.current.maxmem / 1024 / 1024 / 1024 |  number: '1.3-3' }}    {{ t('GiB') }}
+                                        )
+                                    </c-col>
+                                </c-row>
+                                <c-row>
+                                    <c-col>
+                                        <c-progress class="my-2" thin
+                                                    [value]="  result.response.current.mem / result.response.current.maxmem * 100|  number: '1.3-3'"
+                                                    color="info"/>
+                                    </c-col>
+                                </c-row>
+                            }
+                            @if (result.response.current.memhost) {
+                                <c-row class="my-1 even">
+                                    <c-col lg="7">
+                                        <fa-icon [icon]="['fas', 'memory']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ t('Host memory usage') }}
+
+                                    </c-col>
+                                    <c-col class="text-end">
+                                        {{ result.response.current.memhost / 1024 / 1024  |  number: '1.3-3' }}    {{ t('MiB') }}
+                                    </c-col>
+                                </c-row>
+                            }
+                            @if (result.response.current.maxdisk) {
+                                <c-row class="my-1 odd">
+                                    <c-col lg="7">
+                                        <fa-icon [icon]="['far', 'hard-drive']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ t('Bootdisk size') }}
+
+                                    </c-col>
+                                    <c-col class="text-end">
+                                        {{ result.response.current.maxdisk / 1024 / 1024 / 1024 |  number: '1.3-3' }}    {{ t('GiB') }}
+                                    </c-col>
+                                </c-row>
+                            }
+                        }
+                        @if (result.response.ipaddresses) {
+                            <h6 class="fs-6 fw-semibold text-uppercase text-muted mt-3 mb-1">
+                                {{ t('Network Information') }}
+                            </h6>
+                            <hr class="small fieldset-legend-border-bottom my-1 border-2">
+                            <c-row class="even mb-1">
+                                <c-col [lg]="12">
+                                    <fa-icon [icon]="['fas', 'arrow-right-arrow-left']"
+                                             [cTextColor]="'primary'"></fa-icon>
+                                    {{ t('IPs') }}
                                 </c-col>
                             </c-row>
-                        }
+                            <c-row class="d-xs-none ">
+                                <c-col [lg]="4" class="bold pe-1">
+                                    <small>{{ t('Name') }}</small>
+                                </c-col>
+                                <c-col [lg]="3" class="bold px-0">
+                                    <small>{{ t('MAC address') }}</small>
+                                </c-col>
+                                <c-col [lg]="5" class="bold px-1">
+                                    <small>{{ t('IP address') }}</small>
+                                </c-col>
+                            </c-row>
+                            @for (ipaddress of result.response.ipaddresses; track $index) {
+                                <c-row [ngClass]="{odd: $odd, even: $even}">
+                                    <c-col [lg]="4" class="pe-1">
+                                        <small>{{ ipaddress.name }}</small>
+                                    </c-col>
+                                    <c-col [lg]="3" class="px-0">
+                                        <small>{{ ipaddress.hardware_address }}</small>
+                                    </c-col>
+                                    <c-col [lg]="5" class="px-1">
+                                        <ul class="list-unstyled m-0">
+                                            @for (ip of ipaddress.ip_address; track $index) {
+                                                <li><small>{{ ip.ip_address }}</small></li>
+                                            }
+                                        </ul>
+                                    </c-col>
 
-                        <br><br><br>
-                        <small class="text-body-secondary ng-star-inserted"> Lorem ipsum dolor sit amet enim. </small>
+                                </c-row>
+                            }
+                        }
                     </c-card-body>
                 </c-card>
 

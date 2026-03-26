@@ -29,7 +29,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { ProxmoxStatus } from './proxmox-status.enum';
 import { ProxmoxActionsComponent } from './proxmox-actions/proxmox-actions.component';
 import { PatchstatusIconComponent } from '../../../../pages/patchstatus/patchstatus-icon/patchstatus-icon.component';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-proxmox-host-browser-tab',
@@ -48,7 +48,8 @@ import { DecimalPipe } from '@angular/common';
         ProxmoxActionsComponent,
         PatchstatusIconComponent,
         DecimalPipe,
-        TextColorDirective
+        TextColorDirective,
+        NgClass
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',
