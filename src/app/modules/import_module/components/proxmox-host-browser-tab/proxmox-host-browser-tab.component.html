@@ -4,7 +4,7 @@
         <c-alert color="danger" class="d-flex align-items-center">
             <fa-icon [icon]="['fas', 'exclamation-triangle']" size="2x" class="me-3"></fa-icon>
             <div>
-                {{ t('Virtual maschin or LXC container could not be found in Proxmox VE!') }}
+                {{ t('Virtual maschine or LXC container could not be found in Proxmox VE!') }}
             </div>
         </c-alert>
     }
@@ -49,10 +49,94 @@
                         }
                     </h6>
                     <p cCardText>
-                        Some quick example text to build on the card title and make up the
-                        bulk of the card content.
+                        Updated 20s ago
                     </p>
                 </div>
+                @if (result.response.info?.status === 'running') {
+                    @if (result.response.agent && result.response.agent['pretty-name']) {
+                        <div class="flex-1">
+                            <h5>
+                                {{ t('Operating system') }}
+                            </h5>
+                            <h6 cCardSubtitle class="mb-2 mt-1 text-medium-emphasis">
+                                @if (result.response.agent.id && result.response.agent.version) {
+                                    @switch (result.response.agent.id) {
+                                        @case ('ubuntu') {
+                                            <oitc-patchstatus-icon
+                                                [platform]="result.response.agent.id"
+                                                [type]="'linux'"
+                                            ></oitc-patchstatus-icon>
+                                        }
+                                        @case ('debian') {
+                                            <oitc-patchstatus-icon
+                                                [platform]="result.response.agent.id"
+                                                [type]="'linux'"
+                                            ></oitc-patchstatus-icon>
+                                        }
+                                        @case ('suse') {
+                                            <oitc-patchstatus-icon
+                                                [platform]="result.response.agent.id"
+                                                [type]="'suse'"
+                                            ></oitc-patchstatus-icon>
+                                        }
+                                        @case ('windows') {
+                                            <oitc-patchstatus-icon
+                                                [platform]="result.response.agent.id"
+                                                [type]="'windows'"
+                                            ></oitc-patchstatus-icon>
+                                        }
+                                        @default {
+                                            {{ result.response.agent.name }}
+                                        }
+                                    }
+                                }
+                            </h6>
+                            <p cCardText>
+                                {{ result.response.agent['pretty-name'] }}
+                                <span class="text-muted">
+                                    [{{ result.response.agent.version }}]
+                                </span>
+
+                            </p>
+                        </div>
+                    }
+                    @if (result.response.current) {
+                        <div class="flex-1">
+                            <h5>
+                                {{ t('CPU') }}
+                            </h5>
+                            <h6 cCardSubtitle class="mb-2 mt-1 text-medium-emphasis">
+                                {{ t('Cores') }}:
+                                <span class="mx-2">
+                                    <code>{{ result.response.current.cpus }}</code>
+                                </span>
+
+                            </h6>
+                            <p cCardText>
+                                {{ result.response.current.cpu * 100|  number: '1.3-3' }} %
+                            </p>
+                        </div>
+
+                        @if (result.response.current.mem) {
+                            <div class="flex-1">
+                                <h5>
+                                    {{ t('Memory') }}
+                                </h5>
+                                <h6 cCardSubtitle class="mb-2 mt-1 text-medium-emphasis">
+                                    {{ result.response.current.maxmem / 1024 / 1024 / 1024 |  number: '1.3-3' }}    {{ t('GiB') }}
+                                </h6>
+                                <p cCardText>
+                                    {{ result.response.current.mem / result.response.current.maxmem * 100|  number: '1.3-3' }}
+                                    %
+                                    ({{ result.response.current.mem / 1024 / 1024  |  number: '1.3-3' }}    {{ t('MiB') }}
+                                    {{ t('of') }}
+                                    {{ result.response.current.maxmem / 1024 / 1024 / 1024 |  number: '1.3-3' }}    {{ t('GiB') }}
+                                    )
+                                </p>
+                            </div>
+                        }
+                    }
+                }
                 <div class="">
                     @if (vmid && nodeName) {
                         <oitc-proxmox-actions
@@ -62,59 +146,60 @@
                     }
                 </div>
 
-
             </c-card-body>
         </c-card>
+        <c-row class="mt-2 equal-height-row d-flex flex-wrap">
+            <c-col md="12" xl="3">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <div class="fs-4 fw-semibold">
+                            SYSTEM
+                        </div>
+                        <div>
+                            Widget title
+                        </div>
+                        <br><br><br>
+                        <small class="text-body-secondary ng-star-inserted"> Lorem ipsum dolor sit amet enim. </small>
+                    </c-card-body>
+                </c-card>
 
-        <c-row>
-            <c-col md="12" xl="6">
-                <c-widget-stat-a
-                    class="mb-4"
-                    color="primary"
-                    [title]="'Widget Title'"
-                >
-                    <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
-                        $9000
-                        <span class="fs-6 fw-normal">
-                            hier alles value template
-                        </span>
-                    </ng-template>
-                    <ng-template cTemplateId="widgetActionTemplate">
-                        hioer action
-                    </ng-template>
-                    <ng-template cTemplateId="widgetChartTemplate">
-                        hier chart
-                    </ng-template>
-                </c-widget-stat-a>
             </c-col>
-        </c-row>
-
-
-        <c-row>
-            <c-col md="12" xl="6">
-                <c-widget-stat-b
-                    [title]="'Widget title'"
-                    class="mb-4"
-                    text="Lorem ipsum dolor sit amet enim."
-                    [value]="'20'"
-                >
-                    <br><br><br>
-                    <c-progress class="my-2" thin [value]="12" color="success"/>
-                </c-widget-stat-b>
+            <c-col md="12" xl="3">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <div class="fs-4 fw-semibold">
+                            SYSTEM
+                        </div>
+                        <div class="ng-star-inserted">Widget title</div>
+                        <br><br><br>
+                        <small class="text-body-secondary"> Lorem ipsum dolor sit amet enim. </small>
+                    </c-card-body>
+                </c-card>
             </c-col>
-            <c-col md="12" xl="6">
-                <c-widget-stat-b
-                    #widgetStatB1inv="cWidgetStatB"
-                    [title]="'Widget title'"
-                    class="mb-4"
-                    color="primary"
-                    inverse
-                    text="Lorem ipsum dolor sit amet enim."
-                    [value]="'20'"
-                >
-                    <br><br><br>
-                    <c-progress [white]="widgetStatB1inv.inverse" class="my-2" thin [value]="10"/>
-                </c-widget-stat-b>
+            <c-col md="12" xl="3">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <div class="fs-4 fw-semibold">CPU (%)</div>
+                        <div class="ng-star-inserted">Widget title</div>
+                        <br><br><br>
+
+                        <c-progress class="my-2" thin [value]="12" color="success"/>
+                        <small class="text-body-secondary"> Lorem ipsum dolor sit amet enim. </small>
+
+                    </c-card-body>
+                </c-card>
+            </c-col>
+            <c-col md="12" xl="3">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <div class="fs-4 fw-semibold">CPU (%)</div>
+                        <div class="ng-star-inserted">Widget title</div>
+                        <br><br><br>
+
+                        <c-progress class="my-2" thin [value]="12" color="success"/>
+                        <small class="text-body-secondary"> Lorem ipsum dolor sit amet enim. </small>
+                    </c-card-body>
+                </c-card>
             </c-col>
         </c-row>
     }
