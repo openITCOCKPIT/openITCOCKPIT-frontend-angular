@@ -198,6 +198,7 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
                 this.loadContainers();
                 this.loadElements();
+                this.loadExternalSystems();
                 this.loadConfigFieldsByDataSource();
             }));
     }
@@ -246,6 +247,7 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
 
     public onContainerChange() {
         this.loadElements();
+        this.loadExternalSystems();
         this.cdr.markForCheck();
     }
 
@@ -256,7 +258,7 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.ImportersService.loadElements(containerId, this.post.data_source)
+        this.subscriptions.add(this.ImportersService.loadElements(containerId)
             .subscribe((result) => {
 
 
@@ -265,13 +267,39 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
                 });
 
                 this.hostdefaults = result.hostdefaults;
-                this.externalsystems = result.externalsystems.externalsystems;
                 this.externalmonitorings = result.externalMonitorings.externalMonitorings;
                 this.cdr.markForCheck();
             })
         );
-
     }
+
+    private loadExternalSystems = (): void => {
+        if (!this.post.container_id) {
+            return;
+        }
+        let dataSource = null;
+        switch (this.post.data_source) {
+            case 'itop':
+            case 'idoit':
+            case 'proxmox':
+                dataSource = this.post.data_source;
+                break;
+        }
+
+        this.subscriptions.add(this.ImportersService.loadExternalSystems(this.post.container_id, dataSource)
+            .subscribe((result) => {
+                this.externalsystems = result;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    public loadElementsByDataSource() {
+        this.loadExternalSystems();
+        this.loadConfigFieldsByDataSource();
+        this.cdr.markForCheck();
+    }
+
 
     public loadConfigFieldsByDataSource() {
         if (this.post.data_source) {

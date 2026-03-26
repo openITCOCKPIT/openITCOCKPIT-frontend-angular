@@ -259,6 +259,7 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
 
     public onContainerChange() {
         this.loadElements();
+        this.loadExternalSystems();
         this.cdr.markForCheck();
     }
 
@@ -269,18 +270,44 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.ImportersService.loadElements(containerId, this.post.data_source)
+        this.subscriptions.add(this.ImportersService.loadElements(containerId)
             .subscribe((result) => {
                 this.hostdefaultsAsList = _.map(result.hostdefaults, function (value, key) {
                     return {key: key, value: value.name};
                 });
                 this.hostdefaults = result.hostdefaults;
-                this.externalsystems = result.externalsystems.externalsystems;
                 this.externalmonitorings = result.externalMonitorings.externalMonitorings;
                 this.cdr.markForCheck();
             })
         );
 
+    }
+
+    private loadExternalSystems = (): void => {
+        if (!this.post.container_id) {
+            return;
+        }
+        let dataSource = null;
+        switch (this.post.data_source) {
+            case 'itop':
+            case 'idoit':
+            case 'proxmox':
+                dataSource = this.post.data_source;
+                break;
+        }
+
+        this.subscriptions.add(this.ImportersService.loadExternalSystems(this.post.container_id, dataSource)
+            .subscribe((result) => {
+                this.externalsystems = result;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    public loadElementsByDataSource() {
+        this.loadExternalSystems();
+        this.loadConfigFieldsByDataSource();
+        this.cdr.markForCheck();
     }
 
     public loadConfigFieldsByDataSource() {
@@ -297,7 +324,7 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
                     this.formFields = result.config.formFields;
                     this.cdr.markForCheck();
                 })
-            );
+            )
         }
     }
 
