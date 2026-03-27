@@ -33,7 +33,7 @@ export class ProxmoxService {
 
     public getGraphData(hostId: number, params: ProxmoxGraphDataParams): Observable<ProxmoxGraphDataResult> {
         const proxyPath = this.proxyPath;
-        return this.http.get<ProxmoxGraphDataResult>(`${proxyPath}/import_module/Proxmox/command/${hostId}.json`, {
+        return this.http.get<ProxmoxGraphDataResult>(`${proxyPath}/import_module/Proxmox/graph/${hostId}.json`, {
             params: params as {}
         }).pipe(
             map(data => {

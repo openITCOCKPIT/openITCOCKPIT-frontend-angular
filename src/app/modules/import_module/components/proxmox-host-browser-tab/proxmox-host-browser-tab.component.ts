@@ -34,7 +34,7 @@ import { ByteToHumanPipe } from '../../../../pipes/byte-to-human.pipe';
 import {
     ProxmoxBrowserLoaderComponent
 } from '../../../../layouts/primeng/loading/proxmox-browser-loader/proxmox-browser-loader.component';
-import { AreaEchartsComponent } from '../../../../components/charts/area-echarts/area-echarts.component';
+import { ProxmoxGraphsComponent } from './proxmox-graphs/proxmox-graphs.component';
 
 @Component({
     selector: 'oitc-proxmox-host-browser-tab',
@@ -57,7 +57,7 @@ import { AreaEchartsComponent } from '../../../../components/charts/area-echarts
         NgClass,
         ByteToHumanPipe,
         ProxmoxBrowserLoaderComponent,
-        AreaEchartsComponent
+        ProxmoxGraphsComponent
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',
@@ -82,18 +82,6 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
 
     private cdr = inject(ChangeDetectorRef);
-
-
-    public cpuUsage = {
-        "2026-03-27T08:05:22+01:00": 0.003999999999999974,
-        "2026-03-27T08:06:05+01:00": 0.041499999999999974,
-        "2026-03-27T08:06:48+01:00": 0.05616666666666662,
-        "2026-03-27T08:07:31+01:00": 0.046666666666666676,
-        "2026-03-27T08:08:14+01:00": 0.010000000000000024,
-        "2026-03-27T08:08:57+01:00": 0.07599999999999998,
-        "2026-03-27T08:09:40+01:00": 0.07550000000000003
-
-    };
 
     public constructor() {
         // Auto refresh every 5 seconds

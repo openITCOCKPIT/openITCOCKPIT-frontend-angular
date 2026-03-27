@@ -1,0 +1,44 @@
+<ng-container *transloco="let t">
+    <c-row class="mt-2 equal-height-row d-flex flex-wrap">
+        <c-col md="12" xl="3">
+            <c-card class="h-100">
+                <c-card-body>
+                    <div class="fs-6 fw-semibold">{{ t('CPU Usage') }}</div>
+                    <div style="border:1px solid magenta;">
+                        <oitc-area-echarts [dataInput]="cpuUsage"></oitc-area-echarts>
+                    </div>
+                </c-card-body>
+            </c-card>
+        </c-col>
+        <c-col md="12" xl="3">
+            <c-card class="h-100">
+                <c-card-body>
+                    <div class="fs-6 fw-semibold">{{ t('Memory Usage') }}</div>
+                    <div style="border:1px solid cyan;">
+                        <oitc-area-echarts [dataInput]="cpuUsage"></oitc-area-echarts>
+                    </div>
+                </c-card-body>
+            </c-card>
+        </c-col>
+        <c-col md="12" xl="3">
+            <c-card class="h-100">
+                <c-card-body>
+                    <div class="fs-6 fw-semibold">{{ t('Network Traffic') }}</div>
+                    <div style="border:1px solid orangered;">
+                        <oitc-area-echarts [dataInput]="cpuUsage"></oitc-area-echarts>
+                    </div>
+                </c-card-body>
+            </c-card>
+        </c-col>
+        <c-col md="12" xl="3">
+            <c-card class="h-100">
+                <c-card-body>
+                    <div class="fs-6 fw-semibold">{{ t('Disk IO') }}</div>
+                    <div style="border:1px solid purple;">
+                        <oitc-area-echarts [dataInput]="cpuUsage"></oitc-area-echarts>
+                    </div>
+                </c-card-body>
+            </c-card>
+        </c-col>
+    </c-row>
+</ng-container>
