@@ -1,4 +1,5 @@
 import { ExternalSystems } from '../../pages/externalsystems/external-systems.enum';
+import { PerformanceData } from '../../../../components/popover-graph/popover-graph.interface';
 
 
 export interface AdditionalHostInformationProxmoxResult {
@@ -115,4 +116,25 @@ export interface RunProxmoxCommandApiResult {
         message: string // Error message in fase of upid is false
     }
     _csrfToken: null | string
+}
+
+export interface ProxmoxGraphDataParams {
+    jsTimestamp: 0 | 1,
+    isoTimestamp: 0 | 1,
+    debug: 'true' | 'false',
+    timeframe: 'hour' | 'day' | 'week' | 'month' | 'year',
+    cf: 'AVERAGE' | 'MAX'
+    node: string,
+    vmid: string,
+    type: 'qemu' | 'lxc',
+}
+
+export interface ProxmoxGraphDataResult {
+    metrics: {
+        cpu: PerformanceData[],
+        memory: PerformanceData[],
+        network: PerformanceData[],
+        diskio: PerformanceData[],
+    }
+    _csrfToken: null | string,
 }

@@ -2,7 +2,7 @@ import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
-import { RunProxmoxCommandApiResult } from './proxmox-api.interface';
+import { ProxmoxGraphDataParams, ProxmoxGraphDataResult, RunProxmoxCommandApiResult } from './proxmox-api.interface';
 import { ProxmoxCommands } from './proxmox-status.enum';
 
 @Injectable({
@@ -29,6 +29,17 @@ export class ProxmoxService {
                 return data;
             })
         )
+    }
+
+    public getGraphData(hostId: number, params: ProxmoxGraphDataParams): Observable<ProxmoxGraphDataResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ProxmoxGraphDataResult>(`${proxyPath}/import_module/Proxmox/command/${hostId}.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data
+            })
+        );
     }
 
 }
