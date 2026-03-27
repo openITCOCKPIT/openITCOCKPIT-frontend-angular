@@ -832,8 +832,24 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
         if (filterstring && filterstring.length > 0) {
             //cnditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
-            if(!bookmarkfilter.Hostgroups) Object.assign(bookmarkfilter, {'Hostgroups': {'id' : [] }}); //new Filter not in old filters ITC-3738
-            if(!bookmarkfilter.Servicegroups)  Object.assign(bookmarkfilter, {'Servicegroups' : {'id': [] }}); // new Filter not in old filters ITC-3738
+            //new Filter not in old filters ITC-3738
+            if (!bookmarkfilter.Hostgroups) {
+                bookmarkfilter.Hostgroups = {
+                    id: []
+                }
+            }
+            if (!bookmarkfilter.Servicegroups) {
+                bookmarkfilter.Servicegroups = {
+                    id: []
+                }
+            }
+            if (bookmarkfilter.Servicestatus && !bookmarkfilter.Servicestatus.state_type) {
+                bookmarkfilter.Servicestatus.state_type = {
+                    soft: false,
+                    hard: false
+                }
+            }
+
             this.params = getDefaultServiceIndexParams();
             this.filter = bookmarkfilter;
             this.setFilterAndLoad(this.filter);
