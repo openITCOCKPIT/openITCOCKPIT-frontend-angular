@@ -90,6 +90,9 @@ import {
 import {
     DelayedPassiveServicesWidgetComponent
 } from '../delayed-passive-services-widget/delayed-passive-services-widget.component';
+import {
+    ResourcegroupsCronjobStatusWidgetComponent
+} from '../../../../modules/scm_module/widgets/resourcegroups-cronjob-status-widget/resourcegroups-cronjob-status-widget.component';
 
 
 @Component({
@@ -139,7 +142,8 @@ import {
         OrganizationalchartWidgetComponent,
         SlasSummaryWidgetComponent,
         DelayedPassiveHostsWidgetComponent,
-        DelayedPassiveServicesWidgetComponent
+        DelayedPassiveServicesWidgetComponent,
+        ResourcegroupsCronjobStatusWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl:

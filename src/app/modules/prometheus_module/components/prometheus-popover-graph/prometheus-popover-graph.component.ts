@@ -244,6 +244,10 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
             //GraphDefaults.label = this.perfData[i].datasource.name;
             GraphDefaults.label = '';
 
+            if (this.perfData[i].datasource.unit) {
+                GraphDefaults.unit = this.perfData[i].datasource.unit;
+            }
+
             // Get options object for uPlot
             let options = GraphDefaults.getOptions();
             options.unit = this.perfData[i].datasource.unit;

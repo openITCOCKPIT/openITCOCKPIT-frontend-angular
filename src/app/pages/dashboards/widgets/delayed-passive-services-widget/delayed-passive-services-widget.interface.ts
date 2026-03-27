@@ -16,7 +16,7 @@ export interface DelayedPassiveServicesWidgetConfig {
         delayed_greater_than: null | number
         delayed_greater_than_unit: 'SECOND' | 'MINUTE' | 'HOUR' | 'DAY'
     }
-    Host:{
+    Host: {
         name: string
         name_regex: boolean
         keywords: string
@@ -27,8 +27,8 @@ export interface DelayedPassiveServicesWidgetConfig {
         name_regex: boolean
         keywords: string
         not_keywords: string
-    }
-
+    },
+    servicepriority: number[]
     sort: string
     direction: 'asc' | 'desc'
     useScroll: boolean
@@ -62,4 +62,5 @@ export interface DelayedPassiveServicesWidgetParams {
             number | null,
             'SECOND' | 'MINUTE' | 'HOUR' | 'DAY' | null
     ],
+    'filter[servicepriority][]': number[]
 }

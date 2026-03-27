@@ -108,4 +108,5 @@ export class EvcServicestatusToasterComponent implements OnDestroy {
     }
 
     protected readonly String = String;
+    protected readonly Number = Number;
 }

@@ -473,6 +473,44 @@
                                 </c-col>
                             </c-row>
                             <c-row class="mb-2">
+                                <c-col [xs]="12" lg="2">
+                                    <fieldset>
+                                        <h5>
+                                            {{ t('State Types') }}
+                                        </h5>
+                                        <c-form-check>
+                                            <input
+                                                (debouncedValue)="onFilterChange($event)"
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                name="Services.soft"
+                                                id="Services.soft"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                oitcDebounce
+                                                [(ngModel)]="filter.Servicestatus.state_type.soft"/>
+
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   for="Services.soft">{{ t('Soft') }}</label>
+                                        </c-form-check>
+                                        <c-form-check>
+                                            <input
+                                                (debouncedValue)="onFilterChange($event)"
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                name="Services.hard"
+                                                id="Services.hard"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                oitcDebounce
+                                                [(ngModel)]="filter.Servicestatus.state_type.hard"/>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   for="Services.hard">{{ t('Hard') }}</label>
+                                        </c-form-check>
+                                    </fieldset>
+                                </c-col>
+                            </c-row>
+                            <c-row class="mb-2">
                                 <c-col [xs]="12" [lg]="6" class="ui-fluid">
                                     <fieldset>
                                         <h5>

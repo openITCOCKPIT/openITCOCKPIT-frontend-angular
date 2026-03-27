@@ -110,6 +110,14 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
 
     @ViewChild('boxContainer') boxContainer?: ElementRef;
 
+    public priorityFilter: { 1: boolean; 2: boolean; 3: boolean; 4: boolean; 5: boolean } = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
+    };
+
     constructor() {
         super();
         effect(() => {
@@ -135,6 +143,19 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
                     this.containerIds = this.config.Container._ids.split(',').map(Number).filter(Boolean);
                     this.servicegroupsIds = this.config.Servicegroup._ids.split(',').map(Number).filter(Boolean);
                     this.serviceIds = result.serviceIds;
+
+                    this.priorityFilter = {
+                        1: false,
+                        2: false,
+                        3: false,
+                        4: false,
+                        5: false
+                    };
+                    for (let index in this.config.servicepriority) {
+                        // @ts-ignore
+                        this.priorityFilter[this.config.servicepriority[index]] = true;
+                    }
+
                     this.cdr.markForCheck();
                 }));
         }
@@ -207,6 +228,16 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
         this.config.Service.not_keywords = this.notKeywords.join(',');
         this.config.Container._ids = this.containerIds.join(',');
         this.config.Servicegroup._ids = this.servicegroupsIds.join(',');
+
+        let priorityFilter: number[] = [];
+        for (let key in this.priorityFilter) {
+            // @ts-ignore
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(Number(key));
+            }
+        }
+
+        this.config.servicepriority = priorityFilter;
 
         this.subscriptions.add(this.ServiceStatusOverviewExtendedWidgetService.saveWidgetConfig(this.widget.id, this.config)
             .subscribe({
