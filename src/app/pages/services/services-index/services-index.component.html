@@ -483,29 +483,29 @@
                                                 (debouncedValue)="onFilterChange($event)"
                                                 cFormCheckInput
                                                 class="checkbox-lg checkbox-primary"
-                                                name="Hosts.soft"
-                                                id="Hosts.soft"
+                                                name="Services.soft"
+                                                id="Services.soft"
                                                 type="checkbox"
                                                 trueFalseValue
                                                 oitcDebounce
                                                 [(ngModel)]="filter.Servicestatus.state_type.soft"/>
 
                                             <label cFormCheckLabel class="ms-1 mt-1"
-                                                   for="Hosts.soft">{{ t('Soft') }}</label>
+                                                   for="Services.soft">{{ t('Soft') }}</label>
                                         </c-form-check>
                                         <c-form-check>
                                             <input
                                                 (debouncedValue)="onFilterChange($event)"
                                                 cFormCheckInput
                                                 class="checkbox-lg checkbox-primary"
-                                                name="Hosts.hard"
-                                                id="Hosts.hard"
+                                                name="Services.hard"
+                                                id="Services.hard"
                                                 type="checkbox"
                                                 trueFalseValue
                                                 oitcDebounce
                                                 [(ngModel)]="filter.Servicestatus.state_type.hard"/>
                                             <label cFormCheckLabel class="ms-1 mt-1"
-                                                   for="Hosts.hard">{{ t('Hard') }}</label>
+                                                   for="Services.hard">{{ t('Hard') }}</label>
                                         </c-form-check>
                                     </fieldset>
                                 </c-col>
