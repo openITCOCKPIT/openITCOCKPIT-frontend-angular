@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, OnDestroy } from '@angular/core';
-import { ProxmoxStatus } from '../proxmox-status.enum';
+import { ProxmoxCommands, ProxmoxStatus } from '../proxmox-status.enum';
 import {
     DropdownComponent,
     DropdownItemDirective,
@@ -9,7 +9,7 @@ import {
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ConfirmModalComponent } from '../../../../../layouts/coreui/confirm-modal/confirm-modal.component';
 import { Subscription } from 'rxjs';
 import { ProxmoxService } from '../proxmox.service';
@@ -39,13 +39,17 @@ export class ProxmoxActionsComponent implements OnDestroy {
     public nodeName = input<string>('');
     public status = input<ProxmoxStatus>(ProxmoxStatus.Stopped);
 
+    public confirmModalMessage: string = '';
+    public confirmModalHelpMessage: string = '';
+
     private readonly modalService = inject(ModalService);
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private subscriptions: Subscription = new Subscription();
     private readonly ProxmoxService: ProxmoxService = inject(ProxmoxService);
     private readonly notyService = inject(NotyService);
 
 
-    private currentAction?: string;
+    private currentAction?: ProxmoxCommands;
     private upid: false | string = false;
 
     // see https://github.com/proxmox/pve-manager/blob/e855296b69c40dd62f929c26da3ea2be00cfffde/www/manager6/qemu/CmdMenu.js#L59-L120
@@ -71,8 +75,7 @@ export class ProxmoxActionsComponent implements OnDestroy {
      * Run commands that do not require confirmation (e.g. start a vm)
      * @param command
      */
-    public runCommand(command: string) {
-        console.log(this.status());
+    public runCommand(command: ProxmoxCommands) {
         if (this.hostId() > 0) {
             this.subscriptions.add(this.ProxmoxService.sendProxmoxCommand(this.hostId(), this.nodeName(), this.vmid(), command, 'qemu').subscribe((result) => {
                 console.log(result);
@@ -84,11 +87,50 @@ export class ProxmoxActionsComponent implements OnDestroy {
         }
     }
 
-    public getConfirmation(action: string) {
+    public getConfirmation(action: ProxmoxCommands) {
+        switch (action) {
+            case ProxmoxCommands.Pause:
+                this.confirmModalMessage = this.TranslocoService.translate('Are you sure you want to pause the VM?') + ' - ' + this.vmid();
+                this.confirmModalHelpMessage = this.TranslocoService.translate('Will pause the VM, but keep it in the memory.');
+                break;
+
+            case ProxmoxCommands.Suspend:
+                this.confirmModalMessage = this.TranslocoService.translate('Are you sure you want to hibernate the VM?') + ' - ' + this.vmid();
+                this.confirmModalHelpMessage = this.TranslocoService.translate('Will hibernate the VM, which means it will be stopped and the state will be saved to disk.');
+                break;
+
+            case ProxmoxCommands.Shutdown:
+                this.confirmModalMessage = this.TranslocoService.translate('Are you sure you want to shutdown the VM?') + ' - ' + this.vmid();
+                this.confirmModalHelpMessage = this.TranslocoService.translate('Will send a ACPI shutdown signal to the VM, which will trigger a graceful shutdown.');
+                break;
+
+            case ProxmoxCommands.Stop:
+                this.confirmModalMessage = this.TranslocoService.translate('Are you sure you want to stop the VM?') + ' - ' + this.vmid();
+                this.confirmModalHelpMessage = this.TranslocoService.translate('Forces the VM to stop immediately, which may lead to data loss. Use this if the VM is not responding to the shutdown command.');
+                break;
+
+            case ProxmoxCommands.Reboot:
+                this.confirmModalMessage = this.TranslocoService.translate('Are you sure you want to reboot the VM?') + ' - ' + this.vmid();
+                this.confirmModalHelpMessage = this.TranslocoService.translate('Gracefully reboots the VM by sending a ACPI shutdown signal. This will also apply pending hardware changes.');
+                break;
+
+            case ProxmoxCommands.Reset:
+                this.confirmModalMessage = this.TranslocoService.translate('Are you sure you want to reset the VM?') + ' - ' + this.vmid();
+                this.confirmModalHelpMessage = this.TranslocoService.translate('Forces the VM to reset immediately, which may lead to data loss. Use this if the VM is not responding to the reboot command.');
+                break;
+
+            default:
+                this.confirmModalMessage = this.TranslocoService.translate('Please confirm that you want to perform this action');
+                this.confirmModalHelpMessage = '';
+                break;
+        }
+
         this.currentAction = action;
         this.modalService.toggle({
             show: true,
             id: 'confirmModal'
         });
     }
+
+    protected readonly ProxmoxCommands = ProxmoxCommands;
 }

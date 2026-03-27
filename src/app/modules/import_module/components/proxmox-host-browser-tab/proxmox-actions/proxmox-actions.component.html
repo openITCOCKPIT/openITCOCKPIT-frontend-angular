@@ -7,7 +7,7 @@
             <li [hidden]="[ProxmoxStatus.Paused, ProxmoxStatus.Running, ProxmoxStatus.Suspended].includes(status())">
                 <button cDropdownItem
                         [title]="'Start VM' | transloco"
-                        (click)="runCommand('start');">
+                        (click)="runCommand(ProxmoxCommands.Start);">
                     <fa-icon [icon]="['fas', 'play']"></fa-icon>
                     {{ t('Start') }}
                 </button>
@@ -15,7 +15,7 @@
             <li [hidden]="[ProxmoxStatus.Stopped, ProxmoxStatus.Suspended].includes(status())">
                 <button cDropdownItem
                         [title]="'Pause the VM and keep the state in RAM' | transloco"
-                        (click)="getConfirmation('pause')">
+                        (click)="getConfirmation(ProxmoxCommands.Pause)">
                     <fa-icon [icon]="['fas', 'pause']"></fa-icon>
                     {{ t('Pause') }}
                 </button>
@@ -23,7 +23,7 @@
             <li [hidden]="[ProxmoxStatus.Stopped, ProxmoxStatus.Suspended].includes(status())">
                 <button cDropdownItem
                         [title]="'Suspend to Disk' | transloco"
-                        (click)="getConfirmation('suspend')">
+                        (click)="getConfirmation(ProxmoxCommands.Suspend)">
                     <fa-icon [icon]="['fas', 'download']"></fa-icon>
                     {{ t('Hibernate') }}
                 </button>
@@ -31,7 +31,7 @@
             <li [hidden]="![ProxmoxStatus.Paused, ProxmoxStatus.Suspended].includes(status())">
                 <button cDropdownItem
                         [title]="'Start VM' | transloco"
-                        (click)="runCommand('resume');">
+                        (click)="runCommand(ProxmoxCommands.Resume);">
                     <fa-icon [icon]="['fas', 'play']"></fa-icon>
                     {{ t('Resume') }}
                 </button>
@@ -39,7 +39,7 @@
             <li [hidden]="[ProxmoxStatus.Stopped, ProxmoxStatus.Suspended].includes(status())">
                 <button cDropdownItem
                         [title]="'Shutdown the VM gracefully via ACPI-Signal' | transloco"
-                        (click)="getConfirmation('shutdown')">
+                        (click)="getConfirmation(ProxmoxCommands.Shutdown)">
                     <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                     {{ t('Shutdown') }}
                 </button>
@@ -47,7 +47,7 @@
             <li [hidden]="status() === ProxmoxStatus.Stopped">
                 <button cDropdownItem
                         [title]="'Force stop of the VM (pull the plug)' | transloco"
-                        (click)="getConfirmation('stop')">
+                        (click)="getConfirmation(ProxmoxCommands.Stop)">
                     <fa-icon [icon]="['fas', 'stop']"></fa-icon>
                     {{ t('Stop') }}
                 </button>
@@ -55,7 +55,7 @@
             <li [hidden]="status() === ProxmoxStatus.Stopped">
                 <button cDropdownItem
                         [title]="'Gracefully shutdown the VM, apply hardware changes and start the VM.' | transloco"
-                        (click)="getConfirmation('reboot')">
+                        (click)="getConfirmation(ProxmoxCommands.Reboot)">
                     <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
                     {{ t('Reboot') }}
                 </button>
@@ -63,7 +63,7 @@
             <li [hidden]="status() === ProxmoxStatus.Stopped">
                 <button cDropdownItem
                         [title]="'Force reset of the VM.' | transloco"
-                        (click)="getConfirmation('reset')">
+                        (click)="getConfirmation(ProxmoxCommands.Reset)">
                     <fa-icon [icon]="['fas', 'bolt']"></fa-icon>
                     {{ t('Reset') }}
                 </button>
@@ -73,8 +73,8 @@
 
     <oitc-confirm-modal
         (confirmation)="onConfirmation($event)"
-        [message]="'????????????????????????????'"
-        [helpMessage]="'sadsadsadsad'"
+        [message]="confirmModalMessage"
+        [helpMessage]="confirmModalHelpMessage"
     ></oitc-confirm-modal>
 
 </ng-container>

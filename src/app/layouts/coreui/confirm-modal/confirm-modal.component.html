@@ -13,19 +13,19 @@
         </c-modal-header>
         <c-modal-body>
             <c-row>
-                @if (!message) {
+                @if (!message()) {
                     <c-col xs="12">
                         <strong>{{ t('Do you really want to do this action?') }}</strong>
                     </c-col>
                 }
-                @if (message) {
+                @if (message()) {
                     <c-col xs="12">
-                        <strong>{{ message }}</strong>
+                        <strong>{{ message() }}</strong>
                     </c-col>
                 }
-                @if (helpMessage) {
+                @if (helpMessage()) {
                     <c-col class="help-block" xs="12">
-                        {{ helpMessage }}
+                        {{ helpMessage() }}
                     </c-col>
                 }
             </c-row>
