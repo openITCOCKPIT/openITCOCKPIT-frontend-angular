@@ -16,13 +16,14 @@ export class ProxmoxService {
     constructor() {
     }
 
-    public sendProxmoxCommand(hostId: number, nodeName: string, vmid: string, command: ProxmoxCommands, type: 'qemu' | 'lxc'): Observable<RunProxmoxCommandApiResult> {
+    public sendProxmoxCommand(hostId: number, nodeName: string, vmid: string, command: ProxmoxCommands, type: 'qemu' | 'lxc', params: any = {}): Observable<RunProxmoxCommandApiResult> {
         const proxyPath = this.proxyPath;
         return this.http.post<RunProxmoxCommandApiResult>(`${proxyPath}/import_module/Proxmox/command/${hostId}.json`, {
             node: nodeName,
             vmid: vmid,
             command: command,
-            type: type
+            type: type,
+            params: params
         }).pipe(
             map(data => {
                 return data;

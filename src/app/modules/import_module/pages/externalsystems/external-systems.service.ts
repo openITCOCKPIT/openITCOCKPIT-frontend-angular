@@ -52,7 +52,8 @@ export class ExternalSystemsService {
         const proxyPath = this.proxyPath;
         return this.http.get<T>(`${proxyPath}/import_module/ExternalSystems/additionalHostInformation/${hostId}.json`, {
             params: {
-                angular: true
+                angular: true,
+                disableGlobalLoader: true
             }
         }).pipe(
             map(data => {

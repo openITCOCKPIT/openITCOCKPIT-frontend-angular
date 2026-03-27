@@ -9,7 +9,7 @@ import {
     OnInit,
     SimpleChanges
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { catchError, EMPTY, merge, Subject, Subscription, switchMap, timer } from 'rxjs';
 import { ExternalSystemsService } from '../../pages/externalsystems/external-systems.service';
 import {
     AlertComponent,
@@ -74,12 +74,15 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
     public vmid?: string
     public nodeName?: string
     public status: ProxmoxStatus = ProxmoxStatus.Stopped;
+    public overruleShutdown: boolean = true;
 
+    private loadTrigger$ = new Subject<void>();
     private subscriptions: Subscription = new Subscription();
 
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
 
     private cdr = inject(ChangeDetectorRef);
+
 
     public cpuUsage = {
         "2026-03-27T08:05:22+01:00": 0.003999999999999974,
@@ -91,6 +94,33 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
         "2026-03-27T08:09:40+01:00": 0.07550000000000003
 
     };
+
+    public constructor() {
+        // Auto refresh every 5 seconds
+        const autoRefresh$ = timer(5000, 5000);
+
+        this.subscriptions.add(
+            // merge combines the manual triggers (.next()) with the timer
+            merge(this.loadTrigger$, autoRefresh$).pipe(
+                // switchMap will cancel the previous HTTP request
+                switchMap(() => {
+                    return this.ExternalSystemsService
+                        .getAdditionalHostInformationWithType<AdditionalHostInformationProxmoxResult>(this.hostId)
+                        .pipe(
+                            // Important: Catch errors here, otherwise the 5-second timer will stop permanently in case of an error!
+                            catchError(err => {
+                                console.error('Request failed', err);
+                                return EMPTY;
+                            })
+                        );
+                })
+            ).subscribe(result => {
+                this.processLoadedData(result);
+            })
+        );
+
+    }
+
 
     public ngOnInit(): void {
     }
@@ -114,43 +144,53 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
     }
 
     public load(): void {
-        this.subscriptions.add(this.ExternalSystemsService.getAdditionalHostInformationWithType<AdditionalHostInformationProxmoxResult>(this.hostId)
-            .subscribe((result) => {
-                // We use the same API endpoint as the other external systems do, but the data we receive is different.
+        // Tell the loadTrigger$ to load the data.
+        // We use this approach to be able to cancel the previous HTTP requests becasue the Proxmox API
+        // sometimes take a long time to respond, and we don't want to have multiple HTTP requests in flight at the same time.
+        this.loadTrigger$.next();
+    }
 
-                this.result = result;
-                this.nodeName = result.response.info?.node;
-                this.vmid = result.response.info?.vmid.toString();
+    private processLoadedData(result: AdditionalHostInformationProxmoxResult): void {
+        // We use the same API endpoint as the other external systems do, but the data we receive is different.
 
-                // Determine the VM status
-                this.status = ProxmoxStatus.Stopped;
-                if (result.response.info) {
-                    switch (result.response.info.status) {
-                        case 'running':
-                            this.status = ProxmoxStatus.Running;
-                            break;
+        this.result = result;
+        this.nodeName = result.response.info?.node;
+        this.vmid = result.response.info?.vmid.toString();
 
-                        case 'paused':
-                            this.status = ProxmoxStatus.Paused;
-                            break;
+        // Disable overrule-shutdown if Ha is enabled
+        // https://github.com/proxmox/pve-manager/blob/59f360414e671d43005cea7f4ff4db07a35319ea/www/manager6/window/GuestStop.js#L25-L26
+        this.overruleShutdown = true;
+        if (result.response.current?.ha && result.response.current.ha.state !== 'unmanaged') {
+            this.overruleShutdown = false;
+        }
 
-                        case 'stopped':
-                            this.status = ProxmoxStatus.Stopped;
-                    }
-                    if (result.response.current && "lock" in result.response.current) {
-                        switch (result.response.current.lock) {
-                            case 'migrate':
-                                this.status = ProxmoxStatus.Migrate;
-                                break;
-                            case 'suspended':
-                                this.status = ProxmoxStatus.Suspended; // Hibernation
-                                break;
-                        }
-                    }
+        // Determine the VM status
+        this.status = ProxmoxStatus.Stopped;
+        if (result.response.info) {
+            switch (result.response.info.status) {
+                case 'running':
+                    this.status = ProxmoxStatus.Running;
+                    break;
+
+                case 'paused':
+                    this.status = ProxmoxStatus.Paused;
+                    break;
+
+                case 'stopped':
+                    this.status = ProxmoxStatus.Stopped;
+            }
+            if (result.response.current && "lock" in result.response.current) {
+                switch (result.response.current.lock) {
+                    case 'migrate':
+                        this.status = ProxmoxStatus.Migrate;
+                        break;
+                    case 'suspended':
+                        this.status = ProxmoxStatus.Suspended; // Hibernation
+                        break;
                 }
+            }
+        }
 
-                this.cdr.markForCheck();
-            })
-        );
+        this.cdr.markForCheck();
     }
 }
