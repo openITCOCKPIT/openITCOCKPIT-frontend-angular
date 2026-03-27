@@ -31,6 +31,9 @@ import { ProxmoxActionsComponent } from './proxmox-actions/proxmox-actions.compo
 import { PatchstatusIconComponent } from '../../../../pages/patchstatus/patchstatus-icon/patchstatus-icon.component';
 import { DecimalPipe, NgClass } from '@angular/common';
 import { ByteToHumanPipe } from '../../../../pipes/byte-to-human.pipe';
+import {
+    ProxmoxBrowserLoaderComponent
+} from '../../../../layouts/primeng/loading/proxmox-browser-loader/proxmox-browser-loader.component';
 
 @Component({
     selector: 'oitc-proxmox-host-browser-tab',
@@ -51,7 +54,8 @@ import { ByteToHumanPipe } from '../../../../pipes/byte-to-human.pipe';
         DecimalPipe,
         TextColorDirective,
         NgClass,
-        ByteToHumanPipe
+        ByteToHumanPipe,
+        ProxmoxBrowserLoaderComponent
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',
@@ -86,7 +90,7 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
 
         // Parent component wants to trigger an update
         if (changes['lastUpdated'] && !changes['lastUpdated'].isFirstChange()) {
-            //this.load();
+            this.load();
             return;
         }
 

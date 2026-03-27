@@ -1,5 +1,10 @@
 <ng-container *transloco="let t">
 
+
+    @if (!result) {
+        <oitc-proxmox-browser-loader></oitc-proxmox-browser-loader>
+    }
+
     @if (result && result.response && !result.response.found) {
         <c-alert color="danger" class="d-flex align-items-center">
             <fa-icon [icon]="['fas', 'exclamation-triangle']" size="2x" class="me-3"></fa-icon>

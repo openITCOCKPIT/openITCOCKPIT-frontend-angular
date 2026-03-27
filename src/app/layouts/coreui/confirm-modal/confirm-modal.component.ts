@@ -2,9 +2,10 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    effect,
     EventEmitter,
     inject,
-    Input,
+    input,
     Output,
     ViewChild
 } from '@angular/core';
@@ -46,10 +47,17 @@ export class ConfirmModalComponent {
     private cdr = inject(ChangeDetectorRef);
     @ViewChild('modal') private modal!: ModalComponent;
 
-    @Input({required: false}) public message: string = '';
-    @Input({required: false}) public helpMessage: string = '';
+
+    public message = input<string>('');
+    public helpMessage = input<string>('');
     @Output() confirmation = new EventEmitter<boolean>();
 
+    public constructor() {
+        effect(() => {
+            this.message();
+            this.helpMessage();
+        });
+    }
 
     // Modal functions
     public hideModal(): void {
