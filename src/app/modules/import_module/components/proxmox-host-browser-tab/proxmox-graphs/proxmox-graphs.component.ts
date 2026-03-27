@@ -34,17 +34,6 @@ export class ProxmoxGraphsComponent implements OnDestroy {
 
     private cdr = inject(ChangeDetectorRef);
 
-    public cpuUsage = {
-        "2026-03-27T08:05:22+01:00": 0.003999999999999974,
-        "2026-03-27T08:06:05+01:00": 0.041499999999999974,
-        "2026-03-27T08:06:48+01:00": 0.05616666666666662,
-        "2026-03-27T08:07:31+01:00": 0.046666666666666676,
-        "2026-03-27T08:08:14+01:00": 0.010000000000000024,
-        "2026-03-27T08:08:57+01:00": 0.07599999999999998,
-        "2026-03-27T08:09:40+01:00": 0.07550000000000003
-
-    };
-
     public constructor() {
         effect(() => {
             // initialize effect to trigger on input changes
