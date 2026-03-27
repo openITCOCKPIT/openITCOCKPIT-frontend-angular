@@ -158,7 +158,49 @@
             <c-col md="12" xl="3">
                 <c-card class="h-100">
                     <c-card-body>
-                        <h5 class="fs-5 fw-semibold text-uppercase">
+                        <div class="fs-6 fw-semibold">{{ t('CPU Usage') }}</div>
+                        <div style="border:1px solid magenta;">
+                            <oitc-area-echarts [dataInput]="cpuUsage"></oitc-area-echarts>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            </c-col>
+            <c-col md="12" xl="3">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <div class="fs-6 fw-semibold">{{ t('Memory Usage') }}</div>
+                        <div style="border:1px solid cyan;">
+                            <oitc-area-echarts [dataInput]="cpuUsage"></oitc-area-echarts>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            </c-col>
+            <c-col md="12" xl="3">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <div class="fs-6 fw-semibold">{{ t('Network Traffic') }}</div>
+                        <div style="border:1px solid orangered;">
+                            <oitc-area-echarts [dataInput]="cpuUsage"></oitc-area-echarts>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            </c-col>
+            <c-col md="12" xl="3">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <div class="fs-6 fw-semibold">{{ t('Disk IO') }}</div>
+                        <div style="border:1px solid purple;">
+                            <oitc-area-echarts [dataInput]="cpuUsage"></oitc-area-echarts>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            </c-col>
+        </c-row>
+        <c-row class="mt-2 equal-height-row d-flex flex-wrap">
+            <c-col md="12" xl="4">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <h5 class="fs-6 fw-semibold text-uppercase">
                             {{ t('System') }}
                         </h5>
                         @if (result.response.current && result.response.current.ha) {
@@ -227,41 +269,46 @@
                                 <c-row>
                                     <c-col>
                                         <c-progress class="my-2" thin
-                                                    [value]="  result.response.current.mem / result.response.current.maxmem * 100|  number: '1.3-3'"
+                                                    [value]="  result.response.current.mem / result.response.current.maxmem * 100|  number: '1.2-2'"
                                                     color="info"/>
                                     </c-col>
                                 </c-row>
                             }
                             @if (result.response.current.memhost) {
-                                <c-row class="my-1 even">
+                                <c-row class="my-1 odd">
                                     <c-col lg="7">
                                         <fa-icon [icon]="['fas', 'memory']" [cTextColor]="'primary'"></fa-icon>
                                         {{ t('Host memory usage') }}
 
                                     </c-col>
                                     <c-col class="text-end">
-                                        {{ result.response.current.memhost / 1024 / 1024  |  number: '1.3-3' }}    {{ t('MiB') }}
+                                        {{ result.response.current.memhost / 1024 / 1024  |  number: '1.2-2' }}    {{ t('MiB') }}
                                     </c-col>
                                 </c-row>
                             }
                             @if (result.response.current.maxdisk) {
-                                <c-row class="my-1 odd">
+                                <c-row class="my-1 even">
                                     <c-col lg="7">
                                         <fa-icon [icon]="['far', 'hard-drive']" [cTextColor]="'primary'"></fa-icon>
                                         {{ t('Bootdisk size') }}
 
                                     </c-col>
                                     <c-col class="text-end">
-                                        {{ result.response.current.maxdisk / 1024 / 1024 / 1024 |  number: '1.3-3' }}    {{ t('GiB') }}
+                                        {{ result.response.current.maxdisk / 1024 / 1024 / 1024 |  number: '1.2-2' }}    {{ t('GiB') }}
                                     </c-col>
                                 </c-row>
                             }
                         }
+                    </c-card-body>
+                </c-card>
+            </c-col>
+            <c-col md="12" xl="4">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <h5 class="fs-6 fw-semibold text-uppercase">
+                            {{ t('Network information') }}
+                        </h5>
                         @if (result.response.ipaddresses) {
-                            <h6 class="fs-6 fw-semibold text-uppercase text-muted mt-3 mb-1">
-                                {{ t('Network Information') }}
-                            </h6>
-                            <hr class="small fieldset-legend-border-bottom my-1 border-2">
                             <c-row class="even mb-1">
                                 <c-col [lg]="12">
                                     <fa-icon [icon]="['fas', 'arrow-right-arrow-left']"
@@ -273,10 +320,10 @@
                                 <c-col [lg]="4" class="bold pe-1">
                                     <small>{{ t('Name') }}</small>
                                 </c-col>
-                                <c-col [lg]="3" class="bold px-0">
+                                <c-col [lg]="4" class="bold px-0">
                                     <small>{{ t('MAC address') }}</small>
                                 </c-col>
-                                <c-col [lg]="5" class="bold px-1">
+                                <c-col [lg]="4" class="bold px-1">
                                     <small>{{ t('IP address') }}</small>
                                 </c-col>
                             </c-row>
@@ -285,10 +332,10 @@
                                     <c-col [lg]="4" class="pe-1">
                                         <small>{{ ipaddress.name }}</small>
                                     </c-col>
-                                    <c-col [lg]="3" class="px-0">
+                                    <c-col [lg]="4" class="px-0">
                                         <small>{{ ipaddress.hardware_address }}</small>
                                     </c-col>
-                                    <c-col [lg]="5" class="px-1">
+                                    <c-col [lg]="4" class="px-1">
                                         <ul class="list-unstyled m-0">
                                             @for (ip of ipaddress.ip_address; track $index) {
                                                 <li><small>{{ ip.ip_address }}</small></li>
@@ -301,42 +348,15 @@
                         }
                     </c-card-body>
                 </c-card>
-
             </c-col>
-            <c-col md="12" xl="3">
+            <c-col md="12" xl="4">
                 <c-card class="h-100">
                     <c-card-body>
-                        <div class="fs-5 fw-semibold text-uppercase">
-                            {{ t('Hardware') }}
-                        </div>
-                        <div class="ng-star-inserted">Widget title</div>
-                        <br><br><br>
-                        <small class="text-body-secondary"> Lorem ipsum dolor sit amet enim. </small>
-                    </c-card-body>
-                </c-card>
-            </c-col>
-            <c-col md="12" xl="3">
-                <c-card class="h-100">
-                    <c-card-body>
-                        <div class="fs-4 fw-semibold">CPU (%)</div>
-                        <div class="ng-star-inserted">Widget title</div>
-                        <br><br><br>
+                        <h5 class="fs-6 fw-semibold text-uppercase">
+                            {{ t('Snaphots') }}
+                        </h5>
 
-                        <c-progress class="my-2" thin [value]="12" color="success"/>
-                        <small class="text-body-secondary"> Lorem ipsum dolor sit amet enim. </small>
 
-                    </c-card-body>
-                </c-card>
-            </c-col>
-            <c-col md="12" xl="3">
-                <c-card class="h-100">
-                    <c-card-body>
-                        <div class="fs-4 fw-semibold">CPU (%)</div>
-                        <div class="ng-star-inserted">Widget title</div>
-                        <br><br><br>
-
-                        <c-progress class="my-2" thin [value]="12" color="success"/>
-                        <small class="text-body-secondary"> Lorem ipsum dolor sit amet enim. </small>
                     </c-card-body>
                 </c-card>
             </c-col>
