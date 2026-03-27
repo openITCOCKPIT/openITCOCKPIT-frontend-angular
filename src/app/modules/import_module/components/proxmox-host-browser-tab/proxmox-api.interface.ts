@@ -110,5 +110,9 @@ export interface IpAddress {
 }
 
 export interface RunProxmoxCommandApiResult {
-    upid: false | string // Unique identifier for the task, used to track its progress. False if the command failed to start.
+    result: {
+        upid: false | string // Unique identifier for the task, used to track its progress. False if the command failed to start.
+        message: string // Error message in fase of upid is false
+    }
+    _csrfToken: null | string
 }

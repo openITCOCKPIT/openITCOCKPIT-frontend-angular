@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { ProxmoxCommands, ProxmoxStatus } from '../proxmox-status.enum';
 import {
     DropdownComponent,
@@ -38,6 +38,7 @@ export class ProxmoxActionsComponent implements OnDestroy {
     public vmid = input<string>('');
     public nodeName = input<string>('');
     public status = input<ProxmoxStatus>(ProxmoxStatus.Stopped);
+    public overruleShutdown = input<boolean>(true);
 
     public confirmModalMessage: string = '';
     public confirmModalHelpMessage: string = '';
@@ -55,19 +56,24 @@ export class ProxmoxActionsComponent implements OnDestroy {
     // see https://github.com/proxmox/pve-manager/blob/e855296b69c40dd62f929c26da3ea2be00cfffde/www/manager6/qemu/CmdMenu.js#L59-L120
     protected readonly ProxmoxStatus = ProxmoxStatus;
 
+    public constructor() {
+        effect(() => {
+            // initialize the inputs to trigger the effect when they change
+            this.hostId();
+            this.nodeName();
+            this.vmid();
+            this.status();
+            this.overruleShutdown();
+        });
+    }
+
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
 
     public onConfirmation(decision: boolean) {
         if (decision === true && this.currentAction && this.hostId() > 0) {
-            this.subscriptions.add(this.ProxmoxService.sendProxmoxCommand(this.hostId(), this.nodeName(), this.vmid(), this.currentAction, 'qemu').subscribe((result) => {
-                console.log(result);
-                this.upid = result.upid;
-                if (result.upid) {
-                    this.notyService.genericSuccess('Successfully sent command to Proxmox', 'Command');
-                }
-            }));
+            this.runCommand(this.currentAction);
         }
     }
 
@@ -77,11 +83,19 @@ export class ProxmoxActionsComponent implements OnDestroy {
      */
     public runCommand(command: ProxmoxCommands) {
         if (this.hostId() > 0) {
-            this.subscriptions.add(this.ProxmoxService.sendProxmoxCommand(this.hostId(), this.nodeName(), this.vmid(), command, 'qemu').subscribe((result) => {
-                console.log(result);
-                this.upid = result.upid;
-                if (result.upid) {
+            let params = {};
+            if (command === ProxmoxCommands.Stop) {
+                params = {
+                    overruleShutdown: this.overruleShutdown()
+                };
+            }
+
+            this.subscriptions.add(this.ProxmoxService.sendProxmoxCommand(this.hostId(), this.nodeName(), this.vmid(), command, 'qemu', params).subscribe((result) => {
+                this.upid = result.result.upid;
+                if (result.result.upid) {
                     this.notyService.genericSuccess('Successfully sent command to Proxmox', 'Command');
+                } else {
+                    this.notyService.genericError(result.result.message, 'Command');
                 }
             }));
         }
