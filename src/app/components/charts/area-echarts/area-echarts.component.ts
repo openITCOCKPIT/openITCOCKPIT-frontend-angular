@@ -88,6 +88,7 @@ export class AreaEchartsComponent implements OnDestroy {
             'rgba(59, 130, 246, 1)', 'rgba(245, 158, 11, 1)'
         ];
         let contrastColor = getComputedStyle(document.documentElement).getPropertyValue('--cui-medium-emphasis').trim();
+        let backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--cui-body-bg').trim();
 
         if (this.theme === 'dark') {
             gradientStart = [
@@ -150,6 +151,10 @@ export class AreaEchartsComponent implements OnDestroy {
                 trigger: 'axis',
                 axisPointer: {
                     type: 'cross'
+                },
+                backgroundColor: backgroundColor,
+                textStyle: {
+                    color: contrastColor
                 },
                 formatter: (params: any) => {
                     // params is an array when trigger: 'axis'
