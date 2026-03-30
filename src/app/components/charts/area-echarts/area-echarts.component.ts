@@ -81,20 +81,20 @@ export class AreaEchartsComponent implements OnDestroy {
 
         let series: LineSeriesOption[] = [];
         let gradientStart = [
-            'rgba(236, 72, 153, 0.4)', 'rgba(99, 102, 241, 0.4)'
+            'rgba(59, 130, 246, 0.4)', 'rgba(245, 158, 11, 0.4)'
         ];
 
         let gradientLineColor = [
-            'rgba(236, 72, 153, 1)', 'rgba(99, 102, 241, 1)'
+            'rgba(59, 130, 246, 1)', 'rgba(245, 158, 11, 1)'
         ];
         let contrastColor = getComputedStyle(document.documentElement).getPropertyValue('--cui-medium-emphasis').trim();
 
         if (this.theme === 'dark') {
             gradientStart = [
-                'rgba(59, 130, 246, 0.4)', 'rgba(245, 158, 11, 0.4)'
+                'rgba(139, 92, 246, 0.4)', 'rgba(16, 185, 129, 0.4)'
             ];
             gradientLineColor = [
-                'rgba(59, 130, 246, 1)', 'rgba(245, 158, 11, 1)'
+                'rgba(139, 92, 246, 1)', 'rgba(16, 185, 129, 1)'
             ];
         }
 
