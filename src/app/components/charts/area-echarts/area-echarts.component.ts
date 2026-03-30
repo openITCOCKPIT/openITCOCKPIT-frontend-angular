@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, 
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
 import { EChartsCoreOption } from 'echarts/core';
+import { LineSeriesOption } from 'echarts';
 import { Subscription } from 'rxjs';
 import { LineChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent } from 'echarts/components';
@@ -77,12 +78,12 @@ export class AreaEchartsComponent implements OnDestroy {
         //       data.push([isoTimestamp, gauge.data[isoTimestamp]]);
         //   }
 
-        let series: any[] = [];
-        let gradienStart = [
+        let series: LineSeriesOption[] = [];
+        let gradientStart = [
             'rgba(236, 72, 153, 0.4)', 'rgba(99, 102, 241, 0.4)'
         ];
 
-        let gradienLineColor = [
+        let gradientLineColor = [
             'rgba(236, 72, 153, 1)', 'rgba(99, 102, 241, 1)'
         ];
 
@@ -102,14 +103,13 @@ export class AreaEchartsComponent implements OnDestroy {
                     sampling: 'lttb',
                     //smooth: false,
                     itemStyle: {
-                        color: gradienLineColor[index],
-                        backgroundColor: 'transparent'
+                        color: gradientLineColor[index]
                     },
                     areaStyle: {
                         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                             {
                                 offset: 0,
-                                color: gradienStart[index]
+                                color: gradientStart[index]
                             },
                             {
                                 offset: 1,
