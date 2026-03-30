@@ -13,19 +13,19 @@
         </c-modal-header>
         <c-modal-body>
             <c-row>
-                @if (!message()) {
+                @if (this.ConfirmModalService.state().message == '') {
                     <c-col xs="12">
                         <strong>{{ t('Do you really want to do this action?') }}</strong>
                     </c-col>
                 }
-                @if (message()) {
+                @if (this.ConfirmModalService.state().message) {
                     <c-col xs="12">
-                        <strong>{{ message() }}</strong>
+                        <strong>{{ this.ConfirmModalService.state().message }}</strong>
                     </c-col>
                 }
-                @if (helpMessage()) {
+                @if (this.ConfirmModalService.state().helpMessage) {
                     <c-col class="help-block" xs="12">
-                        {{ helpMessage() }}
+                        {{ this.ConfirmModalService.state().helpMessage }}
                     </c-col>
                 }
             </c-row>

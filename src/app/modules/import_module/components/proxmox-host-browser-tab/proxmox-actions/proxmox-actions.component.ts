@@ -10,10 +10,10 @@ import {
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { ConfirmModalComponent } from '../../../../../layouts/coreui/confirm-modal/confirm-modal.component';
 import { Subscription } from 'rxjs';
 import { ProxmoxService } from '../proxmox.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { ConfirmModalService } from '../../../../../layouts/coreui/confirm-modal/confirm-modal.service';
 
 @Component({
     selector: 'oitc-proxmox-actions',
@@ -25,8 +25,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
         DropdownItemDirective,
         FaIconComponent,
         TranslocoDirective,
-        TranslocoPipe,
-        ConfirmModalComponent
+        TranslocoPipe
     ],
     templateUrl: './proxmox-actions.component.html',
     styleUrl: './proxmox-actions.component.css',
@@ -48,6 +47,7 @@ export class ProxmoxActionsComponent implements OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private readonly ProxmoxService: ProxmoxService = inject(ProxmoxService);
     private readonly notyService = inject(NotyService);
+    private readonly ConfirmModalService = inject(ConfirmModalService);
 
 
     private currentAction?: ProxmoxCommands;
@@ -69,12 +69,6 @@ export class ProxmoxActionsComponent implements OnDestroy {
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
-    }
-
-    public onConfirmation(decision: boolean) {
-        if (decision === true && this.currentAction && this.hostId() > 0) {
-            this.runCommand(this.currentAction);
-        }
     }
 
     /**
@@ -102,48 +96,53 @@ export class ProxmoxActionsComponent implements OnDestroy {
     }
 
     public getConfirmation(action: ProxmoxCommands) {
+        let confirmModalMessage: string = '';
+        let confirmModalHelpMessage: string = '';
+
         switch (action) {
             case ProxmoxCommands.Pause:
-                this.confirmModalMessage = this.TranslocoService.translate('Are you sure you want to pause the VM?') + ' - ' + this.vmid();
-                this.confirmModalHelpMessage = this.TranslocoService.translate('Will pause the VM, but keep it in the memory.');
+                confirmModalMessage = this.TranslocoService.translate('Are you sure you want to pause the VM?') + ' - ' + this.vmid();
+                confirmModalHelpMessage = this.TranslocoService.translate('Will pause the VM, but keep it in the memory.');
                 break;
 
             case ProxmoxCommands.Suspend:
-                this.confirmModalMessage = this.TranslocoService.translate('Are you sure you want to hibernate the VM?') + ' - ' + this.vmid();
-                this.confirmModalHelpMessage = this.TranslocoService.translate('Will hibernate the VM, which means it will be stopped and the state will be saved to disk.');
+                confirmModalMessage = this.TranslocoService.translate('Are you sure you want to hibernate the VM?') + ' - ' + this.vmid();
+                confirmModalHelpMessage = this.TranslocoService.translate('Will hibernate the VM, which means it will be stopped and the state will be saved to disk.');
                 break;
 
             case ProxmoxCommands.Shutdown:
-                this.confirmModalMessage = this.TranslocoService.translate('Are you sure you want to shutdown the VM?') + ' - ' + this.vmid();
-                this.confirmModalHelpMessage = this.TranslocoService.translate('Will send a ACPI shutdown signal to the VM, which will trigger a graceful shutdown.');
+                confirmModalMessage = this.TranslocoService.translate('Are you sure you want to shutdown the VM?') + ' - ' + this.vmid();
+                confirmModalHelpMessage = this.TranslocoService.translate('Will send a ACPI shutdown signal to the VM, which will trigger a graceful shutdown.');
                 break;
 
             case ProxmoxCommands.Stop:
-                this.confirmModalMessage = this.TranslocoService.translate('Are you sure you want to stop the VM?') + ' - ' + this.vmid();
-                this.confirmModalHelpMessage = this.TranslocoService.translate('Forces the VM to stop immediately, which may lead to data loss. Use this if the VM is not responding to the shutdown command.');
+                confirmModalMessage = this.TranslocoService.translate('Are you sure you want to stop the VM?') + ' - ' + this.vmid();
+                confirmModalHelpMessage = this.TranslocoService.translate('Forces the VM to stop immediately, which may lead to data loss. Use this if the VM is not responding to the shutdown command.');
                 break;
 
             case ProxmoxCommands.Reboot:
-                this.confirmModalMessage = this.TranslocoService.translate('Are you sure you want to reboot the VM?') + ' - ' + this.vmid();
-                this.confirmModalHelpMessage = this.TranslocoService.translate('Gracefully reboots the VM by sending a ACPI shutdown signal. This will also apply pending hardware changes.');
+                confirmModalMessage = this.TranslocoService.translate('Are you sure you want to reboot the VM?') + ' - ' + this.vmid();
+                confirmModalHelpMessage = this.TranslocoService.translate('Gracefully reboots the VM by sending a ACPI shutdown signal. This will also apply pending hardware changes.');
                 break;
 
             case ProxmoxCommands.Reset:
-                this.confirmModalMessage = this.TranslocoService.translate('Are you sure you want to reset the VM?') + ' - ' + this.vmid();
-                this.confirmModalHelpMessage = this.TranslocoService.translate('Forces the VM to reset immediately, which may lead to data loss. Use this if the VM is not responding to the reboot command.');
+                confirmModalMessage = this.TranslocoService.translate('Are you sure you want to reset the VM?') + ' - ' + this.vmid();
+                confirmModalHelpMessage = this.TranslocoService.translate('Forces the VM to reset immediately, which may lead to data loss. Use this if the VM is not responding to the reboot command.');
                 break;
 
             default:
-                this.confirmModalMessage = this.TranslocoService.translate('Please confirm that you want to perform this action');
-                this.confirmModalHelpMessage = '';
+                confirmModalMessage = this.TranslocoService.translate('Please confirm that you want to perform this action');
+                confirmModalHelpMessage = '';
                 break;
         }
 
-        this.currentAction = action;
-        this.modalService.toggle({
-            show: true,
-            id: 'confirmModal'
+        this.ConfirmModalService.ask(confirmModalMessage, confirmModalHelpMessage, action).subscribe(confirmation => {
+            if (confirmation.decision === true && confirmation.data !== '') {
+                const command = confirmation.data as ProxmoxCommands;
+                this.runCommand(command);
+            }
         });
+
     }
 
     protected readonly ProxmoxCommands = ProxmoxCommands;

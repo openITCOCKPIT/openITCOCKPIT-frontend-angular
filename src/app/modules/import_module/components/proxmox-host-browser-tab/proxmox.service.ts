@@ -2,7 +2,13 @@ import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
-import { ProxmoxGraphDataParams, ProxmoxGraphDataResult, RunProxmoxCommandApiResult } from './proxmox-api.interface';
+import {
+    ProxmoxGetSnapshotsParams,
+    ProxmoxGetSnapshotsResult,
+    ProxmoxGraphDataParams,
+    ProxmoxGraphDataResult,
+    RunProxmoxCommandApiResult
+} from './proxmox-api.interface';
 import { ProxmoxCommands } from './proxmox-status.enum';
 
 @Injectable({
@@ -34,6 +40,17 @@ export class ProxmoxService {
     public getGraphData(hostId: number, params: ProxmoxGraphDataParams): Observable<ProxmoxGraphDataResult> {
         const proxyPath = this.proxyPath;
         return this.http.get<ProxmoxGraphDataResult>(`${proxyPath}/import_module/Proxmox/graph/${hostId}.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data
+            })
+        );
+    }
+
+    public getSnapshots(hostId: number, params: ProxmoxGetSnapshotsParams): Observable<ProxmoxGetSnapshotsResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ProxmoxGetSnapshotsResult>(`${proxyPath}/import_module/Proxmox/snapshots/${hostId}.json`, {
             params: params as {}
         }).pipe(
             map(data => {

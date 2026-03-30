@@ -138,3 +138,27 @@ export interface ProxmoxGraphDataResult {
     }
     _csrfToken: null | string,
 }
+
+export interface ProxmoxGetSnapshotsParams {
+    node: string,
+    vmid: string,
+    type: 'qemu' | 'lxc',
+}
+
+
+export interface ProxmoxGetSnapshotsResult {
+    snapshots_nested: ProxmoxSnapshotNested[],
+    _csrfToken: null | string,
+}
+
+export interface ProxmoxSnapshotNested {
+    parent?: string // Parent snapshot identifier
+    digest?: string
+    snaptime?: number // unix timestamp when the snapshot got created
+    snaptime_user?: string // snapshot creation date in user format
+    description: string
+    name: string
+    vmstate?: '0' | '1' // Includes RAM
+    running?: '1' // The "current" running snapshot
+    children: ProxmoxSnapshotNested[]
+}

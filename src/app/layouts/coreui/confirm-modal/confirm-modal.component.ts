@@ -1,14 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    effect,
-    EventEmitter,
-    inject,
-    input,
-    Output,
-    ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
 import {
     ButtonCloseDirective,
     ColComponent,
@@ -22,6 +12,7 @@ import {
 } from '@coreui/angular';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
+import { ConfirmModalService } from './confirm-modal.service';
 
 @Component({
     selector: 'oitc-confirm-modal',
@@ -43,20 +34,19 @@ import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 })
 export class ConfirmModalComponent {
 
+    /*
+     Use the ConfirmModalService Service to trigger this modal! Like so
+        this.ConfirmModalService.ask(confirmModalMessage, confirmModalHelpMessage, data).subscribe(confirmation => {
+            console.log(confirmation)
+        });
+     */
+
+    public readonly ConfirmModalService = inject(ConfirmModalService);
     private readonly modalService = inject(ModalService);
     private cdr = inject(ChangeDetectorRef);
     @ViewChild('modal') private modal!: ModalComponent;
 
-
-    public message = input<string>('');
-    public helpMessage = input<string>('');
-    @Output() confirmation = new EventEmitter<boolean>();
-
     public constructor() {
-        effect(() => {
-            this.message();
-            this.helpMessage();
-        });
     }
 
     // Modal functions
@@ -69,12 +59,12 @@ export class ConfirmModalComponent {
     }
 
     public yes(): void {
-        this.confirmation.emit(true);
+        this.ConfirmModalService.confirm(true);
         this.hideModal();
     }
 
     public no(): void {
-        this.confirmation.emit(false);
+        this.ConfirmModalService.confirm(false);
         this.hideModal();
     }
 

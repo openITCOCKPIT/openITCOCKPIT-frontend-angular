@@ -35,6 +35,8 @@ import {
     ProxmoxBrowserLoaderComponent
 } from '../../../../layouts/primeng/loading/proxmox-browser-loader/proxmox-browser-loader.component';
 import { ProxmoxGraphsComponent } from './proxmox-graphs/proxmox-graphs.component';
+import { ProxmoxSnapshotsComponent } from './proxmox-snapshots/proxmox-snapshots.component';
+import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-proxmox-host-browser-tab',
@@ -57,7 +59,9 @@ import { ProxmoxGraphsComponent } from './proxmox-graphs/proxmox-graphs.componen
         NgClass,
         ByteToHumanPipe,
         ProxmoxBrowserLoaderComponent,
-        ProxmoxGraphsComponent
+        ProxmoxGraphsComponent,
+        ProxmoxSnapshotsComponent,
+        XsButtonDirective
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',
