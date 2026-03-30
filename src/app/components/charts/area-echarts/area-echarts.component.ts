@@ -42,6 +42,7 @@ export class AreaEchartsComponent implements OnDestroy {
     public echartsInstance: any;
 
     private readonly subscriptions: Subscription = new Subscription();
+    public triggerUpdate = input<number>(0);
 
     public onChartInit(ec: any): void {
         this.echartsInstance = ec;//.setTheme(this.theme);
@@ -53,12 +54,13 @@ export class AreaEchartsComponent implements OnDestroy {
     }
 
     constructor() {
+        // Subscribe to the color mode changes (drop down menu in header)
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
-            this.theme = '';
-            if (theme === 'dark') {
-                this.theme = 'dark';
+            //console.log('Change in theme detected', theme);
+            this.theme = theme;
+            if (this.dataInput().length > 0) {
+                this.renderChart(this.dataInput());
             }
-
             this.cdr.markForCheck();
         }));
 
@@ -70,7 +72,6 @@ export class AreaEchartsComponent implements OnDestroy {
 
     private renderChart(perfdata: PerformanceData[]) {
         let data: any[] = [];
-
 
         // Data format for eCharts
         // https://stackoverflow.com/a/68461548
@@ -86,6 +87,17 @@ export class AreaEchartsComponent implements OnDestroy {
         let gradientLineColor = [
             'rgba(236, 72, 153, 1)', 'rgba(99, 102, 241, 1)'
         ];
+        let contrastColor = getComputedStyle(document.documentElement).getPropertyValue('--cui-medium-emphasis').trim();
+
+        if (this.theme === 'dark') {
+            gradientStart = [
+                'rgba(59, 130, 246, 0.4)', 'rgba(245, 158, 11, 0.4)'
+            ];
+            gradientLineColor = [
+                'rgba(59, 130, 246, 1)', 'rgba(245, 158, 11, 1)'
+            ];
+        }
+
 
         perfdata.forEach((gauge, index) => {
             data[index] = [];
@@ -139,18 +151,34 @@ export class AreaEchartsComponent implements OnDestroy {
                     type: 'cross'
                 }
             },
+
             xAxis: {
                 type: 'time',
                 axisLabel: {
-                    fontSize: 9
+                    fontSize: 9,
+                    color: contrastColor
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: contrastColor
+                    }
+                },
+                axisTick: {
+                    length: 5
                 }
             },
             yAxis: {
                 type: 'value',
                 axisLabel: {
                     fontSize: 9,
+                    color: contrastColor,
                     formatter: (value: any) => {
                         return `${value} ${perfdata[0].datasource.unit}`;
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: contrastColor
                     }
                 }
             },
