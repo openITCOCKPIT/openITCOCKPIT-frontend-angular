@@ -166,6 +166,7 @@ export class AreaEchartsComponent implements OnDestroy {
 
             xAxis: {
                 type: 'time',
+                splitNumber: 5,
                 axisLabel: {
                     fontSize: 9,
                     color: contrastColor
@@ -174,9 +175,6 @@ export class AreaEchartsComponent implements OnDestroy {
                     lineStyle: {
                         color: contrastColor
                     }
-                },
-                axisTick: {
-                    length: 5
                 }
             },
             yAxis: {

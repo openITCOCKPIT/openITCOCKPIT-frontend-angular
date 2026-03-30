@@ -66,7 +66,6 @@ export class ProxmoxGraphsComponent implements OnDestroy {
         };
 
         this.subscriptions.add(this.ProxmoxService.getGraphData(this.hostId(), params).subscribe(response => {
-            console.log(response);
             this.metrics = response;
             this.cdr.markForCheck();
         }));
