@@ -96,6 +96,7 @@ export class AreaEchartsComponent implements OnDestroy {
                 {
                     data: data[index],
                     type: 'line',
+                    name: gauge.datasource.name,
                     symbolSize: 1,
                     lineStyle: {
                         width: 2
@@ -137,6 +138,17 @@ export class AreaEchartsComponent implements OnDestroy {
                 trigger: 'axis',
                 axisPointer: {
                     type: 'cross'
+                },
+                formatter: (params: any) => {
+                    // params is an array when trigger: 'axis'
+                    let result = `${params[0].axisValueLabel}<br/>`; // The header (usually x-axis value)
+
+                    params.forEach((item: any) => {
+                        const value = (Math.round(item.value[1] * 100) / 100).toFixed(2);
+                        result += `${item.marker} ${item.seriesName}: <b>${value} ${perfdata[0].datasource.unit}</b><br/>`;
+                    });
+
+                    return result;
                 }
             },
             xAxis: {
