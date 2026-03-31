@@ -9,7 +9,7 @@ import {
     OnInit,
     SimpleChanges
 } from '@angular/core';
-import { catchError, EMPTY, merge, Subject, Subscription, switchMap, timer } from 'rxjs';
+import { catchError, EMPTY, merge, Subject, Subscription, switchMap, takeWhile, timer } from 'rxjs';
 import { ExternalSystemsService } from '../../pages/externalsystems/external-systems.service';
 import {
     AlertComponent,
@@ -37,7 +37,9 @@ import {
 } from '../../../../layouts/primeng/loading/proxmox-browser-loader/proxmox-browser-loader.component';
 import { ProxmoxGraphsComponent } from './proxmox-graphs/proxmox-graphs.component';
 import { ProxmoxSnapshotsComponent } from './proxmox-snapshots/proxmox-snapshots.component';
+
 import { ProxmoxLoadingModalComponent } from './proxmox-loading-modal/proxmox-loading-modal.component';
+import { OnlineOfflineComponent } from '../additional-host-information/online-offline/online-offline.component';
 
 @Component({
     selector: 'oitc-proxmox-host-browser-tab',
@@ -62,7 +64,8 @@ import { ProxmoxLoadingModalComponent } from './proxmox-loading-modal/proxmox-lo
         ProxmoxBrowserLoaderComponent,
         ProxmoxGraphsComponent,
         ProxmoxSnapshotsComponent,
-        ProxmoxLoadingModalComponent
+        ProxmoxLoadingModalComponent,
+        OnlineOfflineComponent
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',
@@ -91,7 +94,7 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
 
     public constructor() {
         // Auto refresh every 5 seconds
-        const autoRefresh$ = timer(5000, 5000);
+        const autoRefresh$ = timer(10000, 10000);
 
         this.subscriptions.add(
             // merge combines the manual triggers (.next()) with the timer
@@ -99,20 +102,37 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
                 // switchMap will cancel the previous HTTP request
                 switchMap(() => {
                     return this.ExternalSystemsService
-                        .getAdditionalHostInformationWithType<AdditionalHostInformationProxmoxResult>(this.hostId)
+                        .getAdditionalHostInformationWithType<AdditionalHostInformationProxmoxResult>(this.hostId);
+                    /*
                         .pipe(
                             // Important: Catch errors here, otherwise the 5-second timer will stop permanently in case of an error!
                             catchError(err => {
                                 console.error('Request failed', err);
+                                this.subscriptions.unsubscribe();
                                 return EMPTY;
                             })
                         );
+
+                     */
+                }),
+                takeWhile(response => {
+                    return response.response.status === true;
+                }, true),
+                catchError(err => {
+                    //console.error('Critical error, stop requests:', err);
+                    this.subscriptions.unsubscribe();
+                    return EMPTY;
                 })
             ).subscribe(result => {
+                this.result = result;
+                this.cdr.markForCheck();
+                if (!result.response.status) {
+                    this.subscriptions.unsubscribe();
+                    return;
+                }
                 this.processLoadedData(result);
             })
         );
-
     }
 
 
