@@ -1,5 +1,18 @@
 <ng-container *transloco="let t">
-
+    @if (result) {
+        <c-row class="mb-2">
+            <c-col [xs]="12">
+                <h4>
+                    {{ t('Proxmox overview') }}
+                    <sup>
+                        <small>
+                            <oitc-online-offline [isOnline]="result.response.status"></oitc-online-offline>
+                        </small>
+                    </sup>
+                </h4>
+            </c-col>
+        </c-row>
+    }
 
     @if (!result) {
         <oitc-proxmox-browser-loader></oitc-proxmox-browser-loader>
