@@ -43,6 +43,8 @@ import {
 import { ImportDataResponse, ImportedHostRawData } from '../../pages/importedhosts/importedhosts.interface';
 import _ from 'lodash';
 import { ExternalSystems } from '../../pages/externalsystems/external-systems.enum';
+import { IconDirective } from '@coreui/icons-angular';
+import { cibProxmox } from '@coreui/icons';
 
 @Component({
     selector: 'oitc-import-data',
@@ -66,7 +68,8 @@ import { ExternalSystems } from '../../pages/externalsystems/external-systems.en
         AlertHeadingDirective,
         TableLoaderComponent,
         TableDirective,
-        FormsModule
+        FormsModule,
+        IconDirective
     ],
     templateUrl: './import-data.component.html',
     styleUrl: './import-data.component.css',
@@ -93,6 +96,8 @@ export class ImportDataComponent implements OnInit, OnDestroy {
     public showSpinner: boolean = false;
     private cdr = inject(ChangeDetectorRef);
     public dynamicFieldsNameValue: GenericKeyValueFieldType[] = [];
+
+    public coreuiIcons = {cibProxmox};
 
 
     public ngOnDestroy(): void {

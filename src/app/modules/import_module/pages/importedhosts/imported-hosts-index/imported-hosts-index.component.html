@@ -92,6 +92,9 @@
                                                 @case ("external_monitoring") {
                                                     <fa-icon [icon]="['fas', 'tower-observation']"></fa-icon>
                                                 }
+                                                @case ("proxmox"){
+                                                    <svg [cIcon]="coreuiIcons.cibProxmox" title="Proxmox Icon"></svg>
+                                                }
                                                 @default {
                                                     <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
                                                 }
