@@ -29,6 +29,7 @@ export interface AdditionalHostInformationProxmoxResult {
 export interface ProxmoxQemuStatusCurrentMinimal {
     memhost: number // Current memory usage on the host in bytes.
     uptime: number // Uptime in seconds
+    uptimeAgoInWords: string | null // Uptime in seconds
     maxmem: number // Maximum memory in bytes.
     vmid: number
     netout: number  // Traffic in bytes sent from the VM to the network since it was started

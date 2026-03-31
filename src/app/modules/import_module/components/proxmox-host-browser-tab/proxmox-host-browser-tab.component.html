@@ -66,9 +66,12 @@
                             }
                         }
                     </h6>
-                    <p cCardText>
-                        Updated 20s ago
-                    </p>
+                    @if (result.response.current?.uptime) {
+                        <p cCardText>
+                            {{ t('Uptime') }} {{ result.response.current?.uptimeAgoInWords }}
+                        </p>
+                    }
+
                 </div>
                 @if (result.response.info?.status === 'running') {
                     @if (result.response.agent && result.response.agent['pretty-name']) {
