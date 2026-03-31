@@ -124,6 +124,7 @@ import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipbo
 import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../services/timezone.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { FilterBookmarkComponent } from '../../../components/filter-bookmark/filter-bookmark.component';
+import { mergeWithDefaults } from '../../../components/filter-bookmark/bookmark.standardizer';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -831,24 +832,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
         }
         if (filterstring && filterstring.length > 0) {
             //cnditions to apply old bookmarks
-            const bookmarkfilter = JSON.parse(filterstring);
-            //new Filter not in old filters ITC-3738
-            if (!bookmarkfilter.Hostgroups) {
-                bookmarkfilter.Hostgroups = {
-                    id: []
-                }
-            }
-            if (!bookmarkfilter.Servicegroups) {
-                bookmarkfilter.Servicegroups = {
-                    id: []
-                }
-            }
-            if (bookmarkfilter.Servicestatus && !bookmarkfilter.Servicestatus.state_type) {
-                bookmarkfilter.Servicestatus.state_type = {
-                    soft: false,
-                    hard: false
-                }
-            }
+            const bookmark = JSON.parse(filterstring);
+            const bookmarkfilter = mergeWithDefaults(bookmark, getDefaultServicesIndexFilter()) as ServiceIndexFilter;
 
             this.params = getDefaultServiceIndexParams();
             this.filter = bookmarkfilter;

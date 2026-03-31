@@ -899,7 +899,6 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
             //cnditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
-            if(!bookmarkfilter['Hostgroups.id']) Object.assign(bookmarkfilter, {'Hostgroups.id': [] }); //new filter ITC-3738
             this.filter['Hosts.id'] = bookmarkfilter['Hosts.id'];
             this.filter['Hosts.name'] = bookmarkfilter['Hosts.name'];
             this.filter['Hosts.name_regex'] = bookmarkfilter['Hosts.name_regex'];
@@ -936,9 +935,11 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             if (bookmarkfilter['Hoststatus.is_hardstate'] === '1') {
                 this.state_typesFilter.hard = true;
             }
+            if (bookmarkfilter['Hostgroups.id'] ) {
+                this.filter['Hostgroups.id'] = bookmarkfilter['Hostgroups.id'];
+            }
             this.convert2currentStateFilter(bookmarkfilter['hostpriority'], 'priorityFilter');
             this.filter['Hosts.satellite_id'] = bookmarkfilter['Hosts.satellite_id'];
-            this.filter['Hostgroups.id'] = bookmarkfilter['Hostgroups.id'];
             this.loadHosts();
 
         }
