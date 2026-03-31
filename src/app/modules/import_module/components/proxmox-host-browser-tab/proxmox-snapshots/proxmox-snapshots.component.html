@@ -26,7 +26,7 @@
 
                 <ng-template #containerTemplate let-snapshot let-index="index" let-collapsed="collapsed"
                              let-component="component">
-                    <div class="dd-handle">
+                    <div class="dd-handle p-1">
                         @if (snapshot.children.length > 0) {
                             <button
                                 type="button" class="dd-collapse-button"
@@ -94,7 +94,7 @@
                         }
 
                         @if (snapshot.description) {
-                            <div class="help-block ps-3">
+                            <div class="help-block ps-3 my-0">
                                 {{ snapshot.description }}
                             </div>
                         }
