@@ -3,7 +3,7 @@ import { AreaEchartsComponent } from '../../../../../components/charts/area-echa
 import { CardBodyComponent, CardComponent, ColComponent, RowComponent } from '@coreui/angular';
 import { Subscription } from 'rxjs';
 import { ProxmoxService } from '../proxmox.service';
-import { ProxmoxGraphDataParams, ProxmoxGraphDataResult } from '../proxmox-api.interface';
+import { ProxmoxGraphDataParams, ProxmoxGraphDataResult, ProxmoxVirtType } from '../proxmox-api.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
@@ -25,6 +25,7 @@ export class ProxmoxGraphsComponent implements OnDestroy {
     public hostId = input<number>(0);
     public vmid = input<string>('');
     public nodeName = input<string>('');
+    public virtType = input<ProxmoxVirtType>(ProxmoxVirtType.Qemu);
 
     public metrics?: ProxmoxGraphDataResult;
 
@@ -57,7 +58,7 @@ export class ProxmoxGraphsComponent implements OnDestroy {
         let params: ProxmoxGraphDataParams = {
             vmid: this.vmid(),
             node: this.nodeName(),
-            type: 'qemu',
+            type: this.virtType(),
             debug: 'false',
             cf: 'AVERAGE',
             isoTimestamp: 1,

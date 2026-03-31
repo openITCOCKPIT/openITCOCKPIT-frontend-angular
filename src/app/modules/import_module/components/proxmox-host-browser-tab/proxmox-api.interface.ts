@@ -1,9 +1,12 @@
 import { ExternalSystems } from '../../pages/externalsystems/external-systems.enum';
 import { PerformanceData } from '../../../../components/popover-graph/popover-graph.interface';
 
+export enum ProxmoxVirtType {
+    Qemu = 'qemu',
+    Lxc = 'lxc'
+}
 
-export interface AdditionalHostInformationProxmoxResult {
-
+interface ProxmoxQemuResponse {
     response: {
         result?: null // only null if the Proxmox is offline - does not exist in successful for Proxmox Reponse
         status: boolean // true = online, false = offline
@@ -20,11 +23,37 @@ export interface AdditionalHostInformationProxmoxResult {
         },
         current: null | ProxmoxQemuStatusCurrentMinimal | ProxmoxQemuStatusCurrentRunning
         agent: null | ProxmoxQemuAgent,
-        type: 'qemu' | 'lcx'
+        type: ProxmoxVirtType.Qemu
     },
     data_source: ExternalSystems.Proxmox,
     _csrfToken: null | string
 }
+
+interface ProxmoxLxcResponse {
+    response: {
+        result?: null // only null if the Proxmox is offline - does not exist in successful for Proxmox Reponse
+        status: boolean // true = online, false = offline
+        ipaddresses: Ipaddress[]
+        found: boolean
+        // Generic VM info
+        info: null | {
+            node: string
+            vmid: number
+            name: string
+            status: 'running' | 'stopped' | 'paused' | string
+            identifier: string
+            ipaddress: string
+        },
+        current: null | ProxmoxLxcStatusCurrentMinimal
+        agent: null,
+        type: ProxmoxVirtType.Lxc
+    },
+    data_source: ExternalSystems.Proxmox,
+    _csrfToken: null | string
+}
+
+export type AdditionalHostInformationProxmoxResult = ProxmoxQemuResponse | ProxmoxLxcResponse;
+
 
 // The minimum information we get from Proxmox even if the VM is powered off.
 export interface ProxmoxQemuStatusCurrentMinimal {
@@ -36,11 +65,11 @@ export interface ProxmoxQemuStatusCurrentMinimal {
 //    netout: number  // Traffic in bytes sent from the VM to the network since it was started
 //    netin: number // Traffic in bytes sent to the VM over the network since it was started
     cpus: number // Number of configured vCPU Cores
-//    status: "stopped" | "running"
+    status: "stopped" | "running"
     mem: number // Currently used memory in bytes.
     qmpstatus: "stopped" | "running" | "paused" | string // Whatever qemu returns as status
 //    clipboard: any
-//    name: string // Name of the VM
+    name: string // Name of the VM
     cpu: number // Currently used CPU in percent (multiply by 100 to get percentage)
     ha: {
         managed: 0 | 1,
@@ -75,6 +104,29 @@ export interface ProxmoxQemuStatusCurrentRunning extends ProxmoxQemuStatusCurren
 //    pressureiosome?: number
 //    pressurecpusome?: number
     lock?: 'migrate' | 'suspended' | string
+}
+
+// The minimum information we get from Proxmox even if the LXC is powered off.
+export interface ProxmoxLxcStatusCurrentMinimal {
+    uptime: number // Uptime in seconds
+    uptimeAgoInWords: string | null // Uptime in seconds
+    maxmem: number // Maximum memory in bytes.
+//    vmid: number
+//    netout: number  // Traffic in bytes sent from the LXC to the network since it was started
+//    netin: number // Traffic in bytes sent to the LXC over the network since it was started
+    cpus: number // Number of configured vCPU Cores
+    status: "stopped" | "running"
+    mem: number // Currently used memory in bytes.
+    swap: number // Currently used SWAP in bytes.
+    maxswap: number // Maximum SWAP in bytes.
+    name: string // Name of the LXC
+    cpu: number // Currently used CPU in percent (multiply by 100 to get percentage)
+    ha: {
+        managed: 0 | 1,
+        state?: "started" | "stopped" | string
+    }
+    maxdisk: number // Root disk size in bytes.
+    disk: number // Boot disk usage in bytes
 }
 
 export interface ProxmoxBalloonInfo {
@@ -128,7 +180,7 @@ export interface ProxmoxGraphDataParams {
     cf: 'AVERAGE' | 'MAX'
     node: string,
     vmid: string,
-    type: 'qemu' | 'lxc',
+    type: ProxmoxVirtType,
 }
 
 export interface ProxmoxGraphDataResult {
@@ -144,7 +196,7 @@ export interface ProxmoxGraphDataResult {
 export interface ProxmoxGetSnapshotsParams {
     node: string,
     vmid: string,
-    type: 'qemu' | 'lxc',
+    type: ProxmoxVirtType,
 }
 
 
@@ -163,12 +215,14 @@ export interface ProxmoxSnapshotNested {
     vmstate?: '0' | '1' // Includes RAM
     running?: '1' // The "current" running snapshot
     children: ProxmoxSnapshotNested[]
+    type: ProxmoxVirtType // Avendis custom field
+    isCurrent: boolean // Avendis custom field
 }
 
 export interface ProxmoxCreateSnapshotParams {
     node: string,
     vmid: string,
-    type: 'qemu' | 'lxc',
+    type: ProxmoxVirtType,
     name: string,
     description: string,
     includeRam: boolean
@@ -199,6 +253,6 @@ export interface ProxmoxGetTaskStatusResult {
 export interface ProxmoxRollbackSnapshotData {
     node: string,
     vmid: string,
-    type: 'qemu' | 'lxc',
+    type: ProxmoxVirtType,
     snapshotName: string
 }

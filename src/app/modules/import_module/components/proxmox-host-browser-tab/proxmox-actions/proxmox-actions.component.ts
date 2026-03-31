@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { ProxmoxService } from '../proxmox.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ConfirmModalService } from '../../../../../layouts/coreui/confirm-modal/confirm-modal.service';
+import { ProxmoxVirtType } from '../proxmox-api.interface';
 
 @Component({
     selector: 'oitc-proxmox-actions',
@@ -38,6 +39,7 @@ export class ProxmoxActionsComponent implements OnDestroy {
     public nodeName = input<string>('');
     public status = input<ProxmoxStatus>(ProxmoxStatus.Stopped);
     public overruleShutdown = input<boolean>(true);
+    public virtType = input<ProxmoxVirtType>(ProxmoxVirtType.Qemu);
 
     public confirmModalMessage: string = '';
     public confirmModalHelpMessage: string = '';
@@ -84,7 +86,7 @@ export class ProxmoxActionsComponent implements OnDestroy {
                 };
             }
 
-            this.subscriptions.add(this.ProxmoxService.sendProxmoxCommand(this.hostId(), this.nodeName(), this.vmid(), command, 'qemu', params).subscribe((result) => {
+            this.subscriptions.add(this.ProxmoxService.sendProxmoxCommand(this.hostId(), this.nodeName(), this.vmid(), command, this.virtType(), params).subscribe((result) => {
                 this.upid = result.result.upid;
                 if (result.result.upid) {
                     this.notyService.genericSuccess('Successfully sent command to Proxmox', 'Command');
@@ -113,16 +115,28 @@ export class ProxmoxActionsComponent implements OnDestroy {
             case ProxmoxCommands.Shutdown:
                 confirmModalMessage = this.TranslocoService.translate('Are you sure you want to shutdown the VM?') + ' - ' + this.vmid();
                 confirmModalHelpMessage = this.TranslocoService.translate('Will send a ACPI shutdown signal to the VM, which will trigger a graceful shutdown.');
+                if (this.virtType() === ProxmoxVirtType.Lxc) {
+                    confirmModalMessage = this.TranslocoService.translate('Are you sure you want to shutdown the Container?') + ' - ' + this.vmid();
+                    confirmModalHelpMessage = this.TranslocoService.translate('Will send a ACPI shutdown signal to the Container, which will trigger a graceful shutdown.');
+                }
                 break;
 
             case ProxmoxCommands.Stop:
                 confirmModalMessage = this.TranslocoService.translate('Are you sure you want to stop the VM?') + ' - ' + this.vmid();
                 confirmModalHelpMessage = this.TranslocoService.translate('Forces the VM to stop immediately, which may lead to data loss. Use this if the VM is not responding to the shutdown command.');
+                if (this.virtType() === ProxmoxVirtType.Lxc) {
+                    confirmModalMessage = this.TranslocoService.translate('Are you sure you want to stop the Container?') + ' - ' + this.vmid();
+                    confirmModalHelpMessage = this.TranslocoService.translate('Forces the Container to stop immediately, which may lead to data loss. Use this if the Container is not responding to the shutdown command.');
+                }
                 break;
 
             case ProxmoxCommands.Reboot:
                 confirmModalMessage = this.TranslocoService.translate('Are you sure you want to reboot the VM?') + ' - ' + this.vmid();
                 confirmModalHelpMessage = this.TranslocoService.translate('Gracefully reboots the VM by sending a ACPI shutdown signal. This will also apply pending hardware changes.');
+                if (this.virtType() === ProxmoxVirtType.Lxc) {
+                    confirmModalMessage = this.TranslocoService.translate('Are you sure you want to reboot the Container?') + ' - ' + this.vmid();
+                    confirmModalHelpMessage = this.TranslocoService.translate('Gracefully reboots the Container by sending a ACPI shutdown signal. This will also apply pending hardware changes.');
+                }
                 break;
 
             case ProxmoxCommands.Reset:
@@ -146,4 +160,5 @@ export class ProxmoxActionsComponent implements OnDestroy {
     }
 
     protected readonly ProxmoxCommands = ProxmoxCommands;
+    protected readonly ProxmoxVirtType = ProxmoxVirtType;
 }

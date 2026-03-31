@@ -59,11 +59,18 @@
                     <h6 cCardSubtitle class="mb-2 mt-1 text-medium-emphasis">
                         {{ t('State:') }}
                         @if (result.response.info && result.response.current) {
-                            @if (result.response.info.status !== result.response.current.qmpstatus) {
-                                {{ result.response.info.status }} ({{ result.response.current.qmpstatus }})
+                            @if ('qmpstatus' in result.response.current) {
+                                <!-- QEMU VM -->
+                                @if (result.response.info.status !== result.response.current.qmpstatus) {
+                                    {{ result.response.info.status }} ({{ result.response.current.qmpstatus }})
+                                } @else {
+                                    {{ result.response.info.status }}
+                                }
                             } @else {
+                                <!-- LXC Container -->
                                 {{ result.response.info.status }}
                             }
+
                         }
                     </h6>
                     @if (result.response.current?.uptime) {
@@ -165,7 +172,8 @@
                             [vmid]="vmid"
                             [nodeName]="nodeName"
                             [status]="status"
-                            [overruleShutdown]="overruleShutdown"></oitc-proxmox-actions>
+                            [overruleShutdown]="overruleShutdown"
+                            [virtType]="result.response.type"></oitc-proxmox-actions>
                     }
                 </div>
 
@@ -176,7 +184,8 @@
             <oitc-proxmox-graphs
                 [hostId]="hostId"
                 [vmid]="vmid"
-                [nodeName]="nodeName"></oitc-proxmox-graphs>
+                [nodeName]="nodeName"
+                [virtType]="result.response.type"></oitc-proxmox-graphs>
         }
 
         <c-row class="mt-2 equal-height-row d-flex flex-wrap">
@@ -257,7 +266,7 @@
                                     </c-col>
                                 </c-row>
                             }
-                            @if (result.response.current.memhost) {
+                            @if ('memhost' in result.response.current && result.response.current.memhost) {
                                 <c-row class="my-1 odd">
                                     <c-col lg="7">
                                         <fa-icon [icon]="['fas', 'memory']" [cTextColor]="'primary'"></fa-icon>
@@ -343,7 +352,8 @@
                                 [hostId]="hostId"
                                 [vmid]="vmid"
                                 [nodeName]="nodeName"
-                                [status]="status"></oitc-proxmox-snapshots>
+                                [status]="status"
+                                [virtType]="result.response.type"></oitc-proxmox-snapshots>
                         }
                     </c-card-body>
                 </c-card>

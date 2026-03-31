@@ -9,7 +9,8 @@ import {
     ProxmoxGetSnapshotsParams,
     ProxmoxGetTaskStatusParams,
     ProxmoxRollbackSnapshotData,
-    ProxmoxSnapshotNested
+    ProxmoxSnapshotNested,
+    ProxmoxVirtType
 } from '../proxmox-api.interface';
 import { ContainerTypesEnum } from '../../../../../pages/changelogs/object-types.enum';
 import { ProxmoxSnapshotNestComponent } from './proxmox-snapshot-nest/proxmox-snapshot-nest.component';
@@ -41,6 +42,7 @@ export class ProxmoxSnapshotsComponent implements OnDestroy {
     public vmid = input<string>('');
     public nodeName = input<string>('');
     public status = input<ProxmoxStatus>(ProxmoxStatus.Stopped);
+    public virtType = input<ProxmoxVirtType>(ProxmoxVirtType.Qemu);
 
     public nestedSnapshots: ProxmoxSnapshotNested[] = [];
 
@@ -79,7 +81,7 @@ export class ProxmoxSnapshotsComponent implements OnDestroy {
         const params: ProxmoxGetSnapshotsParams = {
             node: this.nodeName(),
             vmid: this.vmid(),
-            type: 'qemu'
+            type: this.virtType()
         };
         this.subscriptions.add(
             this.ProxmoxService.getSnapshots(this.hostId(), params).subscribe((result) => {
@@ -101,7 +103,7 @@ export class ProxmoxSnapshotsComponent implements OnDestroy {
                     node: this.nodeName(),
                     vmid: this.vmid(),
                     snapshotName: snapshotName,
-                    type: 'qemu'
+                    type: this.virtType()
                 };
                 this.subscriptions.add(this.ProxmoxService.rollbackSnapshot(this.hostId(), data).subscribe(response => {
                     if (response.result.upid === false) {
@@ -125,7 +127,7 @@ export class ProxmoxSnapshotsComponent implements OnDestroy {
                     node: this.nodeName(),
                     vmid: this.vmid(),
                     snapshotName: snapshotName,
-                    type: 'qemu'
+                    type: this.virtType()
                 };
                 this.subscriptions.add(this.ProxmoxService.deleteSnapshot(this.hostId(), data).subscribe(response => {
                     if (response.result.upid === false) {
@@ -201,4 +203,5 @@ export class ProxmoxSnapshotsComponent implements OnDestroy {
     }
 
     protected readonly ContainerTypesEnum = ContainerTypesEnum;
+    protected readonly ProxmoxVirtType = ProxmoxVirtType;
 }

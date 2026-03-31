@@ -34,19 +34,21 @@
                     </div>
                 </c-col>
             </c-row>
-            <c-row>
-                <c-col>
-                    <c-form-check class="mb-3">
-                        <input cFormCheckInput id="proxmoxNewSnapshotRam" type="checkbox"
-                               class="checkbox-lg custom-check-default"
-                               [(ngModel)]="postData.ram"
-                               name="proxmoxNewSnapshotRam"/>
-                        <label cFormCheckLabel class="ms-1 mt-1" for="proxmoxNewSnapshotRam">
-                            {{ t('Include RAM') }}
-                        </label>
-                    </c-form-check>
-                </c-col>
-            </c-row>
+            @if (virtType() === ProxmoxVirtType.Qemu) {
+                <c-row>
+                    <c-col>
+                        <c-form-check class="mb-3">
+                            <input cFormCheckInput id="proxmoxNewSnapshotRam" type="checkbox"
+                                   class="checkbox-lg custom-check-default"
+                                   [(ngModel)]="postData.ram"
+                                   name="proxmoxNewSnapshotRam"/>
+                            <label cFormCheckLabel class="ms-1 mt-1" for="proxmoxNewSnapshotRam">
+                                {{ t('Include RAM') }}
+                            </label>
+                        </c-form-check>
+                    </c-col>
+                </c-row>
+            }
             <c-row>
                 <c-col>
                     <div class="mb-3">

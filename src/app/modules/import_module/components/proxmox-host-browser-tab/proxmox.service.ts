@@ -11,6 +11,7 @@ import {
     ProxmoxGraphDataParams,
     ProxmoxGraphDataResult,
     ProxmoxRollbackSnapshotData,
+    ProxmoxVirtType,
     RunProxmoxCommandApiResult
 } from './proxmox-api.interface';
 import { ProxmoxCommands } from './proxmox-status.enum';
@@ -26,7 +27,7 @@ export class ProxmoxService {
     constructor() {
     }
 
-    public sendProxmoxCommand(hostId: number, nodeName: string, vmid: string, command: ProxmoxCommands, type: 'qemu' | 'lxc', params: any = {}): Observable<RunProxmoxCommandApiResult> {
+    public sendProxmoxCommand(hostId: number, nodeName: string, vmid: string, command: ProxmoxCommands, type: ProxmoxVirtType, params: any = {}): Observable<RunProxmoxCommandApiResult> {
         const proxyPath = this.proxyPath;
         return this.http.post<RunProxmoxCommandApiResult>(`${proxyPath}/import_module/Proxmox/command/${hostId}.json`, {
             node: nodeName,

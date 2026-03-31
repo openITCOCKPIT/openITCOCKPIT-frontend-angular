@@ -33,7 +33,7 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ProxmoxCreateSnapshotParams, ProxmoxGetTaskStatusParams } from '../proxmox-api.interface';
+import { ProxmoxCreateSnapshotParams, ProxmoxGetTaskStatusParams, ProxmoxVirtType } from '../proxmox-api.interface';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 
 @Component({
@@ -69,6 +69,8 @@ export class ProxmoxCreateSnapshotModalComponent implements OnDestroy {
     public vmid = input<string>('');
     public nodeName = input<string>('');
     public status = input<ProxmoxStatus>(ProxmoxStatus.Stopped);
+    public virtType = input<ProxmoxVirtType>(ProxmoxVirtType.Qemu);
+
 
     @Output() onFinish = new EventEmitter<boolean>();
 
@@ -115,6 +117,7 @@ export class ProxmoxCreateSnapshotModalComponent implements OnDestroy {
     }
 
     public hideModal() {
+        this.resetForm();
         this.modalService.toggle({
             show: false,
             id: this.modal.id
@@ -125,6 +128,12 @@ export class ProxmoxCreateSnapshotModalComponent implements OnDestroy {
         // Validate name to have 2 characters, starts with a latter, A-Z, a-z, 0-9 _
         const regex = /^[A-Za-z][A-Za-z0-9_]{1,}$/;
         this.isValidName = regex.test(this.postData.name);
+
+        if (this.postData.name === 'current') {
+            // 'current' is a reserved name :(
+            this.isValidName = false;
+        }
+
         this.cdr.markForCheck();
         if (!this.isValidName) {
             return;
@@ -138,7 +147,7 @@ export class ProxmoxCreateSnapshotModalComponent implements OnDestroy {
             description: this.postData.desc,
             includeRam: this.postData.ram,
             vmid: this.vmid(),
-            type: 'qemu',
+            type: this.virtType(),
             node: this.nodeName()
         }
         this.subscriptions.add(this.ProxmoxService.createSnapshot(this.hostId(), data).subscribe(response => {
@@ -195,6 +204,7 @@ export class ProxmoxCreateSnapshotModalComponent implements OnDestroy {
             },
             complete: () => {
                 // Polling completed
+                this.resetForm();
             }
         });
     }
@@ -210,4 +220,6 @@ export class ProxmoxCreateSnapshotModalComponent implements OnDestroy {
             ram: true
         };
     }
+
+    protected readonly ProxmoxVirtType = ProxmoxVirtType;
 }

@@ -41,26 +41,31 @@
                         }
 
                         <!-- Icon -->
-                        @switch (snapshot.running) {
-                            @case (1) {
+                        @if (snapshot.isCurrent) {
+                            @if (snapshot.type === ProxmoxVirtType.Qemu) {
                                 <i class="fas fa-desktop text-primary"></i>
+                            } @else {
+                                <i class="fas fa-cube text-primary"></i>
                             }
-                            @default {
-                                <i class="fa-solid fa-clock-rotate-left"></i>
-                            }
+                        } @else {
+                            <i class="fa-solid fa-clock-rotate-left"></i>
                         }
                         <!-- End icon -->
 
                         <!-- snapshot name and Links -->
                         <span>
                             <span [class.text-primary]="snapshot.running">
-                                {{ snapshot.name }}
+                                @if (snapshot.isCurrent) {
+                                    {{ t('NOW') }}
+                                } @else {
+                                    {{ snapshot.name }}
+                                }
                             </span>
                         </span>
                         <!-- End of Snapshot name and Links -->
 
                         <!-- Buttons -->
-                        @if (!snapshot.running && snapshot.name) {
+                        @if (!snapshot.isCurrent && snapshot.name) {
                             <!-- only show buttons for not "current" -->
                             <button type="button"
                                     class="btn btn-link text-body p-1 text-decoration-none ripple"
@@ -111,6 +116,7 @@
             [vmid]="vmid()"
             [nodeName]="nodeName()"
             [status]="status()"
+            [virtType]="virtType()"
             (onFinish)="loadSnapshots()"></oitc-proxmox-create-snapshot-modal>
     }
 
