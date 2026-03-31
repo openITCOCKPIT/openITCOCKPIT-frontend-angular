@@ -19,6 +19,7 @@ import {
     CardTextDirective,
     CardTitleDirective,
     ColComponent,
+    ModalService,
     ProgressComponent,
     RowComponent,
     TextColorDirective
@@ -36,7 +37,7 @@ import {
 } from '../../../../layouts/primeng/loading/proxmox-browser-loader/proxmox-browser-loader.component';
 import { ProxmoxGraphsComponent } from './proxmox-graphs/proxmox-graphs.component';
 import { ProxmoxSnapshotsComponent } from './proxmox-snapshots/proxmox-snapshots.component';
-import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { ProxmoxLoadingModalComponent } from './proxmox-loading-modal/proxmox-loading-modal.component';
 
 @Component({
     selector: 'oitc-proxmox-host-browser-tab',
@@ -61,7 +62,7 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
         ProxmoxBrowserLoaderComponent,
         ProxmoxGraphsComponent,
         ProxmoxSnapshotsComponent,
-        XsButtonDirective
+        ProxmoxLoadingModalComponent
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',
@@ -84,6 +85,7 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
     private subscriptions: Subscription = new Subscription();
 
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
+    private readonly modalService = inject(ModalService);
 
     private cdr = inject(ChangeDetectorRef);
 

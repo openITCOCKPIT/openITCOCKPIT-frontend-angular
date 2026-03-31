@@ -1,5 +1,19 @@
 <ng-container *transloco="let t">
     <c-row>
+        <c-col>
+            <div class="fs-6 fw-semibold text-uppercase">
+                {{ t('Snaphots') }}
+            </div>
+        </c-col>
+        <c-col class="text-end">
+            <button cButton size="xs" color="default" class="ripple"
+                    (click)="toggleCreateSnapshotModal()">
+                {{ t('Take Snapshot') }}
+            </button>
+        </c-col>
+    </c-row>
+
+    <c-row>
         <c-col [xs]="12">
             <div class="dd">
                 <!-- Recursive component -->
@@ -91,5 +105,13 @@
         </c-col>
     </c-row>
 
+    @if (vmid() && nodeName()) {
+        <oitc-proxmox-create-snapshot-modal
+            [hostId]="hostId()"
+            [vmid]="vmid()"
+            [nodeName]="nodeName()"
+            [status]="status()"
+            (onFinish)="loadSnapshots()"></oitc-proxmox-create-snapshot-modal>
+    }
 
 </ng-container>

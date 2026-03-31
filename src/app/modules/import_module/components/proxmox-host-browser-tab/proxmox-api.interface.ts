@@ -162,3 +162,41 @@ export interface ProxmoxSnapshotNested {
     running?: '1' // The "current" running snapshot
     children: ProxmoxSnapshotNested[]
 }
+
+export interface ProxmoxCreateSnapshotParams {
+    node: string,
+    vmid: string,
+    type: 'qemu' | 'lxc',
+    name: string,
+    description: string,
+    includeRam: boolean
+}
+
+export interface ProxmoxGetTaskStatusParams {
+    node: string,
+    upid: string,
+}
+
+export interface ProxmoxGetTaskStatusResult {
+    status: {
+        exitstatus: 'OK' | string
+        user: string
+        starttime: number // unix time stamp
+        type: string
+        node: string
+        pstart: number
+        upid: string
+        id: string
+        pid: number
+        status: 'stopped' | 'running'
+        starttime_user: string // Formated in user time
+    }
+    _csrfToken: null | string,
+}
+
+export interface ProxmoxRollbackSnapshotData {
+    node: string,
+    vmid: string,
+    type: 'qemu' | 'lxc',
+    snapshotName: string
+}

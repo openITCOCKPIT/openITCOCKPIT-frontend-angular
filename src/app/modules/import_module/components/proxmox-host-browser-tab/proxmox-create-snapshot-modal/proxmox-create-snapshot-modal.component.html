@@ -1,0 +1,74 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="proxmoxCreateSnapshotModal"
+        size="lg"
+    >
+        <c-modal-header class="text-bg-gray">
+            <h5>
+                {{ t('Create new Snapshot') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col>
+                    <div class="mb-3">
+                        <label cLabel for="proxmoxNewSnapshotName">
+                            {{ t('Name') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="proxmoxNewSnapshotName"
+                               [(ngModel)]="postData.name">
+                        <div class="help-block">
+                            {{ t('The name must be at least 2 characters long and start with a latter.') }}
+                            <br>
+                            {{ t('Only A-Z, a-z 0-9 and _ are valid characters.') }}
+                        </div>
+                        @if (!isValidName) {
+                            <div class="pt-1 text-invalid">
+                                {{ t('Invalid name') }}
+                            </div>
+                        }
+                    </div>
+                </c-col>
+            </c-row>
+            <c-row>
+                <c-col>
+                    <c-form-check class="mb-3">
+                        <input cFormCheckInput id="proxmoxNewSnapshotRam" type="checkbox"
+                               class="checkbox-lg custom-check-default"
+                               [(ngModel)]="postData.ram"
+                               name="proxmoxNewSnapshotRam"/>
+                        <label cFormCheckLabel class="ms-1 mt-1" for="proxmoxNewSnapshotRam">
+                            {{ t('Include RAM') }}
+                        </label>
+                    </c-form-check>
+                </c-col>
+            </c-row>
+            <c-row>
+                <c-col>
+                    <div class="mb-3">
+                        <label cLabel for="proxmoxNewSnapshotDesc">
+                            {{ t('Description') }}
+                        </label>
+                        <textarea cFormControl id="proxmoxNewSnapshotDesc"
+                                  name="proxmoxNewSnapshotDesc"
+                                  [(ngModel)]="postData.desc"></textarea>
+                    </div>
+                </c-col>
+            </c-row>
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="createSnapshot()" [disabled]="isRunning" cButton class="ripple" color="primary">
+                <fa-icon [hidden]="!isRunning" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                {{ t('Create Snapshot') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
