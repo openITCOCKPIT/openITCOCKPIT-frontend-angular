@@ -332,21 +332,12 @@
                     </c-card-body>
                 </c-card>
             </c-col>
-            <c-col md="12" xl="4">
+        </c-row>
+
+        <c-row class="mt-2 equal-height-row d-flex flex-wrap">
+            <c-col [xs]="12">
                 <c-card class="h-100">
                     <c-card-body>
-                        <c-row>
-                            <c-col>
-                                <div class="fs-6 fw-semibold text-uppercase">
-                                    {{ t('Snaphots') }}
-                                </div>
-                            </c-col>
-                            <c-col class="text-end">
-                                <button cButton size="xs" color="default" class="ripple">
-                                    {{ t('Take Snapshot') }}
-                                </button>
-                            </c-col>
-                        </c-row>
                         @if (vmid && nodeName) {
                             <oitc-proxmox-snapshots
                                 [hostId]="hostId"
@@ -359,4 +350,6 @@
             </c-col>
         </c-row>
     }
+
+    <oitc-proxmox-loading-modal></oitc-proxmox-loading-modal>
 </ng-container>
