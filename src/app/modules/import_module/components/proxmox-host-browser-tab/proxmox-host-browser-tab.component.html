@@ -55,6 +55,11 @@
                 <div class="flex-1">
                     <h5 cCardTitle>
                         {{ result.response.info?.name }} [{{ result.response.info?.vmid }}]
+                        @if (result.response.externalLink) {
+                            <a target="_blank" [href]="result.response.externalLink">
+                                <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
+                            </a>
+                        }
                     </h5>
                     <h6 cCardSubtitle class="mb-2 mt-1 text-medium-emphasis">
                         {{ t('State:') }}

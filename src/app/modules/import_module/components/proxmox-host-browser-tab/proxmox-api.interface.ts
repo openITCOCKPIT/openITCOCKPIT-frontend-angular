@@ -8,6 +8,7 @@ export enum ProxmoxVirtType {
 
 interface ProxmoxQemuResponse {
     response: {
+        externalLink: string | null
         result?: null // only null if the Proxmox is offline - does not exist in successful for Proxmox Reponse
         status: boolean // true = online, false = offline
         ipaddresses: Ipaddress[]
@@ -31,6 +32,7 @@ interface ProxmoxQemuResponse {
 
 interface ProxmoxLxcResponse {
     response: {
+        externalLink: string | null
         result?: null // only null if the Proxmox is offline - does not exist in successful for Proxmox Reponse
         status: boolean // true = online, false = offline
         ipaddresses: Ipaddress[]
