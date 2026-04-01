@@ -1182,13 +1182,18 @@
                                         </tbody>
                                     </table>
                                 </c-col>
-                                <!-- Relations -->
-                                @if (result.parentChildRelations.nodes.length > 1) {
-                                    <parent-child-host-map
-                                        [result]="result"
-                                    />
-                                }
                             </c-row>
+                            <!-- Relations -->
+                            @if (result.parentChildRelations.nodes.length > 1) {
+                                <c-row>
+                                    <c-col [xs]="12" class="mt-1">
+                                        <h5>{{ t('Host relations') }}</h5>
+                                        <hr class="fieldset-legend-border-bottom">
+                                        <parent-child-host-map [result]="result"/>
+                                    </c-col>
+                                </c-row>
+
+                            }
                         }
                     </div>
                 }
