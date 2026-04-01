@@ -899,16 +899,16 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
             //cnditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
-            this.filter['Hosts.id'] = bookmarkfilter['Hosts.id'];
-            this.filter['Hosts.name'] = bookmarkfilter['Hosts.name'];
-            this.filter['Hosts.name_regex'] = bookmarkfilter['Hosts.name_regex'];
-            this.filter['Hosts.address'] = bookmarkfilter['Hosts.address'];
-            this.filter['Hosts.address_regex'] = bookmarkfilter['Hosts.address_regex'];
-            this.filter['hostdescription'] = bookmarkfilter['hostdescription'];
-            this.filter['Hosts.host_type'] = bookmarkfilter['Hosts.host_type'];
-            this.filter['Hosts.keywords'] = bookmarkfilter['Hosts.keywords'];
-            this.filter['Hosts.not_keywords'] = bookmarkfilter['Hosts.not_keywords'];
-            this.filter['Hoststatus.output'] = bookmarkfilter['Hoststatus.output'];
+            this.filter['Hosts.id'] = bookmarkfilter['Hosts.id'] || [];
+            this.filter['Hosts.name'] = bookmarkfilter['Hosts.name'] || '';
+            this.filter['Hosts.name_regex'] = bookmarkfilter['Hosts.name_regex'] || false;
+            this.filter['Hosts.address'] = bookmarkfilter['Hosts.address'] || '';
+            this.filter['Hosts.address_regex'] = bookmarkfilter['Hosts.address_regex'] || false;
+            this.filter['hostdescription'] = bookmarkfilter['hostdescription'] || '';
+            this.filter['Hosts.host_type'] = bookmarkfilter['Hosts.host_type'] || [];
+            this.filter['Hosts.keywords'] = bookmarkfilter['Hosts.keywords'] || [];
+            this.filter['Hosts.not_keywords'] = bookmarkfilter['Hosts.not_keywords'] || [];
+            this.filter['Hoststatus.output'] = bookmarkfilter['Hoststatus.output'] || '';
             this.convert2currentStateFilter(bookmarkfilter['Hoststatus.current_state'], 'currentStateFilter');
             if (bookmarkfilter['Hoststatus.problem_has_been_acknowledged'] === 'true') {
                 this.acknowledgementsFilter.acknowledged = true;
@@ -939,7 +939,8 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
                 this.filter['Hostgroups.id'] = bookmarkfilter['Hostgroups.id'];
             }
             this.convert2currentStateFilter(bookmarkfilter['hostpriority'], 'priorityFilter');
-            this.filter['Hosts.satellite_id'] = bookmarkfilter['Hosts.satellite_id'];
+            this.filter['Hosts.satellite_id'] = bookmarkfilter['Hosts.satellite_id'] || [];
+            this.filter['Hostgroups.id'] = bookmarkfilter['Hostgroups.id'] || [];
             this.loadHosts();
 
         }
