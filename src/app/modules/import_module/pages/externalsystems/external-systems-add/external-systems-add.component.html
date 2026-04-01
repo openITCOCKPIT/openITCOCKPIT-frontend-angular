@@ -253,7 +253,7 @@
                     </fieldset>
                 </c-container>
 
-                @if (post.system_type == ExternalSystems.Idoit || post.system_type == ExternalSystems.Itop) {
+                @if (post.system_type == ExternalSystems.Idoit || post.system_type == ExternalSystems.Itop || post.system_type == ExternalSystems.Proxmox) {
                     <c-container
                         [fluid]="true" class="shadow-sm px-2 py-4 mb-4 bg-body rounded">
                         <fieldset>
