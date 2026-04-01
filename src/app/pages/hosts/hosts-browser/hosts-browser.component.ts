@@ -130,6 +130,8 @@ import {
     BrowserSoftwareMacosComponent
 } from './browser-software/browser-software-macos/browser-software-macos.component';
 import { PatchstatusIconComponent } from '../../patchstatus/patchstatus-icon/patchstatus-icon.component';
+import { LayoutService } from '../../../layouts/coreui/layout.service';
+import { ParentChildHostMapComponent } from '../../../components/parent-child-host-map/parent-child-host-map.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -193,7 +195,8 @@ import { PatchstatusIconComponent } from '../../patchstatus/patchstatus-icon/pat
         BrowserSoftwareLinuxComponent,
         BrowserSoftwareWindowsComponent,
         BrowserSoftwareMacosComponent,
-        PatchstatusIconComponent
+        PatchstatusIconComponent,
+        ParentChildHostMapComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
@@ -244,25 +247,37 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     private readonly DowntimesService = inject(DowntimesService);
     private readonly AcknowledgementsService = inject(AcknowledgementsService);
     private cdr = inject(ChangeDetectorRef);
+    private readonly LayoutService: LayoutService = inject(LayoutService);
+    public theme: string = '';
 
     constructor() {
+        this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
+            this.theme = '';
+            if (theme === 'dark') {
+                this.theme = 'dark';
+            }
+            this.cdr.markForCheck();
+        }));
     }
 
     public ngOnInit(): void {
-        const idOrUuid = String(this.route.snapshot.paramMap.get('idOrUuid'));
 
-        const uuid = new UUID();
-        if (uuid.isUuid(idOrUuid)) {
-            // UUID was passed via URL
-            this.subscriptions.add(this.HostsService.getHostByUuid(idOrUuid).subscribe((host) => {
-                this.id = host.id;
+        // If you change the hostId, the subscription needs to come from paramMap.
+        this.route.paramMap.subscribe(params => {
+            const idOrUuid = String(this.route.snapshot.paramMap.get('idOrUuid'));
+            const uuid = new UUID();
+            if (uuid.isUuid(idOrUuid)) {
+                // UUID was passed via URL
+                this.subscriptions.add(this.HostsService.getHostByUuid(idOrUuid).subscribe((host) => {
+                    this.id = host.id;
+                    this.loadHost();
+                }));
+            } else {
+                // ID was passed via URL
+                this.id = Number(idOrUuid);
                 this.loadHost();
-            }));
-        } else {
-            // ID was passed via URL
-            this.id = Number(idOrUuid);
-            this.loadHost();
-        }
+            }
+        });
 
         this.route.queryParams.subscribe(params => {
             let selectedTab = params['selectedTab'] || undefined;
@@ -325,6 +340,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
                     this.acknowledgeStatus(this.result.mergedHost);
                 }
             }
+
         }));
     }
 

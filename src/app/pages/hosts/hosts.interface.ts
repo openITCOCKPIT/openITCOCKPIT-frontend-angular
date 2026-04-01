@@ -15,6 +15,8 @@ import { TimeperiodEnity } from '../timeperiods/timeperiods.interface';
 import { ContainerWithHostJoinData } from '../containers/containers.interface';
 import { HostgroupEntityWithJoinData } from '../hostgroups/hostgroups.interface';
 import { ContactgroupEntity } from '../contactgroups/contactgroups.interface';
+import { StatusmapExtendedNode } from '../statusmaps/statusmap.interface';
+import { Edge } from 'vis-network';
 
 export interface HostObject {
     id?: number
@@ -832,7 +834,11 @@ export interface HostBrowserResult {
     mapModule: boolean,
     username: string,
     blurryCommandLine: boolean,
-    masterInstanceName: string
+    masterInstanceName: string,
+    parentChildRelations: {
+        nodes: StatusmapExtendedNode[],
+        edges: Edge[]
+    }
 }
 
 export interface HostBrowserSlaOverview {

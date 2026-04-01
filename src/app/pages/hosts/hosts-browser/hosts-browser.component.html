@@ -1182,6 +1182,12 @@
                                         </tbody>
                                     </table>
                                 </c-col>
+                                <!-- Relations -->
+                                @if (result.parentChildRelations.nodes.length > 1) {
+                                    <parent-child-host-map
+                                        [result]="result"
+                                    />
+                                }
                             </c-row>
                         }
                     </div>
