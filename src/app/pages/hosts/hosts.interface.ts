@@ -1,7 +1,7 @@
 // This interface is 1:1 the same as the src/itnovum/openITCOCKPIT/Core/Views/Host.php class
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
-import { HostTypesEnum } from './hosts.enum';
+import { HostBrowserTabs, HostTypesEnum } from './hosts.enum';
 import { AcknowledgementTypes } from '../acknowledgements/acknowledgement-types.enum';
 import { ContactEntity, Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
@@ -42,6 +42,7 @@ export interface HostObject {
     satelliteName?: string // hosts/index
     satelliteRestricted?: boolean // hosts/index
     additionalInformationExists?: boolean // hosts/index
+    additionalInformation?: HostBrowserTabs // hosts/index
     type?: HostOrServiceType // hosts/index
 }
 
