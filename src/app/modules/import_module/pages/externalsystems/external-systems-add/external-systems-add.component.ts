@@ -196,7 +196,8 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             custom_data: {
                 custom_mappings: [],
                 hostgroup_mappings: []
-            }
+            },
+            polling_interval: null
         }
     }
 
@@ -208,6 +209,7 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.ExternalSystemsService.createExternalSystem(this.post)
             .subscribe((result) => {
+                this.errors = null;
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;

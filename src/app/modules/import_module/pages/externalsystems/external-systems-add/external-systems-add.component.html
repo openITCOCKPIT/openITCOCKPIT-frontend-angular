@@ -580,7 +580,40 @@
                         </fieldset>
                     </c-container>
                 }
-
+                @if (post.system_type === ExternalSystems.Proxmox) {
+                    <c-container
+                        [fluid]="true" class="shadow-sm px-2 pb-4 mb-4 bg-body rounded">
+                        <fieldset>
+                            <legend class="small fieldset-legend-border-bottom">
+                                <h4>
+                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    {{ t('Data source settings') }}
+                                </h4>
+                            </legend>
+                            <c-row>
+                                <c-col>
+                                    <div>
+                                        <label cLabel>
+                                            {{ t('Polling interval') }}
+                                            <oitc-required-icon></oitc-required-icon>
+                                        </label>
+                                        <input cFormControl required type="number"
+                                               [(ngModel)]="post.polling_interval"
+                                               name="polling_interval"
+                                               placeholder="60"
+                                               [min]="1"
+                                               oitcFormError [errors]="errors" errorField="polling_interval">
+                                        <oitc-form-feedback [errors]="errors"
+                                                            errorField="polling_interval"></oitc-form-feedback>
+                                        <div class="help-block">
+                                            {{ t('The polling interval determines how often a poll occurs to check (in seconds).') }}
+                                        </div>
+                                    </div>
+                                </c-col>
+                            </c-row>
+                        </fieldset>
+                    </c-container>
+                }
             </c-card-body>
 
             <c-card-footer class="text-end">

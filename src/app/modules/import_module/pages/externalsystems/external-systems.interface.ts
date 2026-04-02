@@ -442,6 +442,7 @@ export interface ExternalSystemPost {
         custom_mappings: CustomMapping[],
         hostgroup_mappings: HostgroupMapping[]
     }
+    polling_interval: number | null
 }
 
 export interface ExternalSystemGet {
