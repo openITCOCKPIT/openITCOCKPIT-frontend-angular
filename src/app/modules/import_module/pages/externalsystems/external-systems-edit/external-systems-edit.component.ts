@@ -206,10 +206,10 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ExternalSystemsService.testConnection(this.post)
             .subscribe((result: ExternalSystemConnect) => {
                 this.connectStatus = result.status.status;
-                if (result.status.msg) {
+                if (!this.connectStatus && result.status.msg) {
                     this.connectMessage = result.status.msg.message;
                 }
-                if (result.status.result) {
+                if (this.connectStatus) {
                     this.objectTypes = result.status.result;
                     this.objectTypesForOptionGroup = this.ExternalSystemsService.parseElementsForOptionGroup(this.objectTypes);
                 }

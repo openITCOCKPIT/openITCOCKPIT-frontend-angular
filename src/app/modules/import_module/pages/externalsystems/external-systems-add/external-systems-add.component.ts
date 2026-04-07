@@ -239,10 +239,10 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             .subscribe((result: ExternalSystemConnect) => {
                 this.cdr.markForCheck();
                 this.connectStatus = result.status.status;
-                if (result.status.msg) {
+                if (!this.connectStatus && result.status.msg) {
                     this.connectMessage = result.status.msg.message;
                 }
-                if (result.status.result) {
+                if (this.connectStatus) {
                     this.objectTypes = result.status.result;
                     this.objectTypesForOptionGroup = this.ExternalSystemsService.parseElementsForOptionGroup(this.objectTypes);
                 }
