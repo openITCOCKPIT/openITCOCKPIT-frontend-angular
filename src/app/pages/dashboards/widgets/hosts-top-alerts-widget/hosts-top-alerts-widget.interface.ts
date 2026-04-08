@@ -6,7 +6,7 @@ export interface HostsTopAlertsWidgetConfig {
     state: 'recovery' | 'down' | 'unreachable',
     not_older_than: number,
     not_older_than_unit: 'DAY' | 'HOUR' | 'MINUTE',
-    hostpriority: string[]
+    hostpriority: number[]
     scroll_interval: number,
     useScroll: boolean
 }
@@ -17,7 +17,7 @@ export interface HostsTopAlertsWidgetParams {
     page: number
     'filter[NotificationHosts.state][]': ['recovery' | 'down' | 'unreachable']
     'filter[not_older_than]': number // in minutes
-    'filter[hostpriority][]': string[]
+    'filter[hostpriority][]': number[]
     limit: number
 }
 

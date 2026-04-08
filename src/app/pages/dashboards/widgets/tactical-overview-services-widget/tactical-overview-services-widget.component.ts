@@ -32,6 +32,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HostgroupsService } from '../../../hostgroups/hostgroups.service';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-tactical-overview-services-widget',
@@ -70,7 +71,7 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
     public readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
     public servicestatusSummary?: SummaryStateServices;
     public servicestatusCountPercentage: number[] = [];
-    public config?: TacticalOverviewServicesConfig;
+    public config!: TacticalOverviewServicesConfig;
     protected hostgroups: SelectKeyValue[] = [];
     protected servicegroups: SelectKeyValue[] = [];
     public keywords: string[] = [];
@@ -115,17 +116,13 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
                     this.servicestatusSummary = result.servicestatusSummary;
                     this.servicestatusCountPercentage = result.servicestatusCountPercentage;
 
-                    this.priorityFilter = {
-                        1: false,
-                        2: false,
-                        3: false,
-                        4: false,
-                        5: false
-                    };
-                    for (let index in this.config.servicepriority) {
-                        // @ts-ignore
-                        this.priorityFilter[this.config.servicepriority[index]] = true;
-                    }
+                    _.map(this.config.servicepriority,
+                        (value) => {
+                            if (this.priorityFilter.hasOwnProperty(value)) {
+                                this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                            }
+                        }
+                    );
 
                     this.cdr.markForCheck();
                 }));
@@ -177,15 +174,14 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
         this.config.Servicegroup.keywords = this.servicegroupKeywords.join(',');
         this.config.Servicegroup.not_keywords = this.servicegroupNotKeywords.join(',');
 
-        let priorityFilter: number[] = [];
-        for (let key in this.priorityFilter) {
-            // @ts-ignore
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(Number(key));
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
             }
-        }
-
-        this.config.servicepriority = priorityFilter;
+        );
 
         this.subscriptions.add(this.TacticalOverviewServicesWidgetService.saveWidget(this.widget, this.config)
             .subscribe({
