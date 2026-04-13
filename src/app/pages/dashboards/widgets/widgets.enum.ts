@@ -45,7 +45,8 @@ export enum WidgetTypes {
 
 
     // EventcorrelationModule Widgets.php (EE Module)
-    EvcWidget = 300,
+    EvcWidget = 300,            //evc-widget
+    EvcsSummaryWidget = 301,    //evcs-summary-widget
 
     // AutoreportModule Widgets.php (EE Module)
     AutoreportWidget = 400,
