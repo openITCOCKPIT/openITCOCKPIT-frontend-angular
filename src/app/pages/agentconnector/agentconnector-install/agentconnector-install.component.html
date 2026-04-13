@@ -105,8 +105,7 @@
                                         <br>
                                         {{ t('Copy and paste the shown configuration file to') }}
                                         @if (config.string.operating_system === AgentconnectorOperatingSystems.Windows) {
-                                            <code
-                                            >{{ t('C:\\Program Files\\it-novum\\openitcockpit-agent\\config.ini') }}</code>
+                                            <code>{{ t('C:\\Program Files\\openitcockpit\\openitcockpit-agent\\config.ini') }}</code>
                                         }
                                         @if (config.string.operating_system === AgentconnectorOperatingSystems.Linux) {
                                             <code
@@ -142,24 +141,50 @@
                                                 {{ t('To enable the new configuration a restart of the openITCOCKPIT Agent is required.') }}
                                             </c-col>
                                             @if (config.string.operating_system === AgentconnectorOperatingSystems.Windows) {
-                                                <c-col [xs]="12" class="mb-2"
-                                                >
+                                                <c-col [xs]="12" class="mb-2">
                                                     {{ t('Run as administrator (via cmd.exe)') }}
                                                     <code>{{ t('sc stop openITCOCKPITAgent && sc start openITCOCKPITAgent') }}</code>
                                                 </c-col>
+                                                <c-col [xs]="12" class="mt-4">
+                                                    <c-card>
+                                                        <c-card-header>
+                                                            {{ t('Backward compatibility information') }}
+                                                        </c-card-header>
+                                                        <c-card-body>
+                                                            <p>{{ t('If the openITCOCKPIT Monitoring Agent got installed before version 3.6.0, the configuration file is located at') }}
+                                                                :</p>
+                                                            <p>
+                                                                <code>{{ t('C:\\Program Files\\it-novum\\openitcockpit-agent\\config.ini') }}</code>
+                                                            </p>
+                                                        </c-card-body>
+                                                    </c-card>
+                                                </c-col>
                                             }
                                             @if (config.string.operating_system === AgentconnectorOperatingSystems.Linux) {
-                                                <c-col [xs]="12" class="mb-2"
-                                                >
+                                                <c-col [xs]="12" class="mb-2">
                                                     <code>{{ t('sudo systemctl restart openitcockpit-agent.service') }}</code>
                                                 </c-col>
                                             }
                                             @if (config.string.operating_system === AgentconnectorOperatingSystems.Macos) {
-                                                <c-col [xs]="12" class="mb-2"
-                                                >
-                                                    <code>{{ t('sudo /bin/launchctl stop com.it-novum.openitcockpit.agent') }}</code>
+                                                <c-col [xs]="12" class="mb-2">
+                                                    <code>{{ t('sudo /bin/launchctl stop io.openitcockpit.agent') }}</code>
                                                     <br><br>
-                                                    <code>{{ t('sudo /bin/launchctl start com.it-novum.openitcockpit.agent') }}</code>
+                                                    <code>{{ t('sudo /bin/launchctl start io.openitcockpit.agent') }}</code>
+                                                </c-col>
+                                                <c-col [xs]="12" class="mt-4">
+                                                    <c-card>
+                                                        <c-card-header>
+                                                            {{ t('Backward compatibility information') }}
+                                                        </c-card-header>
+                                                        <c-card-body>
+                                                            <p>{{ t('In case the openITCOCKPIT Monitoring Agent version is < 3.6.0, you need to use the following commands.') }}</p>
+                                                            <p>
+                                                                <code>{{ t('sudo /bin/launchctl stop com.it-novum.openitcockpit.agent') }}</code>
+                                                                <br><br>
+                                                                <code>{{ t('sudo /bin/launchctl start com.it-novum.openitcockpit.agent') }}</code>
+                                                            </p>
+                                                        </c-card-body>
+                                                    </c-card>
                                                 </c-col>
                                             }
                                         </c-row>
