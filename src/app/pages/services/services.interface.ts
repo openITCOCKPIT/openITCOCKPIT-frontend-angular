@@ -67,13 +67,7 @@ export interface ServiceIndexFilter {
         keywords: string[],
         not_keywords: string[],
         servicedescription: string,
-        priority: {
-            1: boolean,
-            2: boolean,
-            3: boolean,
-            4: boolean,
-            5: boolean
-        },
+        priority: { [key: string]: boolean },
         service_type: number[]
     },
     Hosts: {
@@ -739,6 +733,7 @@ export interface ServiceBrowserMenu {
     hostName: string
     serviceName: string
     hostAddress: string
+    hostType: number
     docuExists: boolean
     serviceUrl: string | null
     allowEdit: boolean

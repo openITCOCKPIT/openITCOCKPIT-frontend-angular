@@ -47,6 +47,7 @@ import {
 } from '../../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
 import { RouterLink } from '@angular/router';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-services-top-alerts-widget',
@@ -102,7 +103,7 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
 
 
     // widget config will be loaded from the server
-    public config?: ServicesTopAlertsWidgetConfig;
+    public config!: ServicesTopAlertsWidgetConfig;
 
 
     private readonly ServicesTopAlertsService = inject(ServicesTopAlertsService);
@@ -207,17 +208,13 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
             this.config = config;
             this.loadDowntimes();
 
-            this.priorityFilter = {
-                1: false,
-                2: false,
-                3: false,
-                4: false,
-                5: false
-            };
-            for (let index in this.config.servicepriority) {
-                // @ts-ignore
-                this.priorityFilter[this.config.servicepriority[index]] = true;
-            }
+            _.map(this.config.servicepriority,
+                (value) => {
+                    if (this.priorityFilter.hasOwnProperty(value)) {
+                        this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                    }
+                }
+            );
 
             this.cdr.markForCheck();
 
@@ -233,15 +230,14 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
             return;
         }
 
-        let priorityFilter: number[] = [];
-        for (let key in this.priorityFilter) {
-            // @ts-ignore
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(Number(key));
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
             }
-        }
-
-        this.config.servicepriority = priorityFilter;
+        );
 
         this.subscriptions.add(this.ServicesTopAlertsService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -264,6 +260,7 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
                 priorityFilter.push(Number(key));
             }
         }
+
 
         // Apply the config to the filter
         const params: ServicesTopAlertsWidgetParams = {

@@ -84,6 +84,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
 
 import { IntervalPickerComponent } from '../../../../../components/interval-picker/interval-picker.component';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-customalerts-index',
@@ -250,13 +251,18 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
         }
 
         if (filterstring && filterstring.length > 0) {
-            //cnditions to apply old bookmarks
+            this.cdr.markForCheck();
+            //conditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
             let filter: CustomAlertsIndexFilter = getDefaultCustomAlertsIndexFilter();
-            filter.Customalerts.message = bookmarkfilter.Customalerts.message || '';
-            filter.Customalerts.state = bookmarkfilter.Customalerts.state || [true, true, false, false];
-            filter.Hosts.container_id = bookmarkfilter.Hosts.container_id || [];
-            filter.Hosts.name = bookmarkfilter.Hosts.name || '';
+            filter.Customalerts.message = bookmarkfilter.Customalerts?.message || '';
+            filter.Customalerts.state = bookmarkfilter.Customalerts?.state || [true, true, false, false];
+
+            filter.Hosts.container_id = bookmarkfilter.Hosts?.container_id.filter((containerId: number) => {
+                return _.find(this.containers, {key: containerId});
+            }) || [];
+
+            filter.Hosts.name = bookmarkfilter.Hosts?.name || '';
             filter.servicename = bookmarkfilter.servicename || '';
             filter.recursive = bookmarkfilter.recursive || false;
             this.setFilterAndLoad(filter);

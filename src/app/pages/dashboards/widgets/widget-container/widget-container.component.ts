@@ -93,6 +93,9 @@ import {
 import {
     ResourcegroupsCronjobStatusWidgetComponent
 } from '../../../../modules/scm_module/widgets/resourcegroups-cronjob-status-widget/resourcegroups-cronjob-status-widget.component';
+import {
+    EventcorrelationsSummaryWidgetComponent
+} from '../../../../modules/eventcorrelation_module/widgets/eventcorrelations-summary-widget/eventcorrelations-summary-widget.component';
 
 
 @Component({
@@ -143,7 +146,8 @@ import {
         SlasSummaryWidgetComponent,
         DelayedPassiveHostsWidgetComponent,
         DelayedPassiveServicesWidgetComponent,
-        ResourcegroupsCronjobStatusWidgetComponent
+        ResourcegroupsCronjobStatusWidgetComponent,
+        EventcorrelationsSummaryWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl:

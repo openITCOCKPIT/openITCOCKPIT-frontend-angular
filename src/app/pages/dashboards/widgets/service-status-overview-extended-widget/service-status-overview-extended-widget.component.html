@@ -43,60 +43,65 @@
                                     }
                                 </span>
                             </div>
-                        }
-                        <div [style.height.px]="widgetHeight"
-                             [ngClass]="{'bg-ok': config?.Servicestatus?.current_state === 0,
-                         'bg-warning': config?.Servicestatus?.current_state === 1,
-                         'bg-critical': config?.Servicestatus?.current_state === 2,
-                         'bg-unknown': config?.Servicestatus?.current_state === 3}"
-                             class="w-100">
-                            @if (statusCount !== null) {
-                                <c-row class="h-100 align-items-center">
-                                    @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
-                                        <c-col class="text-center text-white" [style.font-size.px]="fontSize">
-                                            @if (statusCount > 0 && config && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
-                                                <a [routerLink]="['/', 'services', 'index']" class="text-white"
-                                                   [queryParams]="{'id': serviceIds,  'servicestate': config.Servicestatus.current_state, 'hostname': config.Host.name, 'name_regex': config.Host.name_regex ,'servicename': config.Service.servicename, 'servicename_regex': config.Service.servicename_regex, 'address': config.Service.address, 'address_regex': config.Service.address_regex, 'acknowledged': config.Servicestatus.acknowledged,'not_acknowledged': config.Servicestatus.not_acknowledged,'in_downtime': config.Servicestatus.in_downtime,'not_in_downtime': config.Servicestatus.not_in_downtime,sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+
+                            <div [style.height.px]="widgetHeight"
+                                 [ngClass]="{'bg-ok': config.Servicestatus.current_state === 0,
+                         'bg-warning': config.Servicestatus.current_state === 1,
+                         'bg-critical': config.Servicestatus.current_state === 2,
+                         'bg-unknown': config.Servicestatus.current_state === 3}"
+                                 class="w-100">
+                                @if (statusCount !== null) {
+                                    <c-row class="h-100 align-items-center">
+                                        @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
+                                            <c-col class="text-center text-white" [style.font-size.px]="fontSize">
+                                                @if (statusCount > 0 && config && ( PermissionsService.hasPermissionObservable(['services', 'index'])|async )) {
+                                                    <a [routerLink]="['/', 'services', 'index']" class="text-white"
+                                                       [queryParams]="{'id': serviceIds,  'servicestate': config.Servicestatus.current_state, 'hostname': config.Host.name, 'name_regex': config.Host.name_regex ,'servicename': config.Service.servicename, 'servicename_regex': config.Service.servicename_regex, 'address': config.Service.address, 'address_regex': config.Service.address_regex, 'acknowledged': config.Servicestatus.acknowledged,'not_acknowledged': config.Servicestatus.not_acknowledged,'in_downtime': config.Servicestatus.in_downtime,'not_in_downtime': config.Servicestatus.not_in_downtime,sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                                        {{ statusCount }}
+                                                    </a>
+                                                } @else {
                                                     {{ statusCount }}
-                                                </a>
-                                            } @else {
-                                                {{ statusCount }}
-                                            }
-                                        </c-col>
-                                    } @else {
-                                        <c-col class="text-center text-white h5">
-                                            <small>
-                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                                {{ t('You are not permitted to access this object') }}
-                                            </small>
-                                        </c-col>
+                                                }
+                                            </c-col>
+                                        } @else {
+                                            <c-col class="text-center text-white h5">
+                                                <small>
+                                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                    {{ t('You are not permitted to access this object') }}
+                                                </small>
+                                            </c-col>
+                                        }
+                                    </c-row>
+
+                                    @switch (config.Servicestatus.current_state) {
+                                        @case (0) {
+                                            <fa-icon [icon]="['fas', 'check-circle']"
+                                                     [style.font-size.px]="fontSizeIcon"
+                                                     [style.top.px]="iconTopPosition"
+                                                     class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                        }
+                                        @case (1) {
+                                            <fa-icon [icon]="['fas', 'exclamation-triangle']"
+                                                     [style.font-size.px]="fontSizeIcon"
+                                                     [style.top.px]="iconTopPosition"
+                                                     class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                        }
+                                        @case (2) {
+                                            <fa-icon [icon]="['fas', 'exclamation-circle']"
+                                                     [style.font-size.px]="fontSizeIcon"
+                                                     [style.top.px]="iconTopPosition"
+                                                     class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                        }
+                                        @case (3) {
+                                            <fa-icon [icon]="['fas', 'question-circle']"
+                                                     [style.font-size.px]="fontSizeIcon"
+                                                     [style.top.px]="iconTopPosition"
+                                                     class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                        }
                                     }
-                                </c-row>
-                            }
-                            @switch (config?.Servicestatus?.current_state) {
-                                @case (0) {
-                                    <fa-icon [icon]="['fas', 'check-circle']" [style.font-size.px]="fontSizeIcon"
-                                             [style.top.px]="iconTopPosition"
-                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
                                 }
-                                @case (1) {
-                                    <fa-icon [icon]="['fas', 'exclamation-triangle']"
-                                             [style.font-size.px]="fontSizeIcon"
-                                             [style.top.px]="iconTopPosition"
-                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                                }
-                                @case (2) {
-                                    <fa-icon [icon]="['fas', 'exclamation-circle']" [style.font-size.px]="fontSizeIcon"
-                                             [style.top.px]="iconTopPosition"
-                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                                }
-                                @case (3) {
-                                    <fa-icon [icon]="['fas', 'question-circle']" [style.font-size.px]="fontSizeIcon"
-                                             [style.top.px]="iconTopPosition"
-                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                                }
-                            }
-                        </div>
+                            </div>
+                        }
                     }
                 </div>
                 <div class="box-x">

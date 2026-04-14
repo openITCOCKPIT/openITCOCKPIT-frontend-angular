@@ -61,6 +61,7 @@ import {
     ServiceBrowserModalService
 } from '../../../services/services-browser/service-browser-modal/service-browser-modal.service';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-services-status-list-extended-widget',
@@ -126,7 +127,7 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
 
 
     // widget config will be loaded from the server
-    public config?: ServicesStatusListWidgetConfig;
+    public config!: ServicesStatusListWidgetConfig;
     public configHostKeyWords: string[] = [];
     public configHostNotKeyWords: string[] = [];
     public configServiceKeyWords: string[] = [];
@@ -245,17 +246,13 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
             this.configServiceKeyWords = (config.Service.keywords !== '') ? config.Service.keywords.split(',') : [];
             this.configServiceNotKeyWords = (config.Service.not_keywords !== '') ? config.Service.not_keywords.split(',') : [];
 
-            this.priorityFilter = {
-                1: false,
-                2: false,
-                3: false,
-                4: false,
-                5: false
-            };
-            for (let index in this.config.servicepriority) {
-                // @ts-ignore
-                this.priorityFilter[this.config.servicepriority[index]] = true;
-            }
+            _.map(this.config.servicepriority,
+                (value) => {
+                    if (this.priorityFilter.hasOwnProperty(value)) {
+                        this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                    }
+                }
+            );
 
 
             this.loadServices();
@@ -278,15 +275,14 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
         this.config.Service.keywords = this.configServiceKeyWords.join(',');
         this.config.Service.not_keywords = this.configServiceNotKeyWords.join(',');
 
-        let priorityFilter: number[] = [];
-        for (let key in this.priorityFilter) {
-            // @ts-ignore
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(Number(key));
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
             }
-        }
-
-        this.config.servicepriority = priorityFilter;
+        );
 
         this.subscriptions.add(this.ServicesStatusListWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -340,13 +336,15 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
             }
         }
 
-        let priorityFilter: number[] = [];
-        for (let key in this.priorityFilter) {
-            //@ts-ignore
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(Number(key));
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
             }
-        }
+        );
+
 
         // Apply the config to the filter
         const params: ServicesStatusListWidgetParams = {
@@ -369,7 +367,7 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
             'filter[Servicestatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
             'filter[Servicestatus.scheduled_downtime_depth]': inDowntime,
             'filter[Servicestatus.last_state_change][]': lastStateChange,
-            'filter[servicepriority][]': priorityFilter
+            'filter[servicepriority][]': this.config.servicepriority
         };
 
         this.subscriptions.add(this.ServicesStatusListWidgetService.loadServices(params).subscribe(services => {

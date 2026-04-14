@@ -35,6 +35,7 @@ import { HoststatusIconComponent } from '../hoststatus-icon/hoststatus-icon.comp
 import {
     BrowserMenuLoaderComponent
 } from '../../../layouts/primeng/loading/browser-menu-loader/browser-menu-loader.component';
+import { HostTypesEnum } from '../hosts.enum';
 
 
 export interface HostBrowserMenuConfig {
@@ -130,4 +131,5 @@ export class HostsBrowserMenuComponent implements OnInit, OnDestroy {
         this.toggleRescheduling.emit(true);
     }
 
+    protected readonly HostTypesEnum = HostTypesEnum;
 }

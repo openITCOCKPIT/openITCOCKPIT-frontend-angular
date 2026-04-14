@@ -296,9 +296,7 @@
                                             [name]="'Hosts.Priority_1-'+widget.id"
                                             [attr.id]="'Hosts.Priority_1-'+widget.id"
                                             type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="priorityFilter['1']"/>
+                                            [(ngModel)]="priorityFilter[1]"/>
 
                                         <label cFormCheckLabel
                                                [for]="'Hosts.Priority_1'+widget.id"
@@ -313,9 +311,7 @@
                                             [name]="'Hosts.Priority_2-'+widget.id"
                                             [attr.id]="'Hosts.Priority_2-'+widget.id"
                                             type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="priorityFilter['2']"/>
+                                            [(ngModel)]="priorityFilter[2]"/>
 
                                         <label cFormCheckLabel
                                                [for]="'Hosts.Priority_2-'+widget.id" class="ms-1 mt-1 ok">
@@ -330,9 +326,7 @@
                                             [name]="'Hosts.Priority_3-'+widget.id"
                                             [attr.id]="'Hosts.Priority_3-'+widget.id"
                                             type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="priorityFilter['3']"/>
+                                            [(ngModel)]="priorityFilter[3]"/>
 
                                         <label cFormCheckLabel
                                                [for]="'Hosts.Priority_3-'+widget.id"
@@ -349,9 +343,7 @@
                                             [name]="'Hosts.Priority_4-'+widget.id"
                                             [attr.id]="'Hosts.Priority_4-'+widget.id"
                                             type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="priorityFilter['4']"/>
+                                            [(ngModel)]="priorityFilter[4]"/>
 
                                         <label cFormCheckLabel
                                                [for]="'Hosts.Priority_4-'+widget.id"
@@ -369,9 +361,7 @@
                                             [name]="'Hosts.Priority_5-'+widget.id"
                                             [attr.id]="'Hosts.Priority_5-'+widget.id"
                                             type="checkbox"
-                                            trueFalseValue
-                                            oitcDebounce
-                                            [(ngModel)]="priorityFilter['5']"/>
+                                            [(ngModel)]="priorityFilter[5]"/>
 
                                         <label cFormCheckLabel
                                                [for]="'Hosts.Priority_5-'+widget.id"
@@ -387,7 +377,7 @@
                             </c-col>
                         </c-row>
                     }
-                    <c-row>
+                    <c-row class="my-2">
                         <c-col class="text-end">
                             <button cButton class="ripple" color="primary" type="button" (click)="saveWidgetConfig()">
                                 {{ t('Save') }}

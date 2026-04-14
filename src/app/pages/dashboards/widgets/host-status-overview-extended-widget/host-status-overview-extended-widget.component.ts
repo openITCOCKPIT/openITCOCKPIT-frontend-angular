@@ -48,6 +48,7 @@ import {
 } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { ContainersService } from '../../../containers/containers.service';
 import { ContainersLoadContainersByStringParams } from '../../../containers/containers.interface';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-host-status-overview-extended-widget',
@@ -86,7 +87,7 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
     protected flipped = signal<boolean>(false);
     public readonly ContainersService: ContainersService = inject(ContainersService);
     public readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
-    public config?: HostStatusOverviewExtendedWidgetConfig;
+    public config!: HostStatusOverviewExtendedWidgetConfig;
     private readonly HostStatusOverviewExtendedWidgetService = inject(HostStatusOverviewExtendedWidgetService);
     public statusCount: number | null = null;
     public hostIds: number[] = [];
@@ -138,16 +139,13 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
                     this.hostgroupsIds = this.config.Hostgroup._ids.split(',').map(Number).filter(Boolean);
                     this.hostIds = result.hostIds;
 
-                    this.priorityFilter = {
-                        '1': false,
-                        '2': false,
-                        '3': false,
-                        '4': false,
-                        '5': false
-                    }
-                    for (let index in this.config.hostpriority) {
-                        this.priorityFilter[this.config.hostpriority[index]] = true;
-                    }
+                    _.map(this.config.hostpriority,
+                        (value) => {
+                            if (this.priorityFilter.hasOwnProperty(value)) {
+                                this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                            }
+                        }
+                    );
 
                     this.cdr.markForCheck();
                 }));
@@ -219,15 +217,14 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
         this.config.Host.not_keywords = this.notKeywords.join(',');
         this.config.Container._ids = this.containerIds.join(',');
         this.config.Hostgroup._ids = this.hostgroupsIds.join(',');
-
-        let priorityFilter = [];
-        for (var key in this.priorityFilter) {
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(key);
+        this.config.hostpriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.hostpriority.push(key);
+                }
             }
-        }
-
-        this.config.hostpriority = priorityFilter;
+        );
 
         this.subscriptions.add(this.HostStatusOverviewExtendedWidgetService.saveWidgetConfig(this.widget.id, this.config)
             .subscribe({
