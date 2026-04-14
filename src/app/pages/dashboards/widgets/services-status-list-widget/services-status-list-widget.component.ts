@@ -58,6 +58,7 @@ import {
 } from '../../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { RouterLink } from '@angular/router';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-services-status-list-widget',
@@ -120,7 +121,7 @@ export class ServicesStatusListWidgetComponent extends BaseWidgetComponent imple
 
 
     // widget config will be loaded from the server
-    public config?: ServicesStatusListWidgetConfig;
+    public config!: ServicesStatusListWidgetConfig;
     public configHostKeyWords: string[] = [];
     public configHostNotKeyWords: string[] = [];
     public configServiceKeyWords: string[] = [];
@@ -238,17 +239,13 @@ export class ServicesStatusListWidgetComponent extends BaseWidgetComponent imple
             this.configServiceKeyWords = (config.Service.keywords !== '') ? config.Service.keywords.split(',') : [];
             this.configServiceNotKeyWords = (config.Service.not_keywords !== '') ? config.Service.not_keywords.split(',') : [];
 
-            this.priorityFilter = {
-                1: false,
-                2: false,
-                3: false,
-                4: false,
-                5: false
-            };
-            for (let index in this.config.servicepriority) {
-                // @ts-ignore
-                this.priorityFilter[this.config.servicepriority[index]] = true;
-            }
+            _.map(this.config.servicepriority,
+                (value) => {
+                    if (this.priorityFilter.hasOwnProperty(value)) {
+                        this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                    }
+                }
+            );
 
 
             this.loadServices();
@@ -271,15 +268,14 @@ export class ServicesStatusListWidgetComponent extends BaseWidgetComponent imple
         this.config.Service.keywords = this.configServiceKeyWords.join(',');
         this.config.Service.not_keywords = this.configServiceNotKeyWords.join(',');
 
-        let priorityFilter: number[] = [];
-        for (let key in this.priorityFilter) {
-            // @ts-ignore
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(Number(key));
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
             }
-        }
-
-        this.config.servicepriority = priorityFilter;
+        );
 
         this.subscriptions.add(this.ServicesStatusListWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -333,13 +329,14 @@ export class ServicesStatusListWidgetComponent extends BaseWidgetComponent imple
             }
         }
 
-        let priorityFilter: number[] = [];
-        for (let key in this.priorityFilter) {
-            //@ts-ignore
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(Number(key));
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
             }
-        }
+        );
 
         // Apply the config to the filter
         const params: ServicesStatusListWidgetParams = {
@@ -362,7 +359,7 @@ export class ServicesStatusListWidgetComponent extends BaseWidgetComponent imple
             'filter[Servicestatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
             'filter[Servicestatus.scheduled_downtime_depth]': inDowntime,
             'filter[Servicestatus.last_state_change][]': lastStateChange,
-            'filter[servicepriority][]': priorityFilter
+            'filter[servicepriority][]': this.config.servicepriority
         };
 
         this.subscriptions.add(this.ServicesStatusListWidgetService.loadServices(params).subscribe(services => {

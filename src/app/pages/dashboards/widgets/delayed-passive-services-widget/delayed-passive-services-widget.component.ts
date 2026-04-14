@@ -58,6 +58,7 @@ import {
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { ServicesIndexRoot } from '../../../services/services.interface';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-delayed-passive-services-widget',
@@ -122,7 +123,7 @@ export class DelayedPassiveServicesWidgetComponent extends BaseWidgetComponent i
 
 
     // widget config will be loaded from the server
-    public config?: DelayedPassiveServicesWidgetConfig;
+    public config!: DelayedPassiveServicesWidgetConfig;
     public configHostKeyWords: string[] = [];
     public configHostNotKeyWords: string[] = [];
     public configServiceKeyWords: string[] = [];
@@ -236,17 +237,13 @@ export class DelayedPassiveServicesWidgetComponent extends BaseWidgetComponent i
             this.configServiceKeyWords = (config.Service.keywords !== '') ? config.Service.keywords.split(',') : [];
             this.configServiceNotKeyWords = (config.Service.not_keywords !== '') ? config.Service.not_keywords.split(',') : [];
 
-            this.priorityFilter = {
-                1: false,
-                2: false,
-                3: false,
-                4: false,
-                5: false
-            };
-            for (let index in this.config.servicepriority) {
-                // @ts-ignore
-                this.priorityFilter[this.config.servicepriority[index]] = true;
-            }
+            _.map(this.config.servicepriority,
+                (value) => {
+                    if (this.priorityFilter.hasOwnProperty(value)) {
+                        this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                    }
+                }
+            );
 
 
             this.loadServices();
@@ -267,15 +264,14 @@ export class DelayedPassiveServicesWidgetComponent extends BaseWidgetComponent i
         this.config.Service.keywords = this.configServiceKeyWords.join(',');
         this.config.Service.not_keywords = this.configServiceNotKeyWords.join(',');
 
-        let priorityFilter: number[] = [];
-        for (let key in this.priorityFilter) {
-            // @ts-ignore
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(Number(key));
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
             }
-        }
-
-        this.config.servicepriority = priorityFilter;
+        );
 
         this.subscriptions.add(this.DelayedPassiveServicesWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -340,13 +336,14 @@ export class DelayedPassiveServicesWidgetComponent extends BaseWidgetComponent i
             }
         }
 
-        let priorityFilter: number[] = [];
-        for (let key in this.priorityFilter) {
-            //@ts-ignore
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(Number(key));
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
             }
-        }
+        );
 
         // Apply the config to the filter
         const params: DelayedPassiveServicesWidgetParams = {
@@ -370,7 +367,7 @@ export class DelayedPassiveServicesWidgetComponent extends BaseWidgetComponent i
             'filter[Servicestatus.scheduled_downtime_depth]': inDowntime,
             'filter[Servicestatus.last_state_change][]': lastStateChange,
             'filter[delayed][]': delayed,
-            'filter[servicepriority][]': priorityFilter
+            'filter[servicepriority][]': this.config.servicepriority
         };
 
         this.subscriptions.add(this.DelayedPassiveServicesWidgetService.loadServices(params).subscribe(services => {

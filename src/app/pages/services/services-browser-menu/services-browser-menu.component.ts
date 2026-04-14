@@ -39,6 +39,7 @@ import {
     ServicestatusIconComponent
 } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { RouterLink } from '@angular/router';
+import { HostTypesEnum } from '../../hosts/hosts.enum';
 
 
 export interface ServiceBrowserMenuConfig {
@@ -142,4 +143,5 @@ export class ServicesBrowserMenuComponent implements OnInit, OnChanges, OnDestro
         this.toggleRescheduling.emit(true);
     }
 
+    protected readonly HostTypesEnum = HostTypesEnum;
 }

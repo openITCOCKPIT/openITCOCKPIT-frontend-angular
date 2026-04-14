@@ -831,41 +831,57 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
         }
         if (filterstring && filterstring.length > 0) {
             //cnditions to apply old bookmarks
-            const bookmarkfilter = JSON.parse(filterstring);
-            //new Filter not in old filters ITC-3738
-            if (!bookmarkfilter.Hostgroups) {
-                bookmarkfilter.Hostgroups = {
-                    id: []
-                }
-            }
-            if (!bookmarkfilter.Servicegroups) {
-                bookmarkfilter.Servicegroups = {
-                    id: []
-                }
-            }
-            if (bookmarkfilter.Servicestatus && !bookmarkfilter.Servicestatus.state_type) {
-                bookmarkfilter.Servicestatus.state_type = {
-                    soft: false,
-                    hard: false
-                }
-            }
-
+            const defaultFilter:ServiceIndexFilter = getDefaultServicesIndexFilter();
+            const bookmark = JSON.parse(filterstring);
+            defaultFilter.Servicestatus.current_state = bookmark.Servicestatus.current_state || {
+                ok: false,
+                warning: false,
+                critical: false,
+                unknown: false
+            };
+            defaultFilter.Servicestatus.acknowledged = bookmark.Servicestatus?.acknowledged || false;
+            defaultFilter.Servicestatus.not_acknowledged = bookmark.Servicestatus?.not_acknowledged || false;
+            defaultFilter.Servicestatus.in_downtime = bookmark.Servicestatus?.in_downtime || false;
+            defaultFilter.Servicestatus.not_in_downtime = bookmark.Servicestatus?.not_in_downtime || false;
+            defaultFilter.Servicestatus.passive = bookmark.Servicestatus?.passive || false;
+            defaultFilter.Servicestatus.active = bookmark.Servicestatus?.active || false;
+            defaultFilter.Servicestatus.notifications_enabled = bookmark.Servicestatus?.notifications_enabled || false;
+            defaultFilter.Servicestatus.notifications_not_enabled = bookmark.Servicestatus?.notifications_not_enabled || false;
+            defaultFilter.Servicestatus.output = bookmark.Servicestatus?.output || '';
+            defaultFilter.Servicestatus.state_type = bookmark.Servicestatus?.state_type || { soft: false, hard: false};
+            defaultFilter.Services.id = defaultFilter.Services?.id || [];
+            defaultFilter.Services.name = bookmark.Services?.name || '';
+            defaultFilter.Services.name_regex = bookmark.Services?.name_regex || false;
+            defaultFilter.Services.servicedescription = bookmark.Services?.servicedescription || '';
+            defaultFilter.Services.service_type = bookmark.Services?.service_type || [];
+            defaultFilter.Services.keywords = bookmark.Services?.keywords || [];
+            defaultFilter.Services.not_keywords = bookmark.Services?.not_keywords || [];
+            defaultFilter.Services.priority = bookmark.Services?.priority || {
+                                                                                1: false,
+                                                                                2: false,
+                                                                                3: false,
+                                                                                4: false,
+                                                                                5: false
+                                                                            };
+            defaultFilter.Services.service_type = bookmark.Services?.service_type || [];
+            defaultFilter.Hosts.id = bookmark.Hosts?.id || [];
+            defaultFilter.Hosts.name = bookmark.Hosts?.name || '';
+            defaultFilter.Hosts.name_regex = bookmark.Hosts?.name_regex || false;
+            defaultFilter.Hosts.satellite_id = bookmark.Hosts?.satellite_id || [];
+            defaultFilter.Hostgroups.id = bookmark.Hostgroups?.id || [];
+            defaultFilter.Servicegroups.id = bookmark.Servicegroups?.id || [];
             this.params = getDefaultServiceIndexParams();
-            this.filter = bookmarkfilter;
+            this.filter = defaultFilter;
             this.setFilterAndLoad(this.filter);
         }
         this.cdr.markForCheck();
     }
 
     private setFilterAndLoad(filter: ServiceIndexFilter) {
-        this.params.page = 1;
-
         let priorityFilter: string[] = [];
         for (const key in filter.Services.priority) {
             if (filter.Services.priority.hasOwnProperty(key)) {
-                // console.log(key); // Logs the key
-                // @ts-ignore
-                if (filter.Services.priority[key] === true) {
+                if (filter.Services.priority[key]) {
                     priorityFilter.push(key);
                 }
             }
@@ -878,7 +894,6 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
                 state_type = '1';
             }
         }
-
         this.RequestFilter['Hosts.id'] = filter.Hosts.id;
         this.RequestFilter['Hosts.name'] = filter.Hosts.name;
         this.RequestFilter['Hosts.name_regex'] = !!(filter.Hosts.name_regex);

@@ -1,0 +1,459 @@
+<ng-container *transloco="let t">
+    <div class="d-flex h-100 flex-column" #boxContainer>
+        <div>
+            <div>
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())">
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        }
+                    </button>
+                }
+            </div>
+        </div>
+
+        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+             class="box-container" [ngClass]="{'overflow-hidden': !flipped()}">
+            <div class="box-x">
+                <div class="d-flex flex-row flex-wrap">
+                    @if (animationStateShowContent) {
+                        <!-- Widget Content -->
+                        @for (summaryItem of summary; track $index) {
+                            <div (mouseenter)="toggleToaster(Number(summaryItem.service_id))"
+                                 (mouseleave)="cancelToaster()" class="d-inline my-2">
+                                @if (summaryItem.Servicestatus) {
+                                    <fa-stack [size]="'2xl'">
+                                        <fa-icon [icon]="['fas', 'square']" [stackItemSize]="'1x'"
+                                                 [ngClass]="{'text-success': summaryItem.Servicestatus.currentState === 0,
+                                 'text-warning': summaryItem.Servicestatus.currentState === 1,
+                                 'text-danger': summaryItem.Servicestatus.currentState === 2,
+                                 'text-muted': summaryItem.Servicestatus.currentState === 3,
+                                 'opacity-50': !summaryItem.Servicestatus.isHardstate}"></fa-icon>
+
+                                        @if (summaryItem.Servicestatus.problemHasBeenAcknowledged && summaryItem.Servicestatus.scheduledDowntimeDepth) {
+                                            <fa-icon [icon]="['fas', 'user-doctor']" [stackItemSize]="'1x'"
+                                                     [cTextColor]="'white'" transform="shrink-5"></fa-icon>
+                                        } @else if (summaryItem.Servicestatus.problemHasBeenAcknowledged) {
+                                            <fa-icon [icon]="['fas', 'user-check']" [stackItemSize]="'1x'"
+                                                     [cTextColor]="'white'" transform="shrink-5"></fa-icon>
+                                        } @else if (summaryItem.Servicestatus.scheduledDowntimeDepth) {
+                                            <fa-icon [icon]="['fas', 'power-off']" [stackItemSize]="'1x'"
+                                                     [cTextColor]="'white'" transform="shrink-5"></fa-icon>
+                                        }
+                                    </fa-stack>
+                                }
+                            </div>
+                        }
+                        <!-- End Widget Content -->
+                    }
+                </div>
+            </div>
+            <div class="box-x">
+                @if (animationStateShowConfig && config && widget) {
+                    <c-row class="mb-1">
+                        <c-col [xs]="12" [lg]="12">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                </span>
+                                <input [(ngModel)]="config['Host']['name']"
+                                       [placeholder]="'Filter by event correlation name' | transloco"
+                                       cFormControl
+                                       [id]="'Hosts.name-'+widget.id"
+                                       [name]="'Hosts.name-'+widget.id"
+                                       type="text"
+                                />
+                                <span cInputGroupText>
+                                    <label>
+                                        {{ t('Enable RegEx') }}
+                                        <input type="checkbox"
+                                               cFormCheckInput
+                                               [id]="'filter.Host.name_regex-'+widget.id"
+                                               [name]="'filter.Host.name_regex-'+widget.id"
+                                               [(ngModel)]="config['Host']['name_regex']"
+                                        />
+                                        <oitc-regex-helper-tooltip/>
+                                    </label>
+                                </span>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-1">
+                        <c-col [xs]="12" [lg]="12">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input [(ngModel)]="config['Service']['servicename']"
+                                       [placeholder]="'Filter by virtual service name' | transloco"
+                                       cFormControl
+                                       [id]="'Service.servicename-'+widget.id"
+                                       [name]="'Service.servicename-'+widget.id"
+                                       type="text"
+                                />
+                                <span cInputGroupText>
+                                    <label>
+                                        {{ t('Enable RegEx') }}
+                                        <input type="checkbox"
+                                               cFormCheckInput
+                                               [id]="'Service.servicename_regex-'+widget.id"
+                                               [name]="'Service.servicename_regex-'+widget.id"
+                                               [(ngModel)]="config['Service']['servicename_regex']"
+                                        />
+                                        <oitc-regex-helper-tooltip/>
+                                    </label>
+                                </span>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="my-2">
+                        <c-col [xs]="12" [lg]="12">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']"
+                                                 class="text-success cornered cornered-lr"></fa-icon>
+                                    </div>
+                                </span>
+                                <ng-select
+                                    [name]="'Hosts.HostKeywordsInput_'+widget.id"
+                                    [attr.id]="'Hosts.HostKeywordsInput_'+widget.id"
+                                    [items]="[]"
+                                    [(ngModel)]="configHostKeyWords"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by host tags'|transloco"
+                                    [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="my-2">
+                        <c-col [xs]="12" [lg]="12">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']"
+                                                 class="text-danger cornered cornered-lr"></fa-icon>
+                                    </div>
+                                </span>
+                                <ng-select
+                                    [name]="'Hosts.HostNotKeywordsInput_'+widget.id"
+                                    [attr.id]="'Hosts.HostNotKeywordsInput_'+widget.id"
+                                    [items]="[]"
+                                    [(ngModel)]="configHostNotKeyWords"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by excluded host tags'|transloco"
+                                    [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                }
+                @if (config && widget) {
+                    <c-row class="mb-2">
+                        <c-col [xs]="12" [lg]="12">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']"
+                                                 class="text-success cornered cornered-lr"></fa-icon>
+                                    </div>
+                                </span>
+                                <ng-select
+                                    [name]="'Services.ServiceKeywordsInput_'+widget.id"
+                                    [attr.id]="'Services.ServiceKeywordsInput_'+widget.id"
+                                    [items]="[]"
+                                    [(ngModel)]="configServiceKeyWords"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by service tags'|transloco"
+                                    [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="my-2">
+                        <c-col [xs]="12" [lg]="12">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <div class="icon-stack">
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'tags']"
+                                                 class="text-danger cornered cornered-lr"></fa-icon>
+                                    </div>
+                                </span>
+                                <ng-select
+                                    [name]="'Services.ServiceNotKeywordsInput_'+widget.id"
+                                    [attr.id]="'Services.ServiceNotKeywordsInput_'+widget.id"
+                                    [items]="[]"
+                                    [(ngModel)]="configServiceNotKeyWords"
+                                    [addTag]="true"
+                                    [multiple]="true"
+                                    [selectOnTab]="true"
+                                    [placeholder]="'Filter by excluded service tags'|transloco"
+                                    [isOpen]="false">
+                                </ng-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col>
+                            <fieldset class="mt-2">
+                                <legend class="fs-5">
+                                    {{ t('Host groups') }}
+                                </legend>
+                                <c-input-group>
+                                    <oitc-multi-select
+                                        [id]="'Hostgroups-'+widget.id"
+                                        [name]="'Hostgroups-'+widget.id"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [options]="hostgroups"
+                                        [(ngModel)]="config['Hostgroup']['_ids']"
+                                        [searchCallback]="loadHostgroups"
+                                        [appendTo]="'body'"
+                                        class="flex-1">
+                                    </oitc-multi-select>
+                                </c-input-group>
+                                <c-row class="my-1">
+                                    <c-col [xs]="12" [lg]="12">
+                                        <c-input-group>
+                                            <span cInputGroupText class="pe-0 ps-2">
+                                                <fa-stack>
+                                                    <fa-icon [icon]="['fas', 'server']"
+                                                             stackItemSize="1x" pull="right"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'tags']" class="text-success"
+                                                             stackItemSize="1x"
+                                                             transform="shrink-5 right-10 down-7"></fa-icon>
+                                                </fa-stack>
+                                            </span>
+                                            <ng-select
+                                                [id]="'HostgroupKeywordsInput-'+widget.id"
+                                                [name]="'HostgroupKeywordsInput-'+widget.id"
+                                                [items]="[]"
+                                                [(ngModel)]="hostgroupKeywords"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="'Filter by host group tags'|transloco"
+                                                [isOpen]="false">
+                                            </ng-select>
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
+                                <c-row>
+                                    <c-col [xs]="12" [lg]="12">
+                                        <c-input-group>
+                                            <span cInputGroupText class="pe-0 ps-2">
+                                                <fa-stack>
+                                                    <fa-icon [icon]="['fas', 'server']"
+                                                             stackItemSize="1x" pull="right"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'tags']" class="text-danger"
+                                                             stackItemSize="1x"
+                                                             transform="shrink-5 right-10 down-7"></fa-icon>
+                                                </fa-stack>
+                                            </span>
+                                            <ng-select
+                                                [id]="'HostgroupNotKeywordsInput-'+widget.id"
+                                                [name]="'HostgroupNotKeywordsInput-'+widget.id"
+                                                [items]="[]"
+                                                [(ngModel)]="hostgroupNotKeywords"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="'Filter by excluded host group tags'|transloco"
+                                                [isOpen]="false">
+                                            </ng-select>
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col>
+                            <fieldset class="mt-2">
+                                <legend class="fs-5">
+                                    {{ t('Service groups') }}
+                                </legend>
+                                <c-input-group>
+                                    <oitc-multi-select
+                                        [id]="'Servicegroups-'+widget.id"
+                                        [name]="'Servicegroups-'+widget.id"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [options]="servicegroups"
+                                        [(ngModel)]="config['Servicegroup']['_ids']"
+                                        [searchCallback]="loadServicegroups"
+                                        [appendTo]="'body'"
+                                        class="flex-1">
+                                    </oitc-multi-select>
+                                </c-input-group>
+                                <c-row class="my-1">
+                                    <c-col [xs]="12" [lg]="12">
+                                        <c-input-group>
+                                            <span cInputGroupText class="pe-0 ps-2">
+                                                <fa-stack>
+                                                    <fa-icon [icon]="['fas', 'cogs']"
+                                                             stackItemSize="1x" pull="right"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'tags']" class="text-success"
+                                                             stackItemSize="1x"
+                                                             transform="shrink-5 right-10 down-7"></fa-icon>
+                                                </fa-stack>
+                                            </span>
+                                            <ng-select
+                                                [id]="'ServicegroupKeywordsInput-'+widget.id"
+                                                [name]="'HostgroupKeywordsInput-'+widget.id"
+                                                [items]="[]"
+                                                [(ngModel)]="servicegroupKeywords"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="'Filter by service group tags'|transloco"
+                                                [isOpen]="false">
+                                            </ng-select>
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
+                                <c-row>
+                                    <c-col [xs]="12" [lg]="12">
+                                        <c-input-group>
+                                            <span cInputGroupText class="pe-0 ps-2">
+                                                <fa-stack>
+                                                    <fa-icon [icon]="['fas', 'cogs']"
+                                                             stackItemSize="1x" pull="right"></fa-icon>
+                                                    <fa-icon [icon]="['fas', 'tags']" class="text-danger"
+                                                             stackItemSize="1x"
+                                                             transform="shrink-5 right-10 down-7"></fa-icon>
+                                                </fa-stack>
+                                            </span>
+                                            <ng-select
+                                                [id]="'ServicegroupNotKeywordsInput-'+widget.id"
+                                                [name]="'ServicegroupNotKeywordsInput-'+widget.id"
+                                                [items]="[]"
+                                                [(ngModel)]="servicegroupNotKeywords"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="'Filter by excluded service group tags'|transloco"
+                                                [isOpen]="false">
+                                            </ng-select>
+                                        </c-input-group>
+                                    </c-col>
+                                </c-row>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-2">
+                        <c-col [xs]="12">
+                            <fieldset>
+                                <legend class="fs-5">
+                                    {{ t('Priority') }}
+                                </legend>
+                                <c-form-check>
+                                    <input cFormCheckInput type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [name]="'Services.Priority_1-'+widget.id"
+                                           [attr.id]="'Services.Priority_1-'+widget.id"
+                                           [(ngModel)]="priorityFilter[1]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           [for]="'Services.Priority_1-'+widget.id">
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="ok-soft"></fa-icon>
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input cFormCheckInput type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [name]="'Services.Priority_2-'+widget.id"
+                                           [attr.id]="'Services.Priority_2-'+widget.id"
+                                           [(ngModel)]="priorityFilter[2]"/>
+                                    <label cFormCheckLabel class="ms-1  mt-1"
+                                           [for]="'Services.Priority_2-'+widget.id">
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="ok"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="ok"></fa-icon>
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input cFormCheckInput type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [name]="'Services.Priority_3-'+widget.id"
+                                           [attr.id]="'Services.Priority_3-'+widget.id"
+                                           [(ngModel)]="priorityFilter[3]"/>
+                                    <label cFormCheckLabel class="ms-1  mt-1"
+                                           [for]="'Services.Priority_3-'+widget.id">
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="warning"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="warning"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="warning"></fa-icon>
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input cFormCheckInput type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [name]="'Services.Priority_4-'+widget.id"
+                                           [attr.id]="'Services.Priority_4-'+widget.id"
+                                           [(ngModel)]="priorityFilter[4]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           [for]="'Services.Priority_4-'+widget.id">
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="critical-soft"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="critical-soft"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="critical-soft"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="critical-soft"></fa-icon>
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input cFormCheckInput type="checkbox"
+                                           class="checkbox-lg custom-check-default"
+                                           [name]="'Services.Priority_5-'+widget.id"
+                                           [attr.id]="'Services.Priority_5-'+widget.id"
+                                           [(ngModel)]="priorityFilter[5]"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           [for]="'Services.Priority_5-'+widget.id">
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="critical"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="critical"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="critical"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="critical"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'fire']"
+                                                 class="critical"></fa-icon>
+                                    </label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                    </c-row>
+                    <c-row class="my-2">
+                        <c-col class="text-end">
+                            <button cButton class="ripple" color="primary" (click)="submit()">
+                                {{ t('Save') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                }
+            </div>
+        </div>
+    </div>
+</ng-container>
+<oitc-evc-servicestatus-toaster></oitc-evc-servicestatus-toaster>

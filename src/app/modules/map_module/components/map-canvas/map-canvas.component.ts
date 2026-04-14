@@ -1,5 +1,4 @@
 import {
-    AfterViewInit,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
@@ -33,7 +32,7 @@ import { fromEvent, Observable, Subscription } from 'rxjs';
     styleUrl: './map-canvas.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
+export class MapCanvasComponent implements OnInit, OnDestroy {
     @ViewChild('mapCanvasContainer', {static: true}) canvasContainerRef!: ElementRef<HTMLDivElement>;
     @ViewChild('backgroundImageContainer', {static: true}) backgroundImageRef!: ElementRef<HTMLDivElement>;
     @ContentChild(BackgroundItemComponent) backgroundItem!: BackgroundItemComponent;
@@ -51,6 +50,7 @@ export class MapCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
         id: number,
         type: MapItemType
     }>();
+    public widgetHeight: InputSignal<number> = input<number>(0); // to calculate the correct height for map widget
 
     protected backgroundWidth: number | undefined | null;
     protected backgroundHeight: number | undefined | null;
@@ -77,12 +77,6 @@ export class MapCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
             this.setCanvasMinHeight();
         }));
         this.updateBackgroundSizeAndPosition();
-    }
-
-    public ngAfterViewInit(): void {
-        setTimeout(() => {
-            this.setCanvasMinHeight();
-        }, 400);
     }
 
     public getHelplinesClass(): string {
@@ -115,7 +109,14 @@ export class MapCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private setCanvasMinHeight(): void {
+        // default map height is window size
         this.canvasHeight = window.innerHeight - 200;
+
+        // default map height in widgets
+        if (this.widgetHeight()) {
+            this.canvasHeight = this.widgetHeight();
+        }
+
         //calculate canvas height based on background position
         if (this.canvasContainerRef) {
 

@@ -44,8 +44,7 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SliderTimeComponent } from '../../../../components/slider-time/slider-time.component';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule } from '@angular/forms';
-import { DebounceDirective } from '../../../../directives/debounce.directive';
-import { TrueFalseDirective } from '../../../../directives/true-false.directive';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-hosts-top-alerts-widget',
@@ -78,9 +77,7 @@ import { TrueFalseDirective } from '../../../../directives/true-false.directive'
         DropdownComponent,
         DropdownToggleDirective,
         DropdownMenuDirective,
-        DropdownItemDirective,
-        DebounceDirective,
-        TrueFalseDirective
+        DropdownItemDirective
     ],
     templateUrl: './hosts-top-alerts-widget.component.html',
     styleUrl: './hosts-top-alerts-widget.component.css',
@@ -101,17 +98,17 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
 
 
     // widget config will be loaded from the server
-    public config?: HostsTopAlertsWidgetConfig;
+    public config!: HostsTopAlertsWidgetConfig;
 
 
     private readonly HostsTopAlertsService = inject(HostsTopAlertsService);
 
     public priorityFilter: { [key: string]: boolean } = {
-        '1': false,
-        '2': false,
-        '3': false,
-        '4': false,
-        '5': false
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
     };
 
 
@@ -206,16 +203,13 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
             // Save the widget config
             this.config = config;
 
-            this.priorityFilter = {
-                '1': false,
-                '2': false,
-                '3': false,
-                '4': false,
-                '5': false
-            }
-            for (let index in this.config.hostpriority) {
-                this.priorityFilter[this.config.hostpriority[index]] = true;
-            }
+            _.map(this.config.hostpriority,
+                (value) => {
+                    if (this.priorityFilter.hasOwnProperty(value)) {
+                        this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                    }
+                }
+            );
 
             this.loadDowntimes();
             this.cdr.markForCheck();
@@ -232,14 +226,14 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
             return;
         }
 
-        let priorityFilter = [];
-        for (var key in this.priorityFilter) {
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(key);
+        this.config.hostpriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.hostpriority.push(Number(key));
+                }
             }
-        }
-
-        this.config.hostpriority = priorityFilter;
+        );
 
         this.subscriptions.add(this.HostsTopAlertsService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -248,6 +242,7 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
             // Reload the downtimes
             this.loadDowntimes();
         }));
+
     }
 
     public loadDowntimes(): void {
@@ -255,12 +250,14 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
             return;
         }
 
-        let priorityFilter: string[] = [];
-        for (let key in this.priorityFilter) {
-            if (this.priorityFilter[key] === true) {
-                priorityFilter.push(key);
+        this.config.hostpriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.hostpriority.push(Number(key));
+                }
             }
-        }
+        );
 
         // Apply the config to the filter
         const params: HostsTopAlertsWidgetParams = {
@@ -270,7 +267,7 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
             limit: this.limit,
             'filter[NotificationHosts.state][]': [this.config.state],
             'filter[not_older_than]': this.getOlderThanInMinutes(),
-            'filter[hostpriority][]': priorityFilter
+            'filter[hostpriority][]': this.config.hostpriority
         };
 
         this.subscriptions.add(this.HostsTopAlertsService.loadHostTopAlerts(params).subscribe(alerts => {

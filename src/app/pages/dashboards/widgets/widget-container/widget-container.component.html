@@ -195,7 +195,6 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-slas-summary-widget>
         }
-
         @case (WidgetTypes.ChangecalendarWidget) {
             <oitc-changecalendar-widget
                 [widgetInput]="widget"
@@ -228,6 +227,12 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()">
             </oitc-delayed-passive-services-widget>
+        }
+        @case (WidgetTypes.EvcsSummaryWidget) {
+            <oitc-evencorrelations-summary-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()">
+            </oitc-evencorrelations-summary-widget>
         }
 
         <!-- Fallback Widget -->
