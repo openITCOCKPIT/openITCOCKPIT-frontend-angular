@@ -6182,5 +6182,5 @@
   "SCORE scalar <= (lesser-or-equal)": "WYNIK skalar <= (mniejszy lub równy)",
   "SCORE Range Inclusive (≥ 10 and ≤ 20 - inside the range of 10 to 20)": "WYNIK Zakres Inkluzywny (≥ 10 i ≤ 20 - w zakresie od 10 do 20)",
   "SCORE Range Exclusive (< 10 or > 20 - outside the range of 10 to 20)": "WYNIK Zakres Wykluczający (< 10 lub > 20 - poza zakresem od 10 do 20)",
-  "Colours": "Kolory",
+  "Colours": "Kolory"
 }
