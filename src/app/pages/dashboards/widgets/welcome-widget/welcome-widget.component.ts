@@ -48,7 +48,7 @@ export class WelcomeWidgetComponent extends BaseWidgetComponent {
                 this.statuscount = result.statuscount;
                 this.welcome = result.welcome;
 
-                this.nameInitials = initials(result.welcome.user_fullname);
+                this.nameInitials = initials(result.welcome.user_fullname_avatar);
 
                 this.cdr.markForCheck();
             });
