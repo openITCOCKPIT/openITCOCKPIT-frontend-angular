@@ -1,0 +1,39 @@
+<!-- Docs: https://flow.foblex.com/ -->
+<f-flow fDraggable (fLoaded)="onLoaded()" class="h-100">
+    <f-canvas fZoom>
+        @for (connection of connections; track connection.id) {
+            <f-connection [fOffset]="8" [fOutputId]="connection.from" [fInputId]="connection.to"
+                          [fSelectionDisabled]="true"
+                          [fReassignDisabled]="true"
+                          [fType]="'bezier'"
+                          fBehavior="fixed">
+            </f-connection>
+        }
+        @for (node of nodes; track node.id) {
+            <div fNode class="host-node-container"
+                 [ngClass]="{'host-node-ok': node.hostNode.hoststatus.currentState === 0,'host-node-warning': node.hostNode.hoststatus.currentState === 1,'host-node-critical': node.hostNode.hoststatus.currentState === 2,'host-node-unknown': node.hostNode.hoststatus.currentState === 3}"
+                 [fNodePosition]="node.position"
+                 fNodeOutput [fOutputId]="node.connectorId"
+                 [fOutputConnectableSide]="configuration.outputSide"
+                 fNodeInput [fInputId]="node.connectorId"
+                 [fInputConnectableSide]="configuration.inputSide">
+                <div class="host-node-content">
+                    <c-row class="m-0">
+                        <c-col [xs]="12" class="text-truncate p-0 ps-1"
+                               [cTooltip]="node.hostNode.name" cTooltipPlacement="top">
+                            @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                <a [routerLink]="['/', 'hosts', 'browser', node.hostNode.id]"
+                                   class="link-default">
+                                    {{ node.hostNode.name }}
+                                </a>
+                            } @else {
+                                {{ node.hostNode.name }}
+                            }
+                        </c-col>
+                    </c-row>
+                </div>
+            </div>
+        }
+    </f-canvas>
+</f-flow>
+<!--</ng-container>-->
