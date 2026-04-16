@@ -22,7 +22,7 @@ All chunks will be written to the `chunks` directory, with filenames `chunk_1.js
 Now open the first chunk file with an IDE like Visual Studio Code.
 Add the file as attachment to the GitHub Copilot Chat and ask AI to translate the content of the file.
 
-Promt:
+Prompt:
 ```
 I have open a language file in JSON format. The key are the english source. Do NEVER change the key. The value is the target language. I want to translate all values from english to spanish. Make sure to only change the values of the JSON. In the values are placeholders like `{0}` or `{1}`, which need to have two curly brackets like so `{{0}}` or `{{1}}`.
 The context is a IT monitoring system. A "Host" is a device that gets monitored and "Services" are services running on the host.
