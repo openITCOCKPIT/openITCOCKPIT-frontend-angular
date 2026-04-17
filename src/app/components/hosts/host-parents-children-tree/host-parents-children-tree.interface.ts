@@ -5,7 +5,7 @@ export interface INode {
     id: string
     position: IPoint
     connectorId: string
-    hostNode: HostNode
+    hostNode?: HostNode
 }
 
 export interface HostNode {
@@ -13,14 +13,15 @@ export interface HostNode {
     name: string
     parentIds: string[] | null
     hoststatus: HoststatusObject
+    groupId: string | undefined
 }
 
 export interface HostParentsChildrenTreeItem {
     id: number | string
     name: string
     hoststatus: HoststatusObject
-    isChildOfHost?: boolean
     parent_ids: number[]
+    isMainHost?: boolean
 }
 
 export interface ConnectionOperator {

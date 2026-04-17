@@ -11,7 +11,7 @@ import {
 import { AsyncPipe, NgClass } from '@angular/common';
 import { ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
 import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule, FZoomDirective } from '@foblex/flow';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { PointExtensions } from '@foblex/2d';
 import dagre from '@dagrejs/dagre';
@@ -31,6 +31,11 @@ interface HostParentsChildrenNode extends dagre.Node {
     hostNode: HostNode
 }
 
+export enum HostParentChildrenTreeGroupIds {
+    PARENT_GROUP = "hostParentGroup",
+    CHILDREN_GROUP = "hostChildrenGroup"
+}
+
 @Component({
     selector: 'oitc-host-parents-children-tree',
     imports: [
@@ -43,7 +48,8 @@ interface HostParentsChildrenNode extends dagre.Node {
         RowComponent,
         TooltipDirective,
         RouterLink,
-        NgClass
+        NgClass,
+        TranslocoDirective,
     ],
     templateUrl: './host-parents-children-tree.component.html',
     styleUrl: './host-parents-children-tree.component.scss',
@@ -63,7 +69,8 @@ export class HostParentsChildrenTreeComponent {
                 "parent_ids": [
                     218,
                     219
-                ]
+                ],
+                "isMainHost": true
             },
             {
                 "id": 218,
@@ -104,9 +111,7 @@ export class HostParentsChildrenTreeComponent {
         ]
     );
 
-    @ViewChild(FFlowComponent, {static: true})
-    public fFlowComponent!: FFlowComponent;
-    @ViewChild(FCanvasComponent, {static: true})
+    @ViewChild(FCanvasComponent)
     public fCanvasComponent!: FCanvasComponent;
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
@@ -123,7 +128,10 @@ export class HostParentsChildrenTreeComponent {
     private isInitialized = false;
 
     public nodes: INode[] = [];
+    public groupNodes: INode[] = [];
     public connections: ConnectionOperator[] = [];
+    public hasParentNodes = false;
+    public hasChildrenNodes = false;
 
     constructor() {
         effect(() => {
@@ -135,14 +143,17 @@ export class HostParentsChildrenTreeComponent {
         afterRenderEffect(() => {
             // DOM rendering completed for this component
             this.isInitialized = true;
-            this.updateGraph(new dagre.graphlib.Graph());
+            this.updateGraph(new dagre.graphlib.Graph({compound: true}));
             this.cdr.markForCheck();
         });
     }
 
     private updateGraph(graph: dagre.graphlib.Graph): void {
+        this.hasParentNodes = false;
+        this.hasChildrenNodes = false;
         this.setGraph(graph);
         this.nodes = this.getNodes(graph);
+        this.groupNodes = this.getGroupNodes(graph);
         this.connections = this.getConnections(graph);
         this.cdr.markForCheck();
     }
@@ -184,6 +195,13 @@ export class HostParentsChildrenTreeComponent {
                 marginy: 0,
             });
 
+            if (this.hasParentNodes) {
+                graph.setNode(HostParentChildrenTreeGroupIds.PARENT_GROUP, {width: 1, height: 1});
+            }
+            if (this.hasChildrenNodes) {
+                graph.setNode(HostParentChildrenTreeGroupIds.CHILDREN_GROUP, {width: 1, height: 1});
+            }
+
 
             nodes.forEach(node => {
                 // Add service meta data into dagre.Node (HostParentsChildrenNode)
@@ -192,6 +210,8 @@ export class HostParentsChildrenTreeComponent {
                     height: 38,
                     hostNode: node,
                 });
+
+                graph.setParent(node.id, node.groupId);
 
                 if (node.parentIds != null) {
                     node.parentIds.forEach(parentId => {
@@ -205,23 +225,53 @@ export class HostParentsChildrenTreeComponent {
         }
     }
 
+    // had to split normal nodes and group nodes in two different arrays, because if statement breaks canvas rendering in html template
     private getNodes(graph: dagre.graphlib.Graph): INode[] {
-        return graph.nodes().map((x: any) => {
+        let nodes: INode[] = [];
+        // @ts-ignore
+        graph.nodes().forEach((x: any) => {
             let node = graph.node(x);
 
             // Cast the dagre.Node to HostParentsChildrenNode
             const hostParentsChildrenNode = node as HostParentsChildrenNode;
 
-            return {
-                id: generateGuid(),
-                connectorId: x,
-                position: {
-                    x: hostParentsChildrenNode.x,
-                    y: hostParentsChildrenNode.y
-                },
-                hostNode: hostParentsChildrenNode.hostNode
+            if (x != HostParentChildrenTreeGroupIds.PARENT_GROUP && x != HostParentChildrenTreeGroupIds.CHILDREN_GROUP) {
+                nodes.push({
+                    id: generateGuid(),
+                    connectorId: x,
+                    position: {
+                        x: hostParentsChildrenNode.x,
+                        y: hostParentsChildrenNode.y
+                    },
+                    hostNode: hostParentsChildrenNode.hostNode
+                });
             }
         });
+        return nodes;
+    }
+
+    // had to split normal nodes and group nodes in two different arrays, because if statement breaks canvas rendering in html template
+    private getGroupNodes(graph: dagre.graphlib.Graph): INode[] {
+        let nodes: INode[] = [];
+        // @ts-ignore
+        graph.nodes().forEach((x: any) => {
+            let node = graph.node(x);
+
+            // Cast the dagre.Node to HostParentsChildrenNode
+            const hostParentsChildrenNode = node as HostParentsChildrenNode;
+
+            if (x == HostParentChildrenTreeGroupIds.PARENT_GROUP || x == HostParentChildrenTreeGroupIds.CHILDREN_GROUP) {
+                nodes.push({
+                    id: generateGuid(),
+                    connectorId: x,
+                    position: {
+                        x: hostParentsChildrenNode.x,
+                        y: hostParentsChildrenNode.y
+                    }
+                });
+            }
+        });
+        return nodes;
     }
 
     private getHostParentChildrenTreeNodes(hostParentChildrenTree: HostParentsChildrenTreeItem[]): HostNode[] {
@@ -236,11 +286,24 @@ export class HostParentsChildrenTreeComponent {
                 parentIds = hostTreeItem.parent_ids.map(parentId => parentId.toString());
             }
 
+            let groupId = undefined;
+            //Parent Group
+            if (hostTreeItem.parent_ids.length === 0 && hostTreeItem.isMainHost === undefined) {
+                groupId = HostParentChildrenTreeGroupIds.PARENT_GROUP;
+                this.hasParentNodes = true;
+            }
+            //Child Group
+            if (hostTreeItem.parent_ids.length && hostTreeItem.isMainHost === undefined) {
+                groupId = HostParentChildrenTreeGroupIds.CHILDREN_GROUP;
+                this.hasChildrenNodes = true;
+            }
+
             nodes.push({
                 id: hostTreeItem.id.toString(),
                 name: hostTreeItem.name,
                 parentIds: parentIds,
-                hoststatus: hostTreeItem.hoststatus
+                hoststatus: hostTreeItem.hoststatus,
+                groupId: groupId
             });
 
         });
@@ -264,9 +327,10 @@ export class HostParentsChildrenTreeComponent {
 
     public fit2screen(): void {
         if (this.fCanvasComponent) {
-            this.fCanvasComponent.fitToScreen(PointExtensions.initialize(0, 0), true);
+            this.fCanvasComponent.fitToScreen(PointExtensions.initialize(15, 15), true);
             this.cdr.markForCheck();
         }
     }
 
+    protected readonly HostParentChildrenTreeGroupIds = HostParentChildrenTreeGroupIds;
 }

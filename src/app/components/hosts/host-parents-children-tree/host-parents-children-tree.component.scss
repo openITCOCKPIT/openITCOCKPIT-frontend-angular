@@ -19,15 +19,6 @@
     --connection-gradient-2: #30a46c;
     --outlet-color: #3451b2;
     --input-output-color: rgba(60, 60, 67, 0.78);
-    --minimap-node-color: rgba(60, 60, 67);
-    --minimap-node-selected-color: #3451b2;
-    --minimap-view-color: rgba(100, 108, 255, 0.14);
-
-    --form-field-text-color: var(--node-color);
-    --form-field-background: var(--minimap-view-color);
-    --form-field-panel-shadow: var(--shadow-4);
-    --form-field-panel-background: var(--node-background-color);
-    --form-field-active-color: var(--minimap-node-selected-color);
 }
 
 body.dark-theme :host {
@@ -46,14 +37,12 @@ body.dark-theme :host {
     --connection-gradient-2: #298459;
     --outlet-color: #a8b1ff;
     --input-output-color: rgba(235, 235, 245, 0.6);
-    --minimap-node-color: rgba(255, 255, 245, 0.86);
-    --minimap-node-selected-color: #a8b1ff;
-    --minimap-view-color: rgba(100, 108, 255, 0.16);
 }
 
 ::ng-deep .f-flow {
 
     //height: 100vh !important;
+    height: 100% !important;
 
     /*.f-flow {
         height: 100vh !important;
@@ -87,24 +76,6 @@ body.dark-theme :host {
     }
 
 
-    .f-background {
-        line {
-            stroke: var(--background-element-color);
-        }
-
-        circle {
-            fill: var(--background-element-color);
-        }
-    }
-
-
-    .f-line-alignment {
-        .f-line {
-            background-color: var(--connection-color);
-        }
-    }
-
-
     .f-node {
         /*width: 150px;*/
         color: var(--node-color);
@@ -119,96 +90,6 @@ body.dark-theme :host {
         }
     }
 
-    .evc-error {
-        color: var(--cui-danger-text-emphasis) !important;
-        background: var(--cui-danger-bg-subtle) !important;
-        border-color: var(--cui-danger-border-subtle) !important;
-        box-shadow: var(--cui-danger-border-subtle) 5px 0px 10px 0px !important;
-    }
-
-    @mixin connectors {
-        position: absolute;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        border: 0.2px solid var(--node-border-color);
-        background-color: var(--node-background-color);
-        &.left {
-            left: -8px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        &.right {
-            right: -8px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        &.top {
-            top: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        &.top-left {
-            top: -8px;
-            left: -8px;
-        }
-        &.top-right {
-            top: -8px;
-            right: -8px;
-        }
-        &.bottom {
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        &.bottom-left {
-            bottom: -8px;
-            left: -8px;
-        }
-        &.bottom-right {
-            bottom: -8px;
-            right: -8px;
-        }
-    }
-
-    .f-toolbar {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 8px;
-        position: absolute;
-        right: 16px;
-        top: 16px;
-
-        button {
-            font-weight: 500;
-            border: none;
-            border-radius: 2px;
-            padding: 4px 8px;
-            line-height: normal;
-        }
-    }
-
-    .animated :not(circle) {
-        stroke-dashoffset: 0;
-        stroke-dasharray: 5, 5;
-        animation: dash 5s linear infinite;
-    }
-
-    .f-flow {
-        circle {
-            stroke-dashoffset: 0;
-            stroke-dasharray: 0, 0;
-            fill: var(--connection-color);
-        }
-    }
-
-    @keyframes dash {
-        to {
-            stroke-dashoffset: 50;
-        }
-    }
 }
 
 .host-node-container {
@@ -247,4 +128,18 @@ body.dark-theme :host {
 .host-node-unknown {
     border-color: var(--cui-secondary);
     box-shadow: rgba(oitc.$secondary, 0.3) 5px 0px 10px 0px;
+}
+
+.host-parent-children-tree-headline {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    text-align: center;
+    width: 100%;
+}
+
+/* padding-top creates space for the host-parent-children-tree-headline, so fitToScreen also shows the headlines */
+.f-group-container {
+    padding-top: 50px;
+    position: relative;
 }
