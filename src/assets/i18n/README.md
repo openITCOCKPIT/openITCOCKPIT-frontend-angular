@@ -3,6 +3,26 @@ This directory contains the translation file for the openITCOCKPIT frontend.
 Please see the main README.md for instructions on how to update or add new translations.
 This README file will describe how to use the helper scripts.
 
+# Update `.json` files
+
+First you have to extract all new language keys into the JSON files. Execute the command
+
+```sh
+npm run i18n:find
+```
+
+to do so.
+This command will **not terminate successfully**, it will just hang instead!
+When you see the message `✔ Summary` just wait a minute or two, and terminate the process
+
+```sh
+$ ps -eaf | grep npm
+root       29185   21670  0 08:35 pts/2    00:00:00 npm run i18n:find
+root       29553    1645  0 08:36 pts/0    00:00:00 grep --color=auto npm
+
+kill -9 29185
+```
+
 # Update translations using AI
 
 At the moment, we can send an unlimited about of AI requests to GitHub Copilot.
@@ -23,6 +43,7 @@ Now open the first chunk file with an IDE like Visual Studio Code.
 Add the file as attachment to the GitHub Copilot Chat and ask AI to translate the content of the file.
 
 Prompt:
+
 ```
 I have open a language file in JSON format. The key are the english source. Do NEVER change the key. The value is the target language. I want to translate all values from english to spanish. Make sure to only change the values of the JSON. In the values are placeholders like `{0}` or `{1}`, which need to have two curly brackets like so `{{0}}` or `{{1}}`.
 The context is a IT monitoring system. A "Host" is a device that gets monitored and "Services" are services running on the host.
@@ -47,10 +68,10 @@ if the translations are looging correct.
 If yes, move the `output.json` to the original file and commit the changes.
 
 usage
+
 ```
 php merge_chunks.php
 ```
-
 
 ---
 
