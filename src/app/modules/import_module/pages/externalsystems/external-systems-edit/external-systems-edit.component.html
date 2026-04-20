@@ -103,10 +103,10 @@
                         </oitc-select>
                         <div class="help-block text-info">
                             @switch (post.system_type) {
-                                @case ('idoit') {
+                                @case (ExternalSystems.Idoit) {
                                     {{ t('i-doit enables external access to the IT documentation via an application programming interface (API)') }}
                                 }
-                                @case ('itop') {
+                                @case (ExternalSystems.Itop) {
                                     {{ t('iTop enables external access to the IT documentation via an application programming interface (API)') }}
                                 }
                             }
@@ -153,7 +153,7 @@
                                             <input cFormControl id="Url" required type="text"
                                                    name="Url"
                                                    [(ngModel)]="post.api_url"
-                                                   placeholder="{{post.system_type === 'idoit' ? ExternalSystemTypes[0].placeholder : ExternalSystemTypes[1].placeholder}}"
+                                                   placeholder="{{post.system_type === ExternalSystems.Idoit ? ExternalSystemTypes[0].placeholder : ExternalSystemTypes[1].placeholder}}"
                                                    oitcFormError [errors]="errors" errorField="api_url">
                                         </c-input-group>
                                         <oitc-form-feedback [errors]="errors"
@@ -173,7 +173,7 @@
                                         <label cFormCheckLabel
                                                for="use_https">{{ t('Connect via HTTPS') }}</label>
                                     </c-form-check>
-                                    @if (post.system_type === 'idoit') {
+                                    @if (post.system_type === ExternalSystems.Idoit) {
                                         <div class="mt-3 mb-3">
                                             <label cLabel for="api_key">
                                                 {{ t('API Key') }}
@@ -349,7 +349,7 @@
                         </fieldset>
                         <fieldset>
                             <!-- ITC-2918 iTop only mapping for custom classes -->
-                            @if (post.system_type == 'itop' && objectTypes.length > 0) {
+                            @if (post.system_type == ExternalSystems.Itop && objectTypes.length > 0) {
                                 <c-row class="px-2">
                                     <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
                                         <h4 cAlertHeading class="text-primary">
@@ -469,7 +469,7 @@
                         </fieldset>
                         <fieldset>
                             <!-- ITC-3098 iTop only mapping for import of applications into host groups -->
-                            @if (post.system_type == 'itop' && objectTypes.length > 0) {
+                            @if (post.system_type == ExternalSystems.Itop && objectTypes.length > 0) {
                                 <c-row class="px-2">
                                     <c-col [xs]="12" class="mt-3 border-start border-primary border-5">
                                         <h4 cAlertHeading class="text-primary">
@@ -581,6 +581,40 @@
                             }
                         </fieldset>
                     </c-container>
+                    @if (post.system_type === ExternalSystems.Proxmox) {
+                        <c-container
+                            [fluid]="true" class="shadow-sm px-2 pb-4 mb-4 bg-body rounded">
+                            <fieldset>
+                                <legend class="small fieldset-legend-border-bottom">
+                                    <h4>
+                                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                        {{ t('Data source settings') }}
+                                    </h4>
+                                </legend>
+                                <c-row>
+                                    <c-col>
+                                        <div>
+                                            <label cLabel>
+                                                {{ t('Polling interval') }}
+                                                <oitc-required-icon></oitc-required-icon>
+                                            </label>
+                                            <input cFormControl required type="number"
+                                                   [(ngModel)]="post.polling_interval"
+                                                   name="polling_interval"
+                                                   placeholder="60"
+                                                   [min]="1"
+                                                   oitcFormError [errors]="errors" errorField="polling_interval">
+                                            <oitc-form-feedback [errors]="errors"
+                                                                errorField="polling_interval"></oitc-form-feedback>
+                                            <div class="help-block">
+                                                {{ t('The polling interval determines how often a poll occurs to check (in seconds).') }}
+                                            </div>
+                                        </div>
+                                    </c-col>
+                                </c-row>
+                            </fieldset>
+                        </c-container>
+                    }
                 </c-card-body>
                 <c-card-footer class="text-end">
                     <button cButton class="ripple" color="primary" type="submit">

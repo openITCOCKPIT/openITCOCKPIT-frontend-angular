@@ -1,0 +1,421 @@
+<ng-container *transloco="let t">
+    @if (result) {
+        <c-row class="mb-2">
+            <c-col [xs]="12">
+                <h4>
+                    {{ t('Proxmox overview') }}
+                    <sup>
+                        <small>
+                            <oitc-online-offline [isOnline]="result.response.status"></oitc-online-offline>
+                        </small>
+                    </sup>
+                </h4>
+            </c-col>
+        </c-row>
+    }
+
+    @if (!result) {
+        <oitc-proxmox-browser-loader></oitc-proxmox-browser-loader>
+    }
+
+    @if (result && result.response && !result.response.found) {
+        <c-alert color="danger" class="d-flex align-items-center">
+            <fa-icon [icon]="['fas', 'exclamation-triangle']" size="2x" class="me-3"></fa-icon>
+            <div>
+                {{ t('Virtual maschine or LXC container could not be found in Proxmox VE!') }}
+            </div>
+        </c-alert>
+    }
+
+    @if (result && result.response && result.response.found) {
+        <c-card>
+            <c-card-body class="align-items-center d-flex">
+                <div class="me-3 p-3 text-white">
+                    @if (result.response.current && 'lock' in result.response.current && result.response.current.lock === 'migrate') {
+                        <fa-icon [icon]="['far', 'paper-plane']"
+                                 size="3x"
+                                 class="unknown unknown-glow-svg"></fa-icon>
+                    } @else {
+                        @if (result.response.info?.status === 'running') {
+                            <fa-icon [icon]="['fas', 'play']"
+                                     size="3x"
+                                     class="up up-glow-svg"></fa-icon>
+                        } @else if (result.response.info?.status === 'paused') {
+                            <fa-icon [icon]="['fas', 'pause']"
+                                     size="3x"
+                                     class="warning warning-glow-svg"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'stop']"
+                                     size="3x"
+                                     class="down down-glow-svg"></fa-icon>
+                        }
+                    }
+
+                </div>
+                <div class="flex-1">
+                    <h5 cCardTitle>
+                        {{ result.response.info?.name }} [{{ result.response.info?.vmid }}]
+                        @if (result.response.externalLink) {
+                            <a target="_blank" [href]="result.response.externalLink">
+                                <fa-icon [icon]="['fas', 'external-link-alt']" class="ps-1"></fa-icon>
+                            </a>
+                        }
+                    </h5>
+                    <h6 cCardSubtitle class="mb-2 mt-1 text-medium-emphasis">
+                        {{ t('State:') }}
+                        @if (result.response.info && result.response.current) {
+                            @if ('qmpstatus' in result.response.current) {
+                                <!-- QEMU VM -->
+                                @if (result.response.info.status !== result.response.current.qmpstatus) {
+                                    {{ result.response.info.status }} ({{ result.response.current.qmpstatus }})
+                                } @else {
+                                    {{ result.response.info.status }}
+                                }
+                            } @else {
+                                <!-- LXC Container -->
+                                {{ result.response.info.status }}
+                            }
+
+                        }
+                    </h6>
+                    @if (result.response.current?.uptime) {
+                        <p cCardText>
+                            {{ t('Uptime') }} {{ result.response.current?.uptimeAgoInWords }}
+                        </p>
+                    }
+
+                </div>
+                @if (result.response.info?.status === 'running') {
+                    @if (result.response.agent && result.response.agent['pretty-name']) {
+                        <div class="flex-1">
+                            <h5>
+                                {{ t('Operating system') }}
+                            </h5>
+                            <h6 cCardSubtitle class="mb-2 mt-1 text-medium-emphasis">
+                                @if (result.response.agent.id && result.response.agent.version) {
+                                    @switch (result.response.agent.id) {
+                                        @case ('ubuntu') {
+                                            <oitc-patchstatus-icon
+                                                [platform]="result.response.agent.id"
+                                                [type]="'linux'"
+                                            ></oitc-patchstatus-icon>
+                                        }
+                                        @case ('debian') {
+                                            <oitc-patchstatus-icon
+                                                [platform]="result.response.agent.id"
+                                                [type]="'linux'"
+                                            ></oitc-patchstatus-icon>
+                                        }
+                                        @case ('suse') {
+                                            <oitc-patchstatus-icon
+                                                [platform]="result.response.agent.id"
+                                                [type]="'suse'"
+                                            ></oitc-patchstatus-icon>
+                                        }
+                                        @case ('mswindows') {
+                                            <oitc-patchstatus-icon
+                                                [platform]="result.response.agent.id"
+                                                [type]="'windows'"
+                                            ></oitc-patchstatus-icon>
+                                        }
+                                        @default {
+                                            {{ result.response.agent.name }}
+                                        }
+                                    }
+                                }
+                            </h6>
+                            <p cCardText>
+                                {{ result.response.agent['pretty-name'] }}
+                                <span class="text-muted">
+                                    [{{ result.response.agent.version }}]
+                                </span>
+
+                            </p>
+                        </div>
+                    }
+                    @if (result.response.current) {
+                        <div class="flex-1">
+                            <h5>
+                                {{ t('CPU') }}
+                            </h5>
+                            <h6 cCardSubtitle class="mb-2 mt-1 text-medium-emphasis">
+                                {{ t('Cores') }}:
+                                <span class="mx-2">
+                                    <code>{{ result.response.current.cpus }}</code>
+                                </span>
+
+                            </h6>
+                            <p cCardText>
+                                {{ result.response.current.cpu * 100|  number: '1.3-3' }} %
+                            </p>
+                        </div>
+
+                        @if (result.response.current.mem) {
+                            <div class="flex-1">
+                                <h5>
+                                    {{ t('Memory') }}
+                                </h5>
+                                <h6 cCardSubtitle class="mb-2 mt-1 text-medium-emphasis">
+                                    {{ result.response.current.maxmem | byteToHuman }}
+                                </h6>
+                                <p cCardText>
+                                    {{ result.response.current.mem / result.response.current.maxmem * 100|  number: '1.3-3' }}
+                                    %
+                                    ({{ result.response.current.mem | byteToHuman }}
+                                    {{ t('of') }}
+                                    {{ result.response.current.maxmem | byteToHuman }}
+                                    )
+                                </p>
+                            </div>
+                        }
+                    }
+                }
+                <div class="">
+                    @if (vmid && nodeName) {
+                        <oitc-proxmox-actions
+                            [hostId]="hostId"
+                            [vmid]="vmid"
+                            [nodeName]="nodeName"
+                            [status]="status"
+                            [overruleShutdown]="overruleShutdown"
+                            [virtType]="result.response.type"></oitc-proxmox-actions>
+                    }
+                </div>
+
+            </c-card-body>
+        </c-card>
+
+        @if (vmid && nodeName) {
+            <oitc-proxmox-graphs
+                [hostId]="hostId"
+                [vmid]="vmid"
+                [nodeName]="nodeName"
+                [virtType]="result.response.type"></oitc-proxmox-graphs>
+        }
+
+        <c-row class="mt-2 equal-height-row d-flex flex-wrap">
+            <c-col md="12" xl="6">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <h5 class="fs-6 fw-semibold text-uppercase">
+                            {{ t('System') }}
+                        </h5>
+                        @if (result.response.current && result.response.current.ha) {
+                            <c-row class="my-1 odd">
+                                <c-col lg="7">
+                                    <fa-icon [icon]="['fas', 'heart-pulse']" [cTextColor]="'primary'"></fa-icon>
+                                    {{ t('HA State') }}
+                                    @if (result.response.current.ha.state) {
+                                        <span class="text-muted">
+                                            ({{ result.response.current.ha.state }})
+                                        </span>
+                                    }
+                                </c-col>
+                                <c-col class="text-end">
+                                    @if (result.response.current.ha.managed) {
+                                        <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
+                                    } @else {
+                                        <fa-icon [icon]="['fas', 'xmark']" class="text-danger"></fa-icon>
+                                    }
+                                </c-col>
+                            </c-row>
+                        }
+                        @if (result.response.info?.node) {
+                            <c-row class="my-1 even">
+                                <c-col lg="7">
+                                    <fa-icon [icon]="['fas', 'building']" [cTextColor]="'primary'"></fa-icon>
+                                    {{ t('Node') }}
+
+                                </c-col>
+                                <c-col class="text-end">
+                                    {{ result.response.info?.node }}
+                                </c-col>
+                            </c-row>
+                        }
+
+                        @if (result.response.current) {
+                            @if (result.response.current.cpu !== undefined && result.response.current.cpus) {
+                                <c-row class="my-1 odd">
+                                    <c-col lg="7">
+                                        <fa-icon [icon]="['fas', 'microchip']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ t('CPU usage') }}
+
+                                    </c-col>
+                                    <c-col class="text-end">
+                                        {{ result.response.current.cpu * 100|  number: '1.3-3' }} % {{ t('of') }}
+                                        {{ result.response.current.cpus }}{{ t('CPU(s)') }}
+                                    </c-col>
+                                </c-row>
+                                <c-row>
+                                    <c-col>
+                                        <c-progress class="my-2" thin
+                                                    [value]="result.response.current.cpu * 100|  number: '1.2-2'"
+                                                    color="info"/>
+                                    </c-col>
+                                </c-row>
+                            }
+                            @if (result.response.current.maxmem && result.response.current.mem) {
+                                <c-row class="my-1 even">
+                                    <c-col lg="7">
+                                        <fa-icon [icon]="['fas', 'memory']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ t('Memory usage') }}
+
+                                    </c-col>
+                                    <c-col class="text-end">
+                                        {{ result.response.current.mem / result.response.current.maxmem * 100|  number: '1.3-3' }}
+                                        %
+                                        ({{ result.response.current.mem | byteToHuman }}
+                                        {{ t('of') }}
+                                        {{ result.response.current.maxmem | byteToHuman }}
+                                        )
+                                    </c-col>
+                                </c-row>
+                                <c-row>
+                                    <c-col>
+                                        <c-progress class="my-2" thin
+                                                    [value]="  result.response.current.mem / result.response.current.maxmem * 100|  number: '1.2-2'"
+                                                    color="info"/>
+                                    </c-col>
+                                </c-row>
+                            }
+                            @if ('swap' in result.response.current && result.response.current.maxswap) {
+                                <c-row class="my-1 even">
+                                    <c-col lg="7">
+                                        <fa-icon [icon]="['fas', 'arrows-rotate']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ t('SWAP usage') }}
+
+                                    </c-col>
+                                    <c-col class="text-end">
+                                        {{ result.response.current.swap / result.response.current.maxswap * 100|  number: '1.3-3' }}
+                                        %
+                                        ({{ result.response.current.swap | byteToHuman }}
+                                        {{ t('of') }}
+                                        {{ result.response.current.maxswap | byteToHuman }}
+                                        )
+                                    </c-col>
+                                </c-row>
+                                <c-row>
+                                    <c-col>
+                                        <c-progress class="my-2" thin
+                                                    [value]="  result.response.current.swap / result.response.current.maxswap * 100|  number: '1.2-2'"
+                                                    color="info"/>
+                                    </c-col>
+                                </c-row>
+                            }
+                            @if ('memhost' in result.response.current && result.response.current.memhost) {
+                                <c-row class="my-1 odd">
+                                    <c-col lg="7">
+                                        <fa-icon [icon]="['fas', 'memory']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ t('Host memory usage') }}
+
+                                    </c-col>
+                                    <c-col class="text-end">
+                                        {{ result.response.current.memhost | byteToHuman }}
+                                    </c-col>
+                                </c-row>
+                            }
+
+                            @if ('maxdisk' in result.response.current && result.response.current.maxdisk) {
+                                <c-row class="my-1 odd">
+                                    <c-col lg="7">
+                                        <fa-icon [icon]="['far', 'hard-drive']" [cTextColor]="'primary'"></fa-icon>
+                                        {{ t('Bootdisk size') }}
+                                    </c-col>
+                                    <c-col class="text-end">
+                                        @if ('disk' in result.response.current) {
+                                            <c-col class="text-end">
+                                                {{ result.response.current.disk / result.response.current.maxdisk * 100|  number: '1.3-3' }}
+                                                %
+                                                ({{ result.response.current.disk | byteToHuman }}
+                                                {{ t('of') }}
+                                                {{ result.response.current.maxdisk | byteToHuman }}
+                                                )
+                                            </c-col>
+                                        } @else {
+                                            {{ result.response.current.maxdisk | byteToHuman }}
+                                        }
+                                    </c-col>
+                                </c-row>
+                                @if ('disk' in result.response.current) {
+                                    <c-row>
+                                        <c-col>
+                                            <c-progress class="my-2" thin
+                                                        [value]="result.response.current.disk / result.response.current.maxdisk * 100|  number: '1.2-2'"
+                                                        color="info"/>
+                                        </c-col>
+                                    </c-row>
+                                }
+                            }
+                        }
+                    </c-card-body>
+                </c-card>
+            </c-col>
+            <c-col md="12" xl="6">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <h5 class="fs-6 fw-semibold text-uppercase">
+                            {{ t('Network information') }}
+                        </h5>
+                        @if (result.response.ipaddresses) {
+                            <c-row class="even mb-1">
+                                <c-col [lg]="12">
+                                    <fa-icon [icon]="['fas', 'arrow-right-arrow-left']"
+                                             [cTextColor]="'primary'"></fa-icon>
+                                    {{ t('IPs') }}
+                                </c-col>
+                            </c-row>
+                            <c-row class="d-xs-none ">
+                                <c-col [lg]="4" class="bold pe-1">
+                                    <small>{{ t('Name') }}</small>
+                                </c-col>
+                                <c-col [lg]="4" class="bold px-0">
+                                    <small>{{ t('MAC address') }}</small>
+                                </c-col>
+                                <c-col [lg]="4" class="bold px-1">
+                                    <small>{{ t('IP address') }}</small>
+                                </c-col>
+                            </c-row>
+                            @for (ipaddress of result.response.ipaddresses; track $index) {
+                                <c-row [ngClass]="{odd: $odd, even: $even}">
+                                    <c-col [lg]="4" class="pe-1">
+                                        <small>{{ ipaddress.name }}</small>
+                                    </c-col>
+                                    <c-col [lg]="4" class="px-0">
+                                        <small>{{ ipaddress.hardware_address }}</small>
+                                    </c-col>
+                                    <c-col [lg]="4" class="px-1">
+                                        <ul class="list-unstyled m-0">
+                                            @for (ip of ipaddress.ip_address; track $index) {
+                                                <li><small>{{ ip.ip_address }}</small></li>
+                                            }
+                                        </ul>
+                                    </c-col>
+
+                                </c-row>
+                            }
+                        }
+                    </c-card-body>
+                </c-card>
+            </c-col>
+        </c-row>
+
+        <c-row class="mt-2 equal-height-row d-flex flex-wrap">
+            <c-col [xs]="12">
+                <c-card class="h-100">
+                    <c-card-body>
+                        @if (vmid && nodeName) {
+                            <oitc-proxmox-snapshots
+                                [hostId]="hostId"
+                                [vmid]="vmid"
+                                [nodeName]="nodeName"
+                                [status]="status"
+                                [virtType]="result.response.type"></oitc-proxmox-snapshots>
+                        }
+                    </c-card-body>
+                </c-card>
+            </c-col>
+        </c-row>
+    }
+
+    <oitc-proxmox-loading-modal></oitc-proxmox-loading-modal>
+</ng-container>

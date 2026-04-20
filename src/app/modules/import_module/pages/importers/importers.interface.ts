@@ -205,7 +205,6 @@ export interface ImporterElements {
     hostdefaults: {
         [key: string]: ImporterHostDefaultsResponse
     }
-    externalsystems: ExternalSystemsAsList
     externalMonitorings: ExternalMonitoringsAsList
 }
 
