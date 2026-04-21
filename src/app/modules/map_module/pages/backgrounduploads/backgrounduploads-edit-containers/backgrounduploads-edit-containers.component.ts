@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { GenericValidationError } from '../../../../../generic-responses';
+import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { HistoryService } from '../../../../../history.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { BackgrounduploadsService } from '../backgrounduploads.service';
 import { LoadContainersRoot } from '../../../../../pages/contacts/contacts.interface';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -16,6 +15,7 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
 import {
     CardBodyComponent,
     CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
@@ -32,6 +32,8 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { BackgrounduploadsService } from '../../mapeditors/backgrounduploads.service';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-backgrounduploads-edit-containers',
@@ -59,6 +61,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         XsButtonDirective,
         RowComponent,
         ColComponent,
+        CardFooterComponent,
     ],
     templateUrl: './backgrounduploads-edit-containers.component.html',
     styleUrl: './backgrounduploads-edit-containers.component.css',
@@ -100,9 +103,7 @@ export class BackgrounduploadsEditContainersComponent implements OnInit, OnDestr
                 this.post = result.uploadedFile;
                 this.requiredContainers = result.requiredContainers
                 this.areContainersChangeable = result.areContainersChangeable
-                console.log(this.post);
                 this.loadContainers();
-
             }));
     }
 
@@ -145,6 +146,43 @@ export class BackgrounduploadsEditContainersComponent implements OnInit, OnDestr
     }
 
     public updateMapUpload() {
+        //update container ids if it was edited
+        if (this.areContainersChangeable) {
+            this.post.containers._ids = this.post.containers._ids.filter((containerId) => {
+                this.containersSelection.forEach((selectedContainerId) => {
+                    return containerId !== selectedContainerId;
+                });
+                return false;
+            });
+        }
 
+        this.post.containers._ids = _.uniq(
+            this.post.containers._ids.concat(this.containersSelection).concat(this.requiredContainers)
+        );
+        this.subscriptions.add(this.BackgrounduploadsService.updateUploadedFile(this.post)
+            .subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+                    const response: GenericIdResponse = result.data as GenericIdResponse;
+
+                    const title: string = this.TranslocoService.translate('Upload file');
+                    const msg: string = this.TranslocoService.translate('updated successfully');
+                    const url: (string | number)[] = ['map_module', 'backgrounduploads', 'editContainers', response.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+                    this.HistoryService.navigateWithFallback(['/map_module/backgrounduploads/backgrounds']);
+
+                    return;
+                }
+
+                // Error
+                const errorResponse = result.data as GenericValidationError;
+                this.notyService.genericError();
+                if (result) {
+                    this.errors = errorResponse;
+                    this.cdr.markForCheck();
+                }
+            })
+        );
     }
 }

@@ -87,7 +87,7 @@ import { TachoItemComponent } from '../../../components/tacho-item/tacho-item.co
 import { TemperatureItemComponent } from '../../../components/temperature-item/temperature-item.component';
 import { GraphItemComponent } from '../../../components/graph-item/graph-item.component';
 import { ServiceOutputItemComponent } from '../../../components/service-output-item/service-output-item.component';
-import { BackgrounduploadsService } from '../Backgrounduploads.service';
+import { BackgrounduploadsService } from '../backgrounduploads.service';
 import { HostsService } from '../../../../../pages/hosts/hosts.service';
 import { HostsLoadHostsByStringParams } from '../../../../../pages/hosts/hosts.interface';
 import { HostgroupsService } from '../../../../../pages/hostgroups/hostgroups.service';

@@ -113,6 +113,17 @@
                         </c-col>
                     </c-row>
                 </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Save') }}
+                    </button>
+                    <button [fallbackUrl]="['map_module','backgrounduploads', 'backgrounds']" cButton
+                            class="ms-1 ripple" color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
             </c-card>
         </form>
     }

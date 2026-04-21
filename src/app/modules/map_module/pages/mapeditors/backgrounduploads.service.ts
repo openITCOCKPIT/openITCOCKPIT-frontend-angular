@@ -28,6 +28,14 @@ import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import {
+    BackgroundsParams,
+    BackgroundsRoot,
+    MapUploadEdit,
+    MapUploadItem
+} from '../backgrounduploads/backgrounduploads.interface';
+import { LoadContainersRoot } from '../../../../pages/contacts/contacts.interface';
+import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -80,6 +88,65 @@ export class BackgrounduploadsService {
                     });
                 })
             );
+    }
+
+    public getBackgrounds(params: BackgroundsParams): Observable<BackgroundsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<BackgroundsRoot>(`${proxyPath}/map_module/backgroundUploads/backgrounds.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+
+    public getMapUploadWithContainers(id: number): Observable<MapUploadEdit> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<MapUploadEdit>(`${proxyPath}/map_module/backgroundUploads/editContainers/${id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadContainers(): Observable<LoadContainersRoot> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<LoadContainersRoot>(`${proxyPath}/map_module/backgroundUploads/loadContainers.json?angular=true`);
+    }
+
+    public updateUploadedFile(upload: MapUploadItem): Observable<GenericResponseWrapper> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/map_module/backgroundUploads/editContainers/${upload.id}.json?angular=true`, {
+            MapUpload: upload
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data as GenericIdResponse
+                };
+            }),
+            catchError((error: any) => {
+                const err = error.error.error as GenericValidationError;
+                return of({
+                    success: false,
+                    data: err
+                });
+            })
+        );
+    }
+
+    public delete(item: DeleteAllItem): Observable<Object> {
+        const proxyPath = this.proxyPath;
+        return this.http.post(`${proxyPath}/map_module/backgroundUploads/delete.json?angular=true`, {
+            'filename': item.id
+        });
     }
 
 }

@@ -122,7 +122,7 @@
                                 <td class="text-center">
                                     <oitc-item-select
                                         *oitcPermission="['mapmodule','backgroundUploads', 'delete']"
-                                        [disabled]="!background.allowEdit || background.maps.length > 0"
+                                        [disabled]="!background.allowEdit"
                                         [item]="background"></oitc-item-select>
                                 </td>
                                 <td>
@@ -164,7 +164,7 @@
                                             <fa-icon [icon]="['fas', 'folder-tree']"></fa-icon>
                                             {{ t('Container assignments') }}
                                         </oitc-actions-button-element>
-                                        @if (background.allowEdit && background.maps.length === 0 && ( this.PermissionsService.hasPermissionObservable(['mapmodule', 'backgroundUploads', 'delete'])|async )) {
+                                        @if (background.allowEdit && ( this.PermissionsService.hasPermissionObservable(['mapmodule', 'backgroundUploads', 'delete'])|async )) {
                                             <li cDropdownDivider *oitcPermission="['MapModule', 'maps', 'delete']"></li>
                                             <oitc-actions-button-element (click)="toggleDeleteAllModal(background)"
                                                                          [permission]="'mapmodule.maps.delete'">

@@ -41,7 +41,6 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { BackgrounduploadsService } from '../backgrounduploads.service';
 import {
     BackgroundsParams,
     BackgroundsRoot,
@@ -58,6 +57,7 @@ import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/it
 import { AsyncPipe } from '@angular/common';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+import { BackgrounduploadsService } from '../../mapeditors/backgrounduploads.service';
 
 
 @Component({
@@ -200,14 +200,14 @@ export class BackgrounduploadsBackgroundsComponent implements OnInit, OnDestroy,
         if (background) {
             // User just want to delete a single command
             items = [{
-                id: Number(background.id),
+                id: background.saved_name,
                 displayName: String(background.upload_name)
             }];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
-                    id: item.id,
+                    id: item.saved_name,
                     displayName: item.upload_name
                 };
             });
