@@ -42,10 +42,10 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
-    BackgroundsParams,
     BackgroundsRoot,
-    getDefaultBackgroundsParams,
-    UploadBackground
+    getDefaultMapUploadsParams, MapUploadItem,
+    MapUploadsParams,
+    Upload
 } from '../backgrounduploads.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
@@ -111,10 +111,11 @@ import { BackgrounduploadsService } from '../../mapeditors/backgrounduploads.ser
 })
 export class BackgrounduploadsBackgroundsComponent implements OnInit, OnDestroy, IndexPage {
 
-    public params: BackgroundsParams = getDefaultBackgroundsParams();
+    public params: MapUploadsParams = getDefaultMapUploadsParams();
     public backgrounds?: BackgroundsRoot;
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
+    public activeTab = 'backgrounds';
 
     private subscriptions: Subscription = new Subscription();
     private readonly BackgrounduploadsService = inject(BackgrounduploadsService);
@@ -187,13 +188,13 @@ export class BackgrounduploadsBackgroundsComponent implements OnInit, OnDestroy,
     }
 
     public resetFilter() {
-        this.params = getDefaultBackgroundsParams();
+        this.params = getDefaultMapUploadsParams();
         this.loadBackgrounds();
     }
 
     // Open the Delete All Modal
 
-    public toggleDeleteAllModal(background?: UploadBackground) {
+    public toggleDeleteAllModal(background?: Upload) {
 
         let items: DeleteAllItem[] = [];
 

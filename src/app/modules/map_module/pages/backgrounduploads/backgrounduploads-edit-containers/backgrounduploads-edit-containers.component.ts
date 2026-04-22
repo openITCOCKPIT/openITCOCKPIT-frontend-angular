@@ -88,7 +88,7 @@ export class BackgrounduploadsEditContainersComponent implements OnInit, OnDestr
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private cdr = inject(ChangeDetectorRef);
     private readonly BackgrounduploadsService = inject(BackgrounduploadsService);
-    protected invalidBackgroundMessage: string = this.TranslocoService.translate('{0} Map background image is not available!!!', {0: '⚠'});
+    protected invalidBackgroundMessage: string = this.TranslocoService.translate('⚠ Map uploaded image is not available!!!');
 
 
     public ngOnInit() {

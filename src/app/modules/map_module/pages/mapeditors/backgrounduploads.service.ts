@@ -29,10 +29,10 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import {
-    BackgroundsParams,
+    MapUploadsParams,
     BackgroundsRoot,
     MapUploadEdit,
-    MapUploadItem
+    MapUploadItem, UploadsIconsRoot
 } from '../backgrounduploads/backgrounduploads.interface';
 import { LoadContainersRoot } from '../../../../pages/contacts/contacts.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -90,9 +90,20 @@ export class BackgrounduploadsService {
             );
     }
 
-    public getBackgrounds(params: BackgroundsParams): Observable<BackgroundsRoot> {
+    public getBackgrounds(params: MapUploadsParams): Observable<BackgroundsRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<BackgroundsRoot>(`${proxyPath}/map_module/backgroundUploads/backgrounds.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getIcons(params: MapUploadsParams): Observable<UploadsIconsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<UploadsIconsRoot>(`${proxyPath}/map_module/backgroundUploads/icons.json`, {
             params: params as {}
         }).pipe(
             map(data => {

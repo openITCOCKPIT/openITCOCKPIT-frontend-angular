@@ -2,11 +2,17 @@ import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator
 import { GenericIdAndName } from '../../../../generic.interfaces';
 
 export interface BackgroundsRoot extends PaginateOrScroll {
-    all_backgrounds: UploadBackground[]
+    all_backgrounds: Upload[]
     _csrfToken: any
 }
 
-export interface UploadBackground {
+export interface UploadsIconsRoot extends PaginateOrScroll {
+    all_icons: Upload[]
+    _csrfToken: any
+}
+
+
+export interface Upload {
     id: number
     upload_name: string
     saved_name: string
@@ -18,13 +24,13 @@ export interface UploadBackground {
 }
 
 export interface MapUploadEdit {
-    uploadedFile:MapUploadItem
+    uploadedFile: MapUploadItem
     areContainersChangeable: boolean
     requiredContainers: number[]
     _csrfToken: string
 }
 
-export interface MapUploadItem{
+export interface MapUploadItem {
     id: number
     upload_type: number
     upload_name: string
@@ -33,7 +39,7 @@ export interface MapUploadItem{
     containers: { _ids: number[] }
 }
 
-export function getDefaultBackgroundsParams(): BackgroundsParams {
+export function getDefaultMapUploadsParams(): MapUploadsParams {
     return {
         angular: true,
         scroll: true,
@@ -47,7 +53,7 @@ export function getDefaultBackgroundsParams(): BackgroundsParams {
 /**********************
  *    Backgrounds action    *
  **********************/
-export interface BackgroundsParams {
+export interface MapUploadsParams {
     angular: true,
     scroll: boolean,
     sort: string,

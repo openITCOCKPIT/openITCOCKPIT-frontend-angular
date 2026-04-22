@@ -2431,11 +2431,12 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 headers: {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
-                url: '/map_module/backgroundUploads/upload/.json',
+                url: '/map_module/backgroundUploads/upload/' + this.mapId + '.json',
                 removedfile: (file: Dropzone.DropzoneFile) => {
                     this.cdr.markForCheck();
                 },
                 sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                    formData.append('map_id', String(this.mapId));
                     this.cdr.markForCheck();
                 },
                 success: (file: Dropzone.DropzoneFile) => {
@@ -2509,11 +2510,12 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 headers: {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
-                url: '/map_module/backgroundUploads/icon/.json',
+                url: '/map_module/backgroundUploads/icon/' + this.mapId + '.json',
                 removedfile: (file: Dropzone.DropzoneFile) => {
                     this.cdr.markForCheck();
                 },
                 sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                    formData.append('map_id', String(this.mapId));
                     this.cdr.markForCheck();
                 },
                 success: (file: Dropzone.DropzoneFile) => {
@@ -2587,11 +2589,12 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 headers: {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
-                url: '/map_module/backgroundUploads/iconset/.json',
+                url: '/map_module/backgroundUploads/iconset/' + this.mapId + '.json',
                 removedfile: (file: Dropzone.DropzoneFile) => {
                     this.cdr.markForCheck();
                 },
                 sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                    formData.append('map_id', String(this.mapId));
                     this.cdr.markForCheck();
                 },
                 success: (file: Dropzone.DropzoneFile) => {

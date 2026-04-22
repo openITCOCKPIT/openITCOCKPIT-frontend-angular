@@ -87,6 +87,30 @@
             </c-container>
             <!-- End Filter -->
 
+            <c-nav variant="underline-border" class="card-toolbar card-header-pills me-3 justify-content-end mt-1">
+                <c-nav-item>
+                    <a [routerLink]="['/', 'map_module', 'backgrounduploads', 'backgrounds']" class="nav-link"
+                       [class.active]="activeTab === 'backgrounds'">
+                        <fa-icon [icon]="['fas', 'images']"></fa-icon>
+                        {{ t('Backgrounds') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'map_module', 'backgrounduploads', 'icons']" class="nav-link"
+                       [class.active]="activeTab === 'icons'">
+                        <fa-icon [icon]="['fas', 'icons']"></fa-icon>
+                        {{ t('Icons') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'map_module', 'backgrounduploads', 'iconsets']" class="nav-link"
+                       [class.active]="activeTab === 'iconsets'">
+                        <fa-icon [icon]="['fas', 'swatchbook']"></fa-icon>
+                        {{ t('Icon sets') }}
+                    </a>
+                </c-nav-item>
+            </c-nav>
+
             @if (!backgrounds) {
                 <oitc-table-loader></oitc-table-loader>
             }
@@ -165,9 +189,12 @@
                                             {{ t('Container assignments') }}
                                         </oitc-actions-button-element>
                                         @if (background.allowEdit && ( this.PermissionsService.hasPermissionObservable(['mapmodule', 'backgroundUploads', 'delete'])|async )) {
-                                            <li cDropdownDivider *oitcPermission="['MapModule', 'maps', 'delete']"></li>
+                                            @if (this.PermissionsService.hasPermissionObservable(['mapmodule', 'backgroundUploads', 'editContainers'])|async) {
+                                                <li cDropdownDivider
+                                                    *oitcPermission="['MapModule', 'backgroundUploads', 'delete']"></li>
+                                            }
                                             <oitc-actions-button-element (click)="toggleDeleteAllModal(background)"
-                                                                         [permission]="'mapmodule.maps.delete'">
+                                                                         [permission]="'mapmodule.backgrounduploads.delete'">
                                                 <span class="text-danger">
                                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                                     {{ t('Delete') }}
@@ -195,14 +222,17 @@
                                 [itemsCount]="backgrounds.all_backgrounds.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
-                            <div class="btn-group d-flex flex-row" role="group">
-                                <button (click)="toggleDeleteAllModal()"
-                                        class="btn btn-outline-danger col-3 border-0"
-                                        type="button">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete selected') }}
-                                </button>
-                            </div>
+                            @if (this.PermissionsService.hasPermissionObservable(['mapmodule', 'backgroundUploads', 'delete'])|async) {
+
+                                <div class="btn-group d-flex flex-row" role="group">
+                                    <button (click)="toggleDeleteAllModal()"
+                                            class="btn btn-outline-danger col-3 border-0"
+                                            type="button">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete selected') }}
+                                    </button>
+                                </div>
+                            }
                         </c-col>
                     </c-row>
                 </c-container>
