@@ -9,20 +9,17 @@ import {
     ViewChild
 } from '@angular/core';
 import { AsyncPipe, NgClass } from '@angular/common';
-import { ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
+import { TooltipDirective } from '@coreui/angular';
 import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule, FZoomDirective } from '@foblex/flow';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { PointExtensions } from '@foblex/2d';
 import dagre from '@dagrejs/dagre';
-import {
-    ConnectionOperator,
-    HostNode,
-    HostParentsChildrenTreeItem,
-    INode
-} from './host-parents-children-tree.interface';
+import { ConnectionOperator, HostNode, HostParentsChildrenTree, INode } from './host-parents-children-tree.interface';
 import { generateGuid } from '@foblex/utils';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { HoststatusIconComponent } from '../../../pages/hosts/hoststatus-icon/hoststatus-icon.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 const NODE_WIDTH = 150;
 const DIRECTION = 'LR';
@@ -40,16 +37,17 @@ export enum HostParentChildrenTreeGroupIds {
     selector: 'oitc-host-parents-children-tree',
     imports: [
         AsyncPipe,
-        ColComponent,
         FCanvasComponent,
         FFlowComponent,
         FFlowModule,
         FZoomDirective,
-        RowComponent,
         TooltipDirective,
         RouterLink,
         NgClass,
         TranslocoDirective,
+        HoststatusIconComponent,
+        FaIconComponent,
+
     ],
     templateUrl: './host-parents-children-tree.component.html',
     styleUrl: './host-parents-children-tree.component.scss',
@@ -57,59 +55,7 @@ export enum HostParentChildrenTreeGroupIds {
 })
 export class HostParentsChildrenTreeComponent {
 
-    //public hostParentsChildrenTree = input<HostParentsChildrenTreeItem[]>();
-    public hostParentsChildrenTree = input<HostParentsChildrenTreeItem[]>(
-        [
-            {
-                "id": 217,
-                "name": "down host",
-                "hoststatus": {
-                    "currentState": 0
-                },
-                "parent_ids": [
-                    218,
-                    219
-                ],
-                "isMainHost": true
-            },
-            {
-                "id": 218,
-                "name": "down host 2",
-                "hoststatus": {
-                    "currentState": 0
-                },
-                "parent_ids": []
-            },
-            {
-                "id": 219,
-                "name": "down host 3",
-                "hoststatus": {
-                    "currentState": 1
-                },
-                "parent_ids": []
-            },
-            {
-                "id": 114,
-                "name": "Fulda Host",
-                "hoststatus": {
-                    "currentState": 3
-                },
-                "parent_ids": [
-                    217
-                ]
-            },
-            {
-                "id": 227,
-                "name": "Ein Host mit einem wirklich langem Namen random irgendwas rtfhsrtrtjsrtjdjrtrstjrttrjrtjjtr",
-                "hoststatus": {
-                    "currentState": 2
-                },
-                "parent_ids": [
-                    217
-                ]
-            }
-        ]
-    );
+    public hostParentsChildrenTree = input<HostParentsChildrenTree>();
 
     @ViewChild(FCanvasComponent)
     public fCanvasComponent!: FCanvasComponent;
@@ -120,7 +66,7 @@ export class HostParentsChildrenTreeComponent {
     public configuration = {
         outputSide: EFConnectableSide.RIGHT,
         inputSide: EFConnectableSide.LEFT,
-        nodeSep: 10
+        nodeSep: 120
     };
 
     private cdr = inject(ChangeDetectorRef);
@@ -132,6 +78,11 @@ export class HostParentsChildrenTreeComponent {
     public connections: ConnectionOperator[] = [];
     public hasParentNodes = false;
     public hasChildrenNodes = false;
+
+    public lastCheckString = this.TranslocoService.translate('Last check');
+    public inDowntimeString = this.TranslocoService.translate('In downtime');
+    public isAcknowledgedString = this.TranslocoService.translate('Acknowledged');
+    public isAcknowledgedAndInDowntimeString = this.TranslocoService.translate('Acknowledged and in downtime');
 
     constructor() {
         effect(() => {
@@ -161,6 +112,7 @@ export class HostParentsChildrenTreeComponent {
     private setGraph(graph: dagre.graphlib.Graph): void {
 
         const hostParentsChildrenTree = this.hostParentsChildrenTree();
+        console.error(hostParentsChildrenTree);
         if (hostParentsChildrenTree) {
             const nodes = this.getHostParentChildrenTreeNodes(hostParentsChildrenTree);
 
@@ -189,7 +141,7 @@ export class HostParentsChildrenTreeComponent {
                 // +--------------+         |    Layer 2   |
                 //                          +--------------+
                 //
-                ranksep: 50,
+                ranksep: 300,
                 edgesep: 10, // not entirely sure
                 marginx: 0,
                 marginy: 0,
@@ -274,26 +226,28 @@ export class HostParentsChildrenTreeComponent {
         return nodes;
     }
 
-    private getHostParentChildrenTreeNodes(hostParentChildrenTree: HostParentsChildrenTreeItem[]): HostNode[] {
+    private getHostParentChildrenTreeNodes(hostParentChildrenTree: HostParentsChildrenTree): HostNode[] {
         const nodes: HostNode[] = [];
 
         // This method create an array for the HostParentsChildren Tree (Flow Chart)
 
-        hostParentChildrenTree.forEach((hostTreeItem: HostParentsChildrenTreeItem, itemIndex: number) => {
+        for (let hostUuid in hostParentChildrenTree) {
+
+            let hostTreeItem = hostParentChildrenTree[hostUuid];
 
             let parentIds: string[] | null = null;
-            if (hostTreeItem.parent_ids.length) {
-                parentIds = hostTreeItem.parent_ids.map(parentId => parentId.toString());
+            if (hostTreeItem.parentIds.length) {
+                parentIds = hostTreeItem.parentIds.map(parentId => parentId.toString());
             }
 
             let groupId = undefined;
             //Parent Group
-            if (hostTreeItem.parent_ids.length === 0 && hostTreeItem.isMainHost === undefined) {
+            if (hostTreeItem.parentIds.length === 0 && hostTreeItem.isMainHost === undefined) {
                 groupId = HostParentChildrenTreeGroupIds.PARENT_GROUP;
                 this.hasParentNodes = true;
             }
             //Child Group
-            if (hostTreeItem.parent_ids.length && hostTreeItem.isMainHost === undefined) {
+            if (hostTreeItem.parentIds.length && hostTreeItem.isMainHost === undefined) {
                 groupId = HostParentChildrenTreeGroupIds.CHILDREN_GROUP;
                 this.hasChildrenNodes = true;
             }
@@ -303,10 +257,13 @@ export class HostParentsChildrenTreeComponent {
                 name: hostTreeItem.name,
                 parentIds: parentIds,
                 hoststatus: hostTreeItem.hoststatus,
-                groupId: groupId
+                groupId: groupId,
+                is_satellite_host: hostTreeItem.is_satellite_host,
+                isAcknowledged: hostTreeItem.isAcknowledged,
+                isInDowntime: hostTreeItem.isInDowntime
             });
 
-        });
+        }
 
         return nodes;
     }

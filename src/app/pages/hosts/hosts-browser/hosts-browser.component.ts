@@ -274,6 +274,21 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
                 this.changeTab(selectedTab);
                 this.cdr.markForCheck();
             }
+            const idOrUuid = params['idOrUuid'] || undefined;
+            if (idOrUuid) {
+                const uuid = new UUID();
+                if (uuid.isUuid(idOrUuid)) {
+                    // UUID was passed via URL
+                    this.subscriptions.add(this.HostsService.getHostByUuid(idOrUuid).subscribe((host) => {
+                        this.id = host.id;
+                        this.loadHost();
+                    }));
+                } else {
+                    // ID was passed via URL
+                    this.id = Number(idOrUuid);
+                    this.loadHost();
+                }
+            }
         });
 
     }
@@ -599,4 +614,5 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     protected readonly Number = Number;
     protected readonly String = String;
     protected readonly Boolean = Boolean;
+    protected readonly Object = Object;
 }

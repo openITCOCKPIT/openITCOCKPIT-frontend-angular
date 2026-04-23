@@ -12,28 +12,109 @@
             }
             @for (node of nodes; track node.id) {
                 <div fNode class="host-node-container"
-                     [ngClass]="{'host-node-ok': node.hostNode!.hoststatus.currentState === 0,'host-node-warning': node.hostNode!.hoststatus.currentState === 1,'host-node-critical': node.hostNode!.hoststatus.currentState === 2,'host-node-unknown': node.hostNode!.hoststatus.currentState === 3}"
                      [fNodePosition]="node.position"
                      fNodeOutput [fOutputId]="node.connectorId"
                      [fOutputConnectableSide]="configuration.outputSide"
                      fNodeInput [fInputId]="node.connectorId"
                      [fInputConnectableSide]="configuration.inputSide"
                      [fNodeParentId]="node.hostNode!.groupId">
-                    <div class="host-node-content">
-                        <c-row class="m-0">
-                            <c-col [xs]="12" class="text-truncate p-0 ps-1"
-                                   [cTooltip]="node.hostNode!.name" cTooltipPlacement="top">
+                    <div class="host-node-header"
+                         [ngClass]="{'host-node-ok': node.hostNode!.hoststatus?.currentState === 0,'host-node-critical': node.hostNode!.hoststatus?.currentState === 1,'host-node-unknown': node.hostNode!.hoststatus?.currentState === 2, 'host-node-not-monitored': node.hostNode!.hoststatus === undefined}">
+                        <div class="host-node-header-left">
+                            @if (node.hostNode!.hoststatus) {
+                                <oitc-hoststatus-icon [hoststatus]="node.hostNode!.hoststatus">
+                                </oitc-hoststatus-icon>
+                            }
+                            <span class="host-node-header-headline text-truncate"
+                                  [cTooltip]="node.hostNode!.name" cTooltipPlacement="top">
                                 @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                     <a [routerLink]="['/', 'hosts', 'browser', node.hostNode!.id]"
+                                       [queryParams]="{idOrUuid: node.hostNode!.id}"
                                        class="link-default">
                                         {{ node.hostNode!.name }}
                                     </a>
                                 } @else {
                                     {{ node.hostNode!.name }}
                                 }
-                            </c-col>
-                        </c-row>
+                            </span>
+                        </div>
+                        <div class="host-node-header-right"
+                             [cTooltip]="lastCheckString + ': ' + node.hostNode!.hoststatus?.lastCheck"
+                             cTooltipPlacement="top">
+                            {{ node.hostNode!.hoststatus?.lastCheck }}
+                        </div>
                     </div>
+                    <div class="host-node-body">
+                        @if (node.hostNode!.hoststatus) {
+                            <div class="host-node-row">
+                                <div>
+                                    {{ t('State since') }}
+                                </div>
+                                <div>
+                                    {{ node.hostNode!.hoststatus.last_state_change }}
+                                </div>
+                            </div>
+                            <div class="host-node-row">
+                                <div>
+                                    {{ t('Next check') }}
+                                </div>
+                                <div>
+                                    @if (node.hostNode!.hoststatus.activeChecksEnabled && !node.hostNode!.is_satellite_host) {
+                                        <span [cTooltip]="node.hostNode!.hoststatus.nextCheckUser"
+                                              cTooltipPlacement="top">
+                                            {{ node.hostNode!.hoststatus.nextCheck }}
+                                        </span>
+                                    } @else {
+                                        {{ t('n/a') }}
+                                    }
+                                </div>
+                            </div>
+                            <div class="host-node-row">
+                                <div>
+                                    {{ t('State type') }}
+                                </div>
+                                <div>
+                                    @if (node.hostNode!.hoststatus.isHardstate) {
+                                        {{ t('Hard state') }}
+                                    } @else {
+                                        {{ t('Soft state') }}
+                                    }
+                                    ({{ node.hostNode!.hoststatus.current_check_attempt }}
+                                    /{{ node.hostNode!.hoststatus.max_check_attempts }})
+                                </div>
+                            </div>
+                        } @else {
+                            <div class="host-node-row justify-content-center">
+                                <oitc-hoststatus-icon [hoststatus]="node.hostNode!.hoststatus" [statusCircleClass]="''">
+                                    {{ t('not in monitoring') }}
+                                </oitc-hoststatus-icon>
+                            </div>
+                        }
+                    </div>
+                    @if (node.hostNode!.hoststatus) {
+                        @if (node.hostNode!.isInDowntime && node.hostNode!.isAcknowledged) {
+                            <span
+                                class="position-absolute top-0 end-0 translate-middle-y badge rounded-pill bg-unknown"
+                                [cTooltip]="isAcknowledgedAndInDowntimeString"
+                                cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
+                            </span>
+                        } @else if (node.hostNode!.isInDowntime) {
+                            <span
+                                class="position-absolute top-0 end-0 translate-middle-y badge rounded-pill bg-unknown"
+                                [cTooltip]="inDowntimeString"
+                                cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                            </span>
+                        } @else if (node.hostNode!.isAcknowledged) {
+                            <span
+                                class="position-absolute top-0 end-0 translate-middle-y badge rounded-pill bg-unknown"
+                                [cTooltip]="isAcknowledgedString"
+                                cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                            </span>
+                        }
+                    }
                 </div>
             }
             @for (node of groupNodes; track node.id) {

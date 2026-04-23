@@ -12,16 +12,26 @@ export interface HostNode {
     id: string
     name: string
     parentIds: string[] | null
-    hoststatus: HoststatusObject
+    hoststatus?: HoststatusObject
     groupId: string | undefined
+    is_satellite_host: boolean
+    isAcknowledged: boolean
+    isInDowntime: boolean
+}
+
+export interface HostParentsChildrenTree {
+    [key: string]: HostParentsChildrenTreeItem
 }
 
 export interface HostParentsChildrenTreeItem {
     id: number | string
     name: string
     hoststatus: HoststatusObject
-    parent_ids: number[]
+    parentIds: number[]
     isMainHost?: boolean
+    is_satellite_host: boolean
+    isAcknowledged: boolean
+    isInDowntime: boolean
 }
 
 export interface ConnectionOperator {
