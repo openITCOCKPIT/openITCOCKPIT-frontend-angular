@@ -41,8 +41,8 @@ import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delet
     providedIn: 'root'
 })
 export class BackgrounduploadsService {
-    private readonly http: HttpClient = inject(HttpClient);
-    private readonly proxyPath: string = inject(PROXY_PATH);
+    public readonly http: HttpClient = inject(HttpClient);
+    public readonly proxyPath: string = inject(PROXY_PATH);
 
     public deleteBackground(filename: string): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;

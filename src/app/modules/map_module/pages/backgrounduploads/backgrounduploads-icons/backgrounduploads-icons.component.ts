@@ -53,6 +53,7 @@ import { AsyncPipe } from '@angular/common';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { BackgrounduploadsService } from '../../mapeditors/backgrounduploads.service';
+import { BackgrounduploadsIconsService } from './backgrounduploads-icons.service';
 
 @Component({
     selector: 'oitc-backgrounduploads-icons',
@@ -99,7 +100,7 @@ import { BackgrounduploadsService } from '../../mapeditors/backgrounduploads.ser
     templateUrl: './backgrounduploads-icons.component.html',
     styleUrl: './backgrounduploads-icons.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: BackgrounduploadsService} // Inject the BackgrounduploadsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: BackgrounduploadsIconsService} // Inject the BackgrounduploadsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -112,7 +113,7 @@ export class BackgrounduploadsIconsComponent implements OnInit, OnDestroy, Index
     public activeTab = 'icons';
 
     private subscriptions: Subscription = new Subscription();
-    private readonly BackgrounduploadsService = inject(BackgrounduploadsService);
+    private readonly BackgrounduploadsIconsService = inject(BackgrounduploadsIconsService);
     private readonly SelectionServiceService = inject(SelectionServiceService);
     private readonly TranslocoService = inject(TranslocoService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
@@ -139,7 +140,7 @@ export class BackgrounduploadsIconsComponent implements OnInit, OnDestroy, Index
     public loadIcons() {
         this.SelectionServiceService.deselectAll();
         this.subscriptions.add(
-            this.BackgrounduploadsService.getIcons(this.params).subscribe((icons) => {
+            this.BackgrounduploadsIconsService.getIcons(this.params).subscribe((icons) => {
                 this.icons = icons;
                 this.cdr.markForCheck();
             })
