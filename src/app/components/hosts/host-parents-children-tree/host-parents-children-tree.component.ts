@@ -8,7 +8,7 @@ import {
     input,
     ViewChild
 } from '@angular/core';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { AsyncPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { TooltipDirective } from '@coreui/angular';
 import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule, FZoomDirective } from '@foblex/flow';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -47,6 +47,7 @@ export enum HostParentChildrenTreeGroupIds {
         TranslocoDirective,
         HoststatusIconComponent,
         FaIconComponent,
+        TitleCasePipe,
 
     ],
     templateUrl: './host-parents-children-tree.component.html',

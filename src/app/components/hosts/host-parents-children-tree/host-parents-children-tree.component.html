@@ -86,7 +86,7 @@
                         } @else {
                             <div class="host-node-row justify-content-center">
                                 <oitc-hoststatus-icon [hoststatus]="node.hostNode!.hoststatus" [statusCircleClass]="''">
-                                    {{ t('not in monitoring') }}
+                                    {{ t('not in monitoring') | titlecase }}
                                 </oitc-hoststatus-icon>
                             </div>
                         }
