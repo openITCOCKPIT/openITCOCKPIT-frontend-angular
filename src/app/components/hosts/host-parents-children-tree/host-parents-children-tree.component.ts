@@ -95,6 +95,10 @@ export class HostParentsChildrenTreeComponent {
             // DOM rendering completed for this component
             this.isInitialized = true;
             this.updateGraph(new dagre.graphlib.Graph({compound: true}));
+            setTimeout(() => {
+                // to center the graph after clicking on another host in graph node
+                this.fit2screen();
+            }, 400);
             this.cdr.markForCheck();
         });
     }
@@ -112,7 +116,7 @@ export class HostParentsChildrenTreeComponent {
     private setGraph(graph: dagre.graphlib.Graph): void {
 
         const hostParentsChildrenTree = this.hostParentsChildrenTree();
-        console.error(hostParentsChildrenTree);
+
         if (hostParentsChildrenTree) {
             const nodes = this.getHostParentChildrenTreeNodes(hostParentsChildrenTree);
 
@@ -180,7 +184,7 @@ export class HostParentsChildrenTreeComponent {
     // had to split normal nodes and group nodes in two different arrays, because if statement breaks canvas rendering in html template
     private getNodes(graph: dagre.graphlib.Graph): INode[] {
         let nodes: INode[] = [];
-        // @ts-ignore
+
         graph.nodes().forEach((x: any) => {
             let node = graph.node(x);
 
@@ -205,7 +209,7 @@ export class HostParentsChildrenTreeComponent {
     // had to split normal nodes and group nodes in two different arrays, because if statement breaks canvas rendering in html template
     private getGroupNodes(graph: dagre.graphlib.Graph): INode[] {
         let nodes: INode[] = [];
-        // @ts-ignore
+
         graph.nodes().forEach((x: any) => {
             let node = graph.node(x);
 
