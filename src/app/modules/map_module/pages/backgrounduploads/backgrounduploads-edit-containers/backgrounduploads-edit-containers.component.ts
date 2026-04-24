@@ -90,6 +90,23 @@ export class BackgrounduploadsEditContainersComponent implements OnInit, OnDestr
     private readonly BackgrounduploadsService = inject(BackgrounduploadsService);
     protected invalidBackgroundMessage: string = this.TranslocoService.translate('⚠ Map uploaded image is not available!!!');
 
+    public iconSetImages = [
+        'ack.png',
+        'critical.png',
+        'down.png',
+        'downtime.png',
+        'downtime_ack.png',
+        'error.png',
+        'ok.png',
+        'sack.png',
+        'sdowntime.png',
+        'sdowntime_ack.png',
+        'unknown.png',
+        'unreachable.png',
+        'up.png',
+        'warning.png'
+    ];
+
 
     public ngOnInit() {
         this.id = Number(this.route.snapshot.paramMap.get('id'));

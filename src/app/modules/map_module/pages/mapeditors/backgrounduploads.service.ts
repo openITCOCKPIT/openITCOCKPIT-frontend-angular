@@ -32,10 +32,11 @@ import {
     MapUploadsParams,
     BackgroundsRoot,
     MapUploadEdit,
-    MapUploadItem, UploadsIconsRoot
+    MapUploadItem, UploadsIconsRoot, UploadsIconSetsRoot
 } from '../backgrounduploads/backgrounduploads.interface';
 import { LoadContainersRoot } from '../../../../pages/contacts/contacts.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { IconsetRoot } from './mapeditors.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -104,6 +105,17 @@ export class BackgrounduploadsService {
     public getIcons(params: MapUploadsParams): Observable<UploadsIconsRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<UploadsIconsRoot>(`${proxyPath}/map_module/backgroundUploads/icons.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public getIconsets(params: MapUploadsParams): Observable<UploadsIconSetsRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<UploadsIconSetsRoot>(`${proxyPath}/map_module/backgroundUploads/iconsets.json`, {
             params: params as {}
         }).pipe(
             map(data => {

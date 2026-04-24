@@ -11,6 +11,11 @@ export interface UploadsIconsRoot extends PaginateOrScroll {
     _csrfToken: any
 }
 
+export interface UploadsIconSetsRoot extends PaginateOrScroll {
+    all_items: Upload[]
+    _csrfToken: any
+}
+
 
 export interface Upload {
     id: number

@@ -52,7 +52,6 @@ import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/it
 import { AsyncPipe } from '@angular/common';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { BackgrounduploadsService } from '../../mapeditors/backgrounduploads.service';
 import { BackgrounduploadsIconsService } from './backgrounduploads-icons.service';
 
 @Component({
@@ -100,7 +99,7 @@ import { BackgrounduploadsIconsService } from './backgrounduploads-icons.service
     templateUrl: './backgrounduploads-icons.component.html',
     styleUrl: './backgrounduploads-icons.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: BackgrounduploadsIconsService} // Inject the BackgrounduploadsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: BackgrounduploadsIconsService} // Inject the BackgrounduploadsIconsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

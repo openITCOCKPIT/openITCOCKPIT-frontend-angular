@@ -43,7 +43,7 @@
                             {{ post.saved_name }}
                         </c-nav-item>
                         <c-nav-item class="px-1">
-                            <button [fallbackUrl]="['map_module','backgrounduploads', 'backgrounds']" cButton
+                            <button [fallbackUrl]="['map_module','backgrounduploads', 'iconsets']" cButton
                                     class="ripple" color="default"
                                     oitcBackButton
                                     size="xs">
@@ -101,14 +101,49 @@
                             <fieldset>
                                 <legend class="small fieldset-legend-border-bottom mb-3">
                                     <h5>
-                                        <fa-icon [icon]="['fas', 'image']"></fa-icon>
-                                        {{ t('Background preview') }}
+                                        @switch (post.upload_type) {
+                                            @case (1) {
+                                                <fa-icon [icon]="['fas', 'image']"></fa-icon>
+                                                {{ t('Background preview') }}
+                                            }
+                                            @case (2) {
+                                                <fa-icon [icon]="['fas', 'swatchbook']"></fa-icon>
+                                                {{ t('Iconset preview') }}
+                                            }
+                                            @case (3) {
+                                                <fa-icon [icon]="['fas', 'icons']"></fa-icon>
+                                                {{ t('Icon preview') }}
+                                            }
+                                        }
                                     </h5>
                                 </legend>
-                                @if (post.path) {
-                                    <img [src]="post.path" class="card-img-top img-fluid img-center w-auto"
-                                         [alt]="invalidBackgroundMessage">
+                                @if (post.upload_type === 1 || post.upload_type === 3) {
+                                    @if (post.path) {
+                                        <img [src]="post.path" class="card-img-top img-fluid img-center w-auto"
+                                             [alt]="invalidBackgroundMessage">
+                                    }
                                 }
+                                @if (post.upload_type === 2) {
+                                    <c-row class="g-1">
+                                        @for (image of iconSetImages; track $index; ) {
+                                            <c-col [lg]="3" [md]="3" [sm]="6" [xs]="12"
+                                                   class="text-center">
+                                                <div
+                                                    class="border-dashed border-1 border-secondary border-opacity-25 rounded-3">
+                                                    @if (post.path) {
+                                                        <img [src]="post.path+'/'+image"
+                                                             class="card-img-top img-fluid img-center w-auto"
+                                                             [alt]="invalidBackgroundMessage">
+                                                        <div class="py-2">
+                                                            {{ image }}
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </c-col>
+                                        }
+                                    </c-row>
+                                }
+
                             </fieldset>
                         </c-col>
                     </c-row>
