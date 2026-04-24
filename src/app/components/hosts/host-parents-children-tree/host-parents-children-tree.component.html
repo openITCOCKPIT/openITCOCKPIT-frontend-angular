@@ -1,6 +1,6 @@
 <!-- Docs: https://flow.foblex.com/ -->
 <ng-container *transloco="let t">
-    <f-flow fDraggable (fLoaded)="onLoaded()" class="h-100">
+    <f-flow fDraggable (fLoaded)="fit2screen()" class="h-100">
         <f-canvas fZoom>
             @for (connection of connections; track connection.id) {
                 <f-connection [fOffset]="8" [fOutputId]="connection.from" [fInputId]="connection.to"

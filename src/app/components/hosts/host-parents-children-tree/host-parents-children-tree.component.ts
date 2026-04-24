@@ -88,7 +88,7 @@ export class HostParentsChildrenTreeComponent {
     constructor() {
         effect(() => {
             if (this.isInitialized) {
-                this.updateGraph(new dagre.graphlib.Graph());
+                this.updateGraph(new dagre.graphlib.Graph({compound: true}));
             }
         });
 
@@ -109,7 +109,7 @@ export class HostParentsChildrenTreeComponent {
         this.hasChildrenNodes = false;
         this.setGraph(graph);
         this.nodes = this.getNodes(graph);
-        this.groupNodes = this.getGroupNodes(graph);
+        this.groupNodes = this.getNodes(graph, true);
         this.connections = this.getConnections(graph);
         this.cdr.markForCheck();
     }
@@ -183,7 +183,7 @@ export class HostParentsChildrenTreeComponent {
     }
 
     // had to split normal nodes and group nodes in two different arrays, because if statement breaks canvas rendering in html template
-    private getNodes(graph: dagre.graphlib.Graph): INode[] {
+    private getNodes(graph: dagre.graphlib.Graph, isGroupNodes: boolean = false): INode[] {
         let nodes: INode[] = [];
 
         graph.nodes().forEach((x: any) => {
@@ -192,7 +192,8 @@ export class HostParentsChildrenTreeComponent {
             // Cast the dagre.Node to HostParentsChildrenNode
             const hostParentsChildrenNode = node as HostParentsChildrenNode;
 
-            if (x != HostParentChildrenTreeGroupIds.PARENT_GROUP && x != HostParentChildrenTreeGroupIds.CHILDREN_GROUP) {
+            if ((!isGroupNodes && x != HostParentChildrenTreeGroupIds.PARENT_GROUP && x != HostParentChildrenTreeGroupIds.CHILDREN_GROUP) ||
+                (isGroupNodes && (x == HostParentChildrenTreeGroupIds.PARENT_GROUP || x == HostParentChildrenTreeGroupIds.CHILDREN_GROUP))) {
                 nodes.push({
                     id: generateGuid(),
                     connectorId: x,
@@ -201,30 +202,6 @@ export class HostParentsChildrenTreeComponent {
                         y: hostParentsChildrenNode.y
                     },
                     hostNode: hostParentsChildrenNode.hostNode
-                });
-            }
-        });
-        return nodes;
-    }
-
-    // had to split normal nodes and group nodes in two different arrays, because if statement breaks canvas rendering in html template
-    private getGroupNodes(graph: dagre.graphlib.Graph): INode[] {
-        let nodes: INode[] = [];
-
-        graph.nodes().forEach((x: any) => {
-            let node = graph.node(x);
-
-            // Cast the dagre.Node to HostParentsChildrenNode
-            const hostParentsChildrenNode = node as HostParentsChildrenNode;
-
-            if (x == HostParentChildrenTreeGroupIds.PARENT_GROUP || x == HostParentChildrenTreeGroupIds.CHILDREN_GROUP) {
-                nodes.push({
-                    id: generateGuid(),
-                    connectorId: x,
-                    position: {
-                        x: hostParentsChildrenNode.x,
-                        y: hostParentsChildrenNode.y
-                    }
                 });
             }
         });
@@ -281,10 +258,6 @@ export class HostParentsChildrenTreeComponent {
                 to: x.w
             }
         });
-    }
-
-    public onLoaded(): void {
-        this.fit2screen();
     }
 
     public fit2screen(): void {
