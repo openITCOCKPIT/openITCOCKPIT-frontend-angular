@@ -47,7 +47,7 @@
                         {{ t('Back') }}
                     </button>
                 </c-nav-item>
-                @if (map) {
+                @if (map && map.Map.allowEdit) {
                     <c-nav-item class="px-1">
                         <button *oitcPermission="['mapmodule', 'mapeditors', 'edit']"
                                 [routerLink]="['/', 'map_module', 'mapeditors', 'edit', map.Map.id]" cButton
