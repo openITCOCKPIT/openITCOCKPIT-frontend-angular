@@ -130,6 +130,9 @@ import {
     BrowserSoftwareMacosComponent
 } from './browser-software/browser-software-macos/browser-software-macos.component';
 import { PatchstatusIconComponent } from '../../patchstatus/patchstatus-icon/patchstatus-icon.component';
+import {
+    HostParentsChildrenTreeComponent
+} from '../../../components/hosts/host-parents-children-tree/host-parents-children-tree.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -193,7 +196,8 @@ import { PatchstatusIconComponent } from '../../patchstatus/patchstatus-icon/pat
         BrowserSoftwareLinuxComponent,
         BrowserSoftwareWindowsComponent,
         BrowserSoftwareMacosComponent,
-        PatchstatusIconComponent
+        PatchstatusIconComponent,
+        HostParentsChildrenTreeComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
@@ -269,6 +273,21 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             if (selectedTab) {
                 this.changeTab(selectedTab);
                 this.cdr.markForCheck();
+            }
+            const idOrUuid = params['idOrUuid'] || undefined;
+            if (idOrUuid) {
+                const uuid = new UUID();
+                if (uuid.isUuid(idOrUuid)) {
+                    // UUID was passed via URL
+                    this.subscriptions.add(this.HostsService.getHostByUuid(idOrUuid).subscribe((host) => {
+                        this.id = host.id;
+                        this.loadHost();
+                    }));
+                } else {
+                    // ID was passed via URL
+                    this.id = Number(idOrUuid);
+                    this.loadHost();
+                }
             }
         });
 
@@ -595,4 +614,5 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     protected readonly Number = Number;
     protected readonly String = String;
     protected readonly Boolean = Boolean;
+    protected readonly Object = Object;
 }
