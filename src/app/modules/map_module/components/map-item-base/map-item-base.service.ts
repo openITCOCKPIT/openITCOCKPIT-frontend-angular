@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { MapItemRoot, MapItemRootParams } from '../map-item-base/map-item-base.interface';
+import { GenericValidationError } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -21,5 +22,4 @@ export class MapItemBaseService {
             })
         )
     }
-
 }
