@@ -1,6 +1,7 @@
 import {
     ChangeDetectionStrategy,
     Component,
+    DOCUMENT,
     effect,
     inject,
     input,
@@ -8,8 +9,7 @@ import {
     OnDestroy,
     OnInit,
     Renderer2,
-    ViewChild,
-    DOCUMENT
+    ViewChild
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
@@ -126,21 +126,27 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         };
 
         this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
-            .subscribe((result: MapItemRoot) => {
-                this.color = result.data.color!;
-                this.Host = result.data.Host;
-                this.Service = result.data.Service;
-                this.responsePerfdata = result.data.Perfdata;
+            .subscribe({
+                next: (result: MapItemRoot) => {
+                    this.color = result.data.color!;
+                    this.Host = result.data.Host;
+                    this.Service = result.data.Service;
+                    this.responsePerfdata = result.data.Perfdata;
 
-                this.processPerfdata();
-                this.renderGauge();
+                    this.processPerfdata();
+                    this.renderGauge();
 
-                this.initRefreshTimer();
-                this.init = false;
-                if (this.resizableDirective) {
-                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
+                    this.initRefreshTimer();
+                    this.init = false;
+                    if (this.resizableDirective) {
+                        this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
+                    }
+                    this.cdr.markForCheck();
+                },
+                error: (err) => {
+                    //error handling here
+                    this.cdr.markForCheck();
                 }
-                this.cdr.markForCheck();
             }));
     };
 

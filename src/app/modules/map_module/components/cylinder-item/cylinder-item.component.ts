@@ -99,6 +99,11 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
 
         this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
             .subscribe((result: MapItemRoot) => {
+                if (!result.allowView) {
+                    // nothing to view
+                    return;
+                }
+       
                 if (result.data.Servicestatus) {
                     this.current_state = result.data.Servicestatus.currentState;
                     this.Host = result.data.Host;

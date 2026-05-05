@@ -13,7 +13,7 @@
                 </div>
             </div>
         }
-        @if (!hasEnoughData) {
+        @if (allowView && !hasEnoughData) {
             <div cdkDragHandle>
                 <c-alert [color]="'info'">
                     <fa-icon [icon]="['fas', 'chart-area']"></fa-icon>
@@ -37,7 +37,7 @@
                 </div>
             </div>
         }
-        @if (!hasEnoughData) {
+        @if (allowView && !hasEnoughData) {
             <div>
                 <c-alert [color]="'info'">
                     <fa-icon [icon]="['fas', 'chart-area']"></fa-icon>

@@ -173,8 +173,8 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
             })
         ];
 
-        this.subscriptions.add(forkJoin(request).subscribe(
-            (results) => {
+        this.subscriptions.add(forkJoin(request).subscribe({
+            next: (results) => {
                 const graphItem = results[0] as GraphItemRoot;
                 const userTimezone = results[1] as { timezone: TimezoneConfiguration };
                 this.host = graphItem.host;
@@ -190,7 +190,12 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
                 }
                 this.cdr.markForCheck();
-            }));
+            },
+            error: (err) => {
+                this.allowView = false;
+                this.cdr.markForCheck();
+            }
+        }));
 
     };
 

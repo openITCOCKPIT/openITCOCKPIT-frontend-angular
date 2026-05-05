@@ -76,53 +76,57 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
         };
 
         this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
-            .subscribe((result: MapItemRoot) => {
-                this.responsePerfdata = result.data.Perfdata;
+            .subscribe({
+                next: (result: MapItemRoot) => {
+                    this.responsePerfdata = result.data.Perfdata;
+                    switch (result.data.color) {
+                        case 'txt-color-green':
+                            this.color = '#356e35';
+                            break;
 
-                switch (result.data.color) {
-                    case 'txt-color-green':
-                        this.color = '#356e35';
-                        break;
+                        case 'warning':
+                            this.color = '#DF8F1D';
+                            break;
 
-                    case 'warning':
-                        this.color = '#DF8F1D';
-                        break;
+                        case 'txt-color-red':
+                            this.color = '#a90329';
+                            break;
 
-                    case 'txt-color-red':
-                        this.color = '#a90329';
-                        break;
+                        case 'txt-color-blueDark':
+                            this.color = '#4c4f53';
+                            break;
 
-                    case 'txt-color-blueDark':
-                        this.color = '#4c4f53';
-                        break;
+                        default:
+                            this.color = '#337ab7'; //text-primary
+                            break;
+                    }
 
-                    default:
-                        this.color = '#337ab7'; //text-primary
-                        break;
+                    this.processPerfdata();
+
+                    /*
+                    setTimeout(function(){
+                        //Resolve strange resize bug on draggable
+                        var $mapPerfdatatext = $('#map-perfdatatext-'+$scope.item.id);
+                        $scope.width = $mapPerfdatatext.width();
+                        $scope.height = $mapPerfdatatext.height();
+
+                    }, 150);*/
+                    this.initRefreshTimer();
+
+                    this.init = false;
+                    if (this.resizableDirective) {
+                        this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
+                    }
+                    this.cdr.markForCheck();
+                },
+                error: (err) => {
+                    //error handling here
+                    this.cdr.markForCheck();
                 }
-
-                this.processPerfdata();
-
-                /*
-                setTimeout(function(){
-                    //Resolve strange resize bug on draggable
-                    var $mapPerfdatatext = $('#map-perfdatatext-'+$scope.item.id);
-                    $scope.width = $mapPerfdatatext.width();
-                    $scope.height = $mapPerfdatatext.height();
-
-                }, 150);*/
-                this.initRefreshTimer();
-
-                this.init = false;
-                if (this.resizableDirective) {
-                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
-                }
-                this.cdr.markForCheck();
             }));
     };
 
     private processPerfdata() {
-
         if (this.responsePerfdata !== null) {
             const metric = this.item()!.metric;
             if (this.item()!.metric !== null && this.responsePerfdata.hasOwnProperty(metric)) {

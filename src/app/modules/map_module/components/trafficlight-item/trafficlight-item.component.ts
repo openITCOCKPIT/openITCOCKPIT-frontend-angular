@@ -1,6 +1,7 @@
 import {
     ChangeDetectionStrategy,
     Component,
+    DOCUMENT,
     effect,
     ElementRef,
     inject,
@@ -9,8 +10,7 @@ import {
     OnDestroy,
     OnInit,
     Renderer2,
-    ViewChild,
-    DOCUMENT
+    ViewChild
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
@@ -76,6 +76,8 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
     protected lightPadding: number = 0;
     protected circleX: number = 0;
 
+    protected allowView = true;
+
     constructor(parent: MapCanvasComponent, private renderer: Renderer2) {
         super(parent);
         effect(() => {
@@ -116,64 +118,76 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
         };
 
         this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
-            .subscribe((result: MapItemRoot) => {
-                this.current_state = result.data.Servicestatus.currentState;
-                this.is_flapping = result.data.Servicestatus.isFlapping;
+            .subscribe({
+                    next: (result: MapItemRoot) => {
+                        this.current_state = result.data.Servicestatus.currentState;
+                        this.is_flapping = result.data.Servicestatus.isFlapping;
 
-                this.Host = result.data.Host;
-                this.Service = result.data.Service;
+                        this.Host = result.data.Host;
+                        this.Service = result.data.Service;
 
-                this.showGreen = false;
-                this.showYellow = false;
-                this.showRed = false;
-                this.showBlue = false;
-                this.blink = false;
+                        this.showGreen = false;
+                        this.showYellow = false;
+                        this.showRed = false;
+                        this.showBlue = false;
+                        this.blink = false;
 
-                this.stopBlinking();
-                switch (this.current_state) {
-                    case 0:
-                        this.showGreen = true;
-                        break;
-                    case 1:
-                        this.showYellow = true;
-                        break;
-                    case 2:
-                        this.showRed = true;
-                        break;
-                    case 3:
-                        this.showGreen = true;
-                        this.showYellow = true;
-                        this.showRed = true;
-                        break;
-                    default:
-                        this.showBlue = true;
-                        break;
+                        this.stopBlinking();
+                        switch (this.current_state) {
+                            case 0:
+                                this.showGreen = true;
+                                break;
+                            case 1:
+                                this.showYellow = true;
+                                break;
+                            case 2:
+                                this.showRed = true;
+                                break;
+                            case 3:
+                                this.showGreen = true;
+                                this.showYellow = true;
+                                this.showRed = true;
+                                break;
+                            default:
+                                this.showBlue = true;
+                                break;
+                        }
+
+                        if (this.is_flapping) {
+                            this.blink = true;
+                        }
+
+                        this.renderTrafficlight();
+
+                        this.initRefreshTimer();
+
+                        this.init = false;
+                        if (this.resizableDirective) {
+                            this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
+                        }
+                        this.cdr.markForCheck();
+                    },
+                    error: (err) => {
+                        //error handling here
+                        this.allowView = false;
+                        this.cdr.markForCheck();
+                    }
                 }
-
-                if (this.is_flapping) {
-                    this.blink = true;
-                }
-
-                this.renderTrafficlight();
-
-                this.initRefreshTimer();
-
-                this.init = false;
-                if (this.resizableDirective) {
-                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
-                }
-                this.cdr.markForCheck();
-            }));
+            ));
     };
 
     private renderTrafficlight() {
-
         // 17px was the old radius of the static traffic light.
         // We calucate this value on the fly to be able to resize the traffic light
         this.lightRadius = Math.floor(this.width * (17 / 60));
         this.lightDiameter = (this.lightRadius * 2) + 2; //2 is the stroke width
         this.lightPadding = Math.ceil((this.height - this.lightDiameter * 3) / 4);
         this.circleX = Math.floor(this.width / 2);
+        if (this.item() && this.item()?.id) {
+            let trafficLightElement = this.document.getElementById('traffic-light-' + this.item()?.id) ;
+            console.log(trafficLightElement);
+        }
+
 
         if (this.showRed) {
             const circle = this.renderer.createElement('circle', 'svg');
