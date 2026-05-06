@@ -91,7 +91,6 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     protected hostgroups: SelectKeyValue[] = [];
     protected satellites: SelectKeyValue[] = [];
     protected hostId: number | null = null;
-    protected parenthosts: SelectKeyValue[] = [];
     protected hostPost: HostPost = {
         address: '',
         container_id: 0,
@@ -183,22 +182,6 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
 
     }
 
-    public onSatelliteChange() {
-        this.loadParentHosts('');
-    }
-
-    public loadParentHosts = (searchString: string) => {
-        if (!this.hostPost.container_id) {
-            return;
-        }
-
-        this.Subscriptions.add(this.HostsService.loadParentHosts(searchString, this.hostPost.container_id, this.hostPost.parenthosts._ids, this.hostPost.satellite_id)
-            .subscribe((result) => {
-                this.parenthosts = result;
-                this.cdr.markForCheck();
-            })
-        );
-    };
 
     protected onContainerChange(): void {
         this.Subscriptions.add(this.WizardsService.loadElements(this.hostPost.container_id)

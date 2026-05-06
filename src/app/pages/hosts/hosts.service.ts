@@ -273,7 +273,7 @@ export class HostsService {
         );
     }
 
-    public loadParentHosts(searchString: string, containerId: number, selected: number[] = [], satellite_id: number): Observable<SelectKeyValue[]> {
+    public loadParentHosts(searchString: string, containerId: number, selected: number[] = [], satellite_id: number, hostId?: number): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
 
         if (!containerId) {
@@ -288,7 +288,8 @@ export class HostsService {
                 'filter[Hosts.name]': searchString,
                 'selected[]': selected,
                 'containerId': containerId,
-                'satellite_id': (satellite_id > 0) ? satellite_id : ''
+                'satellite_id': (satellite_id > 0) ? satellite_id : '',
+                'hostId': hostId ?? ''
             }
         }).pipe(
             map(data => {
