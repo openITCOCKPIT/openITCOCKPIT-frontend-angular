@@ -13,7 +13,6 @@ import { TooltipDirective } from '@coreui/angular';
 import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule, FZoomDirective } from '@foblex/flow';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
-import { PointExtensions } from '@foblex/2d';
 import dagre from '@dagrejs/dagre';
 import { ConnectionOperator, HostNode, HostParentsChildrenTree, INode } from './host-parents-children-tree.interface';
 import { generateGuid } from '@foblex/utils';
@@ -60,6 +59,8 @@ export class HostParentsChildrenTreeComponent {
 
     @ViewChild(FCanvasComponent)
     public fCanvasComponent!: FCanvasComponent;
+    @ViewChild(FFlowComponent)
+    public fFlowComponent!: FFlowComponent;
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly TranslocoService = inject(TranslocoService);
@@ -98,7 +99,7 @@ export class HostParentsChildrenTreeComponent {
             this.updateGraph(new dagre.graphlib.Graph({compound: true}));
             setTimeout(() => {
                 // to center the graph after clicking on another host in graph node
-                this.fit2screen();
+                this.centerMainHost2screen();
             }, 400);
             this.cdr.markForCheck();
         });
@@ -260,9 +261,20 @@ export class HostParentsChildrenTreeComponent {
         });
     }
 
-    public fit2screen(): void {
-        if (this.fCanvasComponent) {
-            this.fCanvasComponent.fitToScreen(PointExtensions.initialize(15, 15), true);
+    public centerMainHost2screen(): void {
+        if (this.fCanvasComponent && this.fFlowComponent) {
+            let mainHostId = "";
+            // get main Host node Id from state, because fFlow changes the IDs after rendering
+            this.fFlowComponent.getState().nodes.forEach(renderedNode => {
+                //main Host node is the only node without a parent, because it has no group attached
+                if (renderedNode.parentId === undefined) {
+                    mainHostId = renderedNode.id;
+                }
+            });
+            if (mainHostId) {
+                this.fCanvasComponent.resetScaleAndCenter(true);
+                this.fCanvasComponent.centerGroupOrNode(mainHostId, true);
+            }
             this.cdr.markForCheck();
         }
     }
