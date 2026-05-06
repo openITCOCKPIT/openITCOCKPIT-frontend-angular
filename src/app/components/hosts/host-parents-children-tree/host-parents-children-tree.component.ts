@@ -272,7 +272,8 @@ export class HostParentsChildrenTreeComponent {
                 }
             });
             if (mainHostId) {
-                this.fCanvasComponent.resetScaleAndCenter(true);
+                this.fCanvasComponent.fitToScreen({x: 0, y: 60}, true);
+                //this.fCanvasComponent.resetScaleAndCenter(true);
                 this.fCanvasComponent.centerGroupOrNode(mainHostId, true);
             }
             this.cdr.markForCheck();
