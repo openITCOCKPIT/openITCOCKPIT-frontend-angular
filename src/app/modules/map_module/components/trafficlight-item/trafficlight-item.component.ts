@@ -78,6 +78,11 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
 
     protected allowView = true;
 
+    protected container!: ElementRef;
+    private svgNamespace = 'http://www.w3.org/2000/svg';
+    private myCircle: any;
+
+
     constructor(parent: MapCanvasComponent, private renderer: Renderer2) {
         super(parent);
         effect(() => {
@@ -177,6 +182,7 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
     };
 
     private renderTrafficlight() {
+
         // 17px was the old radius of the static traffic light.
         // We calucate this value on the fly to be able to resize the traffic light
         this.lightRadius = Math.floor(this.width * (17 / 60));
@@ -184,58 +190,151 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
         this.lightPadding = Math.ceil((this.height - this.lightDiameter * 3) / 4);
         this.circleX = Math.floor(this.width / 2);
         if (this.item() && this.item()?.id) {
-            let trafficLightElement = this.document.getElementById('traffic-light-' + this.item()?.id) ;
-            console.log(trafficLightElement);
-        }
+            let trafficLightElement = this.document.getElementById('map-trafficlight-' + this.item()?.id);
+            // 1. SVG Root-Element
+            const svg = this.renderer.createElement('svg', this.svgNamespace);
+            this.renderer.setAttribute(svg, 'id', 'traffic-light-' + this.item()!.id);
+            this.renderer.setAttribute(svg, 'width', this.width.toString());
+            this.renderer.setAttribute(svg, 'height', this.height.toString());
 
 
-        if (this.showRed) {
-            const circle = this.renderer.createElement('circle', 'svg');
-            this.renderer.setAttribute(circle, 'cx', this.circleX.toString());
-            this.renderer.setAttribute(circle, 'cy', (this.lightPadding + this.lightRadius).toString());
-            this.renderer.setAttribute(circle, 'r', this.lightRadius.toString());
-            this.renderer.setAttribute(circle, 'fill', '#f00');
-            this.renderer.setAttribute(circle, 'id', 'redLightCircle_' + this.id);
-            const redLightGroup = this.redLightGroupElement.nativeElement;
-            this.renderer.insertBefore(redLightGroup, circle, redLightGroup.firstChild);
+            const itemId = this.item()!.id;
+
+            // 1. Defs-Bereich erstellen
+            const defs = this.renderer.createElement('defs', this.svgNamespace);
+
+// Beispiel: Ein LinearGradient erstellen
+            const createLinearGradient = (id: string, stops: { offset: string, color: string }[]) => {
+                const grad = this.renderer.createElement('linearGradient', this.svgNamespace);
+                this.setAttrs(grad, {id: id, x1: 0, y1: 0, x2: 0, y2: 1});
+
+                stops.forEach(s => {
+                    const stop = this.renderer.createElement('stop', this.svgNamespace);
+                    this.setAttrs(stop, {offset: s.offset, 'stop-color': s.color});
+                    this.renderer.appendChild(grad, stop);
+                });
+                return grad;
+            };
+
+// Gradient hinzufügen
+            const tlBg = createLinearGradient('tlBg_' + itemId, [
+                {offset: '0.02', color: '#323232'},
+                {offset: '0.3', color: '#323232'}
+            ]);
+            this.renderer.appendChild(defs, tlBg);
+
+            // 2. Das Haupt-Rechteck (Body)
+            const rect = this.renderer.createElement('rect', this.svgNamespace);
+            this.setAttrs(rect, {
+                width: this.width,
+                height: this.height,
+                rx: 10, ry: 10,
+                fill: `url(#tlBg_${itemId})`,
+                stroke: '#444',
+                'stroke-width': 2
+            });
+
+// 3. Text (Bedingt hinzufügen)
+            if (this.item()?.show_label) {
+                const text = this.renderer.createElement('text', this.svgNamespace);
+                const label = `${this.Host.hostname}/${this.Service.servicename}`;
+                const textNode = this.renderer.createText(label);
+
+                this.setAttrs(text, {
+                    x: 0,
+                    y: this.height - 10,
+                    'font-size': this.width / 8,
+                    'font-family': 'Verdana',
+                    fill: '#FFF',
+                    transform: `rotate(-90, 0, ${this.height - 10 - (this.width / 8)})`
+                });
+                this.renderer.appendChild(text, textNode);
+                this.renderer.appendChild(svg, text); // svg ist dein Root-Element
+            }
+
+// 4. Gruppen und Kreise (Lights)
+            const lightsGroup = this.renderer.createElement('g', this.svgNamespace);
+            this.renderer.setAttribute(lightsGroup, 'id', 'lights_' + itemId);
+
+            const redGroup = this.renderer.createElement('g', this.svgNamespace);
+            const redCircle = this.renderer.createElement('circle', this.svgNamespace);
+            this.setAttrs(redCircle, {
+                cx: this.circleX,
+                cy: this.lightPadding + this.lightRadius,
+                r: this.lightRadius,
+                fill: `url(#redLightPattern_${itemId})`,
+                stroke: '#444',
+                'stroke-width': 2
+            });
+            this.renderer.appendChild(redGroup, redCircle);
+            this.renderer.appendChild(lightsGroup, redGroup);
+
+// Am Ende alles an den Root-SVG anfügen
+            this.renderer.appendChild(svg, defs);
+            this.renderer.appendChild(svg, rect);
+            this.renderer.appendChild(svg, lightsGroup);
+
+            if (this.showRed) {
+                const circle = this.renderer.createElement('circle', 'svg');
+                this.renderer.setAttribute(circle, 'cx', this.circleX.toString());
+                this.renderer.setAttribute(circle, 'cy', (this.lightPadding + this.lightRadius).toString());
+                this.renderer.setAttribute(circle, 'r', this.lightRadius.toString());
+                this.renderer.setAttribute(circle, 'fill', '#f00');
+                this.renderer.setAttribute(circle, 'id', 'redLightCircle_' + this.id);
+                const redLightGroup = this.redLightGroupElement.nativeElement;
+                this.renderer.insertBefore(redLightGroup, circle, redLightGroup.firstChild);
+            }
+
+            if (this.showYellow) {
+                const circle = this.renderer.createElement('circle', 'svg');
+                this.renderer.setAttribute(circle, 'cx', this.circleX.toString());
+                this.renderer.setAttribute(circle, 'cy', (this.lightDiameter + this.lightPadding * 2 + this.lightRadius).toString());
+                this.renderer.setAttribute(circle, 'r', this.lightRadius.toString());
+                this.renderer.setAttribute(circle, 'fill', '#FFFF00');
+                this.renderer.setAttribute(circle, 'id', 'yellowLightCircle_' + this.id);
+                const yellowLightGroup = this.yellowLightGroupElement.nativeElement;
+                this.renderer.insertBefore(yellowLightGroup, circle, yellowLightGroup.firstChild);
+            }
+
+            if (this.showGreen) {
+                const circle = this.renderer.createElement('circle', 'svg');
+                this.renderer.setAttribute(circle, 'cx', this.circleX.toString());
+                this.renderer.setAttribute(circle, 'cy', (this.lightDiameter * 2 + this.lightPadding * 3 + this.lightRadius).toString());
+                this.renderer.setAttribute(circle, 'r', this.lightRadius.toString());
+                this.renderer.setAttribute(circle, 'fill', '#0F0');
+                this.renderer.setAttribute(circle, 'id', 'greenLightCircle_' + this.id)
+                //const greenLightGroup = this.greenLightGroupElement.nativeElement;
+                //this.renderer.insertBefore(greenLightGroup, circle, greenLightGroup.firstChild);
+            }
+
+            let redLightElement = this.document.getElementById('redLightCircle_' + this.id) as HTMLElement;
+            let yellowLightElement = this.document.getElementById('yellowLightCircle_' + this.id) as HTMLElement;
+            let greenLightElement = this.document.getElementById('greenLightCircle_' + this.id) as HTMLElement;
+            if (this.showRed && this.blink && redLightElement) {
+                this.blinking(redLightElement, 'red');
+            }
+            if (this.showYellow && this.blink && yellowLightElement) {
+                this.blinking(yellowLightElement, 'yellow');
+            }
+            if (this.showGreen && this.blink && greenLightElement) {
+                this.blinking(greenLightElement, 'green');
+            }
+
+            // 3. Add svg to div
+            //this.renderer.appendChild(svg, rect);
+
+            this.renderer.appendChild(trafficLightElement, svg);
         }
 
-        if (this.showYellow) {
-            const circle = this.renderer.createElement('circle', 'svg');
-            this.renderer.setAttribute(circle, 'cx', this.circleX.toString());
-            this.renderer.setAttribute(circle, 'cy', (this.lightDiameter + this.lightPadding * 2 + this.lightRadius).toString());
-            this.renderer.setAttribute(circle, 'r', this.lightRadius.toString());
-            this.renderer.setAttribute(circle, 'fill', '#FFFF00');
-            this.renderer.setAttribute(circle, 'id', 'yellowLightCircle_' + this.id);
-            const yellowLightGroup = this.yellowLightGroupElement.nativeElement;
-            this.renderer.insertBefore(yellowLightGroup, circle, yellowLightGroup.firstChild);
-        }
-
-        if (this.showGreen) {
-            const circle = this.renderer.createElement('circle', 'svg');
-            this.renderer.setAttribute(circle, 'cx', this.circleX.toString());
-            this.renderer.setAttribute(circle, 'cy', (this.lightDiameter * 2 + this.lightPadding * 3 + this.lightRadius).toString());
-            this.renderer.setAttribute(circle, 'r', this.lightRadius.toString());
-            this.renderer.setAttribute(circle, 'fill', '#0F0');
-            this.renderer.setAttribute(circle, 'id', 'greenLightCircle_' + this.id)
-            const greenLightGroup = this.greenLightGroupElement.nativeElement;
-            this.renderer.insertBefore(greenLightGroup, circle, greenLightGroup.firstChild);
-        }
-
-        let redLightElement = this.document.getElementById('redLightCircle_' + this.id) as HTMLElement;
-        let yellowLightElement = this.document.getElementById('yellowLightCircle_' + this.id) as HTMLElement;
-        let greenLightElement = this.document.getElementById('greenLightCircle_' + this.id) as HTMLElement;
-        if (this.showRed && this.blink && redLightElement) {
-            this.blinking(redLightElement, 'red');
-        }
-        if (this.showYellow && this.blink && yellowLightElement) {
-            this.blinking(yellowLightElement, 'yellow');
-        }
-        if (this.showGreen && this.blink && greenLightElement) {
-            this.blinking(greenLightElement, 'green');
-        }
 
     };
+
+    private setAttrs(el: any, attrs: { [key: string]: string | number }) {
+        Object.keys(attrs).forEach(key => {
+            this.renderer.setAttribute(el, key, attrs[key].toString());
+        });
+    }
+
 
     private blinking(el: HTMLElement, color: string) {
         //set the animation interval high to prevent high CPU usage
