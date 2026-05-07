@@ -355,7 +355,7 @@ const coreRoutes: Routes = [{
     path: 'proxy/index',
     loadComponent: () => import('./pages/proxy/proxy-index/proxy-index.component').then(m => m.ProxyIndexComponent)
 }, {
-    path: 'pushnotificationsrelay/index',
+    path: 'notificationsrelay/index',
     loadComponent: () => import('./pages/pushnotificationsrelay/pushnotificationsrelay-index/pushnotificationsrelay-index.component').then(m => m.PushnotificationsrelayIndexComponent)
 }, {
     path: 'registers/index',

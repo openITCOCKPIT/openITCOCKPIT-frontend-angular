@@ -19,7 +19,7 @@ export class PushnotificationsrelayService {
 
     public getRelaySettings(): Observable<RelayPost> {
         const proxyPath = this.proxyPath;
-        return this.http.get<{ relay: RelayPost }>(`${proxyPath}/notificationsRelay/index.json`, {
+        return this.http.get<{ relay: RelayPost }>(`${proxyPath}/notificationsrelay/index.json`, {
             params: {
                 angular: true
             }
@@ -32,7 +32,7 @@ export class PushnotificationsrelayService {
 
     public saveRelaySettings(data: RelayPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<GenericResponseWrapper>(`${proxyPath}/notificationsRelay/index.json?angular=true`, {
+        return this.http.post<GenericResponseWrapper>(`${proxyPath}/notificationsrelay/index.json?angular=true`, {
             Relay: data
         }).pipe(
             map(data => {
