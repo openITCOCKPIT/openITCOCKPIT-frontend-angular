@@ -105,6 +105,7 @@ export class WebSocketsService {
         const apikey = String(this.websocketConfiguration?.websocket['SUDO_SERVER.API_KEY']);
 
         if (!this.socket$ || this.socket$.closed) {
+            console.log('Connecting to WebSocket backend...');
             this.socket$ = webSocket({
                 url: url,
                 protocol: ['access_token', apikey],
@@ -182,7 +183,7 @@ export class WebSocketsService {
                 msg.payload.browserUuid = this.browserUuid;
             }
         }
-        console.log('SEND', msg);
+        //console.log('SEND', msg);
         this.socket$?.next(msg);
     }
 
