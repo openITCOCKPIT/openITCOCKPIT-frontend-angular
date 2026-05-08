@@ -37,9 +37,6 @@ import {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
-    @ViewChild('redLightGroup') redLightGroupElement!: ElementRef;
-    @ViewChild('yellowLightGroup') yellowLightGroupElement!: ElementRef;
-    @ViewChild('greenLightGroup') greenLightGroupElement!: ElementRef;
     @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
 
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
@@ -182,36 +179,31 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
     };
 
     private renderTrafficlight() {
-
         // 17px was the old radius of the static traffic light.
-        // We calucate this value on the fly to be able to resize the traffic light
-        this.lightRadius = Math.floor(this.width * (17 / 60));
-        this.lightDiameter = (this.lightRadius * 2) + 2; //2 is the stroke width
-        this.lightPadding = Math.ceil((this.height - this.lightDiameter * 3) / 4);
+        // We calculate this value on the fly to be able to resize the traffic light
+
+        this.lightDiameter = Math.min(this.width * 0.9, this.height / 3.5);
+        this.lightRadius = this.lightDiameter / 2;
+
+        this.lightPadding = (this.height - (3 * this.lightDiameter)) / 4;
         this.circleX = Math.floor(this.width / 2);
+
         if (this.item() && this.item()?.id) {
             let trafficLightElement = this.document.getElementById('map-trafficlight-' + this.item()?.id);
-            // 1. SVG Root-Element
             if (!this.svgElement) {
                 this.svgElement = this.renderer.createElement('svg', this.svgNamespace);
             }
-
             this.renderer.setAttribute(this.svgElement, 'id', 'traffic-light-' + this.item()!.id);
             this.renderer.setAttribute(this.svgElement, 'width', this.width.toString());
             this.renderer.setAttribute(this.svgElement, 'height', this.height.toString());
 
-            // 1. Defs-Bereich erstellen
             const defs = this.renderer.createElement('defs', this.svgNamespace);
-
-
-// Beispiel: Ein LinearGradient erstellen
             const createLinearGradient = (id: string, stops: {
                 offset: string,
                 color: string
             }[], x1: number, y1: number, x2: number, y2: number) => {
                 let grad = this.renderer.createElement('linearGradient', this.svgNamespace);
                 this.setAttrs(grad, {id: id, x1: x1, y1: y1, x2: x2, y2: y2});
-                console.log('createLinearGradient', id);
                 stops.forEach(s => {
                     const stop = this.renderer.createElement('stop', this.svgNamespace);
                     this.setAttrs(stop, {offset: s.offset, 'stop-color': s.color});
@@ -234,7 +226,6 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
                     fy: fy,
                     gradientUnits: 'userSpaceOnUse'
                 });
-                console.log('createRadialGradient', id);
                 stops.forEach(s => {
                     const stop = this.renderer.createElement('stop', this.svgNamespace);
                     this.setAttrs(stop, {offset: s.offset, 'stop-color': s.color});
@@ -251,13 +242,11 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
                     y: y,
                     width: width,
                     height: height,
-                    gradientUnits: 'userSpaceOnUse'
+                    patternUnits: 'userSpaceOnUse'
                 });
-                console.log('createPattern', id);
                 return grad;
             };
 
-// Gradient hinzufügen
             const tlBg = createLinearGradient('tlBg_' + this.item()!.id, [
                 {offset: '0.02', color: '#323232'},
                 {offset: '0.03', color: '#333333'},
@@ -327,7 +316,6 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
             this.renderer.appendChild(defs, greenLightPattern);
             this.renderer.appendChild(this.svgElement, defs);
 
-            // 2. Das Haupt-Rechteck (Body)
             const rect = this.renderer.createElement('rect', this.svgNamespace);
             this.setAttrs(rect, {
                 width: this.width,
@@ -339,7 +327,6 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
             });
             this.renderer.appendChild(this.svgElement, rect);
 
-// 3. Text (Bedingt hinzufügen)
             if (this.item()?.show_label) {
                 const text = this.renderer.createElement('text', this.svgNamespace);
                 const label = `${this.Host.hostname}/${this.Service.servicename}`;
@@ -354,10 +341,9 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
                     transform: `rotate(-90, 0, ${this.height - 10 - (this.width / 8)})`
                 });
                 this.renderer.appendChild(text, textNode);
-                this.renderer.appendChild(this.svgElement, text); // svg ist dein Root-Element
+                this.renderer.appendChild(this.svgElement, text);
             }
 
-// 4. Gruppen und Kreise (Lights)
             const lightsGroup = this.renderer.createElement('g', this.svgNamespace);
             this.renderer.setAttribute(lightsGroup, 'id', 'lights_' + this.item()!.id);
 
@@ -365,7 +351,7 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
             this.setAttrs(
                 redGroup,
                 {
-                    id: `redLightGroup_${this.item()!.id})`
+                    id: `redLightGroup_${this.item()!.id}`
                 }
             );
             const redCircle = this.renderer.createElement('circle', this.svgNamespace);
@@ -377,6 +363,20 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
                 stroke: '#444',
                 'stroke-width': 2
             });
+            if (this.showRed) {
+                const circle = this.renderer.createElement('circle', 'svg');
+                this.setAttrs(circle, {
+                    id: 'redLightCircle_' + this.id,
+                    cx: this.circleX,
+                    cy: this.lightPadding + this.lightRadius,
+                    r: this.lightRadius,
+                    fill: '#f00',
+                });
+                if (this.blink) {
+                    this.blinking(circle, 'red');
+                }
+                this.renderer.appendChild(redGroup, circle);
+            }
             this.renderer.appendChild(redGroup, redCircle);
             this.renderer.appendChild(lightsGroup, redGroup);
 
@@ -384,7 +384,7 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
             this.setAttrs(
                 yellowGroup,
                 {
-                    id: `yellowLightGroup_${this.item()!.id})`
+                    id: `yellowLightGroup_${this.item()!.id}`
                 }
             );
             const yellowCircle = this.renderer.createElement('circle', this.svgNamespace);
@@ -396,6 +396,21 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
                 stroke: '#444',
                 'stroke-width': 2
             });
+            if (this.showYellow) {
+                const circle = this.renderer.createElement('circle', 'svg');
+                this.setAttrs(circle, {
+                    id: 'yellowLightCircle_' + this.id,
+                    cx: this.circleX,
+                    cy: this.lightDiameter + this.lightPadding * 2 + this.lightRadius,
+                    r: this.lightRadius,
+                    fill: '#FFFF00',
+                });
+                if (this.blink) {
+                    this.blinking(circle, 'yellow');
+                }
+                this.renderer.appendChild(yellowGroup, circle);
+
+            }
             this.renderer.appendChild(yellowGroup, yellowCircle);
             this.renderer.appendChild(lightsGroup, yellowGroup);
 
@@ -403,7 +418,7 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
             this.setAttrs(
                 greenGroup,
                 {
-                    id: `greenLightGroup_${this.item()!.id})`
+                    id: `greenLightGroup_${this.item()!.id}`
                 }
             );
             const greenCircle = this.renderer.createElement('circle', this.svgNamespace);
@@ -415,6 +430,20 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
                 stroke: '#444',
                 'stroke-width': 2
             });
+            if (this.showGreen) {
+                const circle = this.renderer.createElement('circle', 'svg');
+                this.setAttrs(circle, {
+                    id: 'greenLightCircle_' + this.id,
+                    cx: this.circleX,
+                    cy: this.lightDiameter * 2 + this.lightPadding * 3 + this.lightRadius,
+                    r: this.lightRadius,
+                    fill: '#0F0',
+                });
+                if (this.blink) {
+                    this.blinking(circle, 'green');
+                }
+                this.renderer.appendChild(greenGroup, circle);
+            }
 
             this.renderer.appendChild(greenGroup, greenCircle);
             this.renderer.appendChild(lightsGroup, greenGroup);
@@ -438,71 +467,9 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
                 this.renderer.appendChild(lightsGroup, blueGroup);
             }
             this.renderer.appendChild(this.svgElement, lightsGroup);
-
-            console.log(this.showRed, this.showYellow, this.showGreen, this.showBlue);
-
-            if (this.showRed) {
-                const circle = this.renderer.createElement('circle', 'svg');
-                this.setAttrs(circle, {
-                    id: 'redLightCircle_' + this.id,
-                    cx: this.circleX,
-                    cy: this.lightPadding + this.lightRadius,
-                    r: this.lightRadius,
-                    fill: '#f00',
-                });
-                this.renderer.appendChild(this.svgElement, circle);
-
-            }
-            if (this.showYellow) {
-                const circle = this.renderer.createElement('circle', 'svg');
-                this.setAttrs(circle, {
-                    id: 'yellowLightCircle_' + this.id,
-                    cx: this.circleX,
-                    cy: this.lightDiameter + this.lightPadding * 2 + this.lightRadius,
-                    r: this.lightRadius,
-                    fill: '#FFFF00',
-                });
-                this.renderer.appendChild(this.svgElement, circle);
-
-            }
-
-            if (this.showGreen) {
-                const circle = this.renderer.createElement('circle', 'svg');
-                this.setAttrs(circle, {
-                    id: 'greenLightCircle_' + this.id,
-                    cx: this.circleX,
-                    cy: this.lightDiameter * 2 + this.lightPadding * 3 + this.lightRadius,
-                    r: this.lightRadius,
-                    fill: '#0F0',
-                });
-                this.renderer.appendChild(this.svgElement, circle);
-
-            }
-            /*
-                                    let redLightElement = this.document.getElementById('redLightCircle_' + this.id) as HTMLElement;
-                                    let yellowLightElement = this.document.getElementById('yellowLightCircle_' + this.id) as HTMLElement;
-                                    let greenLightElement = this.document.getElementById('greenLightCircle_' + this.id) as HTMLElement;
-                                    if (this.showRed && this.blink && redLightElement) {
-                                        this.blinking(redLightElement, 'red');
-                                    }
-                                    if (this.showYellow && this.blink && yellowLightElement) {
-                                        this.blinking(yellowLightElement, 'yellow');
-                                    }
-                                    if (this.showGreen && this.blink && greenLightElement) {
-                                        this.blinking(greenLightElement, 'green');
-                                    }
-
-                                    // 3. Add svg to div
-                                    //this.renderer.appendChild(svg, rect);
-
-
-                         */
-
-            console.log(this.svgElement.innerHTML);
             this.renderer.appendChild(trafficLightElement, this.svgElement);
+            this.cdr.markForCheck();
         }
-
-
     };
 
     private setAttrs(el: any, attrs: { [key: string]: string | number }) {
