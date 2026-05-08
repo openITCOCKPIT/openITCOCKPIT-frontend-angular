@@ -19,13 +19,14 @@
                     <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
                 </div>
                 <oitc-system-health/>
+                <oitc-websocket-connection-error></oitc-websocket-connection-error>
                 <div class="nav-item py-1">
                     <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
                 </div>
             </c-header-nav>
 
             @if (this.PermissionsService.hasPermissionObservable(['exports', 'index'])|async) {
-                <oitc-header-export [headerinfo]="info"></oitc-header-export>
+                <oitc-header-export></oitc-header-export>
             }
 
             <oitc-version-check [newVersion]="info.newVersionAvailable"></oitc-version-check>

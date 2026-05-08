@@ -1,8 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PushConfigurationRoot } from './push-notifications.interface';
-import { PushNotificationsComponentService } from './push-notifications-component.service';
 import { PushNotificationsService } from '../../services/push-notifications.service';
+import {
+    WebsocketMessage,
+    WebsocketMessageType,
+    WebSocketPushNotificationPayload,
+    WebSocketsService
+} from '../../services/web-sockets.service';
 
 @Component({
     selector: 'oitc-push-notifications',
@@ -13,93 +17,110 @@ import { PushNotificationsService } from '../../services/push-notifications.serv
 })
 export class PushNotificationsComponent implements OnInit, OnDestroy {
 
-    private readonly PushNotificationsComponentService: PushNotificationsComponentService = inject(PushNotificationsComponentService);
     private readonly PushNotificationsService: PushNotificationsService = inject(PushNotificationsService);
-    private subscriptions: Subscription = new Subscription();
+    private readonly WebSocketsService: WebSocketsService = inject(WebSocketsService);
+    private readonly subscriptions: Subscription = new Subscription();
+    private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
-    private userId: number | null = null;
-
-    private Notification: Notification | null = null;
-
-    private hasPermission: boolean = false;
-
-    private websocketConfig: { [p: string]: string } = {};
-
-    private cdr = inject(ChangeDetectorRef);
-
+    private alreadySubscribed: boolean = false;
 
     constructor() {
+        // The permissions check will check the browsers push notification permissions
+        // Not any "openITCOCKPIT user specific" permissions.
         this.subscriptions.add(this.PushNotificationsService.hasPermissionObservable$.subscribe((hasPermission: boolean) => {
-            this.hasPermission = hasPermission;
             this.onHasPermissionChange();
         }));
     }
 
     public ngOnInit(): void {
-        if (this.checkBrowserSupport()) {
+        if (this.PushNotificationsService.checkBrowserSupport()) {
             this.PushNotificationsService.checkPermissions();
         }
+        this.WebSocketsService.acquire();
     }
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
-        this.PushNotificationsService.disconnect();
+        this.WebSocketsService.release();
     }
 
-    private checkBrowserSupport() {
-        if (!("Notification" in window)) {
-            console.warn('Browser does not support Notifications');
-            return false;
-        }
-        return true;
-    };
-
     private connectToNotificationPushServer() {
-        this.subscriptions.add(this.PushNotificationsComponentService.getPushConfiguration()
-            .subscribe((result: PushConfigurationRoot) => {
-                this.cdr.markForCheck();
-                this.userId = result.user.id;
+        // Tell the WebSocket service to connect (in case not already done by another component)
+        this.WebSocketsService.connect();
 
-                this.websocketConfig = result.websocket;
+        // Subscribe to all messages received by the WebSocket client
+        // But only process the relevant once.
+        if (!this.alreadySubscribed) {
+            this.subscriptions.add(
+                this.WebSocketsService.messages$.subscribe({
+                    next: (msg) => {
+                        if (msg.type === WebsocketMessageType.ProcessPushNotification) {
+                            this.gotMessage(msg);
+                        }
+                    }
+                })
+            );
 
-                //Only connect, if the user has >= 1 contacts using browser push notifications
-                if (result.user.hasPushContact) {
-                    this.PushNotificationsService.setUrl(this.websocketConfig['PUSH_NOTIFICATIONS.URL']);
-                    this.PushNotificationsService.setApiKey(this.websocketConfig['SUDO_SERVER.API_KEY']);
+            this.subscriptions.add(
+                this.WebSocketsService.isConnected$.subscribe({
+                    next: (isConnected: boolean) => {
+                        if (isConnected) {
+                            // Once we are connected to the WebSocket backend, we can tell the servicer
+                            // that we want to consume Push Notifications
+                            this.WebSocketsService.send({
+                                type: WebsocketMessageType.RegisterBrowserPushNotification,
+                                message: '',
+                                payload: {
+                                    // Additional data we could send to the server
+                                    // If payload is an object, the WebSocketsService will automatically
+                                    // add the clientUuid and browserUuid for us
+                                    // so make sure we always have at least an empty object as playload!
+                                }
+                            });
+                        }
+                    }
+                })
+            );
 
-                    this.PushNotificationsService.setUserId(this.userId);
-                    this.PushNotificationsService.onResponse(this.gotMessage);
+            // In case we want, we could monitor connection errors here.
+            // The WebSocket service will monitor for connection losses and reconnect automatically so for now we dont
+            // need to do anything in here.
+            //this.subscriptions.add(
+            //    this.WebSocketsService.connectionError$.subscribe(isError => {
+            //        const errorMessage = isError ? 'Connection lost. Reconnecting...' : null;
+            //        console.log(errorMessage);
+            //        console.log(isError);
+            //    })
+            //);
 
-                    this.PushNotificationsService.connect();
-                }
-
-            }));
+            // In case connectToNotificationPushServer() gets called multiple times, we would end up with multiple push messages
+            this.alreadySubscribed = true;
+        }
     };
 
     private onHasPermissionChange() {
-        if (this.hasPermission === true && !this.PushNotificationsService.isConnected()) {
+        if (this.PushNotificationsService.hasPermission()) {
             this.connectToNotificationPushServer();
         }
     };
 
-    private gotMessage = (event: MessageEvent) => {
-        if (typeof event.data !== "undefined") {
-            let data = JSON.parse(event.data);
+    private gotMessage = (msg: WebsocketMessage) => {
+        if (msg.payload !== undefined) {
+            const payload = msg.payload as WebSocketPushNotificationPayload;
 
             let options: NotificationOptions = {
-                body: data.message
+                body: msg.message
             };
 
-            if (data.data.icon !== null) {
-                options['icon'] = data.data.icon;
+            if (payload.icon) {
+                options.icon = payload.icon;
             }
 
-            let notification = new Notification(data.data.title, options);
-
-            if (data.data.hostUuid !== null || data.data.serviceUuid !== null) {
-                let url = '/hosts/browser/' + data.data.hostUuid;
-                if (data.data.type === 'service') {
-                    url = '/services/browser/' + data.data.serviceUuid;
+            let notification = new Notification(payload.title, options);
+            if (payload.hostUuid || payload.serviceUuid) {
+                let url = '/hosts/browser/' + payload.hostUuid;
+                if (payload.type === 'service') {
+                    url = '/services/browser/' + payload.serviceUuid;
                 }
 
                 notification.onclick = function (event) {

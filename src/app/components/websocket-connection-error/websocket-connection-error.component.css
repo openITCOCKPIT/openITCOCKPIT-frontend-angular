@@ -1,0 +1,38 @@
+/* pulse effect for danger button*/
+.pulse-danger {
+    box-shadow: 0 0 0 rgba(204, 0, 0, 0.4);
+    animation: pulse-danger 2s normal forwards ease-in-out;
+    animation-iteration-count: 3;
+}
+
+.pulse-danger:hover {
+    animation: 0;
+}
+
+@-webkit-keyframes pulse-danger {
+    0% {
+        -webkit-box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.4);
+    }
+    70% {
+        -webkit-box-shadow: 0 0 0 10px rgba(204, 0, 0, 0);
+    }
+    100% {
+        -webkit-box-shadow: 0 0 0 0 rgba(204, 0, 0, 0);
+    }
+}
+
+@keyframes pulse-danger {
+    0% {
+        -moz-box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.4);
+        box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.4);
+    }
+    70% {
+        -moz-box-shadow: 0 0 0 10px rgba(204, 0, 0, 0);
+        box-shadow: 0 0 0 10px rgba(204, 0, 0, 0);
+    }
+    100% {
+        -moz-box-shadow: 0 0 0 0 rgba(204, 0, 0, 0);
+        box-shadow: 0 0 0 0 rgba(204, 0, 0, 0);
+    }
+}
+
