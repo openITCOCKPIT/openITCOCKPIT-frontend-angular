@@ -347,10 +347,26 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         this.resizedEvent.emit({
             id: this.id,
             mapId: this.mapId,
-            width: event.width,
-            height: event.height,
+            width: event.width - 10,
+            height: event.height - 10,
             itemType: itemType
         });
+        this.cdr.markForCheck();
+    }
+
+    protected onResizeStart(element: HTMLElement) {
+        console.log(element);
+        if (!element.classList.contains('resize-border')) {
+            element.classList.add('resize-border');
+        }
+        this.cdr.markForCheck();
+    }
+
+    protected onResizing(element: HTMLElement) {
+        console.log(element);
+        if (!element.classList.contains('opacity-50')) {
+            element.classList.add('opacity-50');
+        }
         this.cdr.markForCheck();
     }
 

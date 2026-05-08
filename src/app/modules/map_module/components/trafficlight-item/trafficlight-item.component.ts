@@ -27,11 +27,12 @@ import {
     MapItemRootParams,
     ServiceForMapItem
 } from '../map-item-base/map-item-base.interface';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 @Component({
     selector: 'oitc-trafficlight-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgClass],
+    imports: [CdkDrag, ContextMenuModule, NgClass, AngularDraggableModule, CdkDragHandle],
     templateUrl: './trafficlight-item.component.html',
     styleUrl: './trafficlight-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -182,7 +183,7 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
         // 17px was the old radius of the static traffic light.
         // We calculate this value on the fly to be able to resize the traffic light
 
-        this.lightDiameter = Math.min(this.width * 0.9, this.height / 3.5);
+        this.lightDiameter = Math.min(this.width * 0.7, this.height / 3.5);
         this.lightRadius = this.lightDiameter / 2;
 
         this.lightPadding = (this.height - (3 * this.lightDiameter)) / 4;
@@ -335,9 +336,10 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
                 this.setAttrs(text, {
                     x: 0,
                     y: this.height - 10,
-                    'font-size': this.width / 8,
+                    'font-size': this.height / 20,
                     'font-family': 'Verdana',
                     fill: '#FFF',
+                   // 'font-size-adjust': 0.58,
                     transform: `rotate(-90, 0, ${this.height - 10 - (this.width / 8)})`
                 });
                 this.renderer.appendChild(text, textNode);
@@ -546,5 +548,4 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
 
         this.load();
     }
-
 }
