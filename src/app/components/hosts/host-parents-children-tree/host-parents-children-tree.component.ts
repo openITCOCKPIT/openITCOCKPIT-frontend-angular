@@ -19,6 +19,7 @@ import { generateGuid } from '@foblex/utils';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { HoststatusIconComponent } from '../../../pages/hosts/hoststatus-icon/hoststatus-icon.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { PointExtensions } from '@foblex/2d';
 
 const NODE_WIDTH = 150;
 const DIRECTION = 'LR';
@@ -95,12 +96,14 @@ export class HostParentsChildrenTreeComponent {
 
         afterRenderEffect(() => {
             // DOM rendering completed for this component
-            this.isInitialized = true;
             this.updateGraph(new dagre.graphlib.Graph({compound: true}));
-            setTimeout(() => {
-                // to center the graph after clicking on another host in graph node
-                this.centerMainHost2screen();
-            }, 400);
+            if (this.isInitialized) {
+                setTimeout(() => {
+                    // to center the graph after clicking on another host in graph node
+                    this.fit2screen();
+                }, 400);
+            }
+            this.isInitialized = true;
             this.cdr.markForCheck();
         });
     }
@@ -261,21 +264,9 @@ export class HostParentsChildrenTreeComponent {
         });
     }
 
-    public centerMainHost2screen(): void {
-        if (this.fCanvasComponent && this.fFlowComponent) {
-            let mainHostId = "";
-            // get main Host node Id from state, because fFlow changes the IDs after rendering
-            this.fFlowComponent.getState().nodes.forEach(renderedNode => {
-                //main Host node is the only node without a parent, because it has no group attached
-                if (renderedNode.parentId === undefined) {
-                    mainHostId = renderedNode.id;
-                }
-            });
-            if (mainHostId) {
-                this.fCanvasComponent.fitToScreen({x: 0, y: 60}, true);
-                //this.fCanvasComponent.resetScaleAndCenter(true);
-                this.fCanvasComponent.centerGroupOrNode(mainHostId, true);
-            }
+    public fit2screen(): void {
+        if (this.fCanvasComponent) {
+            this.fCanvasComponent.fitToScreen(PointExtensions.initialize(15, 15), true);
             this.cdr.markForCheck();
         }
     }
