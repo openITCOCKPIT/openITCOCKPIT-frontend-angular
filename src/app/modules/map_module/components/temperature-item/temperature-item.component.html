@@ -1,10 +1,19 @@
 @if (!isViewMode()) {
-    <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
+    <div cdkDrag #container class="map-element-container"
          (cdkDragEnded)="onDragEnd($event)"
          (cdkDragMoved)="onDragMove($event)"
-         (resizeStop)="onResizeStop($event, type)"
          cdkDragBoundary=".map-canvas">
-        <canvas cdkDragHandle [id]="'map-temperature-' + item()!.id"></canvas>
+        <div cdkDragHandle [style.width.px]="width+10"
+             ngResizable
+             #thermometer
+             (rzStart)="onResizeStart(container)"
+             (rzResizing)="onResizing(thermometer)"
+             (rzStop)="onResizeStop({ width: $event.size.width, height: $event.size.height }, type)"
+             [rzAspectRatio]="true"
+             [rzHandles]="'se'"
+             [style.height.px]="height+10">
+            <canvas [id]="'map-temperature-' + item()!.id"></canvas>
+        </div>
     </div>
     @if (!isViewMode()) {
         <p-contextMenu [target]="container" [model]="contextMenuItems"

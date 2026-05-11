@@ -1,12 +1,13 @@
 import {
     ChangeDetectionStrategy,
     Component,
+    DOCUMENT,
     effect,
+    inject,
     input,
     InputSignal,
     OnDestroy,
-    OnInit,
-    ViewChild
+    OnInit
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
@@ -15,7 +16,6 @@ import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
-import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { NgClass } from '@angular/common';
 import { LinearGauge } from 'canvas-gauges';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
@@ -27,20 +27,20 @@ import {
     ServiceForMapItem,
     Setup
 } from '../map-item-base/map-item-base.interface';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 @Component({
     selector: 'oitc-temperature-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgClass],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgClass, AngularDraggableModule],
     templateUrl: './temperature-item.component.html',
     styleUrl: './temperature-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
-    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
-
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
+    private readonly document = inject(DOCUMENT);
 
     private subscriptions: Subscription = new Subscription();
     private statusUpdateInterval: Subscription = new Subscription();
@@ -131,9 +131,6 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
                 this.initRefreshTimer();
 
                 this.init = false;
-                if (this.resizableDirective) {
-                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
-                }
                 this.cdr.markForCheck();
             }));
     };
@@ -196,7 +193,6 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
         let setup = this.setup;
         let label = setup.metric.name,
             units = '';
-
 
         if (this.item()!.show_label === true) {
             if (typeof (setup.metric.unit) !== "string" || setup.metric.unit.length === 0) {
@@ -275,10 +271,8 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
         let gauge = new LinearGauge(settings);
 
         gauge.draw();
-
-        //Update value
-        //gauge.value = 1337;
-    };
+        this.cdr.markForCheck();
+    }
 
     private getTickCorrectMax(setup: Setup, numberOfTicks: number) {
         let ticks = this.getMajorTicks(setup, numberOfTicks);

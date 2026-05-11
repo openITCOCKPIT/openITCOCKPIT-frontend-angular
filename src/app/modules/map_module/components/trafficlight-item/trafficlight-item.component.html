@@ -3,12 +3,11 @@
         <div cdkDrag #container class="map-element-container"
              (cdkDragEnded)="onDragEnd($event)"
              (cdkDragMoved)="onDragMove($event)"
-             #trafficContainer
              cdkDragBoundary=".map-canvas">
             <div cdkDragHandle [id]="'map-trafficlight-' + item()?.id" [style.width.px]="width+10"
                  ngResizable
                  #traffic
-                 (rzStart)="onResizeStart(trafficContainer)"
+                 (rzStart)="onResizeStart(container)"
                  (rzResizing)="onResizing(traffic)"
                  (rzStop)="onResizeStop({ width: $event.size.width, height: $event.size.height }, type)"
                  [rzAspectRatio]="true"
