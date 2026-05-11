@@ -10,10 +10,18 @@ import {
 } from '@angular/core';
 import { AsyncPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { TooltipDirective } from '@coreui/angular';
-import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule, FZoomDirective } from '@foblex/flow';
+import {
+    EFConnectableSide,
+    FCanvasComponent,
+    FFlowComponent,
+    FFlowModule,
+    FZoomDirective,
+    provideFFlow,
+    withReflowOnResize
+} from '@foblex/flow';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
-import dagre from '@dagrejs/dagre';
+import dagre, { Edge, graphlib, Point } from '@dagrejs/dagre';
 import { ConnectionOperator, HostNode, HostParentsChildrenTree, INode } from './host-parents-children-tree.interface';
 import { generateGuid } from '@foblex/utils';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -24,7 +32,7 @@ import { PointExtensions } from '@foblex/2d';
 const NODE_WIDTH = 150;
 const DIRECTION = 'LR';
 
-interface HostParentsChildrenNode extends dagre.Node {
+interface HostParentsChildrenNode extends Point {
     hostNode: HostNode
 }
 
@@ -48,8 +56,8 @@ export enum HostParentChildrenTreeGroupIds {
         HoststatusIconComponent,
         FaIconComponent,
         TitleCasePipe,
-
     ],
+    providers: [provideFFlow(withReflowOnResize())],
     templateUrl: './host-parents-children-tree.component.html',
     styleUrl: './host-parents-children-tree.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -108,17 +116,19 @@ export class HostParentsChildrenTreeComponent {
         });
     }
 
-    private updateGraph(graph: dagre.graphlib.Graph): void {
+    private updateGraph(graph: graphlib.Graph): void {
         this.hasParentNodes = false;
         this.hasChildrenNodes = false;
         this.setGraph(graph);
         this.nodes = this.getNodes(graph);
         this.groupNodes = this.getNodes(graph, true);
+        console.error(this.nodes);
+        console.error(this.groupNodes);
         this.connections = this.getConnections(graph);
         this.cdr.markForCheck();
     }
 
-    private setGraph(graph: dagre.graphlib.Graph): void {
+    private setGraph(graph: graphlib.Graph): void {
 
         const hostParentsChildrenTree = this.hostParentsChildrenTree();
 
@@ -187,7 +197,7 @@ export class HostParentsChildrenTreeComponent {
     }
 
     // had to split normal nodes and group nodes in two different arrays, because if statement breaks canvas rendering in html template
-    private getNodes(graph: dagre.graphlib.Graph, isGroupNodes: boolean = false): INode[] {
+    private getNodes(graph: graphlib.Graph, isGroupNodes: boolean = false): INode[] {
         let nodes: INode[] = [];
 
         graph.nodes().forEach((x: any) => {
@@ -254,8 +264,8 @@ export class HostParentsChildrenTreeComponent {
         return nodes;
     }
 
-    private getConnections(graph: dagre.graphlib.Graph): ConnectionOperator[] {
-        return graph.edges().map((x: dagre.Edge) => {
+    private getConnections(graph: graphlib.Graph): ConnectionOperator[] {
+        return graph.edges().map((x: Edge) => {
             return {
                 id: generateGuid(),
                 from: x.v,
@@ -266,6 +276,7 @@ export class HostParentsChildrenTreeComponent {
 
     public fit2screen(): void {
         if (this.fCanvasComponent) {
+            console.error(this.fFlowComponent.getState().nodes);
             this.fCanvasComponent.fitToScreen(PointExtensions.initialize(15, 15), true);
             this.cdr.markForCheck();
         }
