@@ -5,12 +5,11 @@
          (resizeStop)="onResizeStop($event, type)"
          cdkDragBoundary=".map-canvas">
         @if (allowView && ( item()!.label_possition == 1 || item()!.label_possition == 2 )) {
-            <div cdkDragHandle class="text-center"
-            >
+            <div cdkDragHandle class="text-center">
                 <div [hidden]="!(item()!.show_label && item()!.label_possition == 1)">{{ label }}</div>
-                <img
-                    [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
-                    onerror="this.src='/map_module/img/items/missing.png';"/>
+                <img [alt]="label"
+                     [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
+                     onerror="this.src='/map_module/img/items/missing.png';"/>
                 <div [hidden]="!(item()!.show_label && item()!.label_possition == 2)">{{ label }}</div>
             </div>
         }

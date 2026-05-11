@@ -6,8 +6,7 @@ import {
     input,
     InputSignal,
     OnDestroy,
-    OnInit,
-    ViewChild
+    OnInit
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
@@ -18,7 +17,6 @@ import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { forkJoin, interval, Subscription } from 'rxjs';
 import { GraphItemService } from './graph-item.service';
 import { GraphItemParams, GraphItemRoot, PerfdataParams } from './graph-item.interface';
-import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { NgClass } from '@angular/common';
 import { EChartsOption, VisualMapComponentOption } from 'echarts';
 import { DateTime } from 'luxon';
@@ -44,13 +42,14 @@ import { AlertComponent } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TimezoneConfiguration, TimezoneService } from '../../../../services/timezone.service';
 import { HostForMapItem, ServiceForMapItem, Setup } from '../map-item-base/map-item-base.interface';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 echarts.use([LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent, MarkLineComponent]);
 
 @Component({
     selector: 'oitc-graph-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgxEchartsDirective, AlertComponent, FaIconComponent, NgClass],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgxEchartsDirective, AlertComponent, FaIconComponent, NgClass, AngularDraggableModule],
     templateUrl: './graph-item.component.html',
     styleUrl: './graph-item.component.css',
     providers: [
@@ -59,8 +58,6 @@ echarts.use([LineChart, GridComponent, LegendComponent, TitleComponent, TooltipC
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
-    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
-
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
 
@@ -186,9 +183,6 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 this.initRefreshTimer();
 
                 this.loadGraph(this.host.uuid, this.service.uuid);
-                if (this.resizableDirective) {
-                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
-                }
                 this.cdr.markForCheck();
             },
             error: (err) => {
@@ -649,6 +643,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
             return;
         }
 
+
         let gaugeData = [];
         // Data format for eCharts
         // https://stackoverflow.com/a/68461548
@@ -664,16 +659,8 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         //label = this.HtmlspecialcharsPipe.transform(label);
 
         let showTicks = true;
-        let left = 80;
-        let right = 50;
-        let top = 25;
-        let bottom = 50;
         if (this.height < 130) {
             showTicks = false;
-            left = 50;
-            right = 20;
-            top = 20;
-            bottom = 20;
         }
 
         const thresholdsLines = this.getThresholdLines(performance_data);
@@ -686,11 +673,16 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 // label formatter
                 show: this.item()!.show_label,
                 data: [performance_data.datasource.name],
-                position: 'top',
-                align: 'left',
                 formatter: (name: string) => {
                     return label;
-                }
+                },
+                orient: 'horizontal',   // 'horizontal' or 'vertical'
+                bottom: 0,              // Position at the bottom
+                left: 'center',         // Center horizontally
+                textStyle: {
+                    fontSize: '0.9em'   // Responsive relative to container
+                },
+                icon: 'none'
             },
             tooltip: {
                 trigger: 'axis',
@@ -750,7 +742,6 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 splitLine: {
                     show: true,
                 },
-                //name: gauge.datasource.setup.metric.unit,
                 minorTick: {
                     show: false
                 },
@@ -758,14 +749,13 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     show: false
                 }
             },
-
             grid: {
-                left: left,
-                right: right,
-                top: top,
-                bottom: bottom
+                left: '3%',
+                right: '4%',
+                bottom: '10%',
+                top: '3%',
+                containLabel: label.length > 0
             },
-
 
             // Workaround to hide the toolbar and to auto select the dataZoom in this.onChartFinished method
             // https://github.com/apache/echarts/issues/13397#issuecomment-814864873

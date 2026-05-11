@@ -9,8 +9,7 @@ import {
     InputSignal,
     OnDestroy,
     OnInit,
-    Renderer2,
-    ViewChild
+    Renderer2
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
@@ -19,7 +18,6 @@ import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
-import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { NgClass } from '@angular/common';
 import {
     HostForMapItem,
@@ -38,8 +36,6 @@ import { AngularDraggableModule } from 'angular2-draggable';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
-    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
-
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
 
@@ -165,9 +161,6 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
                         this.initRefreshTimer();
 
                         this.init = false;
-                        if (this.resizableDirective) {
-                            this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
-                        }
                         this.cdr.markForCheck();
                     },
                     error: (err) => {
@@ -339,7 +332,6 @@ export class TrafficlightItemComponent extends MapItemBaseComponent<Mapgadget> i
                     'font-size': this.height / 20,
                     'font-family': 'Verdana',
                     fill: '#FFF',
-                   // 'font-size-adjust': 0.58,
                     transform: `rotate(-90, 0, ${this.height - 10 - (this.width / 8)})`
                 });
                 this.renderer.appendChild(text, textNode);

@@ -15,9 +15,6 @@
 }
 
 .ng-resizable-diagonal {
-    box-sizing: border-box;
-    width: 0;
-    height: 0;
     border-bottom: 12px solid var(--cui-primary);
     border-left: 12px solid transparent;
 }

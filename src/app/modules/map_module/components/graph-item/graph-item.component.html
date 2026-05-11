@@ -1,14 +1,25 @@
 @if (!isViewMode()) {
-    <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
+    <div cdkDrag #container class="map-element-container"
          (cdkDragEnded)="onDragEnd($event)"
          (cdkDragMoved)="onDragMove($event)"
-         (resizeStop)="onResizeStop($event, type)"
          cdkDragBoundary=".map-canvas">
         @if (allowView && hasEnoughData) {
-            <div cdkDragHandle class="bg-light" [style.width.px]="width">
-                <div [id]="'mapgraph-' + item()!.id" [style.height.px]="height" style="padding:0; position:relative;"
+            <div cdkDragHandle
+                 [style.width.px]="width+10"
+                 ngResizable
+                 (rzStart)="onResizeStart(container)"
+                 (rzResizing)="onResizing(graph)"
+                 (rzStop)="onResizeStop({ width: $event.size.width, height: $event.size.height }, type)"
+                 [rzAspectRatio]="true"
+                 [rzHandles]="'se'"
+                 [style.height.px]="height+10">
+                <div [id]="'mapgraph-' + item()!.id"
+                     [style.height.px]="height"
+                     [style.width.px]="width"
                      echarts [options]="chartOption"
+                     #graph
                      [theme]="theme"
+                     class="p-0 bg-light position-relative"
                      (chartInit)="onChartInit($event)">
                 </div>
             </div>
