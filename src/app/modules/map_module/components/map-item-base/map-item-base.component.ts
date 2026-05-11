@@ -355,7 +355,6 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     }
 
     protected onResizeStart(element: HTMLElement) {
-        console.log(element);
         if (!element.classList.contains('resize-border')) {
             element.classList.add('resize-border');
         }
@@ -363,7 +362,6 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     }
 
     protected onResizing(element: HTMLElement) {
-        console.log(element);
         if (!element.classList.contains('opacity-50')) {
             element.classList.add('opacity-50');
         }

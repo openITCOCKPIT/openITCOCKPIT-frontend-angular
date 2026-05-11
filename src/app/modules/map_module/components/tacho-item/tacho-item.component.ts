@@ -30,11 +30,12 @@ import {
     ServiceForMapItem,
     Setup
 } from '../map-item-base/map-item-base.interface';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 @Component({
     selector: 'oitc-tacho-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgClass],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgClass, AngularDraggableModule],
     templateUrl: './tacho-item.component.html',
     styleUrl: './tacho-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
