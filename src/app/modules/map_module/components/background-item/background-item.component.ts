@@ -1,13 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-    effect,
-    input,
-    InputSignal,
-    OnDestroy,
-    OnInit,
-    ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, InputSignal, OnDestroy, OnInit } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
@@ -15,19 +6,18 @@ import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Mapbackgrounditem } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { Subscription } from 'rxjs';
-import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { NgStyle } from '@angular/common';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 @Component({
     selector: 'oitc-background-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgStyle],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgStyle, AngularDraggableModule],
     templateUrl: './background-item.component.html',
     styleUrl: './background-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgrounditem> implements OnInit, OnDestroy {
-    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
 
     public override item: InputSignal<Mapbackgrounditem | undefined> = input<Mapbackgrounditem>();
     public aspectRatioEnabled: InputSignal<boolean> = input<boolean>(false);
@@ -75,14 +65,6 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
             this.height = this.item()!.size_y;
         } else {
             this.height = null;
-        }
-
-        if (this.resizableDirective) {
-            if (this.item()!.size_x > 0 && this.item()!.size_y > 0) {
-                this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
-            } else {
-                this.resizableDirective.setLastWidthHeightByHimself();
-            }
         }
         this.cdr.markForCheck();
     }

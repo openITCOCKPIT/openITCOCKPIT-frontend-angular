@@ -1,17 +1,27 @@
 @if (!isViewMode()) {
-    <div cdkDrag #container oitcResizable [aspectRatio]="aspectRatioEnabled()" class="map-element-container"
+    <div cdkDrag #container class="map-element-container"
          (cdkDragEnded)="onDragEnd($event)"
          (cdkDragMoved)="onDragMove($event)"
-         (resizeStop)="onResizeStop($event, type)"
          cdkDragBoundary=".map-canvas">
-        <div cdkDragHandle
-             [ngStyle]="{'width.px': width, 'height.px': height}">
-            @if (this.item()?.background) {
-                <img [src]="'/map_module/img/backgrounds/' + this.item()?.background" class="invalid-image-src"
+        @if (this.item()?.background) {
+            <div cdkDragHandle
+                 class="text-center"
+                 ngResizable
+                 #background
+                 (rzStart)="onResizeStart(background)"
+                 (rzResizing)="onResizing(backgroundImage)"
+                 (rzStop)="onResizeStop({ width: $event.size.width, height: $event.size.height }, type)"
+                 [rzAspectRatio]="aspectRatioEnabled()"
+                 [rzHandles]="'se'"
+                 [style.width.px]="width??+10"
+                 [style.height.px]="height??+10">
+                <img #backgroundImage
+                     [src]="'/map_module/img/backgrounds/' + this.item()?.background" class="invalid-image-src"
                      [ngStyle]="{'width.px': width, 'height.px': height}"
                      [alt]="invalidBackgroundMessage"/>
-            }
-        </div>
+            </div>
+        }
+
     </div>
     @if (!isViewMode()) {
         <p-contextMenu [target]="container" [model]="contextMenuItems"
