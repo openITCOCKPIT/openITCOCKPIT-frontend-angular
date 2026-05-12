@@ -18,19 +18,18 @@ import { interval, Subscription } from 'rxjs';
 import { MapSummaryItemService } from './map-summary-item.service';
 import { NgClass } from '@angular/common';
 import { MenuItem } from 'primeng/api';
-import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { DataForMapItem, MapItemRoot, MapItemRootParams } from '../map-item-base/map-item-base.interface';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 @Component({
     selector: 'oitc-map-summary-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgClass],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgClass, AngularDraggableModule],
     templateUrl: './map-summary-item.component.html',
     styleUrl: './map-summary-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem> implements OnInit, OnDestroy {
-    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
 
     public override item: InputSignal<Mapsummaryitem | undefined> = input<Mapsummaryitem>();
     public refreshInterval = input<number>(0);
@@ -88,9 +87,6 @@ export class MapSummaryItemComponent extends MapItemBaseComponent<Mapsummaryitem
                     this.getLabel(result.data);
                 }
                 this.initRefreshTimer();
-                if (this.resizableDirective) {
-                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
-                }
                 this.cdr.markForCheck();
             }));
     };

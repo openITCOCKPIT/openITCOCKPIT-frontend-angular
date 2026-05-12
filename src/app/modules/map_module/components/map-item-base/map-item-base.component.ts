@@ -344,11 +344,21 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     // type has to be given here because the type of parent class is wrong
     // in template of child you have to use the onResizeStop event to emit the event (example: (resizeStop)="onResizeStop($event, type)"
     protected onResizeStop(event: { width: number, height: number }, itemType: MapItemType) {
+        console.log(itemType, 'WIDTH: ', event.width, 'HEIGHT: ', event.height);
+        let width = event.width - 10;
+        let height = event.height - 10;
+        if (itemType === 'summaryItem') {
+            if (width < height) {
+                height = width;
+            } else {
+                width = height;
+            }
+        }
         this.resizedEvent.emit({
             id: this.id,
             mapId: this.mapId,
-            width: event.width - 10,
-            height: event.height - 10,
+            width: width,
+            height: height,
             itemType: itemType
         });
         this.cdr.markForCheck();
