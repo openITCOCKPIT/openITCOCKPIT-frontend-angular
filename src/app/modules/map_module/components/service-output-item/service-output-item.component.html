@@ -1,12 +1,18 @@
 @if (!isViewMode()) {
-    <div cdkDrag #container oitcResizable [aspectRatio]="false" class="map-element-container"
+    <div cdkDrag #container class="map-element-container"
          (cdkDragEnded)="onDragEnd($event)"
          (cdkDragMoved)="onDragMove($event)"
-         (resizeStop)="onResizeStop($event, type)"
          cdkDragBoundary=".map-canvas">
         @if (allowView) {
             <div cdkDragHandle
-                 [ngStyle]="{'width.px': width, 'height.px': height, 'font-size.px': item()!.font_size}">
+                 ngResizable
+                 #serviceOutput
+                 (rzStart)="onResizeStart(container)"
+                 (rzResizing)="onResizing(serviceOutput)"
+                 (rzStop)="onResizeStop({ width: $event.size.width, height: $event.size.height }, type)"
+                 [rzAspectRatio]="false"
+                 [rzHandles]="'se'"
+                 [ngStyle]="{'width.px': width +10, 'height.px': height +10, 'font-size.px': item()!.font_size}">
                 <span [hidden]="!item()!.show_label" class="bold">
                     {{ Service.hostname }} / {{ Service.servicename }}:
                 </span>
