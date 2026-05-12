@@ -15,20 +15,19 @@ import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
-import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { NgClass } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { MapItemRoot, MapItemRootParams, Perfdata, PerformanceData } from '../map-item-base/map-item-base.interface';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 @Component({
     selector: 'oitc-perfdata-text-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgClass],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgClass, AngularDraggableModule, NgStyle],
     templateUrl: './perfdata-text-item.component.html',
     styleUrl: './perfdata-text-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
-    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
 
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
@@ -114,9 +113,6 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
                     this.initRefreshTimer();
 
                     this.init = false;
-                    if (this.resizableDirective) {
-                        this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
-                    }
                     this.cdr.markForCheck();
                 },
                 error: (err) => {
