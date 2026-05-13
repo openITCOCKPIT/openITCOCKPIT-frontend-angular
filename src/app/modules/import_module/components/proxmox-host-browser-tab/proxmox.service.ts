@@ -86,7 +86,7 @@ export class ProxmoxService {
 
     public rollbackSnapshot(hostId: number, data: ProxmoxRollbackSnapshotData): Observable<RunProxmoxCommandApiResult> {
         const proxyPath = this.proxyPath;
-        return this.http.post<RunProxmoxCommandApiResult>(`${proxyPath}/import_module/Proxmox/rollback_snapshpot/${hostId}.json`, data).pipe(
+        return this.http.post<RunProxmoxCommandApiResult>(`${proxyPath}/import_module/Proxmox/rollback_snapshot/${hostId}.json`, data).pipe(
             map(data => {
                 return data;
             })
@@ -95,7 +95,7 @@ export class ProxmoxService {
 
     public deleteSnapshot(hostId: number, data: ProxmoxRollbackSnapshotData): Observable<RunProxmoxCommandApiResult> {
         const proxyPath = this.proxyPath;
-        return this.http.post<RunProxmoxCommandApiResult>(`${proxyPath}/import_module/Proxmox/delete_snapshpot/${hostId}.json`, data).pipe(
+        return this.http.post<RunProxmoxCommandApiResult>(`${proxyPath}/import_module/Proxmox/delete_snapshot/${hostId}.json`, data).pipe(
             map(data => {
                 return data;
             })
