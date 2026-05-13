@@ -27,7 +27,6 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -61,6 +60,7 @@ import { HistoryService } from '../../../../../history.service';
 import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { ExternalSystems } from '../external-systems.enum';
 
 @Component({
     selector: 'oitc-external-systems-add',
@@ -130,14 +130,19 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
 
     protected readonly ExternalSystemTypes = [
         {
-            key: 'idoit',
+            key: ExternalSystems.Idoit,
             value: this.TranslocoService.translate('i-doit System'),
             placeholder: 'i-doit.system/src/jsonrpc.php'
         },
         {
-            key: 'itop',
+            key: ExternalSystems.Itop,
             value: this.TranslocoService.translate('iTop System'),
             placeholder: 'itop/webservices/rest.php?version=1.3'
+        },
+        {
+            key: ExternalSystems.Proxmox,
+            value: this.TranslocoService.translate('Proxmox VE'),
+            placeholder: 'proxmox.example.com:8006'
         }
     ];
 
@@ -186,12 +191,13 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             use_https: 1, //number
             use_proxy: 1, //number
             ignore_ssl_certificate: 0, //number
-            system_type: 'idoit',
+            system_type: ExternalSystems.Idoit,
             object_type_ids: [],
             custom_data: {
                 custom_mappings: [],
                 hostgroup_mappings: []
-            }
+            },
+            polling_interval: null
         }
     }
 
@@ -203,6 +209,7 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.ExternalSystemsService.createExternalSystem(this.post)
             .subscribe((result) => {
+                this.errors = null;
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
@@ -232,10 +239,10 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             .subscribe((result: ExternalSystemConnect) => {
                 this.cdr.markForCheck();
                 this.connectStatus = result.status.status;
-                if (result.status.msg) {
+                if (!this.connectStatus && result.status.msg) {
                     this.connectMessage = result.status.msg.message;
                 }
-                if (result.status.result) {
+                if (this.connectStatus) {
                     this.objectTypes = result.status.result;
                     this.objectTypesForOptionGroup = this.ExternalSystemsService.parseElementsForOptionGroup(this.objectTypes);
                 }
@@ -280,4 +287,6 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
                 }));
         }
     }
+
+    protected readonly ExternalSystems = ExternalSystems;
 }

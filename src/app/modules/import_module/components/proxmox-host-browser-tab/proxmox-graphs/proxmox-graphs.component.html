@@ -1,0 +1,47 @@
+<ng-container *transloco="let t">
+    @if (metrics) {
+        <c-row class="mt-2 equal-height-row d-flex flex-wrap">
+            <c-col md="12" xl="3">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <div class="fs-6 fw-semibold">{{ t('CPU Usage') }}</div>
+                        <div>
+                            <oitc-area-echarts [dataInput]="metrics.metrics.cpu"></oitc-area-echarts>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            </c-col>
+            <c-col md="12" xl="3">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <div class="fs-6 fw-semibold">{{ t('Memory Usage') }}</div>
+                        <div>
+                            <oitc-area-echarts [dataInput]="metrics.metrics.memory"></oitc-area-echarts>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            </c-col>
+            <c-col md="12" xl="3">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <div class="fs-6 fw-semibold">{{ t('Network Traffic') }}</div>
+                        <div>
+                            <oitc-area-echarts [dataInput]="metrics.metrics.network"></oitc-area-echarts>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            </c-col>
+            <c-col md="12" xl="3">
+                <c-card class="h-100">
+                    <c-card-body>
+                        <div class="fs-6 fw-semibold">{{ t('Disk IO') }}</div>
+                        <div>
+                            <oitc-area-echarts [dataInput]="metrics.metrics.diskio"></oitc-area-echarts>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            </c-col>
+        </c-row>
+    }
+
+</ng-container>

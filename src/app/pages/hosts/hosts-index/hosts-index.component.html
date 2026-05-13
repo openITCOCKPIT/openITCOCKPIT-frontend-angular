@@ -1053,10 +1053,11 @@
                                             <span class="badge border border-info"
                                                   [hidden]="!host.Host.additionalInformationExists">
                                                 <a [routerLink]="['/', 'hosts', 'browser', host.Host.id]"
-                                                   [queryParams]="{selectedTab: HostBrowserTabs.CMDB}"
+                                                   [queryParams]="{selectedTab: host.Host.additionalInformation}"
                                                    class="text-info">
                                                     <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                                    {{ t('CMDB') }}
+                                                        {{ host.Host.additionalInformation }}
+
                                                 </a>
                                             </span>
                                         }
