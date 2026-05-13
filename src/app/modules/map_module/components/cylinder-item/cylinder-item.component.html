@@ -1,10 +1,16 @@
 @if (!isViewMode()) {
-    <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
+    <div cdkDrag #container class="map-element-container"
          (cdkDragEnded)="onDragEnd($event)"
          (cdkDragMoved)="onDragMove($event)"
-         (resizeStop)="onResizeStop($event, type)"
          cdkDragBoundary=".map-canvas">
-        <div cdkDragHandle [id]="'map-cylinder-' + item()!.id"
+        <div cdkDragHandle
+             ngResizable
+             [id]="'map-cylinder-' + item()!.id"
+             (rzStart)="onResizeStart(container)"
+             (rzResizing)="onResizing(cylinderSvg)"
+             (rzStop)="onResizeStop({ width: $event.size.width, height: $event.size.height }, type)"
+             [rzAspectRatio]="true"
+             [rzHandles]="'se'"
              [ngStyle]="{'width.px': width + 10, 'height.px': height + 10}">
             <svg #cylinderSvg [attr.width]="width" [attr.height]="height"></svg>
         </div>
