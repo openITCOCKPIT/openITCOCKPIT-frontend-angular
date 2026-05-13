@@ -89,15 +89,28 @@
                     }
                     @if (( PermissionsService.hasModuleObservable('ImportModule')|async ) && ( PermissionsService.hasPermissionObservable(['ImportModule', 'ExternalSystems', 'additionalHostInformation'])|async )) {
                         @if (AdditionalInformationExists) {
-                            <c-nav-item>
-                                <button
-                                    class="nav-link"
-                                    [ngClass]="{'active': selectedTab == HostBrowserTabs.CMDB}"
-                                    (click)="changeTab(HostBrowserTabs.CMDB)">
-                                    <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                    {{ t('CMDB') }}
-                                </button>
-                            </c-nav-item>
+                            @if (ExternalSystemType === ExternalSystems.Proxmox) {
+                                <c-nav-item>
+                                    <button
+                                        class="nav-link"
+                                        [ngClass]="{'active': selectedTab == HostBrowserTabs.Proxmox}"
+                                        (click)="changeTab(HostBrowserTabs.Proxmox)">
+                                        <svg [cIcon]="coreuiIcons.cibProxmox" title="Proxmox Icon"></svg>
+                                        {{ t('Proxmox VE') }}
+                                    </button>
+                                </c-nav-item>
+                            } @else {
+                                <!-- idoit or itop -->
+                                <c-nav-item>
+                                    <button
+                                        class="nav-link"
+                                        [ngClass]="{'active': selectedTab == HostBrowserTabs.CMDB}"
+                                        (click)="changeTab(HostBrowserTabs.CMDB)">
+                                        <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                        {{ t('CMDB') }}
+                                    </button>
+                                </c-nav-item>
+                            }
                         }
                     }
                     @if (( PermissionsService.hasModuleObservable('IsarFlowModule')|async )) {
@@ -1250,6 +1263,19 @@
                     </div>
                 }
                 <!-- Import Module end -->
+                <!-- Import Module Proxmox start -->
+                @if (selectedTab == HostBrowserTabs.Proxmox) {
+                    <div>
+                        @if (result && result.mergedHost) {
+                            <oitc-proxmox-host-browser-tab
+                                [hostId]="result.mergedHost.id"
+                                [hostname]="String(result.mergedHost.name)"
+                                [lastUpdated]="lastUpdated"
+                                [allowEdit]="result.mergedHost.allowEdit"></oitc-proxmox-host-browser-tab>
+                        }
+                    </div>
+                }
+                <!-- Import Module Proxmox end -->
                 <!-- IsarFlow Module start -->
                 @if (selectedTab == HostBrowserTabs.IsarFlow) {
                     <div>

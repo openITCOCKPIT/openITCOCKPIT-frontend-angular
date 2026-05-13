@@ -168,11 +168,16 @@
                                         </span>
                                     }
                                     @if (!externalSystem.connected.status) {
-                                        <span class="badge border border-danger text-danger"
-                                              title="{{externalSystem.connected.msg.message}}"
-                                        >
-                                            {{ t('OFFLINE') }}
-                                        </span>
+                                        @if (externalSystem.connected.msg) {
+                                            <span class="badge border border-danger text-danger"
+                                                  title="{{externalSystem.connected.msg.message}}">
+                                                {{ t('OFFLINE') }}
+                                            </span>
+                                        } @else {
+                                            <span class="badge border border-danger text-danger">
+                                                {{ t('OFFLINE') }}
+                                            </span>
+                                        }
                                     }
                                 </td>
                                 <td class="width-50">

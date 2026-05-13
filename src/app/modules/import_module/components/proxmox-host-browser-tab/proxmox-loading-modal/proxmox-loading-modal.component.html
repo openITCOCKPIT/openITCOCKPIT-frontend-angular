@@ -1,0 +1,28 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="false"
+        backdrop="static"
+        id="proxmoxLoadingModal"
+        size="lg">
+        <c-modal-header class="text-bg-gray">
+            <h5>
+                {{ t('Processing...') }}
+            </h5>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col xs="12" class="text-center">
+                    <fa-icon [icon]="['fas', 'spinner']" animation="spin" [size]="'5x'"></fa-icon>
+                </c-col>
+                <c-col xs="12" class="text-center mt-2">
+                    {{ t('Request is being processed. Please wait.') }}
+                </c-col>
+            </c-row>
+
+        </c-modal-body>
+        <c-modal-footer>
+
+        </c-modal-footer>
+    </c-modal>
+</ng-container>

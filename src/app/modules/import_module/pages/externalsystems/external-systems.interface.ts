@@ -1,5 +1,6 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { ExternalSystems } from './external-systems.enum';
 
 export interface AdditionalHostInformationResult {
 
@@ -55,7 +56,7 @@ export interface AdditionalHostInformationResult {
         externalLink?: string
 
     },
-    data_source: 'itop' | 'idoit',
+    data_source: ExternalSystems.Itop | ExternalSystems.Idoit | ExternalSystems.Proxmox,
 }
 
 
@@ -441,6 +442,7 @@ export interface ExternalSystemPost {
         custom_mappings: CustomMapping[],
         hostgroup_mappings: HostgroupMapping[]
     }
+    polling_interval: number | null
 }
 
 export interface ExternalSystemGet {

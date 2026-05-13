@@ -42,6 +42,9 @@ import {
 } from '../../pages/importers/importers.interface';
 import { ImportDataResponse, ImportedHostRawData } from '../../pages/importedhosts/importedhosts.interface';
 import _ from 'lodash';
+import { ExternalSystems } from '../../pages/externalsystems/external-systems.enum';
+import { IconDirective } from '@coreui/icons-angular';
+import { cibProxmox } from '@coreui/icons';
 
 @Component({
     selector: 'oitc-import-data',
@@ -65,7 +68,8 @@ import _ from 'lodash';
         AlertHeadingDirective,
         TableLoaderComponent,
         TableDirective,
-        FormsModule
+        FormsModule,
+        IconDirective
     ],
     templateUrl: './import-data.component.html',
     styleUrl: './import-data.component.css',
@@ -92,6 +96,8 @@ export class ImportDataComponent implements OnInit, OnDestroy {
     public showSpinner: boolean = false;
     private cdr = inject(ChangeDetectorRef);
     public dynamicFieldsNameValue: GenericKeyValueFieldType[] = [];
+
+    public coreuiIcons = {cibProxmox};
 
 
     public ngOnDestroy(): void {
@@ -139,7 +145,7 @@ export class ImportDataComponent implements OnInit, OnDestroy {
                         });
                 }
                 switch (this.importer.data_source) {
-                    case 'idoit':
+                    case ExternalSystems.Idoit:
                         this.ImporterService.loadDataFromIdoit(this.importer).subscribe(data => {
                             if (data.success) {
                                 let response = data.data as ImportDataResponse;
@@ -200,8 +206,37 @@ export class ImportDataComponent implements OnInit, OnDestroy {
 
                         });
                         break;
-                    case 'itop':
+                    case ExternalSystems.Itop:
                         this.ImporterService.loadDataFromITop(this.importer).subscribe(data => {
+                            if (data.success) {
+                                let response = data.data as ImportDataResponse;
+                                this.importData = {
+                                    success: true,
+                                    data: response.response.rawData,
+                                    errors: response.response.errors || null,
+                                    message: response.response.message
+                                }
+                                this.cdr.markForCheck();
+                            }
+                            if (!data.success) {
+                                let response = data.data as ImportersErrorMessageResponse;
+                                let notValidData: any = [];
+                                if (response.errors && response.errors.notValidRawData) {
+                                    notValidData = response.errors.notValidRawData;
+                                }
+                                this.importData = {
+                                    success: false,
+                                    errorMessage: response.message,
+                                    errors: notValidData
+                                }
+                                this.cdr.markForCheck();
+                            }
+                            this.cdr.markForCheck();
+
+                        });
+                        break;
+                    case ExternalSystems.Proxmox:
+                        this.ImporterService.loadDataFromProxmox(this.importer).subscribe(data => {
                             if (data.success) {
                                 let response = data.data as ImportDataResponse;
                                 this.importData = {
@@ -301,4 +336,6 @@ export class ImportDataComponent implements OnInit, OnDestroy {
             });
         }
     }
+
+    protected readonly ExternalSystems = ExternalSystems;
 }

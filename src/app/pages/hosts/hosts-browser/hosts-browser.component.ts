@@ -133,6 +133,12 @@ import { PatchstatusIconComponent } from '../../patchstatus/patchstatus-icon/pat
 import {
     HostParentsChildrenTreeComponent
 } from '../../../components/hosts/host-parents-children-tree/host-parents-children-tree.component';
+import { ExternalSystems } from '../../../modules/import_module/pages/externalsystems/external-systems.enum';
+import { IconDirective } from '@coreui/icons-angular';
+import { cibProxmox } from '@coreui/icons';
+import {
+    ProxmoxHostBrowserTabComponent
+} from '../../../modules/import_module/components/proxmox-host-browser-tab/proxmox-host-browser-tab.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -197,7 +203,10 @@ import {
         BrowserSoftwareWindowsComponent,
         BrowserSoftwareMacosComponent,
         PatchstatusIconComponent,
-        HostParentsChildrenTreeComponent
+        HostParentsChildrenTreeComponent,
+        IconDirective,
+        ProxmoxHostBrowserTabComponent
+
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
@@ -208,6 +217,8 @@ import {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsBrowserComponent implements OnInit, OnDestroy {
+
+    public coreuiIcons = {cibProxmox};
 
     public id: number = 0;
 
@@ -228,6 +239,8 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public selectedGrafanaAutorefresh: string = '1m';
 
     public AdditionalInformationExists: boolean = false;
+    public ExternalSystemType: null | ExternalSystems = null;
+
     public isarFlowInformationExists: boolean = false;
     public softwareInformation?: SoftwareInformationHost;
 
@@ -248,6 +261,9 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     private readonly DowntimesService = inject(DowntimesService);
     private readonly AcknowledgementsService = inject(AcknowledgementsService);
     private cdr = inject(ChangeDetectorRef);
+
+    protected readonly HostBrowserTabs = HostBrowserTabs;
+    protected readonly ExternalSystems = ExternalSystems;
 
     constructor() {
     }
@@ -365,7 +381,8 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public loadAdditionalInformation(): void {
         if (this.result?.mergedHost) {
             this.subscriptions.add(this.HostsService.loadAdditionalInformation(this.result.mergedHost.id).subscribe((result) => {
-                this.AdditionalInformationExists = result;
+                this.AdditionalInformationExists = result.AdditionalInformationExists;
+                this.ExternalSystemType = result.externalSystemType;
                 this.cdr.markForCheck();
             }));
         }
@@ -610,7 +627,6 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         }
     }
 
-    protected readonly HostBrowserTabs = HostBrowserTabs;
     protected readonly Number = Number;
     protected readonly String = String;
     protected readonly Boolean = Boolean;
