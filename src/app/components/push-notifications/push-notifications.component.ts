@@ -118,9 +118,9 @@ export class PushNotificationsComponent implements OnInit, OnDestroy {
 
             let notification = new Notification(payload.title, options);
             if (payload.hostUuid || payload.serviceUuid) {
-                let url = '/hosts/browser/' + payload.hostUuid;
+                let url = '/a/hosts/browser/' + payload.hostUuid;
                 if (payload.type === 'service') {
-                    url = '/services/browser/' + payload.serviceUuid;
+                    url = '/a/services/browser/' + payload.serviceUuid;
                 }
 
                 notification.onclick = function (event) {
