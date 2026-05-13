@@ -170,8 +170,8 @@
                         }
                     }
                 }
-                <div class="">
-                    @if (vmid && nodeName) {
+                <div>
+                    @if (allowEdit && vmid && nodeName) {
                         <oitc-proxmox-actions
                             [hostId]="hostId"
                             [vmid]="vmid"
@@ -409,7 +409,8 @@
                                 [vmid]="vmid"
                                 [nodeName]="nodeName"
                                 [status]="status"
-                                [virtType]="result.response.type"></oitc-proxmox-snapshots>
+                                [virtType]="result.response.type"
+                                [allowEdit]="allowEdit"></oitc-proxmox-snapshots>
                         }
                     </c-card-body>
                 </c-card>

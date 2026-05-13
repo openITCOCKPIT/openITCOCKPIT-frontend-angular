@@ -5,12 +5,14 @@
                 {{ t('Snaphots') }}
             </div>
         </c-col>
-        <c-col class="text-end">
-            <button cButton size="xs" color="default" class="ripple"
-                    (click)="toggleCreateSnapshotModal()">
-                {{ t('Take Snapshot') }}
-            </button>
-        </c-col>
+        @if (allowEdit()) {
+            <c-col class="text-end">
+                <button cButton size="xs" color="default" class="ripple"
+                        (click)="toggleCreateSnapshotModal()">
+                    {{ t('Take Snapshot') }}
+                </button>
+            </c-col>
+        }
     </c-row>
 
     <c-row>
@@ -65,7 +67,7 @@
                         <!-- End of Snapshot name and Links -->
 
                         <!-- Buttons -->
-                        @if (!snapshot.isCurrent && snapshot.name) {
+                        @if (allowEdit() && !snapshot.isCurrent && snapshot.name) {
                             <!-- only show buttons for not "current" -->
                             <button type="button"
                                     class="btn btn-link text-body p-1 text-decoration-none ripple"

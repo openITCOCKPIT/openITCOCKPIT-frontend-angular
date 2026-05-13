@@ -43,6 +43,7 @@ export class ProxmoxSnapshotsComponent implements OnDestroy {
     public nodeName = input<string>('');
     public status = input<ProxmoxStatus>(ProxmoxStatus.Stopped);
     public virtType = input<ProxmoxVirtType>(ProxmoxVirtType.Qemu);
+    public allowEdit = input<boolean>(false);
 
     public nestedSnapshots: ProxmoxSnapshotNested[] = [];
 

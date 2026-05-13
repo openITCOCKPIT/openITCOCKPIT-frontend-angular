@@ -76,6 +76,7 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
     @Input() public hostId: number = 0;
     @Input() public hostname: string = '';
     @Input() public lastUpdated?: Date; // Change the date to trigger an update from an external component
+    @Input() public allowEdit: boolean = false;
 
     public result?: AdditionalHostInformationProxmoxResult;
 

@@ -1259,7 +1259,8 @@
                             <oitc-proxmox-host-browser-tab
                                 [hostId]="result.mergedHost.id"
                                 [hostname]="String(result.mergedHost.name)"
-                                [lastUpdated]="lastUpdated"></oitc-proxmox-host-browser-tab>
+                                [lastUpdated]="lastUpdated"
+                                [allowEdit]="result.mergedHost.allowEdit"></oitc-proxmox-host-browser-tab>
                         }
                     </div>
                 }
