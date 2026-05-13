@@ -52,8 +52,8 @@ export class HeaderAvatarComponent implements OnDestroy {
 
     private loadProfile(): void {
         this.subscriptions.add(this.ProfileService.getProfile().subscribe((profile) => {
-            const firstname = profile.user.firstname;
-            const lastname = profile.user.lastname;
+            const firstname = this.capitalizeFirstLetter(profile.user.firstname.trim()).replace(/[^\w\s]/g, '');
+            const lastname = this.capitalizeFirstLetter(profile.user.lastname.trim()).replace(/[^\w\s]/g, '');
             const fullname = `${firstname} ${lastname}`;
 
             this.nameInitials = initials(fullname);
@@ -68,5 +68,13 @@ export class HeaderAvatarComponent implements OnDestroy {
             this.cdr.markForCheck();
         }));
     }
+
+    private capitalizeFirstLetter(str: string) {
+        if (!str) {
+            return '';
+        }
+        return (str.charAt(0).toUpperCase() + str.slice(1)).substring(0, 3);
+    }
+
 
 }
