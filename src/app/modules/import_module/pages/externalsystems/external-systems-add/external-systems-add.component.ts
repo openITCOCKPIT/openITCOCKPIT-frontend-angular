@@ -61,6 +61,7 @@ import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { ExternalSystems } from '../external-systems.enum';
+import { MultiSelectChangeEvent } from 'primeng/multiselect';
 
 @Component({
     selector: 'oitc-external-systems-add',
@@ -160,6 +161,9 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             value: this.TranslocoService.translate('LogicalInterface')
         }
     ];
+
+    // By default, we select the Idoit URL placeholder
+    public url_placeholder: string = this.ExternalSystemTypes[0].placeholder;
 
     public containers: SelectKeyValue[] = [];
     public hostgroup_containers: SelectKeyValue[] = [];
@@ -286,6 +290,15 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
                     this.cdr.markForCheck();
                 }));
         }
+    }
+
+    public onExternalSystemTypeChange(selectedSystem: MultiSelectChangeEvent) {
+        // Find placeholder by key
+        const foundSystem = this.ExternalSystemTypes.find(item => item.key === selectedSystem.value);
+        if (foundSystem) {
+            this.url_placeholder = foundSystem.placeholder;
+        }
+        this.cdr.markForCheck()
     }
 
     protected readonly ExternalSystems = ExternalSystems;

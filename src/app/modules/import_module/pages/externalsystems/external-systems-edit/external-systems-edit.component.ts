@@ -65,6 +65,7 @@ import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { ExternalSystems } from '../external-systems.enum';
+import { MultiSelectChangeEvent } from 'primeng/multiselect';
 
 @Component({
     selector: 'oitc-external-systems-edit',
@@ -168,6 +169,9 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
         }
     ];
 
+    // By default, we select the Idoit URL placeholder
+    public url_placeholder: string = this.ExternalSystemTypes[0].placeholder;
+
     public containers: SelectKeyValue[] = [];
     public hostgroup_containers: SelectKeyValue[] = [];
     public connectStatus: boolean | null = null;
@@ -195,10 +199,16 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 //Fire on page load
                 this.post = result.externalSystem;
-                this.cdr.markForCheck();
                 this.loadContainers();
                 this.checkConnection();
                 this.loadHostgroupContainers();
+
+                const foundSystem = this.ExternalSystemTypes.find(item => item.key === result.externalSystem.system_type);
+                if (foundSystem) {
+                    this.url_placeholder = foundSystem.placeholder;
+                }
+                
+                this.cdr.markForCheck();
             }));
     }
 
@@ -285,6 +295,15 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    public onExternalSystemTypeChange(selectedSystem: MultiSelectChangeEvent) {
+        // Find placeholder by key
+        const foundSystem = this.ExternalSystemTypes.find(item => item.key === selectedSystem.value);
+        if (foundSystem) {
+            this.url_placeholder = foundSystem.placeholder;
+        }
+        this.cdr.markForCheck()
     }
 
     protected readonly ExternalSystems = ExternalSystems;

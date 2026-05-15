@@ -99,7 +99,8 @@
                             optionLabel="value"
                             [options]="ExternalSystemTypes"
                             [(ngModel)]="post.system_type"
-                            [showClear]="false">
+                            [showClear]="false"
+                            (onChange)="onExternalSystemTypeChange($event)">
                         </oitc-select>
                         <div class="help-block text-info">
                             @switch (post.system_type) {
@@ -153,7 +154,7 @@
                                             <input cFormControl id="Url" required type="text"
                                                    name="Url"
                                                    [(ngModel)]="post.api_url"
-                                                   placeholder="{{post.system_type === ExternalSystems.Idoit ? ExternalSystemTypes[0].placeholder : ExternalSystemTypes[1].placeholder}}"
+                                                   [placeholder]="url_placeholder"
                                                    oitcFormError [errors]="errors" errorField="api_url">
                                         </c-input-group>
                                         <oitc-form-feedback [errors]="errors"
