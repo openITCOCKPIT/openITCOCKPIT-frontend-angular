@@ -213,12 +213,18 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         this.subscriptions.add(this.PopoverGraphService.getPerfdata(params)
             .subscribe((result) => {
                 // ECharts needs at least 2 data points to render the chart
-                this.hasEnoughData = (Object.keys(result.performance_data[0].data).length >= 2);
+                this.hasEnoughData = false;
+                if (Array.isArray(result.performance_data) && result.performance_data.length > 0) {
+                    this.hasEnoughData = (Object.keys(result.performance_data[0].data).length >= 2);
+                }
                 this.isLoadingGraph = false;
                 this.responsePerfdata = result.performance_data;
 
-                this.processPerfdata();
-                this.renderGraph();
+                if (this.hasEnoughData) {
+                    this.processPerfdata();
+                    this.renderGraph();
+                }
+                
                 this.init = false;
 
                 this.cdr.markForCheck();

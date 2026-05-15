@@ -47,6 +47,7 @@ export interface Mapitem extends MapitemBase {
     object_id: number
     show_label: boolean
     label_possition: number
+    allowView: boolean
 }
 
 export interface MapitemPost {
