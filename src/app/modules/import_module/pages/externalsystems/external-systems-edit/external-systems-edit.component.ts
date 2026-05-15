@@ -168,6 +168,9 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
         }
     ];
 
+    // By default, we select the Idoit URL placeholder
+    public url_placeholder: string = this.ExternalSystemTypes[0].placeholder;
+
     public containers: SelectKeyValue[] = [];
     public hostgroup_containers: SelectKeyValue[] = [];
     public connectStatus: boolean | null = null;
