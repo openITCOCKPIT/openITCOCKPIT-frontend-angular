@@ -224,7 +224,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     this.processPerfdata();
                     this.renderGraph();
                 }
-                
+
                 this.init = false;
 
                 this.cdr.markForCheck();
@@ -760,7 +760,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 right: '4%',
                 bottom: '10%',
                 top: '3%',
-                containLabel: label.length > 0
+                containLabel: label.length > 0 // containLabel is deprecated https://echarts.apache.org/en/option.html#grid.containLabel
             },
 
             // Workaround to hide the toolbar and to auto select the dataZoom in this.onChartFinished method
