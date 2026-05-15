@@ -239,7 +239,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             size: 15
         },
         synchronizeGridAndHelplinesSize: true,
-        maintainBackgroundAspectRatio: false
+        maintainBackgroundAspectRatio: true
     };
 
     public addLink: boolean = false;
