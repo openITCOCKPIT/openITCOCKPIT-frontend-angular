@@ -17,7 +17,7 @@ import { MapeditorsService } from '../mapeditors.service';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HistoryService } from '../../../../../history.service';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import {
     AlertComponent,
@@ -169,7 +169,9 @@ import { BackgroundItemComponent } from '../../../components/background-item/bac
         XsButtonDirective,
         AlertComponent,
         BbCodeEditorComponent,
-        BackgroundItemComponent
+        BackgroundItemComponent,
+        FaStackComponent,
+        FaStackItemSizeDirective
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',
@@ -1371,7 +1373,11 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 this.loadIcons();
 
-                this.notyService.genericSuccess(msg);
+                if (result.data.response.success) {
+                    this.notyService.genericSuccess(msg);
+                } else {
+                    this.notyService.genericError(msg);
+                }
                 return;
             }
 
