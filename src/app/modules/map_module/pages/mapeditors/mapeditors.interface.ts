@@ -200,6 +200,8 @@ export interface Background {
     image: string
     path?: string
     thumbnail?: string
+    background_size_x?: number
+    background_size_y?: number
 }
 
 export interface SaveBackgroundPost {

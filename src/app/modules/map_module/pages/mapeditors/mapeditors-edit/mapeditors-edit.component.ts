@@ -937,15 +937,14 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         }
 
         let action = 'add_or_edit';
-
         this.subscriptions.add(this.MapeditorsService.saveBackground({
             'Map': {
                 id: this.mapId.toString(),
                 background: background.image,
                 background_x: 0,
                 background_y: 0,
-                background_size_x: 0,
-                background_size_y: 0,
+                background_size_x: background.background_size_x,
+                background_size_y: background.background_size_y
             },
             'action': action
         }).subscribe((result) => {
@@ -984,7 +983,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         if (typeof action === 'undefined') {
             action = 'add_or_edit';
         }
-
+        console.log(this.map.Map);
         this.subscriptions.add(this.MapeditorsService.saveBackground({
             'Map': {
                 id: this.mapId.toString(),

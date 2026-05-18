@@ -12,11 +12,7 @@
                  (rzResizing)="onResizing(backgroundImage)"
                  (rzStop)="onResizeStop({ width: $event.size.width, height: $event.size.height }, type)"
                  [rzAspectRatio]="aspectRatioEnabled()"
-                 [rzHandles]="'se'"
-                 [style.width.px]="width??+10"
-                 [style.height.px]="height??+10"
-                 [style.padding-bottom.px]="10"
-                 [style.padding-right.px]="10">
+                 [rzHandles]="'se'">
                 <img #backgroundImage
                      [src]="'/map_module/img/backgrounds/' + this.item()?.background" class="invalid-image-src"
                      [style.width.px]="width"
