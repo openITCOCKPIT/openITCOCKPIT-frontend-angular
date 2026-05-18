@@ -112,7 +112,7 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
 
                 if (item && item?.size_y > 0) {
                     // User has defined a height
-                    this.width = Number(item?.size_y);
+                    this.height = Number(item?.size_y);
                 } else {
                     // Use image width
                     this.height = height;
