@@ -1,4 +1,15 @@
-import { ChangeDetectionStrategy, Component, effect, input, InputSignal, OnDestroy, OnInit } from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    Component,
+    effect,
+    ElementRef,
+    input,
+    InputSignal,
+    OnDestroy,
+    OnInit,
+    ViewChild
+} from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
@@ -6,21 +17,21 @@ import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Mapbackgrounditem } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { Subscription } from 'rxjs';
-import { NgStyle } from '@angular/common';
 import { AngularDraggableModule } from 'angular2-draggable';
 
 @Component({
     selector: 'oitc-background-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgStyle, AngularDraggableModule],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, AngularDraggableModule],
     templateUrl: './background-item.component.html',
     styleUrl: './background-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgrounditem> implements OnInit, OnDestroy {
+export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgrounditem> implements OnInit, OnDestroy, AfterViewInit {
 
     public override item: InputSignal<Mapbackgrounditem | undefined> = input<Mapbackgrounditem>();
     public aspectRatioEnabled: InputSignal<boolean> = input<boolean>(false);
+    @ViewChild('backgroundImage', {static: false}) backgroundImageRef!: ElementRef<HTMLImageElement>;
 
     private subscriptions: Subscription = new Subscription();
 
@@ -41,31 +52,104 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
         });
     }
 
-    public ngOnDestroy(): void {
-        this.subscriptions.unsubscribe();
-    }
 
     public ngOnInit(): void {
 
         this.init = false;
-        this.updateBackgroundSizeAndPosition();
+        //this.updateBackgroundSizeAndPosition();
+    }
+
+    public override ngAfterViewInit(): void {
+        super.ngAfterViewInit();
+
+        let width, height = 0;
+        const img = this.backgroundImageRef.nativeElement;
+        if (img.complete) {
+            // Image already loaded
+            width = img.naturalWidth;
+            height = img.naturalHeight;
+
+            console.log('complete');
+            console.log({w: width, h: height});
+            console.log(this.width);
+            console.log(this.height);
+
+            const item = this.item();
+            if (item && item?.size_x > 0) {
+                // User has defined a width
+                this.width = Number(item?.size_x);
+            } else {
+                // Use image width
+                this.width = width;
+            }
+
+            if (item && item?.size_y > 0) {
+                // User has defined a height
+                this.width = Number(item?.size_y);
+            } else {
+                // Use image width
+                this.height = height;
+            }
+
+        } else {
+            img.onload = () => {
+                width = img.naturalWidth;
+                height = img.naturalHeight;
+
+                console.log('onload');
+                console.log({w: width, h: height});
+                console.log(this.width);
+                console.log(this.height);
+
+                const item = this.item();
+                if (item && item?.size_x > 0) {
+                    // User has defined a width
+                    this.width = Number(item?.size_x);
+                } else {
+                    // Use image width
+                    this.width = width;
+                }
+
+                if (item && item?.size_y > 0) {
+                    // User has defined a height
+                    this.width = Number(item?.size_y);
+                } else {
+                    // Use image width
+                    this.height = height;
+                }
+            };
+        }
+
+
+        /*
+        this.backgroundImageRef.nativeElement.onload = () => {
+            const width = this.backgroundImageRef.nativeElement.offsetWidth;
+            const height = this.backgroundImageRef.nativeElement.offsetHeight;
+            console.log({w: width, h: height});
+            console.log(this.width);
+            console.log(this.height);
+        };*/
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     private updateBackgroundSizeAndPosition(): void {
-        this.item()!.size_x = parseInt(this.item()!.size_x.toString(), 10);
-        this.item()!.size_y = parseInt(this.item()!.size_y.toString(), 10);
+        const width = Number(this.item()?.size_x);
+        const height = Number(this.item()?.size_y);
 
+        this.width = null;
+        this.height = null;
 
-        if (this.item()!.size_x > 0) {
-            this.width = this.item()!.size_x;
-        } else {
-            this.width = null;
+        if (width > 0) {
+            this.width = width;
         }
-        if (this.item()!.size_y > 0) {
-            this.height = this.item()!.size_y;
-        } else {
-            this.height = null;
+
+        if (height > 0) {
+            this.height = height;
         }
+
         this.cdr.markForCheck();
     }
 

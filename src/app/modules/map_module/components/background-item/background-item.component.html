@@ -14,11 +14,15 @@
                  [rzAspectRatio]="aspectRatioEnabled()"
                  [rzHandles]="'se'"
                  [style.width.px]="width??+10"
-                 [style.height.px]="height??+10">
+                 [style.height.px]="height??+10"
+                 [style.padding-bottom.px]="10"
+                 [style.padding-right.px]="10">
                 <img #backgroundImage
                      [src]="'/map_module/img/backgrounds/' + this.item()?.background" class="invalid-image-src"
-                     [ngStyle]="{'width.px': width, 'height.px': height}"
-                     [alt]="invalidBackgroundMessage"/>
+                     [style.width.px]="width"
+                     [alt]="invalidBackgroundMessage"
+                     [style.height.px]="height"
+                />
             </div>
         }
 
