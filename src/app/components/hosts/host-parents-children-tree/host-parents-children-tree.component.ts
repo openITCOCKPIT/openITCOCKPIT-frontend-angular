@@ -122,8 +122,6 @@ export class HostParentsChildrenTreeComponent {
         this.setGraph(graph);
         this.nodes = this.getNodes(graph);
         this.groupNodes = this.getNodes(graph, true);
-        console.error(this.nodes);
-        console.error(this.groupNodes);
         this.connections = this.getConnections(graph);
         this.cdr.markForCheck();
     }
@@ -276,7 +274,6 @@ export class HostParentsChildrenTreeComponent {
 
     public fit2screen(): void {
         if (this.fCanvasComponent) {
-            console.error(this.fFlowComponent.getState().nodes);
             this.fCanvasComponent.fitToScreen(PointExtensions.initialize(15, 15), true);
             this.cdr.markForCheck();
         }
