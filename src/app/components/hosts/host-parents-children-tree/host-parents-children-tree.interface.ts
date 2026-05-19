@@ -5,33 +5,23 @@ export interface INode {
     id: string
     position: IPoint
     connectorId: string
-    hostNode?: HostNode
+    nodeData?: NodeData
 }
 
-export interface HostNode {
+export interface NodeData {
     id: string
     name: string
-    parentIds: string[] | null
+    parentIds?: string[] | null
     hoststatus?: HoststatusObject
-    groupId: string | undefined
-    is_satellite_host: boolean
-    isAcknowledged: boolean
-    isInDowntime: boolean
+    groupId?: string | undefined
+    is_satellite_host?: boolean
+    isAcknowledged?: boolean
+    isInDowntime?: boolean
+    isGroup: boolean
 }
 
 export interface HostParentsChildrenTree {
-    [key: string]: HostParentsChildrenTreeItem
-}
-
-export interface HostParentsChildrenTreeItem {
-    id: number | string
-    name: string
-    hoststatus: HoststatusObject
-    parentIds: number[]
-    isMainHost?: boolean
-    is_satellite_host: boolean
-    isAcknowledged: boolean
-    isInDowntime: boolean
+    [key: string]: NodeData
 }
 
 export interface ConnectionOperator {

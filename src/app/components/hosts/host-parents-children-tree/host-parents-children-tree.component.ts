@@ -22,7 +22,7 @@ import {
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import dagre, { Edge, graphlib, Point } from '@dagrejs/dagre';
-import { ConnectionOperator, HostNode, HostParentsChildrenTree, INode } from './host-parents-children-tree.interface';
+import { ConnectionOperator, HostParentsChildrenTree, INode, NodeData } from './host-parents-children-tree.interface';
 import { generateGuid } from '@foblex/utils';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { HoststatusIconComponent } from '../../../pages/hosts/hoststatus-icon/hoststatus-icon.component';
@@ -33,7 +33,7 @@ const NODE_WIDTH = 150;
 const DIRECTION = 'LR';
 
 interface HostParentsChildrenNode extends Point {
-    hostNode: HostNode
+    nodeData: NodeData
 }
 
 export enum HostParentChildrenTreeGroupIds {
@@ -68,8 +68,6 @@ export class HostParentsChildrenTreeComponent {
 
     @ViewChild(FCanvasComponent)
     public fCanvasComponent!: FCanvasComponent;
-    @ViewChild(FFlowComponent)
-    public fFlowComponent!: FFlowComponent;
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly TranslocoService = inject(TranslocoService);
@@ -87,8 +85,6 @@ export class HostParentsChildrenTreeComponent {
     public nodes: INode[] = [];
     public groupNodes: INode[] = [];
     public connections: ConnectionOperator[] = [];
-    public hasParentNodes = false;
-    public hasChildrenNodes = false;
 
     public lastCheckString = this.TranslocoService.translate('Last check');
     public inDowntimeString = this.TranslocoService.translate('In downtime');
@@ -117,8 +113,6 @@ export class HostParentsChildrenTreeComponent {
     }
 
     private updateGraph(graph: graphlib.Graph): void {
-        this.hasParentNodes = false;
-        this.hasChildrenNodes = false;
         this.setGraph(graph);
         this.nodes = this.getNodes(graph);
         this.groupNodes = this.getNodes(graph, true);
@@ -131,7 +125,7 @@ export class HostParentsChildrenTreeComponent {
         const hostParentsChildrenTree = this.hostParentsChildrenTree();
 
         if (hostParentsChildrenTree) {
-            const nodes = this.getHostParentChildrenTreeNodes(hostParentsChildrenTree);
+            const treeItems = hostParentsChildrenTree;
 
             // https://github.com/dagrejs/dagre/wiki#configuring-the-layout
             graph.setGraph({
@@ -164,31 +158,25 @@ export class HostParentsChildrenTreeComponent {
                 marginy: 0,
             });
 
-            if (this.hasParentNodes) {
-                graph.setNode(HostParentChildrenTreeGroupIds.PARENT_GROUP, {width: 1, height: 1});
-            }
-            if (this.hasChildrenNodes) {
-                graph.setNode(HostParentChildrenTreeGroupIds.CHILDREN_GROUP, {width: 1, height: 1});
-            }
 
+            for (let hostUuid in treeItems) {
+                const node = treeItems[hostUuid];
 
-            nodes.forEach(node => {
                 // Add service meta data into dagre.Node (HostParentsChildrenNode)
                 graph.setNode(node.id, {
                     width: NODE_WIDTH,
                     height: 38,
-                    hostNode: node,
+                    nodeData: node,
                 });
 
                 graph.setParent(node.id, node.groupId);
 
-                if (node.parentIds != null) {
+                if (node.parentIds) {
                     node.parentIds.forEach(parentId => {
                         graph.setEdge(parentId, node.id, {});
                     });
                 }
-            });
-
+            }
 
             dagre.layout(graph);
         }
@@ -213,52 +201,10 @@ export class HostParentsChildrenTreeComponent {
                         x: hostParentsChildrenNode.x,
                         y: hostParentsChildrenNode.y
                     },
-                    hostNode: hostParentsChildrenNode.hostNode
+                    nodeData: hostParentsChildrenNode.nodeData
                 });
             }
         });
-        return nodes;
-    }
-
-    private getHostParentChildrenTreeNodes(hostParentChildrenTree: HostParentsChildrenTree): HostNode[] {
-        const nodes: HostNode[] = [];
-
-        // This method create an array for the HostParentsChildren Tree (Flow Chart)
-
-        for (let hostUuid in hostParentChildrenTree) {
-
-            let hostTreeItem = hostParentChildrenTree[hostUuid];
-
-            let parentIds: string[] | null = null;
-            if (hostTreeItem.parentIds.length) {
-                parentIds = hostTreeItem.parentIds.map(parentId => parentId.toString());
-            }
-
-            let groupId = undefined;
-            //Parent Group
-            if (hostTreeItem.parentIds.length === 0 && hostTreeItem.isMainHost === undefined) {
-                groupId = HostParentChildrenTreeGroupIds.PARENT_GROUP;
-                this.hasParentNodes = true;
-            }
-            //Child Group
-            if (hostTreeItem.parentIds.length && hostTreeItem.isMainHost === undefined) {
-                groupId = HostParentChildrenTreeGroupIds.CHILDREN_GROUP;
-                this.hasChildrenNodes = true;
-            }
-
-            nodes.push({
-                id: hostTreeItem.id.toString(),
-                name: hostTreeItem.name,
-                parentIds: parentIds,
-                hoststatus: hostTreeItem.hoststatus,
-                groupId: groupId,
-                is_satellite_host: hostTreeItem.is_satellite_host,
-                isAcknowledged: hostTreeItem.isAcknowledged,
-                isInDowntime: hostTreeItem.isInDowntime
-            });
-
-        }
-
         return nodes;
     }
 
@@ -278,6 +224,4 @@ export class HostParentsChildrenTreeComponent {
             this.cdr.markForCheck();
         }
     }
-
-    protected readonly HostParentChildrenTreeGroupIds = HostParentChildrenTreeGroupIds;
 }

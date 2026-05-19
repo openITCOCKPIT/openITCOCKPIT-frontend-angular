@@ -17,41 +17,41 @@
                      [fOutputConnectableSide]="configuration.outputSide"
                      fNodeInput [fInputId]="node.connectorId"
                      [fInputConnectableSide]="configuration.inputSide"
-                     [fNodeParentId]="node.hostNode!.groupId">
+                     [fNodeParentId]="node.nodeData!.groupId">
                     <div class="host-node-header"
-                         [ngClass]="{'host-node-ok': node.hostNode!.hoststatus?.currentState === 0,'host-node-critical': node.hostNode!.hoststatus?.currentState === 1,'host-node-unknown': node.hostNode!.hoststatus?.currentState === 2, 'host-node-not-monitored': node.hostNode!.hoststatus === undefined}">
+                         [ngClass]="{'host-node-ok': node.nodeData!.hoststatus?.currentState === 0,'host-node-critical': node.nodeData!.hoststatus?.currentState === 1,'host-node-unknown': node.nodeData!.hoststatus?.currentState === 2, 'host-node-not-monitored': node.nodeData!.hoststatus === undefined}">
                         <div class="host-node-header-left">
-                            @if (node.hostNode!.hoststatus) {
-                                <oitc-hoststatus-icon [hoststatus]="node.hostNode!.hoststatus">
+                            @if (node.nodeData!.hoststatus) {
+                                <oitc-hoststatus-icon [hoststatus]="node.nodeData!.hoststatus">
                                 </oitc-hoststatus-icon>
                             }
                             <span class="host-node-header-headline text-truncate"
-                                  [cTooltip]="node.hostNode!.name" cTooltipPlacement="top">
+                                  [cTooltip]="node.nodeData!.name" cTooltipPlacement="top">
                                 @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                                    <a [routerLink]="['/', 'hosts', 'browser', node.hostNode!.id]"
-                                       [queryParams]="{idOrUuid: node.hostNode!.id}"
+                                    <a [routerLink]="['/', 'hosts', 'browser', node.nodeData!.id]"
+                                       [queryParams]="{idOrUuid: node.nodeData!.id}"
                                        class="link-default">
-                                        {{ node.hostNode!.name }}
+                                        {{ node.nodeData!.name }}
                                     </a>
                                 } @else {
-                                    {{ node.hostNode!.name }}
+                                    {{ node.nodeData!.name }}
                                 }
                             </span>
                         </div>
                         <div class="host-node-header-right"
-                             [cTooltip]="lastCheckString + ': ' + node.hostNode!.hoststatus?.lastCheck"
+                             [cTooltip]="lastCheckString + ': ' + node.nodeData!.hoststatus?.lastCheck"
                              cTooltipPlacement="top">
-                            {{ node.hostNode!.hoststatus?.lastCheck }}
+                            {{ node.nodeData!.hoststatus?.lastCheck }}
                         </div>
                     </div>
                     <div class="host-node-body">
-                        @if (node.hostNode!.hoststatus) {
+                        @if (node.nodeData!.hoststatus) {
                             <div class="host-node-row">
                                 <div>
                                     {{ t('State since') }}
                                 </div>
                                 <div>
-                                    {{ node.hostNode!.hoststatus.last_state_change }}
+                                    {{ node.nodeData!.hoststatus.last_state_change }}
                                 </div>
                             </div>
                             <div class="host-node-row">
@@ -59,10 +59,10 @@
                                     {{ t('Next check') }}
                                 </div>
                                 <div>
-                                    @if (node.hostNode!.hoststatus.activeChecksEnabled && !node.hostNode!.is_satellite_host) {
-                                        <span [cTooltip]="node.hostNode!.hoststatus.nextCheckUser"
+                                    @if (node.nodeData!.hoststatus.activeChecksEnabled && !node.nodeData!.is_satellite_host) {
+                                        <span [cTooltip]="node.nodeData!.hoststatus.nextCheckUser"
                                               cTooltipPlacement="top">
-                                            {{ node.hostNode!.hoststatus.nextCheck }}
+                                            {{ node.nodeData!.hoststatus.nextCheck }}
                                         </span>
                                     } @else {
                                         {{ t('n/a') }}
@@ -74,39 +74,39 @@
                                     {{ t('State type') }}
                                 </div>
                                 <div>
-                                    @if (node.hostNode!.hoststatus.isHardstate) {
+                                    @if (node.nodeData!.hoststatus.isHardstate) {
                                         {{ t('Hard state') }}
                                     } @else {
                                         {{ t('Soft state') }}
                                     }
-                                    ({{ node.hostNode!.hoststatus.current_check_attempt }}
-                                    /{{ node.hostNode!.hoststatus.max_check_attempts }})
+                                    ({{ node.nodeData!.hoststatus.current_check_attempt }}
+                                    /{{ node.nodeData!.hoststatus.max_check_attempts }})
                                 </div>
                             </div>
                         } @else {
                             <div class="host-node-row justify-content-center">
-                                <oitc-hoststatus-icon [hoststatus]="node.hostNode!.hoststatus" [statusCircleClass]="''">
+                                <oitc-hoststatus-icon [hoststatus]="node.nodeData!.hoststatus" [statusCircleClass]="''">
                                     {{ t('not in monitoring') | titlecase }}
                                 </oitc-hoststatus-icon>
                             </div>
                         }
                     </div>
-                    @if (node.hostNode!.hoststatus) {
-                        @if (node.hostNode!.isInDowntime && node.hostNode!.isAcknowledged) {
+                    @if (node.nodeData!.hoststatus) {
+                        @if (node.nodeData!.isInDowntime && node.nodeData!.isAcknowledged) {
                             <span
                                 class="position-absolute top-0 end-0 translate-middle-y badge rounded-pill bg-unknown"
                                 [cTooltip]="isAcknowledgedAndInDowntimeString"
                                 cTooltipPlacement="top">
                                 <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
                             </span>
-                        } @else if (node.hostNode!.isInDowntime) {
+                        } @else if (node.nodeData!.isInDowntime) {
                             <span
                                 class="position-absolute top-0 end-0 translate-middle-y badge rounded-pill bg-unknown"
                                 [cTooltip]="inDowntimeString"
                                 cTooltipPlacement="top">
                                 <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                             </span>
-                        } @else if (node.hostNode!.isAcknowledged) {
+                        } @else if (node.nodeData!.isAcknowledged) {
                             <span
                                 class="position-absolute top-0 end-0 translate-middle-y badge rounded-pill bg-unknown"
                                 [cTooltip]="isAcknowledgedString"
@@ -123,12 +123,7 @@
                      [fIncludePadding]="true"
                      [fAutoSizeToFitChildren]="true"
                      [fAutoExpandOnChildHit]="true">
-                    @if (node.connectorId === HostParentChildrenTreeGroupIds.PARENT_GROUP) {
-                        <span class="host-parent-children-tree-headline">{{ t("Parents") }}</span>
-                    }
-                    @if (node.connectorId === HostParentChildrenTreeGroupIds.CHILDREN_GROUP) {
-                        <span class="host-parent-children-tree-headline">{{ t("Children") }}</span>
-                    }
+                    <span class="host-parent-children-tree-headline">{{ node.nodeData!.name }}</span>
                 </div>
             }
         </f-canvas>
