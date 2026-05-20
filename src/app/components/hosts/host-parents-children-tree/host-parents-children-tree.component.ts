@@ -11,7 +11,7 @@ import {
 import { AsyncPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { TooltipDirective } from '@coreui/angular';
 import {
-    EFConnectableSide,
+    EFConnectableSide, EFMarkerType,
     FCanvasComponent,
     FFlowComponent,
     FFlowModule,
@@ -90,6 +90,7 @@ export class HostParentsChildrenTreeComponent {
     public inDowntimeString = this.TranslocoService.translate('In downtime');
     public isAcknowledgedString = this.TranslocoService.translate('Acknowledged');
     public isAcknowledgedAndInDowntimeString = this.TranslocoService.translate('Acknowledged and in downtime');
+    protected readonly EFMarkerType = EFMarkerType;
 
     constructor() {
         effect(() => {
@@ -163,17 +164,17 @@ export class HostParentsChildrenTreeComponent {
                 const node = treeItems[hostUuid];
 
                 // Add service meta data into dagre.Node (HostParentsChildrenNode)
-                graph.setNode(node.id, {
+                graph.setNode(node.id.toString(), {
                     width: NODE_WIDTH,
                     height: 38,
                     nodeData: node,
                 });
 
-                graph.setParent(node.id, node.groupId);
+                graph.setParent(node.id.toString(), node.groupId);
 
                 if (node.parentIds) {
                     node.parentIds.forEach(parentId => {
-                        graph.setEdge(parentId, node.id, {});
+                        graph.setEdge(parentId.toString(), node.id.toString(), {});
                     });
                 }
             }

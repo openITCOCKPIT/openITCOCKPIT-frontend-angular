@@ -9,9 +9,9 @@ export interface INode {
 }
 
 export interface NodeData {
-    id: string
+    id: number
     name: string
-    parentIds?: string[] | null
+    parentIds?: number[] | null
     hoststatus?: HoststatusObject
     groupId?: string | undefined
     is_satellite_host?: boolean

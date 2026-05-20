@@ -6,8 +6,19 @@
                 <f-connection [fOffset]="8" [fOutputId]="connection.from" [fInputId]="connection.to"
                               [fSelectionDisabled]="true"
                               [fReassignDisabled]="true"
-                              [fType]="'bezier'"
+                              [fType]="'segment'"
                               fBehavior="fixed">
+                    <svg fMarker
+                         viewBox="0 0 6 7"
+                         [type]="EFMarkerType.START_ALL_STATES"
+                         [width]="6"
+                         [height]="7"
+                         [refX]="0"
+                         [refY]="3.5"
+                         markerUnits="strokeWidth"
+                         orient="auto">
+                        <path d="M5.99961 7L0 3.5L5.99961 0V7Z"/>
+                    </svg>
                 </f-connection>
             }
             @for (node of nodes; track node.id) {

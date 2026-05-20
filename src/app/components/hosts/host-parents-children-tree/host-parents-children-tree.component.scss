@@ -75,6 +75,10 @@ body.dark-theme :host {
         }
     }
 
+    .f-connections-container {
+        fill: var(--connection-color);
+    }
+
 
     .f-node {
         /*width: 150px;*/
