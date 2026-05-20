@@ -38,6 +38,7 @@ import { SystemnameService } from './services/systemname.service';
 import { PermissionsService } from './permissions/permissions.service';
 import { TimezoneService } from './services/timezone.service';
 import { TranslocoDirective } from '@jsverse/transloco';
+import { ConfirmModalComponent } from './layouts/coreui/confirm-modal/confirm-modal.component';
 
 @Component({
     selector: 'oitc-root',
@@ -52,7 +53,8 @@ import { TranslocoDirective } from '@jsverse/transloco';
         AsyncPipe,
         NgClass,
         MessageOfTheDayModalComponent,
-        TranslocoDirective
+        TranslocoDirective,
+        ConfirmModalComponent
     ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',

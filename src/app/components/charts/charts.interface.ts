@@ -19,3 +19,7 @@ export interface SparklineBarMetric {
         text: string
     }
 }
+
+export interface AreaChartMetric {
+    [key: string]: number
+}
