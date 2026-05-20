@@ -68,6 +68,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { CustomAlertsIndexFilter } from '../../modules/customalert_module/pages/customalerts/customalerts.interface';
+import { FilterBookmarkAllocationModalComponent } from './filter-bookmark-allocation-modal/filter-bookmark-allocation-modal.component';
 
 
 @Component({
@@ -83,6 +84,7 @@ import { CustomAlertsIndexFilter } from '../../modules/customalert_module/pages/
         ButtonGroupComponent,
         DeleteBookmarkModalComponent,
         FilterBookmarkExportModalComponent,
+        FilterBookmarkAllocationModalComponent,
         NgSelectModule,
         FormsModule,
         NgOptionHighlightDirective,
@@ -147,6 +149,12 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 this.bookmarks = result.bookmarks || [];
+               /* this.bookmarks = (result.bookmarks || []).map(b => ({
+                    ...b,
+                    displayName: `${b.name}${b.Filter_bookmark_allocation != null ? ' (allocated)' : ''}`
+                })); */
+
+                console.log(this.bookmarks);
                 if (result.bookmark !== null && result.bookmark.ownership === true) {
                     this.selectedBookmark = result.bookmark;
                     this.selectedBookmarkId = this.selectedBookmark.id;
@@ -202,7 +210,17 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
                 });
             }, 0);
         }
+    }
 
+    allocateBookmark() {
+        if (this.selectedBookmark && this.selectedBookmark.uuid != '') {
+            setTimeout(() => {
+                this.modalService.toggle({
+                    show: true,
+                    id: 'bookmarkAllocateModal',
+                });
+            }, 0);
+        }
     }
 
     onBookmarkChange() {

@@ -45,7 +45,12 @@
                                placeholder="{{t('Please choose')}}"
                                (change)="onBookmarkChange()">
                         <ng-template ng-label-tmp let-item="item">
-                            <b>{{ item.name }}</b>
+                            <b>
+                                <span>
+                                    {{ item.name }}
+                                    <span [hidden]="item.ownership ">(allocated <fa-icon [icon]="['fas', 'file-import']"></fa-icon>)</span>
+                                </span>
+                            </b>
                         </ng-template>
                         <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
                             <b [ngOptionHighlight]="search">{{ item.name }}</b>
@@ -55,7 +60,7 @@
                 </c-col>
                 <c-col [xs]="4" [lg]="4" class="p-1">
 
-                    @if (showEdit) {
+                    @if (showEdit && selectedBookmark?.ownership) {
                         <c-button-group class="ripple" aria-label="Crud" role="group">
                             <button cButton class="ripple" color="default" size="xs" (click)="editBookmark()"
                                     title="{{t('Edit bookmark')}}">
@@ -63,6 +68,10 @@
                             </button>
                             <button cButton class="ripple " color="info" size="xs"
                                     title="{{t('Share Filter')}}" (click)="computeBookmarkUrl()">
+                                <fa-icon [icon]="['fas', 'bookmark']"></fa-icon>
+                            </button>
+                            <button cButton class="ripple " color="primary" size="xs"
+                                    title="{{t('allocate Filter')}}" (click)="allocateBookmark()">
                                 <fa-icon [icon]="['fas', 'bookmark']"></fa-icon>
                             </button>
                             <button cButton class="ripple float-end" color="danger" size="xs"
@@ -91,4 +100,7 @@
                                      [action]="action" [filter]="filter"></oitc-filter-bookmark-save-modal>
     <oitc-delete-bookmark-modal (completed)="deleted($event)" [items]="deleteItems"></oitc-delete-bookmark-modal>
     <oitc-filter-bookmark-export-modal [urlString]="computedUrl"/>
+    @if(selectedBookmark) {
+        <oitc-filter-bookmark-allocation-modal [plugin]="plugin" [controller]="controller" [action]="action"  [bookmark]="selectedBookmark"/>
+    }
 </ng-container>

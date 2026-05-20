@@ -1,0 +1,108 @@
+<ng-container *transloco="let t">
+    <c-modal #bookmarkAllocateModal fullscreen="md" id="bookmarkAllocateModal" size="lg">
+        <c-modal-header class="bg-primary text-white">
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'table']"></fa-icon>
+                {{ t('Allocate Bookmark Filter') }}
+            </h5>
+            <button (click)="hideModal()"  cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            @if (bookmark && filterBookmarkAllocation) {
+                <div>
+                    <div class="mb-3">
+                        <label cLabel for="allocation_container_id">
+                            {{ t('Container') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-select
+                                name="allocation_container_id"
+                                id="allocation_container_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="filterBookmarkAllocation.container_id"
+                                [options]="containers"
+                                (onChange)="loadElements()"
+                                oitcFormError [errors]="errors" errorField="container_id"
+                                [appendTo]="''">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="allocation_name">
+                            {{ t('Name of the allocation') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="allocation_name" type="text"
+                               name="allocation_name"
+                               [disabled]="true"
+                               oitcFormError [errors]="errors" errorField="name"
+                               [(ngModel)]="filterBookmarkAllocation.name">
+                        <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="allocation_users">
+                            {{ t('Allocated Users') }}
+                        </label>
+                        <oitc-multi-select
+                                name="allocation_users"
+                                id="allocation_users"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="users"
+                                [(ngModel)]="filterBookmarkAllocation.users._ids"
+                                [appendTo]="''">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors" errorField="users"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        <label cLabel for="allocation_usergroups">
+                            {{ t('Allocated User roles') }}
+                        </label>
+                        <oitc-multi-select
+                                name="allocation_usergroups"
+                                id="allocation_usergroups"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="usergroups"
+                                [(ngModel)]="filterBookmarkAllocation.usergroups._ids"
+                                [appendTo]="''">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors" errorField="usergroups"></oitc-form-feedback>
+                    </div>
+                </div>
+            }
+
+        </c-modal-body>
+        <c-modal-footer>
+                @if (mode === 'edit') {
+                    <button (click)="deleteAllocation()"
+                            cButton color="danger" class="ripple me-auto" type="button">
+                        {{ t('Delete') }}
+                    </button>
+                }
+
+
+            @if (mode === 'add') {
+                <button (click)="createAllocation()" cButton color="primary" class="ripple"
+                        type="button">
+                    {{ t('Create Allocation') }}
+                </button>
+            }
+            @if (mode === 'edit') {
+                <button (click)="updateAllocation()" cButton color="primary" class="ripple"
+                        type="button">
+                    {{ t('Update Allocation') }}
+                </button>
+            }
+            <button (click)="cleanup()" [cModalToggle]="bookmarkAllocateModal.id" cButton color="default"
+                    class="ripple" type="button">
+                {{ t('Close') }}
+            </button>
+
+        </c-modal-footer>
+    </c-modal>
+
+</ng-container>
