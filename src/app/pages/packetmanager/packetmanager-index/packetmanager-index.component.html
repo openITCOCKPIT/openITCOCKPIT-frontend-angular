@@ -176,7 +176,12 @@
                                     </div>
                                     <div class="padding-top-10">
                                         <fa-icon [icon]="['fas', 'key']"/>
-                                        {{ module.Module.license }}
+                                        @if(module.Module.license){
+                                            {{ module.Module.license }}
+                                        } @else if (module.Module.module_license?.name){
+                                            {{ module.Module.module_license?.name }}
+                                        }
+
                                     </div>
                                     @if (module.Module.tags) {
                                         <div>
