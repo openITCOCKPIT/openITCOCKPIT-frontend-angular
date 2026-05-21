@@ -44,6 +44,7 @@ import { GenericMessageResponse } from '../../../../generic-responses';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
+import { ExternalSystems } from '../../pages/externalsystems/external-systems.enum';
 
 @Component({
     selector: 'oitc-import-itop-data',
@@ -117,7 +118,7 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
                 }
 
                 switch (this.externalSystem.system_type) {
-                    case 'itop':
+                    case ExternalSystems.Itop:
                         this.ExternalSystemService.loadDataFromITop(this.externalSystem).subscribe(data => {
                             this.iTopData = data;
                             this.cdr.markForCheck();

@@ -1,0 +1,260 @@
+import { ExternalSystems } from '../../pages/externalsystems/external-systems.enum';
+import { PerformanceData } from '../../../../components/popover-graph/popover-graph.interface';
+
+export enum ProxmoxVirtType {
+    Qemu = 'qemu',
+    Lxc = 'lxc'
+}
+
+interface ProxmoxQemuResponse {
+    response: {
+        externalLink: string | null
+        result?: null // only null if the Proxmox is offline - does not exist in successful for Proxmox Reponse
+        status: boolean // true = online, false = offline
+        ipaddresses: Ipaddress[]
+        found: boolean
+        // Generic VM info
+        info: null | {
+            node: string
+            vmid: number
+            name: string
+            status: 'running' | 'stopped' | 'paused' | string
+            identifier: string
+            ipaddress: string
+        },
+        current: null | ProxmoxQemuStatusCurrentMinimal | ProxmoxQemuStatusCurrentRunning
+        agent: null | ProxmoxQemuAgent,
+        type: ProxmoxVirtType.Qemu
+    },
+    data_source: ExternalSystems.Proxmox,
+    _csrfToken: null | string
+}
+
+interface ProxmoxLxcResponse {
+    response: {
+        externalLink: string | null
+        result?: null // only null if the Proxmox is offline - does not exist in successful for Proxmox Reponse
+        status: boolean // true = online, false = offline
+        ipaddresses: Ipaddress[]
+        found: boolean
+        // Generic VM info
+        info: null | {
+            node: string
+            vmid: number
+            name: string
+            status: 'running' | 'stopped' | 'paused' | string
+            identifier: string
+            ipaddress: string
+        },
+        current: null | ProxmoxLxcStatusCurrentMinimal
+        agent: null,
+        type: ProxmoxVirtType.Lxc
+    },
+    data_source: ExternalSystems.Proxmox,
+    _csrfToken: null | string
+}
+
+export type AdditionalHostInformationProxmoxResult = ProxmoxQemuResponse | ProxmoxLxcResponse;
+
+
+// The minimum information we get from Proxmox even if the VM is powered off.
+export interface ProxmoxQemuStatusCurrentMinimal {
+    memhost: number // Current memory usage on the host in bytes.
+    uptime: number // Uptime in seconds
+    uptimeAgoInWords: string | null // Uptime in seconds
+    maxmem: number // Maximum memory in bytes.
+//    vmid: number
+//    netout: number  // Traffic in bytes sent from the VM to the network since it was started
+//    netin: number // Traffic in bytes sent to the VM over the network since it was started
+    cpus: number // Number of configured vCPU Cores
+    status: "stopped" | "running"
+    mem: number // Currently used memory in bytes.
+    qmpstatus: "stopped" | "running" | "paused" | string // Whatever qemu returns as status
+//    clipboard: any
+    name: string // Name of the VM
+    cpu: number // Currently used CPU in percent (multiply by 100 to get percentage)
+    ha: {
+        managed: 0 | 1,
+        state?: "started" | "stopped" | string
+    }
+    maxdisk: number // Root disk size in bytes.
+//    agent: 0 | 1 // QEMU Guest Agent enabled
+//    serial: 0 | 1 // Serial console enabled
+//    spice?: 0 | 1 // SPICE enabled
+//    template?: 0 | 1 // Whether the VM is a template
+//    disk: number // ??
+}
+
+// Proxmox API Result we get when a VM is powered on
+export interface ProxmoxQemuStatusCurrentRunning extends ProxmoxQemuStatusCurrentMinimal {
+//    pressurememorysome?: number // Memory Some pressure stall average over the last 10 seconds.
+//    diskwrite?: number
+//    "running-qemu"?: string // The QEMU version the VM is currently using (if running).
+//    pid?: number // PID of QEMU process (if running).
+//    pressureiofull?: number
+//    pressurecpufull?: number
+//    freemem?: number
+//    "running-machine"?: string // The currently running machine type (if running).
+//    pressurememoryfull?: number
+//    blockstat?: any
+//    diskread?: number
+//    balloon?: number // Minimum memory if ballooning is active in bytes.
+//    balloon_min?: number // Minimum memory if ballooning is active in bytes.
+//    nics?: any
+    ballooninfo?: ProxmoxBalloonInfo
+//    "proxmox-support"?: any
+//    pressureiosome?: number
+//    pressurecpusome?: number
+    lock?: 'migrate' | 'suspended' | string
+}
+
+// The minimum information we get from Proxmox even if the LXC is powered off.
+export interface ProxmoxLxcStatusCurrentMinimal {
+    uptime: number // Uptime in seconds
+    uptimeAgoInWords: string | null // Uptime in seconds
+    maxmem: number // Maximum memory in bytes.
+//    vmid: number
+//    netout: number  // Traffic in bytes sent from the LXC to the network since it was started
+//    netin: number // Traffic in bytes sent to the LXC over the network since it was started
+    cpus: number // Number of configured vCPU Cores
+    status: "stopped" | "running"
+    mem: number // Currently used memory in bytes.
+    swap: number // Currently used SWAP in bytes.
+    maxswap: number // Maximum SWAP in bytes.
+    name: string // Name of the LXC
+    cpu: number // Currently used CPU in percent (multiply by 100 to get percentage)
+    ha: {
+        managed: 0 | 1,
+        state?: "started" | "stopped" | string
+    }
+    maxdisk: number // Root disk size in bytes.
+    disk: number // Boot disk usage in bytes
+}
+
+export interface ProxmoxBalloonInfo {
+    mem_swapped_in: number
+    minor_page_faults: number
+    free_mem: number
+    major_page_faults: number
+    max_mem: number
+    last_update: number // unix timestamp
+    actual: number
+    total_mem: number
+    mem_swapped_out: number
+}
+
+export interface ProxmoxQemuAgent {
+    "kernel-version": string // #106-Ubuntu SMP PREEMPT_DYNAMIC Fri Mar  6 07:58:08 UTC 2026 | 10.0 | #1 SMP Sun Mar 8 20:06:07 EDT 2026 | #1 SMP PREEMPT_DYNAMIC Debian 6.12.73-1 (2026-02-17)
+    machine: string // x86_64
+    "version-id": string // 24.04 | 2025 | 8.10 | 13
+    name: string // Ubuntu | Microsoft Windows | AlmaLinux | Debian GNU/Linux
+    "kernel-release": string // 6.8.0-106-generic | 26100 | 4.18.0-553.111.1.el8_10.x86_64 | 6.12.73+deb13-amd64
+    version: string // 24.04.4 LTS (Noble Numbat) | Microsoft Windows Server 2025 | 8.10 (Cerulean Leopard) | 13 (trixie)
+    id: string // ubuntu | mswindows | almalinux | debian
+    "pretty-name": string // Ubuntu 24.04.4 LTS | Windows Server 2025 Standard | AlmaLinux 8.10 (Cerulean Leopard) | Debian GNU/Linux 13 (trixie)
+}
+
+export interface Ipaddress {
+    hardware_address: string
+    name: string
+    ip_address: IpAddress[]
+}
+
+export interface IpAddress {
+    ip_address: string
+    ip_address_type: string
+    prefix: number
+}
+
+export interface RunProxmoxCommandApiResult {
+    result: {
+        upid: false | string // Unique identifier for the task, used to track its progress. False if the command failed to start.
+        message: string // Error message in fase of upid is false
+    }
+    _csrfToken: null | string
+}
+
+export interface ProxmoxGraphDataParams {
+    jsTimestamp: 0 | 1,
+    isoTimestamp: 0 | 1,
+    debug: 'true' | 'false',
+    timeframe: 'hour' | 'day' | 'week' | 'month' | 'year',
+    cf: 'AVERAGE' | 'MAX'
+    node: string,
+    vmid: string,
+    type: ProxmoxVirtType,
+}
+
+export interface ProxmoxGraphDataResult {
+    metrics: {
+        cpu: PerformanceData[],
+        memory: PerformanceData[],
+        network: PerformanceData[],
+        diskio: PerformanceData[],
+    }
+    _csrfToken: null | string,
+}
+
+export interface ProxmoxGetSnapshotsParams {
+    node: string,
+    vmid: string,
+    type: ProxmoxVirtType,
+}
+
+
+export interface ProxmoxGetSnapshotsResult {
+    snapshots_nested: ProxmoxSnapshotNested[],
+    _csrfToken: null | string,
+}
+
+export interface ProxmoxSnapshotNested {
+    parent?: string // Parent snapshot identifier
+    digest?: string
+    snaptime?: number // unix timestamp when the snapshot got created
+    snaptime_user?: string // snapshot creation date in user format
+    description: string
+    name: string
+    vmstate?: '0' | '1' // Includes RAM
+    running?: '1' // The "current" running snapshot
+    children: ProxmoxSnapshotNested[]
+    type: ProxmoxVirtType // Avendis custom field
+    isCurrent: boolean // Avendis custom field
+}
+
+export interface ProxmoxCreateSnapshotParams {
+    node: string,
+    vmid: string,
+    type: ProxmoxVirtType,
+    name: string,
+    description: string,
+    includeRam: boolean
+}
+
+export interface ProxmoxGetTaskStatusParams {
+    node: string,
+    upid: string,
+}
+
+export interface ProxmoxGetTaskStatusResult {
+    status: {
+        exitstatus: 'OK' | string
+        user: string
+        starttime: number // unix time stamp
+        type: string
+        node: string
+        pstart: number
+        upid: string
+        id: string
+        pid: number
+        status: 'stopped' | 'running'
+        starttime_user: string // Formated in user time
+    }
+    _csrfToken: null | string,
+}
+
+export interface ProxmoxRollbackSnapshotData {
+    node: string,
+    vmid: string,
+    type: ProxmoxVirtType,
+    snapshotName: string
+}

@@ -1,0 +1,142 @@
+<!-- Docs: https://flow.foblex.com/ -->
+<ng-container *transloco="let t">
+    <f-flow fDraggable (fFullRendered)="fit2screen()" class="h-100">
+        <f-canvas fZoom>
+            @for (connection of connections; track connection.id) {
+                <f-connection [fOffset]="8" [fOutputId]="connection.from" [fInputId]="connection.to"
+                              [fSelectionDisabled]="true"
+                              [fReassignDisabled]="true"
+                              [fType]="'segment'"
+                              fBehavior="fixed">
+                    <svg fMarker
+                         viewBox="0 0 6 7"
+                         [type]="EFMarkerType.START_ALL_STATES"
+                         [width]="6"
+                         [height]="7"
+                         [refX]="0"
+                         [refY]="3.5"
+                         markerUnits="strokeWidth"
+                         orient="auto">
+                        <path d="M5.99961 7L0 3.5L5.99961 0V7Z"/>
+                    </svg>
+                </f-connection>
+            }
+            @for (node of nodes; track node.id) {
+                <div fNode class="host-node-container"
+                     [fNodePosition]="node.position"
+                     fNodeOutput [fOutputId]="node.connectorId"
+                     [fOutputConnectableSide]="configuration.outputSide"
+                     fNodeInput [fInputId]="node.connectorId"
+                     [fInputConnectableSide]="configuration.inputSide"
+                     [fNodeParentId]="node.nodeData!.groupId">
+                    <div class="host-node-header"
+                         [ngClass]="{'host-node-ok': node.nodeData!.hoststatus?.currentState === 0,'host-node-critical': node.nodeData!.hoststatus?.currentState === 1,'host-node-unknown': node.nodeData!.hoststatus?.currentState === 2, 'host-node-not-monitored': node.nodeData!.hoststatus === undefined}">
+                        <div class="host-node-header-left">
+                            @if (node.nodeData!.hoststatus) {
+                                <oitc-hoststatus-icon [hoststatus]="node.nodeData!.hoststatus">
+                                </oitc-hoststatus-icon>
+                            }
+                            <span class="host-node-header-headline text-truncate"
+                                  [cTooltip]="node.nodeData!.name" cTooltipPlacement="top">
+                                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                    <a [routerLink]="['/', 'hosts', 'browser', node.nodeData!.id]"
+                                       [queryParams]="{idOrUuid: node.nodeData!.id}"
+                                       class="link-default">
+                                        {{ node.nodeData!.name }}
+                                    </a>
+                                } @else {
+                                    {{ node.nodeData!.name }}
+                                }
+                            </span>
+                        </div>
+                        <div class="host-node-header-right"
+                             [cTooltip]="lastCheckString + ': ' + node.nodeData!.hoststatus?.lastCheck"
+                             cTooltipPlacement="top">
+                            {{ node.nodeData!.hoststatus?.lastCheck }}
+                        </div>
+                    </div>
+                    <div class="host-node-body">
+                        @if (node.nodeData!.hoststatus) {
+                            <div class="host-node-row">
+                                <div>
+                                    {{ t('State since') }}
+                                </div>
+                                <div>
+                                    {{ node.nodeData!.hoststatus.last_state_change }}
+                                </div>
+                            </div>
+                            <div class="host-node-row">
+                                <div>
+                                    {{ t('Next check') }}
+                                </div>
+                                <div>
+                                    @if (node.nodeData!.hoststatus.activeChecksEnabled && !node.nodeData!.is_satellite_host) {
+                                        <span [cTooltip]="node.nodeData!.hoststatus.nextCheckUser"
+                                              cTooltipPlacement="top">
+                                            {{ node.nodeData!.hoststatus.nextCheck }}
+                                        </span>
+                                    } @else {
+                                        {{ t('n/a') }}
+                                    }
+                                </div>
+                            </div>
+                            <div class="host-node-row">
+                                <div>
+                                    {{ t('State type') }}
+                                </div>
+                                <div>
+                                    @if (node.nodeData!.hoststatus.isHardstate) {
+                                        {{ t('Hard state') }}
+                                    } @else {
+                                        {{ t('Soft state') }}
+                                    }
+                                    ({{ node.nodeData!.hoststatus.current_check_attempt }}
+                                    /{{ node.nodeData!.hoststatus.max_check_attempts }})
+                                </div>
+                            </div>
+                        } @else {
+                            <div class="host-node-row justify-content-center">
+                                <oitc-hoststatus-icon [hoststatus]="node.nodeData!.hoststatus" [statusCircleClass]="''">
+                                    {{ t('not in monitoring') | titlecase }}
+                                </oitc-hoststatus-icon>
+                            </div>
+                        }
+                    </div>
+                    @if (node.nodeData!.hoststatus) {
+                        @if (node.nodeData!.isInDowntime && node.nodeData!.isAcknowledged) {
+                            <span
+                                class="position-absolute top-0 end-0 translate-middle-y badge rounded-pill bg-unknown"
+                                [cTooltip]="isAcknowledgedAndInDowntimeString"
+                                cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
+                            </span>
+                        } @else if (node.nodeData!.isInDowntime) {
+                            <span
+                                class="position-absolute top-0 end-0 translate-middle-y badge rounded-pill bg-unknown"
+                                [cTooltip]="inDowntimeString"
+                                cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                            </span>
+                        } @else if (node.nodeData!.isAcknowledged) {
+                            <span
+                                class="position-absolute top-0 end-0 translate-middle-y badge rounded-pill bg-unknown"
+                                [cTooltip]="isAcknowledgedString"
+                                cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                            </span>
+                        }
+                    }
+                </div>
+            }
+            @for (node of groupNodes; track node.id) {
+                <div fGroup class="f-group-container" [fGroupId]="node.connectorId"
+                     [fGroupPosition]="node.position"
+                     [fIncludePadding]="true"
+                     [fAutoSizeToFitChildren]="true"
+                     [fAutoExpandOnChildHit]="true">
+                    <span class="host-parent-children-tree-headline">{{ node.nodeData!.name }}</span>
+                </div>
+            }
+        </f-canvas>
+    </f-flow>
+</ng-container>

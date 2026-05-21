@@ -1,7 +1,7 @@
 // This interface is 1:1 the same as the src/itnovum/openITCOCKPIT/Core/Views/Host.php class
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
-import { HostTypesEnum } from './hosts.enum';
+import { HostBrowserTabs, HostTypesEnum } from './hosts.enum';
 import { AcknowledgementTypes } from '../acknowledgements/acknowledgement-types.enum';
 import { ContactEntity, Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
@@ -15,6 +15,11 @@ import { TimeperiodEnity } from '../timeperiods/timeperiods.interface';
 import { ContainerWithHostJoinData } from '../containers/containers.interface';
 import { HostgroupEntityWithJoinData } from '../hostgroups/hostgroups.interface';
 import { ContactgroupEntity } from '../contactgroups/contactgroups.interface';
+import {
+    HostParentsChildrenTree
+} from '../../components/hosts/host-parents-children-tree/host-parents-children-tree.interface';
+import { ExternalSystems } from '../../modules/import_module/pages/externalsystems/external-systems.enum';
+
 
 export interface HostObject {
     id?: number
@@ -41,6 +46,7 @@ export interface HostObject {
     satelliteName?: string // hosts/index
     satelliteRestricted?: boolean // hosts/index
     additionalInformationExists?: boolean // hosts/index
+    additionalInformation?: HostBrowserTabs // hosts/index
     type?: HostOrServiceType // hosts/index
 }
 
@@ -807,6 +813,7 @@ export interface HostBrowserResult {
     parentHostStatus: {
         [key: string]: HoststatusObject
     },
+    parentAndChildHostsTree: HostParentsChildrenTree,
     acknowledgement?: AcknowledgementObject,
     downtime?: DowntimeObject,
     plannedDowntimes: DowntimeObject[],
@@ -842,4 +849,10 @@ export interface HostBrowserSlaOverview {
     determined_availability_percent?: number,
     warning_threshold?: number | null,
     minimal_availability?: number,
+}
+
+export interface LoadAdditionalInformationResult {
+    AdditionalInformationExists: boolean,
+    externalSystemType: null | ExternalSystems,
+    _csrfToken: string
 }

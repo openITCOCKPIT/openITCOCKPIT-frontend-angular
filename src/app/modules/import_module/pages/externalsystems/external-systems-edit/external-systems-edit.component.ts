@@ -27,7 +27,6 @@ import {
 } from '@coreui/angular';
 import { AsyncPipe } from '@angular/common';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -65,6 +64,8 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
 import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { ExternalSystems } from '../external-systems.enum';
+import { MultiSelectChangeEvent } from 'primeng/multiselect';
 
 @Component({
     selector: 'oitc-external-systems-edit',
@@ -137,14 +138,19 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
 
     protected readonly ExternalSystemTypes = [
         {
-            key: 'idoit',
+            key: ExternalSystems.Idoit,
             value: this.TranslocoService.translate('i-doit System'),
             placeholder: 'i-doit.system/src/jsonrpc.php'
         },
         {
-            key: 'itop',
+            key: ExternalSystems.Itop,
             value: this.TranslocoService.translate('iTop System'),
             placeholder: 'itop/webservices/rest.php?version=1.3'
+        },
+        {
+            key: ExternalSystems.Proxmox,
+            value: this.TranslocoService.translate('Proxmox VE'),
+            placeholder: 'proxmox.example.com:8006'
         }
     ];
 
@@ -162,6 +168,9 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
             value: this.TranslocoService.translate('LogicalInterface')
         }
     ];
+
+    // By default, we select the Idoit URL placeholder
+    public url_placeholder: string = this.ExternalSystemTypes[0].placeholder;
 
     public containers: SelectKeyValue[] = [];
     public hostgroup_containers: SelectKeyValue[] = [];
@@ -190,10 +199,16 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 //Fire on page load
                 this.post = result.externalSystem;
-                this.cdr.markForCheck();
                 this.loadContainers();
                 this.checkConnection();
                 this.loadHostgroupContainers();
+
+                const foundSystem = this.ExternalSystemTypes.find(item => item.key === result.externalSystem.system_type);
+                if (foundSystem) {
+                    this.url_placeholder = foundSystem.placeholder;
+                }
+                
+                this.cdr.markForCheck();
             }));
     }
 
@@ -201,10 +216,10 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ExternalSystemsService.testConnection(this.post)
             .subscribe((result: ExternalSystemConnect) => {
                 this.connectStatus = result.status.status;
-                if (result.status.msg) {
+                if (!this.connectStatus && result.status.msg) {
                     this.connectMessage = result.status.msg.message;
                 }
-                if (result.status.result) {
+                if (this.connectStatus) {
                     this.objectTypes = result.status.result;
                     this.objectTypesForOptionGroup = this.ExternalSystemsService.parseElementsForOptionGroup(this.objectTypes);
                 }
@@ -281,4 +296,15 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
+
+    public onExternalSystemTypeChange(selectedSystem: MultiSelectChangeEvent) {
+        // Find placeholder by key
+        const foundSystem = this.ExternalSystemTypes.find(item => item.key === selectedSystem.value);
+        if (foundSystem) {
+            this.url_placeholder = foundSystem.placeholder;
+        }
+        this.cdr.markForCheck()
+    }
+
+    protected readonly ExternalSystems = ExternalSystems;
 }
