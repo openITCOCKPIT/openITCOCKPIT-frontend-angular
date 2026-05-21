@@ -13,8 +13,8 @@
                     {{ t('Wizards') }}
                 </a></li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'shield']"></fa-icon>
-                {{ t('Checkpoint Firewall') }}
+                <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                {{ t('SonicWall') }}
             </li>
         </ol>
     </nav>
@@ -22,7 +22,7 @@
     <c-card>
         <c-card-header>
             <h5 cCardTitle>
-                {{ t('Configuration Wizard: Checkpoint Firewall') }}
+                {{ t('Configuration Wizard: SonicWall') }}
             </h5>
         </c-card-header>
         <c-card-body class="p-0">
@@ -39,7 +39,7 @@
                     class="col-xs-12 col-md-4 col-lg-3 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Configure SNMP for Checkpoint Firewall Monitoring') }}
+                        {{ t('Configure SNMP for SonicWall Hardware Monitoring') }}
                     </span>
                 </div>
                 <div class="col-lg-4 wizard-bg-inactive d-inline-flex">
@@ -228,7 +228,7 @@
                 [(post)]="post.services"
                 [errors]="errors"
                 [titleErrorField]="'services'"
-                [title]="'Checkpoint Firewall services'|transloco"
+                [title]="'SonicWall services'|transloco"
             />
 
 
