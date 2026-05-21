@@ -23,7 +23,8 @@ export enum HostBrowserTabs {
     CMDB = 'CMDB',
     SLA = 'SLA',
     IsarFlow = 'IsarFlow',
-    SoftwareInventory = 'SoftwareInventory'
+    SoftwareInventory = 'SoftwareInventory',
+    DependencyTree = 'DependencyTree'
 }
 
 export enum HostStatusNames {

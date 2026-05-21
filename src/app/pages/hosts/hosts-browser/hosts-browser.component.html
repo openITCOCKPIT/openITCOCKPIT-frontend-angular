@@ -65,6 +65,14 @@
                             {{ t('Timeline') }}
                         </button>
                     </c-nav-item>
+                    <c-nav-item>
+                        <button class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.DependencyTree}"
+                                (click)="changeTab(HostBrowserTabs.DependencyTree)">
+                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                            {{ t('Dependency Tree') }}
+                        </button>
+                    </c-nav-item>
                     @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'ServicenowSettings', 'hostspecific']) | async )) {
                         <c-nav-item>
                             <button
@@ -1198,6 +1206,14 @@
                     </div>
                 }
                 <!-- Timeline end -->
+                <!-- DependencyTree start -->
+                @if (selectedTab == HostBrowserTabs.DependencyTree && result && result.mergedHost) {
+                    <div style="height: 100vh;">
+                        <oitc-host-service-dependencies-tree>
+                        </oitc-host-service-dependencies-tree>
+                    </div>
+                }
+                <!-- DependencyTree end -->
                 <!-- ServiceNow Module start -->
                 @if (selectedTab == HostBrowserTabs.ServiceNow) {
                     <div>

@@ -11,28 +11,35 @@ import {
 import { PermissionsService } from '../../permissions/permissions.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
-    ConnectionOperator
-} from '../../modules/eventcorrelation_module/pages/eventcorrelations/eventcorrelations-view/evc-tree/evc-tree.interface';
-import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule, FZoomDirective } from '@foblex/flow';
+    EFConnectableSide,
+    FCanvasComponent,
+    FConnectionContent,
+    FFlowComponent,
+    FFlowModule,
+    FZoomDirective
+} from '@foblex/flow';
 import { generateGuid } from '@foblex/utils';
 import { PointExtensions } from '@foblex/2d';
 import {
-    DependenciesNode,
+    ConnectionData,
+    HostServiceDependenciesConnectionOperator,
     HostServiceDependenciesINode,
-    HostServiceDependenciesTree
+    HostServiceDependenciesTreeItem
 } from './host-service-dependencies-tree.interface';
 import dagre from '@dagrejs/dagre';
-import { AsyncPipe, NgClass, TitleCasePipe } from '@angular/common';
-import { TooltipDirective } from '@coreui/angular';
+import { AsyncPipe } from '@angular/common';
+import { RowComponent, TooltipDirective } from '@coreui/angular';
 import { RouterLink } from '@angular/router';
-import { HoststatusIconComponent } from '../../pages/hosts/hoststatus-icon/hoststatus-icon.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 const NODE_WIDTH = 150;
 const DIRECTION = 'TB';
 
 interface HostServiceDependenciesNode extends dagre.Node {
-    dependenciesNode: DependenciesNode
+    dependenciesNode: HostServiceDependenciesTreeItem
+}
+
+interface HostServiceDependenciesEdge extends dagre.Edge {
+    connectionData: ConnectionData
 }
 
 @Component({
@@ -45,11 +52,9 @@ interface HostServiceDependenciesNode extends dagre.Node {
         FZoomDirective,
         TooltipDirective,
         RouterLink,
-        NgClass,
         TranslocoDirective,
-        HoststatusIconComponent,
-        FaIconComponent,
-        TitleCasePipe,
+        FConnectionContent,
+        RowComponent
     ],
     templateUrl: './host-service-dependencies-tree.component.html',
     styleUrl: './host-service-dependencies-tree.component.scss',
@@ -57,7 +62,92 @@ interface HostServiceDependenciesNode extends dagre.Node {
 })
 export class HostServiceDependenciesTreeComponent {
 
-    public hostServiceDependenciesTree = input<HostServiceDependenciesTree>();
+    public hostServiceDependenciesTree = input<HostServiceDependenciesTreeItem[]>(
+        [
+            {
+                id: 4,
+                name: "noch ein host",
+                connectionData: [
+                    {
+                        parentIds: [1],
+                        dependency_id: 5,
+                        inherits_parent: 0,
+                        timeperiod_id: null,
+                        execution_fail_on_up: 1,
+                        execution_fail_on_down: 1,
+                        execution_fail_on_unreachable: 1,
+                        execution_fail_on_pending: 1,
+                        notification_fail_on_up: 1,
+                        notification_fail_on_down: 1,
+                        notification_fail_on_unreachable: 1,
+                        notification_fail_on_pending: 1,
+                        timeperiod: null
+                    }
+                ]
+            },
+            {
+                id: 157,
+                name: "Apache Test",
+                connectionData: [
+                    {
+                        parentIds: [201],
+                        dependency_id: 6,
+                        inherits_parent: 0,
+                        timeperiod_id: null,
+                        execution_fail_on_up: 1,
+                        execution_fail_on_down: 1,
+                        execution_fail_on_unreachable: 1,
+                        execution_fail_on_pending: 1,
+                        notification_fail_on_up: 1,
+                        notification_fail_on_down: 1,
+                        notification_fail_on_unreachable: 1,
+                        notification_fail_on_pending: 1,
+                        timeperiod: null
+                    },
+                    {
+                        parentIds: [1],
+                        dependency_id: 7,
+                        inherits_parent: 0,
+                        timeperiod_id: null,
+                        execution_fail_on_up: 1,
+                        execution_fail_on_down: 1,
+                        execution_fail_on_unreachable: 1,
+                        execution_fail_on_pending: 1,
+                        notification_fail_on_up: 1,
+                        notification_fail_on_down: 1,
+                        notification_fail_on_unreachable: 1,
+                        notification_fail_on_pending: 1,
+                        timeperiod: null
+                    }
+                ]
+            },
+            {
+                id: 1,
+                name: "default host",
+                connectionData: [
+                    {
+                        parentIds: [201],
+                        dependency_id: 6,
+                        inherits_parent: 0,
+                        timeperiod_id: null,
+                        execution_fail_on_up: 1,
+                        execution_fail_on_down: 1,
+                        execution_fail_on_unreachable: 1,
+                        execution_fail_on_pending: 1,
+                        notification_fail_on_up: 1,
+                        notification_fail_on_down: 1,
+                        notification_fail_on_unreachable: 1,
+                        notification_fail_on_pending: 1,
+                        timeperiod: null
+                    }
+                ]
+            },
+            {
+                id: 201,
+                name: "Prio 2"
+            },
+        ]
+    );
 
     @ViewChild(FCanvasComponent)
     public fCanvasComponent!: FCanvasComponent;
@@ -66,13 +156,13 @@ export class HostServiceDependenciesTreeComponent {
     private readonly TranslocoService = inject(TranslocoService);
 
     public configuration = {
-        outputSide: EFConnectableSide.RIGHT,
-        inputSide: EFConnectableSide.LEFT,
+        outputSide: EFConnectableSide.BOTTOM,
+        inputSide: EFConnectableSide.TOP,
         nodeSep: 120
     };
 
-    public nodes: any[] = [];
-    public connections: ConnectionOperator[] = [];
+    public nodes: HostServiceDependenciesINode[] = [];
+    public connections: HostServiceDependenciesConnectionOperator[] = [];
 
     private isInitialized = false;
 
@@ -108,10 +198,9 @@ export class HostServiceDependenciesTreeComponent {
 
     private setGraph(graph: dagre.graphlib.Graph): void {
 
-        const hostServiceDependenciesTree = this.hostServiceDependenciesTree();
+        const hostServiceDependenciesTreeItems = this.hostServiceDependenciesTree();
 
-        if (hostServiceDependenciesTree) {
-            const nodes = this.getHostServiceDependenciesTreeNodes(hostServiceDependenciesTree);
+        if (hostServiceDependenciesTreeItems) {
 
             // https://github.com/dagrejs/dagre/wiki#configuring-the-layout
             graph.setGraph({
@@ -145,18 +234,23 @@ export class HostServiceDependenciesTreeComponent {
             });
 
 
-            nodes.forEach(node => {
-                // Add service meta data into dagre.Node (HostServiceDependenciesNode)
-                graph.setNode(node.id, {
+            hostServiceDependenciesTreeItems.forEach(node => {
+                // Add meta data into dagre.Node (HostServiceDependenciesNode)
+                graph.setNode(node.id.toString(), {
                     width: NODE_WIDTH,
                     height: 38,
-                    hostNode: node,
+                    dependenciesNode: node,
                 });
 
-                if (node.parentIds != null) {
-                    node.parentIds.forEach(parentId => {
-                        graph.setEdge(parentId, node.id, {});
-                    });
+                if (node.connectionData) {
+                    for (let connectionKey in node.connectionData) {
+                        node.connectionData[connectionKey].parentIds.forEach(parentId => {
+                            // add meta data into connections to build fConnectionContent in the template
+                            graph.setEdge(parentId.toString(), node.id.toString(), {
+                                connectionData: node.connectionData![connectionKey]
+                            });
+                        });
+                    }
                 }
             });
 
@@ -187,39 +281,24 @@ export class HostServiceDependenciesTreeComponent {
         return nodes;
     }
 
-    private getHostServiceDependenciesTreeNodes(hostServiceDependenciesTree: HostServiceDependenciesTree): DependenciesNode[] {
-        const nodes: DependenciesNode[] = [];
+    private getConnections(graph: dagre.graphlib.Graph): HostServiceDependenciesConnectionOperator[] {
+        let edges: HostServiceDependenciesConnectionOperator[] = [];
 
-        // This method create an array for the hostServiceDependenciesTree Tree (Flow Chart)
+        graph.edges().forEach((x: any) => {
+            let edge = graph.edge(x)
 
-        for (let hostOrServiceUuid in hostServiceDependenciesTree) {
+            // Cast the dagre.Edge to HostServiceDependenciesEdge
+            const hostServiceDependenciesEdge = edge as HostServiceDependenciesEdge;
 
-            let treeItem = hostServiceDependenciesTree[hostOrServiceUuid];
-
-            let parentIds: string[] | null = null;
-            if (treeItem.parentIds.length) {
-                parentIds = treeItem.parentIds.map(parentId => parentId.toString());
-            }
-
-            nodes.push({
-                id: treeItem.id.toString(),
-                name: treeItem.name,
-                parentIds: parentIds,
-            });
-
-        }
-
-        return nodes;
-    }
-
-    private getConnections(graph: dagre.graphlib.Graph): ConnectionOperator[] {
-        return graph.edges().map((x: dagre.Edge) => {
-            return {
+            edges.push({
                 id: generateGuid(),
                 from: x.v,
-                to: x.w
-            }
+                to: x.w,
+                connectionData: hostServiceDependenciesEdge.connectionData
+            });
+
         });
+        return edges;
     }
 
     public fit2screen(): void {

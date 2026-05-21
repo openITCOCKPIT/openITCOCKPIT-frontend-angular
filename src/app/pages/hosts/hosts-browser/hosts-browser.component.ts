@@ -130,6 +130,9 @@ import {
     BrowserSoftwareMacosComponent
 } from './browser-software/browser-software-macos/browser-software-macos.component';
 import { PatchstatusIconComponent } from '../../patchstatus/patchstatus-icon/patchstatus-icon.component';
+import {
+    HostServiceDependenciesTreeComponent
+} from '../../../components/host-service-dependencies-tree/host-service-dependencies-tree.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -193,7 +196,8 @@ import { PatchstatusIconComponent } from '../../patchstatus/patchstatus-icon/pat
         BrowserSoftwareLinuxComponent,
         BrowserSoftwareWindowsComponent,
         BrowserSoftwareMacosComponent,
-        PatchstatusIconComponent
+        PatchstatusIconComponent,
+        HostServiceDependenciesTreeComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',

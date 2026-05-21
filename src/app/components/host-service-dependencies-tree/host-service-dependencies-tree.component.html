@@ -6,8 +6,36 @@
                 <f-connection [fOffset]="8" [fOutputId]="connection.from" [fInputId]="connection.to"
                               [fSelectionDisabled]="true"
                               [fReassignDisabled]="true"
-                              [fType]="'bezier'"
+                              [fType]="'segment'"
                               fBehavior="fixed">
+                    <div fConnectionContent>
+                        <div>
+                            <c-row>
+                                Dependency ID:
+                                {{ connection.connectionData.dependency_id }}
+                            </c-row>
+                            <c-row>
+                                Fail on OK:
+                                {{ connection.connectionData.execution_fail_on_up }}
+                            </c-row>
+                            <c-row>
+                                Fail on Down:
+                                {{ connection.connectionData.execution_fail_on_down }}
+                            </c-row>
+                            <c-row>
+                                Fail on Unreachable:
+                                {{ connection.connectionData.execution_fail_on_unreachable }}
+                            </c-row>
+                            <c-row>
+                                Fail on Pending:
+                                {{ connection.connectionData.execution_fail_on_pending }}
+                            </c-row>
+                            <c-row>
+                                Inherits from parent:
+                                {{ connection.connectionData.inherits_parent }}
+                            </c-row>
+                        </div>
+                    </div>
                 </f-connection>
             }
             @for (node of nodes; track node.id) {
@@ -17,98 +45,22 @@
                      [fOutputConnectableSide]="configuration.outputSide"
                      fNodeInput [fInputId]="node.connectorId"
                      [fInputConnectableSide]="configuration.inputSide">
-                    <div class="host-node-header"
-                         [ngClass]="{'host-node-ok': node.hostNode!.hoststatus?.currentState === 0,'host-node-critical': node.hostNode!.hoststatus?.currentState === 1,'host-node-unknown': node.hostNode!.hoststatus?.currentState === 2, 'host-node-not-monitored': node.hostNode!.hoststatus === undefined}">
+                    <div class="host-node-header">
                         <div class="host-node-header-left">
-                            @if (node.hostNode!.hoststatus) {
-                                <oitc-hoststatus-icon [hoststatus]="node.hostNode!.hoststatus">
-                                </oitc-hoststatus-icon>
-                            }
                             <span class="host-node-header-headline text-truncate"
-                                  [cTooltip]="node.hostNode!.name" cTooltipPlacement="top">
+                                  [cTooltip]="node.dependenciesNode.name" cTooltipPlacement="top">
                                 @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                                    <a [routerLink]="['/', 'hosts', 'browser', node.hostNode!.id]"
-                                       [queryParams]="{idOrUuid: node.hostNode!.id}"
+                                    <a [routerLink]="['/', 'hosts', 'browser', node.dependenciesNode.id]"
+                                       [queryParams]="{idOrUuid: node.dependenciesNode.id}"
                                        class="link-default">
-                                        {{ node.hostNode!.name }}
+                                        {{ node.dependenciesNode.name }}
                                     </a>
                                 } @else {
-                                    {{ node.hostNode!.name }}
+                                    {{ node.dependenciesNode.name }}
                                 }
                             </span>
                         </div>
                     </div>
-                    <div class="host-node-body">
-                        @if (node.hostNode!.hoststatus) {
-                            <div class="host-node-row">
-                                <div>
-                                    {{ t('State since') }}
-                                </div>
-                                <div>
-                                    {{ node.hostNode!.hoststatus.last_state_change }}
-                                </div>
-                            </div>
-                            <div class="host-node-row">
-                                <div>
-                                    {{ t('Next check') }}
-                                </div>
-                                <div>
-                                    @if (node.hostNode!.hoststatus.activeChecksEnabled && !node.hostNode!.is_satellite_host) {
-                                        <span [cTooltip]="node.hostNode!.hoststatus.nextCheckUser"
-                                              cTooltipPlacement="top">
-                                            {{ node.hostNode!.hoststatus.nextCheck }}
-                                        </span>
-                                    } @else {
-                                        {{ t('n/a') }}
-                                    }
-                                </div>
-                            </div>
-                            <div class="host-node-row">
-                                <div>
-                                    {{ t('State type') }}
-                                </div>
-                                <div>
-                                    @if (node.hostNode!.hoststatus.isHardstate) {
-                                        {{ t('Hard state') }}
-                                    } @else {
-                                        {{ t('Soft state') }}
-                                    }
-                                    ({{ node.hostNode!.hoststatus.current_check_attempt }}
-                                    /{{ node.hostNode!.hoststatus.max_check_attempts }})
-                                </div>
-                            </div>
-                        } @else {
-                            <div class="host-node-row justify-content-center">
-                                <oitc-hoststatus-icon [hoststatus]="node.hostNode!.hoststatus" [statusCircleClass]="''">
-                                    {{ t('not in monitoring') | titlecase }}
-                                </oitc-hoststatus-icon>
-                            </div>
-                        }
-                    </div>
-                    @if (node.hostNode!.hoststatus) {
-                        @if (node.hostNode!.isInDowntime && node.hostNode!.isAcknowledged) {
-                            <span
-                                class="position-absolute top-0 end-0 translate-middle-y badge rounded-pill bg-unknown"
-                                [cTooltip]="isAcknowledgedAndInDowntimeString"
-                                cTooltipPlacement="top">
-                                <fa-icon [icon]="['fas', 'user-md']"></fa-icon>
-                            </span>
-                        } @else if (node.hostNode!.isInDowntime) {
-                            <span
-                                class="position-absolute top-0 end-0 translate-middle-y badge rounded-pill bg-unknown"
-                                [cTooltip]="inDowntimeString"
-                                cTooltipPlacement="top">
-                                <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                            </span>
-                        } @else if (node.hostNode!.isAcknowledged) {
-                            <span
-                                class="position-absolute top-0 end-0 translate-middle-y badge rounded-pill bg-unknown"
-                                [cTooltip]="isAcknowledgedString"
-                                cTooltipPlacement="top">
-                                <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                            </span>
-                        }
-                    }
                 </div>
             }
         </f-canvas>
