@@ -994,7 +994,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         if (typeof action === 'undefined') {
             action = 'add_or_edit';
         }
-        console.log(this.map.Map);
         this.subscriptions.add(this.MapeditorsService.saveBackground({
             'Map': {
                 id: this.mapId.toString(),
