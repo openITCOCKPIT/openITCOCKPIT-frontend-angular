@@ -47,6 +47,7 @@ export interface Mapitem extends MapitemBase {
     object_id: number
     show_label: boolean
     label_possition: number
+    allowView: boolean
 }
 
 export interface MapitemPost {
@@ -199,6 +200,8 @@ export interface Background {
     image: string
     path?: string
     thumbnail?: string
+    background_size_x?: number
+    background_size_y?: number
 }
 
 export interface SaveBackgroundPost {
