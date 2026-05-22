@@ -69,11 +69,6 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
             width = img.naturalWidth;
             height = img.naturalHeight;
 
-            console.log('complete');
-            console.log({w: width, h: height});
-            console.log(this.width);
-            console.log(this.height);
-
             const item = this.item();
             if (item && item?.size_x > 0) {
                 // User has defined a width
@@ -95,11 +90,6 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
             img.onload = () => {
                 width = img.naturalWidth;
                 height = img.naturalHeight;
-
-                console.log('onload');
-                console.log({w: width, h: height});
-                console.log(this.width);
-                console.log(this.height);
 
                 const item = this.item();
                 if (item && item?.size_x > 0) {

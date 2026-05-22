@@ -231,21 +231,23 @@
                 <!-- start map-editor -->
                 <div id="map-editor" class="map-editor" #mapEditor>
                     <!-- start mainMapContainer -->
-                    <div (click)="addNewObjectFunc($event)">
+                    <div (click)="addNewObjectFunc($event)">ffgf
                         <oitc-map-canvas [helplines]="Mapeditor.helplines" [map]="map.Map"
                                          [isViewMode]="false" [isBackgroundEditMode]="backgroundEditEnabled"
                                          [currentDeletedItem]="currentDeletedItem">
                             @if (map && map.Map && map.Map.background && backgroundItemRerendered) {
-                                <oitc-background-item
-                                    [item]="backgroundItem"
-                                    [aspectRatioEnabled]="Mapeditor.maintainBackgroundAspectRatio"
-                                    [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
-                                    (dblclick)="openChangeMapBackgroundModal()"
-                                    (contextActionEvent)="onContextAction($event)"
-                                    (dropItemEvent)="onDropItem($event)"
-                                    (resizedEvent)="onResizeStop($event)"
-                                    [hidden]="!backgroundEditEnabled">
-                                </oitc-background-item>
+                                @if (backgroundEditEnabled) {
+                                    <oitc-background-item
+                                        [item]="backgroundItem"
+                                        [aspectRatioEnabled]="Mapeditor.maintainBackgroundAspectRatio"
+                                        [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                        (dblclick)="openChangeMapBackgroundModal()"
+                                        (contextActionEvent)="onContextAction($event)"
+                                        (dropItemEvent)="onDropItem($event)"
+                                        (resizedEvent)="onResizeStop($event)">
+                                    </oitc-background-item>
+                                }
+
                             }
                             @for (item of map.Mapitems; track item) {
                                 <oitc-map-item [item]="item" [refreshInterval]="0"
@@ -2046,8 +2048,3 @@
                 <button [cModalToggle]="AddEditStatelessTextModal.id" cButton color="default" class="ripple">
                     {{ t('Close') }}
                 </button>
-            </c-modal-footer>
-        </form>
-    </c-modal>
-
-</ng-container>

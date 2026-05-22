@@ -930,6 +930,13 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     };
 
     public changeBackground(background: Background) {
+        // The next two lines are a hack to fix the "Maintain aspect ratio" when a user switch from one
+        // background image to another (without clicking on "Remove background" first)
+        // By setting background = null, somewhere in this code the img-tag gets removed from the page
+        // The new background image will create a new img-tag and the "Maintain spect ratio" will work as expected
+        this.map.Map.background = null;
+        this.brokenImageDetected = false;
+
         if (background !== undefined && this.lastBackgroundImageToDeletePreventForSave === background.image) {
             this.lastBackgroundImageToDeletePreventForSave = null;
             this.map.Map.background = null;
@@ -955,13 +962,17 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 this.backgroundItem = this.getDefaultBackgroundItem();
                 this.backgroundItem.background = background.image;
+                this.backgroundItem.x = result.data.Map.Map.background_x;
+                this.backgroundItem.y = result.data.Map.Map.background_y;
+                this.backgroundItem.size_x = result.data.Map.Map.background_size_x;
+                this.backgroundItem.size_y = result.data.Map.Map.background_size_y;
                 this.backgroundItem = {...this.backgroundItem};
 
                 this.map.Map.background = background.image;
-                this.map.Map.background_x = this.backgroundItem.x;
-                this.map.Map.background_y = this.backgroundItem.y;
-                this.map.Map.background_size_x = this.backgroundItem.size_x;
-                this.map.Map.background_size_y = this.backgroundItem.size_y;
+                this.map.Map.background_x = result.data.Map.Map.background_x;
+                this.map.Map.background_y = result.data.Map.Map.background_y;
+                this.map.Map.background_size_x = result.data.Map.Map.background_size_x;
+                this.map.Map.background_size_y = result.data.Map.Map.background_size_y;
                 this.map.Map = {...this.map.Map};
 
                 this.notyService.genericSuccess(msg, title);
