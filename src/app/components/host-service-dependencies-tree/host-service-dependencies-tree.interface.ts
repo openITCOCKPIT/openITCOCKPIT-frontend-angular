@@ -3,6 +3,8 @@ import { Timeperiod } from '../../pages/hostdependencies/hostdependencies.interf
 import {
     ConnectionOperator
 } from '../../modules/eventcorrelation_module/pages/eventcorrelations/eventcorrelations-view/evc-tree/evc-tree.interface';
+import { HoststatusObject } from '../../pages/hosts/hosts.interface';
+import { ServicestatusObject } from '../../pages/services/services.interface';
 
 export interface HostServiceDependenciesINode {
     id: string
@@ -43,12 +45,11 @@ export interface HostServiceDependenciesConnectionOperator extends ConnectionOpe
 
 export interface HostServiceDependenciesTreeItem {
     id: number
-    name: string
-    host?: {
-        id: number
-        name: string
-    }
+    name?: string
+    servicename?: string
     connectionData?: ConnectionData[]
+    hoststatus?: HoststatusObject
+    servicestatus?: ServicestatusObject
 }
 
 export interface ConnectionData {
@@ -60,10 +61,12 @@ export interface ConnectionData {
     execution_fail_on_down?: number
     execution_fail_on_unreachable?: number
     execution_fail_on_pending: number
+    execution_none: number
     notification_fail_on_up?: number
     notification_fail_on_down?: number
     notification_fail_on_unreachable?: number
     notification_fail_on_pending: number
+    notification_none: number
     execution_fail_on_ok?: number
     execution_fail_on_warning?: number
     execution_fail_on_critical?: number

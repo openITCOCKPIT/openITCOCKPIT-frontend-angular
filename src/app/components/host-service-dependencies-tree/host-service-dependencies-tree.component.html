@@ -8,47 +8,245 @@
                               [fReassignDisabled]="true"
                               [fType]="'segment'"
                               fBehavior="fixed">
-                    <div fConnectionContent>
-                        <div>
-                            <c-row>
-                                Dependency ID:
-                                {{ connection.connectionData.dependency_id }}
-                            </c-row>
-                            <c-row>
-                                Fail on OK:
-                                {{ connection.connectionData.execution_fail_on_up }}
-                            </c-row>
-                            <c-row>
-                                Fail on Down:
-                                {{ connection.connectionData.execution_fail_on_down }}
-                            </c-row>
-                            <c-row>
-                                Fail on Unreachable:
-                                {{ connection.connectionData.execution_fail_on_unreachable }}
-                            </c-row>
-                            <c-row>
-                                Fail on Pending:
-                                {{ connection.connectionData.execution_fail_on_pending }}
-                            </c-row>
-                            <c-row>
-                                Inherits from parent:
-                                {{ connection.connectionData.inherits_parent }}
-                            </c-row>
+                    <svg fMarker
+                         viewBox="0 0 6 7"
+                         [type]="EFMarkerType.START_ALL_STATES"
+                         [width]="6"
+                         [height]="7"
+                         [refX]="0"
+                         [refY]="3.5"
+                         markerUnits="strokeWidth"
+                         orient="auto">
+                        <path d="M5.99961 7L0 3.5L5.99961 0V7Z"/>
+                    </svg>
+                    <div fConnectionContent class="node-container"
+                         [ngClass]="{'service-node-container': connection.connectionData.execution_fail_on_ok}">
+                        <div class="node-header px-3 py-2">
+                            <span class="badge bg-unknown mx-1">
+                                <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                            </span>
+                            @if (connection.connectionData.execution_fail_on_up !== undefined) {
+                                @if (this.PermissionsService.hasPermissionObservable(['hostdependencies', 'index'])|async) {
+                                    <a [routerLink]="['/', 'hostdependencies', 'index']"
+                                       [queryParams]="{id: connection.connectionData.dependency_id}"
+                                       class="link-default">
+                                        {{ t('Host dependency') }} ({{ t('ID') }}
+                                        : {{ connection.connectionData.dependency_id }})
+                                    </a>
+                                } @else {
+                                    {{ t('Host dependency') }} ({{ t('ID') }}: {{ connection.connectionData.dependency_id }})
+                                }
+                            } @else {
+                                @if (this.PermissionsService.hasPermissionObservable(['servicedependencies', 'index'])|async) {
+                                    <a [routerLink]="['/', 'servicedependencies', 'index']"
+                                       [queryParams]="{id: connection.connectionData.dependency_id}"
+                                       class="link-default">
+                                        {{ t('Service dependency') }} ({{ t('ID') }}
+                                        : {{ connection.connectionData.dependency_id }})
+                                    </a>
+                                } @else {
+                                    {{ t('Service dependency') }} ({{ t('ID') }}: {{ connection.connectionData.dependency_id }})
+                                }
+                            }
+                        </div>
+                        <div class="node-body">
+                            @if (connection.connectionData.timeperiod) {
+                                <div class="node-row px-3 py-2">
+                                    <div>
+                                        {{ t('Timeperiod') }}
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <a *oitcPermission="['timeperiods', 'edit']"
+                                               [routerLink]="['/', 'timeperiods', 'edit', connection.connectionData.timeperiod.id]">
+                                                {{ connection.connectionData.timeperiod.name }}
+                                            </a>
+                                            <span *oitcPermission="['timeperiods', 'edit']; negate: true">
+                                                {{ connection.connectionData.timeperiod.name }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="node-row px-3 py-2">
+                                <div>
+                                    {{ t('Inherits parent') }}
+                                </div>
+                                <div>
+                                    @if (connection.connectionData.inherits_parent) {
+                                        <span class="badge bg-success mx-1" title="{{ t('Yes') }}"
+                                        >
+                                            {{ t('Yes') }}
+                                        </span>
+                                    }
+                                    @if (!connection.connectionData.inherits_parent) {
+                                        <span class="badge bg-danger mx-1" title="{{ t('No') }}"
+                                        >
+                                            {{ t('No') }}
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                            @if (connection.connectionData.execution_fail_on_up !== undefined) {
+                                <div class="node-row px-3 py-2">
+                                    <div>
+                                        {{ t('Execution failure criteria') }}
+                                    </div>
+                                    <div>
+                                        @if (connection.connectionData.execution_fail_on_up) {
+                                            <span class="badge bg-success mx-1" title="{{ t('Up') }}">
+                                                {{ t('O') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.execution_fail_on_down) {
+                                            <span class="badge bg-danger mx-1" title="{{ t('Down') }}">
+                                                {{ t('D') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.execution_fail_on_unreachable) {
+                                            <span class="badge bg-secondary mx-1" title="{{ t('Unreachable') }}">
+                                                {{ t('U') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.execution_fail_on_pending) {
+                                            <span class="badge bg-primary mx-1" title="{{ t('Pending') }}">
+                                                {{ t('P') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.execution_none) {
+                                            <span class="badge bg-primary mx-1" title="{{ t('Execution none') }}">
+                                                {{ t('N') }}
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="node-row px-3 py-2">
+                                    <div>
+                                        {{ t('Notification failure criteria') }}
+                                    </div>
+                                    <div>
+                                        @if (connection.connectionData.notification_fail_on_up) {
+                                            <span class="badge bg-success mx-1" title="{{ t('Recovery') }}">
+                                                {{ t('O') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.notification_fail_on_down) {
+                                            <span class="badge bg-danger mx-1" title="{{ t('Down') }}">
+                                                {{ t('D') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.notification_fail_on_unreachable) {
+                                            <span class="badge bg-secondary mx-1" title="{{ t('Unreachable') }}">
+                                                {{ t('U') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.notification_fail_on_pending) {
+                                            <span class="badge bg-primary mx-1" title="{{ t('Pending') }}">
+                                                {{ t('P') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.notification_none) {
+                                            <span class="badge bg-primary mx-1" title="{{ t('Notification none') }}">
+                                                {{ t('N') }}
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            @if (connection.connectionData.execution_fail_on_ok !== undefined) {
+                                <div class="node-row px-3 py-2">
+                                    <div>
+                                        {{ t('Execution failure criteria') }}
+                                    </div>
+                                    <div>
+                                        @if (connection.connectionData.execution_fail_on_ok) {
+                                            <span class="badge bg-success mx-1" title="{{ t('Ok') }}">
+                                                {{ t('O') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.execution_fail_on_warning) {
+                                            <span class="badge bg-warning mx-1" title="{{ t('Warning') }}">
+                                                {{ t('W') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.execution_fail_on_critical) {
+                                            <span class="badge bg-danger mx-1" title="{{ t('Critical') }}">
+                                                {{ t('C') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.execution_fail_on_unknown) {
+                                            <span class="badge bg-secondary mx-1" title="{{ t('Unknown') }}">
+                                                {{ t('U') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.execution_fail_on_pending) {
+                                            <span class="badge bg-primary mx-1" title="{{ t('Pending') }}">
+                                                {{ t('P') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.execution_none) {
+                                            <span class="badge bg-primary mx-1" title="{{ t('Execution none') }}">
+                                                {{ t('N') }}
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="node-row px-3 py-2">
+                                    <div>
+                                        {{ t('Notification failure criteria') }}
+                                    </div>
+                                    <div>
+                                        @if (connection.connectionData.notification_fail_on_ok) {
+                                            <span class="badge bg-success mx-1" title="{{ t('Recovery') }}">
+                                                {{ t('O') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.notification_fail_on_warning) {
+                                            <span class="badge bg-warning mx-1" title="{{ t('Warning') }}">
+                                                {{ t('W') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.notification_fail_on_critical) {
+                                            <span class="badge bg-danger mx-1" title="{{ t('Critical') }}">
+                                                {{ t('C') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.notification_fail_on_unknown) {
+                                            <span class="badge bg-secondary mx-1" title="{{ t('Unknown') }}">
+                                                {{ t('U') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.notification_fail_on_pending) {
+                                            <span class="badge bg-primary mx-1" title="{{ t('Pending') }}">
+                                                {{ t('P') }}
+                                            </span>
+                                        }
+                                        @if (connection.connectionData.notification_none) {
+                                            <span class="badge bg-primary mx-1" title="{{ t('Notification none') }}">
+                                                {{ t('N') }}
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </f-connection>
             }
             @for (node of nodes; track node.id) {
-                <div fNode class="host-node-container"
+                <div fNode class="node-container"
                      [fNodePosition]="node.position"
                      fNodeOutput [fOutputId]="node.connectorId"
                      [fOutputConnectableSide]="configuration.outputSide"
                      fNodeInput [fInputId]="node.connectorId"
                      [fInputConnectableSide]="configuration.inputSide">
-                    <div class="host-node-header">
-                        <div class="host-node-header-left">
-                            <span class="host-node-header-headline text-truncate"
-                                  [cTooltip]="node.dependenciesNode.name" cTooltipPlacement="top">
+                    <div class="px-3 py-2 d-flex justify-content-center align-items-center bold">
+                        @if (node.dependenciesNode.name) {
+                            <span class="badge bg-primary mx-1" [cTooltip]="'Host'|transloco"
+                                  cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                            </span>
+                            <span class="text-truncate" [cTooltip]="node.dependenciesNode.name" cTooltipPlacement="top">
                                 @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                     <a [routerLink]="['/', 'hosts', 'browser', node.dependenciesNode.id]"
                                        [queryParams]="{idOrUuid: node.dependenciesNode.id}"
@@ -59,7 +257,34 @@
                                     {{ node.dependenciesNode.name }}
                                 }
                             </span>
-                        </div>
+                            @if (node.dependenciesNode.hoststatus) {
+                                <oitc-hoststatus-icon class="mx-1" [hoststatus]="node.dependenciesNode.hoststatus">
+                                </oitc-hoststatus-icon>
+                            }
+                        }
+                        @if (node.dependenciesNode.servicename) {
+                            <span class="badge bg-primary mx-1" [cTooltip]="'Service'|transloco"
+                                  cTooltipPlacement="top">
+                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                            </span>
+                            <span class="text-truncate" [cTooltip]="node.dependenciesNode.servicename"
+                                  cTooltipPlacement="top">
+                                @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
+                                    <a [routerLink]="['/', 'services', 'browser', node.dependenciesNode.id]"
+                                       [queryParams]="{idOrUuid: node.dependenciesNode.id}"
+                                       class="link-default">
+                                        {{ node.dependenciesNode.servicename }}
+                                    </a>
+                                } @else {
+                                    {{ node.dependenciesNode.servicename }}
+                                }
+                            </span>
+                            @if (node.dependenciesNode.servicestatus) {
+                                <oitc-servicestatus-icon class="mx-1"
+                                                         [servicestatus]="node.dependenciesNode.servicestatus">
+                                </oitc-servicestatus-icon>
+                            }
+                        }
                     </div>
                 </div>
             }

@@ -9,14 +9,17 @@ import {
     ViewChild
 } from '@angular/core';
 import { PermissionsService } from '../../permissions/permissions.service';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
     EFConnectableSide,
+    EFMarkerType,
     FCanvasComponent,
     FConnectionContent,
     FFlowComponent,
     FFlowModule,
-    FZoomDirective
+    FZoomDirective,
+    provideFFlow,
+    withReflowOnResize
 } from '@foblex/flow';
 import { generateGuid } from '@foblex/utils';
 import { PointExtensions } from '@foblex/2d';
@@ -26,19 +29,23 @@ import {
     HostServiceDependenciesINode,
     HostServiceDependenciesTreeItem
 } from './host-service-dependencies-tree.interface';
-import dagre from '@dagrejs/dagre';
-import { AsyncPipe } from '@angular/common';
-import { RowComponent, TooltipDirective } from '@coreui/angular';
+import dagre, { Edge, graphlib, Point } from '@dagrejs/dagre';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { TooltipDirective } from '@coreui/angular';
 import { RouterLink } from '@angular/router';
+import { PermissionDirective } from '../../permissions/permission.directive';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { HoststatusIconComponent } from '../../pages/hosts/hoststatus-icon/hoststatus-icon.component';
+import { ServicestatusIconComponent } from '../services/servicestatus-icon/servicestatus-icon.component';
 
-const NODE_WIDTH = 150;
+const NODE_WIDTH = 250;
 const DIRECTION = 'TB';
 
-interface HostServiceDependenciesNode extends dagre.Node {
+interface HostServiceDependenciesNode extends Point {
     dependenciesNode: HostServiceDependenciesTreeItem
 }
 
-interface HostServiceDependenciesEdge extends dagre.Edge {
+interface HostServiceDependenciesEdge extends Edge {
     connectionData: ConnectionData
 }
 
@@ -54,8 +61,14 @@ interface HostServiceDependenciesEdge extends dagre.Edge {
         RouterLink,
         TranslocoDirective,
         FConnectionContent,
-        RowComponent
+        PermissionDirective,
+        FaIconComponent,
+        NgClass,
+        HoststatusIconComponent,
+        ServicestatusIconComponent,
+        TranslocoPipe
     ],
+    providers: [provideFFlow(withReflowOnResize())],
     templateUrl: './host-service-dependencies-tree.component.html',
     styleUrl: './host-service-dependencies-tree.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -63,7 +76,7 @@ interface HostServiceDependenciesEdge extends dagre.Edge {
 export class HostServiceDependenciesTreeComponent {
 
     public hostServiceDependenciesTree = input<HostServiceDependenciesTreeItem[]>(
-        [
+        /*[
             {
                 id: 4,
                 name: "noch ein host",
@@ -77,10 +90,12 @@ export class HostServiceDependenciesTreeComponent {
                         execution_fail_on_down: 1,
                         execution_fail_on_unreachable: 1,
                         execution_fail_on_pending: 1,
+                        execution_none: 0,
                         notification_fail_on_up: 1,
                         notification_fail_on_down: 1,
                         notification_fail_on_unreachable: 1,
                         notification_fail_on_pending: 1,
+                        notification_none: 0,
                         timeperiod: null
                     }
                 ]
@@ -93,16 +108,21 @@ export class HostServiceDependenciesTreeComponent {
                         parentIds: [201],
                         dependency_id: 6,
                         inherits_parent: 0,
-                        timeperiod_id: null,
+                        timeperiod_id: 2,
                         execution_fail_on_up: 1,
                         execution_fail_on_down: 1,
                         execution_fail_on_unreachable: 1,
                         execution_fail_on_pending: 1,
+                        execution_none: 0,
                         notification_fail_on_up: 1,
                         notification_fail_on_down: 1,
                         notification_fail_on_unreachable: 1,
                         notification_fail_on_pending: 1,
-                        timeperiod: null
+                        notification_none: 0,
+                        timeperiod: {
+                            "id": 2,
+                            "name": "none"
+                        }
                     },
                     {
                         parentIds: [1],
@@ -113,10 +133,12 @@ export class HostServiceDependenciesTreeComponent {
                         execution_fail_on_down: 1,
                         execution_fail_on_unreachable: 1,
                         execution_fail_on_pending: 1,
+                        execution_none: 0,
                         notification_fail_on_up: 1,
                         notification_fail_on_down: 1,
                         notification_fail_on_unreachable: 1,
                         notification_fail_on_pending: 1,
+                        notification_none: 0,
                         timeperiod: null
                     }
                 ]
@@ -134,10 +156,12 @@ export class HostServiceDependenciesTreeComponent {
                         execution_fail_on_down: 1,
                         execution_fail_on_unreachable: 1,
                         execution_fail_on_pending: 1,
+                        execution_none: 0,
                         notification_fail_on_up: 1,
                         notification_fail_on_down: 1,
                         notification_fail_on_unreachable: 1,
                         notification_fail_on_pending: 1,
+                        notification_none: 0,
                         timeperiod: null
                     }
                 ]
@@ -145,6 +169,117 @@ export class HostServiceDependenciesTreeComponent {
             {
                 id: 201,
                 name: "Prio 2"
+            },
+        ]*/
+
+        [
+            {
+                id: 11,
+                servicename: "noch ein host/Disk usage /",
+                connectionData: [
+                    {
+                        parentIds: [2],
+                        dependency_id: 8,
+                        inherits_parent: 0,
+                        timeperiod_id: 25,
+                        execution_fail_on_ok: 1,
+                        execution_fail_on_warning: 1,
+                        execution_fail_on_unknown: 1,
+                        execution_fail_on_critical: 1,
+                        execution_fail_on_pending: 1,
+                        execution_none: 0,
+                        notification_fail_on_ok: 1,
+                        notification_fail_on_warning: 1,
+                        notification_fail_on_unknown: 1,
+                        notification_fail_on_critical: 1,
+                        notification_fail_on_pending: 1,
+                        notification_none: 0,
+                        timeperiod: {
+                            id: 25,
+                            name: "UsedBy Test"
+                        }
+                    }
+                ],
+                servicestatus: {
+                    currentState: 0,
+                    isFlapping: false,
+                    problemHasBeenAcknowledged: false,
+                    scheduledDowntimeDepth: 0,
+                    lastCheck: "8 minutes ago",
+                    nextCheck: "21 minutes",
+                    activeChecksEnabled: 1,
+                    lastHardStateChange: "2Y 4M 10D 19h 44m 48s",
+                    last_state_change: "2Y 4M 10D 19h 44m 48s",
+                    processPerformanceData: true,
+                    state_type: 1,
+                    acknowledgement_type: 0,
+                    flap_detection_enabled: false,
+                    notifications_enabled: true,
+                    current_check_attempt: 1,
+                    output: "DISK OK - free space: / 13326MiB (22,2% inode=83%):",
+                    long_output: "",
+                    perfdata: "/=48835330048B;52963993190;59584492339;0;66204991488",
+                    latency: 0.52605801820755,
+                    max_check_attempts: 2,
+                    last_time_ok: "13:02:06 - 22.05.2026",
+                    lastHardStateChangeInWords: "2Y 4M 10D 19h 44m 48s",
+                    last_state_change_in_words: "2Y 4M 10D 19h 44m 48s",
+                    lastCheckInWords: "8 minutes ago",
+                    nextCheckInWords: "21 minutes",
+                    isHardstate: true,
+                    isInMonitoring: true,
+                    humanState: "ok",
+                    cssClass: "bg-ok",
+                    textClass: "ok",
+                    outputHtml: "DISK OK - free space: / 13326MiB (22,2% inode=83%):",
+                    lastHardStateChangeUser: "16:26:03 - 11.01.2024",
+                    last_state_change_user: "16:26:03 - 11.01.2024",
+                    lastCheckUser: "13:02:06 - 22.05.2026",
+                    nextCheckUser: "13:32:06 - 22.05.2026",
+                    longOutputHtml: ""
+                }
+            },
+            {
+                id: 2,
+                servicename: "default host/Disk usage /",
+                servicestatus: {
+                    currentState: 0,
+                    isFlapping: false,
+                    problemHasBeenAcknowledged: false,
+                    scheduledDowntimeDepth: 0,
+                    lastCheck: "25 minutes ago",
+                    nextCheck: "4 minutes",
+                    activeChecksEnabled: 1,
+                    lastHardStateChange: "2Y 2M 1D 1h 31m 49s",
+                    last_state_change: "2Y 2M 1D 1h 31m 49s",
+                    processPerformanceData: true,
+                    state_type: 1,
+                    acknowledgement_type: 0,
+                    flap_detection_enabled: false,
+                    notifications_enabled: true,
+                    current_check_attempt: 1,
+                    output: "DISK OK - free space: / 13329MiB (22,3% inode=83%):",
+                    long_output: "",
+                    perfdata: "/=48832184320B;52963993190;59584492339;0;66204991488",
+                    latency: 0.91742998361588,
+                    max_check_attempts: 2,
+                    last_time_ok: "12:35:05 - 22.05.2026",
+                    lastHardStateChangeInWords: "2Y 2M 1D 1h 31m 49s",
+                    last_state_change_in_words: "2Y 2M 1D 1h 31m 49s",
+                    lastCheckInWords: "25 minutes ago",
+                    nextCheckInWords: "4 minutes",
+                    isHardstate: true,
+                    isInMonitoring: true,
+                    humanState: "ok",
+                    cssClass: "bg-ok",
+                    textClass: "ok",
+                    outputHtml: "DISK OK - free space: / 13329MiB (22,3% inode=83%):",
+                    lastHardStateChangeUser: "10:28:20 - 22.03.2024",
+                    last_state_change_user: "10:28:20 - 22.03.2024",
+                    lastCheckUser: "12:35:05 - 22.05.2026",
+                    nextCheckUser: "13:05:05 - 22.05.2026",
+                    longOutputHtml: ""
+                }
             },
         ]
     );
@@ -158,7 +293,7 @@ export class HostServiceDependenciesTreeComponent {
     public configuration = {
         outputSide: EFConnectableSide.BOTTOM,
         inputSide: EFConnectableSide.TOP,
-        nodeSep: 120
+        nodeSep: 300
     };
 
     public nodes: HostServiceDependenciesINode[] = [];
@@ -189,14 +324,14 @@ export class HostServiceDependenciesTreeComponent {
         });
     }
 
-    private updateGraph(graph: dagre.graphlib.Graph): void {
+    private updateGraph(graph: graphlib.Graph): void {
         this.setGraph(graph);
         this.nodes = this.getNodes(graph);
         this.connections = this.getConnections(graph);
         this.cdr.markForCheck();
     }
 
-    private setGraph(graph: dagre.graphlib.Graph): void {
+    private setGraph(graph: graphlib.Graph): void {
 
         const hostServiceDependenciesTreeItems = this.hostServiceDependenciesTree();
 
@@ -259,7 +394,7 @@ export class HostServiceDependenciesTreeComponent {
         }
     }
 
-    private getNodes(graph: dagre.graphlib.Graph): HostServiceDependenciesINode[] {
+    private getNodes(graph: graphlib.Graph): HostServiceDependenciesINode[] {
         let nodes: HostServiceDependenciesINode[] = [];
 
         graph.nodes().forEach((x: any) => {
@@ -281,7 +416,7 @@ export class HostServiceDependenciesTreeComponent {
         return nodes;
     }
 
-    private getConnections(graph: dagre.graphlib.Graph): HostServiceDependenciesConnectionOperator[] {
+    private getConnections(graph: graphlib.Graph): HostServiceDependenciesConnectionOperator[] {
         let edges: HostServiceDependenciesConnectionOperator[] = [];
 
         graph.edges().forEach((x: any) => {
@@ -308,4 +443,5 @@ export class HostServiceDependenciesTreeComponent {
         }
     }
 
+    protected readonly EFMarkerType = EFMarkerType;
 }
