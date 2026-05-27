@@ -120,9 +120,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
     };
     public actionType: string = '';
     public deleteItems: any[] = [];
-    public deleteMessage: string = '';
     public TranslocoService: TranslocoService = inject(TranslocoService);
-    private init: boolean = false;
     private filterUuid: string | null = null;
     private subscriptions: Subscription = new Subscription();
     private BookmarksService: BookmarksService = inject(BookmarksService);
@@ -154,12 +152,6 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 this.bookmarks = result.bookmarks || [];
-               /* this.bookmarks = (result.bookmarks || []).map(b => ({
-                    ...b,
-                    displayName: `${b.name}${b.Filter_bookmark_allocation != null ? ' (allocated)' : ''}`
-                })); */
-
-                //console.log(this.bookmarks);
                 if (result.bookmark !== null && result.bookmark.ownership === true) {
                     this.selectedBookmark = result.bookmark;
                     this.selectedBookmarkId = this.selectedBookmark.id;
@@ -306,7 +298,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
         let items: DeleteAllItem[] = [];
         if (this.selectedBookmark) {
             // User just want to delete a single command
-            const displayName = (this.selectedBookmark.Filter_bookmark_allocation) ? `${this.selectedBookmark.name} (Attention: this item is allocated)` : this.selectedBookmark.name;
+            const displayName = (this.selectedBookmark.filter_bookmark_allocation) ? `${this.selectedBookmark.name} (Attention: this item is allocated)` : this.selectedBookmark.name;
             items = [{
                 id: Number(this.selectedBookmark.id),
                 displayName: displayName
@@ -340,8 +332,6 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
         if (!$result) {
             this.notyService.genericError();
         }
-       // this.deleteMessage = '';
-
     }
 
     ngOnDestroy() {

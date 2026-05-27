@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
-import { BookmarksObject } from '../bookmarks.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { FilterBookmarkAllocateModalService } from './filter-bookmark-allocate-modal.service';
@@ -17,11 +16,12 @@ import { RequiredIconComponent } from '../../required-icon/required-icon.compone
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../generic-responses';
-import { allocatedFilterbookmark } from './filter-bookmark-allocate-modal.interface'
+import { BookmarksObject ,allocatedFilterbookmark } from '../bookmarks.interface';
 import { ContainersLoadContainersByStringParams } from '../../../pages/containers/containers.interface';
 import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { NotyService } from '../../../layouts/coreui/noty.service';
+import { AsyncPipe } from '@angular/common';
 
 
 @Component({
@@ -45,7 +45,8 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         SelectComponent,
         TranslocoDirective,
         XsButtonDirective,
-        ModalToggleDirective
+        ModalToggleDirective,
+        AsyncPipe
     ],
     templateUrl: './filter-bookmark-allocation-modal.component.html',
     styleUrl: './filter-bookmark-allocation-modal.component.css',
@@ -70,6 +71,8 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
     private readonly subscriptions: Subscription = new Subscription();
 
     public filterBookmarkAllocation: allocatedFilterbookmark | undefined;
+    public originalFilterBookmarkAllocation: allocatedFilterbookmark | undefined;
+    public selectedBookmark!: BookmarksObject;
 
     public mode: 'add' | 'edit' = 'add';
 
@@ -79,40 +82,37 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
         if (changes['bookmark']?.currentValue) {
 
             const bm = changes['bookmark'].currentValue;
-            this.bookmark = bm;
+            this.selectedBookmark = bm;
             if(!bm.ownership) {
                 return;
             }
 
-            if(bm.Filter_bookmark_allocation) {
+            if(this.selectedBookmark?.filter_bookmark_allocation && this.selectedBookmark.filter_bookmark_allocation.id) {
                 this.mode = 'edit';
-                console.log('edit mode - allocation:', bm.Filter_bookmark_allocation);
+                //console.log('edit mode - allocation:', bm.Filter_bookmark_allocation);
 
                 this.filterBookmarkAllocation = {
-                    id: bm.Filter_bookmark_allocation.id,
-                    container_id: bm.Filter_bookmark_allocation.container_id,
-                    filter_bookmark_id: bm.id,
-                    name: bm.name,
+                    id: this.selectedBookmark.filter_bookmark_allocation.id,
+                    container_id: this.selectedBookmark.filter_bookmark_allocation.container_id,
+                    filter_bookmark_id: this.bookmark.id,
+                    name: this.selectedBookmark.name,
                     users: {
-                        _ids: bm.Filter_bookmark_allocation.users._ids
+                        _ids: this.selectedBookmark.filter_bookmark_allocation.users._ids
                     },
                     usergroups: {
-                        _ids: bm.Filter_bookmark_allocation.usergroups._ids
+                        _ids: this.selectedBookmark.filter_bookmark_allocation.usergroups._ids
                     }
-                };
+                }
                 this.loadElements();
-                console.log( bm.Filter_bookmark_allocation);
-
             }
 
 
-
-            if(!bm.Filter_bookmark_allocation ) {
+            if(!this.selectedBookmark.filter_bookmark_allocation ) {
                 this.mode = 'add';
                 this.filterBookmarkAllocation = {
                     container_id: 0,
-                    filter_bookmark_id: bm.id,
-                    name: bm.name,
+                    filter_bookmark_id:this.selectedBookmark.id,
+                    name: this.selectedBookmark.name,
                     users: {
                         _ids: []
                     },
@@ -121,6 +121,8 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
                     }
                 };
             }
+            this.originalFilterBookmarkAllocation = JSON.parse(JSON.stringify(this.filterBookmarkAllocation)) as allocatedFilterbookmark;
+
             if (this.containers.length === 0) {
                 this.loadContainers();
             }
@@ -149,6 +151,7 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
             show: false,
             id: 'bookmarkAllocateModal'
         });
+        this.cleanup();
     }
 
     protected loadElements(): void {
@@ -163,8 +166,6 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
         this.subscriptions.add(this.FilterBookmarkAllocateModalService.loadElementsByContainerId(this.filterBookmarkAllocation.container_id, this.plugin, this.controller, this.action).subscribe((response) => {
             this.users = response.users;
             this.usergroups = response.usergroups;
-            console.log(response.filter_bookmarks);
-            console.log(response.allocated_filter_bookmarks);
 
             this.cdr.markForCheck();
         }));
@@ -174,13 +175,11 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
         if (!this.filterBookmarkAllocation) {
             return;
         }
-
-        console.log(this.filterBookmarkAllocation);
-
+        //console.log(this.filterBookmarkAllocation);
 
         this.subscriptions.add(this.FilterBookmarkAllocateModalService.addBookmarkAllocation(this.filterBookmarkAllocation).subscribe((response) => {
             this.cdr.markForCheck();
-            console.log(response);
+            //console.log(response);
 
             if (response.success) {
                 const data = response.data.allocation as allocatedFilterbookmark;
@@ -198,9 +197,8 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
 
                 this.modalService.toggle({
                     show: false,
-                    id: 'dashboardAllocateModal'
+                    id: 'bookmarkAllocateModal'
                 });
-                //this.triggerReloadEvent.emit(true);
                 return;
             }
 
@@ -253,7 +251,7 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
     }
 
     public updateAllocation() {
-        if (!this.bookmark || !this.bookmark.Filter_bookmark_allocation || !this.filterBookmarkAllocation) {
+        if (!this.bookmark || !this.bookmark.filter_bookmark_allocation || !this.filterBookmarkAllocation) {
             return;
         }
 
@@ -270,9 +268,9 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
 
                 this.modalService.toggle({
                     show: false,
-                    id: 'dashboardAllocateModal'
+                    id: 'bookmarkAllocateModal'
                 });
-                //this.triggerReloadEvent.emit(true);
+
                 return;
             }
 
@@ -285,9 +283,16 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
         }));
     }
 
-    protected cleanup() {}
+    protected cleanup() {
+        if (!this.filterBookmarkAllocation || !this.originalFilterBookmarkAllocation) {
+            return;
+        }
+        this.filterBookmarkAllocation = this.originalFilterBookmarkAllocation;
+        this.cdr.markForCheck();
+    }
 
     public ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 
 }

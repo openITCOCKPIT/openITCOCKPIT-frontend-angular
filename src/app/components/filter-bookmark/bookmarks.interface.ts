@@ -1,5 +1,7 @@
+import { SelectKeyValue, SelectKeyValueWithDisabled } from '../../layouts/primeng/select.interface';
+
 export interface BookmarksObject {
-    id: number;
+id: number;
 uuid: string;
 plugin: string;
 controller: string;
@@ -10,7 +12,7 @@ filter: string;
 favorite: boolean;
 fav_group: string;
 ownership?: boolean;
-Filter_bookmark_allocation?: object | null;
+filter_bookmark_allocation?: allocatedFilterbookmark | null;
 }
 
 export interface BookmarkResponse {
@@ -39,5 +41,26 @@ export interface BookmarkPost {
     plugin: string
     controller: string
     action: string
+}
 
+export interface BookmarkAllocateContainerResponse {
+    users: SelectKeyValue[]
+    usergroups: SelectKeyValue[],
+    filter_bookmarks: SelectKeyValueWithDisabled[];
+    allocated_filter_bookmarks: allocatedFilterbookmark[]
+    _csrfToken: string
+}
+
+export interface allocatedFilterbookmark {
+    id?: number,
+    filter_bookmark_id: number,
+    container_id: number,
+    name: string,
+    user_id?: number,
+    usergroups: {
+        _ids: number[]
+    }
+    users: {
+        _ids: number[]
+    }
 }

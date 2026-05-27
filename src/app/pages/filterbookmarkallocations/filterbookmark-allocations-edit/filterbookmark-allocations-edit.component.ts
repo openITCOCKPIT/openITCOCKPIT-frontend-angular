@@ -163,7 +163,7 @@ export class FilterbookmarkAllocationsEditComponent implements OnInit, OnDestroy
 
                     const title = this.TranslocoService.translate('Bookmark allocation');
                     const msg = this.TranslocoService.translate('updated successfully');
-                    const url = ['DashboardAllocations', 'edit', response.id];
+                    const url = ['FilterBookmarkAllocations', 'edit', response.id];
                     this.notyService.genericSuccess(msg, title, url);
                     this.HistoryService.navigateWithFallback(['/FilterBookmarkAllocations/index']);
                     return;

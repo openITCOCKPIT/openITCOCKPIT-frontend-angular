@@ -5,7 +5,7 @@ import { PROXY_PATH } from '../../../tokens/proxy-path.token';
 import { ContainersLoadContainersByStringParams } from '../../../pages/containers/containers.interface';
 import { LoadContainersResponse } from '../../../pages/users/users.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { allocatedFilterbookmark, BookmarkAllocateContainerResponse } from './filter-bookmark-allocate-modal.interface'
+import { allocatedFilterbookmark, BookmarkAllocateContainerResponse } from '../bookmarks.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -101,6 +101,5 @@ export class FilterBookmarkAllocateModalService {
                 })
             );
     }
-
 
 }

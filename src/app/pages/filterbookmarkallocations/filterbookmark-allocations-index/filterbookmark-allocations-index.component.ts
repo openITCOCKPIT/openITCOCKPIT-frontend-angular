@@ -52,7 +52,6 @@ import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { getDefaultTabAllocationsIndexParams } from '../../dashboardallocations/dashboard-allocations.interface';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 
 @Component({
@@ -92,12 +91,13 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
         InputGroupComponent,
         InputGroupTextDirective,
         ReactiveFormsModule,
-        TranslocoPipe
+        TranslocoPipe,
+        PermissionDirective,
     ],
     templateUrl: './filterbookmark-allocations-index.component.html',
     styleUrl: './filterbookmark-allocations-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: FilterbookmarkAllocationsService} // Inject the DashboardAllocationsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: FilterbookmarkAllocationsService}
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -119,13 +119,9 @@ export class FilterbookmarkAllocationsIndexComponent implements OnInit, OnDestro
 
     public ngOnInit() {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
-
             let id = params['id'];
             if (id) {
-                this.params['filter[FilterBookmarkAllocations.id][]'] = [].concat(id); // make sure we always get an array
+                this.params['filter[FilterBookmarkAllocations.id][]'] = [].concat(id);
                 this.cdr.markForCheck();
             }
             this.loadBookmarkAllocations();
@@ -178,7 +174,6 @@ export class FilterbookmarkAllocationsIndexComponent implements OnInit, OnDestro
     public toggleDeleteAllModal(FilterBookmarkAllocation?: FilterbookmarkAllocationWithUsersAndUsergroups) {
         let items: DeleteAllItem[] = [];
         if (FilterBookmarkAllocation) {
-            // User just want to delete a single dashboardAllocation
             if (FilterBookmarkAllocation.id) {
                 items = [{
                     id: FilterBookmarkAllocation.id,

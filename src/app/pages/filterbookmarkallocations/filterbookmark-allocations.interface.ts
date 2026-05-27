@@ -19,7 +19,6 @@ export interface FilterbookmarkAllocationWithUsersAndUsergroups {
     container_id: number
     author: string
     user_id?: number            // not present when creating
-    pinned: boolean
     created?: string            // not present when creating
     modified?: string           // not present when creating
     usergroups: FilterbookmarkAllocationToUsergroup[]
