@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnChanges, SimpleChanges,
+    output
+} from '@angular/core';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { FilterBookmarkAllocateModalService } from './filter-bookmark-allocate-modal.service';
@@ -59,6 +62,8 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
     @Input({required: true}) public action: string = '';
     @Input({required: true}) public bookmark!: BookmarksObject;
 
+    public triggerReloadEvent = output<boolean>();
+
     public containers: SelectKeyValue[] = [];
     public users: SelectKeyValue[] = [];
     public usergroups: SelectKeyValue[] = [];
@@ -80,6 +85,7 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['bookmark']?.currentValue) {
+            //console.log('change');
 
             const bm = changes['bookmark'].currentValue;
             this.selectedBookmark = bm;
@@ -155,7 +161,7 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
     }
 
     protected loadElements(): void {
-        if (!this.bookmark || !this.filterBookmarkAllocation) {
+        if (!this.selectedBookmark || !this.filterBookmarkAllocation) {
             return;
         }
 
@@ -199,6 +205,7 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
                     show: false,
                     id: 'bookmarkAllocateModal'
                 });
+                this.triggerReloadEvent.emit(true);
                 return;
             }
 
@@ -245,8 +252,7 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
                     _ids: [],
                 }
             };
-
-           // this.triggerReloadEvent.emit(true);
+            this.triggerReloadEvent.emit(true);
         }));
     }
 
@@ -270,7 +276,7 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
                     show: false,
                     id: 'bookmarkAllocateModal'
                 });
-
+                this.triggerReloadEvent.emit(true);
                 return;
             }
 

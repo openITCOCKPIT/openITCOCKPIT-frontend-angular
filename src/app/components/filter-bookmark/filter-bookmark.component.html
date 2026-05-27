@@ -103,6 +103,6 @@
     <oitc-delete-bookmark-modal (completed)="deleted($event)" [items]="deleteItems"></oitc-delete-bookmark-modal>
     <oitc-filter-bookmark-export-modal [urlString]="computedUrl"/>
     @if(selectedBookmark) {
-        <oitc-filter-bookmark-allocation-modal [plugin]="plugin" [controller]="controller" [action]="action"  [bookmark]="selectedBookmark"/>
+        <oitc-filter-bookmark-allocation-modal [plugin]="plugin" [controller]="controller" [action]="action"  [bookmark]="selectedBookmark" (triggerReloadEvent)="loadBookmarks(selectedBookmark.id)"/>
     }
 </ng-container>
