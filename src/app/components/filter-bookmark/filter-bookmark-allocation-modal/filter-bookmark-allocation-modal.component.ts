@@ -161,10 +161,10 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
         }
 
         this.subscriptions.add(this.FilterBookmarkAllocateModalService.loadElementsByContainerId(this.filterBookmarkAllocation.container_id, this.plugin, this.controller, this.action).subscribe((response) => {
-            //this.dashboardTabs = response.dashboard_tabs;
             this.users = response.users;
             this.usergroups = response.usergroups;
-           // console.log(response.filter_bookmarks);
+            console.log(response.filter_bookmarks);
+            console.log(response.allocated_filter_bookmarks);
 
             this.cdr.markForCheck();
         }));

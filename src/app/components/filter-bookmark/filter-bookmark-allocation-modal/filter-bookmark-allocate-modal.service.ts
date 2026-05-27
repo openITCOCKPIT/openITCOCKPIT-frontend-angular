@@ -6,7 +6,6 @@ import { ContainersLoadContainersByStringParams } from '../../../pages/container
 import { LoadContainersResponse } from '../../../pages/users/users.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { allocatedFilterbookmark, BookmarkAllocateContainerResponse } from './filter-bookmark-allocate-modal.interface'
-import { DashboardTabAllocation } from '../../../pages/dashboards/dashboards.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -50,12 +49,6 @@ export class FilterBookmarkAllocateModalService {
         );
     }
 
-   /* public deleteDashboardAllocation(tabId: number): Observable<Object> {
-        const proxyPath = this.proxyPath;
-
-        return this.http.post(`${proxyPath}/DashboardAllocations/delete/${tabId}.json`, {});
-    } */
-
     public addBookmarkAllocation(data: allocatedFilterbookmark): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/FilterBookmarksAllocations/add.json?angular=true`, {
@@ -85,9 +78,6 @@ export class FilterBookmarkAllocateModalService {
         return this.http.post(`${proxyPath}/FilterBookmarksAllocations/delete/${bookmarkId}.json`, {});
     }
 
-   /* public editBookmarkAllocation(data: allocatedFilterbookmark): void {
-
-    } */
 
     public editBookmarkAllocation(data: allocatedFilterbookmark): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;

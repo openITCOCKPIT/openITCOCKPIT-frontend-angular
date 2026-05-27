@@ -162,6 +162,12 @@ const coreRoutes: Routes = [{
     path: 'DashboardAllocations/edit/:id',
     loadComponent: () => import('./pages/dashboardallocations/dashboard-allocations-edit/dashboard-allocations-edit.component').then(m => m.DashboardAllocationsEditComponent)
 }, {
+    path: 'FilterbookmarkAllocations/index',
+    loadComponent: () => import('./pages/filterbookmarkallocations/filterbookmark-allocations-index/filterbookmark-allocations-index.component').then(m => m.FilterbookmarkAllocationsIndexComponent)
+}, {
+    path: 'FilterbookmarkAllocations/edit/:id',
+    loadComponent: () => import('./pages/filterbookmarkallocations/filterbookmark-allocations-edit/filterbookmark-allocations-edit.component').then(m => m.FilterbookmarkAllocationsEditComponent)
+}, {
     path: 'macros/index',
     loadComponent: () => import('./pages/macros/macro-index/macro-index.component').then(m => m.MacroIndexComponent)
 }, {

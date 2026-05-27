@@ -4,7 +4,8 @@ import { AllocatedDashboardTab } from '../../../pages/dashboardallocations/dashb
 export interface BookmarkAllocateContainerResponse {
     users: SelectKeyValue[]
     usergroups: SelectKeyValue[],
-    filter_bookmarks: SelectKeyValueWithDisabled[] ;
+    filter_bookmarks: SelectKeyValueWithDisabled[];
+    allocated_filter_bookmarks: allocatedFilterbookmark[]
     _csrfToken: string
 }
 
