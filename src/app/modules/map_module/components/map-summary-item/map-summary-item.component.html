@@ -1,28 +1,69 @@
 @if (!isViewMode()) {
-    <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
+    <div cdkDrag #container class="map-element-container"
          (cdkDragEnded)="onDragEnd($event)"
          (cdkDragMoved)="onDragMove($event)"
-         (resizeStop)="onResizeStop($event, type)"
          cdkDragBoundary=".map-canvas">
         @if (allowView && ( item()!.label_possition == 1 || item()!.label_possition == 2 )) {
             <div cdkDragHandle class="text-center"
-            >
-                <div [hidden]="!(item()!.show_label && item()!.label_possition == 1)">{{ label }}</div>
-                <img
-                    [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
-                    onerror="this.src='/map_module/img/items/missing.png';"/>
-                <div [hidden]="!(item()!.show_label && item()!.label_possition == 2)">{{ label }}</div>
+                 ngResizable
+                 #parent
+                 (rzStart)="onResizeStart(parent)"
+                 (rzResizing)="onResizing(summaryIcon)"
+                 (rzStop)="onResizeStop({ width: $event.size.width, height: $event.size.height }, type)"
+                 [rzAspectRatio]="false"
+                 [rzHandles]="'se'">
+                @if (item()!.label_possition == 1) {
+                    <div [hidden]="!(item()!.show_label)"
+                         [style.width.px]="item()!.size_x"
+                         class="text-break">
+                        {{ label }}
+                    </div>
+                }
+                <img [alt]="label"
+                     #summaryIcon
+                     [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
+                     onerror="this.src='/map_module/img/items/missing.png';"/>
+                @if (item()!.label_possition == 2) {
+                    <div [hidden]="!(item()!.show_label)"
+                         [style.width.px]="item()!.size_x"
+                         class="text-break">
+                        {{ label }}
+                    </div>
+                }
             </div>
         }
 
         @if (allowView && ( item()!.label_possition == 3 || item()!.label_possition == 4 )) {
             <div cdkDragHandle class="text-center"
-            >
-                <span [hidden]="!(item()!.show_label && item()!.label_possition == 4)">{{ label }}</span>
-                <img
-                    [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
-                    onerror="this.src='/map_module/img/items/missing.png';"/>
-                <span [hidden]="!(item()!.show_label && item()!.label_possition == 3)">{{ label }}</span>
+                 ngResizable
+                 (rzStart)="onResizeStart(container)"
+                 (rzResizing)="onResizing(summaryIcon)"
+                 (rzStop)="onResizeStop({ width: $event.size.width, height: $event.size.height }, type)"
+                 [rzAspectRatio]="false"
+                 [rzHandles]="'se'">
+                @if (item()!.label_possition == 4) {
+                    <div [hidden]="!(item()!.show_label)"
+                         class="text-break position-absolute"
+                         [style.top.px]="0"
+                         [style.left.px]="-item()!.size_x"
+                         [style.width.px]="item()!.size_x">
+                        {{ label }}
+                    </div>
+                }
+                <div>
+                    <img #summaryIcon
+                         [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
+                         onerror="this.src='/map_module/img/items/missing.png';"/>
+                </div>
+                @if (item()!.label_possition == 3) {
+                    <div [hidden]="!(item()!.show_label)"
+                         class="text-break position-absolute"
+                         [style.top.px]="0"
+                         [style.left.px]="item()!.size_x"
+                         [style.width.px]="item()!.size_x">
+                        {{ label }}
+                    </div>
+                }
             </div>
         }
     </div>
@@ -33,8 +74,7 @@
 } @else {
     <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
         @if (allowView && ( item()!.label_possition == 1 || item()!.label_possition == 2 )) {
-            <div class="text-center"
-            >
+            <div class="text-center">
                 <div [hidden]="!(item()!.show_label && item()!.label_possition == 1)">{{ label }}</div>
                 <img
                     [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
@@ -44,8 +84,7 @@
         }
 
         @if (allowView && ( item()!.label_possition == 3 || item()!.label_possition == 4 )) {
-            <div class="text-center"
-            >
+            <div class="text-center">
                 <span [hidden]="!(item()!.show_label && item()!.label_possition == 4)">{{ label }}</span>
                 <img
                     [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"

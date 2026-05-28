@@ -15,7 +15,11 @@ import { TimeperiodEnity } from '../timeperiods/timeperiods.interface';
 import { ContainerWithHostJoinData } from '../containers/containers.interface';
 import { HostgroupEntityWithJoinData } from '../hostgroups/hostgroups.interface';
 import { ContactgroupEntity } from '../contactgroups/contactgroups.interface';
+import {
+    HostParentsChildrenTree
+} from '../../components/hosts/host-parents-children-tree/host-parents-children-tree.interface';
 import { ExternalSystems } from '../../modules/import_module/pages/externalsystems/external-systems.enum';
+
 
 export interface HostObject {
     id?: number
@@ -809,6 +813,7 @@ export interface HostBrowserResult {
     parentHostStatus: {
         [key: string]: HoststatusObject
     },
+    parentAndChildHostsTree: HostParentsChildrenTree,
     acknowledgement?: AcknowledgementObject,
     downtime?: DowntimeObject,
     plannedDowntimes: DowntimeObject[],

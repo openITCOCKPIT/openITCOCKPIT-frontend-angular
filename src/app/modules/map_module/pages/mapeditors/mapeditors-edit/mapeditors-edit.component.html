@@ -26,11 +26,11 @@
 
     <c-card class="mb-3">
         <c-card-header>
-            <h5 cCardTitle>
+            <h5 cCardTitle class="text-truncate pe-2">
                 {{ t('Edit map:') }}
 
                 @if (map) {
-                    <small class="fw-300 word-break">
+                    <small class="fw-300 word-break" [title]="map.Map.name">
                         {{ map.Map.name }}
                     </small>
                 }
@@ -84,7 +84,7 @@
                     </c-nav-item>
                 }
                 <c-nav-item class="px-1">
-                    <div class="checkbox small-checkbox-label me-1 mt-2">
+                    <div class="checkbox small-checkbox-label mt-1">
                         <c-form-check>
                             <input
                                 type="checkbox"
@@ -108,12 +108,12 @@
                     <c-dropdown variant="btn-group">
                         <button cButton cDropdownToggle color="default" class="dropdown-button dropdown-btn ripple me-1"
                                 size="xs" [caret]="true">
-                            <span class="fa-stack helpline-stack-icon">
+                            <span class="fa-stack helpline-stack-icon fa-xs">
                                 <i class="fas fa-grip-lines fa-stack-1x"></i>
                                 <i class="fas fa-grip-lines-vertical"></i>
                             </span>
                             {{ t('Help lines distance') }} - {{ Mapeditor.helplines.size }}
-                            <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
+                            <fa-icon [icon]="['fas', 'caret-down']" [size]="'xs'"></fa-icon>
                         </button>
                         <ul cDropdownMenu>
                             @for (size of helplineSizes; track size) {
@@ -151,7 +151,7 @@
                 </c-nav-item>
 
                 <c-nav-item class="px-1">
-                    <div class="checkbox small-checkbox-label me-1 mt-2">
+                    <div class="checkbox small-checkbox-label mt-1">
                         <c-form-check>
                             <input
                                 type="checkbox"
@@ -201,6 +201,16 @@
 
                 @if (map) {
                     <c-nav-item class="px-1">
+                        <button *oitcPermission="['mapmodule', 'maps', 'edit']"
+                                [routerLink]="['/', 'map_module', 'maps', 'edit', map.Map.id]" cButton
+                                class="ripple"
+                                color="default"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                            {{ t('Edit settings') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
                         <button *oitcPermission="['mapmodule', 'mapeditors', 'view']"
                                 [routerLink]="['/', 'map_module', 'mapeditors', 'view', map.Map.id, false]" cButton
                                 class="ripple"
@@ -221,21 +231,23 @@
                 <!-- start map-editor -->
                 <div id="map-editor" class="map-editor" #mapEditor>
                     <!-- start mainMapContainer -->
-                    <div (click)="addNewObjectFunc($event)">
+                    <div (click)="addNewObjectFunc($event)">ffgf
                         <oitc-map-canvas [helplines]="Mapeditor.helplines" [map]="map.Map"
                                          [isViewMode]="false" [isBackgroundEditMode]="backgroundEditEnabled"
                                          [currentDeletedItem]="currentDeletedItem">
                             @if (map && map.Map && map.Map.background && backgroundItemRerendered) {
-                                <oitc-background-item
-                                    [item]="backgroundItem"
-                                    [aspectRatioEnabled]="Mapeditor.maintainBackgroundAspectRatio"
-                                    [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
-                                    (dblclick)="openChangeMapBackgroundModal()"
-                                    (contextActionEvent)="onContextAction($event)"
-                                    (dropItemEvent)="onDropItem($event)"
-                                    (resizedEvent)="onResizeStop($event)"
-                                    [hidden]="!backgroundEditEnabled">
-                                </oitc-background-item>
+                                @if (backgroundEditEnabled) {
+                                    <oitc-background-item
+                                        [item]="backgroundItem"
+                                        [aspectRatioEnabled]="Mapeditor.maintainBackgroundAspectRatio"
+                                        [gridSize]="gridSize" [gridEnabled]="Mapeditor.grid.enabled"
+                                        (dblclick)="openChangeMapBackgroundModal()"
+                                        (contextActionEvent)="onContextAction($event)"
+                                        (dropItemEvent)="onDropItem($event)"
+                                        (resizedEvent)="onResizeStop($event)">
+                                    </oitc-background-item>
+                                }
+
                             }
                             @for (item of map.Mapitems; track item) {
                                 <oitc-map-item [item]="item" [refreshInterval]="0"
@@ -1549,12 +1561,14 @@
                                  role="alert">
                             <div class="d-flex align-items-center">
                                 <div class="alert-icon width-xs me-2">
-                                    <div class="icon-stack icon-stack-xl">
-                                        <i class="fa-regular fa-image opacity-100"></i>
-                                        <i class="fa-solid fa-triangle-exclamation opacity-100 font-xs text-danger cornered cornered-lr"></i>
-                                    </div>
+                                    <fa-stack [size]="'2xl'">
+                                        <fa-icon [icon]="['fas', 'image']" stackItemSize="1x"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger"
+                                                 stackItemSize="1x"
+                                                 transform="shrink-6 right-8 down-8"></fa-icon>
+                                    </fa-stack>
                                 </div>
-                                <div class="flex-1">
+                                <div class="flex-1 ps-2">
                                     <span class="h5">
                                         {{ t('Map background image is not available!') }}
                                     </span>
@@ -1573,13 +1587,14 @@
                         <c-col lg="12">
                             <c-alert class="alert bg-primary-500" role="alert">
                                 <div class="d-flex align-items-center">
-                                    <div class="alert-icon width-xs me-2">
-                                        <div class="icon-stack icon-stack-xl">
-                                            <i class="fa-regular fa-image opacity-100 text-white"></i>
-                                            <i class="fa-solid fa-xmark opacity-100 font-xs text-danger cornered cornered-lr"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-1 text-white">
+                                    <fa-stack [size]="'2xl'">
+                                        <fa-icon [icon]="['fas', 'image']" stackItemSize="1x"
+                                                 class="text-white"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'xmark']" class="text-danger"
+                                                 stackItemSize="1x"
+                                                 transform="shrink-6 right-8 down-8"></fa-icon>
+                                    </fa-stack>
+                                    <div class="flex-1 ps-2 text-white">
                                         <span class="h5">
                                             {{ t('Remove background from map!') }}
                                         </span>
@@ -1783,7 +1798,7 @@
                                                     (click)="deleteIconImage(icon)">
                                                 <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                             </button>
-                                            <img class="mx-auto my-auto"
+                                            <img class="mx-auto my-auto w-100"
                                                  [src]="'/map_module/img/icons/' + icon">
                                         </div>
                                     </c-col>
@@ -2033,8 +2048,3 @@
                 <button [cModalToggle]="AddEditStatelessTextModal.id" cButton color="default" class="ripple">
                     {{ t('Close') }}
                 </button>
-            </c-modal-footer>
-        </form>
-    </c-modal>
-
-</ng-container>
