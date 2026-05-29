@@ -6,6 +6,8 @@ import {
     effect,
     inject,
     input,
+    OnDestroy,
+    OnInit,
     ViewChild
 } from '@angular/core';
 import { PermissionsService } from '../../permissions/permissions.service';
@@ -37,6 +39,8 @@ import { PermissionDirective } from '../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { HoststatusIconComponent } from '../../pages/hosts/hoststatus-icon/hoststatus-icon.component';
 import { ServicestatusIconComponent } from '../services/servicestatus-icon/servicestatus-icon.component';
+import { Subscription } from 'rxjs';
+import { HostServiceDependenciesTreeService } from './host-service-dependencies-tree.service';
 
 const NODE_WIDTH = 250;
 const DIRECTION = 'TB';
@@ -73,222 +77,19 @@ interface HostServiceDependenciesEdge extends Edge {
     styleUrl: './host-service-dependencies-tree.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HostServiceDependenciesTreeComponent {
+export class HostServiceDependenciesTreeComponent implements OnInit, OnDestroy {
 
-    public hostServiceDependenciesTree = input<HostServiceDependenciesTreeItem[]>(
-        /*[
-            {
-                id: 4,
-                name: "noch ein host",
-                connectionData: [
-                    {
-                        parentIds: [1],
-                        dependency_id: 5,
-                        inherits_parent: 0,
-                        timeperiod_id: null,
-                        execution_fail_on_up: 1,
-                        execution_fail_on_down: 1,
-                        execution_fail_on_unreachable: 1,
-                        execution_fail_on_pending: 1,
-                        execution_none: 0,
-                        notification_fail_on_up: 1,
-                        notification_fail_on_down: 1,
-                        notification_fail_on_unreachable: 1,
-                        notification_fail_on_pending: 1,
-                        notification_none: 0,
-                        timeperiod: null
-                    }
-                ]
-            },
-            {
-                id: 157,
-                name: "Apache Test",
-                connectionData: [
-                    {
-                        parentIds: [201],
-                        dependency_id: 6,
-                        inherits_parent: 0,
-                        timeperiod_id: 2,
-                        execution_fail_on_up: 1,
-                        execution_fail_on_down: 1,
-                        execution_fail_on_unreachable: 1,
-                        execution_fail_on_pending: 1,
-                        execution_none: 0,
-                        notification_fail_on_up: 1,
-                        notification_fail_on_down: 1,
-                        notification_fail_on_unreachable: 1,
-                        notification_fail_on_pending: 1,
-                        notification_none: 0,
-                        timeperiod: {
-                            "id": 2,
-                            "name": "none"
-                        }
-                    },
-                    {
-                        parentIds: [1],
-                        dependency_id: 7,
-                        inherits_parent: 0,
-                        timeperiod_id: null,
-                        execution_fail_on_up: 1,
-                        execution_fail_on_down: 1,
-                        execution_fail_on_unreachable: 1,
-                        execution_fail_on_pending: 1,
-                        execution_none: 0,
-                        notification_fail_on_up: 1,
-                        notification_fail_on_down: 1,
-                        notification_fail_on_unreachable: 1,
-                        notification_fail_on_pending: 1,
-                        notification_none: 0,
-                        timeperiod: null
-                    }
-                ]
-            },
-            {
-                id: 1,
-                name: "default host",
-                connectionData: [
-                    {
-                        parentIds: [201],
-                        dependency_id: 6,
-                        inherits_parent: 0,
-                        timeperiod_id: null,
-                        execution_fail_on_up: 1,
-                        execution_fail_on_down: 1,
-                        execution_fail_on_unreachable: 1,
-                        execution_fail_on_pending: 1,
-                        execution_none: 0,
-                        notification_fail_on_up: 1,
-                        notification_fail_on_down: 1,
-                        notification_fail_on_unreachable: 1,
-                        notification_fail_on_pending: 1,
-                        notification_none: 0,
-                        timeperiod: null
-                    }
-                ]
-            },
-            {
-                id: 201,
-                name: "Prio 2"
-            },
-        ]*/
+    public hostServiceDependenciesTreeItems: HostServiceDependenciesTreeItem[] = [];
 
-        [
-            {
-                id: 11,
-                servicename: "noch ein host/Disk usage /",
-                connectionData: [
-                    {
-                        parentIds: [2],
-                        dependency_id: 8,
-                        inherits_parent: 0,
-                        timeperiod_id: 25,
-                        execution_fail_on_ok: 1,
-                        execution_fail_on_warning: 1,
-                        execution_fail_on_unknown: 1,
-                        execution_fail_on_critical: 1,
-                        execution_fail_on_pending: 1,
-                        execution_none: 0,
-                        notification_fail_on_ok: 1,
-                        notification_fail_on_warning: 1,
-                        notification_fail_on_unknown: 1,
-                        notification_fail_on_critical: 1,
-                        notification_fail_on_pending: 1,
-                        notification_none: 0,
-                        timeperiod: {
-                            id: 25,
-                            name: "UsedBy Test"
-                        }
-                    }
-                ],
-                servicestatus: {
-                    currentState: 0,
-                    isFlapping: false,
-                    problemHasBeenAcknowledged: false,
-                    scheduledDowntimeDepth: 0,
-                    lastCheck: "8 minutes ago",
-                    nextCheck: "21 minutes",
-                    activeChecksEnabled: 1,
-                    lastHardStateChange: "2Y 4M 10D 19h 44m 48s",
-                    last_state_change: "2Y 4M 10D 19h 44m 48s",
-                    processPerformanceData: true,
-                    state_type: 1,
-                    acknowledgement_type: 0,
-                    flap_detection_enabled: false,
-                    notifications_enabled: true,
-                    current_check_attempt: 1,
-                    output: "DISK OK - free space: / 13326MiB (22,2% inode=83%):",
-                    long_output: "",
-                    perfdata: "/=48835330048B;52963993190;59584492339;0;66204991488",
-                    latency: 0.52605801820755,
-                    max_check_attempts: 2,
-                    last_time_ok: "13:02:06 - 22.05.2026",
-                    lastHardStateChangeInWords: "2Y 4M 10D 19h 44m 48s",
-                    last_state_change_in_words: "2Y 4M 10D 19h 44m 48s",
-                    lastCheckInWords: "8 minutes ago",
-                    nextCheckInWords: "21 minutes",
-                    isHardstate: true,
-                    isInMonitoring: true,
-                    humanState: "ok",
-                    cssClass: "bg-ok",
-                    textClass: "ok",
-                    outputHtml: "DISK OK - free space: / 13326MiB (22,2% inode=83%):",
-                    lastHardStateChangeUser: "16:26:03 - 11.01.2024",
-                    last_state_change_user: "16:26:03 - 11.01.2024",
-                    lastCheckUser: "13:02:06 - 22.05.2026",
-                    nextCheckUser: "13:32:06 - 22.05.2026",
-                    longOutputHtml: ""
-                }
-            },
-            {
-                id: 2,
-                servicename: "default host/Disk usage /",
-                servicestatus: {
-                    currentState: 0,
-                    isFlapping: false,
-                    problemHasBeenAcknowledged: false,
-                    scheduledDowntimeDepth: 0,
-                    lastCheck: "25 minutes ago",
-                    nextCheck: "4 minutes",
-                    activeChecksEnabled: 1,
-                    lastHardStateChange: "2Y 2M 1D 1h 31m 49s",
-                    last_state_change: "2Y 2M 1D 1h 31m 49s",
-                    processPerformanceData: true,
-                    state_type: 1,
-                    acknowledgement_type: 0,
-                    flap_detection_enabled: false,
-                    notifications_enabled: true,
-                    current_check_attempt: 1,
-                    output: "DISK OK - free space: / 13329MiB (22,3% inode=83%):",
-                    long_output: "",
-                    perfdata: "/=48832184320B;52963993190;59584492339;0;66204991488",
-                    latency: 0.91742998361588,
-                    max_check_attempts: 2,
-                    last_time_ok: "12:35:05 - 22.05.2026",
-                    lastHardStateChangeInWords: "2Y 2M 1D 1h 31m 49s",
-                    last_state_change_in_words: "2Y 2M 1D 1h 31m 49s",
-                    lastCheckInWords: "25 minutes ago",
-                    nextCheckInWords: "4 minutes",
-                    isHardstate: true,
-                    isInMonitoring: true,
-                    humanState: "ok",
-                    cssClass: "bg-ok",
-                    textClass: "ok",
-                    outputHtml: "DISK OK - free space: / 13329MiB (22,3% inode=83%):",
-                    lastHardStateChangeUser: "10:28:20 - 22.03.2024",
-                    last_state_change_user: "10:28:20 - 22.03.2024",
-                    lastCheckUser: "12:35:05 - 22.05.2026",
-                    nextCheckUser: "13:05:05 - 22.05.2026",
-                    longOutputHtml: ""
-                }
-            },
-        ]
-    );
+    public hostId = input<number>();
 
     @ViewChild(FCanvasComponent)
     public fCanvasComponent!: FCanvasComponent;
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly TranslocoService = inject(TranslocoService);
+    private subscriptions: Subscription = new Subscription();
+    private HostServiceDependenciesTreeService = inject(HostServiceDependenciesTreeService)
 
     public configuration = {
         outputSide: EFConnectableSide.BOTTOM,
@@ -324,6 +125,27 @@ export class HostServiceDependenciesTreeComponent {
         });
     }
 
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
+    ngOnInit(): void {
+        if (this.hostId()) {
+            this.subscriptions.add(this.HostServiceDependenciesTreeService.getHostDependencyTree(<number>this.hostId())
+                .subscribe((result) => {
+                    this.hostServiceDependenciesTreeItems = result;
+                    this.updateGraph(new dagre.graphlib.Graph());
+                    if (this.isInitialized) {
+                        setTimeout(() => {
+                            // to center the graph after clicking on another host in graph node
+                            this.fit2screen();
+                        }, 400);
+                    }
+                    this.cdr.markForCheck();
+                }));
+        }
+    }
+
     private updateGraph(graph: graphlib.Graph): void {
         this.setGraph(graph);
         this.nodes = this.getNodes(graph);
@@ -333,9 +155,7 @@ export class HostServiceDependenciesTreeComponent {
 
     private setGraph(graph: graphlib.Graph): void {
 
-        const hostServiceDependenciesTreeItems = this.hostServiceDependenciesTree();
-
-        if (hostServiceDependenciesTreeItems) {
+        if (this.hostServiceDependenciesTreeItems) {
 
             // https://github.com/dagrejs/dagre/wiki#configuring-the-layout
             graph.setGraph({
@@ -369,7 +189,7 @@ export class HostServiceDependenciesTreeComponent {
             });
 
 
-            hostServiceDependenciesTreeItems.forEach(node => {
+            this.hostServiceDependenciesTreeItems.forEach(node => {
                 // Add meta data into dagre.Node (HostServiceDependenciesNode)
                 graph.setNode(node.id.toString(), {
                     width: NODE_WIDTH,

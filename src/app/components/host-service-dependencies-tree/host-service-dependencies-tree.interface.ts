@@ -77,3 +77,8 @@ export interface ConnectionData {
     notification_fail_on_unknown?: number
     timeperiod: Timeperiod | null
 }
+
+export interface HostServiceDependenciesTreeGet {
+    hostdependenciesTree: HostServiceDependenciesTreeItem[]
+    _csrfToken: string
+}

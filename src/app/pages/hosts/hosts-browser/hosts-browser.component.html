@@ -65,14 +65,16 @@
                             {{ t('Timeline') }}
                         </button>
                     </c-nav-item>
-                    <c-nav-item>
-                        <button class="nav-link"
-                                [ngClass]="{'active': selectedTab == HostBrowserTabs.DependencyTree}"
-                                (click)="changeTab(HostBrowserTabs.DependencyTree)">
-                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                            {{ t('Dependency Tree') }}
-                        </button>
-                    </c-nav-item>
+                    @if (result.hasHostDependencies) {
+                        <c-nav-item>
+                            <button class="nav-link"
+                                    [ngClass]="{'active': selectedTab == HostBrowserTabs.DependencyTree}"
+                                    (click)="changeTab(HostBrowserTabs.DependencyTree)">
+                                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                {{ t('Dependency Tree') }}
+                            </button>
+                        </c-nav-item>
+                    }
                     @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'ServicenowSettings', 'hostspecific']) | async )) {
                         <c-nav-item>
                             <button
@@ -1231,9 +1233,9 @@
                 }
                 <!-- Timeline end -->
                 <!-- DependencyTree start -->
-                @if (selectedTab == HostBrowserTabs.DependencyTree && result && result.mergedHost) {
+                @if (selectedTab == HostBrowserTabs.DependencyTree && result && result.mergedHost && result.hasHostDependencies) {
                     <div style="height: 75vh;">
-                        <oitc-host-service-dependencies-tree>
+                        <oitc-host-service-dependencies-tree [hostId]="result.mergedHost.id">
                         </oitc-host-service-dependencies-tree>
                     </div>
                 }
