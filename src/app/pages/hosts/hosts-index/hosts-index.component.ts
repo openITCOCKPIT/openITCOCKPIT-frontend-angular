@@ -912,7 +912,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.filter['Hosts.keywords'] = bookmarkfilter['Hosts.keywords'] || [];
             this.filter['Hosts.not_keywords'] = bookmarkfilter['Hosts.not_keywords'] || [];
             this.filter['Hoststatus.output'] = bookmarkfilter['Hoststatus.output'] || '';
-            this.convert2currentStateFilter(bookmarkfilter['Hoststatus.current_state'], 'currentStateFilter');
+            this.convert2currentStateFilter(bookmarkfilter['Hoststatus.current_state'] || [], 'currentStateFilter');
             if (bookmarkfilter['Hoststatus.problem_has_been_acknowledged'] === 'true') {
                 this.acknowledgementsFilter.acknowledged = true;
             }
@@ -941,7 +941,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             if (bookmarkfilter['Hostgroups.id'] ) {
                 this.filter['Hostgroups.id'] = bookmarkfilter['Hostgroups.id'];
             }
-            this.convert2currentStateFilter(bookmarkfilter['hostpriority'], 'priorityFilter');
+            this.convert2currentStateFilter(bookmarkfilter['hostpriority'] || [], 'priorityFilter');
             this.filter['Hosts.satellite_id'] = bookmarkfilter['Hosts.satellite_id'] || [];
             this.filter['Hostgroups.id'] = bookmarkfilter['Hostgroups.id'] || [];
             this.loadHosts();

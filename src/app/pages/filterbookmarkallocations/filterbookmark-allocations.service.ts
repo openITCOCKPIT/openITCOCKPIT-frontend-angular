@@ -7,13 +7,10 @@ import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } fro
 import {
     FilterbookmarkAllocationsIndex,
     FilterBookmarkAllocationElements,
-    FilterbookmarkAllocationWithUsersAndUsergroups,
-    getDefaultFilterbookmarkAllocationsIndexParams,
     FilterbookmarkAllocationsIndexParams,
     FilterbookmarkAllocationPost,
     FilterbookmarkAllocationGet
 } from './filterbookmark-allocations.interface';
-import { DashboardTabAllocationPost } from '../dashboardallocations/dashboard-allocations.interface';
 @Injectable({
     providedIn: 'root'
 })

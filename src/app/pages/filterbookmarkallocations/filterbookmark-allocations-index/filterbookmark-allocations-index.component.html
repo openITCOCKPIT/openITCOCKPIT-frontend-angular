@@ -36,16 +36,6 @@
                         {{ t('Refresh') }}
                     </button>
                 </c-nav-item>
-                <!--<c-nav-item class="px-1">
-                    <button *oitcPermission="['DashboardAllocations', 'add']"
-                            [routerLink]="['/', 'DashboardAllocations', 'add']" cButton
-                            class="ripple"
-                            color="success"
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                        {{ t('New') }}
-                    </button>
-                </c-nav-item>-->
                 <c-nav-item class="px-1">
                     <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -140,7 +130,12 @@
                                                 [item]="bookmarkAllocation"></oitc-item-select>
                                     </td>
                                     <td>
-                                        {{ bookmarkAllocation.name }}
+                                        @if(bookmarkAllocation.filter_bookmark){
+                                            {{ bookmarkAllocation.filter_bookmark.name }}
+                                        }
+                                        @else {
+                                            {{ bookmarkAllocation.name }}
+                                        }
                                     </td>
                                     <td>
                                         {{ bookmarkAllocation.author }}

@@ -95,7 +95,6 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
 
             if(this.selectedBookmark?.filter_bookmark_allocation && this.selectedBookmark.filter_bookmark_allocation.id) {
                 this.mode = 'edit';
-                //console.log('edit mode - allocation:', bm.Filter_bookmark_allocation);
 
                 this.filterBookmarkAllocation = {
                     id: this.selectedBookmark.filter_bookmark_allocation.id,
@@ -172,7 +171,6 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
         this.subscriptions.add(this.FilterBookmarkAllocateModalService.loadElementsByContainerId(this.filterBookmarkAllocation.container_id, this.plugin, this.controller, this.action).subscribe((response) => {
             this.users = response.users;
             this.usergroups = response.usergroups;
-
             this.cdr.markForCheck();
         }));
     }
@@ -185,7 +183,6 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
 
         this.subscriptions.add(this.FilterBookmarkAllocateModalService.addBookmarkAllocation(this.filterBookmarkAllocation).subscribe((response) => {
             this.cdr.markForCheck();
-            //console.log(response);
 
             if (response.success) {
                 const data = response.data.allocation as allocatedFilterbookmark;

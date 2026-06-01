@@ -31,7 +31,6 @@
                     <div class="mb-3">
                         <label cLabel for="allocation_name">
                             {{ t('Name of the allocation') }}
-                            <oitc-required-icon></oitc-required-icon>
                         </label>
                         <input cFormControl id="allocation_name" type="text"
                                name="allocation_name"
@@ -44,6 +43,7 @@
                     <div class="mb-3">
                         <label cLabel for="allocation_users">
                             {{ t('Allocated Users') }}
+                            <oitc-required-icon></oitc-required-icon>
                         </label>
                         <oitc-multi-select
                                 name="allocation_users"
@@ -60,6 +60,7 @@
                     <div class="mb-3">
                         <label cLabel for="allocation_usergroups">
                             {{ t('Allocated User roles') }}
+                            <oitc-required-icon></oitc-required-icon>
                         </label>
                         <oitc-multi-select
                                 name="allocation_usergroups"
