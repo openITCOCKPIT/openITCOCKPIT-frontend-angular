@@ -81,6 +81,8 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     private responsePerfdata!: Perfdata;
     private color: string = '';
     private setup!: Setup;
+    protected allowView: boolean = false;
+
 
     constructor(parent: MapCanvasComponent, private renderer: Renderer2) {
         super(parent);
@@ -130,6 +132,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     this.Host = result.data.Host;
                     this.Service = result.data.Service;
                     this.responsePerfdata = result.data.Perfdata;
+                    this.allowView = result.allowView!;
 
                     this.processPerfdata();
                     this.renderGauge();

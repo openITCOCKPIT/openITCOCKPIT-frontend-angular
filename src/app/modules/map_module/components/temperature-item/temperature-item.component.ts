@@ -46,6 +46,8 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
     private statusUpdateInterval: Subscription = new Subscription();
 
     protected override type = MapItemType.GADGET;
+    protected allowView: boolean = false;
+
 
     // default data if no setup is passed whatsoever.
     private defaultSetup: Setup = {
@@ -119,19 +121,26 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
         };
 
         this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
-            .subscribe((result: MapItemRoot) => {
-                this.color = result.data.color!;
-                this.Host = result.data.Host;
-                this.Service = result.data.Service;
-                this.responsePerfdata = result.data.Perfdata;
+            .subscribe({
+                next: (result: MapItemRoot) => {
+                    this.color = result.data.color!;
+                    this.Host = result.data.Host;
+                    this.Service = result.data.Service;
+                    this.responsePerfdata = result.data.Perfdata;
+                    this.allowView = result.allowView!;
 
-                this.processPerfdata();
-                this.renderGauge();
+                    this.processPerfdata();
+                    this.renderGauge();
 
-                this.initRefreshTimer();
+                    this.initRefreshTimer();
 
-                this.init = false;
-                this.cdr.markForCheck();
+                    this.init = false;
+                    this.cdr.markForCheck();
+                },
+                error: (err) => {
+                    //error handling here
+                    this.cdr.markForCheck();
+                }
             }));
     };
 

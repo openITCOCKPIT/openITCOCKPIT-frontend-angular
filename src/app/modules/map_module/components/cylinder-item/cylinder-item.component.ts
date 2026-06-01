@@ -57,6 +57,8 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
     private responsePerfdata!: Perfdata;
     private perfdataName: string = '';
     private perfdata: PerformanceData | undefined;
+    protected allowView: boolean = false;
+
 
     constructor(parent: MapCanvasComponent, private renderer: Renderer2) {
         super(parent);
@@ -102,6 +104,7 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
                     // nothing to view
                     return;
                 }
+                this.allowView = result.allowView!;
 
                 if (result.data.Servicestatus) {
                     this.current_state = result.data.Servicestatus.currentState;
