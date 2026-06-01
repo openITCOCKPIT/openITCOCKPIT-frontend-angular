@@ -17,32 +17,6 @@ export interface HostServiceDependenciesConnectionOperator extends ConnectionOpe
     connectionData: ConnectionData
 }
 
-/*export interface DependenciesNode {
-    id: string
-    name: string
-    parentIds: string[] | null
-}*/
-
-/*export interface HostServiceDependenciesTree {
-    [key: string]: HostServiceDependenciesTreeItem
-}*/
-
-/*export interface HostServiceDependenciesTreeItem {
-    id: number | string
-    name: string
-    uuid: string
-    hosts_dependent: HostdependencyHost[]
-    execution_fail_on_up: number
-    execution_fail_on_down: number
-    execution_fail_on_unreachable: number
-    execution_fail_on_pending: number
-    notification_fail_on_up: number
-    notification_fail_on_down: number
-    notification_fail_on_unreachable: number
-    notification_fail_on_pending: number
-}*/
-
-
 export interface HostServiceDependenciesTreeItem {
     id: number
     name?: string
@@ -78,7 +52,12 @@ export interface ConnectionData {
     timeperiod: Timeperiod | null
 }
 
-export interface HostServiceDependenciesTreeGet {
+export interface HostDependenciesTreeGet {
     hostdependenciesTree: HostServiceDependenciesTreeItem[]
+    _csrfToken: string
+}
+
+export interface ServiceDependenciesTreeGet {
+    servicedependenciesTree: HostServiceDependenciesTreeItem[]
     _csrfToken: string
 }

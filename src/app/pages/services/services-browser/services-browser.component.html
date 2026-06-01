@@ -66,6 +66,15 @@
                             {{ t('Timeline') }}
                         </button>
                     </c-nav-item>
+                    <c-nav-item>
+                        <button
+                            *oitcPermission="['serviceependencies', 'loadServicedependenciesTree']" class="nav-link"
+                            [ngClass]="{'active': selectedTab == ServiceBrowserTabs.DependencyTree}"
+                            (click)="changeTab(ServiceBrowserTabs.DependencyTree)">
+                            <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                            {{ t('Dependency Tree') }}
+                        </button>
+                    </c-nav-item>
                     @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'ServicenowSettings', 'servicespecific']) |async )) {
                         <c-nav-item>
                             <button
@@ -1416,6 +1425,14 @@
                     </div>
                 }
                 <!-- Timeline end -->
+                <!-- DependencyTree start -->
+                @if (selectedTab == ServiceBrowserTabs.DependencyTree && result && result.mergedService) {
+                    <div style="height: 75vh;">
+                        <oitc-host-service-dependencies-tree [serviceId]="result.mergedService.id">
+                        </oitc-host-service-dependencies-tree>
+                    </div>
+                }
+                <!-- DependencyTree end -->
                 <!-- ServiceNow Module start -->
                 @if (selectedTab == ServiceBrowserTabs.ServiceNow) {
                     <div>

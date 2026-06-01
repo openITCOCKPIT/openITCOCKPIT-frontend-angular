@@ -18,6 +18,7 @@ export enum ServiceBrowserTabs {
     ServiceNow = 'ServiceNow',
     CustomAlerts = 'CustomAlerts',
     SLA = 'SLA',
+    DependencyTree = 'DependencyTree',
 }
 
 export enum ServiceStatusNames {

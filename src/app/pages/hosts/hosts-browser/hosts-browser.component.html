@@ -67,10 +67,10 @@
                     </c-nav-item>
                     @if (result.hasHostDependencies) {
                         <c-nav-item>
-                            <button class="nav-link"
+                            <button *oitcPermission="['hostdependencies', 'loadHostdependenciesTree']" class="nav-link"
                                     [ngClass]="{'active': selectedTab == HostBrowserTabs.DependencyTree}"
                                     (click)="changeTab(HostBrowserTabs.DependencyTree)">
-                                <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
                                 {{ t('Dependency Tree') }}
                             </button>
                         </c-nav-item>

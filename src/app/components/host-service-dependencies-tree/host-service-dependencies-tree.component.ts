@@ -82,6 +82,7 @@ export class HostServiceDependenciesTreeComponent implements OnInit, OnDestroy {
     public hostServiceDependenciesTreeItems: HostServiceDependenciesTreeItem[] = [];
 
     public hostId = input<number>();
+    public serviceId = input<number>();
 
     @ViewChild(FCanvasComponent)
     public fCanvasComponent!: FCanvasComponent;
@@ -113,13 +114,7 @@ export class HostServiceDependenciesTreeComponent implements OnInit, OnDestroy {
 
         afterRenderEffect(() => {
             // DOM rendering completed for this component
-            this.updateGraph(new dagre.graphlib.Graph());
-            if (this.isInitialized) {
-                setTimeout(() => {
-                    // to center the graph after clicking on another host in graph node
-                    this.fit2screen();
-                }, 400);
-            }
+            this.updateGraphAndFitToScreen();
             this.isInitialized = true;
             this.cdr.markForCheck();
         });
@@ -134,15 +129,27 @@ export class HostServiceDependenciesTreeComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.HostServiceDependenciesTreeService.getHostDependencyTree(<number>this.hostId())
                 .subscribe((result) => {
                     this.hostServiceDependenciesTreeItems = result;
-                    this.updateGraph(new dagre.graphlib.Graph());
-                    if (this.isInitialized) {
-                        setTimeout(() => {
-                            // to center the graph after clicking on another host in graph node
-                            this.fit2screen();
-                        }, 400);
-                    }
+                    this.updateGraphAndFitToScreen();
                     this.cdr.markForCheck();
                 }));
+        }
+        if (this.serviceId()) {
+            this.subscriptions.add(this.HostServiceDependenciesTreeService.getServiceDependencyTree(<number>this.serviceId())
+                .subscribe((result) => {
+                    this.hostServiceDependenciesTreeItems = result;
+                    this.updateGraphAndFitToScreen();
+                    this.cdr.markForCheck();
+                }));
+        }
+    }
+
+    private updateGraphAndFitToScreen() {
+        this.updateGraph(new dagre.graphlib.Graph());
+        if (this.isInitialized) {
+            setTimeout(() => {
+                // to center the graph after clicking on another host in graph node
+                this.fit2screen();
+            }, 400);
         }
     }
 
