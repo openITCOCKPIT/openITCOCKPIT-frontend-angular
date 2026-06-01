@@ -20,7 +20,9 @@
                        appendTo="body"></p-contextMenu>
     }
 } @else {
-    <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
+    <div #container class="map-element-container cursor-normal"
+         [ngClass]="{'cursor-pointer': enablePointerCursor()}"
+         [hidden]="!allowView">
         <canvas [id]="'map-tacho-' + item()!.id"></canvas>
     </div>
 }
