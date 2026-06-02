@@ -79,7 +79,7 @@
         </c-modal-body>
         <c-modal-footer>
             @if (PermissionsService.hasPermissionObservable(['FilterBookmarksAllocations', 'delete'])|async) {
-                @if (mode === 'edit') {
+                @if (mode === 'edit' && filterBookmarkAllocation?.allowEdit) {
                     <button (click)="deleteAllocation()"
                             cButton color="danger" class="ripple me-auto" type="button">
                         {{ t('Delete') }}
@@ -95,7 +95,7 @@
                 </button>
             }
 
-            @if (mode === 'edit') {
+            @if (mode === 'edit' && filterBookmarkAllocation?.allowEdit) {
                 <button (click)="updateAllocation()" cButton color="primary" class="ripple"
                         type="button">
                     {{ t('Update Allocation') }}

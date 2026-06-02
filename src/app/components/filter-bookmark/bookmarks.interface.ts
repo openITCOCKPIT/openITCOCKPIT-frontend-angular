@@ -57,6 +57,7 @@ export interface allocatedFilterbookmark {
     container_id: number,
     name: string,
     user_id?: number,
+    allowEdit?: boolean
     usergroups: {
         _ids: number[]
     }

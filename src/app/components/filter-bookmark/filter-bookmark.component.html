@@ -71,10 +71,12 @@
                                 <fa-icon [icon]="['fas', 'bookmark']"></fa-icon>
                             </button>
                             @if (( PermissionsService.hasPermissionObservable(['FilterBookmarksAllocations', 'add'])|async ) && ( PermissionsService.hasPermissionObservable(['FilterBookmarksAllocations', 'edit'])|async )) {
-                                <button cButton class="ripple " color="primary" size="xs"
-                                        title="{{t('allocate Filter')}}" (click)="allocateBookmark()">
-                                    <fa-icon [icon]="['fas', 'bookmark']"></fa-icon>
-                                </button>
+                                @if(selectedBookmark?.ownership) {
+                                    <button cButton class="ripple " color="primary" size="xs"
+                                            title="{{t('allocate Filter')}}" (click)="allocateBookmark()">
+                                        <fa-icon [icon]="['fas', 'bookmark']"></fa-icon>
+                                    </button>
+                                }
                             }
                             <button cButton class="ripple float-end" color="danger" size="xs"
                                     title="{{t('Delete current filter')}}" (click)="toggleDeleteAllModal()">

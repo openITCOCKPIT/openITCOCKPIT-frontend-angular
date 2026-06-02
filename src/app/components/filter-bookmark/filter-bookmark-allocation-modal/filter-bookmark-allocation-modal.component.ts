@@ -98,7 +98,9 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
                 this.filterBookmarkAllocation = {
                     id: this.selectedBookmark.filter_bookmark_allocation.id,
                     container_id: this.selectedBookmark.filter_bookmark_allocation.container_id,
+                    allowEdit: this.selectedBookmark.filter_bookmark_allocation.allowEdit,
                     filter_bookmark_id: this.bookmark.id,
+
                     name: this.selectedBookmark.name,
                     users: {
                         _ids: this.selectedBookmark.filter_bookmark_allocation.users._ids
