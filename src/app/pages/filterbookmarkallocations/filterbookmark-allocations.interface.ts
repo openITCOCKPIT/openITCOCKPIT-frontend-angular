@@ -20,7 +20,8 @@ export interface FilterbookmarkAllocationWithUsersAndUsergroups {
     author: string
     user_id?: number            // not present when creating
     created?: string            // not present when creating
-    modified?: string           // not present when creating
+    modified?: string
+    allowEdit?: boolean
     usergroups: FilterbookmarkAllocationToUsergroup[]
     users: FilterbookmarkAllocationToUser[]
 }

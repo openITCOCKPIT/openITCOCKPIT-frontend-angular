@@ -85,7 +85,6 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['bookmark']?.currentValue) {
-            //console.log('change');
 
             const bm = changes['bookmark'].currentValue;
             this.selectedBookmark = bm;

@@ -24,7 +24,7 @@
     </nav>
     <c-card class="mb-3">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Dashboards') }}
+            <h5 cCardTitle>{{ t('Bookmarks') }}
                 <small class="fw-300">
                     {{ t('Allocation') }}
                 </small>
@@ -66,9 +66,9 @@
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[FilterBookmarkAllocations.name]']"
                                        [placeholder]="'Filter by allocation name' | transloco"
-                                       aria-label="DashboardTabAllocations.name"
+                                       aria-label="FilterBookmarkAllocations.name"
                                        cFormControl
-                                       name="DashboardTabAllocations.name"
+                                       name="FilterBookmarkAllocations.name"
                                        oitcDebounce
                                        type="text"
                                 />
@@ -126,7 +126,7 @@
                                     <td class="text-center">
                                         <oitc-item-select
                                                 *oitcPermission="['FilterBookmarksAllocations', 'delete']"
-                                                [disabled]="false"
+                                                [disabled]="!bookmarkAllocation.allowEdit"
                                                 [item]="bookmarkAllocation"></oitc-item-select>
                                     </td>
                                     <td>
@@ -177,22 +177,27 @@
                                     </td>
                                     <td class="width-50">
                                         <oitc-actions-button [permission]="'FilterBookmarksAllocations.edit'"
-                                                             [url]="'/FilterbookmarkAllocations/edit/' + bookmarkAllocation.id">
-                                            <oitc-actions-button-element [permission]="'FilterBookmarksAllocations.edit'"
-                                                                         [url]="'/FilterbookmarkAllocations/edit/' + bookmarkAllocation.id">
-                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                                {{ t('Edit') }}
-                                            </oitc-actions-button-element>
-                                            <li cDropdownDivider></li>
-                                            <oitc-actions-button-element
-                                                    (click)="toggleDeleteAllModal(bookmarkAllocation)"
-                                                    [permission]="'FilterBookmarksAllocations.delete'">
-                                                <span class="text-danger">
-                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                    {{ t('Delete') }}
-                                                </span>
-                                            </oitc-actions-button-element>
+                                                             [url]="'/FilterbookmarkAllocations/edit/' + bookmarkAllocation.id"
+                                                             [allowEdit]="bookmarkAllocation.allowEdit">
+                                            @if(bookmarkAllocation.allowEdit) {
+                                                <oitc-actions-button-element [permission]="'FilterBookmarksAllocations.edit'"
+                                                                             [url]="'/FilterbookmarkAllocations/edit/' + bookmarkAllocation.id">
+                                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                    {{ t('Edit') }}
+                                                </oitc-actions-button-element>
+
+                                                <li cDropdownDivider></li>
+                                                <oitc-actions-button-element
+                                                        (click)="toggleDeleteAllModal(bookmarkAllocation)"
+                                                        [permission]="'FilterBookmarksAllocations.delete'">
+                                                    <span class="text-danger">
+                                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                        {{ t('Delete') }}
+                                                    </span>
+                                                </oitc-actions-button-element>
+                                            }
                                         </oitc-actions-button>
+
                                     </td>
                                 </tr>
                             }

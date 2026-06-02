@@ -99,7 +99,6 @@ export class FilterbookmarkAllocationsEditComponent implements OnInit, OnDestroy
             .subscribe((result) => {
                 //Fire on page load
                 this.post = result.allocation.FilterBookmarkAllocation;
-                console.log('editpost', this.post);
                 this.cdr.markForCheck();
                 this.loadContainers();
                 this.loadElements();
@@ -110,7 +109,6 @@ export class FilterbookmarkAllocationsEditComponent implements OnInit, OnDestroy
         this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
             .subscribe((result: SelectKeyValue[]) => {
                 this.containers = result;
-                console.log()
                 this.cdr.markForCheck();
             }));
     }
@@ -124,7 +122,6 @@ export class FilterbookmarkAllocationsEditComponent implements OnInit, OnDestroy
             this.filter_bookmarks = result.filter_bookmarks;
             this.users = result.users;
             this.usergroups = result.usergroups;
-            console.log('containerchange-allocated', result);
             this.allocated_filter_bookmarks = _.filter(result.allocated_filterbookmarks, (object) => {
                 return object.id != this.id;
             });

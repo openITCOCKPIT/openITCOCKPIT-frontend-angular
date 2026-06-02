@@ -137,6 +137,7 @@ export class FilterbookmarkAllocationsIndexComponent implements OnInit, OnDestro
         this.subscriptions.add(this.FilterbookmarkAllocationsService.getIndex(this.params)
             .subscribe((result) => {
                 this.FilterbookmarkAllocations = result;
+
                 this.cdr.markForCheck();
             })
         );
