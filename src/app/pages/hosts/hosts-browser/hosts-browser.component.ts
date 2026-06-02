@@ -131,6 +131,9 @@ import {
 } from './browser-software/browser-software-macos/browser-software-macos.component';
 import { PatchstatusIconComponent } from '../../patchstatus/patchstatus-icon/patchstatus-icon.component';
 import {
+    HostServiceDependenciesTreeComponent
+} from '../../../components/host-service-dependencies-tree/host-service-dependencies-tree.component';
+import {
     HostParentsChildrenTreeComponent
 } from '../../../components/hosts/host-parents-children-tree/host-parents-children-tree.component';
 import { ExternalSystems } from '../../../modules/import_module/pages/externalsystems/external-systems.enum';
@@ -203,10 +206,10 @@ import {
         BrowserSoftwareWindowsComponent,
         BrowserSoftwareMacosComponent,
         PatchstatusIconComponent,
+        HostServiceDependenciesTreeComponent,
         HostParentsChildrenTreeComponent,
         IconDirective,
         ProxmoxHostBrowserTabComponent
-
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
