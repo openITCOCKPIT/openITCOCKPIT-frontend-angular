@@ -19,7 +19,7 @@ export class HostServiceDependenciesTreeService {
 
     public getHostDependencyTree(id: number): Observable<HostServiceDependenciesTreeItem[]> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HostDependenciesTreeGet>(`${proxyPath}/hostdependencies/loadHostdependenciesTree/${id}.json?angular=true`).pipe(
+        return this.http.get<HostDependenciesTreeGet>(`${proxyPath}/hostdependencies/dependencyTree/${id}.json?angular=true`).pipe(
             map((data: HostDependenciesTreeGet) => {
                 return data.hostdependenciesTree;
             })
@@ -28,7 +28,7 @@ export class HostServiceDependenciesTreeService {
 
     public getServiceDependencyTree(id: number): Observable<HostServiceDependenciesTreeItem[]> {
         const proxyPath = this.proxyPath;
-        return this.http.get<ServiceDependenciesTreeGet>(`${proxyPath}/servicedependencies/loadServicedependenciesTree/${id}.json?angular=true`).pipe(
+        return this.http.get<ServiceDependenciesTreeGet>(`${proxyPath}/servicedependencies/dependencyTree/${id}.json?angular=true`).pipe(
             map((data: ServiceDependenciesTreeGet) => {
                 return data.servicedependenciesTree;
             })
