@@ -34,13 +34,14 @@ import {
 import dagre, { Edge, graphlib, Point } from '@dagrejs/dagre';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { TooltipDirective } from '@coreui/angular';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PermissionDirective } from '../../permissions/permission.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { HoststatusIconComponent } from '../../pages/hosts/hoststatus-icon/hoststatus-icon.component';
 import { ServicestatusIconComponent } from '../services/servicestatus-icon/servicestatus-icon.component';
 import { Subscription } from 'rxjs';
 import { HostServiceDependenciesTreeService } from './host-service-dependencies-tree.service';
+import { UUID } from '../../classes/UUID';
 
 const NODE_WIDTH = 250;
 const DIRECTION = 'TB';
@@ -83,6 +84,7 @@ export class HostServiceDependenciesTreeComponent implements OnInit, OnDestroy {
 
     public hostId = input<number>();
     public serviceId = input<number>();
+    lastUpdated = input<Date>(); // Change the date to trigger an update from an external component
 
     @ViewChild(FCanvasComponent)
     public fCanvasComponent!: FCanvasComponent;
@@ -91,6 +93,7 @@ export class HostServiceDependenciesTreeComponent implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
     private subscriptions: Subscription = new Subscription();
     private HostServiceDependenciesTreeService = inject(HostServiceDependenciesTreeService)
+    private route = inject(ActivatedRoute);
 
     public configuration = {
         outputSide: EFConnectableSide.BOTTOM,
@@ -107,7 +110,9 @@ export class HostServiceDependenciesTreeComponent implements OnInit, OnDestroy {
 
     constructor() {
         effect(() => {
-            if (this.isInitialized) {
+            this.lastUpdated();
+            console.log("earh", this.lastUpdated());
+            if (this.isInitialized && this.lastUpdated()) {
                 this.updateGraph(new dagre.graphlib.Graph());
             }
         });
@@ -125,16 +130,38 @@ export class HostServiceDependenciesTreeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        if (this.hostId()) {
-            this.subscriptions.add(this.HostServiceDependenciesTreeService.getHostDependencyTree(<number>this.hostId())
+        this.loadHostDependenciesTree();
+        this.loadServiceDependenciesTree();
+
+        this.route.queryParams.subscribe(params => {
+            const idOrUuid = params['idOrUuid'] || undefined;
+            if (this.isInitialized && idOrUuid) {
+                const uuid = new UUID();
+                if (!uuid.isUuid(idOrUuid)) {
+                    if (this.hostId()) {
+                        this.loadHostDependenciesTree();
+                    } else {
+                        this.loadServiceDependenciesTree();
+                    }
+                }
+            }
+        });
+    }
+
+    private loadServiceDependenciesTree() {
+        if (this.serviceId()) {
+            this.subscriptions.add(this.HostServiceDependenciesTreeService.getServiceDependencyTree(<number>this.serviceId())
                 .subscribe((result) => {
                     this.hostServiceDependenciesTreeItems = result;
                     this.updateGraphAndFitToScreen();
                     this.cdr.markForCheck();
                 }));
         }
-        if (this.serviceId()) {
-            this.subscriptions.add(this.HostServiceDependenciesTreeService.getServiceDependencyTree(<number>this.serviceId())
+    }
+
+    private loadHostDependenciesTree() {
+        if (this.hostId()) {
+            this.subscriptions.add(this.HostServiceDependenciesTreeService.getHostDependencyTree(<number>this.hostId())
                 .subscribe((result) => {
                     this.hostServiceDependenciesTreeItems = result;
                     this.updateGraphAndFitToScreen();
