@@ -68,11 +68,11 @@
                     </c-nav-item>
                     <c-nav-item>
                         <button
-                            *oitcPermission="['servicedependencies', 'loadServicedependenciesTree']" class="nav-link"
+                            *oitcPermission="['servicedependencies', 'dependencyTree']" class="nav-link"
                             [ngClass]="{'active': selectedTab == ServiceBrowserTabs.DependencyTree}"
                             (click)="changeTab(ServiceBrowserTabs.DependencyTree)">
-                            <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
-                            {{ t('Dependency Tree') }}
+                            <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+                            {{ t('Dependency tree') }}
                         </button>
                     </c-nav-item>
                     @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'ServicenowSettings', 'servicespecific']) |async )) {
