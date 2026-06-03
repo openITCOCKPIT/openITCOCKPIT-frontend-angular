@@ -28,7 +28,11 @@ export interface HostServiceDependenciesTreeItem {
 
 export interface ConnectionData {
     parentIds: number[]
-    dependency_id: number
+    dependency?: DependencyData
+}
+
+export interface DependencyData {
+    id: number
     inherits_parent: number
     timeperiod_id: number | null
     execution_fail_on_up?: number
