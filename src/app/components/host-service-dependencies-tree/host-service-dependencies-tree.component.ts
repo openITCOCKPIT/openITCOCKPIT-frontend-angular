@@ -111,9 +111,10 @@ export class HostServiceDependenciesTreeComponent implements OnInit, OnDestroy {
     constructor() {
         effect(() => {
             this.lastUpdated();
-            console.log("earh", this.lastUpdated());
             if (this.isInitialized && this.lastUpdated()) {
-                this.updateGraph(new dagre.graphlib.Graph());
+                this.loadHostDependenciesTree();
+                this.loadServiceDependenciesTree();
+                this.updateGraphAndFitToScreen();
             }
         });
 

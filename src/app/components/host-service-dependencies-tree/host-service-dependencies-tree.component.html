@@ -21,7 +21,7 @@
                     </svg>
                     @if (connection.connectionData.dependency) {
                         <div fConnectionContent class="node-container"
-                             [ngClass]="{'service-node-container': connection.connectionData.dependency?.execution_fail_on_ok}">
+                             [ngClass]="{'service-node-container': connection.connectionData.dependency.execution_fail_on_ok}">
                             <div class="node-header px-3 py-2">
                                 <span class="mx-1">
                                     <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>

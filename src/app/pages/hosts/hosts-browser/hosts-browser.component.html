@@ -1234,7 +1234,7 @@
                 <!-- Timeline end -->
                 <!-- DependencyTree start -->
                 @if (selectedTab == HostBrowserTabs.DependencyTree && result && result.mergedHost && result.hasHostDependencies) {
-                    <div style="height: 75vh;">
+                    <div class="host-dependency-tree-container border">
                         <oitc-host-service-dependencies-tree [hostId]="result.mergedHost.id"
                                                              [lastUpdated]="lastUpdated">
                         </oitc-host-service-dependencies-tree>
