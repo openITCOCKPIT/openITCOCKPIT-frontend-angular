@@ -19,16 +19,44 @@
         </ol>
     </nav>
 
+    @if (data.result && data.result.error) {
+        <c-alert color="danger">
+            <div class="d-flex align-items-center">
+                <div class="alert-icon">
+                    <span class="icon-stack icon-stack-md">
+                        <i class="base-7 icon-stack-3x text-danger"></i>
+                        <i class="fas fa-exclamation icon-stack-1x text-white"></i>
+                    </span>
+                </div>
+                <div class="flex-1 ps-1">
+                    <span class="h5 text-danger">
+                        {{ t('Error while loading') }}
+                    </span>
+                    <br>
+                    {{ data.result.error_msg }}
+                </div>
+            </div>
+        </c-alert>
+    }
+
     @if (data.result.data.isContainer) {
         <c-alert color="primary">
-            <span class="icon-stack icon-stack-md">
-                <i class="base-7 icon-stack-3x color-info-600"></i>
-                <i class="fas fa-info icon-stack-1x text-white"></i>
-            </span>
-            {{ t('Containerized installation') }}
-            <br>
-            {{ t('Your installation of {0} is running in a container based environment like Docker.', {systemname: data.result.data.systemname}) }}
-            {{ t('Therefore all available module are installed by default.') }}
+            <div class="d-flex align-items-center">
+                <div class="alert-icon">
+                    <span class="icon-stack icon-stack-md">
+                        <i class="base-7 icon-stack-3x color-info-600"></i>
+                        <i class="fas fa-cube icon-stack-1x text-white"></i>
+                    </span>
+                </div>
+                <div class="flex-1 ps-1">
+                    <span class="h5 color-info-600">
+                        {{ t('Containerized installation') }}
+                    </span>
+                    <br>
+                    {{ t('Your installation of {0} is running in a container based environment like Docker.', {systemname: data.result.data.systemname}) }}
+                    {{ t('Therefore all available module are installed by default.') }}
+                </div>
+            </div>
         </c-alert>
     }
 
@@ -176,9 +204,9 @@
                                     </div>
                                     <div class="padding-top-10">
                                         <fa-icon [icon]="['fas', 'key']"/>
-                                        @if(module.Module.license){
+                                        @if (module.Module.license) {
                                             {{ module.Module.license }}
-                                        } @else if (module.Module.module_license?.name){
+                                        } @else if (module.Module.module_license?.name) {
                                             {{ module.Module.module_license?.name }}
                                         }
 
