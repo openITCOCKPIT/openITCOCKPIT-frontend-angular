@@ -26,14 +26,16 @@
                                 {name: 'UNKNOWN',value: host().pieChartData.widgetOverview[2].percent}]"/>
                 </c-col>
                 <c-col md="11">
-                    <c-row *ngIf="host().Host.description">
-                        <c-col md="3">
-                            {{ t('Description') }}
-                        </c-col>
-                        <c-col md="9">
-                            {{ host().Host.description }}&nbsp;
-                        </c-col>
-                    </c-row>
+                    @if (host().Host.description) {
+                        <c-row>
+                            <c-col md="3">
+                                {{ t('Description') }}
+                            </c-col>
+                            <c-col md="9">
+                                {{ host().Host.description }}&nbsp;
+                            </c-col>
+                        </c-row>
+                    }
                     <c-row>
                         <c-col md="3">
                             {{ t('IP address') }}
@@ -68,14 +70,18 @@
                     </c-row>
                 </c-col>
             </c-row>
-            <c-row *ngIf="host().Services && evaluationType() === 1">
-                <c-col md="3"
-                       *ngFor="let service of host().Services | keyvalue">
-                    <oitc-service-availability-overview
-                        [service]="service.value"
-                        [dynamicColour]="dynamicColour()"/>
-                </c-col>
-            </c-row>
+            @if (host().Services && evaluationType() === 1) {
+                <c-row>
+                    @for (service of host().Services | keyvalue; track service) {
+                        <c-col md="3"
+                        >
+                            <oitc-service-availability-overview
+                                [service]="service.value"
+                                [dynamicColour]="dynamicColour()"/>
+                        </c-col>
+                    }
+                </c-row>
+            }
         </c-card-body>
     </c-card>
 </ng-container>

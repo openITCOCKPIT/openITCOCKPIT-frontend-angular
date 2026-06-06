@@ -1,12 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-iframe',
-    imports: [
-        NgIf
-    ],
+    imports: [],
     templateUrl: './iframe.component.html',
     styleUrl: './iframe.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -17,11 +17,10 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -52,6 +51,7 @@ import {
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { IndexPage } from '../../../../../pages.interface';
+import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
 
 @Component({
     selector: 'oitc-external-monitorings-index',
@@ -71,7 +71,6 @@ import { IndexPage } from '../../../../../pages.interface';
         InputGroupTextDirective,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         ReactiveFormsModule,
         RowComponent,
@@ -87,14 +86,13 @@ import { IndexPage } from '../../../../../pages.interface';
         ItemSelectComponent,
         MatSort,
         MatSortHeader,
-        NgForOf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         SelectAllComponent,
         TableDirective
     ],
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: ExternalMonitoringsService } // Inject the ExternalMonitoringsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ExternalMonitoringsService} // Inject the ExternalMonitoringsService into the DeleteAllModalComponent
     ],
     templateUrl: './external-monitorings-index.component.html',
     styleUrl: './external-monitorings-index.component.css',
@@ -204,4 +202,6 @@ export class ExternalMonitoringsIndexComponent implements OnInit, OnDestroy, Ind
             this.load();
         }
     }
+
+    protected readonly ExternalMonitoringSystems = ExternalMonitoringSystems;
 }

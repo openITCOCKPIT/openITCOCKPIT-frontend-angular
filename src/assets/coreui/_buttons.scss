@@ -1,4 +1,6 @@
 @use "sass:color";
+@use "variables" as oitc;
+@use "@coreui/coreui/scss/coreui" as cui;
 
 /* bring back good old .btn-xs */
 
@@ -15,7 +17,7 @@
 
 /* add shadows for all button types (btn-primary, btn-secondary etc) */
 /* prefix is "cui" */
-@each $color-name, $color-value in $theme-colors {
+@each $color-name, $color-value in cui.$theme-colors {
     .btn-#{$color-name} {
         //box-shadow: 0 2px 6px 0 rgba(var(--#{$prefix}#{$state}), 0.5);
         box-shadow: 0 2px 6px 0 color.adjust($color-value, $alpha: -0.5);
@@ -57,13 +59,13 @@
 body.dark-theme .btn-default {
     background-color: #1d222b;
     color: #eeecec;
-    border: 1px solid $gray-800;
+    border: 1px solid oitc.$gray-800;
     /*box-shadow: 0 2px 6px 0 rgba(29, 34, 43, 0.5);*/
     box-shadow: 0 2px 6px 0 rgba(11, 81, 197, 0.13);
 }
 
 body.dark-theme .btn-default:hover, body.dark-theme .btn-default:active {
-    border: 1px solid $gray-700 !important;
+    border: 1px solid oitc.$gray-700 !important;
     color: #fff;
     background-color: #282d37 !important; // otherwise form-check.scss will override it
 }
@@ -136,7 +138,7 @@ body.dark-theme .btn-icon:hover {
 
 
 /* add color types (btn-icon-primary, btn-icon-secondary, btn-icon-hover-$color etc) */
-@each $color-name, $color-value in $theme-colors {
+@each $color-name, $color-value in cui.$theme-colors {
 
     .btn-icon-#{$color-name}:hover {
         color: $color-value !important;

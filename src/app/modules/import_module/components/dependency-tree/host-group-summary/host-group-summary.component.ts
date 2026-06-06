@@ -2,31 +2,29 @@ import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { BadgeComponent, TableDirective } from '@coreui/angular';
-import { HostgroupSummaryState, HostgroupSummaryStateHosts } from '../../../../../pages/hosts/summary_state.interface';
 import { NodeExtended } from '../dependency-tree.component';
 import { GetKeys } from '../../../../../classes/GetKeys';
+import { StatusSummaryState, SummaryStateHosts } from '../../../../../pages/hosts/summary_state.interface';
 
 @Component({
     selector: 'oitc-host-group-summary',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    RouterLink,
-    NgIf,
-    TranslocoDirective,
-    BadgeComponent,
-    NgForOf,
-    TableDirective
-],
+        FaIconComponent,
+        PermissionDirective,
+        RouterLink,
+        TranslocoDirective,
+        BadgeComponent,
+        TableDirective
+    ],
     templateUrl: './host-group-summary.component.html',
     styleUrl: './host-group-summary.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostGroupSummaryComponent {
-    @Input() hostgroupSummeryState!: HostgroupSummaryState;
+    @Input() hostgroupSummeryState!: StatusSummaryState;
     @Input() selectedNode!: NodeExtended;
     public TranslocoService: TranslocoService = inject(TranslocoService);
 
@@ -36,7 +34,7 @@ export class HostGroupSummaryComponent {
     //public HostgroupSummaryStatesServicesKeys = Array<keyof HostgroupSummaryStatesServices>('0', '1', '2', '3', 'serviceIds');
 
 
-    public hostSummaryRowLabels: { key: keyof HostgroupSummaryStateHosts, label: string, queryParams: {} }[] = [
+    public hostSummaryRowLabels: { key: keyof SummaryStateHosts, label: string, queryParams: {} }[] = [
         {
             key: 'state',
             label: this.TranslocoService.translate('State'),

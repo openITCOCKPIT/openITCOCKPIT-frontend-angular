@@ -36,7 +36,7 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -58,6 +58,7 @@ import {
 } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ExternalSystems } from '../../externalsystems/external-systems.enum';
 
 @Component({
     selector: 'oitc-importers-edit',
@@ -80,7 +81,6 @@ import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } fro
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         ReactiveFormsModule,
         RequiredIconComponent,
         RowComponent,
@@ -99,7 +99,6 @@ import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } fro
         TrueFalseDirective,
         FormCheckComponent,
         NgClass,
-        NgForOf,
         DynamicalFormFieldsComponent,
         FormCheckLabelDirective,
         TranslocoPipe,
@@ -147,7 +146,7 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
             value: this.TranslocoService.translate('CSV without header')
         },
         {
-            key: 'idoit',
+            key: ExternalSystems.Idoit,
             value: this.TranslocoService.translate('i-doit')
         },
         {
@@ -155,12 +154,16 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
             value: this.TranslocoService.translate('openITCOCKPIT Agent')
         },
         {
-            key: 'itop',
+            key: ExternalSystems.Itop,
             value: this.TranslocoService.translate('iTop')
         },
         {
             key: 'external_monitoring',
             value: this.TranslocoService.translate('External Monitoring')
+        },
+        {
+            key: ExternalSystems.Proxmox,
+            value: this.TranslocoService.translate('Proxmox VE'),
         }
     ];
 
@@ -199,6 +202,7 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
                 this.loadContainers();
                 this.loadElements();
+                this.loadExternalSystems();
                 this.loadConfigFieldsByDataSource();
             }));
     }
@@ -247,6 +251,7 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
 
     public onContainerChange() {
         this.loadElements();
+        this.loadExternalSystems();
         this.cdr.markForCheck();
     }
 
@@ -257,7 +262,7 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.ImportersService.loadElements(containerId, this.post.data_source)
+        this.subscriptions.add(this.ImportersService.loadElements(containerId)
             .subscribe((result) => {
 
 
@@ -266,13 +271,39 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
                 });
 
                 this.hostdefaults = result.hostdefaults;
-                this.externalsystems = result.externalsystems.externalsystems;
                 this.externalmonitorings = result.externalMonitorings.externalMonitorings;
                 this.cdr.markForCheck();
             })
         );
-
     }
+
+    private loadExternalSystems = (): void => {
+        if (!this.post.container_id) {
+            return;
+        }
+        let dataSource = null;
+        switch (this.post.data_source) {
+            case 'itop':
+            case 'idoit':
+            case 'proxmox':
+                dataSource = this.post.data_source;
+                break;
+        }
+
+        this.subscriptions.add(this.ImportersService.loadExternalSystems(this.post.container_id, dataSource)
+            .subscribe((result) => {
+                this.externalsystems = result;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    public loadElementsByDataSource() {
+        this.loadExternalSystems();
+        this.loadConfigFieldsByDataSource();
+        this.cdr.markForCheck();
+    }
+
 
     public loadConfigFieldsByDataSource() {
         if (this.post.data_source) {
@@ -367,4 +398,5 @@ export class ImportersEditComponent implements OnInit, OnDestroy {
     }
 
     protected readonly Boolean = Boolean;
+    protected readonly ExternalSystems = ExternalSystems;
 }

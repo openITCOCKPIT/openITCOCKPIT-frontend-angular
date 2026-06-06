@@ -37,7 +37,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { SatellitesService } from '../satellites.service';
 import { SystemdowntimesService } from '../../../../../pages/systemdowntimes/systemdowntimes.service';
-import { NgIf } from '@angular/common';
+
 import { ObjectTypesEnum } from '../../../../../pages/changelogs/object-types.enum';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import _ from 'lodash';
@@ -48,35 +48,34 @@ import { HistoryService } from '../../../../../history.service';
 @Component({
     selector: 'oitc-add-satellite-downtime',
     imports: [
-    CardComponent,
-    FaIconComponent,
-    FormDirective,
-    FormsModule,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    BackButtonDirective,
-    CardBodyComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    InputGroupComponent,
-    MultiSelectComponent,
-    RequiredIconComponent,
-    FormCheckComponent,
-    FormCheckLabelDirective,
-    FormCheckInputDirective,
-    FormControlDirective,
-    TrueFalseDirective,
-    CardFooterComponent,
-    NgIf,
-    DurationInputComponent
-],
+        CardComponent,
+        FaIconComponent,
+        FormDirective,
+        FormsModule,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        BackButtonDirective,
+        CardBodyComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        InputGroupComponent,
+        MultiSelectComponent,
+        RequiredIconComponent,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        FormCheckInputDirective,
+        FormControlDirective,
+        TrueFalseDirective,
+        CardFooterComponent,
+        DurationInputComponent
+    ],
     templateUrl: './add-satellite-downtime.component.html',
     styleUrl: './add-satellite-downtime.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -190,6 +189,7 @@ export class AddSatellitedowntimeComponent implements OnInit, OnDestroy {
 
                     if (!this.createAnother) {
                         this.HistoryService.navigateWithFallback(['/downtimes/host']);
+                        return;
                     }
                     // Create another
                     this.post = this.getClearForm();

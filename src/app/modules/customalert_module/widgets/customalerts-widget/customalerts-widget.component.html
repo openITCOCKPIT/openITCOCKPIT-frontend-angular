@@ -1,166 +1,171 @@
 <ng-container *transloco="let t">
-    <div class="d-flex h-100 flex-column" #boxContainer *ngIf="widget">
-        <div>
-            <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-                    *ngIf="!isReadonly()">
-                @if (flipped()) {
-                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                } @else {
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                }
-            </button>
-        </div>
-
-        <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
-             class="box-container">
-            <div class="box-x">
-                <ng-container *ngIf="animationStateShowContent">
-                    <div [style.height.px]="widgetHeight"
-                         [ngClass]="{'new-flame-bg': CustomalertsFilter.Customalerts.state === 0, 'bg-secondary': CustomalertsFilter.Customalerts.state === 1, 'bg-success': CustomalertsFilter.Customalerts.state === 2,'bg-primary-700': CustomalertsFilter.Customalerts.state === 3}"
-                         class="w-100">
-                        <c-row *ngIf="statusCount !== null" class="h-100 align-items-center">
-                            @if (PermissionsService.hasPermissionObservable(['CustomalertModule', 'customalerts', 'index'])|async) {
-                                <c-col class="text-center text-white" [style.font-size.px]="fontSize">
-                                    {{ statusCount }}
-                                </c-col>
-                            } @else {
-                                <c-col class="text-center text-white h5">
-                                    <small>
-                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                        {{ t('You are not permitted to access this object') }}
-                                    </small>
-                                </c-col>
-
-                            }
-                        </c-row>
-                        @switch (CustomalertsFilter.Customalerts.state) {
-                            @case (0) {
-                                <fa-icon [icon]="['fas', 'fire-flame-curved']" [style.font-size.px]="fontSizeIcon"
-                                         [style.top.px]="iconTopPosition"
-                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                            }
-                            @case (1) {
-                                <fa-icon [icon]="['fas', 'person-digging']" [style.font-size.px]="fontSizeIcon"
-                                         [style.top.px]="iconTopPosition"
-                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                            }
-                            @case (2) {
-                                <fa-icon [icon]="['fas', 'clipboard-check']" [style.font-size.px]="fontSizeIcon"
-                                         [style.top.px]="iconTopPosition"
-                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                            }
-                            @case (3) {
-                                <fa-icon [icon]="['fas', 'folder-closed']" [style.font-size.px]="fontSizeIcon"
-                                         [style.top.px]="iconTopPosition"
-                                         class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
-                            }
+    @if (widget) {
+        <div class="d-flex h-100 flex-column" #boxContainer>
+            <div>
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())"
+                    >
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                         }
-                    </div>
-                </ng-container>
+                    </button>
+                }
             </div>
-
-            <div class="box-x">
-                <ng-container *ngIf="animationStateShowConfig">
-                    <c-row class="mb-2">
-                        <c-col>
-                            <fieldset>
-                                <legend class="fs-5">
-                                    {{ t('Status') }}
-                                </legend>
-                                <c-form-check>
-                                    <input cFormCheckInput
-                                           class="radio-lg radio-danger border-danger"
-                                           type="radio"
-                                           [id]="'widget-radio0-'+widget.id"
-                                           [name]="'widget-radio0-'+widget.id"
-                                           [value]="0"
-                                           [(ngModel)]="CustomalertsFilter.Customalerts.state"
-                                    />
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           [for]="'widget-radio0-'+widget.id">
-                                        <i class="fas fa-fire-flame-curved flame"></i>
-                                        {{ t('New') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input cFormCheckInput
-                                           class="radio-lg radio-secondary border-secondary"
-                                           type="radio"
-                                           [id]="'widget-radio1-'+widget.id"
-                                           [name]="'widget-radio1-'+widget.id"
-                                           [value]="1"
-                                           [(ngModel)]="CustomalertsFilter.Customalerts.state"
-                                    />
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           [for]="'widget-radio1-'+widget.id">
-                                        <fa-icon [icon]="['fas', 'person-digging']" class="text-secondary"></fa-icon>
-                                        {{ t('In progress') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input cFormCheckInput
-                                           class="radio-lg radio-success border-success"
-                                           type="radio"
-                                           [id]="'widget-radio2-'+widget.id"
-                                           [name]="'widget-radio2-'+widget.id"
-                                           [value]="2"
-                                           [(ngModel)]="CustomalertsFilter.Customalerts.state"
-                                    />
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           [for]="'widget-radio2-'+widget.id">
-                                        <fa-icon [icon]="['fas', 'clipboard-check']" class="text-success"></fa-icon>
-                                        {{ t('Done') }}
-                                    </label>
-                                </c-form-check>
-                                <c-form-check>
-                                    <input cFormCheckInput
-                                           class="radio-lg radio-primary border-primary"
-                                           type="radio"
-                                           [id]="'widget-radio3-'+widget.id"
-                                           [name]="'widget-radio3-'+widget.id"
-                                           [value]="3"
-                                           [(ngModel)]="CustomalertsFilter.Customalerts.state"
-                                    />
-                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                           [for]="'widget-radio3-'+widget.id">
-                                        <fa-icon [icon]="['fas', 'folder-closed']" class="text-primary"></fa-icon>
-                                        {{ t('Manually closed') }}
-                                    </label>
-                                </c-form-check>
-                            </fieldset>
-                            <fieldset class="mt-2">
-                                <legend class="fs-5">
-                                    {{ t('Alerts older than') }}
-                                </legend>
-                                <c-input-group>
-                                    <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'calendar-day']" class="text-secondary"></fa-icon>
-                                    </span>
-                                    <input [(ngModel)]="CustomalertsFilter.Customalerts.state_since"
-                                           [placeholder]="'Leave empty for all alerts' | transloco"
-                                           aria-label="state_since"
-                                           [name]="'state_since-'+widget.id"
-                                           cFormControl
-                                           oitcDebounce
-                                           type="number"
-                                           min="1"
-                                    />
-                                    <span cInputGroupText>
-                                        {{ t('in days') }}
-                                    </span>
-                                </c-input-group>
-                            </fieldset>
-                        </c-col>
-                    </c-row>
-                    <c-row>
-                        <c-col class="text-end">
-                            <button cButton class="ripple" color="primary" (click)="submit()">
-                                {{ t('Save') }}
-                            </button>
-                        </c-col>
-                    </c-row>
-                </ng-container>
+            <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+                 class="box-container">
+                <div class="box-x">
+                    @if (animationStateShowContent) {
+                        <div [style.height.px]="widgetHeight"
+                             [ngClass]="{'new-flame-bg': CustomalertsFilter.Customalerts.state === 0, 'bg-secondary': CustomalertsFilter.Customalerts.state === 1, 'bg-success': CustomalertsFilter.Customalerts.state === 2,'bg-primary-700': CustomalertsFilter.Customalerts.state === 3}"
+                             class="w-100">
+                            @if (statusCount !== null) {
+                                <c-row class="h-100 align-items-center">
+                                    @if (PermissionsService.hasPermissionObservable(['CustomalertModule', 'customalerts', 'index'])|async) {
+                                        <c-col class="text-center text-white" [style.font-size.px]="fontSize">
+                                            {{ statusCount }}
+                                        </c-col>
+                                    } @else {
+                                        <c-col class="text-center text-white h5">
+                                            <small>
+                                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                                {{ t('You are not permitted to access this object') }}
+                                            </small>
+                                        </c-col>
+                                    }
+                                </c-row>
+                            }
+                            @switch (CustomalertsFilter.Customalerts.state) {
+                                @case (0) {
+                                    <fa-icon [icon]="['fas', 'fire-flame-curved']" [style.font-size.px]="fontSizeIcon"
+                                             [style.top.px]="iconTopPosition"
+                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                }
+                                @case (1) {
+                                    <fa-icon [icon]="['fas', 'person-digging']" [style.font-size.px]="fontSizeIcon"
+                                             [style.top.px]="iconTopPosition"
+                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                }
+                                @case (2) {
+                                    <fa-icon [icon]="['fas', 'clipboard-check']" [style.font-size.px]="fontSizeIcon"
+                                             [style.top.px]="iconTopPosition"
+                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                }
+                                @case (3) {
+                                    <fa-icon [icon]="['fas', 'folder-closed']" [style.font-size.px]="fontSizeIcon"
+                                             [style.top.px]="iconTopPosition"
+                                             class="text-white opacity-15 display-1 position-absolute bottom-0 end-0 pe-2"></fa-icon>
+                                }
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="box-x">
+                    @if (animationStateShowConfig) {
+                        <c-row class="mb-2">
+                            <c-col>
+                                <fieldset>
+                                    <legend class="fs-5">
+                                        {{ t('Status') }}
+                                    </legend>
+                                    <c-form-check>
+                                        <input cFormCheckInput
+                                               class="radio-lg radio-danger border-danger"
+                                               type="radio"
+                                               [id]="'widget-radio0-'+widget.id"
+                                               [name]="'widget-radio0-'+widget.id"
+                                               [value]="0"
+                                               [(ngModel)]="CustomalertsFilter.Customalerts.state"
+                                        />
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'widget-radio0-'+widget.id">
+                                            <i class="fas fa-fire-flame-curved flame"></i>
+                                            {{ t('New') }}
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input cFormCheckInput
+                                               class="radio-lg radio-secondary border-secondary"
+                                               type="radio"
+                                               [id]="'widget-radio1-'+widget.id"
+                                               [name]="'widget-radio1-'+widget.id"
+                                               [value]="1"
+                                               [(ngModel)]="CustomalertsFilter.Customalerts.state"
+                                        />
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'widget-radio1-'+widget.id">
+                                            <fa-icon [icon]="['fas', 'person-digging']"
+                                                     class="text-secondary"></fa-icon>
+                                            {{ t('In progress') }}
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input cFormCheckInput
+                                               class="radio-lg radio-success border-success"
+                                               type="radio"
+                                               [id]="'widget-radio2-'+widget.id"
+                                               [name]="'widget-radio2-'+widget.id"
+                                               [value]="2"
+                                               [(ngModel)]="CustomalertsFilter.Customalerts.state"
+                                        />
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'widget-radio2-'+widget.id">
+                                            <fa-icon [icon]="['fas', 'clipboard-check']" class="text-success"></fa-icon>
+                                            {{ t('Done') }}
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input cFormCheckInput
+                                               class="radio-lg radio-primary border-primary"
+                                               type="radio"
+                                               [id]="'widget-radio3-'+widget.id"
+                                               [name]="'widget-radio3-'+widget.id"
+                                               [value]="3"
+                                               [(ngModel)]="CustomalertsFilter.Customalerts.state"
+                                        />
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'widget-radio3-'+widget.id">
+                                            <fa-icon [icon]="['fas', 'folder-closed']" class="text-primary"></fa-icon>
+                                            {{ t('Manually closed') }}
+                                        </label>
+                                    </c-form-check>
+                                </fieldset>
+                                <fieldset class="mt-2">
+                                    <legend class="fs-5">
+                                        {{ t('Alerts older than') }}
+                                    </legend>
+                                    <c-input-group>
+                                        <span cInputGroupText>
+                                            <fa-icon [icon]="['fas', 'calendar-day']" class="text-secondary"></fa-icon>
+                                        </span>
+                                        <input [(ngModel)]="CustomalertsFilter.Customalerts.state_since"
+                                               [placeholder]="'Leave empty for all alerts' | transloco"
+                                               aria-label="state_since"
+                                               [name]="'state_since-'+widget.id"
+                                               cFormControl
+                                               oitcDebounce
+                                               type="number"
+                                               min="1"
+                                        />
+                                        <span cInputGroupText>
+                                            {{ t('in days') }}
+                                        </span>
+                                    </c-input-group>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+                        <c-row>
+                            <c-col class="text-end">
+                                <button cButton class="ripple" color="primary" (click)="submit()">
+                                    {{ t('Save') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    }
+                </div>
             </div>
         </div>
-    </div>
+    }
 </ng-container>

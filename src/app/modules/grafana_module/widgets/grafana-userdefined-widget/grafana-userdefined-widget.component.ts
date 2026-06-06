@@ -15,7 +15,7 @@ import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-w
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormLabelDirective } from '@coreui/angular';
 import { IframeComponent } from '../../../../components/iframe/iframe.component';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -27,7 +27,6 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
         FaIconComponent,
         FormLabelDirective,
         IframeComponent,
-        NgIf,
         RequiredIconComponent,
         SelectComponent,
         TranslocoDirective,

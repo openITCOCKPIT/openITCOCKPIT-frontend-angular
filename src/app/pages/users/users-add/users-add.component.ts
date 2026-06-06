@@ -46,7 +46,7 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
 import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { ProfileService } from '../../profile/profile.service';
 import { PermissionLevel } from '../permission-level';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
@@ -88,7 +88,6 @@ import { ROOT_CONTAINER } from '../../changelogs/object-types.enum';
         NgOptionHighlightDirective,
         RowComponent,
         ColComponent,
-        NgIf,
         InputGroupComponent,
         NgClass,
         BadgeOutlineComponent,

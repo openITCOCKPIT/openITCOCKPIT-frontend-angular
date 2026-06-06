@@ -1,39 +1,60 @@
 @if (!isViewMode()) {
-    <div cdkDrag #container oitcResizable [aspectRatio]="true" class="map-element-container"
+    <div cdkDrag #container class="map-element-container"
          (cdkDragEnded)="onDragEnd($event)"
          (cdkDragMoved)="onDragMove($event)"
-         (resizeStop)="onResizeStop($event, type)"
          cdkDragBoundary=".map-canvas">
-        <div cdkDragHandle class="bg-light" *ngIf="allowView && hasEnoughData" [style.width.px]="width">
-            <div [id]="'mapgraph-' + item()!.id" [style.height.px]="height" style="padding:0; position:relative;"
-                 echarts [options]="chartOption"
-                 [theme]="theme"
-                 (chartInit)="onChartInit($event)">
+        @if (allowView && hasEnoughData) {
+            <div cdkDragHandle
+                 [style.width.px]="width+10"
+                 ngResizable
+                 (rzStart)="onResizeStart(container)"
+                 (rzResizing)="onResizing(graph)"
+                 (rzStop)="onResizeStop({ width: $event.size.width, height: $event.size.height }, type)"
+                 [rzAspectRatio]="true"
+                 [rzHandles]="'se'"
+                 [style.height.px]="height+10">
+                <div [id]="'mapgraph-' + item()!.id"
+                     [style.height.px]="height"
+                     [style.width.px]="width"
+                     echarts [options]="chartOption"
+                     #graph
+                     [theme]="theme"
+                     class="p-0 bg-light position-relative"
+                     (chartInit)="onChartInit($event)">
+                </div>
             </div>
-        </div>
-        <div cdkDragHandle *ngIf="!hasEnoughData">
-            <c-alert [color]="'info'">
-                <fa-icon [icon]="['fas', 'chart-area']"></fa-icon>
-                {{ notEnoughDataString }}
-            </c-alert>
-        </div>
+        }
+        @if (allowView && !hasEnoughData) {
+            <div cdkDragHandle>
+                <c-alert [color]="'info'">
+                    <fa-icon [icon]="['fas', 'chart-area']"></fa-icon>
+                    {{ notEnoughDataString }}
+                </c-alert>
+            </div>
+        }
     </div>
-    <p-contextMenu *ngIf="!isViewMode()" [target]="container" [model]="contextMenuItems"
-                   appendTo="body"></p-contextMenu>
+    @if (!isViewMode()) {
+        <p-contextMenu [target]="container" [model]="contextMenuItems"
+                       appendTo="body"></p-contextMenu>
+    }
 } @else {
     <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
-        <div class="bg-light" *ngIf="allowView && hasEnoughData" [style.width.px]="width">
-            <div [id]="'mapgraph-' + item()!.id" [style.height.px]="height" style="padding:0; position:relative;"
-                 echarts [options]="chartOption"
-                 [theme]="theme"
-                 (chartInit)="onChartInit($event)">
+        @if (allowView && hasEnoughData) {
+            <div class="bg-light" [style.width.px]="width">
+                <div [id]="'mapgraph-' + item()!.id" [style.height.px]="height" style="padding:0; position:relative;"
+                     echarts [options]="chartOption"
+                     [theme]="theme"
+                     (chartInit)="onChartInit($event)">
+                </div>
             </div>
-        </div>
-        <div *ngIf="!hasEnoughData">
-            <c-alert [color]="'info'">
-                <fa-icon [icon]="['fas', 'chart-area']"></fa-icon>
-                {{ notEnoughDataString }}
-            </c-alert>
-        </div>
+        }
+        @if (allowView && !hasEnoughData) {
+            <div>
+                <c-alert [color]="'info'">
+                    <fa-icon [icon]="['fas', 'chart-area']"></fa-icon>
+                    {{ notEnoughDataString }}
+                </c-alert>
+            </div>
+        }
     </div>
 }

@@ -28,6 +28,7 @@ export interface Importedhostgroup {
     container_id: number
     description: string
     hostgroup_url: any
+    tags: string
     created: string
     modified: string
     imported: number

@@ -14,17 +14,21 @@
         <c-modal-body>
 
             <c-row class="pt-2">
-                <c-col *ngFor="let item of items; index as i" sm="12">
-                    <ul class="mb-0">
-                        <li>
-                            {{ item.displayName }}
-                            <div *ngIf="hasErrors && errors[i]" class="text-danger">
-                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                                {{ errors[i].message }}
-                            </div>
-                        </li>
-                    </ul>
-                </c-col>
+                @for (item of items; track item; let i = $index) {
+                    <c-col sm="12">
+                        <ul class="mb-0">
+                            <li>
+                                {{ item.displayName }}
+                                @if (hasErrors && errors[i]) {
+                                    <div class="text-danger">
+                                        <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                        {{ errors[i].message }}
+                                    </div>
+                                }
+                            </li>
+                        </ul>
+                    </c-col>
+                }
             </c-row>
 
             <c-row [hidden]="!isSynchronizing" class="pt-4 pb-2">

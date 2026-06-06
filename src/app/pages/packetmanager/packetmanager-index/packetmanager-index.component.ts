@@ -4,7 +4,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
     AlertComponent,
     BadgeComponent,
@@ -60,8 +60,6 @@ import { EolAlertsComponent } from '../../administrators/administrators-debug/eo
         ModalToggleDirective,
         ModalBodyComponent,
         AlertComponent,
-        NgIf,
-        NgForOf,
         TranslocoPipe,
         ColComponent,
         BadgeComponent,
@@ -86,6 +84,7 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
     private readonly PacketmanagerService: PacketmanagerService = inject(PacketmanagerService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
 
+    public newVersionAvailable: boolean = false;
 
     protected modulesToCheckboxesInstall: { [key: string]: boolean } = {};
     private packageList: string = '';
@@ -103,7 +102,6 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
                 isContainer: false,
                 LsbRelease: '',
                 systemname: '',
-                newVersion: false,
                 version: '',
                 logoUrl: '',
                 _csrfToken: ''
@@ -118,14 +116,18 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
 
 
     public ngOnInit() {
-        this.subscriptions.add(this.PacketmanagerService.getIndex()
-            .subscribe((result: PacketmanagerIndexRoot): void => {
+        this.subscriptions.add(this.PacketmanagerService.getIndex().subscribe((result: PacketmanagerIndexRoot): void => {
                 this.data = result;
                 this.cdr.markForCheck();
 
+                const currentVersion = parseInt(result.OPENITCOCKPIT_VERSION.replace(/\D/g, ''), 10); //Remove all non numbers and parse to int
+                const newVersion = parseInt(result.result.data.changelog[0].Changelog.version.replace(/\D/g, ''), 10); //Remove all non numbers and parse to int
+
+                this.newVersionAvailable = currentVersion < newVersion;
+
                 this.initializeModulesToCheckboxesInstall();
             })
-        )
+        );
     }
 
     private initializeModulesToCheckboxesInstall(): void {

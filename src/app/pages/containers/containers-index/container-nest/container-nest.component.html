@@ -6,11 +6,13 @@
                 <ng-container
                     *ngTemplateOutlet="containerTemplate(); context: { $implicit: container, index:$index, collapsed:collapsed(), component:this }"></ng-container>
 
-                <oitc-container-nest *ngIf="container.children.length > 0"
-                                     [hidden]="collapsed()[$index]"
-                                     [nestedContainers]="container.children"
-                                     [level]="(level()+1)"
-                                     [containerTemplate]="containerTemplate()"></oitc-container-nest>
+                @if (container.children.length > 0) {
+                    <oitc-container-nest
+                        [hidden]="collapsed()[$index]"
+                        [nestedContainers]="container.children"
+                        [level]="(level()+1)"
+                        [containerTemplate]="containerTemplate()"></oitc-container-nest>
+                }
             </li>
         </ol>
     }

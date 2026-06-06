@@ -19,7 +19,7 @@ import {
     FormLabelDirective,
     RowComponent
 } from '@coreui/angular';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -42,7 +42,6 @@ import {
     imports: [
         FaIconComponent,
         FormLabelDirective,
-        NgIf,
         RequiredIconComponent,
         SelectComponent,
         TranslocoDirective,

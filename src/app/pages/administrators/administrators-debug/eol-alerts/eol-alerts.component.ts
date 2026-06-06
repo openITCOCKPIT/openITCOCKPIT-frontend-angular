@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { AlertComponent } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
@@ -9,7 +9,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
     imports: [
         AlertComponent,
         FaIconComponent,
-        NgIf,
         TranslocoDirective
     ],
     templateUrl: './eol-alerts.component.html',

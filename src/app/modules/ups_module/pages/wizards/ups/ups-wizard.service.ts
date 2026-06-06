@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { WizardsService } from '../../../../../pages/wizards/wizards.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { UpsWizardGet, UpsWizardPost } from './ups-wizard.interface';
+import { UpsWizardPost } from './ups-wizard.interface';
+import { WizardGet } from '../../../../../pages/wizards/wizards.interface';
 
 @Injectable({
     providedIn: 'root'
 })
 export class UpsWizardService extends WizardsService {
 
-    public fetch(hostId: number): Observable<UpsWizardGet> {
-        return this.http.get<UpsWizardGet>(`${this.proxyPath}/ups_module/wizards/ups/${hostId}.json?angular=true`).pipe(
-            map((data: UpsWizardGet): UpsWizardGet => {
+    public fetch(hostId: number): Observable<WizardGet> {
+        return this.http.get<WizardGet>(`${this.proxyPath}/ups_module/wizards/ups/${hostId}.json?angular=true`).pipe(
+            map((data: WizardGet): WizardGet => {
                 return data;
             })
         );

@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-  BorderDirective,
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    BorderDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -36,36 +36,34 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ContainerTypesEnum, ROOT_CONTAINER } from '../../changelogs/object-types.enum';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { GenericKeyValue } from '../../../generic.interfaces';
 
 @Component({
     selector: 'oitc-containers-show-details',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    BackButtonDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    ColComponent,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    RowComponent,
-    SelectComponent,
-    BlockLoaderComponent,
-    NgIf,
-    BorderDirective,
-    NgForOf,
-    TableDirective,
-    AsyncPipe
-],
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        BackButtonDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        ColComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        RowComponent,
+        SelectComponent,
+        BlockLoaderComponent,
+        BorderDirective,
+        TableDirective,
+        AsyncPipe
+    ],
     templateUrl: './containers-show-details.component.html',
     styleUrl: './containers-show-details.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

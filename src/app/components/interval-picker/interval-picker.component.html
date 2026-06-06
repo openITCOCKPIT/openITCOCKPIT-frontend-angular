@@ -13,13 +13,15 @@
                         <fieldset>
                             <h5>{{ t('Auto refresh') }}</h5>
                             <hr class="border-dashed">
-                            <div *ngFor="let refreshRate of refreshRates"
-                                 class="no-padding cursor-pointer"
-                                 style="line-height: 25px;"
-                                 [ngClass]="{'text-primary': refreshRate.key === selectedAutoRefresh.key}"
-                                 (click)="changeRefresh(refreshRate)">
-                                {{ refreshRate.value }}
-                            </div>
+                            @for (refreshRate of refreshRates; track refreshRate) {
+                                <div
+                                    class="no-padding cursor-pointer"
+                                    style="line-height: 25px;"
+                                    [ngClass]="{'text-primary': refreshRate.key === selectedAutoRefresh.key}"
+                                    (click)="changeRefresh(refreshRate)">
+                                    {{ refreshRate.value }}
+                                </div>
+                            }
                         </fieldset>
                     </c-col>
                 </c-row>

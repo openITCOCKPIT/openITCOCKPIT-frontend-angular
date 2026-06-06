@@ -32,13 +32,13 @@ import { NgClass } from '@angular/common';
 @Component({
     selector: 'oitc-regex-helper-tooltip',
     imports: [
-    FaIconComponent,
-    PopoverDirective,
-    TranslocoDirective,
-    RowComponent,
-    ContainerComponent,
-    NgClass
-],
+        FaIconComponent,
+        PopoverDirective,
+        TranslocoDirective,
+        RowComponent,
+        ContainerComponent,
+        NgClass
+    ],
     templateUrl: './regex-helper-tooltip.component.html',
     styleUrl: './regex-helper-tooltip.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

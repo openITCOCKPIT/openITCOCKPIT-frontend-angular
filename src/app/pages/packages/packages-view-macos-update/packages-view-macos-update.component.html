@@ -1,0 +1,198 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['packages', 'macos_updates']"
+                   [routerLink]="['/', 'packages', 'macos_updates']">
+                    <fa-icon [icon]="['fas', 'cubes']"></fa-icon>
+                    {{ t('Package') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fab', 'apple']"></fa-icon>
+                {{ t('Update Details') }}
+            </li>
+        </ol>
+    </nav>
+
+
+    @if (!update) {
+        <oitc-block-loader [height]="'25rem'"></oitc-block-loader>
+    }
+
+    @if (update) {
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('macOS Update details:') }}
+                    <small class="fw-300">
+                        {{ update.update.name }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['packages', 'macos']" cButton class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="loadMacosUpdateView()" cButton class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+
+            <c-card-body>
+                <c-row class="equal-height-row d-flex flex-wrap">
+                    <c-col [xs]="12" [md]="12" [lg]="6" [xl]="6">
+
+                        <div class="card mb-3">
+                            <c-card-body class="card-body align-items-center d-flex">
+                                <div class="me-3 p-3 text-white">
+                                    <fa-icon [icon]="['fas', 'square-binary']" [cTextColor]="'primary'"
+                                             [size]="'2xl'"></fa-icon>
+                                </div>
+                                <div>
+                                    <div class="fs-6 fw-semibold">
+                                        {{ update.update.name }}
+                                    </div>
+                                    <div class="fw-semibold small text-body-secondary">
+                                        {{ update.update.description }}
+                                    </div>
+                                </div>
+                            </c-card-body>
+                        </div>
+
+                    </c-col>
+                </c-row>
+
+                <!-- Filter -->
+                <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <h6 class="pb-2 mb-3 border-bottom">
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                {{ t('Filter') }}
+                            </h6>
+                        </c-col>
+                    </c-row>
+                    <form cForm>
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" [md]="6">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    </span>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="params['filter[Hosts.name]']"
+                                           [placeholder]="'Filter by host name' | transloco"
+                                           aria-label="Host name"
+                                           cFormControl
+                                           name="'Host.name"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+
+                        <c-row class="mt-2">
+                            <c-col class="text-end">
+                                <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                    {{ t('Reset filter') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    </form>
+                </c-container>
+                <!-- End Filter -->
+
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Host name') }}
+                        </th>
+                        @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                            <td>
+                                {{ t('Patch status') }}
+                            </td>
+                        }
+                        <th mat-sort-header="MacosUpdates.version">
+                            {{ t('Version') }}
+                        </th>
+                    </thead>
+                    <tbody>
+                        @for (host of update.all_host_updates; track $index) {
+                            <tr>
+                                <td class="word-break">
+                                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                        <a [routerLink]="['/', 'hosts', 'browser', host.Hosts.id]">
+                                            {{ host.Hosts.name }}
+                                        </a>
+                                    } @else {
+                                        {{ host.Hosts.name }}
+                                    }
+                                </td>
+
+                                @if (this.PermissionsService.hasPermissionObservable(['patchstatus', 'index'])|async) {
+                                    <td>
+                                        <a [routerLink]="['/', 'patchstatus', 'index']"
+                                           [queryParams]="{host_id: host.Hosts.id}">
+                                            {{ t('Host Patch status') }}
+                                        </a>
+                                    </td>
+                                }
+
+                                <td>
+                                    {{ host.macos_update.version }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                @if (update && update.all_host_updates.length === 0) {
+                    <oitc-no-records></oitc-no-records>
+                }
+                @if (update && update.all_host_updates) {
+                    <c-container
+                        class="mb-3 py-2"
+                        [fluid]="true">
+                        <c-row>
+                            <c-col>
+                                @if (update) {
+                                    <oitc-paginate-or-scroll
+                                        (paginatorChange)="onPaginatorChange($event)"
+                                        [paginateOrScroll]="update"></oitc-paginate-or-scroll>
+                                }
+                            </c-col>
+                        </c-row>
+                    </c-container>
+                }
+
+            </c-card-body>
+        </c-card>
+    }
+
+
+</ng-container>
+

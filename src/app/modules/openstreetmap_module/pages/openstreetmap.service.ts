@@ -1,7 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, DOCUMENT } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { DOCUMENT } from '@angular/common';
+
 import { PROXY_PATH } from '../../../tokens/proxy-path.token';
 import {
     OpenstreetmapIndexRoot,
@@ -40,7 +40,7 @@ export class OpenstreetmapService {
     public getAclAndSettings(): Observable<OpenstreetmapAclSettingsRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<OpenstreetmapAclSettingsRoot>(`${proxyPath}/openstreetmap_module/openstreetmap/getAclAndSettings.json`, {
-            params:  {angular: true}
+            params: {angular: true}
         }).pipe(
             map(data => {
                 return data;
@@ -51,7 +51,7 @@ export class OpenstreetmapService {
     public getSettings(): Observable<OpenstreetmapRequestSettings> {
         const proxyPath = this.proxyPath;
         return this.http.get<OpenstreetmapRequestSettings>(`${proxyPath}/openstreetmap_module/openstreetmap_settings/index.json`, {
-            params:  {angular: true}
+            params: {angular: true}
         }).pipe(
             map(data => {
                 return data;

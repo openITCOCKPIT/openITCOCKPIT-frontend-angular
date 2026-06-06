@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
@@ -20,12 +20,17 @@ import { ContextActionType, LabelPosition, MapItemType } from '../map-item-base/
 import { MapItemReloadService } from '../../../../services/map-item-reload.service';
 import { BlinkService } from '../../../../services/blink.service';
 import { UUID } from '../../../../classes/UUID';
-import { DataForMapItem, MapItemRoot, MapItemRootParams } from '../map-item-base/map-item-base.interface';
+import {
+    DataForMapItem,
+    MapItemRoot,
+    MapItemRootForMapItem,
+    MapItemRootParams
+} from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-map-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, NgIf, NgClass],
+    imports: [CdkDrag, ContextMenuModule, NgClass],
     templateUrl: './map-item.component.html',
     styleUrl: './map-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -73,28 +78,32 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         if (!this.isItemDeleted(this.type)) {
             this.load();
         }
-        if (this.refreshInterval()! > 0 && this.uuidForServices) {
-            this.MapItemReloadService.setRefreshInterval(this.refreshInterval() as number);
-            this.MapItemReloadService.registerNewItem(this.uuidForServices, this.item() as Mapitem, this.updateCallback);
-        }
+
     }
 
-    public updateCallback(result: MapItemRoot) {
-        if (!result.allowView) {
+    public updateCallback = (result: MapItemRootForMapItem) => {
+        if (!result.data.allowView) {
             this.allowView = false;
             return;
         }
 
-        this.icon = result.data.icon!;
-        this.icon_property = result.data.icon_property!;
-        this.allowView = result.allowView;
+        this.icon = result.data.data.icon!;
+        this.icon_property = result.data.data.icon_property!;
+        this.allowView = result.data.allowView;
         this.init = false;
 
-        this.getLabel(result.data);
+        if (this.allowView) {
+            if (this.refreshInterval()! > 0 && this.uuidForServices) {
+                this.MapItemReloadService.setRefreshInterval(this.refreshInterval() as number);
+                this.MapItemReloadService.registerNewItem(this.uuidForServices, this.item() as Mapitem, this.updateCallback);
+            }
+        }
+
+        this.getLabel(result.data.data);
 
         this.currentIcon = this.icon;
 
-        if ((result.data.isAcknowledged === true || result.data.isInDowntime === true) && this.uuidForServices) {
+        if ((result.data.data.isAcknowledged === true || result.data.data.isInDowntime === true) && this.uuidForServices) {
             this.BlinkService.registerNewObject(this.uuidForServices, this.blinkServiceCallback);
         } else {
             if (this.uuidForServices) {
@@ -119,31 +128,36 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
 
         this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
             .subscribe((result: MapItemRoot) => {
-                this.updateCallback(result);
+                this.updateCallback({data: result});
             }));
     };
 
-    private getLabel(data: DataForMapItem) {
+    private getLabel = (data: DataForMapItem) => {
         this.label = '';
         switch (this.item()!.type) {
             case 'host':
                 this.label = data.Host.hostname;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'service':
                 this.label = data.Host.hostname + '/' + data.Service.servicename;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'hostgroup':
                 this.label = data.Hostgroup!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'servicegroup':
                 this.label = data.Servicegroup!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
             case 'map':
                 this.label = data.Map!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
                 break;
         }
         this.cdr.markForCheck();
@@ -227,7 +241,8 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
-                                    label_possition: LabelPosition.RIGHT
+                                    label_possition: LabelPosition.RIGHT,
+                                    allowView: this.allowView
                                 } as Mapitem,
                                 itemType: this.type
                             });
@@ -245,7 +260,8 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
-                                    label_possition: LabelPosition.BOTTOM
+                                    label_possition: LabelPosition.BOTTOM,
+                                    allowView: this.allowView
                                 } as Mapitem,
                                 itemType: this.type
                             });
@@ -263,7 +279,8 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
-                                    label_possition: LabelPosition.LEFT
+                                    label_possition: LabelPosition.LEFT,
+                                    allowView: this.allowView
                                 } as Mapitem,
                                 itemType: this.type
                             });

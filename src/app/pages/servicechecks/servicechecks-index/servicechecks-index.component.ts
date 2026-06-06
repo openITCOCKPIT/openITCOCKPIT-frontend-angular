@@ -17,14 +17,14 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
+import { formatDate, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -53,6 +53,7 @@ import {
     ServicechecksIndexRoot
 } from '../servicechecks.interface';
 import { IndexPage } from '../../../pages.interface';
+import { LocalNumberPipe } from '../../../pipes/local-number.pipe';
 
 @Component({
     selector: 'oitc-servicechecks-index',
@@ -77,8 +78,6 @@ import { IndexPage } from '../../../pages.interface';
         MatSortHeader,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         PaginatorModule,
@@ -93,7 +92,9 @@ import { IndexPage } from '../../../pages.interface';
         ServicesBrowserMenuComponent,
         ServicestatusSimpleIconComponent,
         NgClass,
-        CardFooterComponent
+        CardFooterComponent,
+        TooltipDirective,
+        LocalNumberPipe
     ],
     templateUrl: './servicechecks-index.component.html',
     styleUrl: './servicechecks-index.component.css',

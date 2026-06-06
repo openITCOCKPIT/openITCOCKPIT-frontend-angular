@@ -1,6 +1,7 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { Container } from '../containers/containers.interface';
+import { getUserDate } from '../../services/timezone.service';
 
 export interface EventlogsIndex extends PaginateOrScroll {
     all_events: Eventlog[],
@@ -26,7 +27,7 @@ export interface EventlogsIndexParams {
 }
 
 export function getDefaultEventlogsIndexParams(): EventlogsIndexParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,

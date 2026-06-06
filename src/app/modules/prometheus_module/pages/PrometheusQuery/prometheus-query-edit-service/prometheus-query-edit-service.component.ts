@@ -16,7 +16,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import {
     PrometheusCodeMirrorComponent
@@ -73,8 +73,6 @@ import { PrometheusThresholdType } from '../prometheus.enum';
         KeyValuePipe,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         PermissionDirective,
         PrometheusCodeMirrorComponent,
         PrometheusHelpComponent,
@@ -92,7 +90,7 @@ import { PrometheusThresholdType } from '../prometheus.enum';
         FormLoaderComponent,
         TranslocoPipe,
         MultiSelectComponent,
-        FormLabelDirective,
+        FormLabelDirective
     ],
     templateUrl: './prometheus-query-edit-service.component.html',
     styleUrl: './prometheus-query-edit-service.component.css',

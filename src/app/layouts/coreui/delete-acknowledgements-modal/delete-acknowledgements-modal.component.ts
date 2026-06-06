@@ -24,7 +24,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 import { DisableResponse } from '../disable-modal/disable.interface';
@@ -45,8 +45,6 @@ import { DeleteAcknowledgementItem } from '../../../pages/acknowledgements/ackno
         ModalFooterComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
-        NgForOf,
-        NgIf,
         ProgressComponent,
         RowComponent,
         TranslocoDirective,

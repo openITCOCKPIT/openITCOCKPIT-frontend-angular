@@ -27,7 +27,6 @@ import {
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -38,7 +37,7 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 import { SelectItemOptionGroup, SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
@@ -61,53 +60,54 @@ import { HistoryService } from '../../../../../history.service';
 import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { ExternalSystems } from '../external-systems.enum';
+import { MultiSelectChangeEvent } from 'primeng/multiselect';
 
 @Component({
     selector: 'oitc-external-systems-add',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    NgIf,
-    SelectComponent,
-    ColComponent,
-    RowComponent,
-    ContainerComponent,
-    InputGroupComponent,
-    DropdownComponent,
-    DropdownToggleDirective,
-    DropdownMenuDirective,
-    DropdownItemDirective,
-    InputGroupTextDirective,
-    DebounceDirective,
-    FormCheckComponent,
-    FormCheckLabelDirective,
-    AlertComponent,
-    AlertHeadingDirective,
-    MultiSelectOptgroupComponent,
-    AsyncPipe,
-    TrueFalseDirective,
-    RegexHelperTooltipComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormCheckInputDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        SelectComponent,
+        ColComponent,
+        RowComponent,
+        ContainerComponent,
+        InputGroupComponent,
+        DropdownComponent,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        DropdownItemDirective,
+        InputGroupTextDirective,
+        DebounceDirective,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        AlertComponent,
+        AlertHeadingDirective,
+        MultiSelectOptgroupComponent,
+        AsyncPipe,
+        TrueFalseDirective,
+        RegexHelperTooltipComponent
+    ],
     templateUrl: './external-systems-add.component.html',
     styleUrl: './external-systems-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -131,14 +131,19 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
 
     protected readonly ExternalSystemTypes = [
         {
-            key: 'idoit',
+            key: ExternalSystems.Idoit,
             value: this.TranslocoService.translate('i-doit System'),
             placeholder: 'i-doit.system/src/jsonrpc.php'
         },
         {
-            key: 'itop',
+            key: ExternalSystems.Itop,
             value: this.TranslocoService.translate('iTop System'),
             placeholder: 'itop/webservices/rest.php?version=1.3'
+        },
+        {
+            key: ExternalSystems.Proxmox,
+            value: this.TranslocoService.translate('Proxmox VE'),
+            placeholder: 'proxmox.example.com:8006'
         }
     ];
 
@@ -156,6 +161,9 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             value: this.TranslocoService.translate('LogicalInterface')
         }
     ];
+
+    // By default, we select the Idoit URL placeholder
+    public url_placeholder: string = this.ExternalSystemTypes[0].placeholder;
 
     public containers: SelectKeyValue[] = [];
     public hostgroup_containers: SelectKeyValue[] = [];
@@ -187,12 +195,13 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             use_https: 1, //number
             use_proxy: 1, //number
             ignore_ssl_certificate: 0, //number
-            system_type: 'idoit',
+            system_type: ExternalSystems.Idoit,
             object_type_ids: [],
             custom_data: {
                 custom_mappings: [],
                 hostgroup_mappings: []
-            }
+            },
+            polling_interval: null
         }
     }
 
@@ -204,6 +213,7 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
     public submit() {
         this.subscriptions.add(this.ExternalSystemsService.createExternalSystem(this.post)
             .subscribe((result) => {
+                this.errors = null;
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
@@ -233,10 +243,10 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
             .subscribe((result: ExternalSystemConnect) => {
                 this.cdr.markForCheck();
                 this.connectStatus = result.status.status;
-                if (result.status.msg) {
+                if (!this.connectStatus && result.status.msg) {
                     this.connectMessage = result.status.msg.message;
                 }
-                if (result.status.result) {
+                if (this.connectStatus) {
                     this.objectTypes = result.status.result;
                     this.objectTypesForOptionGroup = this.ExternalSystemsService.parseElementsForOptionGroup(this.objectTypes);
                 }
@@ -281,4 +291,15 @@ export class ExternalSystemsAddComponent implements OnInit, OnDestroy {
                 }));
         }
     }
+
+    public onExternalSystemTypeChange(selectedSystem: MultiSelectChangeEvent) {
+        // Find placeholder by key
+        const foundSystem = this.ExternalSystemTypes.find(item => item.key === selectedSystem.value);
+        if (foundSystem) {
+            this.url_placeholder = foundSystem.placeholder;
+        }
+        this.cdr.markForCheck()
+    }
+
+    protected readonly ExternalSystems = ExternalSystems;
 }

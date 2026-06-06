@@ -105,123 +105,135 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!timeperiods"></oitc-table-loader>
-            <table *ngIf="timeperiods" bordered cTable class="mt-2 mb-0" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center col-1" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Timeperiods.name">
-                        {{ t('Time period name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Timeperiods.description">
-                        {{ t('Description') }}
-                    </th>
-                    <th class="text-center col-1 width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let timeperiod of timeperiods.all_timeperiods">
-                    <td class="text-center">
-                        @if (( PermissionService.hasPermissionObservable(['timeperiods', 'delete'])|async ) || ( PermissionService.hasPermissionObservable(['timeperiods', 'copy'])|async )) {
-                            <oitc-item-select
-                                [disabled]="!timeperiod.Timeperiod.allow_edit"
-                                [item]="timeperiod"></oitc-item-select>
+            @if (!timeperiods) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (timeperiods) {
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center col-1" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Timeperiods.name">
+                            {{ t('Time period name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Timeperiods.description">
+                            {{ t('Description') }}
+                        </th>
+                        <th class="text-center col-1 width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (timeperiod of timeperiods.all_timeperiods; track timeperiod) {
+                            <tr>
+                                <td class="text-center">
+                                    @if (( PermissionService.hasPermissionObservable(['timeperiods', 'delete'])|async ) || ( PermissionService.hasPermissionObservable(['timeperiods', 'copy'])|async )) {
+                                        <oitc-item-select
+                                            [disabled]="!timeperiod.Timeperiod.allow_edit"
+                                            [item]="timeperiod"></oitc-item-select>
+                                    }
+                                </td>
+                                <td *oitcPermission="['timeperiods', 'viewdetails']" class="word-break">
+                                    <a [routerLink]="['/', 'timeperiods', 'viewDetails', timeperiod.Timeperiod.id]">
+                                        {{ timeperiod.Timeperiod.name }}
+                                    </a>
+                                </td>
+                                <td *oitcPermission="['timeperiods', 'viewdetails']; negate: true"
+                                    class="word-break">
+                                    {{ timeperiod.Timeperiod.name }}
+                                </td>
+                                <td>{{ timeperiod.Timeperiod.description }}</td>
+                                <td class="width-50">
+                                    <c-button-group role="group">
+                                        @if (PermissionService.hasPermissionObservable(['timeperiods', 'edit'])|async) {
+                                            @if (timeperiod.Timeperiod.allow_edit) {
+                                                <button cButton class="ripple btn-lower-padding" color="default"
+                                                        size="xs"
+                                                        (click)="onActionButtonClick('/timeperiods/edit/' + timeperiod.Timeperiod.id)">
+                                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                </button>
+                                            }
+                                            @if (!timeperiod.Timeperiod.allow_edit) {
+                                                <button cButton class="ripple btn-lower-padding" color="default"
+                                                        size="xs"
+                                                        disabled>
+                                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                </button>
+                                            }
+                                        } @else if (PermissionService.hasPermissionObservable(['timeperiods', 'viewdetails'])|async) {
+                                            <button cButton class="ripple btn-lower-padding" color="default" size="xs"
+                                                    (click)="onActionButtonClick('/timeperiods/viewDetails/' + timeperiod.Timeperiod.id)">
+                                                <fa-icon [icon]="['fas', 'calendar-week']"></fa-icon>
+                                            </button>
+                                        } @else {
+                                            <button cButton class="ripple btn-lower-padding" color="default" size="xs"
+                                                    disabled>
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            </button>
+                                        }
+                                        <c-dropdown variant="btn-group">
+                                            <button cButton cDropdownToggle
+                                                    class="ripple btn-lower-padding dropdown-btn"
+                                                    color="default" [caret]="false"
+                                                    size="xs">
+                                                <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
+                                            </button>
+                                            <ul cDropdownMenu>
+                                                <oitc-actions-button-element [permission]="'timeperiods.edit'"
+                                                                             [url]="'/timeperiods/edit/' + timeperiod.Timeperiod.id"
+                                                                             [allow]="timeperiod.Timeperiod.allow_edit">
+                                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                    {{ t('Edit') }}
+                                                </oitc-actions-button-element>
+                                                <oitc-actions-button-element [permission]="'timeperiods.viewdetails'"
+                                                                             [url]="'/timeperiods/viewDetails/' + timeperiod.Timeperiod.id">
+                                                    <fa-icon [icon]="['fas', 'calendar-week']"></fa-icon>
+                                                    {{ t('View details') }}
+                                                </oitc-actions-button-element>
+                                                <oitc-actions-button-element [permission]="'timeperiods.copy'"
+                                                                             [url]="'/timeperiods/copy/' + timeperiod.Timeperiod.id"
+                                                                             [allow]="timeperiod.Timeperiod.allow_edit">
+                                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                                    {{ t('Copy') }}
+                                                </oitc-actions-button-element>
+                                                <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                             [url]="'/changelogs/entity/timeperiod/' + timeperiod.Timeperiod.id">
+                                                    <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                                    {{ t('Changelog') }}
+                                                </oitc-actions-button-element>
+                                                <oitc-actions-button-element [permission]="'timeperiods.usedBy'"
+                                                                             [url]="'/timeperiods/usedBy/' + timeperiod.Timeperiod.id">
+                                                    <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                                    {{ t('Used By') }}
+                                                </oitc-actions-button-element>
+                                                <li cDropdownDivider></li>
+                                                <oitc-actions-button-element (click)="toggleDeleteAllModal(timeperiod)"
+                                                                             [permission]="'timeperiods.delete'"
+                                                                             [allow]="timeperiod.Timeperiod.allow_edit">
+                                                    <span class="text-danger">
+                                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                        {{ t('Delete') }}
+                                                    </span>
+                                                </oitc-actions-button-element>
+                                            </ul>
+                                        </c-dropdown>
+                                    </c-button-group>
+                                </td>
+                            </tr>
                         }
-                    </td>
-                    <td *oitcPermission="['timeperiods', 'viewdetails']" class="word-break">
-                        <a [routerLink]="['/', 'timeperiods', 'viewDetails', timeperiod.Timeperiod.id]">
-                            {{ timeperiod.Timeperiod.name }}
-                        </a>
-                    </td>
-                    <td *oitcPermission="['timeperiods', 'viewdetails']; negate: true"
-                        class="word-break">
-                        {{ timeperiod.Timeperiod.name }}
-                    </td>
-                    <td>{{ timeperiod.Timeperiod.description }}</td>
+                    </tbody>
+                </table>
+            }
 
-
-                    <td class="width-50">
-
-                        <c-button-group role="group">
-                            @if (PermissionService.hasPermissionObservable(['timeperiods', 'edit'])|async) {
-                                <button cButton class="ripple btn-lower-padding" color="default"
-                                        *ngIf="timeperiod.Timeperiod.allow_edit" size="xs"
-                                        (click)="onActionButtonClick('/timeperiods/edit/' + timeperiod.Timeperiod.id)">
-                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                </button>
-                                <button cButton class="ripple btn-lower-padding" color="default" size="xs"
-                                        *ngIf="!timeperiod.Timeperiod.allow_edit" disabled>
-                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                </button>
-                            } @else if (PermissionService.hasPermissionObservable(['timeperiods', 'viewdetails'])|async) {
-                                <button cButton class="ripple btn-lower-padding" color="default" size="xs"
-                                        (click)="onActionButtonClick('/timeperiods/viewDetails/' + timeperiod.Timeperiod.id)">
-                                    <fa-icon [icon]="['fas', 'calendar-week']"></fa-icon>
-                                </button>
-                            } @else {
-                                <button cButton class="ripple btn-lower-padding" color="default" size="xs" disabled>
-                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                </button>
-                            }
-                            <c-dropdown variant="btn-group">
-                                <button cButton cDropdownToggle class="ripple btn-lower-padding dropdown-btn"
-                                        color="default" [caret]="false"
-                                        size="xs">
-                                    <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
-                                </button>
-                                <ul cDropdownMenu>
-                                    <oitc-actions-button-element [permission]="'timeperiods.edit'"
-                                                                 [url]="'/timeperiods/edit/' + timeperiod.Timeperiod.id"
-                                                                 [allow]="timeperiod.Timeperiod.allow_edit">
-                                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                        {{ t('Edit') }}
-                                    </oitc-actions-button-element>
-                                    <oitc-actions-button-element [permission]="'timeperiods.viewdetails'"
-                                                                 [url]="'/timeperiods/viewDetails/' + timeperiod.Timeperiod.id">
-                                        <fa-icon [icon]="['fas', 'calendar-week']"></fa-icon>
-                                        {{ t('View details') }}
-                                    </oitc-actions-button-element>
-                                    <oitc-actions-button-element [permission]="'timeperiods.copy'"
-                                                                 [url]="'/timeperiods/copy/' + timeperiod.Timeperiod.id"
-                                                                 [allow]="timeperiod.Timeperiod.allow_edit">
-                                        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                        {{ t('Copy') }}
-                                    </oitc-actions-button-element>
-                                    <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                                 [url]="'/changelogs/entity/timeperiod/' + timeperiod.Timeperiod.id">
-                                        <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                        {{ t('Changelog') }}
-                                    </oitc-actions-button-element>
-                                    <oitc-actions-button-element [permission]="'timeperiods.usedBy'"
-                                                                 [url]="'/timeperiods/usedBy/' + timeperiod.Timeperiod.id">
-                                        <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                                        {{ t('Used By') }}
-                                    </oitc-actions-button-element>
-                                    <li cDropdownDivider></li>
-                                    <oitc-actions-button-element (click)="toggleDeleteAllModal(timeperiod)"
-                                                                 [permission]="'timeperiods.delete'"
-                                                                 [allow]="timeperiod.Timeperiod.allow_edit">
-                                        <span class="text-danger">
-                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                            {{ t('Delete') }}
-                                        </span>
-                                    </oitc-actions-button-element>
-                                </ul>
-                            </c-dropdown>
-                        </c-button-group>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records *ngIf="timeperiods && timeperiods.all_timeperiods.length === 0"></oitc-no-records>
-            <ng-container *ngIf="timeperiods && timeperiods.all_timeperiods">
+            @if (timeperiods && timeperiods.all_timeperiods.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (timeperiods && timeperiods.all_timeperiods) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -248,16 +260,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="timeperiods"
-                            [paginateOrScroll]="timeperiods"></oitc-paginate-or-scroll>
+                        @if (timeperiods) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="timeperiods"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

@@ -36,7 +36,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -54,7 +54,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 
@@ -79,8 +79,6 @@ import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipbo
         InputGroupTextDirective,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PermissionDirective,
         ReactiveFormsModule,
@@ -106,7 +104,7 @@ import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipbo
         FormFeedbackComponent,
         FormErrorDirective,
         FormFeedbackComponent,
-        NgOptionHighlightModule,
+        NgOptionHighlightDirective,
         TableLoaderComponent,
         CopyToClipboardComponent
     ],

@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf, SlicePipe } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgClass, SlicePipe } from '@angular/common';
 
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -19,16 +19,14 @@ import { PermissionsService } from '../../../../permissions/permissions.service'
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Response, SlaHostInformationElementRoot } from './sla-host-information-element.interface';
 import {
-  AlertComponent,
-  BadgeComponent,
-  ColComponent,
-  RowComponent,
-  TableDirective
+    AlertComponent,
+    BadgeComponent,
+    ColComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-
-
 
 
 import { FormsModule } from '@angular/forms';
@@ -41,25 +39,23 @@ import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-
 @Component({
     selector: 'oitc-sla-host-information-element',
     imports: [
-    TranslocoDirective,
-    SkeletonModule,
-    NgIf,
-    ColComponent,
-    FaIconComponent,
-    NgForOf,
-    RowComponent,
-    RouterLink,
-    FormsModule,
-    AsyncPipe,
-    NgClass,
-    SlicePipe,
-    TableDirective,
-    BadgeOutlineComponent,
-    KeyValuePipe,
-    BadgeComponent,
-    AlertComponent,
-    TableLoaderComponent
-],
+        TranslocoDirective,
+        SkeletonModule,
+        ColComponent,
+        FaIconComponent,
+        RowComponent,
+        RouterLink,
+        FormsModule,
+        AsyncPipe,
+        NgClass,
+        SlicePipe,
+        TableDirective,
+        BadgeOutlineComponent,
+        KeyValuePipe,
+        BadgeComponent,
+        AlertComponent,
+        TableLoaderComponent
+    ],
     templateUrl: './sla-host-information-element.component.html',
     styleUrl: './sla-host-information-element.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

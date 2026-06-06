@@ -34,7 +34,8 @@ import {
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, ColComponent,
+    CardTitleDirective,
+    ColComponent,
     FormCheckInputDirective,
     FormControlDirective,
     FormDirective,
@@ -51,17 +52,18 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { StatuspagesService } from '../statuspages.service';
-import { map, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit } from '../statuspage.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { intersection } from 'lodash';
+import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 
 @Component({
     selector: 'oitc-statuspages-edit',
@@ -85,7 +87,6 @@ import { intersection } from 'lodash';
         FormDirective,
         FormsModule,
         PaginatorModule,
-        NgIf,
         FormFeedbackComponent,
         FormCheckInputDirective,
         FormControlDirective,
@@ -95,7 +96,8 @@ import { intersection } from 'lodash';
         InputGroupComponent,
         AsyncPipe,
         InputGroupTextDirective,
-        ColComponent
+        ColComponent,
+        ObjectUuidComponent
     ],
     templateUrl: './statuspages-edit.component.html',
     styleUrl: './statuspages-edit.component.css',
@@ -117,6 +119,8 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
     public post: StatuspagePostEdit = {} as StatuspagePostEdit;
     public errors: GenericValidationError | null = null;
     public noItemsSelected: boolean = false;
+
+    public readonly hostname = window.location.hostname;
 
     constructor(private route: ActivatedRoute, private _router: Router) {
     }
@@ -291,7 +295,8 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
             container_id: null,
             name: '',
             description: '',
-           // public_title: '',
+            public_title: '',
+            public_identifier: null,
             public: false,
             show_downtimes: false,
             show_downtime_comments: false,
@@ -320,13 +325,20 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         this.cleanUpForSubmit();
         this.filterForSubmit();
 
+        if (!this.post.public || this.post.public_identifier === '') {
+            this.post.public_identifier = null;
+        }
+
         this.subscriptions.add(this.StatuspagesService.updateStatuspage(this.id, this.post)
             .subscribe((result) => {
                 this.errors = null;
                 if (result.success) {
-                    const title: string = this.TranslocoService.translate('Statuspage');
-                    const msg: string = this.TranslocoService.translate('added successfully');
-                    this.notyService.genericSuccess(msg, title);
+                    const title = this.TranslocoService.translate('Statuspage');
+                    const msg = this.TranslocoService.translate('updated successfully');
+                    const url = ['statuspages', 'edit', this.id];
+
+                    this.notyService.genericSuccess(msg, title, url);
+
                     this._router.navigate(['statuspages', 'index']);
                     this.notyService.scrollContentDivToTop();
                     this._router.navigate(['statuspages', 'index'])
@@ -408,6 +420,16 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
             this.services.map(service => service.key),
             this.post.selected_services._ids
         );
+    }
+
+    public onPublicIdentifierInputChange(event: Event) {
+        if (this.post.public_identifier) {
+            // Replace all values we do not want to have in a URL
+            const input = event.target as HTMLInputElement;
+            const filtered = input.value.replace(/[^a-zA-Z0-9\-]/g, '');
+            input.value = filtered;
+            this.post.public_identifier = filtered;
+        }
     }
 
 }

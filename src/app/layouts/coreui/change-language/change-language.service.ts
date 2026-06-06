@@ -1,7 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, DOCUMENT } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../tokens/proxy-path.token';
-import { DOCUMENT } from '@angular/common';
+
 import { catchError, map, Observable, of } from 'rxjs';
 
 
@@ -14,7 +14,7 @@ export class ChangeLanguageService {
     private readonly document = inject(DOCUMENT);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    public  changeBackendLanguage(i18n: string): Observable<any> {
+    public changeBackendLanguage(i18n: string): Observable<any> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/profile/updateI18n.json?angular=true`, {
             i18n: i18n

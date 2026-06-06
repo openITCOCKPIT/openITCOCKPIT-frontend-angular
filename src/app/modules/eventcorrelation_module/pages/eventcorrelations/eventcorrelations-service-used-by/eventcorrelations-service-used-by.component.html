@@ -21,144 +21,158 @@
     </nav>
 
     <oitc-form-loader [isVisible]="!service"></oitc-form-loader>
-    <c-card class="mb-3" *ngIf="service">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('Service') }}
-                <small class="fw-300 word-break">
-                    <i>
-                        <strong>
-                            »{{ service.host?.name }}/{{ service.servicename }}«
-                        </strong>
-                        {{ t('is used by') }}
-                        {{ total }}
-                        {{ t('event correlations.') }}
-                    </i>
-                </small>
-            </h5>
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['eventcorrelation_module', 'eventcorrelations', 'index']" cButton
-                            class="ripple" color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-        <c-card-body>
-            <c-container
-                [fluid]="true">
-                <table bordered cTable class="mt-2 mb-0" hover striped *ngIf="usedBy">
-                    <thead>
-                    <tr>
-                        <th scope="col">
-                            {{ t('Event correlation name') }}
-                        </th>
-                        <th scope="col">
-                            {{ t('Description') }}
-                        </th>
-                        <th class="text-center width-50" scope="col">
-                            <i class="fa fa-cog"></i>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let evchost of usedBy">
-                        <td>
-                            @if (( PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'editCorrelation'])|async ) && evchost.hasWritePermission) {
-                                <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', evchost.Hosts.id]"
-                                   [queryParams]="{'highlightServiceId': service.id}">
-                                    {{ evchost.Hosts.name }}
-                                </a>
-                            } @else if (!( PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'editCorrelation'])|async ) &&
-                            ( PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'view'])|async ) && evchost.hasViewPermission) {
-                                <a [routerLink]="['/','eventcorrelation_module','eventcorrelations','view', + evchost.Hosts.id]">
-                                    {{ evchost.Hosts.name }}
-                                </a>
-                            } @else {
-                                {{ evchost.Hosts.name }}
-                                <fa-icon [icon]="['fas', 'low-vision']" class="text-info"
-                                         [cTooltip]="'This EVC contains Hosts you are not permitted to view' | transloco"
-                                         cTooltipPlacement="bottom"></fa-icon>
-                            }
-                        </td>
-
-                        <td>
-                            {{ evchost.Hosts.description }}
-                        </td>
-
-                        <td class="width-50">
-                            <oitc-actions-button
-                                [permission]="'EventcorrelationModule.eventcorrelations.editCorrelation'"
-                                [url]="'/eventcorrelation_module/eventcorrelations/editCorrelation/' + evchost.Hosts.id"
-                                [allowEdit]="evchost.hasWritePermission">
-                                <oitc-actions-button-element
-                                    [permission]="'EventcorrelationModule.eventcorrelations.editCorrelation'"
-                                    [url]="'/eventcorrelation_module/eventcorrelations/editCorrelation/' + evchost.Hosts.id"
-                                    *ngIf="evchost.hasWritePermission">
-                                    <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                    {{ t('Edit Correlation') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element
-                                    [permission]="'hosts.edit'"
-                                    [url]="'/hosts/edit/' + evchost.Hosts.id"
-                                    *ngIf="evchost.hasWritePermission">
-                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                    {{ t('Edit host') }}
-                                </oitc-actions-button-element>
-                                <li cDropdownDivider *ngIf="evchost.hasViewPermission"></li>
-                                <oitc-actions-button-element
-                                    [permission]="'EventcorrelationModule.eventcorrelations.usedBy'"
-                                    [url]="'/eventcorrelation_module/eventcorrelations/usedBy/' + evchost.Hosts.id">
-                                    <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                                    {{ t('Used by') }}
-                                </oitc-actions-button-element>
-                                <li cDropdownDivider *ngIf="evchost.hasViewPermission"></li>
-                                <oitc-actions-button-element
-                                    [permission]="'EventcorrelationModule.eventcorrelations.view'"
-                                    [url]="'/eventcorrelation_module/eventcorrelations/view/' + evchost.Hosts.id">
-                                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                                    {{ t('View') }}
-                                </oitc-actions-button-element>
-                                <oitc-actions-button-element
-                                    [permission]="'EventcorrelationModule.eventcorrelations.summary_view'"
-                                    [url]="'/eventcorrelation_module/eventcorrelations/summary_view/' + evchost.Hosts.id">
-                                    <fa-icon [icon]="['fas', 'th-large']"></fa-icon>
-                                    {{ t('Summary view') }}
-                                </oitc-actions-button-element>
-                                <li *oitcPermission="'EventcorrelationModule.eventcorrelations.view'">
-                                    <a cDropdownItem
-                                       [href]="'/eventcorrelation_module/eventcorrelations/summary_view_table/' + evchost.Hosts.id+'.pdf'">
-                                        <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
-                                        {{ t('Download as PDF') }}
-                                    </a>
-                                </li>
-
-                                <li cDropdownDivider *ngIf="evchost.hasWritePermission"></li>
-                                <oitc-actions-button-element (click)="toggleDeleteAllModal(evchost)"
-                                                             [permission]="'EventcorrelationModule.eventcorrelations.delete'"
-                                                             *ngIf="evchost.hasWritePermission">
-                                    <span class="text-danger">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Delete') }}
-                                    </span>
-                                </oitc-actions-button-element>
-                            </oitc-actions-button>
-                        </td>
-
-                    </tr>
-
-
-                    </tbody>
-                </table>
-                <oitc-not-used-by-object *ngIf="total === 0">
-                    {{ t('This event correlation is not used by other event correlations') }}
-                </oitc-not-used-by-object>
-            </c-container>
-        </c-card-body>
-    </c-card>
+    @if (service) {
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Service') }}
+                    <small class="fw-300 word-break">
+                        <i>
+                            <strong>
+                                »{{ service.host?.name }}/{{ service.servicename }}«
+                            </strong>
+                            {{ t('is used by') }}
+                            {{ total }}
+                            {{ t('event correlations.') }}
+                        </i>
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['eventcorrelation_module', 'eventcorrelations', 'index']" cButton
+                                class="ripple" color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <c-container
+                    [fluid]="true">
+                    @if (usedBy) {
+                        <table bordered cTable class="mt-2 mb-0" hover striped>
+                            <thead>
+                            <tr>
+                                <th scope="col">
+                                    {{ t('Event correlation name') }}
+                                </th>
+                                <th scope="col">
+                                    {{ t('Description') }}
+                                </th>
+                                <th class="text-center width-50" scope="col">
+                                    <i class="fa fa-cog"></i>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @for (evchost of usedBy; track evchost) {
+                                    <tr>
+                                        <td>
+                                            @if (( PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'editCorrelation'])|async ) && evchost.hasWritePermission) {
+                                                <a [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'editCorrelation', evchost.Hosts.id]"
+                                                   [queryParams]="{'highlightServiceId': service.id}">
+                                                    {{ evchost.Hosts.name }}
+                                                </a>
+                                            } @else if (!( PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'editCorrelation'])|async ) &&
+                                            ( PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'view'])|async ) && evchost.hasViewPermission) {
+                                                <a [routerLink]="['/','eventcorrelation_module','eventcorrelations','view', + evchost.Hosts.id]">
+                                                    {{ evchost.Hosts.name }}
+                                                </a>
+                                            } @else {
+                                                {{ evchost.Hosts.name }}
+                                                <fa-icon [icon]="['fas', 'low-vision']" class="text-info"
+                                                         [cTooltip]="'This EVC contains Hosts you are not permitted to view' | transloco"
+                                                         cTooltipPlacement="bottom"></fa-icon>
+                                            }
+                                        </td>
+                                        <td>
+                                            {{ evchost.Hosts.description }}
+                                        </td>
+                                        <td class="width-50">
+                                            <oitc-actions-button
+                                                [permission]="'EventcorrelationModule.eventcorrelations.editCorrelation'"
+                                                [url]="'/eventcorrelation_module/eventcorrelations/editCorrelation/' + evchost.Hosts.id"
+                                                [allowEdit]="evchost.hasWritePermission">
+                                                @if (evchost.hasWritePermission) {
+                                                    <oitc-actions-button-element
+                                                        [permission]="'EventcorrelationModule.eventcorrelations.editCorrelation'"
+                                                        [url]="'/eventcorrelation_module/eventcorrelations/editCorrelation/' + evchost.Hosts.id"
+                                                    >
+                                                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                        {{ t('Edit Correlation') }}
+                                                    </oitc-actions-button-element>
+                                                }
+                                                @if (evchost.hasWritePermission) {
+                                                    <oitc-actions-button-element
+                                                        [permission]="'hosts.edit'"
+                                                        [url]="'/hosts/edit/' + evchost.Hosts.id"
+                                                    >
+                                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                        {{ t('Edit host') }}
+                                                    </oitc-actions-button-element>
+                                                }
+                                                @if (evchost.hasViewPermission) {
+                                                    <li cDropdownDivider></li>
+                                                }
+                                                <oitc-actions-button-element
+                                                    [permission]="'EventcorrelationModule.eventcorrelations.usedBy'"
+                                                    [url]="'/eventcorrelation_module/eventcorrelations/usedBy/' + evchost.Hosts.id">
+                                                    <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                                    {{ t('Used by') }}
+                                                </oitc-actions-button-element>
+                                                @if (evchost.hasViewPermission) {
+                                                    <li cDropdownDivider></li>
+                                                }
+                                                <oitc-actions-button-element
+                                                    [permission]="'EventcorrelationModule.eventcorrelations.view'"
+                                                    [url]="'/eventcorrelation_module/eventcorrelations/view/' + evchost.Hosts.id">
+                                                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                                                    {{ t('View') }}
+                                                </oitc-actions-button-element>
+                                                <oitc-actions-button-element
+                                                    [permission]="'EventcorrelationModule.eventcorrelations.summary_view'"
+                                                    [url]="'/eventcorrelation_module/eventcorrelations/summary_view/' + evchost.Hosts.id">
+                                                    <fa-icon [icon]="['fas', 'th-large']"></fa-icon>
+                                                    {{ t('Summary view') }}
+                                                </oitc-actions-button-element>
+                                                <li *oitcPermission="'EventcorrelationModule.eventcorrelations.view'">
+                                                    <a cDropdownItem
+                                                       [href]="'/eventcorrelation_module/eventcorrelations/summary_view_table/' + evchost.Hosts.id+'.pdf'">
+                                                        <fa-icon [icon]="['fas', 'file-pdf']"></fa-icon>
+                                                        {{ t('Download as PDF') }}
+                                                    </a>
+                                                </li>
+                                                @if (evchost.hasWritePermission) {
+                                                    <li cDropdownDivider></li>
+                                                }
+                                                @if (evchost.hasWritePermission) {
+                                                    <oitc-actions-button-element (click)="toggleDeleteAllModal(evchost)"
+                                                                                 [permission]="'EventcorrelationModule.eventcorrelations.delete'"
+                                                    >
+                                                        <span class="text-danger">
+                                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                            {{ t('Delete') }}
+                                                        </span>
+                                                    </oitc-actions-button-element>
+                                                }
+                                            </oitc-actions-button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    @if (total === 0) {
+                        <oitc-not-used-by-object>
+                            {{ t('This event correlation is not used by other event correlations') }}
+                        </oitc-not-used-by-object>
+                    }
+                </c-container>
+            </c-card-body>
+        </c-card>
+    }
 </ng-container>
 
 <oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

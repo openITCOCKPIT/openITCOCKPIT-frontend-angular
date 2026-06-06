@@ -36,21 +36,21 @@ import {
     ViewChild
 } from '@angular/core';
 import {
-  ButtonCloseDirective,
-  ColComponent,
-  FormControlDirective,
-  FormLabelDirective,
-  FormTextDirective,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective,
-  RowComponent
+    ButtonCloseDirective,
+    ColComponent,
+    FormControlDirective,
+    FormLabelDirective,
+    FormTextDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -67,24 +67,22 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 @Component({
     selector: 'oitc-service-maintenance-modal',
     imports: [
-    ButtonCloseDirective,
-    ColComponent,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    NgForOf,
-    NgIf,
-    RowComponent,
-    TranslocoDirective,
-    FormTextDirective,
-    FormControlDirective,
-    FormLabelDirective,
-    FormsModule,
-    XsButtonDirective
-],
+        ButtonCloseDirective,
+        ColComponent,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        RowComponent,
+        TranslocoDirective,
+        FormTextDirective,
+        FormControlDirective,
+        FormLabelDirective,
+        FormsModule,
+        XsButtonDirective
+    ],
     templateUrl: './service-maintenance-modal.component.html',
     styleUrl: './service-maintenance-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

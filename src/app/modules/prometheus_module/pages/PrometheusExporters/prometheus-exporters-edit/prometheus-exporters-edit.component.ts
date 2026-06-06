@@ -27,7 +27,7 @@ import {
 } from '@coreui/angular';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -48,7 +48,6 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
         FormDirective,
         FormLoaderComponent,
         FormsModule,
-        NgIf,
         PaginatorModule,
         BackButtonDirective,
         CardBodyComponent,

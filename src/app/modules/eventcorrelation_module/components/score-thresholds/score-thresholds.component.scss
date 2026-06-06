@@ -1,0 +1,215 @@
+@use "sass:color";
+@use "../../../../../assets/coreui/variables" as oitc;
+/* Thresholds Warning / Critical consider min/max values and inclusive setting*/
+
+.threshold-container {
+    border-bottom: 1px solid #cccccc;
+}
+
+.subcontainer-warning {
+    border-bottom: 11px solid;
+    border-image: linear-gradient(to right, #DF8F1D 25%, #cccccc 25%, transparent 25%, transparent 75%, #cccccc 75%, #DF8F1D 75%);
+    border-image-slice: 1;
+}
+
+.subcontainer-critical {
+    border-bottom: 11px solid;
+    border-image: linear-gradient(to right, #C9302C 25%, #cccccc 26%, transparent 26%, transparent 75%, #cccccc 75%, #C9302C 75%);
+    border-image-slice: 1;
+}
+
+.subcontainer-unknown {
+    border-bottom: 11px solid;
+    border-image: linear-gradient(to right, #6b7785 25%, #cccccc 26%, transparent 26%, transparent 75%, #cccccc 75%, #6b7785 75%);
+    border-image-slice: 1;
+}
+
+.subcontainer-warning-inclusive {
+    border-bottom: 11px solid;
+    border-image: linear-gradient(to right, transparent 0%, transparent 25%, #cccccc 26%, #DF8F1D 26%, #DF8F1D 75%, #cccccc 75%, transparent 75%);
+    border-image-slice: 1;
+}
+
+.subcontainer-critical-inclusive {
+    border-bottom: 11px solid;
+    border-image: linear-gradient(to right, transparent 0%, transparent 25%, #cccccc 26%, #C9302C 26%, #C9302C 75%, #cccccc 75%, transparent 75%);
+    border-image-slice: 1;
+}
+
+.subcontainer-unknown-inclusive {
+    border-bottom: 11px solid;
+    border-image: linear-gradient(to right, transparent 0%, transparent 25%, #cccccc 26%, #6b7785 26%, #6b7785 75%, #cccccc 75%, transparent 75%);
+    border-image-slice: 1;
+}
+
+.label-container {
+    position: relative;
+}
+
+.label-left {
+    font-weight: bold;
+    font-size: 14px;
+    position: absolute;
+    left: 2px;
+    top: -5px;
+    color: #ffffff;
+}
+
+.label-left:before {
+    content: '- ∞';
+}
+
+.label-right {
+    font-weight: bold;
+    font-size: 14px;
+    position: absolute;
+    right: 2px;
+    top: -5px;
+    color: #ffffff;
+}
+
+.label-right:before {
+    content: '+ ∞';
+}
+
+.label-left-inclusive {
+    font-size: 14px;
+    position: absolute;
+    left: 2px;
+    top: -5px;
+    color: #000000;
+}
+
+.label-left-inclusive:before {
+    content: '- ∞';
+    color: var(--cui-body-color);
+}
+
+.label-right-inclusive {
+    font-size: 14px;
+    position: absolute;
+    right: 2px;
+    top: -5px;
+    color: #000000;
+}
+
+.label-right-inclusive:before {
+    content: '+ ∞';
+    color: var(--cui-body-color);
+}
+
+.value-container {
+    position: relative;
+
+}
+
+.values-left-container {
+    margin-top: -14px;
+    position: absolute;
+    padding: 2px;
+    left: 0px;
+}
+
+.values-right-container {
+    margin-top: -14px;
+    position: absolute;
+    padding: 2px 1px;
+    right: 0px;
+}
+
+.speech-bubble-ds {
+    margin: 0 auto 5px;
+    padding: 0px 4px;
+    position: relative;
+}
+
+.speech-bubble-ds p {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    text-align: center;
+    font-size: 10px;
+}
+
+.speech-bubble-ds p:last-of-type {
+    margin-bottom: 0;
+}
+
+/* ARROW OUTSIDE*/
+
+.speech-bubble-ds-arrow-left {
+    border-left: 2px solid transparent;
+    border-top: 14px solid rgba(0, 0, 0, 0.2);
+    bottom: -28px;
+    position: absolute;
+    right: 49%;
+}
+
+.speech-bubble-ds-arrow-left::before {
+    border-top: 14px solid rgba(0, 0, 0, 0.2);
+    border-left: 8px solid transparent;
+    bottom: 2px;
+    content: "";
+    position: absolute;
+    right: 0px;
+}
+
+.speech-bubble-ds-arrow-right {
+    border-right: 2px solid transparent;
+    border-top: 14px solid rgba(0, 0, 0, 0.2);
+    bottom: -28px;
+    position: absolute;
+    right: 49%;
+}
+
+.speech-bubble-ds-arrow-right::before {
+    border-top: 14px solid rgba(0, 0, 0, 0.2);
+    border-right: 8px solid transparent;
+    bottom: 2px;
+    content: "";
+    position: absolute;
+    right: -8px;
+}
+
+.bottom-14 {
+    bottom: -14px;
+}
+
+/* ARROW INSIDE*/
+
+.speech-bubble-ds-arrow-left-inside {
+    border-left: 2px solid transparent;
+    border-top: 14px solid rgba(0, 0, 0, 0.2);
+    bottom: -28px;
+    position: absolute;
+    right: 20px;
+}
+
+.speech-bubble-ds-arrow-left-inside::before {
+    border-top: 22px solid rgba(0, 0, 0, 0.2);
+    border-right: 8px solid transparent;
+    bottom: 2px;
+    content: "";
+    position: absolute;
+    right: -8px;
+}
+
+.speech-bubble-ds-arrow-right-inside {
+    border-right: 2px solid transparent;
+    border-top: 14px solid rgba(0, 0, 0, 0.2);
+    bottom: -28px;
+    position: absolute;
+    right: 49%;
+}
+
+.speech-bubble-ds-arrow-right-inside::before {
+    border-top: 14px solid rgba(0, 0, 0, 0.2);
+    border-left: 8px solid transparent;
+    bottom: 2px;
+    content: "";
+    position: absolute;
+    right: 0px;
+}
+
+.thresholds-values {
+    border-bottom: 1px solid #cccccc;
+}

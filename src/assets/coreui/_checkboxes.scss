@@ -1,4 +1,6 @@
 @use "sass:color";
+@use "variables" as oitc;
+@use "@coreui/coreui/scss/coreui" as cui;
 
 /* Add large checkboxes */
 
@@ -12,7 +14,7 @@
     height: 20px;
 }
 
-@each $color-name, $color-value in $theme-colors {
+@each $color-name, $color-value in cui.$theme-colors {
     .checkbox-#{$color-name}.form-check-input:checked {
         background-color: $color-value;
         border-color: $color-value;
@@ -25,7 +27,7 @@
 
     .radio-#{$color-name}.form-check-input:checked {
         background-color: $color-value;
-        border-color: $color-value!important;
+        border-color: $color-value !important;
     }
 
     .radio-#{$color-name}.form-check-input:focus {

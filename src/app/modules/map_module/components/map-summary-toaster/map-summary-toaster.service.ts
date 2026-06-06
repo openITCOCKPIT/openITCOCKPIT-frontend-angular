@@ -1,7 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, DOCUMENT } from '@angular/core';
 import { map, Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { DOCUMENT } from '@angular/common';
+
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { MapSummaryRoot } from '../../pages/mapeditors/mapeditors.interface';
 

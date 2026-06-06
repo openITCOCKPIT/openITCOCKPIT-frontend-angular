@@ -1,19 +1,22 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
+    AlertComponent,
+    AlertHeadingDirective,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
     ContainerComponent,
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import {
     DynamicalFormFieldsComponent
 } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
@@ -21,7 +24,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -38,10 +41,16 @@ import { ContainersService } from '../../../../../pages/containers/containers.se
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
 import { ExternalMonitoringsService } from '../external-monitorings.service';
 import { HistoryService } from '../../../../../history.service';
-import { ExternalMonitoringConfig, ExternalMonitoringPost } from '../external-monitorings.interface';
+import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import {
+    ExternalMonitoringConfig,
+    ExternalMonitoringConnect,
+    ExternalMonitoringPost
+} from '../external-monitorings.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { SystemnameService } from '../../../../../services/systemname.service';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
 
 
 @Component({
@@ -64,8 +73,6 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         PaginatorModule,
         PermissionDirective,
         RequiredIconComponent,
@@ -73,7 +80,12 @@ import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        FormLoaderComponent
+        FormLoaderComponent,
+        RowComponent,
+        ColComponent,
+        AlertComponent,
+        MultiSelectComponent,
+        AlertHeadingDirective
     ],
     templateUrl: './external-monitorings-edit.component.html',
     styleUrl: './external-monitorings-edit.component.css',
@@ -95,18 +107,31 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
     public readonly SystemnameService = inject(SystemnameService);
     public formFields?: DynamicalFormFields;
 
+    public connectStatus: boolean | null = null;
+    public connectMessage: string = '';
+
+    public messageTemplates: SelectKeyValue[] = [];
+
     protected readonly ExternalMonitoringTypes = [
         {
-            key: 'icinga2',
+            key: ExternalMonitoringSystems.FlowChief,
+            value: this.TranslocoService.translate('FlowChief')
+        },
+        {
+            key: ExternalMonitoringSystems.Icinga2,
             value: this.TranslocoService.translate('Icinga 2')
         },
         {
-            key: 'opmanager',
+            key: ExternalMonitoringSystems.OpManager,
             value: this.TranslocoService.translate('ManageEngine OpManager')
         },
         {
-            key: 'prtg',
+            key: ExternalMonitoringSystems.PRTG,
             value: this.TranslocoService.translate('Paessler PRTG System')
+        },
+        {
+            key: ExternalMonitoringSystems.LibreNMS,
+            value: this.TranslocoService.translate('LibreNMS')
         }
     ];
     protected readonly Object = Object;
@@ -146,10 +171,11 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ExternalMonitoringsService.getEdit(this.id)
             .subscribe((result) => {
                 //Fire on page load
-                this.post = result.externalMonitoring;
+                this.post = result;
                 this.cdr.markForCheck();
                 this.loadContainers();
                 this.loadConfigFieldsBySystemType();
+                this.checkConnection();
             }));
     }
 
@@ -178,7 +204,23 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
             }));
     }
 
+    public checkConnection() {
+        this.subscriptions.add(this.ExternalMonitoringsService.testConnection(this.post)
+            .subscribe((result: ExternalMonitoringConnect) => {
+                this.connectStatus = result.status.status;
+                if (result.status.msg) {
+                    this.connectMessage = result.status.msg.message;
+                }
+                if (result.messageTemplates) {
+                    this.messageTemplates = result.messageTemplates;
+                }
+                this.cdr.markForCheck();
+            }));
+    }
+
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
+
+    protected readonly ExternalMonitoringSystems = ExternalMonitoringSystems;
 }

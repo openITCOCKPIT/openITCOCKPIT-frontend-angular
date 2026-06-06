@@ -1,27 +1,27 @@
 <!--
-  ~ Copyright (C) <2015>  <it-novum GmbH>
-  ~
-  ~ This file is dual licensed
-  ~
-  ~ 1.
-  ~     This program is free software: you can redistribute it and/or modify
-  ~     it under the terms of the GNU General Public License as published by
-  ~     the Free Software Foundation, version 3 of the License.
-  ~
-  ~     This program is distributed in the hope that it will be useful,
-  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~     GNU General Public License for more details.
-  ~
-  ~     You should have received a copy of the GNU General Public License
-  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  ~
-  ~ 2.
-  ~     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
-  ~     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
-  ~     License agreement and license key will be shipped with the order
-  ~     confirmation.
-  -->
+~ Copyright (C) <2015>  <it-novum GmbH>
+~
+~ This file is dual licensed
+~
+~ 1.
+~     This program is free software: you can redistribute it and/or modify
+~     it under the terms of the GNU General Public License as published by
+~     the Free Software Foundation, version 3 of the License.
+~
+~     This program is distributed in the hope that it will be useful,
+~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+~     GNU General Public License for more details.
+~
+~     You should have received a copy of the GNU General Public License
+~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+~
+~ 2.
+~     If you purchased an openITCOCKPIT Enterprise Edition you can use this file
+~     under the terms of the openITCOCKPIT Enterprise Edition license agreement.
+~     License agreement and license key will be shipped with the order
+~     confirmation.
+-->
 
 <ng-container *transloco="let t">
     <c-card-header>
@@ -55,23 +55,25 @@
                 </c-col>
                 <c-col [xs]="4" [lg]="4" class="p-1">
 
-                    <c-button-group *ngIf="showEdit" class="ripple" aria-label="Crud" role="group">
-                        <button cButton class="ripple" color="default" size="xs" (click)="editBookmark()"
-                                title="{{t('Edit bookmark')}}">
-                            <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                        </button>
-                        <button cButton class="ripple " color="info" size="xs"
-                                title="{{t('Share Filter')}}" (click)="computeBookmarkUrl()">
-                            <fa-icon [icon]="['fas', 'bookmark']"></fa-icon>
-                        </button>
-                        <button cButton class="ripple float-end" color="danger" size="xs"
-                                title="{{t('Delete current filter')}}" (click)="toggleDeleteAllModal()">
-                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                        </button>
-                        <button cButton class="ripple" color="success" size="xs" (click)="updateBookmark()">
-                            {{ t('Update filter') }}
-                        </button>
-                    </c-button-group>
+                    @if (showEdit) {
+                        <c-button-group class="ripple" aria-label="Crud" role="group">
+                            <button cButton class="ripple" color="default" size="xs" (click)="editBookmark()"
+                                    title="{{t('Edit bookmark')}}">
+                                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+                            </button>
+                            <button cButton class="ripple " color="info" size="xs"
+                                    title="{{t('Share Filter')}}" (click)="computeBookmarkUrl()">
+                                <fa-icon [icon]="['fas', 'bookmark']"></fa-icon>
+                            </button>
+                            <button cButton class="ripple float-end" color="danger" size="xs"
+                                    title="{{t('Delete current filter')}}" (click)="toggleDeleteAllModal()">
+                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                            </button>
+                            <button cButton class="ripple" color="success" size="xs" (click)="updateBookmark()">
+                                {{ t('Update filter') }}
+                            </button>
+                        </c-button-group>
+                    }
                     <c-button-group class="ripple ms-2 float-end" aria-label="Crud" role="group">
                         <button cButton color="success" size="xs"
                                 (click)="showNewBookmarkModel()">

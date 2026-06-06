@@ -121,15 +121,14 @@
                                         {{ t('Achieved') }}(%)
                                     </c-col>
                                     <hr class="mt-1 mb-1 w-100 border-dashed"/>
-                                    <ng-container
-                                        *ngFor="let service of sla_information.services | slice:0:10; let i = index">
+                                    @for (service of sla_information.services | slice:0:10; track service; let i = $index) {
                                         <c-col lg="9" class="ellipsis">
                                             {{ service.servicename }}
                                         </c-col>
                                         <c-col lg="3" class="text-{{service.state}}">
                                             {{ service.determined_availability_percent }}%
                                         </c-col>
-                                    </ng-container>
+                                    }
                                 </c-row>
                             </c-col>
                         }
@@ -139,12 +138,18 @@
                             <c-col lg="4" class="px-2">
                                 <div class="sla-info-box bg-{{sla_information.host.state}}">
                                     <span class="sla-info-box-icon">
-                                        <fa-icon [icon]="['fas', 'check']"
-                                                 *ngIf="sla_information.host.state === 'success'"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'exclamation']"
-                                                 *ngIf="sla_information.host.state === 'warning'"></fa-icon>
-                                        <fa-icon [icon]="['fas', 'bolt']"
-                                                 *ngIf="sla_information.host.state === 'danger'"></fa-icon>
+                                        @if (sla_information.host.state === 'success') {
+                                            <fa-icon [icon]="['fas', 'check']"
+                                            ></fa-icon>
+                                        }
+                                        @if (sla_information.host.state === 'warning') {
+                                            <fa-icon [icon]="['fas', 'exclamation']"
+                                            ></fa-icon>
+                                        }
+                                        @if (sla_information.host.state === 'danger') {
+                                            <fa-icon [icon]="['fas', 'bolt']"
+                                            ></fa-icon>
+                                        }
                                     </span>
                                     <div class="sla-info-box-content">
                                         <span class="sla-info-box-text">
@@ -219,215 +224,239 @@
                         </div>
                     }
                 </c-col>
-                <c-col xs="12" sm="12" md="6" class="pt-1" *ngIf="isLoading">
-                    <oitc-table-loader></oitc-table-loader>
-                </c-col>
-                <c-col xs="12" sm="12" md="6" class="pt-1" *ngIf="!isLoading">
-                    <table bordered cTable class="table-sm">
-                        <tbody>
-                        <tr>
-                            <th class="col-3">{{ t('Name') }}</th>
-                            <td>
-                                @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'viewdetails']) | async) {
-                                    <a [routerLink]="['/', 'sla_module', 'slas', 'viewDetails', sla.id]">
-                                        {{ sla.name }}
-                                    </a>
-                                } @else {
-                                    {{ sla.name }}
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="col-3">{{ t('Description') }}</th>
-                            <td>{{ sla.description }}</td>
-                        </tr>
-                        <tr>
-                            <th class="col-3">{{ t('Evaluation interval') }}</th>
-                            <td>{{ sla.evaluation_interval }}</td>
-                        </tr>
-                        <tr>
-                            <th>
-                                {{ t('Thresholds') }}
-                            </th>
-                            <td>
-                                <oitc-badge-outline color="warning" [hidden]="!sla.warning_threshold"
-                                                    class="me-1">
-                                    <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
-                                    {{ sla.warning_threshold }} %
-                                </oitc-badge-outline>
-                                <oitc-badge-outline color="danger" [hidden]="!sla.minimal_availability">
-                                    <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
-                                    {{ sla.minimal_availability }} %
-                                </oitc-badge-outline>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>{{ t('Container') }}</th>
-                            <td>
-                                @if (this.PermissionsService.hasPermissionObservable(['browsers', 'index']) | async) {
-                                    <span *ngFor="let container of sla.main_container">
-                                        /
-                                        <a [routerLink]="['/', 'browsers', 'index']"
-                                           [queryParams]="{ containerId: container.id }"
-                                           *ngIf="container.id != null">
-                                            {{ container.name }}
-                                        </a>
-
-                                        <span *ngIf="container.id === null">
-                                            {{ container.name }}
-                                        </span>
-                                    </span>
-                                } @else {
-                                    <span *ngFor="let container of sla.main_container">
-                                        /
-                                        {{ container.name }}
-                                    </span>
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>{{ t('Consider downtimes') }}</th>
-                            <td>
-                                <c-badge color="success" [hidden]="!sla.consider_downtimes">
-                                    {{ t('Yes') }}
-                                </c-badge>
-                                <c-badge color="danger" [hidden]="sla.consider_downtimes">
-                                    {{ t('No') }}
-                                </c-badge>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>{{ t('Reflection state') }}</th>
-                            <td>
-                                <span [hidden]="sla.hard_state_only">
-                                    {{ t('soft and hard state') }}
-                                </span>
-
-                                <span [hidden]="!sla.hard_state_only">
-                                    {{ t('hard state only') }}
-                                </span>
-                            </td>
-                        </tr>
-                        <tr *ngIf="sla.timeperiod && sla.timeperiod.name">
-                            <th>{{ t('Timeperiod') }}</th>
-                            <td>{{ sla.timeperiod.name }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <div class="gridContainer-weekdays">
-                                    <div *ngFor="let weekday of weekdayNames"
-                                         class="child grid bg-primary text-white small">
-                                        {{ weekday.name }}
-                                    </div>
-                                    <div class="child grid" *ngFor="let weekDay of weekDays | keyvalue">
-                                        <span [hidden]="weekDay.value.length !== 0">
-                                            <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
-                                        </span>
-                                        <ul class="p-0 inside-list fw-300" [hidden]="!(weekDay.value.length > 0)">
-                                            <li *ngFor="let timeDetails of weekDay.value">
-                                                {{ timeDetails.start }} - {{ timeDetails.end }}
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </c-col>
-            </c-row>
-        </c-col>
-        <c-col lg="12" class="p-2" *ngIf="isLoading">
-            <oitc-table-loader></oitc-table-loader>
-        </c-col>
-        <c-col lg="12" class="p-2" *ngIf="!isLoading">
-            <table bordered cTable class="mt-2 mb-2 table-sm" hover striped>
-                <thead>
-                <tr>
-                    <th>
-                        {{ t('Service') }}
-                    </th>
-                    <th>
-                        {{ t('Total time') }}
-                    </th>
-                    <th>
-                        {{ t('Availability time') }}
-                    </th>
-                    <th>
-                        {{ t('Total outages') }}
-                    </th>
-                    <th>
-                        {{ t('Outage time') }}
-                    </th>
-                    <th>
-                        {{ t('Last update') }}
-                    </th>
-                    <th>
-                        {{ t('Goal') }}(%)
-                    </th>
-                    <th>
-                        {{ t(' Achieved') }}(%)
-                        <span class="float-end">
-                            <i class="fa-solid fa-arrow-down-short-wide sla-service-list-icon font-md"></i>
-                        </span>
-                    </th>
-                    <th>
-                        {{ t('Status') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                    @if (sla_information !== null) {
-                        <tr *ngFor="let service of sla_information.services">
-                            <td class="word-break">
-                                <span class="border-left border-{{service.state}} ps-1 border-5">
-                                    @if (this.PermissionsService.hasPermissionObservable(['services', 'browser']) | async) {
-                                        <a [routerLink]="['/', 'services', 'browser', service.service_id]">
-                                            {{ service.servicename }}
+                @if (isLoading) {
+                    <c-col xs="12" sm="12" md="6" class="pt-1">
+                        <oitc-table-loader></oitc-table-loader>
+                    </c-col>
+                }
+                @if (!isLoading) {
+                    <c-col xs="12" sm="12" md="6" class="pt-1">
+                        <table bordered cTable class="table-sm">
+                            <tbody>
+                            <tr>
+                                <th class="col-3">{{ t('Name') }}</th>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'viewdetails']) | async) {
+                                        <a [routerLink]="['/', 'sla_module', 'slas', 'viewDetails', sla.id]">
+                                            {{ sla.name }}
                                         </a>
                                     } @else {
-                                        {{ service.servicename }}
+                                        {{ sla.name }}
                                     }
-                                </span>
-                            </td>
-                            <td>
-                                {{ service.evaluation_total_time_human_readable }}
-                            </td>
-                            <td>
-                                {{ service.determined_availability_time_human_readable }}
-                            </td>
-                            <td [ngClass]="{'text-danger': service.determined_number_outages && service.determined_number_outages >0 }">
-                                {{ service.determined_number_outages }}
-                            </td>
-                            <td>
-                                {{ service.determined_outage_time_human_readable }}
-                            </td>
-                            <td>
-                                {{ service.evaluation_end }}
-                            </td>
-                            <td>
-                                {{ service.minimal_availability_percent }}%
-                            </td>
-                            <td class="text-{{service.state}}">
-                                {{ service.determined_availability_percent }}%
-                            </td>
-                            <td>
-
-                                <c-badge [hidden]="service.state === 'danger'"
-                                         textColor="success"
-                                         class="badge-border w-100">
-                                    {{ t('PASSED') }}
-                                </c-badge>
-                                <c-badge [hidden]="service.state !== 'danger'"
-                                         textColor="danger"
-                                         class="badge-border w-100">
-                                    {{ t('FAILED') }}
-                                </c-badge>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="col-3">{{ t('Description') }}</th>
+                                <td>{{ sla.description }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-3">{{ t('Evaluation interval') }}</th>
+                                <td>{{ sla.evaluation_interval }}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    {{ t('Thresholds') }}
+                                </th>
+                                <td>
+                                    <oitc-badge-outline color="warning" [hidden]="!sla.warning_threshold"
+                                                        class="me-1">
+                                        <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
+                                        {{ sla.warning_threshold }} %
+                                    </oitc-badge-outline>
+                                    <oitc-badge-outline color="danger" [hidden]="!sla.minimal_availability">
+                                        <fa-icon [icon]="['fas', 'less-than']"></fa-icon>
+                                        {{ sla.minimal_availability }} %
+                                    </oitc-badge-outline>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Container') }}</th>
+                                <td>
+                                    @if (this.PermissionsService.hasPermissionObservable(['browsers', 'index']) | async) {
+                                        @for (container of sla.main_container; track container) {
+                                            <span>
+                                                /
+                                                @if (container.id != null) {
+                                                    <a [routerLink]="['/', 'browsers', 'index']"
+                                                       [queryParams]="{ containerId: container.id }"
+                                                    >
+                                                        {{ container.name }}
+                                                    </a>
+                                                }
+                                                @if (container.id === null) {
+                                                    <span>
+                                                        {{ container.name }}
+                                                    </span>
+                                                }
+                                            </span>
+                                        }
+                                    } @else {
+                                        @for (container of sla.main_container; track container) {
+                                            <span>
+                                                /
+                                                {{ container.name }}
+                                            </span>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Consider downtimes') }}</th>
+                                <td>
+                                    <c-badge color="success" [hidden]="!sla.consider_downtimes">
+                                        {{ t('Yes') }}
+                                    </c-badge>
+                                    <c-badge color="danger" [hidden]="sla.consider_downtimes">
+                                        {{ t('No') }}
+                                    </c-badge>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Reflection state') }}</th>
+                                <td>
+                                    <span [hidden]="sla.hard_state_only">
+                                        {{ t('soft and hard state') }}
+                                    </span>
+                                    <span [hidden]="!sla.hard_state_only">
+                                        {{ t('hard state only') }}
+                                    </span>
+                                </td>
+                            </tr>
+                                @if (sla.timeperiod && sla.timeperiod.name) {
+                                    <tr>
+                                        <th>{{ t('Timeperiod') }}</th>
+                                        <td>{{ sla.timeperiod.name }}</td>
+                                    </tr>
+                                }
+                            <tr>
+                                <td colspan="2">
+                                    <div class="gridContainer-weekdays">
+                                        @for (weekday of weekdayNames; track weekday) {
+                                            <div
+                                                class="child grid bg-primary text-white small">
+                                                {{ weekday.name }}
+                                            </div>
+                                        }
+                                        @for (weekDay of weekDays | keyvalue; track weekDay) {
+                                            <div class="child grid">
+                                                <span [hidden]="weekDay.value.length !== 0">
+                                                    <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
+                                                </span>
+                                                <ul class="p-0 inside-list fw-300"
+                                                    [hidden]="!(weekDay.value.length > 0)">
+                                                    @for (timeDetails of weekDay.value; track timeDetails) {
+                                                        <li>
+                                                            {{ timeDetails.start }} - {{ timeDetails.end }}
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </c-col>
+                }
+            </c-row>
         </c-col>
+        @if (isLoading) {
+            <c-col lg="12" class="p-2">
+                <oitc-table-loader></oitc-table-loader>
+            </c-col>
+        }
+        @if (!isLoading) {
+            <c-col lg="12" class="p-2">
+                <table bordered cTable class="mt-2 mb-2 table-sm" hover striped>
+                    <thead>
+                    <tr>
+                        <th>
+                            {{ t('Service') }}
+                        </th>
+                        <th>
+                            {{ t('Total time') }}
+                        </th>
+                        <th>
+                            {{ t('Availability time') }}
+                        </th>
+                        <th>
+                            {{ t('Total outages') }}
+                        </th>
+                        <th>
+                            {{ t('Outage time') }}
+                        </th>
+                        <th>
+                            {{ t('Last update') }}
+                        </th>
+                        <th>
+                            {{ t('Goal') }}(%)
+                        </th>
+                        <th>
+                            {{ t(' Achieved') }}(%)
+                            <span class="float-end">
+                                <i class="fa-solid fa-arrow-down-short-wide sla-service-list-icon font-md"></i>
+                            </span>
+                        </th>
+                        <th>
+                            {{ t('Status') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @if (sla_information !== null) {
+                            @for (service of sla_information.services; track service) {
+                                <tr>
+                                    <td class="word-break">
+                                        <span class="border-left border-{{service.state}} ps-1 border-5">
+                                            @if (this.PermissionsService.hasPermissionObservable(['services', 'browser']) | async) {
+                                                <a [routerLink]="['/', 'services', 'browser', service.service_id]">
+                                                    {{ service.servicename }}
+                                                </a>
+                                            } @else {
+                                                {{ service.servicename }}
+                                            }
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {{ service.evaluation_total_time_human_readable }}
+                                    </td>
+                                    <td>
+                                        {{ service.determined_availability_time_human_readable }}
+                                    </td>
+                                    <td [ngClass]="{'text-danger': service.determined_number_outages && service.determined_number_outages >0 }">
+                                        {{ service.determined_number_outages }}
+                                    </td>
+                                    <td>
+                                        {{ service.determined_outage_time_human_readable }}
+                                    </td>
+                                    <td>
+                                        {{ service.evaluation_end }}
+                                    </td>
+                                    <td>
+                                        {{ service.minimal_availability_percent }}%
+                                    </td>
+                                    <td class="text-{{service.state}}">
+                                        {{ service.determined_availability_percent }}%
+                                    </td>
+                                    <td>
+                                        <c-badge [hidden]="service.state === 'danger'"
+                                                 textColor="success"
+                                                 class="badge-border w-100">
+                                            {{ t('PASSED') }}
+                                        </c-badge>
+                                        <c-badge [hidden]="service.state !== 'danger'"
+                                                 textColor="danger"
+                                                 class="badge-border w-100">
+                                            {{ t('FAILED') }}
+                                        </c-badge>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </c-col>
+        }
     </c-row>
 </ng-container>

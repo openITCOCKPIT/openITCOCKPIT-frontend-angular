@@ -23,7 +23,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MacrosComponent } from '../../../components/macros/macros.component';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -77,8 +77,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         MacrosComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NgSelectModule,
         ObjectUuidComponent,
         PermissionDirective,

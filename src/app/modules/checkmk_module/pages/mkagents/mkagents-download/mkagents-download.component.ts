@@ -14,7 +14,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
+
 import { AgentconnectorOperatingSystems } from '../../../../../pages/agentconnector/agentconnector.enums';
 import { MkagentsListDownloadsComponent } from './mkagents-list-downloads/mkagents-list-downloads.component';
 import { MkagentsDownloadRoot } from '../mkagents.interface';
@@ -25,23 +25,22 @@ import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/blo
 @Component({
     selector: 'oitc-mkagents-download',
     imports: [
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    CardBodyComponent,
-    RowComponent,
-    ColComponent,
-    AlertComponent,
-    MkagentsListDownloadsComponent,
-    NgIf,
-    BlockLoaderComponent
-],
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        CardBodyComponent,
+        RowComponent,
+        ColComponent,
+        AlertComponent,
+        MkagentsListDownloadsComponent,
+        BlockLoaderComponent
+    ],
     templateUrl: './mkagents-download.component.html',
     styleUrl: './mkagents-download.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

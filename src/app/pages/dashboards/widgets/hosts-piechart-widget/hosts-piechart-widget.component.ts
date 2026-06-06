@@ -1,80 +1,82 @@
-import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
-import { BaseWidgetComponent } from '../base-widget/base-widget.component';
-import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
-import { AsyncPipe, NgIf } from '@angular/common';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { ChangeDetectionStrategy, Component, effect, inject, input, OnDestroy } from '@angular/core';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
+import * as echarts from 'echarts/core';
+import 'echarts/theme/dark.js';
+import { EChartsOption } from 'echarts';
+
+import { LegendComponent, PolarComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+import { PieChart } from 'echarts/charts';
+import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
+import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { StatuscountResponse } from '../../../browsers/browsers.interface';
-import { ApexGrid, ChartComponent } from "ng-apexcharts";
-import { ChartOptions } from '../../../../components/charts/host-pie-chart/host-pie-chart.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { BaseWidgetComponent } from '../base-widget/base-widget.component';
+import { PieChartMetric } from '../../../../components/charts/charts.interface';
 import { LayoutService } from '../../../../layouts/coreui/layout.service';
-import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { KtdGridLayout } from '@katoid/angular-grid-layout';
+
+echarts.use([PieChart, LegendComponent, TitleComponent, TooltipComponent, PolarComponent]);
 
 @Component({
     selector: 'oitc-hosts-piechart-widget',
     imports: [
+        NgxEchartsDirective,
+        BlockLoaderComponent,
         AsyncPipe,
-        FaIconComponent,
-        NgIf,
-        TranslocoDirective,
         RouterLink,
-        ChartComponent,
-        BlockLoaderComponent
+        FaIconComponent,
+        TranslocoDirective
+    ],
+    providers: [
+        provideEchartsCore({echarts}),
     ],
     templateUrl: './hosts-piechart-widget.component.html',
     styleUrl: './hosts-piechart-widget.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HostsPiechartWidgetComponent extends BaseWidgetComponent {
+export class HostsPiechartWidgetComponent extends BaseWidgetComponent implements OnDestroy {
+    public widgetHeight: number = 0;
 
-    public statusCounts?: StatuscountResponse;
+    public title = input<string>('Host availability');
+    public showLegend = input<boolean>(true);
+    public chartData = input<PieChartMetric[]>([]);
+    public scaleSize = input<number>(20);
+    public scale = input<boolean>(true);
 
-    @ViewChild("chart") chart?: ChartComponent;
-    public chartOptions!: Partial<ChartOptions>;
+
+    public theme: string = '';
+    public chartOption: EChartsOption = {};
+
+    public echartsInstance: any;
 
     private readonly LayoutService = inject(LayoutService);
 
-    public apexGridOptions: ApexGrid = {
-        padding: {
-            top: 10,
-            right: 0,
-            bottom: 0,
-            left: 0
-        },
-    };
+    public statusCounts?: StatuscountResponse;
 
     public constructor() {
         super();
-
-        // Subscribe to the color mode changes (drop down menu in header)
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
-            //console.log('Change in theme detected', theme);
-            if (this.chart && this.chartOptions) {
-
-                // Read the background color value from the CSS variable and update the chart
-                let cuiSecondaryBg = getComputedStyle(document.documentElement).getPropertyValue('--cui-secondary-bg').trim();
-
-                //this.chartOptions.plotOptions?.radialBar?.track?.background = cuiSecondaryBg;
-                this.chart.updateOptions({
-                    plotOptions: {
-                        radialBar: {
-                            track: {
-                                background: cuiSecondaryBg
-                            }
-                        }
-                    }
-                });
+            this.theme = '';
+            if (theme === 'dark') {
+                this.theme = 'dark';
             }
+
             this.cdr.markForCheck();
         }));
+
+        effect(() => {
+            this.renderChart();
+            this.cdr.markForCheck();
+        });
     }
 
     public override load() {
         this.subscriptions.add(this.WidgetsService.loadStatusCount()
             .subscribe((result) => {
                 this.statusCounts = result;
-                this.updateChart();
+                this.renderChart();
                 this.cdr.markForCheck();
             })
         );
@@ -84,89 +86,129 @@ export class HostsPiechartWidgetComponent extends BaseWidgetComponent {
         super.ngOnDestroy();
     }
 
-    private updateChart() {
+    onChartInit(ec: any) {
+        this.echartsInstance = ec;
+        this.cdr.markForCheck();
+    }
+
+    private renderChart() {
         if (!this.statusCounts) {
             return;
         }
+        let labels = [
+            this.TranslocoService.translate('Unreachable'),
+            this.TranslocoService.translate('Down'),
+            this.TranslocoService.translate('Up')
+        ];
 
-        let cuiSecondaryBg = getComputedStyle(document.documentElement).getPropertyValue('--cui-secondary-bg').trim();
-        this.chartOptions = {
+        this.chartOption = {
+            polar: {
+                radius: [30, '80%'],
+            },
+            backgroundColor: 'transparent',
+            angleAxis: {
+                show: false,
+                max: 100,
+                startAngle: 270
+            },
+            radiusAxis: {
+                type: 'category',
+                show: false,
+                data: labels
+            },
+            tooltip: {
+                show: true,
+                formatter: '{b} ({c}%)'
+            },
             series: [
-                this.statusCounts.hoststatusCountPercentage[0],
-                this.statusCounts.hoststatusCountPercentage[1],
-                this.statusCounts.hoststatusCountPercentage[2],
-            ],
-            chart: {
-                height: 180,
-                offsetY: -20,
-                type: "radialBar",
-
-                // The sparkline option remove all paddings
-                // https://github.com/apexcharts/apexcharts.js/issues/1272#issuecomment-591388290
-                sparkline: {
-                    enabled: true
-                }
-            },
-            plotOptions: {
-                radialBar: {
-                    offsetY: 0,
-                    startAngle: -180,
-                    endAngle: 180,
-                    hollow: {
-                        margin: 5,
-                        size: "30%",
-                        background: "transparent",
-                        image: undefined,
-                    },
-                    track: {
-                        show: true,
-                        background: cuiSecondaryBg,
-                        opacity: 0.5,
-                        dropShadow: {
-                            enabled: false,
-                            top: 2,
-                            left: 0,
-                            color: '#999999',
-                            opacity: 0.2,
-                            blur: 2
-                        }
-                    },
-                    dataLabels: {
-                        name: {
-                            show: false
-                        },
-                        value: {
-                            show: true
-                        }
-                    }
-                },
-            },
-            colors: ["#00bc4c", "#bf0000", "#6b737c"],
-            labels: [
-                this.TranslocoService.translate('Up'),
-                this.TranslocoService.translate('Down'),
-                this.TranslocoService.translate('Unreachable')
-            ],
-            legend: {
-                show: false
-            },
-            responsive: [
                 {
-                    breakpoint: 480,
-                    options: {
-                        legend: {
-                            show: false
+                    type: 'bar',
+                    barWidth: '50%',
+                    data: [
+                        {
+                            value: this.statusCounts.hoststatusCountPercentage[2],
+                            itemStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0.5,
+                                    y: 0.5,
+                                    x2: 1.5,
+                                    y2: 1.5,
+                                    colorStops: [
+                                        {
+                                            offset: 0.1,
+                                            color: '#6b737c' // color at 0%
+                                        },
+                                        {
+                                            offset: 1,
+                                            color: '#4f555a' // color at 100%
+                                        }
+                                    ],
+                                    global: false // default is false
+                                }
+                            }
+                        },
+                        {
+                            value: this.statusCounts.hoststatusCountPercentage[1],
+                            itemStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0.5,
+                                    y: 0.5,
+                                    x2: 1.5,
+                                    y2: 1.5,
+                                    colorStops: [
+                                        {
+                                            offset: 0.1,
+                                            color: '#CC0000' // color at 0%
+                                        },
+                                        {
+                                            offset: 1,
+                                            color: '#c0022e' // color at 100%
+                                        }
+                                    ],
+                                    global: false // default is false
+                                }
+                            }
+                        },
+                        {
+                            value: this.statusCounts.hoststatusCountPercentage[0],
+                            itemStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0.5,
+                                    y: 0.5,
+                                    x2: 1.5,
+                                    y2: 1.5,
+                                    colorStops: [
+                                        {
+                                            offset: 0.1,
+                                            color: '#00bc4c' // color at 0%
+                                        },
+                                        {
+                                            offset: 1,
+                                            color: '#039a3f' // color at 100%
+                                        }
+                                    ],
+                                    global: false // default is false
+                                },
+                                borderWidth: 1
+                            }
                         }
-                    }
+                    ],
+
+                    colorBy: 'series',
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: 'rgba(180, 180, 180, 0.1)',
+                        borderRadius: [5, 5, 0, 0]
+                    },
+
+                    coordinateSystem: 'polar'
                 }
             ]
         };
-    }
-
-    public override resizeWidget(event?: KtdResizeEnd) {
-        if (this.chart) {
-            this.chart.updateOptions(this.chartOptions);
-        }
+        this.cdr.markForCheck();
     }
 
     public override layoutUpdate(event: KtdGridLayout) {

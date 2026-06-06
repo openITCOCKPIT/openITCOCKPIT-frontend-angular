@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { getUserDate } from '../../services/timezone.service';
 
 export interface AcknowledgementObject extends AcknowledgedHost {
     commentDataHtml: string
@@ -22,7 +23,7 @@ export interface AcknowledgementsHostParams {
 }
 
 export function getDefaultAcknowledgementsHostParams(): AcknowledgementsHostParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,
@@ -72,7 +73,7 @@ export interface AcknowledgementsServiceParams {
 }
 
 export function getDefaultAcknowledgementsServiceParams(): AcknowledgementsServiceParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,

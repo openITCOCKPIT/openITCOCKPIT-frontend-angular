@@ -1,76 +1,74 @@
 <ng-container *transloco="let t">
-    <oitc-block-loader *ngIf="!statusCounts" height="5rem"></oitc-block-loader>
+    <div class="d-flex h-85">
 
-    <div class="w-100 text-center"
-         *ngIf="statusCounts && statusCounts.servicestatusCount.length === 4">
+        @if (!statusCounts) {
+            <oitc-block-loader height="5rem"></oitc-block-loader>
+        }
+        @if (statusCounts && statusCounts.servicestatusCount.length === 4) {
+            <div class="w-100 text-center">
+                <div echarts [options]="chartOption"
+                     [theme]="theme"
+                     (chartInit)="onChartInit($event)"
+                     class="w-100 h-100"></div>
 
-        <apx-chart
-            #chart
-            [series]="chartOptions.series!"
-            [chart]="chartOptions.chart!"
-            [plotOptions]="chartOptions.plotOptions!"
-            [labels]="chartOptions.labels!"
-            [legend]="chartOptions.legend!"
-            [colors]="chartOptions.colors!"
-            [grid]="apexGridOptions"
-        ></apx-chart>
+                <div class="row text-center font-xs">
+                    <div class="col-xs-12 col-md-3 no-padding">
+                        @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
+                            <a [routerLink]="['/', 'services', 'index']"
+                               [queryParams]="{servicestate: 0, sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                <fa-icon [icon]="['fas', 'square']" class="ok"></fa-icon>
+                                {{ statusCounts.servicestatusCount[0] }}
+                                ({{ statusCounts.servicestatusCountPercentage[0] }} %)
+                            </a>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'square']" class="ok"></fa-icon>
+                            {{ statusCounts.servicestatusCount[0] }} ({{ statusCounts.servicestatusCountPercentage[0] }} %)
+                        }
+                    </div>
 
-        <div class="row text-center font-xs">
-            <div class="col-xs-12 col-md-3 no-padding">
-                @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
-                    <a [routerLink]="['/', 'services', 'index']"
-                       [queryParams]="{servicestate: 0, sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
-                        <fa-icon [icon]="['fas', 'square']" class="ok"></fa-icon>
-                        {{ statusCounts.servicestatusCount[0] }}
-                        ({{ statusCounts.servicestatusCountPercentage[0] }} %)
-                    </a>
-                } @else {
-                    <fa-icon [icon]="['fas', 'square']" class="ok"></fa-icon>
-                    {{ statusCounts.servicestatusCount[0] }} ({{ statusCounts.servicestatusCountPercentage[0] }} %)
-                }
+                    <div class="col-xs-12 col-md-3 no-padding">
+                        @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
+                            <a [routerLink]="['/', 'services', 'index']"
+                               [queryParams]="{servicestate: 1, sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                <fa-icon [icon]="['fas', 'square']" class="warning"></fa-icon>
+                                {{ statusCounts.servicestatusCount[1] }}
+                                ({{ statusCounts.servicestatusCountPercentage[1] }} %)
+                            </a>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'square']" class="warning"></fa-icon>
+                            {{ statusCounts.servicestatusCount[1] }} ({{ statusCounts.servicestatusCountPercentage[1] }} %)
+                        }
+                    </div>
+
+                    <div class="col-xs-12 col-md-3 no-padding">
+                        @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
+                            <a [routerLink]="['/', 'services', 'index']"
+                               [queryParams]="{servicestate: 2, sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                <fa-icon [icon]="['fas', 'square']" class="critical"></fa-icon>
+                                {{ statusCounts.servicestatusCount[2] }}
+                                ({{ statusCounts.servicestatusCountPercentage[2] }} %)
+                            </a>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'square']" class="critical"></fa-icon>
+                            {{ statusCounts.servicestatusCount[2] }} ({{ statusCounts.servicestatusCountPercentage[2] }} %)
+                        }
+                    </div>
+
+                    <div class="col-xs-12 col-md-3 no-padding">
+                        @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
+                            <a [routerLink]="['/', 'services', 'index']"
+                               [queryParams]="{servicestate: 3, sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
+                                <fa-icon [icon]="['fas', 'square']" class="unknown"></fa-icon>
+                                {{ statusCounts.servicestatusCount[3] }}
+                                ({{ statusCounts.servicestatusCountPercentage[3] }} %)
+                            </a>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'square']" class="unknown"></fa-icon>
+                            {{ statusCounts.servicestatusCount[3] }} ({{ statusCounts.servicestatusCountPercentage[3] }} %)
+                        }
+                    </div>
+                </div>
             </div>
-
-            <div class="col-xs-12 col-md-3 no-padding">
-                @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
-                    <a [routerLink]="['/', 'services', 'index']"
-                       [queryParams]="{servicestate: 1, sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
-                        <fa-icon [icon]="['fas', 'square']" class="warning"></fa-icon>
-                        {{ statusCounts.servicestatusCount[1] }}
-                        ({{ statusCounts.servicestatusCountPercentage[1] }} %)
-                    </a>
-                } @else {
-                    <fa-icon [icon]="['fas', 'square']" class="warning"></fa-icon>
-                    {{ statusCounts.servicestatusCount[1] }} ({{ statusCounts.servicestatusCountPercentage[1] }} %)
-                }
-            </div>
-
-            <div class="col-xs-12 col-md-3 no-padding">
-                @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
-                    <a [routerLink]="['/', 'services', 'index']"
-                       [queryParams]="{servicestate: 2, sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
-                        <fa-icon [icon]="['fas', 'square']" class="critical"></fa-icon>
-                        {{ statusCounts.servicestatusCount[2] }}
-                        ({{ statusCounts.servicestatusCountPercentage[2] }} %)
-                    </a>
-                } @else {
-                    <fa-icon [icon]="['fas', 'square']" class="critical"></fa-icon>
-                    {{ statusCounts.servicestatusCount[2] }} ({{ statusCounts.servicestatusCountPercentage[2] }} %)
-                }
-            </div>
-
-            <div class="col-xs-12 col-md-3 no-padding">
-                @if (PermissionsService.hasPermissionObservable(['services', 'index'])|async) {
-                    <a [routerLink]="['/', 'services', 'index']"
-                       [queryParams]="{servicestate: 3, sort: 'Servicestatus.last_state_change',  direction: 'desc'}">
-                        <fa-icon [icon]="['fas', 'square']" class="unknown"></fa-icon>
-                        {{ statusCounts.servicestatusCount[3] }}
-                        ({{ statusCounts.servicestatusCountPercentage[3] }} %)
-                    </a>
-                } @else {
-                    <fa-icon [icon]="['fas', 'square']" class="unknown"></fa-icon>
-                    {{ statusCounts.servicestatusCount[3] }} ({{ statusCounts.servicestatusCountPercentage[3] }} %)
-                }
-            </div>
-        </div>
+        }
     </div>
 </ng-container>

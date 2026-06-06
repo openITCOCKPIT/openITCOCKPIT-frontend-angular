@@ -28,7 +28,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-tenants-edit',
@@ -54,8 +54,7 @@ import { NgIf } from '@angular/common';
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        FormLoaderComponent,
-        NgIf
+        FormLoaderComponent
     ],
     templateUrl: './tenants-edit.component.html',
     styleUrl: './tenants-edit.component.css',

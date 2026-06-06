@@ -8,9 +8,10 @@ import {
     Inject,
     OnDestroy,
     OnInit,
-    ViewChild
+    ViewChild,
+    DOCUMENT
 } from '@angular/core';
-import { DOCUMENT, NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 import {
     KtdDragEnd,
@@ -90,10 +91,8 @@ import {
 @Component({
     selector: 'oitc-dashboards-index',
     imports: [
-        NgForOf,
         KtdGridComponent,
         KtdGridItemComponent,
-        NgIf,
         CardTitleDirective,
         CardBodyComponent,
         CardHeaderComponent,

@@ -8,15 +8,14 @@ import {
     input,
     OnDestroy,
     Renderer2,
-    ViewChild
+    ViewChild,
+    DOCUMENT
 } from '@angular/core';
-import { DOCUMENT, NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-trafficlight-svg',
-    imports: [
-        NgIf
-    ],
+    imports: [],
     templateUrl: './trafficlight-svg.component.html',
     styleUrl: './trafficlight-svg.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -180,130 +180,135 @@
                 </div>
             </div>
 
-            <oitc-table-loader *ngIf="!agents"></oitc-table-loader>
-            <table *ngIf="agents" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Hosts.name">
-                        {{ t('Assigned host') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatellitePushAgents.uuid">
-                        {{ t('Agent UUID') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatellitePushAgents.hostname">
-                        {{ t('Agent Hostname') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatellitePushAgents.ipaddress">
-                        {{ t('Agent IP address') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatellitePushAgents.remote_address">
-                        {{ t('Remote address') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatellitePushAgents.last_update">
-                        {{ t('Last update') }}
-                    </th>
-                    <th scope="col" mat-sort-header="SatellitePushAgents.satellite_id">
-                        {{ t('Satellite') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let agent of agents.agents">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['agentconnector', 'delete']"
-                            [disabled]="!agent.allow_edit"
-                            [item]="agent"></oitc-item-select>
-                    </td>
-
-                    <td>
-                        @if (agent.Hosts && agent.Hosts.id) {
-                            <oitc-label-link
-                                [objectId]="agent.Hosts.id"
-                                [route]="'/hosts/browser'"
-                                [permissions]="'hosts.browser'">
-                                {{ agent.Hosts.name }}
-                            </oitc-label-link>
-                        } @else {
-                            <span class="italic text-secondary">
-                                {{ t('No host assignment defined') }}
-                            </span>
+            @if (!agents) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (agents) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Assigned host') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatellitePushAgents.uuid">
+                            {{ t('Agent UUID') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatellitePushAgents.hostname">
+                            {{ t('Agent Hostname') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatellitePushAgents.ipaddress">
+                            {{ t('Agent IP address') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatellitePushAgents.remote_address">
+                            {{ t('Remote address') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatellitePushAgents.last_update">
+                            {{ t('Last update') }}
+                        </th>
+                        <th scope="col" mat-sort-header="SatellitePushAgents.satellite_id">
+                            {{ t('Satellite') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (agent of agents.agents; track agent) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['agentconnector', 'delete']"
+                                        [disabled]="!agent.allow_edit"
+                                        [item]="agent"></oitc-item-select>
+                                </td>
+                                <td>
+                                    @if (agent.Hosts && agent.Hosts.id) {
+                                        <oitc-label-link
+                                            [objectId]="agent.Hosts.id"
+                                            [route]="'/hosts/browser'"
+                                            [permissions]="'hosts.browser'">
+                                            {{ agent.Hosts.name }}
+                                        </oitc-label-link>
+                                    } @else {
+                                        <span class="italic text-secondary">
+                                            {{ t('No host assignment defined') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    {{ agent.uuid }}
+                                </td>
+                                <td>
+                                    {{ agent.hostname }}
+                                </td>
+                                <td>
+                                    {{ agent.ipaddress }}
+                                </td>
+                                <td>
+                                    {{ agent.http_x_forwarded_for ? agent.http_x_forwarded_for : agent.remote_address }}
+                                </td>
+                                <td>
+                                    {{ agent.last_update }}
+                                </td>
+                                <td>
+                                    <oitc-label-link
+                                        [objectId]="agent.Satellites.id"
+                                        [route]="'/distribute_module/satellites/edit'"
+                                        [permissions]="'DistributeModule.satellites.edit'">
+                                        {{ agent.Satellites.name }}
+                                    </oitc-label-link>
+                                </td>
+                                <td class="width-50">
+                                    <!-- Agent is assigend to a host -->
+                                    <oitc-actions-button [permission]="'agentconnector.config'"
+                                                         [url]="'/agentconnector/config/'+agent.Hosts?.id"
+                                                         [allowEdit]="agent.allow_edit && agent.Hosts?.id">
+                                        @if (agent.allow_edit && agent.Hosts?.id) {
+                                            <oitc-actions-button-element
+                                                [permission]="'agentconnector.config'"
+                                                [url]="'/agentconnector/config/'+agent.Hosts?.id">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        <oitc-actions-button-element [permission]="'agentconnector.showOutput'"
+                                                                     [url]="'/agentconnector/showOutput/' + agent.id+'/push_satellite'">
+                                            <fa-icon [icon]="['fab', 'js']"></fa-icon>
+                                            {{ t('Show received data') }}
+                                        </oitc-actions-button-element>
+                                        @if (agent.allow_edit) {
+                                            <li cDropdownDivider></li>
+                                        }
+                                        @if (agent.allow_edit) {
+                                            <oitc-actions-button-element (click)="toggleDeleteAllModal(agent)"
+                                                                         [permission]="'agentconnector.delete'"
+                                            >
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
                         }
-                    </td>
-
-                    <td>
-                        {{ agent.uuid }}
-                    </td>
-
-                    <td>
-                        {{ agent.hostname }}
-                    </td>
-
-                    <td>
-                        {{ agent.ipaddress }}
-                    </td>
-
-                    <td>
-                        {{ agent.http_x_forwarded_for ? agent.http_x_forwarded_for : agent.remote_address }}
-                    </td>
-
-                    <td>
-                        {{ agent.last_update }}
-                    </td>
-
-                    <td>
-                        <oitc-label-link
-                            [objectId]="agent.Satellites.id"
-                            [route]="'/distribute_module/satellites/edit'"
-                            [permissions]="'DistributeModule.satellites.edit'">
-                            {{ agent.Satellites.name }}
-                        </oitc-label-link>
-                    </td>
-
-                    <td class="width-50">
-                        <!-- Agent is assigend to a host -->
-                        <oitc-actions-button [permission]="'agentconnector.config'"
-                                             [url]="'/agentconnector/config/'+agent.Hosts?.id"
-                                             [allowEdit]="agent.allow_edit && agent.Hosts?.id">
-                            <oitc-actions-button-element
-                                *ngIf="agent.allow_edit && agent.Hosts?.id"
-                                [permission]="'agentconnector.config'"
-                                [url]="'/agentconnector/config/'+agent.Hosts?.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'agentconnector.showOutput'"
-                                                         [url]="'/agentconnector/showOutput/' + agent.id+'/push_satellite'">
-                                <fa-icon [icon]="['fab', 'js']"></fa-icon>
-                                {{ t('Show received data') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *ngIf="agent.allow_edit"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(agent)"
-                                                         [permission]="'agentconnector.delete'"
-                                                         *ngIf="agent.allow_edit">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            }
 
 
-            <oitc-no-records
-                *ngIf="agents && agents.agents.length === 0"></oitc-no-records>
-            <ng-container *ngIf="agents && agents.agents">
+            @if (agents && agents.agents.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (agents && agents.agents) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -323,19 +328,19 @@
                         </c-col>
                     </c-row>
                 </c-container>
-
                 <c-container
                     [fluid]="true">
                     <c-row>
                         <c-col>
-                            <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                *ngIf="agents"
-                                [paginateOrScroll]="agents"></oitc-paginate-or-scroll>
+                            @if (agents) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="agents"></oitc-paginate-or-scroll>
+                            }
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
         </c-card-body>
 

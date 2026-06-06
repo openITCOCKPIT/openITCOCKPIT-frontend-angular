@@ -39,48 +39,47 @@
 
             <oitc-form-loader [isVisible]="timeperiods.length === 0"></oitc-form-loader>
 
-            <c-card class="mb-3" *ngFor="let timeperiod of timeperiods; let i = index">
-                <c-card-header>
-                    <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                    <span class="ms-1">
-                        {{ t('Source time period:') }}
-                        {{ timeperiod.Source.name }}
-                    </span>
-                </c-card-header>
-                <c-card-body>
-
-                    <div class="mb-3">
-                        <label cLabel for="name{{i}}">
-                            {{ t('Time period name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl required type="text"
-                               name="name{{i}}"
-                               id="name{{i}}"
-                               [(ngModel)]="timeperiod.Timeperiod.name"
-                               oitcFormError [errors]="timeperiod.Error" errorField="name">
-                        <oitc-form-feedback [errors]="timeperiod.Error" errorField="name"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Name of the new time period') }}
+            @for (timeperiod of timeperiods; track timeperiod; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source time period:') }}
+                            {{ timeperiod.Source.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('Time period name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="name{{i}}"
+                                   id="name{{i}}"
+                                   [(ngModel)]="timeperiod.Timeperiod.name"
+                                   oitcFormError [errors]="timeperiod.Error" errorField="name">
+                            <oitc-form-feedback [errors]="timeperiod.Error" errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new time period') }}
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="description{{i}}">
-                            {{ t('Description') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl required type="text"
-                               name="description{{i}}"
-                               id="description{{i}}"
-                               [(ngModel)]="timeperiod.Timeperiod.description"
-                               oitcFormError [errors]="timeperiod.Error" errorField="description">
-                        <oitc-form-feedback [errors]="timeperiod.Error"
-                                            errorField="description"></oitc-form-feedback>
-                    </div>
-
-                </c-card-body>
-            </c-card>
+                        <div class="mb-3">
+                            <label cLabel for="description{{i}}">
+                                {{ t('Description') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="description{{i}}"
+                                   id="description{{i}}"
+                                   [(ngModel)]="timeperiod.Timeperiod.description"
+                                   oitcFormError [errors]="timeperiod.Error" errorField="description">
+                            <oitc-form-feedback [errors]="timeperiod.Error"
+                                                errorField="description"></oitc-form-feedback>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            }
 
         </c-card-body>
         <c-card-footer class="text-end">

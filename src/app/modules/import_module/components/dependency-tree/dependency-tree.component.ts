@@ -10,21 +10,22 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    SimpleChanges
+    SimpleChanges,
+    DOCUMENT
 } from '@angular/core';
 import {
-  ColComponent,
-  ProgressBarComponent,
-  ProgressComponent,
-  RowComponent,
-  ToastBodyComponent,
-  ToastComponent,
-  ToasterComponent,
-  ToastHeaderComponent
+    ColComponent,
+    ProgressBarComponent,
+    ProgressComponent,
+    RowComponent,
+    ToastBodyComponent,
+    ToastComponent,
+    ToasterComponent,
+    ToastHeaderComponent
 } from '@coreui/angular';
 import { OnlineOfflineComponent } from '../additional-host-information/online-offline/online-offline.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { DecimalPipe, DOCUMENT, NgIf } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ExternalSystemsService } from '../../pages/externalsystems/external-systems.service';
 import {
@@ -38,7 +39,7 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data/peer';
-import { HostgroupSummaryState, SummaryState } from '../../../../pages/hosts/summary_state.interface';
+import { StatusSummaryState, SummaryState } from '../../../../pages/hosts/summary_state.interface';
 import { HostSummaryComponent } from './host-summary/host-summary.component';
 import { NotInMonitoringComponent } from './not-in-monitoring/not-in-monitoring.component';
 import { HostGroupSummaryComponent } from './host-group-summary/host-group-summary.component';
@@ -72,25 +73,24 @@ export interface NodeExtended extends Node {
 @Component({
     selector: 'oitc-dependency-tree',
     imports: [
-    ColComponent,
-    OnlineOfflineComponent,
-    RowComponent,
-    TranslocoDirective,
-    NgIf,
-    XsButtonDirective,
-    FaIconComponent,
-    TranslocoPipe,
-    ProgressComponent,
-    DecimalPipe,
-    ToastComponent,
-    ToastBodyComponent,
-    ToasterComponent,
-    ToastHeaderComponent,
-    ProgressBarComponent,
-    HostSummaryComponent,
-    NotInMonitoringComponent,
-    HostGroupSummaryComponent
-],
+        ColComponent,
+        OnlineOfflineComponent,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        FaIconComponent,
+        TranslocoPipe,
+        ProgressComponent,
+        DecimalPipe,
+        ToastComponent,
+        ToastBodyComponent,
+        ToasterComponent,
+        ToastHeaderComponent,
+        ProgressBarComponent,
+        HostSummaryComponent,
+        NotInMonitoringComponent,
+        HostGroupSummaryComponent
+    ],
     templateUrl: './dependency-tree.component.html',
     styleUrl: './dependency-tree.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -122,7 +122,7 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
     public toastPercentage: number = 0;
 
     public hostSummaryState?: SummaryState;
-    public hostgroupSummeryState?: HostgroupSummaryState;
+    public hostgroupSummeryState?: StatusSummaryState;
 
     private isFullscreen: boolean = false;
     private subscriptions: Subscription = new Subscription();

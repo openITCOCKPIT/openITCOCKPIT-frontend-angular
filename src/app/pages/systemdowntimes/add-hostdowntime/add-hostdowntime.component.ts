@@ -15,7 +15,6 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -28,14 +27,14 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import { GenericValidationError } from '../../../generic-responses';
 import { SystemdowntimesGet, SystemdowntimesPost } from '../systemdowntimes.interface';
 import { HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { HostsService } from '../../hosts/hosts.service';
 import { SystemdowntimesService } from '../systemdowntimes.service';
-import { NgIf } from '@angular/common';
+
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import _ from 'lodash';
@@ -45,35 +44,34 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-add-hostdowntime',
     imports: [
-    CardComponent,
-    FaIconComponent,
-    FormDirective,
-    FormsModule,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    BackButtonDirective,
-    CardBodyComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    InputGroupComponent,
-    MultiSelectComponent,
-    RequiredIconComponent,
-    FormCheckComponent,
-    FormCheckLabelDirective,
-    FormCheckInputDirective,
-    FormControlDirective,
-    TrueFalseDirective,
-    CardFooterComponent,
-    NgIf,
-    DurationInputComponent
-],
+        CardComponent,
+        FaIconComponent,
+        FormDirective,
+        FormsModule,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        BackButtonDirective,
+        CardBodyComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        InputGroupComponent,
+        MultiSelectComponent,
+        RequiredIconComponent,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        FormCheckInputDirective,
+        FormControlDirective,
+        TrueFalseDirective,
+        CardFooterComponent,
+        DurationInputComponent
+    ],
     templateUrl: './add-hostdowntime.component.html',
     styleUrl: './add-hostdowntime.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -191,6 +189,7 @@ export class AddHostdowntimeComponent implements OnInit, OnDestroy {
 
                     if (!this.createAnother) {
                         this.HistoryService.navigateWithFallback(['/downtimes/host']);
+                        return;
                     }
                     // Create another
                     this.post = this.getClearForm();

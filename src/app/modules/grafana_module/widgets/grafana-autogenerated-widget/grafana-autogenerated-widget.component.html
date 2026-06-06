@@ -2,41 +2,46 @@
     <div class="d-flex h-100 flex-column" #boxContainer>
         <div>
             <div>
-                <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button" (click)="flipped.set(!flipped())"
-                        *ngIf="!isReadonly()">
-                    @if (flipped()) {
-                        <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                    } @else {
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    }
-                </button>
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())"
+                    >
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        }
+                    </button>
+                }
             </div>
         </div>
 
         <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
              class="box-container">
             <div class="box-x">
-                <ng-container *ngIf="animationStateShowContent">
+                @if (animationStateShowContent) {
                     <!-- Widget Content -->
-                    <div class="ps-2 text-info" *ngIf="!host_id">
-                        {{ t('No element selected') }}
-                    </div>
-                    <oitc-iframe [url]="iframe_url" *ngIf="host_id" [height]="widgetHeight+'px'"></oitc-iframe>
+                    @if (!host_id) {
+                        <div class="ps-2 text-info">
+                            {{ t('No element selected') }}
+                        </div>
+                    }
+                    @if (host_id) {
+                        <oitc-iframe [url]="iframe_url" [height]="widgetHeight+'px'"></oitc-iframe>
+                    }
                     <!-- End Widget Content -->
-                </ng-container>
+                }
             </div>
 
             <div class="box-x">
-                <ng-container *ngIf="animationStateShowConfig">
+                @if (animationStateShowConfig) {
                     <!-- Config area -->
                     @if (widget) {
-
                         <div class="mb-3">
                             <label cLabel [for]="'grafana_dashboard_id_'+widget.id">
                                 {{ t('Grafana dashboard') }}
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
-
                             <oitc-select
                                 [id]="'grafana_dashboard_id_'+widget.id"
                                 [name]="'grafana_dashboard_id_'+widget.id"
@@ -49,17 +54,14 @@
                                 [appendTo]="''">
                             </oitc-select>
                         </div>
-
-
                         <div class="mt-1 text-end">
                             <button cButton type="button" class="ripple" (click)="saveConfig()">
                                 {{ t('Save') }}
                             </button>
                         </div>
-
                     }
                     <!-- End Config area -->
-                </ng-container>
+                }
             </div>
         </div>
     </div>

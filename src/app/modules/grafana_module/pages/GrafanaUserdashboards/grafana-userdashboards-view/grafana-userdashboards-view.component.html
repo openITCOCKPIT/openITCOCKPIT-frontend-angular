@@ -29,9 +29,11 @@
     <c-card class="mb-3">
         <c-card-header>
             <h5 cCardTitle>{{ t('Dashboard') }}
-                <small class="fw-300" *ngIf="dashboard">
-                    {{ dashboard.dashboard.name }}
-                </small>
+                @if (dashboard) {
+                    <small class="fw-300">
+                        {{ dashboard.dashboard.name }}
+                    </small>
+                }
             </h5>
             <c-nav class="card-toolbar card-header-pills">
                 <c-nav-item>
@@ -41,15 +43,17 @@
                                              [selectedAutoRefreshInput]="selectedGrafanaAutorefresh"
                                              (change)="onGrafanaTimeRangeChange($event)"></oitc-grafana-timepicker>
                 </c-nav-item>
-                <c-nav-item class="px-1" *ngIf="dashboard && dashboard.allowEdit">
-                    <a [routerLink]="['/grafana_module/grafana_userdashboards/editor', dashboard.dashboard.id]"
-                       *oitcPermission="'GrafanaModule.GrafanaUserdashboards.editor'"
-                       cButton
-                       class="ripple" color="default" size="xs">
-                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                        {{ t('Open in Editor') }}
-                    </a>
-                </c-nav-item>
+                @if (dashboard && dashboard.allowEdit) {
+                    <c-nav-item class="px-1">
+                        <a [routerLink]="['/grafana_module/grafana_userdashboards/editor', dashboard.dashboard.id]"
+                           *oitcPermission="'GrafanaModule.GrafanaUserdashboards.editor'"
+                           cButton
+                           class="ripple" color="default" size="xs">
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                            {{ t('Open in Editor') }}
+                        </a>
+                    </c-nav-item>
+                }
                 <c-nav-item class="px-1">
                     <button [fallbackUrl]="['grafana_module', 'grafana_userdashboards', 'index']" cButton class="ripple"
                             color="default"
@@ -64,19 +68,23 @@
             </c-nav>
         </c-card-header>
 
-        <c-card-body *ngIf="!dashboard">
-            <oitc-block-loader height="35rem"></oitc-block-loader>
-        </c-card-body>
+        @if (!dashboard) {
+            <c-card-body>
+                <oitc-block-loader height="35rem"></oitc-block-loader>
+            </c-card-body>
+        }
 
-        <c-card-body *ngIf="dashboard">
-
-            @if (this.dashboardFoundInGrafana && this.iframeUrl !== '') {
-                <oitc-iframe [url]="iframeUrl"></oitc-iframe>
-            } @else {
-                <oitc-error404 *ngIf="!isLoading"></oitc-error404>
-            }
-
-        </c-card-body>
+        @if (dashboard) {
+            <c-card-body>
+                @if (this.dashboardFoundInGrafana && this.iframeUrl !== '') {
+                    <oitc-iframe [url]="iframeUrl"></oitc-iframe>
+                } @else {
+                    @if (!isLoading) {
+                        <oitc-error404></oitc-error404>
+                    }
+                }
+            </c-card-body>
+        }
         <c-card-footer>
             &nbsp;
         </c-card-footer>

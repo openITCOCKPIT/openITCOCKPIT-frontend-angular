@@ -34,7 +34,7 @@ export class HostsStatusListWidgetService {
                 state_older_than: null,
                 state_older_than_unit: 'MINUTE',
             },
-
+            hostpriority: [],
             Host: {
                 name: '',
                 name_regex: false,

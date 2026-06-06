@@ -19,7 +19,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgForOf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
@@ -38,7 +38,6 @@ import { RouterLink } from '@angular/router';
         ModalFooterComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
-        NgForOf,
         RowComponent,
         TranslocoDirective,
         XsButtonDirective,

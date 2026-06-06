@@ -15,7 +15,7 @@ import {
     getCustomAlertsWidgetParams
 } from '../../pages/customalerts/customalerts.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
     ColComponent,
     FormCheckComponent,
@@ -39,7 +39,6 @@ import { KtdResizeEnd } from '@katoid/angular-grid-layout';
     selector: 'oitc-customalerts-widget',
     imports: [
         FaIconComponent,
-        NgIf,
         NgClass,
         RowComponent,
         ColComponent,

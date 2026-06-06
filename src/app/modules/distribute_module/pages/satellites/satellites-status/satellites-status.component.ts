@@ -35,7 +35,7 @@ import { Subscription } from 'rxjs';
 import { SatellitesService } from '../satellites.service';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -67,11 +67,9 @@ import {
         ReactiveFormsModule,
         RowComponent,
         TranslocoPipe,
-        NgIf,
         TableLoaderComponent,
         MatSort,
         MatSortHeader,
-        NgForOf,
         TableDirective,
         NoRecordsComponent,
         PaginateOrScrollComponent,

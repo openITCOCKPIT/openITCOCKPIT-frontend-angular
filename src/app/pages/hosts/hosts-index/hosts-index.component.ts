@@ -1,3 +1,4 @@
+
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
@@ -37,7 +38,7 @@ import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -125,6 +126,8 @@ import {
     ColumnsConfigImportModalComponent
 } from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
 import { IndexPage } from '../../../pages.interface';
+import { HostgroupsService } from '../../hostgroups/hostgroups.service';
+import { HostgroupsLoadHostgroupsByStringParams } from '../../hostgroups/hostgroups.interface';
 
 @Component({
     selector: 'oitc-hosts-index',
@@ -153,8 +156,6 @@ import { IndexPage } from '../../../pages.interface';
         MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         PaginatorModule,
@@ -245,6 +246,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public hosts?: HostsIndexRoot;
     public hideFilter: boolean = true;
     public satellites: SelectKeyValue[] = [];
+    public hostgroups: SelectKeyValue[] = [];
 
     public hostTypes: any[] = [];
     public selectedItems: any[] = [];
@@ -252,6 +254,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public userFullname: string = '';
 
     private readonly HostsService = inject(HostsService);
+    private readonly HostgroupsService = inject(HostgroupsService);
     private subscriptions: Subscription = new Subscription();
     public readonly PermissionsService = inject(PermissionsService);
     public readonly route = inject(ActivatedRoute);
@@ -317,7 +320,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
                 this.filter['Hosts.address'] = address;
             }
 
-            let address_regex = params['address_regex'] ;
+            let address_regex = params['address_regex'];
             if (address_regex === 'true') {
                 this.filter['Hosts.address_regex'] = true;
             }
@@ -407,7 +410,18 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
                 this.cdr.markForCheck();
             })
         );
+        this.loadHostgroups('');
 
+    }
+
+    protected loadHostgroups = (search: string) => {
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({
+            'filter[Containers.name]': search,
+            'selected[]': this.filter['Hostgroups.id']
+        } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+            this.hostgroups = data;
+            this.cdr.markForCheck();
+        }));
     }
 
     public ngOnDestroy() {
@@ -596,7 +610,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Host.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'hosts', 'copy', ids]);
-        }else {
+        } else {
             const message = this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
             return;
@@ -648,6 +662,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             'page': this.params.page,
             'direction': this.params.direction,
             'filter[Hosts.name]': this.filter['Hosts.name'],
+            'filter[Hosts.name_regex]': this.filter['Hosts.name_regex'],
             'filter[Hosts.description]': this.filter.hostdescription,
             'filter[Hoststatus.output]': this.filter['Hoststatus.output'],
             'filter[Hoststatus.current_state][]': getHostCurrentStateForApi(this.currentStateFilter),
@@ -657,9 +672,11 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             'filter[Hoststatus.scheduled_downtime_depth]': inDowntime,
             'filter[Hoststatus.is_hardstate]': state_type,
             'filter[Hosts.address]': this.filter['Hosts.address'],
+            'filter[Hosts.address_regex]': this.filter['Hosts.address_regex'],
             'filter[Hosts.satellite_id][]': this.filter['Hosts.satellite_id'],
             'filter[Hosts.host_type][]': this.filter['Hosts.host_type'],
-            'filter[hostpriority][]': priorityFilter
+            'filter[hostpriority][]': priorityFilter,
+            'filter[Hostgroups.id][]': this.filter['Hostgroups.id'],
         };
 
         let stringParams: HttpParams = new HttpParams();
@@ -885,16 +902,16 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
             //cnditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
-            this.filter['Hosts.id'] = bookmarkfilter['Hosts.id'];
-            this.filter['Hosts.name'] = bookmarkfilter['Hosts.name'];
-            this.filter['Hosts.name_regex'] = bookmarkfilter['Hosts.name_regex'];
-            this.filter['Hosts.address'] = bookmarkfilter['Hosts.address'];
-            this.filter['Hosts.address_regex'] = bookmarkfilter['Hosts.address_regex'];
-            this.filter['hostdescription'] = bookmarkfilter['hostdescription'];
-            this.filter['Hosts.host_type'] = bookmarkfilter['Hosts.host_type'];
-            this.filter['Hosts.keywords'] = bookmarkfilter['Hosts.keywords'];
-            this.filter['Hosts.not_keywords'] = bookmarkfilter['Hosts.not_keywords'];
-            this.filter['Hoststatus.output'] = bookmarkfilter['Hoststatus.output'];
+            this.filter['Hosts.id'] = bookmarkfilter['Hosts.id'] || [];
+            this.filter['Hosts.name'] = bookmarkfilter['Hosts.name'] || '';
+            this.filter['Hosts.name_regex'] = bookmarkfilter['Hosts.name_regex'] || false;
+            this.filter['Hosts.address'] = bookmarkfilter['Hosts.address'] || '';
+            this.filter['Hosts.address_regex'] = bookmarkfilter['Hosts.address_regex'] || false;
+            this.filter['hostdescription'] = bookmarkfilter['hostdescription'] || '';
+            this.filter['Hosts.host_type'] = bookmarkfilter['Hosts.host_type'] || [];
+            this.filter['Hosts.keywords'] = bookmarkfilter['Hosts.keywords'] || [];
+            this.filter['Hosts.not_keywords'] = bookmarkfilter['Hosts.not_keywords'] || [];
+            this.filter['Hoststatus.output'] = bookmarkfilter['Hoststatus.output'] || '';
             this.convert2currentStateFilter(bookmarkfilter['Hoststatus.current_state'], 'currentStateFilter');
             if (bookmarkfilter['Hoststatus.problem_has_been_acknowledged'] === 'true') {
                 this.acknowledgementsFilter.acknowledged = true;
@@ -921,8 +938,12 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             if (bookmarkfilter['Hoststatus.is_hardstate'] === '1') {
                 this.state_typesFilter.hard = true;
             }
+            if (bookmarkfilter['Hostgroups.id'] ) {
+                this.filter['Hostgroups.id'] = bookmarkfilter['Hostgroups.id'];
+            }
             this.convert2currentStateFilter(bookmarkfilter['hostpriority'], 'priorityFilter');
-            this.filter['Hosts.satellite_id'] = bookmarkfilter['Hosts.satellite_id'];
+            this.filter['Hosts.satellite_id'] = bookmarkfilter['Hosts.satellite_id'] || [];
+            this.filter['Hostgroups.id'] = bookmarkfilter['Hostgroups.id'] || [];
             this.loadHosts();
 
         }

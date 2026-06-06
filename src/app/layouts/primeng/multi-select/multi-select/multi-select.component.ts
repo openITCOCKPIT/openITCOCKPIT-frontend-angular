@@ -21,7 +21,6 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import _ from 'lodash';
-import { AnimationEvent } from '@angular/animations';
 
 @Component({
     selector: 'oitc-multi-select',
@@ -58,7 +57,7 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
      */
     private _options: any[] | undefined;
     @Input()
-    set options(value: any[]) {
+    set options(value: any[] | undefined) {
         this._options = value;
         this.onOptionsChanged();
     }
@@ -278,7 +277,14 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
      *
      * @param event
      */
-    public onShow(event: AnimationEvent) {
+    public onShow(event: any) {
+        // In the past, we got a AnimationEvent from @angular/animations which is now deprecated:
+        // https://v20.angular.dev/api/animations/AnimationEvent
+        // As far is I understand the PrimeNG code, we should now get a standard AnimationEvent which is NOT the fact.
+        // I don't know what type we have here, so we use "any" for now.
+        // In the future, event.element is maybe relly undefined ad we have to use event.target (??)
+        //   const element = event.target as HTMLElement;
+
         event.element.parentElement.style.width = event.element.parentElement.style.minWidth;
 
         // 🩹
@@ -288,7 +294,14 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
         // To fix this, PrimeNG sets left to 0. https://github.com/primefaces/primeng/blob/33b099064e75d2ba9aa5fd45889837ff9a9875e5/packages/primeng/src/dom/domhandler.ts#L194
         // We try to fix this, when left = 0, we set it to the same position as the select box is.
         if (this.multiSelectOptgroup) {
+            // PrimeNG 20
             if (event.element.parentElement.style.left === '0px' && this.multiSelectOptgroup.appendTo.length !== 0) {
+                const selectBoxPosition = this.multiSelectOptgroup.el.nativeElement.getBoundingClientRect();
+                event.element.parentElement.style.left = selectBoxPosition.x + 'px';
+            }
+
+            // PrimeNG 21
+            if ((event.element.parentElement.style.left === '0px' || event.element.parentElement.style.left === '') && this.multiSelectOptgroup.appendTo().length !== 0) {
                 const selectBoxPosition = this.multiSelectOptgroup.el.nativeElement.getBoundingClientRect();
                 event.element.parentElement.style.left = selectBoxPosition.x + 'px';
             }
@@ -296,4 +309,5 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, OnDes
     }
 
     protected readonly String = String;
+    protected readonly Infinity = Infinity;
 }

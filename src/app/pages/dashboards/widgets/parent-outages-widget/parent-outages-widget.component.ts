@@ -14,7 +14,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { HoststatusIconComponent } from '../../../hosts/hoststatus-icon/hoststatus-icon.component';
-import { NgIf } from '@angular/common';
+
 import { LabelLinkComponent } from '../../../../layouts/coreui/label-link/label-link.component';
 import { ParentOutagesWidgetService } from './parent-outages-widget.service';
 import { ParentOutage } from './parent-outages-widget.interface';
@@ -33,7 +33,6 @@ import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-rec
         TranslocoDirective,
         HoststatusIconComponent,
         LabelLinkComponent,
-        NgIf,
         RowComponent,
         ColComponent,
         ListGroupDirective,

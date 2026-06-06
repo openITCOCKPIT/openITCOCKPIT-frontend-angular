@@ -24,9 +24,11 @@
                                [(ngModel)]="searchString"
                                (keyup)="filterWidgets()">
                     </c-input-group>
-                    <div class="pt-1 text-invalid" *ngIf="availableWidgetsFiltered.length === 0">
-                        {{ t('No matching widgets found.') }}
-                    </div>
+                    @if (availableWidgetsFiltered.length === 0) {
+                        <div class="pt-1 text-invalid">
+                            {{ t('No matching widgets found.') }}
+                        </div>
+                    }
                 </c-col>
             </c-row>
 

@@ -1,3 +1,5 @@
+@use "variables" as oitc;
+
 /* This file contains styles for fonts and typography */
 
 code {
@@ -90,4 +92,8 @@ c-card-header > fa-icon {
 
 .font-h1 {
     font-size: 0.8rem;
+}
+
+.text-danger-hover:hover {
+    color: oitc.$danger !important;
 }

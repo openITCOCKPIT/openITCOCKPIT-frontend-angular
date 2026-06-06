@@ -7,21 +7,21 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 import { GenericValidationError } from '../../../generic-responses';
 import { CommandCopyPost } from '../commands.interface';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormControlDirective,
-  FormLabelDirective,
-  NavComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    NavComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgForOf } from '@angular/common';
+
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
@@ -33,27 +33,26 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-commands-copy',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    NavComponent,
-    PermissionDirective,
-    XsButtonDirective,
-    BackButtonDirective,
-    RouterLink,
-    TranslocoDirective,
-    NgForOf,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    RequiredIconComponent,
-    CardFooterComponent,
-    FormLoaderComponent
-],
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        NavComponent,
+        PermissionDirective,
+        XsButtonDirective,
+        BackButtonDirective,
+        RouterLink,
+        TranslocoDirective,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        RequiredIconComponent,
+        CardFooterComponent,
+        FormLoaderComponent
+    ],
     templateUrl: './commands-copy.component.html',
     styleUrl: './commands-copy.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

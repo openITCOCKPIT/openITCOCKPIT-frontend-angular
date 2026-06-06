@@ -10,24 +10,24 @@ import {
     ViewChild
 } from '@angular/core';
 import {
-  AlertComponent,
-  AlertHeadingDirective,
-  ButtonCloseDirective,
-  ColComponent,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective,
-  RowComponent,
-  TableDirective
+    AlertComponent,
+    AlertHeadingDirective,
+    ButtonCloseDirective,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
@@ -44,37 +44,36 @@ import { GenericMessageResponse } from '../../../../generic-responses';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
+import { ExternalSystems } from '../../pages/externalsystems/external-systems.enum';
 
 @Component({
     selector: 'oitc-import-itop-data',
     imports: [
-    ButtonCloseDirective,
-    ColComponent,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    NgForOf,
-    NgIf,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    FaStackComponent,
-    FaStackItemSizeDirective,
-    PermissionDirective,
-    RouterLink,
-    AlertComponent,
-    AlertHeadingDirective,
-    TableLoaderComponent,
-    TableDirective,
-    DebounceDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormsModule
-],
+        ButtonCloseDirective,
+        ColComponent,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        FaStackComponent,
+        FaStackItemSizeDirective,
+        PermissionDirective,
+        RouterLink,
+        AlertComponent,
+        AlertHeadingDirective,
+        TableLoaderComponent,
+        TableDirective,
+        DebounceDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormsModule
+    ],
     templateUrl: './import-itop-data.component.html',
     styleUrl: './import-itop-data.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -119,7 +118,7 @@ export class ImportITopDataComponent implements OnInit, OnDestroy {
                 }
 
                 switch (this.externalSystem.system_type) {
-                    case 'itop':
+                    case ExternalSystems.Itop:
                         this.ExternalSystemService.loadDataFromITop(this.externalSystem).subscribe(data => {
                             this.iTopData = data;
                             this.cdr.markForCheck();

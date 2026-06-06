@@ -84,7 +84,7 @@ import {
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -139,6 +139,10 @@ import {
     ServiceAddToServicegroupModalComponent
 } from '../../../components/services/service-add-to-servicegroup-modal/service-add-to-servicegroup-modal.component';
 import { IndexPage } from '../../../pages.interface';
+import { HostgroupsService } from '../../hostgroups/hostgroups.service';
+import { ServicegroupsService } from '../../servicegroups/servicegroups.service';
+import { HostgroupsLoadHostgroupsByStringParams } from '../../hostgroups/hostgroups.interface';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-services-index',
@@ -160,7 +164,6 @@ import { IndexPage } from '../../../pages.interface';
         MatSort,
         MatSortHeader,
         TableDirective,
-        NgIf,
         ItemSelectComponent,
         RowComponent,
         NoRecordsComponent,
@@ -206,7 +209,8 @@ import { IndexPage } from '../../../pages.interface';
         DropdownDividerDirective,
         TableLoaderComponent,
         ServiceAddToServicegroupModalComponent,
-        AsyncPipe
+        AsyncPipe,
+        TrueFalseDirective
     ],
     templateUrl: './services-index.component.html',
     styleUrl: './services-index.component.css',
@@ -221,6 +225,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private ServicesService: ServicesService = inject(ServicesService);
+    private readonly HostgroupsService = inject(HostgroupsService);
+    private readonly ServicegroupsService = inject(ServicegroupsService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     public readonly PermissionsService = inject(PermissionsService);
     private readonly notyService = inject(NotyService);
@@ -250,6 +256,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
     public configString: string = ''
     //Filter
     public satellites: ServicesIndexRoot['satellites'] = [];
+    public hostgroups: SelectKeyValue[] = [];
+    public servicegroups: SelectKeyValue[] = [];
     public serviceTypes: any[] = [];
     public filter: ServiceIndexFilter = getDefaultServicesIndexFilter();
     private RequestFilter: ServicesIndexFilterApiRequest = getDefaultServicesIndexFilterApiRequest();
@@ -395,7 +403,8 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.setFilterAndLoad(this.filter);
             this.cdr.markForCheck();
         });
-
+        this.loadHostgroups('');
+        this.loadServicegroups('');
     }
 
     public ngOnDestroy() {
@@ -414,6 +423,26 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
                 this.userFullname = services.username;
             })
         );
+    }
+
+    protected loadHostgroups = (search: string) => {
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({
+            'filter[Containers.name]': search,
+            'selected[]': this.filter.Hostgroups.id
+        } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+            this.hostgroups = data;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    protected loadServicegroups = (search: string) => {
+        this.subscriptions.add(this.ServicegroupsService.loadServicegroupsByString({
+            'filter[Containers.name]': search,
+            'selected[]': this.filter.Servicegroups.id
+        } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+            this.servicegroups = data;
+            this.cdr.markForCheck();
+        }));
     }
 
     public onSortChange(sort: Sort) {
@@ -530,6 +559,14 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             }
         }
 
+        let state_type: string = '';
+        if (this.filter.Servicestatus.state_type.soft !== this.filter.Servicestatus.state_type.hard) {
+            state_type = '0';
+            if (this.filter.Servicestatus.state_type.hard) {
+                state_type = '1';
+            }
+        }
+
         let urlParams = {
             'angular': true,
             'sort': this.params.sort,
@@ -553,6 +590,9 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             'filter[Servicestatus.active_checks_enabled]': activeChecksEnabled,
             'filter[Servicestatus.notifications_enabled]': notificationsEnabled,
             'filter[servicepriority][]': priorityFilter,
+            'filter[Hostgroups.id][]': this.filter.Hostgroups.id,
+            'filter[Servicegroups.id][]': this.filter.Servicegroups.id,
+            'filter[Servicestatus.is_hardstate]': state_type,
         };
 
 
@@ -772,7 +812,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
         let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Service.id).join(',');
         if (ids) {
             this.router.navigate(['/', 'services', 'copy', ids]);
-        } else{
+        } else {
             const message = this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
             return;
@@ -791,31 +831,74 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
         }
         if (filterstring && filterstring.length > 0) {
             //cnditions to apply old bookmarks
-            const bookmarkfilter = JSON.parse(filterstring);
+            const defaultFilter:ServiceIndexFilter = getDefaultServicesIndexFilter();
+            const bookmark = JSON.parse(filterstring);
+            defaultFilter.Servicestatus.current_state = bookmark.Servicestatus.current_state || {
+                ok: false,
+                warning: false,
+                critical: false,
+                unknown: false
+            };
+            defaultFilter.Servicestatus.acknowledged = bookmark.Servicestatus?.acknowledged || false;
+            defaultFilter.Servicestatus.not_acknowledged = bookmark.Servicestatus?.not_acknowledged || false;
+            defaultFilter.Servicestatus.in_downtime = bookmark.Servicestatus?.in_downtime || false;
+            defaultFilter.Servicestatus.not_in_downtime = bookmark.Servicestatus?.not_in_downtime || false;
+            defaultFilter.Servicestatus.passive = bookmark.Servicestatus?.passive || false;
+            defaultFilter.Servicestatus.active = bookmark.Servicestatus?.active || false;
+            defaultFilter.Servicestatus.notifications_enabled = bookmark.Servicestatus?.notifications_enabled || false;
+            defaultFilter.Servicestatus.notifications_not_enabled = bookmark.Servicestatus?.notifications_not_enabled || false;
+            defaultFilter.Servicestatus.output = bookmark.Servicestatus?.output || '';
+            defaultFilter.Servicestatus.state_type = bookmark.Servicestatus?.state_type || { soft: false, hard: false};
+            defaultFilter.Services.id = defaultFilter.Services?.id || [];
+            defaultFilter.Services.name = bookmark.Services?.name || '';
+            defaultFilter.Services.name_regex = bookmark.Services?.name_regex || false;
+            defaultFilter.Services.servicedescription = bookmark.Services?.servicedescription || '';
+            defaultFilter.Services.service_type = bookmark.Services?.service_type || [];
+            defaultFilter.Services.keywords = bookmark.Services?.keywords || [];
+            defaultFilter.Services.not_keywords = bookmark.Services?.not_keywords || [];
+            defaultFilter.Services.priority = bookmark.Services?.priority || {
+                                                                                1: false,
+                                                                                2: false,
+                                                                                3: false,
+                                                                                4: false,
+                                                                                5: false
+                                                                            };
+            defaultFilter.Services.service_type = bookmark.Services?.service_type || [];
+            defaultFilter.Hosts.id = bookmark.Hosts?.id || [];
+            defaultFilter.Hosts.name = bookmark.Hosts?.name || '';
+            defaultFilter.Hosts.name_regex = bookmark.Hosts?.name_regex || false;
+            defaultFilter.Hosts.satellite_id = bookmark.Hosts?.satellite_id || [];
+            defaultFilter.Hostgroups.id = bookmark.Hostgroups?.id || [];
+            defaultFilter.Servicegroups.id = bookmark.Servicegroups?.id || [];
             this.params = getDefaultServiceIndexParams();
-            this.filter = bookmarkfilter;
+            this.filter = defaultFilter;
             this.setFilterAndLoad(this.filter);
         }
         this.cdr.markForCheck();
     }
 
     private setFilterAndLoad(filter: ServiceIndexFilter) {
-        this.params.page = 1;
-
         let priorityFilter: string[] = [];
         for (const key in filter.Services.priority) {
             if (filter.Services.priority.hasOwnProperty(key)) {
-                // console.log(key); // Logs the key
-                // @ts-ignore
-                if (filter.Services.priority[key] === true) {
+                if (filter.Services.priority[key]) {
                     priorityFilter.push(key);
                 }
             }
         }
 
+        let state_type: string = '';
+        if (this.filter.Servicestatus.state_type.soft !== this.filter.Servicestatus.state_type.hard) {
+            state_type = '0';
+            if (this.filter.Servicestatus.state_type.hard) {
+                state_type = '1';
+            }
+        }
         this.RequestFilter['Hosts.id'] = filter.Hosts.id;
         this.RequestFilter['Hosts.name'] = filter.Hosts.name;
         this.RequestFilter['Hosts.name_regex'] = !!(filter.Hosts.name_regex);
+        this.RequestFilter['Hostgroups.id'] = filter.Hostgroups.id;
+        this.RequestFilter['Servicegroups.id'] = filter.Servicegroups.id;
         this.RequestFilter['Hosts.satellite_id'] = filter.Hosts.satellite_id;
 
         this.RequestFilter['Services.id'] = filter.Services.id;
@@ -826,6 +909,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.RequestFilter['servicedescription'] = filter.Services.servicedescription;
         this.RequestFilter['servicepriority'] = priorityFilter
         this.RequestFilter['Services.service_type'] = filter.Services.service_type;
+        this.RequestFilter['Servicestatus.is_hardstate'] = state_type;
 
         this.RequestFilter['Servicestatus.current_state'] = getServiceCurrentStateForApi(filter.Servicestatus.current_state);
         this.RequestFilter['Servicestatus.output'] = filter.Servicestatus.output;

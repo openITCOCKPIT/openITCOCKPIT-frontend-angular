@@ -49,21 +49,24 @@
         </c-card-header>
         <c-card-body>
 
-            <p-skeleton width="10rem" styleClass="mb-2" *ngIf="!slaHostAndStatusLog && isLoading"/>
-            <span class="padding-left-10 font-md" *ngIf="slaHostAndStatusLog && !isLoading">
-                <fa-icon [icon]="['fas', 'desktop']" class="fa fa-fw margin-right-5"></fa-icon>
-                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser']) | async) {
-                    <a [routerLink]="['/', 'hosts', 'browser', slaHostAndStatusLog.host.id]">{{ slaHostAndStatusLog.host.name }}</a>
-                    (
-                    <oitc-copy-to-clipboard [data]="slaHostAndStatusLog.host.address">
-                        {{ slaHostAndStatusLog.host.address }}
-                    </oitc-copy-to-clipboard>
-                    )
-                } @else {
-                    {{ slaHostAndStatusLog.host.name }} ({{ slaHostAndStatusLog.host.address }})
-                }
-
-            </span>
+            @if (!slaHostAndStatusLog && isLoading) {
+                <p-skeleton width="10rem" styleClass="mb-2"/>
+            }
+            @if (slaHostAndStatusLog && !isLoading) {
+                <span class="padding-left-10 font-md">
+                    <fa-icon [icon]="['fas', 'desktop']" class="fa fa-fw margin-right-5"></fa-icon>
+                    @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser']) | async) {
+                        <a [routerLink]="['/', 'hosts', 'browser', slaHostAndStatusLog.host.id]">{{ slaHostAndStatusLog.host.name }}</a>
+                        (
+                        <oitc-copy-to-clipboard [data]="slaHostAndStatusLog.host.address">
+                            {{ slaHostAndStatusLog.host.address }}
+                        </oitc-copy-to-clipboard>
+                        )
+                    } @else {
+                        {{ slaHostAndStatusLog.host.name }} ({{ slaHostAndStatusLog.host.address }})
+                    }
+                </span>
+            }
 
             <!-- Filter -->
             <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
@@ -122,136 +125,154 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!slaHostAndStatusLog && isLoading"></oitc-table-loader>
-            <table *ngIf="slaHostAndStatusLog && !isLoading" bordered cTable class="mt-2 mb-2" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th scope="col">
-                        {{ t('Evaluation range') }}
-                    </th>
-                    <th scope="col" class="col-2">
-                        {{ t('State summary') }}
-                    </th>
-                    <th scope="col" class="col-5">
-                        {{ t('Outage overview') }}
-                    </th>
-                    <th scope="col">
-                        {{ t('Goal') }}(%)
-                    </th>
-                    <th scope="col">
-                        {{ t('Achieved') }}(%)
-                    </th>
-                    <th scope="col" colspan="2">
-                        {{ t('Status') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let hostStatus of slaHostAndStatusLog.slaHostStatusLog; let i = index; let last = last"
-                    class="ps-1">
-                    <td>
-                        <ul class="evaluation-range timeline">
-                            <li class="m-1 ps-1 start">
-                                {{ hostStatus.start }}
-                            </li>
-                            <li class="m-1 ps-1 end">
-                                {{ hostStatus.end }}
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                        <div class="btn-group btn-group-justified w-100">
-                            <c-badge color="success" class="col-4 rounded-0 rounded-start">
-                                {{ hostStatus.up_human_readable }}
-                            </c-badge>
-                            <c-badge color="danger" class="col-4 rounded-0">
-                                {{ hostStatus.down_human_readable }}
-                            </c-badge>
-                            <c-badge color="secondary" class="col-4 rounded-0 rounded-end">
-                                {{ hostStatus.unreachable_human_readable }}
-                            </c-badge>
-                        </div>
-                    </td>
-                    <td>
-                        <fa-icon [icon]="['fas', 'clock']" class="text-primary"></fa-icon>
-                        {{ hostStatus.determined_outage_time_human_readable }}
+            @if (!slaHostAndStatusLog && isLoading) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (slaHostAndStatusLog && !isLoading) {
+                <table bordered cTable class="mt-2 mb-2" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col">
+                            {{ t('Evaluation range') }}
+                        </th>
+                        <th scope="col" class="col-2">
+                            {{ t('State summary') }}
+                        </th>
+                        <th scope="col" class="col-5">
+                            {{ t('Outage overview') }}
+                        </th>
+                        <th scope="col">
+                            {{ t('Goal') }}(%)
+                        </th>
+                        <th scope="col">
+                            {{ t('Achieved') }}(%)
+                        </th>
+                        <th scope="col" colspan="2">
+                            {{ t('Status') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (hostStatus of slaHostAndStatusLog.slaHostStatusLog; track hostStatus; let i = $index; let last = $last) {
+                            <tr
+                                class="ps-1">
+                                <td>
+                                    <ul class="evaluation-range timeline">
+                                        <li class="m-1 ps-1 start">
+                                            {{ hostStatus.start }}
+                                        </li>
+                                        <li class="m-1 ps-1 end">
+                                            {{ hostStatus.end }}
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-justified w-100">
+                                        <c-badge color="success" class="col-4 rounded-0 rounded-start">
+                                            {{ hostStatus.up_human_readable }}
+                                        </c-badge>
+                                        <c-badge color="danger" class="col-4 rounded-0">
+                                            {{ hostStatus.down_human_readable }}
+                                        </c-badge>
+                                        <c-badge color="secondary" class="col-4 rounded-0 rounded-end">
+                                            {{ hostStatus.unreachable_human_readable }}
+                                        </c-badge>
+                                    </div>
+                                </td>
+                                <td>
+                                    <fa-icon [icon]="['fas', 'clock']" class="text-primary"></fa-icon>
+                                    {{ hostStatus.determined_outage_time_human_readable }}
+                                    @if (hostStatus.sla_host_outages.length > 0) {
+                                        <ul class="list-unstyled p-2"
+                                        >
+                                            <div class="border-primary border-bottom pb-1">
+                                                {{ t('Outages') }}
+                                            </div>
+                                            @for (outage of hostStatus.sla_host_outages|filter:{in_downtime: false}; track outage) {
+                                                <li
+                                                    class="padding-left-15 pb-2">
+                                                    <fa-icon [icon]="['fas', 'bolt']" class="text-danger"></fa-icon>
+                                                    {{ outage.start }}
+                                                    <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
+                                                    {{ outage.end }} ({{ outage.duration }})
+                                                    <br/>
+                                                    <code>
+                                                        {{ outage.output }}
+                                                    </code>
+                                                </li>
+                                            }
+                                            @for (outage of hostStatus.sla_host_outages|filter:{in_downtime: true}; track outage) {
+                                                <li
+                                                    class="padding-left-15 cursor-help"
+                                                    [title]="'In downtime' | transloco">
+                                                    <fa-icon [icon]="['fas', 'power-off']"
+                                                             class="text-primary"></fa-icon>
+                                                    {{ outage.start }}
+                                                    <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
+                                                    {{ outage.end }}
+                                                    (<span class="outages-in-downtime">{{ outage.duration }}</span>)
+                                                    <br/>
+                                                    <code>
+                                                        {{ outage.output }}
+                                                    </code>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                </td>
+                                <td>
+                                    {{ hostStatus.minimal_availability_percent }}%
+                                </td>
+                                <td class="text-{{hostStatus.state}}">
+                                    {{ hostStatus.determined_availability_percent }}%
+                                </td>
+                                <td>
+                                    <c-badge [hidden]="hostStatus.state === 'danger'"
+                                             textColor="{{hostStatus.state}}"
+                                             class="badge-border w-100 text-{{hostStatus.state}} border-{{hostStatus.state}}">
+                                        {{ t('PASSED') }}
+                                    </c-badge>
+                                    <c-badge [hidden]="hostStatus.state !== 'danger'"
+                                             textColor="{{hostStatus.state}}"
+                                             class="badge-border w-100 text-{{hostStatus.state}} border-{{hostStatus.state}}">
+                                        {{ t('FAILED') }}
+                                    </c-badge>
+                                </td>
+                                <td>
+                                    @if (!last) {
+                                        <span>
+                                            <span>
+                                                <span [hidden]="!(declineValues[i] > 0)"
+                                                      class="small text-red-400">
+                                                    <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
+                                                    {{ declineValues[i] | number:'1.2-2' }}%
+                                                </span>
+                                            </span>
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                        <ul class="list-unstyled p-2"
-                            *ngIf="hostStatus.sla_host_outages.length > 0">
-                            <div class="border-primary border-bottom pb-1">
-                                {{ t('Outages') }}
-                            </div>
-                            <li *ngFor="let outage of hostStatus.sla_host_outages|filter:{in_downtime:false}"
-                                class="padding-left-15 pb-2">
-                                <fa-icon [icon]="['fas', 'bolt']" class="text-danger"></fa-icon>
-                                {{ outage.start }}
-                                <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
-                                {{ outage.end }} ({{ outage.duration }})
-                                <br/>
-                                <code>
-                                    {{ outage.output }}
-                                </code>
-                            </li>
-                            <li *ngFor="let outage of hostStatus.sla_host_outages|filter:{in_downtime:true}"
-                                class="padding-left-15 cursor-help" [title]="'In downtime' | transloco">
-                                <fa-icon [icon]="['fas', 'power-off']" class="text-primary"></fa-icon>
-                                {{ outage.start }}
-                                <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
-                                {{ outage.end }}
-                                (<span class="outages-in-downtime">{{ outage.duration }}</span>)
-                                <br/>
-                                <code>
-                                    {{ outage.output }}
-                                </code>
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                        {{ hostStatus.minimal_availability_percent }}%
-                    </td>
-                    <td class="text-{{hostStatus.state}}">
-                        {{ hostStatus.determined_availability_percent }}%
-                    </td>
-                    <td>
-                        <c-badge [hidden]="hostStatus.state === 'danger'"
-                                 textColor="{{hostStatus.state}}"
-                                 class="badge-border w-100 text-{{hostStatus.state}} border-{{hostStatus.state}}">
-                            {{ t('PASSED') }}
-                        </c-badge>
-                        <c-badge [hidden]="hostStatus.state !== 'danger'"
-                                 textColor="{{hostStatus.state}}"
-                                 class="badge-border w-100 text-{{hostStatus.state}} border-{{hostStatus.state}}">
-                            {{ t('FAILED') }}
-                        </c-badge>
-                    </td>
-                    <td>
-                        <span *ngIf="!last">
-                            <span>
-                                <span [hidden]="!(declineValues[i] > 0)"
-                                      class="small text-red-400">
-                                    <fa-icon [icon]="['fas', 'caret-down']"></fa-icon>
-                                    {{ declineValues[i] | number:'1.2-2' }}%
-                                </span>
-                            </span>
-                        </span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records
-                *ngIf="slaHostAndStatusLog && slaHostAndStatusLog.slaHostStatusLog && slaHostAndStatusLog.slaHostStatusLog.length === 0"></oitc-no-records>
+            @if (slaHostAndStatusLog && slaHostAndStatusLog.slaHostStatusLog && slaHostAndStatusLog.slaHostStatusLog.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="slaHostAndStatusLog"
-                            [paginateOrScroll]="slaHostAndStatusLog"></oitc-paginate-or-scroll>
+                        @if (slaHostAndStatusLog) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="slaHostAndStatusLog"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

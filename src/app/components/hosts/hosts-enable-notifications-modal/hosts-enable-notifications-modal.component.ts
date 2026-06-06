@@ -11,18 +11,18 @@ import {
     ViewChild
 } from '@angular/core';
 import {
-  ButtonCloseDirective,
-  CardBodyComponent,
-  CardComponent,
-  ColComponent,
-  FormSelectDirective,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective,
-  RowComponent
+    ButtonCloseDirective,
+    CardBodyComponent,
+    CardComponent,
+    ColComponent,
+    FormSelectDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -39,24 +39,24 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 @Component({
     selector: 'oitc-hosts-enable-notifications-modal',
     imports: [
-    ButtonCloseDirective,
-    ColComponent,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    RowComponent,
-    TranslocoDirective,
-    FormsModule,
-    NgSelectModule,
-    RequiredIconComponent,
-    FormSelectDirective,
-    XsButtonDirective,
-    CardComponent,
-    CardBodyComponent
-],
+        ButtonCloseDirective,
+        ColComponent,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        RowComponent,
+        TranslocoDirective,
+        FormsModule,
+        NgSelectModule,
+        RequiredIconComponent,
+        FormSelectDirective,
+        XsButtonDirective,
+        CardComponent,
+        CardBodyComponent
+    ],
     templateUrl: './hosts-enable-notifications-modal.component.html',
     styleUrl: './hosts-enable-notifications-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

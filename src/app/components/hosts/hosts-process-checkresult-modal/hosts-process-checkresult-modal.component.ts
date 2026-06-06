@@ -28,7 +28,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -56,7 +56,6 @@ import { Subscription } from 'rxjs';
         ModalFooterComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
-        NgIf,
         ReactiveFormsModule,
         RequiredIconComponent,
         RowComponent,

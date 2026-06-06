@@ -1,0 +1,31 @@
+<ng-container *transloco="let t">
+    @switch (reasonType()) {
+        @case (NotificationReasonTypesEnum.NOTIFICATION_NORMAL) {
+            {{ t('Alert') }}
+        }
+        @case (NotificationReasonTypesEnum.NOTIFICATION_ACKNOWLEDGEMENT) {
+            {{ t('Acknowledgement set') }}
+        }
+        @case (NotificationReasonTypesEnum.NOTIFICATION_FLAPPINGSTART) {
+            {{ t('Start flapping') }}
+        }
+        @case (NotificationReasonTypesEnum.NOTIFICATION_FLAPPINGSTOP) {
+            {{ t('Stop flapping') }}
+        }
+        @case (NotificationReasonTypesEnum.NOTIFICATION_FLAPPINGDISABLED) {
+            {{ t('Flapping disabled') }}
+        }
+        @case (NotificationReasonTypesEnum.NOTIFICATION_DOWNTIMESTART) {
+            {{ t('Downtime start') }}
+        }
+        @case (NotificationReasonTypesEnum.NOTIFICATION_DOWNTIMEEND) {
+            {{ t('Downtime end') }}
+        }
+        @case (NotificationReasonTypesEnum.NOTIFICATION_DOWNTIMECANCELLED) {
+            {{ t('Downtime cancelled') }}
+        }
+        @case (NotificationReasonTypesEnum.NOTIFICATION_CUSTOM) {
+            {{ t('Custom') }}
+        }
+    }
+</ng-container>

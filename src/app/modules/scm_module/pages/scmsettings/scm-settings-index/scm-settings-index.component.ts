@@ -2,19 +2,20 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import {
     AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
-    CardHeaderComponent, CardTitleDirective,
+    CardHeaderComponent,
+    CardTitleDirective,
     ColComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
-    FormControlDirective, FormDirective,
+    FormControlDirective,
+    FormDirective,
     FormLabelDirective,
     RowComponent
 } from '@coreui/angular';
@@ -32,6 +33,7 @@ import { ScmsettingsService } from '../scmsettings.service';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { HistoryService } from '../../../../../history.service';
 import { ScmSettingsIndex, ScmSettingsPost } from '../scmsettings.interface';
+import { TimezoneConfiguration, TimezoneService } from '../../../../../services/timezone.service';
 
 @Component({
     selector: 'oitc-scm-settings-index',
@@ -39,7 +41,6 @@ import { ScmSettingsIndex, ScmSettingsPost } from '../scmsettings.interface';
         TranslocoDirective,
         RouterLink,
         FaIconComponent,
-        NgIf,
         FormLoaderComponent,
         CardComponent,
         CardHeaderComponent,
@@ -73,12 +74,15 @@ export class ScmSettingsIndexComponent implements OnInit, OnDestroy {
     public PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly TimezoneService = inject(TimezoneService);
 
     private subscriptions: Subscription = new Subscription();
 
     public readonly route = inject(ActivatedRoute);
     public errors: GenericValidationError | null = null;
     public post!: ScmSettingsPost;
+
+    public serverTimezone: TimezoneConfiguration | null = null;
 
     private cdr = inject(ChangeDetectorRef);
 
@@ -91,7 +95,12 @@ export class ScmSettingsIndexComponent implements OnInit, OnDestroy {
             .subscribe((result: ScmSettingsIndex) => {
                 this.post = result.scm_settings;
                 this.cdr.markForCheck();
-            }))
+            }));
+
+        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
+            this.serverTimezone = data;
+            this.cdr.markForCheck();
+        }));
     }
 
     public ngOnDestroy() {

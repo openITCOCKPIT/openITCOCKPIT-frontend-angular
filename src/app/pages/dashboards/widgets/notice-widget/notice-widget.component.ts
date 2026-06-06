@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgIf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { NoticeWidgetService } from './notice-widget.service';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
@@ -23,7 +23,6 @@ import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
     selector: 'oitc-notice-widget',
     imports: [
         FaIconComponent,
-        NgIf,
         TranslocoDirective,
         FormControlDirective,
         FormLabelDirective,

@@ -10,7 +10,7 @@ import {
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { IframeComponent } from '../../../../components/iframe/iframe.component';
-import { NgIf } from '@angular/common';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { AlertComponent, ColComponent, FormControlDirective, FormLabelDirective, RowComponent } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
@@ -23,7 +23,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
     selector: 'oitc-website-widget',
     imports: [
         IframeComponent,
-        NgIf,
         FaIconComponent,
         FormLabelDirective,
         FormControlDirective,

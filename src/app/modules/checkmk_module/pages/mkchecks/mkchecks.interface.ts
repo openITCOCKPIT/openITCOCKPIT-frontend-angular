@@ -37,7 +37,7 @@ export interface Mkcheck {
     servicetemplate_id: number
     created: string
     modified: string
-    servicetemplate: ServicetemplateEntity
+    servicetemplate: ServicetemplateEntity | null
 }
 
 /**********************

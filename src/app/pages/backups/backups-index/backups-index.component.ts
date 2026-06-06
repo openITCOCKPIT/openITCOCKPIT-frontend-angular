@@ -28,7 +28,7 @@ import { Subscription } from 'rxjs';
 import { BackupsService } from '../backups.service';
 import { StartBackupResponse } from '../backups.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
 import { ProgressBar } from 'primeng/progressbar';
 
@@ -58,7 +58,6 @@ import { ProgressBar } from 'primeng/progressbar';
         RequiredIconComponent,
         TranslocoPipe,
         CardFooterComponent,
-        NgIf,
         OitcAlertComponent,
         NgClass,
         ProgressBar

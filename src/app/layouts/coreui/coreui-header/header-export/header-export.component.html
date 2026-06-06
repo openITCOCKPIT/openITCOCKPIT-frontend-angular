@@ -13,9 +13,13 @@
                 <a class="btn btn-default btn-xs waves-effect waves-themed"
                    [routerLink]="['/', 'exports', 'index']"
                    cTooltip="{{t('Refresh monitoring configuration')}}">
-                    <fa-icon [icon]="['fas', 'retweet']" *ngIf="!isRunning"></fa-icon>
-                    <fa-icon [icon]="['fas', 'refresh']" class="critical" [animation]="'spin'"
-                             *ngIf="isRunning"></fa-icon>
+                    @if (!isRunning) {
+                        <fa-icon [icon]="['fas', 'retweet']"></fa-icon>
+                    }
+                    @if (isRunning) {
+                        <fa-icon [icon]="['fas', 'refresh']" class="critical" [animation]="'spin'"
+                        ></fa-icon>
+                    }
                 </a>
             </div>
         }

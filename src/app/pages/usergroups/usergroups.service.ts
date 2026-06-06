@@ -4,11 +4,11 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
     AcoRoot,
     LoadLdapgroups,
+    Usergroup,
     UsergroupsAddRoot,
     UsergroupsCopyGetRoot,
     UsergroupsCopyPostRoot,
-    UsergroupsEditGetRoot,
-    UsergroupsEditPostRoot,
+    UsergroupsEditGetRoot, UsergroupsEditPostRoot,
     UsergroupsIndexParams,
     UsergroupsIndexRoot
 } from './usergroups.interface';
@@ -51,8 +51,11 @@ export class UsergroupsService {
         return this.http.post(`${this.proxyPath}/usergroups/delete/${item.id}.json?angular=true`, {});
     }
 
-    public loadLdapgroupsForAngular(search: string = ''): Observable<LoadLdapgroups> {
-        return this.http.get<LoadLdapgroups>(`${this.proxyPath}/usergroups/loadLdapgroupsForAngular.json?angular=true&filter[Ldapgroups.cn]=${search}`);
+    public loadLdapgroupsForAngular(search: string = '', selected?: number[]): Observable<LoadLdapgroups> {
+        return this.http.get<LoadLdapgroups>(`${this.proxyPath}/usergroups/loadLdapgroupsForAngular.json?angular=true&filter[Ldapgroups.cn]=${search}`,
+            {
+                params: selected ? {'selected[]': selected} : {}
+            });
     }
 
     public loadAcos(): Observable<AcoRoot> {

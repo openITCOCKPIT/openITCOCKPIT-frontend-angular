@@ -3,21 +3,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EventcorrelationWidgetComponent } from './eventcorrelation-widget.component';
 
 describe('EventcorrelationWidgetComponent', () => {
-  let component: EventcorrelationWidgetComponent;
-  let fixture: ComponentFixture<EventcorrelationWidgetComponent>;
+    let component: EventcorrelationWidgetComponent;
+    let fixture: ComponentFixture<EventcorrelationWidgetComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [EventcorrelationWidgetComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [EventcorrelationWidgetComponent]
+        })
+            .compileComponents();
 
-    fixture = TestBed.createComponent(EventcorrelationWidgetComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(EventcorrelationWidgetComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

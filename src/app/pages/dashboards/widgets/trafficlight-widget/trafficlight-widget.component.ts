@@ -22,7 +22,7 @@ import {
 } from '@coreui/angular';
 import { SelectOptgroupComponent } from '../../../../layouts/primeng/select/select-optgroup/select-optgroup.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -37,7 +37,6 @@ import { forkJoin } from 'rxjs';
         FormLabelDirective,
         SelectOptgroupComponent,
         FaIconComponent,
-        NgIf,
         TranslocoDirective,
         XsButtonDirective,
         FormCheckComponent,

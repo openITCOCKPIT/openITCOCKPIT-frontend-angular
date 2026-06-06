@@ -17,7 +17,7 @@ import {
 } from '@coreui/angular';
 import { IntervalInput } from './interval-input.interface';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 import { PaginatorModule } from 'primeng/paginator';
 import { HumanTimeComponent } from './human-time/human-time.component';
@@ -26,19 +26,18 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-interval-input',
     imports: [
-    TranslocoPipe,
-    RowComponent,
-    ColComponent,
-    ButtonGroupComponent,
-    XsButtonDirective,
-    NgClass,
-    FormControlDirective,
-    PaginatorModule,
-    HumanTimeComponent,
-    NgForOf,
-    InputGroupComponent,
-    FormsModule
-],
+        TranslocoPipe,
+        RowComponent,
+        ColComponent,
+        ButtonGroupComponent,
+        XsButtonDirective,
+        NgClass,
+        FormControlDirective,
+        PaginatorModule,
+        HumanTimeComponent,
+        InputGroupComponent,
+        FormsModule
+    ],
     templateUrl: './interval-input.component.html',
     styleUrl: './interval-input.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

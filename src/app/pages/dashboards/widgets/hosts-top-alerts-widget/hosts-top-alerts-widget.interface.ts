@@ -3,9 +3,10 @@ import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator
 import { HostObject } from '../../../hosts/hosts.interface';
 
 export interface HostsTopAlertsWidgetConfig {
-    state: 'up' | 'down' | 'unreachable',
+    state: 'recovery' | 'down' | 'unreachable',
     not_older_than: number,
     not_older_than_unit: 'DAY' | 'HOUR' | 'MINUTE',
+    hostpriority: number[]
     scroll_interval: number,
     useScroll: boolean
 }
@@ -14,8 +15,9 @@ export interface HostsTopAlertsWidgetParams {
     angular: true
     scroll: true
     page: number
-    'filter[NotificationHosts.state][]': ['up' | 'down' | 'unreachable']
+    'filter[NotificationHosts.state][]': ['recovery' | 'down' | 'unreachable']
     'filter[not_older_than]': number // in minutes
+    'filter[hostpriority][]': number[]
     limit: number
 }
 

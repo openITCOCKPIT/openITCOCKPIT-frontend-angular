@@ -1,5 +1,5 @@
 // Keep in Sync with backend API
-// https://github.com/it-novum/openITCOCKPIT/blob/development/src/Lib/Constants.php#L86-L93
+// https://github.com/openITCOCKPIT/openITCOCKPIT/blob/development/src/Lib/Constants.php#L86-L93
 export enum ObjectTypesEnum {
     'TENANT' = 1 << 0,
     'USER' = 1 << 1,

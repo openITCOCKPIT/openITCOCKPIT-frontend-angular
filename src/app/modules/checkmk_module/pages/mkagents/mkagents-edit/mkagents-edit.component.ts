@@ -2,18 +2,18 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  AlertComponent,
-  AlertHeadingDirective,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    AlertComponent,
+    AlertHeadingDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -23,7 +23,7 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { PaginatorModule } from 'primeng/paginator';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { MkagentPost } from '../mkagents.interface';
@@ -42,34 +42,33 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-mkagents-edit',
     imports: [
-    TranslocoDirective,
-    RouterLink,
-    FaIconComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    BackButtonDirective,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    XsButtonDirective,
-    TranslocoDirective,
-    CardBodyComponent,
-    CardFooterComponent,
-    PaginatorModule,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    NgIf,
-    RequiredIconComponent,
-    SelectComponent,
-    FormControlDirective,
-    AlertComponent,
-    AlertHeadingDirective,
-    FormDirective,
-    FormLoaderComponent,
-    FormsModule
-],
+        TranslocoDirective,
+        RouterLink,
+        FaIconComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        BackButtonDirective,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        XsButtonDirective,
+        TranslocoDirective,
+        CardBodyComponent,
+        CardFooterComponent,
+        PaginatorModule,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        FormControlDirective,
+        AlertComponent,
+        AlertHeadingDirective,
+        FormDirective,
+        FormLoaderComponent,
+        FormsModule
+    ],
     templateUrl: './mkagents-edit.component.html',
     styleUrl: './mkagents-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

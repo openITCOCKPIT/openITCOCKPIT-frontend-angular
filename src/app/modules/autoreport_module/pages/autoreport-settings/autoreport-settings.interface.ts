@@ -2,7 +2,7 @@ import { GenericValidationError } from '../../../../generic-responses';
 
 export interface DefaultAutoreportSettings {
     key: string,
-        value:{
+    value: {
         value: number | string,
         info: string
     }
@@ -19,6 +19,7 @@ export interface AutoreportSettingsRoot {
     all_autoreport_settings: AllAutoreportSettings,
     default_autoreport_settings: DefaultAutoreportSettings[],
 }
+
 export interface AutoreportSettingsPostResponse {
     autoreportSettings: AllAutoreportSettings
     error: GenericValidationError | null

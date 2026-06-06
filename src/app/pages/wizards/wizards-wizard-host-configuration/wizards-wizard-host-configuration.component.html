@@ -26,17 +26,25 @@
                 <small class="fw-300">
                     {{ title }}
                 </small>
+                @if (!this.WizardElement.active) {
+                    <oitc-badge-outline color="warning"
+                                        class="ms-1">
+                        <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                        {{ t('Deprecated') }}
+                    </oitc-badge-outline>
+                }
             </h5>
         </c-card-header>
         <c-card-body class="p-0">
-            <div class="row m-0 text-end mb-3" style="min-height: 22px;">
-                <div class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
+            <div class="row m-0 text-end mb-3">
+                <div
+                    class="col-xs-12 col-md-4 col-lg-3 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-active">
                     <span>
                         <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                         {{ t('Host Information') }}
                     </span>
                 </div>
-                <div class="col-lg-8 wizard-bg-inactive d-inline-flex">
+                <div class="col-lg-7 wizard-bg-inactive d-inline-flex">
                 </div>
                 <div class="col-xs-12 col-md-4 col-lg-2 ps-0 pe-0 wizard-bg-inactive">
                     <div class="btn-group btn-group-xs w-100 h-100">
@@ -91,14 +99,14 @@
                                 <oitc-required-icon/>
                             </label>
                             <oitc-select
-                                    name="hostId"
-                                    id="hostId"
-                                    [(ngModel)]="hostId"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [searchCallback]="loadHosts"
-                                    [options]="hosts"
-                                    oitcFormError [errors]="errors" errorField="Host">
+                                name="hostId"
+                                id="hostId"
+                                [(ngModel)]="hostId"
+                                optionValue="key"
+                                optionLabel="value"
+                                [searchCallback]="loadHosts"
+                                [options]="hosts"
+                                oitcFormError [errors]="errors" errorField="Host">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="Host"></oitc-form-feedback>
                         </div>
@@ -112,19 +120,21 @@
                                 <oitc-required-icon/>
                             </label>
                             <oitc-select
-                                    name="hostPost.container_id"
-                                    id="hostPost.container_id"
-                                    [(ngModel)]="hostPost.container_id"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    (onChange)="onContainerChange()"
-                                    [options]="containers"
-                                    oitcFormError [errors]="errors" errorField="container_id">
+                                name="hostPost.container_id"
+                                id="hostPost.container_id"
+                                [(ngModel)]="hostPost.container_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                (onChange)="onContainerChange()"
+                                [options]="containers"
+                                oitcFormError [errors]="errors" errorField="container_id">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-                            <div *ngIf="!hostPost.container_id" class="text-warning-glow pt-1">
-                                {{ t('Please select a container.') }}
-                            </div>
+                            @if (!hostPost.container_id) {
+                                <div class="text-warning-glow pt-1">
+                                    {{ t('Please select a container.') }}
+                                </div>
+                            }
                         </div>
 
                         <div class="mb-3">
@@ -133,19 +143,21 @@
                                 <oitc-required-icon/>
                             </label>
                             <oitc-select
-                                    name="hostPost.hosttemplate_id"
-                                    id="hostPost.hosttemplate_id"
-                                    [(ngModel)]="hostPost.hosttemplate_id"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    (onChange)="onHosttemplateChange()"
-                                    [options]="hosttemplates"
-                                    oitcFormError [errors]="errors" errorField="hosttemplate_id">
+                                name="hostPost.hosttemplate_id"
+                                id="hostPost.hosttemplate_id"
+                                [(ngModel)]="hostPost.hosttemplate_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                (onChange)="onHosttemplateChange()"
+                                [options]="hosttemplates"
+                                oitcFormError [errors]="errors" errorField="hosttemplate_id">
                             </oitc-select>
                             <oitc-form-feedback [errors]="errors" errorField="hosttemplate_id"></oitc-form-feedback>
-                            <div *ngIf="!hostPost.hosttemplate_id" class="text-warning-glow pt-1">
-                                {{ t('Please select a host template.') }}
-                            </div>
+                            @if (!hostPost.hosttemplate_id) {
+                                <div class="text-warning-glow pt-1">
+                                    {{ t('Please select a host template.') }}
+                                </div>
+                            }
                         </div>
 
                         <div class="mb-2">
@@ -172,20 +184,23 @@
                                 </label>
                             </c-form-check>
                         </div>
-                        <div class="help-block text-info" *ngIf="data.dnsHostnameNotFound">
-                            <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
-                            {{ t('Could not resolve hostname.') }}
-                        </div>
+                        @if (data.dnsHostnameNotFound) {
+                            <div class="help-block text-info">
+                                <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
+                                {{ t('Could not resolve hostname.') }}
+                            </div>
+                        }
 
-                        <c-alert color="warning" *ngIf="data.isHostnameInUse">
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                            {{
-                                t('A host with the name {0} already exists. Duplicate host names could lead to confusion.', {
-                                    '0': hostPost.name
-                                })
-                            }}
-
-                        </c-alert>
+                        @if (data.isHostnameInUse) {
+                            <c-alert color="warning">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                {{
+                                    t('A host with the name {0} already exists. Duplicate host names could lead to confusion.', {
+                                        '0': hostPost.name
+                                    })
+                                }}
+                            </c-alert>
+                        }
 
                         <div class="mb-3">
                             <label cLabel for="HostAddress">
@@ -200,51 +215,55 @@
                                    (blur)="runDnsLookup(false)">
                             <oitc-form-feedback [errors]="errors" errorField="address"></oitc-form-feedback>
                         </div>
-                        <div class="help-block text-info" *ngIf="data.dnsAddressNotFound">
-                            <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
-                            {{ t('Could not resolve address.') }}
-                        </div>
+                        @if (data.dnsAddressNotFound) {
+                            <div class="help-block text-info">
+                                <fa-icon [icon]="['fas', 'earth-europe']"></fa-icon>
+                                {{ t('Could not resolve address.') }}
+                            </div>
+                        }
 
 
-                        <div class="mb-3" *ngIf="hostPost.hosttemplate_id">
-                            <label cLabel for="description">
-                                {{ t('Description') }}
-                            </label>
-                            <c-input-group>
-                                <input cFormControl id="description" type="text"
-                                       name="description"
-                                       oitcFormError [errors]="errors" errorField="description"
-                                       [(ngModel)]="hostPost.description">
-                                <oitc-template-diff cInputGroupText
-                                                    *ngIf="hosttemplate"
-                                                    [templateValue]="hosttemplate.description"
-                                                    [(value)]="hostPost.description"
-                                                    class="bg-transparent p-0"></oitc-template-diff>
-                            </c-input-group>
-                            <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
-                        </div>
+                        @if (hostPost.hosttemplate_id) {
+                            <div class="mb-3">
+                                <label cLabel for="description">
+                                    {{ t('Description') }}
+                                </label>
+                                <c-input-group>
+                                    <input cFormControl id="description" type="text"
+                                           name="description"
+                                           oitcFormError [errors]="errors" errorField="description"
+                                           [(ngModel)]="hostPost.description">
+                                    @if (hosttemplate) {
+                                        <oitc-template-diff cInputGroupText
+                                                            [templateValue]="hosttemplate.description"
+                                                            [(value)]="hostPost.description"
+                                                            class="bg-transparent p-0"></oitc-template-diff>
+                                    }
+                                </c-input-group>
+                                <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                            </div>
+                        }
 
                         @if (PermissionsService.hasModuleObservable('DistributeModule')|async) {
                             <div class="mb-3">
                                 <label cLabel for="SatellitesSelect">
                                     <oitc-label-link
-                                            [objectId]="hostPost.satellite_id"
-                                            [route]="'/distribute_module/satellites/edit'"
-                                            [permissions]="'DistributeModule.satellites.edit'"
+                                        [objectId]="hostPost.satellite_id"
+                                        [route]="'/distribute_module/satellites/edit'"
+                                        [permissions]="'DistributeModule.satellites.edit'"
                                     >
                                         {{ t('Satellite') }}
                                     </oitc-label-link>
                                 </label>
 
                                 <oitc-select
-                                        name="SatellitesSelect"
-                                        id="SatellitesSelect"
-                                        optionValue="key"
-                                        optionLabel="value"
-                                        [(ngModel)]="hostPost.satellite_id"
-                                        (onChange)="onSatelliteChange()"
-                                        [options]="satellites"
-                                        oitcFormError [errors]="errors" errorField="satellite_id">
+                                    name="SatellitesSelect"
+                                    id="SatellitesSelect"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="hostPost.satellite_id"
+                                    [options]="satellites"
+                                    oitcFormError [errors]="errors" errorField="satellite_id">
                                 </oitc-select>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="satellite_id"></oitc-form-feedback>

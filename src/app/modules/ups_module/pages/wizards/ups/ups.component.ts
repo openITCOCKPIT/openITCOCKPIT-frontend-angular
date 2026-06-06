@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { UpsWizardService } from './ups-wizard.service';
-import { UpsWizardPost } from './ups-wizard.interface';
 import {
     CardBodyComponent,
     CardComponent,
@@ -14,7 +13,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
@@ -24,6 +23,7 @@ import {
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import { SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-ups',
@@ -37,7 +37,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
-        NgIf,
         ReactiveFormsModule,
         RequiredIconComponent,
         SelectComponent,
@@ -55,7 +54,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 export class UpsComponent extends WizardsAbstractComponent {
     protected override WizardService: UpsWizardService = inject(UpsWizardService);
 
-    protected override post: UpsWizardPost = {
+    protected override post: SNMPWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
@@ -69,7 +68,7 @@ export class UpsComponent extends WizardsAbstractComponent {
         securityName: '',
         snmpCommunity: '',
         snmpVersion: '2'
-    } as UpsWizardPost;
+    } as SNMPWizardPost;
     protected snmpVersions: SelectKeyValueString[] = [
         {value: '1', key: 'SNMP V 1'},
         {value: '2', key: 'SNMP V 2c'},

@@ -1,19 +1,21 @@
 @use '@angular/material' as mat;
+@use "../../../../assets/coreui/variables" as oitc;
 @use "sass:color";
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 :host {
 
     $primary: #5856d6 !default;
 
-    --ktd-color-primary: $primary;
-    --ktd-color-primary-rgb: $primary;
-    --ktd-color-primary-contrast: $primary;
+    --ktd-color-primary: oitc.$primary;
+    --ktd-color-primary-rgb: oitc.$primary;
+    --ktd-color-primary-contrast: oitc.$primary;
 
-    --ktd-color-accent: $secondary;
-    --ktd-color-accent-rgb: $secondary;
-    --ktd-color-accent-contrast: $secondary;
+    --ktd-color-accent: oitc.$secondary;
+    --ktd-color-accent-rgb: oitc.$secondary;
+    --ktd-color-accent-contrast: oitc.$secondary;
 
     // Background & foreground (as background contrast)
     --ktd-background-color: #121212;
@@ -55,7 +57,7 @@
     --ktd-svg-color-complementary-rgb: 155, 155, 155;
 
     // text colors
-    --ktd-text-color: $body-color;
+    --ktd-text-color: oitc.$body-color;
     --ktd-text-accent-color: rgba(var(--ktd-color-accent-rgb), 0.94);
 
 
@@ -115,8 +117,8 @@
 
     .widget-placeholder {
         border-style: dashed;
-        border-color: $primary;
-        background: color.adjust($primary, $alpha: -0.5)
+        border-color: oitc.$primary;
+        background: color.adjust(oitc.$primary, $alpha: -0.5)
     }
 
     /*

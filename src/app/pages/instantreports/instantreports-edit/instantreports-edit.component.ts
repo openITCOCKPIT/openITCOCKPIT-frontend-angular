@@ -24,7 +24,7 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import {
     MultiSelectOptgroupComponent
 } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
-import { NgIf } from '@angular/common';
+
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
@@ -74,7 +74,6 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
         MultiSelectOptgroupComponent,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         RequiredIconComponent,
         SelectComponent,
@@ -312,8 +311,8 @@ export class InstantreportsEditComponent {
         }
     }
 
-    public onSendCheckboxChange(event:any) {
-        if(event === 1 && this.post.send_interval === 0) {
+    public onSendCheckboxChange(event: any) {
+        if (event === 1 && this.post.send_interval === 0) {
             this.post.send_interval = 1; // Day
             this.cdr.markForCheck();
         }

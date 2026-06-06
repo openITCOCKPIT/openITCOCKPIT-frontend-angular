@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, O
 import { Customvariable } from '../../pages/contacts/contacts.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -14,14 +14,13 @@ import { ObjectTypesEnum } from '../../pages/changelogs/object-types.enum';
 @Component({
     selector: 'oitc-macros',
     imports: [
-    FaIconComponent,
-    FormsModule,
-    NgIf,
-    TranslocoDirective,
-    NgSelectModule,
-    FormFeedbackComponent,
-    RequiredIconComponent
-],
+        FaIconComponent,
+        FormsModule,
+        TranslocoDirective,
+        NgSelectModule,
+        FormFeedbackComponent,
+        RequiredIconComponent
+    ],
     templateUrl: './macros.component.html',
     styleUrl: './macros.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

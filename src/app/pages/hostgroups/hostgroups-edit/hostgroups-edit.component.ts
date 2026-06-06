@@ -9,6 +9,7 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
+    InputGroupComponent,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -17,11 +18,11 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 
-import { NgIf } from '@angular/common';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -60,7 +61,6 @@ import { HistoryService } from '../../../history.service';
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         NgSelectModule,
         PermissionDirective,
         RequiredIconComponent,
@@ -70,7 +70,9 @@ import { HistoryService } from '../../../history.service';
         ObjectUuidComponent,
         SelectComponent,
         MultiSelectComponent,
-        FormLoaderComponent
+        FormLoaderComponent,
+        InputGroupComponent,
+        TranslocoPipe
     ],
     templateUrl: './hostgroups-edit.component.html',
     styleUrl: './hostgroups-edit.component.css',
@@ -88,29 +90,11 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
 
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
-    public post: Hostgroup = {
-        container: {
-            containertype_id: 0,
-            id: 0,
-            lft: 0,
-            name: '',
-            parent_id: 0,
-            rght: 0,
-        },
-        container_id: 0,
-        description: '',
-        hostgroup_url: '',
-        hosts: {
-            _ids: []
-        },
-        hosttemplates: {
-            _ids: []
-        },
-        id: 0,
-        uuid: ''
-    }
+    public post!: Hostgroup;
     protected containers: SelectKeyValue[] = [];
     protected hosttemplates: SelectKeyValue[] = [];
+    public tagsForSelect: string[] = [];
+
     private route = inject(ActivatedRoute);
     private cdr = inject(ChangeDetectorRef);
 
@@ -119,8 +103,10 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
         this.loadContainers();
         this.subscriptions.add(this.HostgroupsService.getEdit(id)
             .subscribe((result: HostgroupsEditGet) => {
-
                 this.post = result.hostgroup.Hostgroup;
+                if (this.post.tags) {
+                    this.tagsForSelect = this.post.tags.split(',');
+                }
                 this.cdr.markForCheck();
 
                 // Then force containerChange!
@@ -132,8 +118,8 @@ export class HostgroupsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public updateHostgroup(): void {
-
+    public submit(): void {
+        this.post.tags = this.tagsForSelect.join(',');
         this.subscriptions.add(this.HostgroupsService.updateHostgroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();

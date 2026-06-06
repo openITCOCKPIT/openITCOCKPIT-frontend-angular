@@ -27,6 +27,7 @@ export interface ServiceStatusOverviewExtendedWidgetConfig {
     Servicegroup: {
         _ids: string
     }
+    servicepriority: number[]
 }
 
 export interface ServicestatusExtendedWidgetConfig {

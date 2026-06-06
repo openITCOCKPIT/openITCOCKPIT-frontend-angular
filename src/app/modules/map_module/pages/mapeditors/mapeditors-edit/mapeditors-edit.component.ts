@@ -2,6 +2,7 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    DOCUMENT,
     ElementRef,
     inject,
     OnDestroy,
@@ -16,7 +17,7 @@ import { MapeditorsService } from '../mapeditors.service';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HistoryService } from '../../../../../history.service';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import {
     AlertComponent,
@@ -51,7 +52,7 @@ import {
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { FCanvasComponent, FFlowModule } from '@foblex/flow';
-import { DOCUMENT, NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MapItemComponent } from '../../../components/map-item/map-item.component';
 import { MapCanvasComponent } from '../../../components/map-canvas/map-canvas.component';
@@ -86,7 +87,7 @@ import { TachoItemComponent } from '../../../components/tacho-item/tacho-item.co
 import { TemperatureItemComponent } from '../../../components/temperature-item/temperature-item.component';
 import { GraphItemComponent } from '../../../components/graph-item/graph-item.component';
 import { ServiceOutputItemComponent } from '../../../components/service-output-item/service-output-item.component';
-import { BackgrounduploadsService } from '../Backgrounduploads.service';
+import { BackgrounduploadsService } from '../backgrounduploads.service';
 import { HostsService } from '../../../../../pages/hosts/hosts.service';
 import { HostsLoadHostsByStringParams } from '../../../../../pages/hosts/hosts.interface';
 import { HostgroupsService } from '../../../../../pages/hostgroups/hostgroups.service';
@@ -130,8 +131,6 @@ import { BackgroundItemComponent } from '../../../components/background-item/bac
         DropdownToggleDirective,
         DropdownMenuDirective,
         DropdownItemDirective,
-        NgForOf,
-        NgIf,
         MapItemComponent,
         MapCanvasComponent,
         NgClass,
@@ -170,7 +169,9 @@ import { BackgroundItemComponent } from '../../../components/background-item/bac
         XsButtonDirective,
         AlertComponent,
         BbCodeEditorComponent,
-        BackgroundItemComponent
+        BackgroundItemComponent,
+        FaStackComponent,
+        FaStackItemSizeDirective
     ],
     templateUrl: './mapeditors-edit.component.html',
     styleUrl: './mapeditors-edit.component.css',
@@ -238,7 +239,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             size: 15
         },
         synchronizeGridAndHelplinesSize: true,
-        maintainBackgroundAspectRatio: false
+        maintainBackgroundAspectRatio: true
     };
 
     public addLink: boolean = false;
@@ -754,8 +755,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 // Set X and Y poss of the new copied object
                 this.currentItem = copiedItem;
-                this.currentItem.x = copiedItem.x + 10;
-                this.currentItem.y = copiedItem.y + 10;
+                this.currentItem.x = Math.floor(copiedItem.x + 10);
+                this.currentItem.y = Math.floor(copiedItem.y + 10);
 
                 this.saveItem();
 
@@ -766,10 +767,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 // Set X and Y poss of the new copied object
                 this.currentItem = copiedItem;
-                this.currentItem.startX = copiedItem.startX + 10;
-                this.currentItem.startY = copiedItem.startY + 10;
-                this.currentItem.endX = copiedItem.endX + 10;
-                this.currentItem.endY = copiedItem.endY + 10;
+                this.currentItem.startX = Math.floor(copiedItem.startX + 10);
+                this.currentItem.startY = Math.floor(copiedItem.startY + 10);
+                this.currentItem.endX = Math.floor(copiedItem.endX + 10);
+                this.currentItem.endY = Math.floor(copiedItem.endY + 10);
 
                 this.saveLine();
 
@@ -780,8 +781,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 // Set X and Y poss of the new copied object
                 this.currentItem = copiedItem;
-                this.currentItem.x = copiedItem.x + 10;
-                this.currentItem.y = copiedItem.y + 10;
+                this.currentItem.x = Math.floor(copiedItem.x + 10);
+                this.currentItem.y = Math.floor(copiedItem.y + 10);
 
                 this.saveGadget();
 
@@ -792,8 +793,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 // Set X and Y poss of the new copied object
                 this.currentItem = copiedItem;
-                this.currentItem.x = copiedItem.x + 10;
-                this.currentItem.y = copiedItem.y + 10;
+                this.currentItem.x = Math.floor(copiedItem.x + 10);
+                this.currentItem.y = Math.floor(copiedItem.y + 10);
 
                 this.saveText();
 
@@ -804,8 +805,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 // Set X and Y poss of the new copied object
                 this.currentItem = copiedItem;
-                this.currentItem.x = copiedItem.x + 10;
-                this.currentItem.y = copiedItem.y + 10;
+                this.currentItem.x = Math.floor(copiedItem.x + 10);
+                this.currentItem.y = Math.floor(copiedItem.y + 10);
 
                 this.saveIcon();
 
@@ -816,8 +817,8 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 // Set X and Y poss of the new copied object
                 this.currentItem = copiedItem;
-                this.currentItem.x = copiedItem.x + 10;
-                this.currentItem.y = copiedItem.y + 10;
+                this.currentItem.x = Math.floor(copiedItem.x + 10);
+                this.currentItem.y = Math.floor(copiedItem.y + 10);
 
                 this.saveSummaryItem();
 
@@ -929,6 +930,13 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
     };
 
     public changeBackground(background: Background) {
+        // The next two lines are a hack to fix the "Maintain aspect ratio" when a user switch from one
+        // background image to another (without clicking on "Remove background" first)
+        // By setting background = null, somewhere in this code the img-tag gets removed from the page
+        // The new background image will create a new img-tag and the "Maintain spect ratio" will work as expected
+        this.map.Map.background = null;
+        this.brokenImageDetected = false;
+
         if (background !== undefined && this.lastBackgroundImageToDeletePreventForSave === background.image) {
             this.lastBackgroundImageToDeletePreventForSave = null;
             this.map.Map.background = null;
@@ -936,15 +944,14 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         }
 
         let action = 'add_or_edit';
-
         this.subscriptions.add(this.MapeditorsService.saveBackground({
             'Map': {
                 id: this.mapId.toString(),
                 background: background.image,
                 background_x: 0,
                 background_y: 0,
-                background_size_x: 0,
-                background_size_y: 0,
+                background_size_x: background.background_size_x,
+                background_size_y: background.background_size_y
             },
             'action': action
         }).subscribe((result) => {
@@ -955,13 +962,17 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 this.backgroundItem = this.getDefaultBackgroundItem();
                 this.backgroundItem.background = background.image;
+                this.backgroundItem.x = result.data.Map.Map.background_x;
+                this.backgroundItem.y = result.data.Map.Map.background_y;
+                this.backgroundItem.size_x = result.data.Map.Map.background_size_x;
+                this.backgroundItem.size_y = result.data.Map.Map.background_size_y;
                 this.backgroundItem = {...this.backgroundItem};
 
                 this.map.Map.background = background.image;
-                this.map.Map.background_x = this.backgroundItem.x;
-                this.map.Map.background_y = this.backgroundItem.y;
-                this.map.Map.background_size_x = this.backgroundItem.size_x;
-                this.map.Map.background_size_y = this.backgroundItem.size_y;
+                this.map.Map.background_x = result.data.Map.Map.background_x;
+                this.map.Map.background_y = result.data.Map.Map.background_y;
+                this.map.Map.background_size_x = result.data.Map.Map.background_size_x;
+                this.map.Map.background_size_y = result.data.Map.Map.background_size_y;
                 this.map.Map = {...this.map.Map};
 
                 this.notyService.genericSuccess(msg, title);
@@ -983,7 +994,6 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         if (typeof action === 'undefined') {
             action = 'add_or_edit';
         }
-
         this.subscriptions.add(this.MapeditorsService.saveBackground({
             'Map': {
                 id: this.mapId.toString(),
@@ -1372,7 +1382,11 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 this.loadIcons();
 
-                this.notyService.genericSuccess(msg);
+                if (result.data.response.success) {
+                    this.notyService.genericSuccess(msg);
+                } else {
+                    this.notyService.genericError(msg);
+                }
                 return;
             }
 
@@ -2432,11 +2446,12 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 headers: {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
-                url: '/map_module/backgroundUploads/upload/.json',
+                url: '/map_module/backgroundUploads/upload/' + this.mapId + '.json',
                 removedfile: (file: Dropzone.DropzoneFile) => {
                     this.cdr.markForCheck();
                 },
                 sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                    formData.append('map_id', String(this.mapId));
                     this.cdr.markForCheck();
                 },
                 success: (file: Dropzone.DropzoneFile) => {
@@ -2510,11 +2525,12 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 headers: {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
-                url: '/map_module/backgroundUploads/icon/.json',
+                url: '/map_module/backgroundUploads/icon/' + this.mapId + '.json',
                 removedfile: (file: Dropzone.DropzoneFile) => {
                     this.cdr.markForCheck();
                 },
                 sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                    formData.append('map_id', String(this.mapId));
                     this.cdr.markForCheck();
                 },
                 success: (file: Dropzone.DropzoneFile) => {
@@ -2588,11 +2604,12 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 headers: {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
-                url: '/map_module/backgroundUploads/iconset/.json',
+                url: '/map_module/backgroundUploads/iconset/' + this.mapId + '.json',
                 removedfile: (file: Dropzone.DropzoneFile) => {
                     this.cdr.markForCheck();
                 },
                 sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                    formData.append('map_id', String(this.mapId));
                     this.cdr.markForCheck();
                 },
                 success: (file: Dropzone.DropzoneFile) => {

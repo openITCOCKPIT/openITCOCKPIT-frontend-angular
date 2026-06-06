@@ -3,14 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { AutoreportSettingsService } from './autoreport-settings.service';
 
 describe('AutreportsSettingsService', () => {
-  let service: AutoreportSettingsService;
+    let service: AutoreportSettingsService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(AutoreportSettingsService);
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(AutoreportSettingsService);
+    });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 });

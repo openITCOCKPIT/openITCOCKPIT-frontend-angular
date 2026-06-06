@@ -26,97 +26,101 @@
     </nav>
 
 
-    <oitc-block-loader *ngIf="isLoading"></oitc-block-loader>
-    <c-card class="mb-3" *ngIf="!isLoading">
-        <c-card-header>
-            <h5 cCardTitle>{{ t('View imported file:') }}
-                <small class="fw-300">
-                    {{ importedfile?.importedfile?.filename }}
-                </small>
-            </h5>
-
-            <c-nav class="card-toolbar card-header-pills">
-                <c-nav-item class="px-1" *ngIf="importedfile?.importedfile?.id">
-                    <a *oitcPermission="['importmodule','ImportedFiles', 'download']"
-                       [href]="'/import_module/ImportedFiles/download/'+importedfile?.importedfile?.id"
-                       cButton class="ripple" color="primary" size="xs">
-                        <fa-icon [icon]="['fas', 'download']"></fa-icon>
-                        {{ t('Download') }}
-                    </a>
-                </c-nav-item>
-                <c-nav-item class="px-1">
-                    <button [fallbackUrl]="['import_module', 'ImportedFiles', 'index']" cButton class="ripple"
-                            color="default"
-                            oitcBackButton
-                            size="xs">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                        {{ t('Back') }}
-                    </button>
-                </c-nav-item>
-            </c-nav>
-        </c-card-header>
-
-        <c-card-body>
-
-            <div class="alert border-faded bg-transparent text-secondary"
-                 *ngIf="fileNotFound">
-                <div class="d-flex align-items-center">
-                    <div class="alert-icon me-2">
-                        <span class="icon-stack icon-stack-md">
-                            <i class="base-circle icon-stack-3x text-danger"></i>
-                            <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
-                        </span>
+    @if (isLoading) {
+        <oitc-block-loader></oitc-block-loader>
+    }
+    @if (!isLoading) {
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('View imported file:') }}
+                    <small class="fw-300">
+                        {{ importedfile?.importedfile?.filename }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    @if (importedfile?.importedfile?.id) {
+                        <c-nav-item class="px-1">
+                            <a *oitcPermission="['importmodule','ImportedFiles', 'download']"
+                               [href]="'/import_module/ImportedFiles/download/'+importedfile?.importedfile?.id"
+                               cButton class="ripple" color="primary" size="xs">
+                                <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                                {{ t('Download') }}
+                            </a>
+                        </c-nav-item>
+                    }
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['import_module', 'ImportedFiles', 'index']" cButton class="ripple"
+                                color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                @if (fileNotFound) {
+                    <div class="alert border-faded bg-transparent text-secondary"
+                    >
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack icon-stack-md">
+                                    <i class="base-circle icon-stack-3x text-danger"></i>
+                                    <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
+                                </span>
+                            </div>
+                            <div class="flex-1">
+                                <span class="h5 text-danger">
+                                    {{ t('Can\'t read imported csv file') }}
+                                </span>
+                                <br>
+                                {{ t('The imported file may have been deleted.') }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex-1">
-                        <span class="h5 text-danger">
-                            {{ t('Can\'t read imported csv file') }}
-                        </span>
-                        <br>
-                        {{ t('The imported file may have been deleted.') }}
+                }
+                @if (fileIsEmpty) {
+                    <div class="alert border-faded bg-transparent text-secondary"
+                    >
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-2">
+                                <span class="icon-stack icon-stack-md">
+                                    <i class="base-circle icon-stack-3x text-warning"></i>
+                                    <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
+                                </span>
+                            </div>
+                            <div class="flex-1">
+                                <span class="h5 text-warning">
+                                    {{ t('File Content is not available in imported file') }}
+                                </span>
+                                <br>
+                                {{ t('Maybe the file is no: CSV, or the file is empty') }}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="alert border-faded bg-transparent text-secondary"
-                 *ngIf="fileIsEmpty">
-                <div class="d-flex align-items-center">
-                    <div class="alert-icon me-2">
-                        <span class="icon-stack icon-stack-md">
-                            <i class="base-circle icon-stack-3x text-warning"></i>
-                            <i class="fas fa-exclamation-triangle icon-stack-1x text-white"></i>
-                        </span>
-                    </div>
-                    <div class="flex-1">
-                        <span class="h5 text-warning">
-                            {{ t('File Content is not available in imported file') }}
-                        </span>
-                        <br>
-                        {{ t('Maybe the file is no: CSV, or the file is empty') }}
-                    </div>
-                </div>
-            </div>
-
-            @if (importedfile && importedfile.filecontent) {
-                <table *ngIf="importedfile.filecontent.length > 0" bordered cTable
-                       class="mt-2 mb-0 table table-fit" hover striped>
-                    <tbody>
-                        @for (line of importedfile.filecontent; track $index) {
-                            <tr>
-                                <td class="text-center width-90">
-                                    <code>{{ $index }}</code>
-                                </td>
-                                <td>
-                                    {{ line }}
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-
-
-        </c-card-body>
-
-    </c-card>
+                }
+                @if (importedfile && importedfile.filecontent) {
+                    @if (importedfile.filecontent.length > 0) {
+                        <table bordered cTable
+                               class="mt-2 mb-0 table table-fit" hover striped>
+                            <tbody>
+                                @for (line of importedfile.filecontent; track $index) {
+                                    <tr>
+                                        <td class="text-center width-90">
+                                            <code>{{ $index }}</code>
+                                        </td>
+                                        <td>
+                                            {{ line }}
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                }
+            </c-card-body>
+        </c-card>
+    }
 </ng-container>
 

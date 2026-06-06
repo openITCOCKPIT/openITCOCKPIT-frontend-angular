@@ -16,7 +16,7 @@ openITCOCKPIT is an Open Source system monitoring tool built for different monit
 
 This is the repository for the official [openITCOCKPIT](https://openitcockpit.io/) frontend.
 
-The backend server code that is providing the API can be found [here](https://github.com/it-novum/openITCOCKPIT).
+The backend server code that is providing the API can be found [here](https://github.com/openITCOCKPIT/openITCOCKPIT).
 
 # Demo
 
@@ -46,7 +46,7 @@ Please refer to the [official documentation](https://openitcockpit.io/download_s
 
 ## Setup for Developers
 
-The openITCOCKPIT frontend is a standalone Angular application that communicates with the [openITCOCKPIT backend](https://github.com/it-novum/openITCOCKPIT)
+The openITCOCKPIT frontend is a standalone Angular application that communicates with the [openITCOCKPIT backend](https://github.com/openITCOCKPIT/openITCOCKPIT)
 via the [HTTP API](https://docs.openitcockpit.io/en/development/api/).
 
 If you want to contribute to the openITCOCKPIT frontend, you can follow the instructions below to set up a development environment.
@@ -111,7 +111,7 @@ systemctl restart nginx
 
 ```
 cd /opt/openitc/
-git clone https://github.com/it-novum/openITCOCKPIT-frontend-angular.git frontend-angular
+git clone https://github.com/openITCOCKPIT/openITCOCKPIT-frontend-angular.git frontend-angular
 ```
 
 You can now start the Angular development server.
@@ -254,16 +254,16 @@ This document describes how to upgrade the underlying Angular version.
 1. Update CoreUI
    Please see the official CoreUI documentation on how to update the Angular
    version: https://coreui.io/angular/docs/migration/angular-version/ first.
-   Copy and modify the shown upgrade command. This example upgrades from Angular 18 to Angular 20.
+   Copy and modify the shown upgrade command. This example upgrades from Angular 20 to Angular 21.
 
    Probably it's a good idea to also add `angular-fontawesome`, `@fullcalendar/angular`, `ng-select` and
    `ng-option-highlight` to this list as well. We can test this with the next Angular upgrade.
 
     ```
-    ng update @angular/core@19 @angular/cli@19 @angular/material@19 @coreui/angular@~5.3 @coreui/icons-angular@~5.3 primeng@19.0.2 @primeng/themes@19.0.2
+    ng update @angular/core@21 @angular/cli@21 @angular/cdk@21 @coreui/angular@~5.6 @coreui/icons-angular@~5.6 primeng@21.0.2 @primeng/themes@21.0.2 @fortawesome/angular-fontawesome@4.0.0 @fullcalendar/angular@6.1.20 @ng-select/ng-select@21.1.4 @ng-select/ng-option-highlight@21.1.4 
     ```
 
-   Check the terminal for any errors.
+Check the terminal for any errors.
 
 2. Follow the Update Guide from https://angular.dev/update-guide and check for any breaking changes
 3. Update other dependencies
@@ -285,14 +285,36 @@ This document describes how to upgrade the underlying Angular version.
    version.
 
 ```
-npm install --save typescript@~5.5.3
+npm install --save typescript@~5.9.3
+```
+
+### How to Upgrade Font Awesome
+
+Wherever we combine `Font Awesome` with `vis-network`, to actually work, we reference the specific webfont to use for the `icon`s in the `options` object.
+
+```typescript
+// [...]
+icon: {
+    face: '"Font Awesome 7 Free"',   // Here we changed the string from "Font Awesome 6 Free" to "Font Awesome 7 Free"
+        code
+:
+    '\uf0ac',
+        color
+:
+    colorGroup, //color for icon,
+        weight
+:
+    "900", // Font Awesome 5 doesn't work properly unless bold. // Font Awesome 6 fix https://github.com/visjs/vis-network/issues/139#issuecomment-536114158
+
+}
+// [...]
 ```
 
 # Need help or support?
 
 * Official [Discord Server](https://discord.gg/G8KhxKuQ9G)
 * Join [#openitcockpit](https://web.libera.chat/#openitcockpit) on Libera Chat
-* [it-novum GmbH](https://it-services.it-novum.com/support-2/) provides commercial support
+* [AVENDIS GmbH](https://avendis.com/) provides commercial support
 
 # Security
 
@@ -303,7 +325,8 @@ All disclosed vulnerabilities are available here: [https://openitcockpit.io/secu
 # License
 
 ```
-Copyright (C) 2024 it-novum GmbH
+Copyright (C) 2015-2025  it-novum GmbH
+Copyright (C) 2025-today AVENDIS GmbH
 
 
 openITCOCKPIT is dual licensed

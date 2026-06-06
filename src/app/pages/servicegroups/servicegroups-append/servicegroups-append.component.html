@@ -54,8 +54,12 @@
                         [(ngModel)]="post.Servicegroup.id"
                         optionValue="key"
                         optionLabel="value"
-                        [options]="servicegroups">
+                        [options]="servicegroups"
+                        [searchCallback]="loadServicegroups"
+                        oitcFormError [errors]="errors" errorField="servicegroup_id">
                     </oitc-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="servicegroup_id"></oitc-form-feedback>
                 </div>
 
 
@@ -82,4 +86,3 @@
         </c-card>
     </form>
 </ng-container>
-

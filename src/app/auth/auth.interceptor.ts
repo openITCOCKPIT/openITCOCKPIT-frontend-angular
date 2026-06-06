@@ -3,28 +3,34 @@ import { catchError, EMPTY, throwError } from "rxjs";
 import { inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "./auth.service";
+import { LocalStorageService } from '../services/local-storage.service';
+import { SKIP_ERROR_REDIRECT } from '../tokens/skip-error-redirect.token';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-    const router = inject(Router);
-    const authService = inject(AuthService);
+    const router: Router = inject(Router);
+    const authService: AuthService = inject(AuthService);
+    const localStorageService: LocalStorageService = inject(LocalStorageService);
 
     return next(req).pipe(
         catchError((error) => {
+            const skipRedirect = req.context.get(SKIP_ERROR_REDIRECT);
             if (error.status === HttpStatusCode.Unauthorized) {
                 authService.setUnauthorized();
-                router.navigate(['/users/login']);
 
+                // Store the requested URL to redirect after login.
+                let redirectUrl: string = window.location.href || '';
+                if (redirectUrl.length && !redirectUrl.includes('login')) {
+                    localStorageService.setItem('redirectUrl', redirectUrl);
+                }
+                router.navigate(['/users/login']);
                 return EMPTY;
             }
-
-            if (error.status === HttpStatusCode.NotFound) {
+            if (error.status === HttpStatusCode.NotFound && !skipRedirect) {
                 router.navigate(['/error/404']);
             }
-
-            if (error.status === HttpStatusCode.Forbidden) {
+            if (error.status === HttpStatusCode.Forbidden && !skipRedirect) {
                 router.navigate(['/error/403']);
             }
-
             // re-throw all other errors so components can handle them
             return throwError(() => error);
         })

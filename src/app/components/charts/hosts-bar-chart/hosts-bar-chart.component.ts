@@ -32,7 +32,7 @@ export class HostsBarChartComponent implements OnDestroy {
     public showLegend = input<boolean>(true);
     public chartData = input<PieChartMetric[]>([]);
 
-    public theme: null | 'dark' = null;
+    public theme: string = '';
     public chartOption: EChartsOption = {};
 
     public echartsInstance: any;
@@ -43,7 +43,7 @@ export class HostsBarChartComponent implements OnDestroy {
 
     public constructor() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
-            this.theme = null;
+            this.theme = '';
             if (theme === 'dark') {
                 this.theme = 'dark';
             }

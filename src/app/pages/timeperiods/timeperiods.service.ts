@@ -1,6 +1,6 @@
-import { inject, Injectable } from '@angular/core';
+import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DOCUMENT } from '@angular/common';
+
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
@@ -66,7 +66,7 @@ export class TimeperiodsService {
         )
     }
 
-    public getContainers(): Observable<SelectKeyValue[]> {
+    public loadContainers(): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
             containers: SelectKeyValue[]
@@ -195,6 +195,23 @@ export class TimeperiodsService {
             params: {
                 angular: true,
                 containerId: container_id.toString()
+            }
+        }).pipe(
+            map(data => {
+                return data.timeperiods;
+            })
+        )
+    }
+
+    public loadTimeperiodsByContainerIdAndExludeItself(timeperiod_id: number, container_id: number): Observable<SelectKeyValue[]> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<{
+            timeperiods: SelectKeyValue[]
+        }>(`${proxyPath}/timeperiods/loadTimeperiodsByContainerIdAndExludeItself.json`, {
+            params: {
+                angular: true,
+                containerId: container_id.toString(),
+                timeperiodId: timeperiod_id,
             }
         }).pipe(
             map(data => {

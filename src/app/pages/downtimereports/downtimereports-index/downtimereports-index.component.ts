@@ -28,7 +28,7 @@ import {
     NavItemComponent,
     PopoverDirective
 } from '@coreui/angular';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { DowntimereportsEnum } from '../downtimereports.enum';
 import {
     DowntimeReportsRequest,
@@ -75,7 +75,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         CardTitleDirective,
         NavComponent,
         NavItemComponent,
-        NgIf,
         NgClass,
         FormFeedbackComponent,
         FormsModule,
@@ -92,7 +91,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         TranslocoPipe,
         FullCalendarModule,
         HostAvailabilityOverviewComponent,
-        NgForOf,
         PopoverDirective,
         HostsBarChartComponent,
         AlertComponent,

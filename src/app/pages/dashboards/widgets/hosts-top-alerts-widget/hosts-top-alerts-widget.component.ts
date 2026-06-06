@@ -34,7 +34,7 @@ import {
     TableDirective,
     TooltipDirective
 } from '@coreui/angular';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-records.component';
 import { ScrollIndexComponent } from '../../../../layouts/coreui/paginator/scroll-index/scroll-index.component';
 import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -44,6 +44,7 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SliderTimeComponent } from '../../../../components/slider-time/slider-time.component';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule } from '@angular/forms';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-hosts-top-alerts-widget',
@@ -51,7 +52,6 @@ import { FormsModule } from '@angular/forms';
         FaIconComponent,
         ColComponent,
         ContainerComponent,
-        NgIf,
         NoRecordsComponent,
         RowComponent,
         ScrollIndexComponent,
@@ -98,10 +98,18 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
 
 
     // widget config will be loaded from the server
-    public config?: HostsTopAlertsWidgetConfig;
+    public config!: HostsTopAlertsWidgetConfig;
 
 
     private readonly HostsTopAlertsService = inject(HostsTopAlertsService);
+
+    public priorityFilter: { [key: string]: boolean } = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
+    };
 
 
     public override load() {
@@ -194,6 +202,15 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
         this.subscriptions.add(this.HostsTopAlertsService.loadWidgetConfig(this.widget.id).subscribe(config => {
             // Save the widget config
             this.config = config;
+
+            _.map(this.config.hostpriority,
+                (value) => {
+                    if (this.priorityFilter.hasOwnProperty(value)) {
+                        this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                    }
+                }
+            );
+
             this.loadDowntimes();
             this.cdr.markForCheck();
 
@@ -209,6 +226,15 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
             return;
         }
 
+        this.config.hostpriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.hostpriority.push(Number(key));
+                }
+            }
+        );
+
         this.subscriptions.add(this.HostsTopAlertsService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
             this.flipped.set(false);
@@ -216,12 +242,22 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
             // Reload the downtimes
             this.loadDowntimes();
         }));
+
     }
 
     public loadDowntimes(): void {
         if (!this.config) {
             return;
         }
+
+        this.config.hostpriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.hostpriority.push(Number(key));
+                }
+            }
+        );
 
         // Apply the config to the filter
         const params: HostsTopAlertsWidgetParams = {
@@ -231,6 +267,7 @@ export class HostsTopAlertsWidgetComponent extends BaseWidgetComponent implement
             limit: this.limit,
             'filter[NotificationHosts.state][]': [this.config.state],
             'filter[not_older_than]': this.getOlderThanInMinutes(),
+            'filter[hostpriority][]': this.config.hostpriority
         };
 
         this.subscriptions.add(this.HostsTopAlertsService.loadHostTopAlerts(params).subscribe(alerts => {

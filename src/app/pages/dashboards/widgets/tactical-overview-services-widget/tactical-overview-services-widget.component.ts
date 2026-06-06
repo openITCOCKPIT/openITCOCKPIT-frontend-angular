@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
-import { HostgroupSummaryStateServices } from '../../../hosts/summary_state.interface';
+import { SummaryStateServices } from '../../../hosts/summary_state.interface';
 import { HostgroupsLoadHostgroupsByStringParams } from '../../../hostgroups/hostgroups.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -10,13 +10,15 @@ import { NotyService } from '../../../../layouts/coreui/noty.service';
 import { ServicegroupsService } from '../../../servicegroups/servicegroups.service';
 import { TacticalOverviewServicesConfig } from './tactical-overview-services-widget.interface';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { AsyncPipe, NgIf } from '@angular/common';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { AsyncPipe } from '@angular/common';
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { RouterLink } from '@angular/router';
 import {
     ButtonDirective,
     ColComponent,
+    FormCheckComponent,
     FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     InputGroupComponent,
     InputGroupTextDirective,
@@ -28,6 +30,9 @@ import {
 } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { HostgroupsService } from '../../../hostgroups/hostgroups.service';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-tactical-overview-services-widget',
@@ -35,7 +40,6 @@ import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/m
         ReactiveFormsModule,
         FormsModule,
         TranslocoDirective,
-        NgIf,
         FaIconComponent,
         AsyncPipe,
         RouterLink,
@@ -50,8 +54,12 @@ import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/m
         RegexHelperTooltipComponent,
         NgSelectComponent,
         MultiSelectComponent,
-        ButtonDirective
-
+        ButtonDirective,
+        FaStackComponent,
+        FaStackItemSizeDirective,
+        XsButtonDirective,
+        FormCheckComponent,
+        FormCheckLabelDirective
     ],
     templateUrl: './tactical-overview-services-widget.component.html',
     styleUrl: './tactical-overview-services-widget.component.css',
@@ -59,19 +67,35 @@ import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/m
 })
 export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent {
     protected flipped = signal<boolean>(false);
+    public readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
     public readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
-    public servicestatusSummary?: HostgroupSummaryStateServices;
-    public config?: TacticalOverviewServicesConfig;
+    public servicestatusSummary?: SummaryStateServices;
+    public servicestatusCountPercentage: number[] = [];
+    public config!: TacticalOverviewServicesConfig;
+    protected hostgroups: SelectKeyValue[] = [];
     protected servicegroups: SelectKeyValue[] = [];
     public keywords: string[] = [];
     public notKeywords: string[] = [];
+    public servicegroupKeywords: string[] = [];
+    public servicegroupNotKeywords: string[] = [];
+    public hostgroupKeywords: string[] = [];
+    public hostgroupNotKeywords: string[] = [];
     private readonly TacticalOverviewServicesWidgetService = inject(TacticalOverviewServicesWidgetService);
     private readonly notyService = inject(NotyService);
+
+    public priorityFilter: { 1: boolean; 2: boolean; 3: boolean; 4: boolean; 5: boolean } = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
+    };
 
     constructor() {
         super();
         effect(() => {
             if (this.flipped()) {
+                this.loadHostgroups('');
                 this.loadServicegroups('');
             }
             this.cdr.markForCheck();
@@ -85,10 +109,38 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
                     this.config = result.config;
                     this.keywords = this.config.Service.keywords.split(',').filter(Boolean);
                     this.notKeywords = this.config.Service.not_keywords.split(',').filter(Boolean);
+                    this.hostgroupKeywords = this.config.Hostgroup.keywords.split(',').filter(Boolean);
+                    this.hostgroupNotKeywords = this.config.Hostgroup.not_keywords.split(',').filter(Boolean);
+                    this.servicegroupKeywords = this.config.Servicegroup.keywords.split(',').filter(Boolean);
+                    this.servicegroupNotKeywords = this.config.Servicegroup.not_keywords.split(',').filter(Boolean);
                     this.servicestatusSummary = result.servicestatusSummary;
+                    this.servicestatusCountPercentage = result.servicestatusCountPercentage;
+
+                    _.map(this.config.servicepriority,
+                        (value) => {
+                            if (this.priorityFilter.hasOwnProperty(value)) {
+                                this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                            }
+                        }
+                    );
+
                     this.cdr.markForCheck();
                 }));
         }
+    }
+
+    protected loadHostgroups = (search: string) => {
+        let hostgroupIds: number[] = [];
+        if (this.config?.Hostgroup._ids) {
+            hostgroupIds = this.config.Hostgroup._ids;
+        }
+        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({
+            'filter[Containers.name]': search,
+            'selected[]': hostgroupIds
+        } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+            this.hostgroups = data;
+            this.cdr.markForCheck();
+        }));
     }
 
     protected loadServicegroups = (search: string) => {
@@ -117,6 +169,19 @@ export class TacticalOverviewServicesWidgetComponent extends BaseWidgetComponent
 
         this.config.Service.keywords = this.keywords.join(',');
         this.config.Service.not_keywords = this.notKeywords.join(',');
+        this.config.Hostgroup.keywords = this.hostgroupKeywords.join(',');
+        this.config.Hostgroup.not_keywords = this.hostgroupNotKeywords.join(',');
+        this.config.Servicegroup.keywords = this.servicegroupKeywords.join(',');
+        this.config.Servicegroup.not_keywords = this.servicegroupNotKeywords.join(',');
+
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
+            }
+        );
 
         this.subscriptions.add(this.TacticalOverviewServicesWidgetService.saveWidget(this.widget, this.config)
             .subscribe({

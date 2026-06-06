@@ -26,7 +26,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
 import {
@@ -77,13 +77,11 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
         TableLoaderComponent,
         TableDirective,
         MatSort,
-        NgForOf,
         ItemSelectComponent,
         ActionsButtonComponent,
         ActionsButtonElementComponent,
         DropdownDividerDirective,
         NoRecordsComponent,
-        NgIf,
         SelectAllComponent,
         PaginateOrScrollComponent,
         CardFooterComponent,
@@ -95,7 +93,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
     templateUrl: './mkchecks-index.component.html',
     styleUrl: './mkchecks-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: MkchecksService } // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: MkchecksService} // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

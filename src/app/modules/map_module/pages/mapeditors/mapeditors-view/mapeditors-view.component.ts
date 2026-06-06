@@ -8,7 +8,7 @@ import {
     OnInit
 } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { MapeditorsService } from '../mapeditors.service';
@@ -25,9 +25,8 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { parseInt } from 'lodash';
 import { MapViewComponent } from '../../../components/map-view/map-view.component';
 import { SidebarService } from '../../../../../layouts/coreui/coreui-navbar/sidebar.service';
 
@@ -45,7 +44,6 @@ import { SidebarService } from '../../../../../layouts/coreui/coreui-navbar/side
         CardBodyComponent,
         RouterLink,
         TranslocoDirective,
-        NgIf,
         XsButtonDirective,
         MapViewComponent,
         NgClass
@@ -61,67 +59,72 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
     private MapeditorsService: MapeditorsService = inject(MapeditorsService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
     readonly sidebarService: SidebarService = inject(SidebarService);
-    private route = inject(ActivatedRoute);
+    public readonly route = inject(ActivatedRoute);
+    public readonly router = inject(Router);
     public errors: GenericValidationError | null = null;
     private cdr = inject(ChangeDetectorRef);
 
     public map!: MapeditorsViewMap;
-    private init = true;
     protected mapId: number = 0;
-    protected rotate: null | string | string[] = null;
+    protected rotate: string[] = [];
 
     protected fullscreen: boolean = false;
     private rotationInterval: number = 0;
     private rotationPosition: number = 1;
     protected intervalParam: number = 0;
-
-    private interval = null;
     private refreshInterval: number = 0;
 
     public ngOnInit(): void {
-        this.mapId = Number(this.route.snapshot.paramMap.get('id'));
-        this.fullscreen = (this.route.snapshot.paramMap.get('fullscreen') === 'true');
-        let rotationParam = this.route.snapshot.paramMap.get('rotation');
-        if (rotationParam != null) this.rotate = rotationParam;
-        let intervalParam = this.route.snapshot.paramMap.get('interval');
-        if (intervalParam != null) {
-            this.rotationInterval = parseInt(intervalParam, 10) * 1000;
-            this.intervalParam = parseInt(intervalParam, 10);
-        }
-        this.loadMapDetails();
-
-        if (this.rotate !== null && this.rotationInterval > 0) {
-            if (typeof this.rotate === "string") {
-                this.rotate = this.rotate.split(',');
-            }
-
-            this.intervalSubscription = interval(this.rotationInterval).subscribe(() => {
-                this.rotationPosition++;
-                if (this.rotate != null && (this.rotationPosition > this.rotate.length)) {
-                    this.rotationPosition = 1;
-                }
-
-                if (this.rotate != null) {
-                    this.mapId = Number(this.rotate[this.rotationPosition - 1]);
-                }
-                this.loadMapDetails();
-                this.cdr.markForCheck();
-            });
-        }
 
         this.subscriptions.add(this.route.params.subscribe(params => {
-            // reload page to display new map
-            if (params['id'] !== undefined && params['id'] !== null && params['id'] !== '' && params['id'] !== this.mapId.toString()) {
-                window.location.reload();
+
+            if (this.intervalSubscription) {
+                this.intervalSubscription.unsubscribe();
+            }
+
+            this.mapId = Number(params['id'] ?? 0);
+            this.fullscreen = (params['fullscreen'] ?? 'false') === 'true';
+
+            let rotationParam = params['rotation']
+            if (rotationParam) {
+                this.rotate = String(rotationParam).split(',');
+            }
+
+            this.intervalParam = Number(params['interval'] ?? 0);
+            if (isNaN(this.intervalParam)) {
+                this.intervalParam = 90;
+            }
+            this.rotationInterval = this.intervalParam * 1000;
+
+
+            // Load the current map / first map of a rotation
+            this.loadMapDetails();
+            this.cdr.markForCheck();
+
+            if (this.rotate.length > 0 && !this.rotate.includes("0") && this.rotationInterval > 0) {
+
+                // Handle map rotations
+                this.intervalSubscription = interval(this.rotationInterval).subscribe(() => {
+
+                    this.rotationPosition++;
+                    if (this.rotate != null && (this.rotationPosition > this.rotate.length)) {
+                        this.rotationPosition = 1;
+                    }
+
+                    this.mapId = Number(this.rotate[this.rotationPosition - 1]);
+
+                    this.loadMapDetails();
+                    this.cdr.markForCheck();
+                });
             }
         }));
+
+
     }
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
-        if (this.intervalSubscription) {
-            this.intervalSubscription.unsubscribe();
-        }
+        this.intervalSubscription.unsubscribe();
         this.toggleFullscreenMode(false, true);
         this.cdr.markForCheck();
     }
@@ -131,16 +134,17 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     private loadMapDetails() {
-        this.subscriptions.add(this.MapeditorsService.loadMapDetails(this.mapId)
-            .subscribe((result) => {
-                this.map = result.map;
-                this.refreshInterval = this.map.Map.refresh_interval!;
-                if (this.refreshInterval !== 0 && this.refreshInterval < 5000) {
-                    this.refreshInterval = 5000;
-                }
-                this.init = false;
-                this.cdr.markForCheck();
-            }));
+        if (this.mapId) {
+            this.subscriptions.add(this.MapeditorsService.loadMapDetails(this.mapId)
+                .subscribe((result) => {
+                    this.map = result.map;
+                    this.refreshInterval = this.map.Map.refresh_interval!;
+                    if (this.refreshInterval !== 0 && this.refreshInterval < 5000) {
+                        this.refreshInterval = 5000;
+                    }
+                    this.cdr.markForCheck();
+                }));
+        }
     };
 
     public toggleFullscreenMode(initialLoad: boolean = false, leavePage: boolean = false) {
@@ -166,5 +170,4 @@ export class MapeditorsViewComponent implements OnInit, OnDestroy, AfterViewInit
         this.cdr.markForCheck();
     }
 
-    protected readonly Array = Array;
 }

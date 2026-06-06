@@ -10,18 +10,18 @@ import {
     AgentconnectorWizardProgressbarComponent
 } from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormLabelDirective,
-  FormSelectDirective,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    FormSelectDirective,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -31,7 +31,7 @@ import { Subscription } from 'rxjs';
 import { AgentconnectorService } from '../agentconnector.service';
 import { AgentConfig } from '../agentconfig.interface';
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { HostEntity } from '../../hosts/hosts.interface';
 
 import { PaginatorModule } from 'primeng/paginator';
@@ -48,34 +48,33 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'oitc-agentconnector-config',
     imports: [
-    AgentconnectorWizardProgressbarComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    BlockLoaderComponent,
-    NgIf,
-    NgClass,
-    FormSelectDirective,
-    PaginatorModule,
-    RequiredIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    TranslocoPipe,
-    ApikeyDocModalComponent,
-    RowComponent,
-    ColComponent,
-    FormsModule
-],
+        AgentconnectorWizardProgressbarComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        BlockLoaderComponent,
+        NgClass,
+        FormSelectDirective,
+        PaginatorModule,
+        RequiredIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        TranslocoPipe,
+        ApikeyDocModalComponent,
+        RowComponent,
+        ColComponent,
+        FormsModule
+    ],
     templateUrl: './agentconnector-config.component.html',
     styleUrl: './agentconnector-config.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -225,6 +224,12 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
             this.config.bool.use_autossl = false; // no autotls in push mode
             this.config.bool.use_https = false; // the agent push the data to oitc this variable is for pull mode
             this.config.bool.use_https_verify = false; // the agent push the data to oitc this variable is for pull mode
+
+            this.config.bool.push_webserver_use_https = true;
+            if (this.webserverType === AgentconnectorWebserverTypes.Http) {
+                this.config.bool.push_webserver_use_https = false;
+            }
+
         }
     }
 

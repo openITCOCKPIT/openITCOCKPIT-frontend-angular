@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { getUserDate } from '../../services/timezone.service';
 
 /**********************
  *    Index action    *
@@ -17,7 +18,7 @@ export interface HostchecksIndexParams {
 }
 
 export function getDefaultHostchecksIndexParams(): HostchecksIndexParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,

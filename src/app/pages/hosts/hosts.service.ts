@@ -30,7 +30,9 @@ import {
     HostsLoadHostsByStringParams,
     HostsNotMonitoredParams,
     HostsNotMonitoredRoot,
-    HostUsedByRoot
+    HostUsedByRoot,
+    LoadAdditionalInformationResult,
+    SoftwareInformationHost
 } from './hosts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
@@ -272,7 +274,7 @@ export class HostsService {
         );
     }
 
-    public loadParentHosts(searchString: string, containerId: number, selected: number[] = [], satellite_id: number): Observable<SelectKeyValue[]> {
+    public loadParentHosts(searchString: string, containerId: number, selected: number[] = [], satellite_id: number, hostId?: number): Observable<SelectKeyValue[]> {
         const proxyPath = this.proxyPath;
 
         if (!containerId) {
@@ -287,7 +289,8 @@ export class HostsService {
                 'filter[Hosts.name]': searchString,
                 'selected[]': selected,
                 'containerId': containerId,
-                'satellite_id': (satellite_id > 0) ? satellite_id : ''
+                'satellite_id': (satellite_id > 0) ? satellite_id : '',
+                'hostId': hostId ?? ''
             }
         }).pipe(
             map(data => {
@@ -587,10 +590,10 @@ export class HostsService {
             )
     }
 
-    public loadAdditionalInformation(id: number): Observable<boolean> {
+    public loadAdditionalInformation(id: number): Observable<LoadAdditionalInformationResult> {
         const proxyPath = this.proxyPath;
         return this
-            .http.get<{ AdditionalInformationExists: boolean }>(`${proxyPath}/hosts/loadAdditionalInformation/.json`, {
+            .http.get<LoadAdditionalInformationResult>(`${proxyPath}/hosts/loadAdditionalInformation/.json`, {
                 params: {
                     angular: true,
                     id: id
@@ -598,7 +601,7 @@ export class HostsService {
             })
             .pipe(
                 map(data => {
-                    return data.AdditionalInformationExists;
+                    return data;
                 })
             )
     }
@@ -632,6 +635,22 @@ export class HostsService {
             .pipe(
                 map(data => {
                     return data.slaOverview;
+                })
+            )
+    }
+
+    public loadSoftwareInformation(id: number): Observable<SoftwareInformationHost> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<SoftwareInformationHost>(`${proxyPath}/hosts/loadSoftwareInformation/.json`, {
+                params: {
+                    angular: true,
+                    id: id
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data;
                 })
             )
     }

@@ -4,6 +4,9 @@ import Aura from '@primeng/themes/aura';
 // https://primeng.org/theming#primary
 // This Theme was created using the Theme Generator of PrimeNG
 // Go to the PrimeNG website https://primeng.org/ and click on the "Cog" (Gear) icon in the top right corner
+//
+// Go to node_modules/@primeuix/themes/dist/aura/base/index.d.ts for definition of AuraBaseDesignTokens
+//
 const OItcPrimeNGPreset = definePreset(Aura, {
     primitive: {
         borderRadius: {
@@ -346,7 +349,6 @@ const OItcPrimeNGPreset = definePreset(Aura, {
                 color: "transparent",
                 offset: "0",
                 shadow: "0 0 0 .25rem #5856d640", // it-novum adjusted
-                borderColor: "#acabeb", // it-novum adjusted
             },
             transitionDuration: "{transition.duration}"
         },
@@ -441,15 +443,16 @@ const OItcPrimeNGPreset = definePreset(Aura, {
                     color: "{surface.200}"
                 },
                 formField: {
-                    fontSize: "0.5rem", // it-novum added
+                    //fontSize: "0.5rem", // it-novum added
                     background: "{surface.0}",
                     disabledBackground: "rgb(231, 234, 238)", // it-novum adjusted (default surface.200)
                     filledBackground: "rgb(243, 244, 247)", // it-novum adjusted (default surface.50)
                     filledHoverBackground: "rgb(243, 244, 247)", // it-novum adjusted (default surface.50)
                     filledFocusBackground: "rgb(243, 244, 247)", // it-novum adjusted (default surface.50)
+                    focusBorderColor: "#acabeb", // it-novum adjusted
                     borderColor: "{surface.300}",
                     hoverBorderColor: "{surface.400}",
-                    focusBorderColor: "{primary.color}",
+                    //focusBorderColor: "{primary.color}",
                     invalidBorderColor: "{red.400}",
                     color: "{surface.700}",
                     disabledColor: "{surface.500}",
@@ -567,15 +570,16 @@ const OItcPrimeNGPreset = definePreset(Aura, {
                     color: "{surface.200}"
                 },
                 formField: {
-                    fontSize: "0.5rem", // it-novum added
+                    //fontSize: "0.5rem", // it-novum added
                     background: "{surface.950}",
                     disabledBackground: "{surface.700}", // it-novum adjusted (default surface.700)
                     filledBackground: "{surface.800}", // it-novum adjusted (default surface.800)
                     filledHoverBackground: "{surface.800}", // it-novum adjusted (default surface.800)
                     filledFocusBackground: "{surface.800}", // it-novum adjusted (default surface.800)
+                    focusBorderColor: "#acabeb", // it-novum adjusted
                     borderColor: "{surface.600}",
                     hoverBorderColor: "{surface.500}",
-                    focusBorderColor: "{primary.color}",
+                    //focusBorderColor: "{primary.color}",
                     invalidBorderColor: "{red.300}",
                     color: "{surface.0}",
                     disabledColor: "{surface.400}",

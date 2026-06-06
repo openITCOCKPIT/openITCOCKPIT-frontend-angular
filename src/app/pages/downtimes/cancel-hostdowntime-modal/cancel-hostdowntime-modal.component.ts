@@ -28,7 +28,7 @@ import {
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { CancelAllItem, CancelAllResponse } from './cancel-hostdowntime.interface';
-import { NgIf } from '@angular/common';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -42,26 +42,25 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 @Component({
     selector: 'oitc-cancel-hostdowntime-modal',
     imports: [
-    ModalComponent,
-    ModalHeaderComponent,
-    ModalBodyComponent,
-    ModalTitleDirective,
-    ButtonCloseDirective,
-    ModalFooterComponent,
-    TranslocoDirective,
-    RowComponent,
-    ColComponent,
-    FaIconComponent,
-    ProgressComponent,
-    NgIf,
-    DebounceDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormsModule,
-    TrueFalseDirective,
-    XsButtonDirective
-],
+        ModalComponent,
+        ModalHeaderComponent,
+        ModalBodyComponent,
+        ModalTitleDirective,
+        ButtonCloseDirective,
+        ModalFooterComponent,
+        TranslocoDirective,
+        RowComponent,
+        ColComponent,
+        FaIconComponent,
+        ProgressComponent,
+        DebounceDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormsModule,
+        TrueFalseDirective,
+        XsButtonDirective
+    ],
     templateUrl: './cancel-hostdowntime-modal.component.html',
     styleUrl: './cancel-hostdowntime-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

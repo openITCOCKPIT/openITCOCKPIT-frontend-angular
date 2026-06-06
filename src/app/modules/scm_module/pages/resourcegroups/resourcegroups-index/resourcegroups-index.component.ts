@@ -42,7 +42,7 @@ import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-al
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -50,11 +50,12 @@ import {
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
+import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 
 @Component({
     selector: 'oitc-resourcegroups-index',
@@ -81,8 +82,6 @@ import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outli
         MatSortHeader,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         PermissionDirective,
@@ -98,7 +97,8 @@ import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outli
         ButtonGroupComponent,
         NgClass,
         BadgeOutlineComponent,
-        TextColorDirective
+        TextColorDirective,
+        LabelLinkComponent
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ResourcegroupsService} // Inject the ResourcegroupsService into the DeleteAllModalComponent
@@ -120,15 +120,24 @@ export class ResourcegroupsIndexComponent implements OnInit, OnDestroy, IndexPag
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly ResourcegroupsService = inject(ResourcegroupsService);
     public readonly PermissionsService = inject(PermissionsService);
+    public readonly TranslocoService = inject(TranslocoService);
     private cdr = inject(ChangeDetectorRef);
+    public weekdays = {
+        1: this.TranslocoService.translate('Monday'),
+        2: this.TranslocoService.translate('Tuesday'),
+        3: this.TranslocoService.translate('Wednesday'),
+        4: this.TranslocoService.translate('Thursday'),
+        5: this.TranslocoService.translate('Friday'),
+        6: this.TranslocoService.translate('Saturday'),
+        7: this.TranslocoService.translate('Sunday')
+    };
 
     public ngOnInit(): void {
-
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
             // Here, params is an object containing the current query parameters.
             // You can do something with these parameters here.
             let resourcegroupId = params['id'] || params['id'];
-            console.log(resourcegroupId);
+
             if (resourcegroupId) {
                 this.params['filter[Resourcegroups.id][]'] = [].concat(resourcegroupId); // make sure we always get an array
             }

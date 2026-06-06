@@ -1,17 +1,19 @@
 <ng-container *transloco="let t">
     <c-row>
         <c-col>
-            <oitc-paginator
-                (pageChange)="onPageChange($event)"
-                *ngIf="paginateOrScroll?.paging"
-                [paging]="paginateOrScroll?.paging"
-            ></oitc-paginator>
+            @if (paginateOrScroll?.paging) {
+                <oitc-paginator
+                    (pageChange)="onPageChange($event)"
+                    [paging]="paginateOrScroll?.paging"
+                ></oitc-paginator>
+            }
 
-            <oitc-scroll-index
-                (pageChange)="onPageChange($event)"
-                *ngIf="paginateOrScroll?.scroll"
-                [scroll]="paginateOrScroll?.scroll">
-            </oitc-scroll-index>
+            @if (paginateOrScroll?.scroll) {
+                <oitc-scroll-index
+                    (pageChange)="onPageChange($event)"
+                    [scroll]="paginateOrScroll?.scroll">
+                </oitc-scroll-index>
+            }
         </c-col>
     </c-row>
     <c-row>

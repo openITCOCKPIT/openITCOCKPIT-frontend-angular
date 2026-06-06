@@ -3,7 +3,7 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { Subscription } from 'rxjs';
 import { SlasService } from '../slas.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { AsyncPipe, formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, formatDate, NgClass } from '@angular/common';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -42,6 +42,7 @@ import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { saveAs } from 'file-saver';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { getUserDate } from '../../../../../services/timezone.service';
 
 
 @Component({
@@ -62,7 +63,6 @@ import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/tab
         RequiredIconComponent,
         SelectComponent,
         FormErrorDirective,
-        NgIf,
         FormFeedbackComponent,
         FormsModule,
         FormDirective,
@@ -74,7 +74,6 @@ import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/tab
         CardFooterComponent,
         PermissionDirective,
         NgClass,
-        NgForOf,
         AlertComponent,
         RowComponent,
         ColComponent,
@@ -136,7 +135,7 @@ export class SlasGenerateComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
 
     private getDefaultPost(id: number): SlasGeneratePost {
-        let now = new Date();
+        let now: Date = getUserDate();
         return {
             Sla: {
                 id: id,

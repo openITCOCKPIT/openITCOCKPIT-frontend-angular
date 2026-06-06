@@ -86,18 +86,17 @@
                         </span>
                         <input cFormControl id="from_date" required type="date"
                                name="from_date" placeholder="{{ t('DD.MM.YYYY') }}"
-                               oitcFormError [errors]="errors" errorField="from"
+                               oitcFormError [errors]="errors" errorField="start_time"
                                [(ngModel)]="post.from_date">
-                        <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
                         <span class="input-group-text">
                             <fa-icon [icon]="['far', 'clock']"></fa-icon>
                         </span>
                         <input cFormControl id="from_time" required type="time"
                                name="from_time" placeholder="{{ t('hh:mm') }}"
-                               oitcFormError [errors]="errors" errorField="from_time"
+                               oitcFormError [errors]="errors" errorField="start_time"
                                [(ngModel)]="post.from_time">
-                        <oitc-form-feedback [errors]="errors" errorField="from_time"></oitc-form-feedback>
                     </div>
+                    <oitc-form-feedback [errors]="errors" errorField="start_time"></oitc-form-feedback>
                 </div>
                 <div class="mb-3">
                     <label cLabel for="to_date">
@@ -110,18 +109,17 @@
                         </span>
                         <input cFormControl id="to_date" required type="date"
                                name="to_date" placeholder="{{ t('DD.MM.YYYY') }}"
-                               oitcFormError [errors]="errors" errorField="to"
+                               oitcFormError [errors]="errors" errorField="end_time"
                                [(ngModel)]="post.to_date">
-                        <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
                         <span class="input-group-text">
                             <fa-icon [icon]="['far', 'clock']"></fa-icon>
                         </span>
                         <input cFormControl id="to_time" required type="time"
                                name="to_time" placeholder="{{ t('hh:mm') }}"
-                               oitcFormError [errors]="errors" errorField="to_time"
+                               oitcFormError [errors]="errors" errorField="end_time"
                                [(ngModel)]="post.to_time">
-                        <oitc-form-feedback [errors]="errors" errorField="to_time"></oitc-form-feedback>
                     </div>
+                    <oitc-form-feedback [errors]="errors" errorField="end_time"></oitc-form-feedback>
                 </div>
             </c-card-body>
             <c-card-footer class="text-end">

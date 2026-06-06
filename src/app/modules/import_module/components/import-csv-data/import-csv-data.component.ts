@@ -8,7 +8,8 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    ViewChild
+    ViewChild,
+    DOCUMENT
 } from '@angular/core';
 import {
     ButtonCloseDirective,
@@ -23,7 +24,7 @@ import {
     TableDirective
 } from '@coreui/angular';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { DOCUMENT, NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
@@ -60,7 +61,6 @@ import _ from 'lodash';
         ModalFooterComponent,
         ModalHeaderComponent,
         ModalTitleDirective,
-        NgIf,
         RowComponent,
         TranslocoDirective,
         XsButtonDirective,
@@ -70,7 +70,6 @@ import _ from 'lodash';
         RouterLink,
         FormsModule,
         TableDirective,
-        NgForOf,
         NgClass
     ],
     templateUrl: './import-csv-data.component.html',
@@ -187,9 +186,9 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
             return;
         }
 
-        if((this.importer?.data_source === 'csv_with_header' || this.importer?.data_source === 'csv_without_header')
+        if ((this.importer?.data_source === 'csv_with_header' || this.importer?.data_source === 'csv_without_header')
             && (!this.filenameOnServer && !this.uploadSuccessful)) {
-           return;
+            return;
 
         }
 

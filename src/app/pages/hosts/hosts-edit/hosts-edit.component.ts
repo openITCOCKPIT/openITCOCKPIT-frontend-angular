@@ -1,26 +1,26 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 
 import {
-  AlertComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  DropdownComponent,
-  DropdownItemDirective,
-  DropdownMenuDirective,
-  DropdownToggleDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  NavComponent,
-  NavItemComponent
+    AlertComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    NavComponent,
+    NavItemComponent
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
@@ -35,7 +35,7 @@ import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/i
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { MacrosComponent } from '../../../components/macros/macros.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
@@ -69,59 +69,57 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-hosts-edit',
     imports: [
-    AlertComponent,
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    CheckAttemptsInputComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FaIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    HumanTimeComponent,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    IntervalInputComponent,
-    LabelLinkComponent,
-    MacrosComponent,
-    MultiSelectComponent,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NgSelectModule,
-    PermissionDirective,
-    PriorityComponent,
-    ReactiveFormsModule,
-    RequiredIconComponent,
-    SelectComponent,
-    TemplateDiffBtnComponent,
-    TemplateDiffComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    TrueFalseDirective,
-    XsButtonDirective,
-    RouterLink,
-    ObjectUuidComponent,
-    NgClass,
-    FakeSelectComponent,
-    UiBlockerComponent,
-    FormLoaderComponent,
-    AsyncPipe
-],
+        AlertComponent,
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        CheckAttemptsInputComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        HumanTimeComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        IntervalInputComponent,
+        LabelLinkComponent,
+        MacrosComponent,
+        MultiSelectComponent,
+        NavComponent,
+        NavItemComponent,
+        NgSelectModule,
+        PermissionDirective,
+        PriorityComponent,
+        ReactiveFormsModule,
+        RequiredIconComponent,
+        SelectComponent,
+        TemplateDiffBtnComponent,
+        TemplateDiffComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        TrueFalseDirective,
+        XsButtonDirective,
+        RouterLink,
+        ObjectUuidComponent,
+        NgClass,
+        FakeSelectComponent,
+        UiBlockerComponent,
+        FormLoaderComponent,
+        AsyncPipe
+    ],
     templateUrl: './hosts-edit.component.html',
     styleUrl: './hosts-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -154,6 +152,9 @@ export class HostsEditComponent implements OnInit, OnDestroy {
         areContactsInheritedFromHosttemplate: false,
         disableInheritance: false
     };
+
+    public hostnameCheckedForDuplicates: string = '';
+
 
     public hosttemplates: SelectKeyValue[] = [];
     public hostgroups: SelectKeyValue[] = [];
@@ -285,7 +286,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.HostsService.loadParentHosts(searchString, this.post.container_id, this.post.parenthosts._ids, this.post.satellite_id)
+        this.subscriptions.add(this.HostsService.loadParentHosts(searchString, this.post.container_id, this.post.parenthosts._ids, this.post.satellite_id, this.id)
             .subscribe((result) => {
                 this.parenthosts = result;
                 this.cdr.markForCheck();
@@ -410,6 +411,8 @@ export class HostsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.checkForDuplicateHostname(this.post.name, [this.id])
             .subscribe((result) => {
                 this.data.isHostnameInUse = result;
+                // Ensure that the host name in the warning box will not change until the user changes the name again
+                this.hostnameCheckedForDuplicates = this.post.name;
                 this.cdr.markForCheck();
             })
         );

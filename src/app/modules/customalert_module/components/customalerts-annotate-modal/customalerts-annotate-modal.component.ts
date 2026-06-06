@@ -28,7 +28,7 @@ import {
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
@@ -58,7 +58,6 @@ import { Subscription } from 'rxjs';
         FormControlDirective,
         ModalBodyComponent,
         ModalFooterComponent,
-        NgForOf,
         ReactiveFormsModule,
         RowComponent,
         XsButtonDirective,
@@ -69,7 +68,6 @@ import { Subscription } from 'rxjs';
         DebounceDirective,
         ProgressComponent,
         FormFeedbackComponent,
-        NgIf,
         FormCheckLabelDirective,
         NgClass
     ],

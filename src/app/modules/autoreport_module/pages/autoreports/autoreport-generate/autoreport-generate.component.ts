@@ -19,15 +19,7 @@ import {
     NavComponent,
     NavItemComponent, RowComponent
 } from '@coreui/angular';
-import {
-    AsyncPipe,
-    DecimalPipe,
-    formatDate,
-    NgClass,
-    NgForOf,
-    NgIf,
-    KeyValuePipe
-} from '@angular/common';
+import { AsyncPipe, DecimalPipe, formatDate, NgClass, KeyValuePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AutoreportsService } from '../autoreports.service';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
@@ -50,14 +42,13 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
 import { saveAs } from 'file-saver';
 
 @Component({
-  selector: 'oitc-autoreport-generate',
+    selector: 'oitc-autoreport-generate',
     imports: [
         TranslocoDirective,
         FaIconComponent,
         PermissionDirective,
         RouterLink,
         CardComponent,
-        NgIf,
         CardHeaderComponent,
         CardTitleDirective,
         NavComponent,
@@ -76,17 +67,16 @@ import { saveAs } from 'file-saver';
         ReactiveFormsModule,
         FormsModule,
         ColComponent,
-        NgForOf,
         DecimalPipe,
         AlertComponent,
         AsyncPipe,
         KeyValuePipe,
         FormDirective,
-        CardFooterComponent,
+        CardFooterComponent
     ],
-  templateUrl: './autoreport-generate.component.html',
-  styleUrl: './autoreport-generate.component.css', //'./../../../assets/autoreport.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: './autoreport-generate.component.html',
+    styleUrl: './autoreport-generate.component.css', //'./../../../assets/autoreport.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutoreportGenerateComponent implements OnInit, OnDestroy {
 
@@ -103,21 +93,21 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
 
     public id: number = 0;
     public tabName: string = 'reportConfig';
-    public reportWasGenerated:boolean = false;
+    public reportWasGenerated: boolean = false;
     public isGenerating: boolean = false;
     public errors: GenericValidationError | null = null;
     public report_error: ReportError | null = null;
 
     public autoreports!: AutoreportIndex[];
-    public report!:GenerateResponse;
+    public report!: GenerateResponse;
     public reportHostIds: number[] = [];
-    public logoUrl:string = '';
+    public logoUrl: string = '';
     private now = DateTime.now();
     public post = {
         Autoreport: {
             id: this.id,
             format: 'html',
-            from_date: this.now.minus({ days: 30 }).toISODate(),
+            from_date: this.now.minus({days: 30}).toISODate(),
             to_date: this.now.toISODate()
         }
     };
@@ -150,7 +140,7 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
 
     public submitReport() {
         this.report_error = null;
-       // this.report = null;
+        // this.report = null;
         this.cdr.markForCheck();
         this.post.Autoreport.from_date = formatDate(this.from, 'dd.MM.y', 'en-US');
         this.post.Autoreport.to_date = formatDate(this.to, 'dd.MM.y', 'en-US');
@@ -226,7 +216,7 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
                             this.report = result.data.report;
                             this.logoUrl = result.data.logoUrl;
                             this.reportHostIds = [];
-                            for(var hostIndex in this.report.autoreport.hosts){
+                            for (var hostIndex in this.report.autoreport.hosts) {
                                 this.reportHostIds.push(this.report.autoreport.hosts[hostIndex].id);
                             }
                             this.notyService.genericSuccess(this.TranslocoService.translate('Report created successfully'));
@@ -261,24 +251,24 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
         }
     }
 
-    public hasBitValue(option:any, value: any){
+    public hasBitValue(option: any, value: any) {
         return option & value;
     }
 
-    public checkIfHostInReport(hostId: number){
-        return  (this.reportHostIds.indexOf(hostId) !== -1);
+    public checkIfHostInReport(hostId: number) {
+        return (this.reportHostIds.indexOf(hostId) !== -1);
     }
 
     public getServiceKeys(servicesObject: any) {
         return Object.keys(servicesObject);
     }
 
-    public hasGraph(hostUuid: string, serviceUuid: string){
-        if(typeof this.report !== "undefined"){
-            if(this.report.hasOwnProperty('GraphImageBlobs')){
-                if(this.report.GraphImageBlobs.hasOwnProperty(hostUuid)){
+    public hasGraph(hostUuid: string, serviceUuid: string) {
+        if (typeof this.report !== "undefined") {
+            if (this.report.hasOwnProperty('GraphImageBlobs')) {
+                if (this.report.GraphImageBlobs.hasOwnProperty(hostUuid)) {
                     // @ts-ignore
-                    if(this.report.GraphImageBlobs[hostUuid].hasOwnProperty(serviceUuid)){
+                    if (this.report.GraphImageBlobs[hostUuid].hasOwnProperty(serviceUuid)) {
                         return true;
                     }
                 }

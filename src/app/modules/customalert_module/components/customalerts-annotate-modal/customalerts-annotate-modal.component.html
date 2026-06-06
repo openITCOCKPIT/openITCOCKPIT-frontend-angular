@@ -18,9 +18,11 @@
                 <c-row class="pt-2">
                     <c-col sm="12">
                         <ul class="mb-3">
-                            <li *ngFor="let item of items">
-                                {{ item.service.host.name }} / {{ item.servicename }}
-                            </li>
+                            @for (item of items; track item) {
+                                <li>
+                                    {{ item.service.host.name }} / {{ item.servicename }}
+                                </li>
+                            }
                         </ul>
                     </c-col>
                 </c-row>
@@ -37,15 +39,19 @@
                 </div>
             </ng-container>
 
-            <div class="col-lg-12 mt-3" *ngIf="loadingHoststate">
-                <i class="fa-solid fa-spinner fa-spin"></i>
-                {{ t('Determining host state...') }}
-            </div>
+            @if (loadingHoststate) {
+                <div class="col-lg-12 mt-3">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    {{ t('Determining host state...') }}
+                </div>
+            }
 
-            <div class="mb-3" [cTextColor]="'success'" *ngIf="result && result.all_hosts.length === 0">
-                <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
-                {{ t('All hosts are Up.') }}
-            </div>
+            @if (result && result.all_hosts.length === 0) {
+                <div class="mb-3" [cTextColor]="'success'">
+                    <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+                    {{ t('All hosts are Up.') }}
+                </div>
+            }
 
             <c-form-check class="mb-3">
                 <input cFormCheckInput id="acknowledgement" type="checkbox"

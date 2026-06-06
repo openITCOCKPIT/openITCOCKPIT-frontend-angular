@@ -49,4 +49,36 @@ export const mapModuleRoutes: Routes = [
         path: 'map_module/rotations/edit/:id',
         loadComponent: () => import('./pages/rotations/rotations-edit/rotations-edit.component').then(m => m.RotationsEditComponent)
     },
+    {
+        path: 'map_module/mapgenerators/index',
+        loadComponent: () => import('./pages/mapgenerators/mapgenerators-index/mapgenerators-index.component').then(m => m.MapgeneratorsIndexComponent)
+    },
+    {
+        path: 'map_module/mapgenerators/add',
+        loadComponent: () => import('./pages/mapgenerators/mapgenerators-add/mapgenerators-add.component').then(m => m.MapgeneratorsAddComponent)
+    },
+    {
+        path: 'map_module/mapgenerators/edit/:id',
+        loadComponent: () => import('./pages/mapgenerators/mapgenerators-edit/mapgenerators-edit.component').then(m => m.MapgeneratorsEditComponent)
+    },
+    {
+        path: 'map_module/mapgenerators/generate/:id',
+        loadComponent: () => import('./pages/mapgenerators/mapgenerators-generate/mapgenerators-generate.component').then(m => m.MapgeneratorsGenerateComponent)
+    },
+    {
+        path: 'map_module/backgrounduploads/backgrounds',
+        loadComponent: () => import('./pages/backgrounduploads/backgrounduploads-backgrounds/backgrounduploads-backgrounds.component').then(m => m.BackgrounduploadsBackgroundsComponent)
+    },
+    {
+        path: 'map_module/backgrounduploads/icons',
+        loadComponent: () => import('./pages/backgrounduploads/backgrounduploads-icons/backgrounduploads-icons.component').then(m => m.BackgrounduploadsIconsComponent)
+    },
+    {
+        path: 'map_module/backgrounduploads/iconsets',
+        loadComponent: () => import('./pages/backgrounduploads/backgrounduploads-iconsets/backgrounduploads-iconsets.component').then(m => m.BackgrounduploadsIconsetsComponent)
+    },
+    {
+        path: 'map_module/backgrounduploads/editContainers/:id',
+        loadComponent: () => import('./pages/backgrounduploads/backgrounduploads-edit-containers/backgrounduploads-edit-containers.component').then(m => m.BackgrounduploadsEditContainersComponent)
+    }
 ];

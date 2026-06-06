@@ -14,7 +14,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SupportsService } from '../supports.service';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-supports-issue',
@@ -28,8 +28,7 @@ import { NgIf } from '@angular/common';
         TranslocoDirective,
         RouterLink,
         RowComponent,
-        ColComponent,
-        NgIf
+        ColComponent
     ],
     templateUrl: './supports-issue.component.html',
     styleUrl: './supports-issue.component.css',

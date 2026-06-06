@@ -6,7 +6,6 @@ import {
     Input,
     OnChanges,
     OnDestroy,
-    OnInit,
     SimpleChanges
 } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -16,25 +15,24 @@ import { Timeperiod, TimeperiodRoot, WeekDays } from './timeperiod-details-toolt
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { BadgeComponent, PopoverDirective, TableDirective } from '@coreui/angular';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-timeperiod-details-tooltip',
     imports: [
-    FaIconComponent,
-    TranslocoDirective,
-    PopoverDirective,
-    TableDirective,
-    BadgeComponent,
-    NgIf,
-    NgForOf,
-    KeyValuePipe
-],
+        FaIconComponent,
+        TranslocoDirective,
+        PopoverDirective,
+        TableDirective,
+        BadgeComponent,
+        KeyValuePipe
+    ],
     templateUrl: './timeperiod-details-tooltip.component.html',
     styleUrl: './timeperiod-details-tooltip.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TimeperiodDetailsTooltipComponent implements OnInit, OnDestroy, OnChanges {
+export class TimeperiodDetailsTooltipComponent implements OnDestroy, OnChanges {
 
     @Input() timeperiodId: number = 0;
 
@@ -43,7 +41,7 @@ export class TimeperiodDetailsTooltipComponent implements OnInit, OnDestroy, OnC
     private readonly TranslocoService = inject(TranslocoService);
     private readonly TimeperiodDetailsTooltipService = inject(TimeperiodDetailsTooltipService);
     public isLoading: boolean = true;
-    public timeperiod: Timeperiod = {} as Timeperiod;
+    public timeperiod?: Timeperiod;
     public weekDays: WeekDays = {} as WeekDays;
     public label = {
         messageExists: this.TranslocoService.translate('Yes'),
@@ -54,16 +52,6 @@ export class TimeperiodDetailsTooltipComponent implements OnInit, OnDestroy, OnC
     ngOnChanges(changes: SimpleChanges): void {
         //this is necessary to update the component if the timeperiodId was changed
         this.loadTimeperiodDetails();
-    }
-
-
-    public ngOnInit() {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
-            this.loadTimeperiodDetails();
-        }));
     }
 
     public ngOnDestroy() {
@@ -97,6 +85,11 @@ export class TimeperiodDetailsTooltipComponent implements OnInit, OnDestroy, OnC
                         });
                     }
 
+                    for (let day in this.weekDays) {
+                        this.weekDays[day] = _.sortBy(this.weekDays[day], [function (o) {
+                            return o.start;
+                        }]);
+                    }
                 }));
         }
         this.cdr.markForCheck();

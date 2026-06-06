@@ -10,22 +10,30 @@ import {
     OnChanges,
     Output,
     SimpleChanges,
+    ViewChildren,
 } from '@angular/core';
 import {
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     ColComponent,
+    FormCheckComponent,
     FormCheckInputDirective,
+    FormCheckLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
-    RowComponent
+    RowComponent,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { Service } from '../../../pages/wizards/wizards.interface';
+import { ServiceForWizard } from '../../../pages/wizards/wizards.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
     selector: 'oitc-wizards-dynamicfields',
@@ -36,27 +44,38 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
         FormsModule,
         InputGroupComponent,
         InputGroupTextDirective,
-        NgForOf,
-        NgIf,
         NgSelectComponent,
         RowComponent,
         TranslocoPipe,
         TranslocoDirective,
-        FormFeedbackComponent
+        FormFeedbackComponent,
+        NgClass,
+        FormCheckLabelDirective,
+        FormCheckComponent,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective,
+        AccordionButtonDirective,
+        XsButtonDirective
     ],
     templateUrl: './wizards-dynamicfields.component.html',
     styleUrl: './wizards-dynamicfields.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WizardsDynamicfieldsComponent implements OnChanges {
+    @ViewChildren('accordionItem') accordionItems: AccordionItemComponent[] = [];
+
     public cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
     protected searchedTags: string[] = [];
 
     public title = input.required<string>();
+    public titleErrorField = input<string>('');
+    public checked: boolean = false;
+    public accordionClosed: boolean = true;
 
-    @Input() post: Service[] = [];
+    @Input() post: ServiceForWizard[] = [];
     @Input() errors: GenericValidationError = {} as GenericValidationError;
-    @Output() postChange = new EventEmitter<Service[]>();
+    @Output() postChange = new EventEmitter<ServiceForWizard[]>();
 
     constructor() {
         effect(() => {
@@ -64,7 +83,7 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
         });
     }
 
-    protected hasName = (name: string): boolean => {
+    public hasName = (name: string): boolean => {
         if (this.searchedTags.length === 0) {
             return true;
         }
@@ -73,21 +92,23 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
         });
     }
 
-    protected toggleCheck(theService: Service | undefined): void {
-        if (theService) {
-            this.post.forEach((service: Service) => {
-                if (service.servicetemplate_id === theService.servicetemplate_id) {
-                    service.createService = !service.createService;
-                }
-            });
-            this.cdr.markForCheck();
-            return;
-        }
-        this.post.forEach((service: Service) => {
+    protected toggleCheck(checked: boolean): void {
+        this.checked = checked;
+        this.post.forEach((service: ServiceForWizard) => {
             if (!this.hasName(service.name)) {
                 return;
             }
-            service.createService = !service.createService
+            service.createService = this.checked;
+        });
+        this.cdr.markForCheck();
+    }
+
+    protected toggleAccordionClose(checked: boolean): void {
+        this.accordionClosed = checked;
+        this.accordionItems.forEach((accordionItem: AccordionItemComponent) => {
+            if ((accordionItem.visible && this.accordionClosed) || (!accordionItem.visible && !this.accordionClosed)) {
+                accordionItem.toggleItem();
+            }
         });
         this.cdr.markForCheck();
     }

@@ -55,6 +55,10 @@ export interface ServiceIndexFilter {
         notifications_enabled: boolean,
         notifications_not_enabled: boolean,
         output: string,
+        state_type: {
+            soft: boolean,
+            hard: boolean
+        }
     },
     Services: {
         id: number[],
@@ -63,13 +67,7 @@ export interface ServiceIndexFilter {
         keywords: string[],
         not_keywords: string[],
         servicedescription: string,
-        priority: {
-            1: boolean,
-            2: boolean,
-            3: boolean,
-            4: boolean,
-            5: boolean
-        },
+        priority: { [key: string]: boolean },
         service_type: number[]
     },
     Hosts: {
@@ -77,6 +75,12 @@ export interface ServiceIndexFilter {
         name: string,
         name_regex: boolean | string,
         satellite_id: number[]
+    },
+    Hostgroups: {
+        id: number[]
+    },
+    Servicegroups: {
+        id: number[]
     }
 }
 
@@ -98,6 +102,10 @@ export function getDefaultServicesIndexFilter(): ServiceIndexFilter {
             notifications_enabled: false,
             notifications_not_enabled: false,
             output: '',
+            state_type: {
+                soft: false,
+                hard: false
+            }
         },
         Services: {
             id: [],
@@ -120,6 +128,12 @@ export function getDefaultServicesIndexFilter(): ServiceIndexFilter {
             name: '',
             name_regex: false,
             satellite_id: []
+        },
+        Hostgroups: {
+            id: []
+        },
+        Servicegroups: {
+            id: []
         }
     };
 }
@@ -145,6 +159,10 @@ export interface ServicesIndexFilterApiRequest {
     'Servicestatus.scheduled_downtime_depth': string
     'Servicestatus.active_checks_enabled': string
     'Servicestatus.notifications_enabled': string
+    'Servicestatus.is_hardstate': string
+
+    'Hostgroups.id': number[]
+    'Servicegroups.id': number[]
 }
 
 export function getDefaultServicesIndexFilterApiRequest(): ServicesIndexFilterApiRequest {
@@ -170,6 +188,9 @@ export function getDefaultServicesIndexFilterApiRequest(): ServicesIndexFilterAp
         'Servicestatus.notifications_enabled': '',
         //'Servicestatus.is_hardstate': '',
         'Servicestatus.active_checks_enabled': '',
+        'Hostgroups.id': [],
+        'Servicegroups.id': [],
+        'Servicestatus.is_hardstate': ''
     }
 }
 
@@ -224,6 +245,8 @@ export interface ServiceObject {
     hostname: string
     description: any
     active_checks_enabled: boolean
+    checkIntervalHuman?: string
+    delayedHuman?: string
     tags?: string
     host_id: number
     allow_edit: boolean
@@ -710,6 +733,7 @@ export interface ServiceBrowserMenu {
     hostName: string
     serviceName: string
     hostAddress: string
+    hostType: number
     docuExists: boolean
     serviceUrl: string | null
     allowEdit: boolean
@@ -766,7 +790,9 @@ export interface ServiceBrowserResult {
     servicestatus: ServicestatusObject
     acknowledgement?: AcknowledgementObject
     downtime?: DowntimeObject
+    plannedDowntimes: DowntimeObject[],
     hostDowntime?: DowntimeObject
+    plannedHostDowntimes: DowntimeObject[],
     hostAcknowledgement?: AcknowledgementObject
     checkCommand: CheckCommandCake2
     checkPeriod: TimeperiodEnity

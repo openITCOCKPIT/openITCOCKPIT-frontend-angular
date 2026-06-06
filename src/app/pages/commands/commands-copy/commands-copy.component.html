@@ -39,63 +39,61 @@
 
             <oitc-form-loader [isVisible]="commands.length === 0"></oitc-form-loader>
 
-            <c-card class="mb-3" *ngFor="let command of commands; let i = index">
-                <c-card-header>
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    <span class="ms-1">
-                        {{ t('Source command:') }}
-                        {{ command.Source.name }}
-                    </span>
-                </c-card-header>
-                <c-card-body>
-
-                    <div class="mb-3">
-                        <label cLabel for="name{{i}}">
-                            {{ t('Name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl required type="text"
-                               name="name{{i}}"
-                               id="name{{i}}"
-                               [(ngModel)]="command.Command.name"
-                               oitcFormError [errors]="command.Error" errorField="name">
-                        <oitc-form-feedback [errors]="command.Error" errorField="name"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Name of the new command') }}
+            @for (command of commands; track command; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source command:') }}
+                            {{ command.Source.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('Name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl required type="text"
+                                   name="name{{i}}"
+                                   id="name{{i}}"
+                                   [(ngModel)]="command.Command.name"
+                                   oitcFormError [errors]="command.Error" errorField="name">
+                            <oitc-form-feedback [errors]="command.Error" errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new command') }}
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="commandLine{{i}}">
-                            {{ t('Command line') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <textarea cFormControl required
-                                  cols="30"
-                                  rows="6"
-                                  name="commandLine{{i}}"
-                                  id="commandLine{{i}}"
-                                  [(ngModel)]="command.Command.command_line"
-                                  oitcFormError [errors]="command.Error" errorField="command_line"></textarea>
-                        <oitc-form-feedback [errors]="command.Error" errorField="command_line"></oitc-form-feedback>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="description{{i}}">
-                            {{ t('Description') }}
-                        </label>
-                        <textarea cFormControl required
-                                  cols="30"
-                                  rows="6"
-                                  name="description{{i}}"
-                                  id="description{{i}}"
-                                  [(ngModel)]="command.Command.description"
-                                  oitcFormError [errors]="command.Error" errorField="description"></textarea>
-                        <oitc-form-feedback [errors]="command.Error" errorField="description"></oitc-form-feedback>
-                    </div>
-
-                </c-card-body>
-            </c-card>
+                        <div class="mb-3">
+                            <label cLabel for="commandLine{{i}}">
+                                {{ t('Command line') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <textarea cFormControl required
+                                      cols="30"
+                                      rows="6"
+                                      name="commandLine{{i}}"
+                                      id="commandLine{{i}}"
+                                      [(ngModel)]="command.Command.command_line"
+                                      oitcFormError [errors]="command.Error" errorField="command_line"></textarea>
+                            <oitc-form-feedback [errors]="command.Error" errorField="command_line"></oitc-form-feedback>
+                        </div>
+                        <div class="mb-3">
+                            <label cLabel for="description{{i}}">
+                                {{ t('Description') }}
+                            </label>
+                            <textarea cFormControl required
+                                      cols="30"
+                                      rows="6"
+                                      name="description{{i}}"
+                                      id="description{{i}}"
+                                      [(ngModel)]="command.Command.description"
+                                      oitcFormError [errors]="command.Error" errorField="description"></textarea>
+                            <oitc-form-feedback [errors]="command.Error" errorField="description"></oitc-form-feedback>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            }
 
         </c-card-body>
         <c-card-footer class="text-end">

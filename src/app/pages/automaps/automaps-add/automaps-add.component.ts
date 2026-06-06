@@ -32,7 +32,7 @@ import { AutomapsService } from '../automaps.service';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
+
 
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { AutomapEntity, AutomapsMatchingHostAndServiceCounts } from '../automaps.interface';
@@ -46,37 +46,36 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-automaps-add',
     imports: [
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    FormDirective,
-    FormsModule,
-    ReactiveFormsModule,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    BackButtonDirective,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    CardFooterComponent,
-    FormCheckInputDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    NgIf,
-    RequiredIconComponent,
-    SelectComponent,
-    FormControlDirective,
-    FormCheckComponent,
-    FormCheckLabelDirective,
-    DebounceDirective,
-    RowComponent,
-    ColComponent,
-    BadgeComponent
-],
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        FormDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        BackButtonDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        CardFooterComponent,
+        FormCheckInputDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        FormControlDirective,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        DebounceDirective,
+        RowComponent,
+        ColComponent,
+        BadgeComponent
+    ],
     templateUrl: './automaps-add.component.html',
     styleUrl: './automaps-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

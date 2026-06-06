@@ -20,7 +20,7 @@ import {
 } from "@coreui/angular";
 import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { NgForOf, NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -75,8 +75,6 @@ import { PushNotificationsService } from '../../../services/push-notifications.s
         MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NgSelectModule,
         PermissionDirective,
         RequiredIconComponent,

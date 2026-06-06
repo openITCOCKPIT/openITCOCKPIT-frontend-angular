@@ -3,21 +3,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { WizardsAbstractComponent } from './wizards-abstract.component';
 
 describe('WizardsAbstractComponent', () => {
-  let component: WizardsAbstractComponent;
-  let fixture: ComponentFixture<WizardsAbstractComponent>;
+    let component: WizardsAbstractComponent;
+    let fixture: ComponentFixture<WizardsAbstractComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [WizardsAbstractComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [WizardsAbstractComponent]
+        })
+            .compileComponents();
 
-    fixture = TestBed.createComponent(WizardsAbstractComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(WizardsAbstractComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

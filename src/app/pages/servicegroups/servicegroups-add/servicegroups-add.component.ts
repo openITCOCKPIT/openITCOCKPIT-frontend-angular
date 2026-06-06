@@ -9,7 +9,7 @@ import {
     FormCheckInputDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective,
+    FormLabelDirective, InputGroupComponent,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -18,11 +18,11 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 
-import { NgIf } from '@angular/common';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -64,7 +64,6 @@ import {
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         NgSelectModule,
         PermissionDirective,
         RequiredIconComponent,
@@ -73,7 +72,9 @@ import {
         RouterLink,
         SelectComponent,
         MultiSelectComponent,
-        MultiSelectOptgroupComponent
+        MultiSelectOptgroupComponent,
+        InputGroupComponent,
+        TranslocoPipe
     ],
     templateUrl: './servicegroups-add.component.html',
     styleUrl: './servicegroups-add.component.css',
@@ -97,6 +98,7 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
     protected services: ServicesListService[] = [];
     protected containers: SelectKeyValue[] = [];
     protected servicetemplates: SelectKeyValue[] = [];
+    public tagsForSelect: string[] = [];
 
 
     constructor() {
@@ -119,8 +121,8 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public addServicegroup(): void {
-
+    public submit(): void {
+        this.post.tags = this.tagsForSelect.join(',');
         this.subscriptions.add(this.ServicegroupsService.addServicegroup(this.post)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
@@ -172,6 +174,7 @@ export class ServicegroupsAddComponent implements OnInit, OnDestroy {
             },
             description: "",
             servicegroup_url: "",
+            tags: "",
             services: {
                 _ids: []
             },

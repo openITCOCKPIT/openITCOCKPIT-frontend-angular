@@ -10,7 +10,6 @@ export interface PacketmanagerIndexRoot {
             isContainer: boolean
             LsbRelease: string
             systemname: string
-            newVersion: boolean
             version: string
             logoUrl: string
             _csrfToken: string

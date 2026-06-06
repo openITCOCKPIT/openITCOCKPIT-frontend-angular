@@ -1,6 +1,7 @@
 import { TemplateRef } from '@angular/core';
 import { ScrollerOptions } from 'primeng/api';
 import { MultiSelect, MultiSelectItem } from './multiselect';
+
 /**
  * Callbacks to invoke on filter or reset.
  * @group Interface
@@ -9,6 +10,7 @@ export interface MultiSelectFilterOptions {
     filter?: (value?: any) => void;
     reset?: () => void;
 }
+
 /**
  * Custom change event.
  * @see {@link MultiSelect.onChange}
@@ -28,6 +30,7 @@ export interface MultiSelectChangeEvent {
      */
     itemValue?: any;
 }
+
 /**
  * Custom change event.
  * @see {@link MultiSelect.onSelectAllChange}
@@ -43,6 +46,7 @@ export interface MultiSelectSelectAllChangeEvent {
      */
     checked: boolean;
 }
+
 /**
  * Custom filter event.
  * @see {@link MultiSelect.onFilter}
@@ -58,6 +62,7 @@ export interface MultiSelectFilterEvent {
      */
     filter: any;
 }
+
 /**
  * Custom focus event.
  * @see {@link MultiSelect.onFocus}
@@ -69,13 +74,15 @@ export interface MultiSelectFocusEvent {
      */
     originalEvent: Event;
 }
+
 /**
  * Custom blur event.
  * @see {@link MultiSelect.onBlur}
  * @extends {MultiSelectFocusEvent}
  * @group Events
  */
-export interface MultiSelectBlurEvent extends MultiSelectFocusEvent {}
+export interface MultiSelectBlurEvent extends MultiSelectFocusEvent {
+}
 
 /**
  * Custom lazy load event.
@@ -92,6 +99,7 @@ export interface MultiSelectLazyLoadEvent {
      */
     last: number;
 }
+
 /**
  * Custom remove event.
  * @see {@link MultiSelect.onRemove}
@@ -123,6 +131,7 @@ export interface MultiSelectTemplates {
          */
         $implicit: any;
     }): TemplateRef<{ $implicit: any }>;
+
     /**
      * Custom selected item template.
      * @param {Object} context - selected items data.
@@ -137,10 +146,12 @@ export interface MultiSelectTemplates {
          */
         removeChip: (chip: MultiSelectItem, event: MouseEvent) => void;
     }): TemplateRef<{ $implicit: any; removeChip: Function }>;
+
     /**
      * Custom header template.
      */
     header(): TemplateRef<any>;
+
     /**
      * Custom filter template.
      * @param {MultiSelectFilterOptions} options - filter options.
@@ -151,18 +162,22 @@ export interface MultiSelectTemplates {
          */
         options: MultiSelectFilterOptions;
     }): TemplateRef<{ options: MultiSelectFilterOptions }>;
+
     /**
      * Custom footer template.
      */
     footer(): TemplateRef<any>;
+
     /**
      * Custom empty filter template.
      */
     emptyfilter(): TemplateRef<any>;
+
     /**
      * Custom empty template.
      */
     empty(): TemplateRef<any>;
+
     /**
      * Custom group template.
      */
@@ -172,6 +187,7 @@ export interface MultiSelectTemplates {
          */
         $implicit: any;
     }): TemplateRef<{ $implicit: any }>;
+
     /**
      * Custom loader template. This template can be used with virtualScroll.
      * @param {ScrollerOptions} options - virtual scroller options.
@@ -182,23 +198,28 @@ export interface MultiSelectTemplates {
          */
         options: ScrollerOptions;
     }): TemplateRef<{ options: ScrollerOptions }>;
+
     /**
      * Custom dropdown trigger icon template.
      */
     dropdownicon(): TemplateRef<any>;
+
     /**
      * Custom clear icon template.
      */
     clearicon(): TemplateRef<any>;
+
     /**
      * Custom filter icon template.
      */
     filtericon(): TemplateRef<any>;
+
     /**
      * Custom check icon template.
      * @deprecated Use headercheckboxicon or itemcheckboxicon instead.
      */
     checkicon(): TemplateRef<any>;
+
     /**
      * Custom check icon template for the header checkbox.
      */
@@ -212,6 +233,7 @@ export interface MultiSelectTemplates {
          */
         partialSelected: boolean;
     }): TemplateRef<{ $implicit: boolean; partialSelected: boolean }>;
+
     /**
      * Custom check icon template for the item checkbox.
      */
@@ -221,10 +243,12 @@ export interface MultiSelectTemplates {
          */
         $implicit: boolean;
     }): TemplateRef<{ $implicit: boolean }>;
+
     /**
      * Custom close icon template.
      */
     closeicon(): TemplateRef<any>;
+
     /**
      * Custom remove token icon template.
      */

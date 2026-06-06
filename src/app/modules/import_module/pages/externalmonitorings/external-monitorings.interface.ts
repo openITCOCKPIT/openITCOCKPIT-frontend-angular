@@ -1,6 +1,8 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { ExternalMonitoringSystems } from './external-monitoring-systems.enum';
+import { ConnectMessage } from '../externalsystems/external-systems.interface';
 
 export interface ExternalMonitoringsIndexRoot extends PaginateOrScroll {
     externalMonitorings: ExternalMonitoring[]
@@ -12,7 +14,7 @@ export interface ExternalMonitoring {
     name: string
     container_id: number
     description: string
-    system_type: string
+    system_type: ExternalMonitoringSystems
     container: string
     allowEdit: boolean
 }
@@ -22,12 +24,9 @@ export interface ExternalMonitoringPost {
     container_id: number | null
     name: string
     description: string
-    system_type: string
-    json_data: any
-}
-
-export interface ExternalMonitoringGet {
-    externalMonitoring: ExternalMonitoringPost
+    system_type: ExternalMonitoringSystems | ''
+    json_data: any,
+    message_template_ids?: number[],
 }
 
 export interface ExternalMonitoringsIndexParams {
@@ -58,11 +57,12 @@ export function getDefaultExternalMonitoringsIndexParams(): ExternalMonitoringsI
 
 export interface ExternalMonitoringConfig {
     config: {
-        config: ExternalMonitoringConfigIcinga2 | ExternalMonitoringConfigOpmanager | ExternalMonitoringConfigPrtg
+        config: ExternalMonitoringConfigIcinga2 | ExternalMonitoringConfigOpmanager | ExternalMonitoringConfigPrtg | ExternalMonitoringConfigFlowChief | ExternalMonitoringConfigLibreNMS
         formFields: DynamicalFormFields
     }
 }
 
+// Server code: IcingaExternalMonitoringJson.php
 export interface ExternalMonitoringConfigIcinga2 {
     api_url: string
     api_user: string
@@ -74,6 +74,7 @@ export interface ExternalMonitoringConfigIcinga2 {
     receive_acknowledgements: number
 }
 
+// Server code: OpManagerExternalMonitoringJson.php
 export interface ExternalMonitoringConfigOpmanager {
     api_url: string
     api_key: string
@@ -82,6 +83,7 @@ export interface ExternalMonitoringConfigOpmanager {
     polling_interval: number
 }
 
+// Server code: PrtgExternalMonitoringJson.php
 export interface ExternalMonitoringConfigPrtg {
     api_url: string
     api_token: string
@@ -93,6 +95,63 @@ export interface ExternalMonitoringConfigPrtg {
     include_channels: number
 }
 
-export interface ExternalMonitoringsAsList{
+// Server code: FlowChiefExternalMonitoringJson.php
+export interface ExternalMonitoringConfigFlowChief {
+    api_url: string
+    api_user: string
+    api_password: string
+    use_proxy: number
+    ignore_ssl_certificate: number
+    host_prefix: string
+}
+
+// Server code: LibreNMSExternalMonitoringJson.php
+export interface ExternalMonitoringConfigLibreNMS {
+    api_url: string
+    api_key: string
+    device_types: string[] // one of appliance,collaboration,environment,firewall,loadbalancer,management,network,printer,power,server,storage,wireless,workstation
+    import_ports: number
+    import_services: number
+    track_alerts: number
+    warning_alerts_force_down_state: number
+    critical_alerts_force_down_state: number
+    polling_interval: number
+    use_proxy: number
+    ignore_ssl_certificate: number
+}
+
+export interface ExternalMonitoringsAsList {
     externalMonitorings: SelectKeyValue[]
+}
+
+
+export interface ExternalMonitoringWithFlowchiefNodesMembershipPost extends ExternalMonitoringPost {
+    flowchief_nodes_membership: FlowchiefNodesMembership[]
+}
+
+export interface FlowchiefNodesMembership {
+    id?: number // auto increment of linking table
+    external_monitoring_id: number
+    flowchief_node_id: number
+    is_recursive: boolean
+    path?: string // only used by the Angular Frontend
+}
+
+/**********************
+ *     Global action    *
+ **********************/
+export interface FlowchiefNodesByStringParams {
+    externalMonitoringId: number,
+    'filter[FlowchiefNodes.path]': string,
+    'selected[]': number[],
+}
+
+export interface ExternalMonitoringConnect {
+    status: ExternalMonitoringConnectStatus
+    messageTemplates: SelectKeyValue[]
+}
+
+export interface ExternalMonitoringConnectStatus {
+    status: boolean
+    msg: ConnectMessage
 }

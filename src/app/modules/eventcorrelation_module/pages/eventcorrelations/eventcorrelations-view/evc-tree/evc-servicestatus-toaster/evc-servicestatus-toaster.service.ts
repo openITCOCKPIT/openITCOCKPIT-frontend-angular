@@ -1,8 +1,8 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, DOCUMENT } from '@angular/core';
 import { map, Observable, Subject } from 'rxjs';
 import { EvcServicestatusToast } from '../../../eventcorrelations.interface';
 import { HttpClient } from '@angular/common/http';
-import { DOCUMENT } from '@angular/common';
+
 import { PROXY_PATH } from '../../../../../../../tokens/proxy-path.token';
 
 @Injectable({

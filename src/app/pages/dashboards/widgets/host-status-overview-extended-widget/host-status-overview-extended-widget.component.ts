@@ -16,7 +16,7 @@ import { HostStatusOverviewExtendedWidgetService } from './host-status-overview-
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { GenericValidationError } from '../../../../generic-responses';
 import {
@@ -48,12 +48,12 @@ import {
 } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { ContainersService } from '../../../containers/containers.service';
 import { ContainersLoadContainersByStringParams } from '../../../containers/containers.interface';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-host-status-overview-extended-widget',
     imports: [
         FaIconComponent,
-        NgIf,
         TranslocoDirective,
         RowComponent,
         NgClass,
@@ -87,7 +87,7 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
     protected flipped = signal<boolean>(false);
     public readonly ContainersService: ContainersService = inject(ContainersService);
     public readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
-    public config?: HostStatusOverviewExtendedWidgetConfig;
+    public config!: HostStatusOverviewExtendedWidgetConfig;
     private readonly HostStatusOverviewExtendedWidgetService = inject(HostStatusOverviewExtendedWidgetService);
     public statusCount: number | null = null;
     public hostIds: number[] = [];
@@ -106,6 +106,14 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
     public errors: GenericValidationError | null = null;
 
     @ViewChild('boxContainer') boxContainer?: ElementRef;
+
+    public priorityFilter: { [key: string]: boolean } = {
+        '1': false,
+        '2': false,
+        '3': false,
+        '4': false,
+        '5': false
+    };
 
     constructor() {
         super();
@@ -130,6 +138,15 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
                     this.containerIds = this.config.Container._ids.split(',').map(Number).filter(Boolean);
                     this.hostgroupsIds = this.config.Hostgroup._ids.split(',').map(Number).filter(Boolean);
                     this.hostIds = result.hostIds;
+
+                    _.map(this.config.hostpriority,
+                        (value) => {
+                            if (this.priorityFilter.hasOwnProperty(value)) {
+                                this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                            }
+                        }
+                    );
+
                     this.cdr.markForCheck();
                 }));
         }
@@ -200,6 +217,14 @@ export class HostStatusOverviewExtendedWidget extends BaseWidgetComponent implem
         this.config.Host.not_keywords = this.notKeywords.join(',');
         this.config.Container._ids = this.containerIds.join(',');
         this.config.Hostgroup._ids = this.hostgroupsIds.join(',');
+        this.config.hostpriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.hostpriority.push(key);
+                }
+            }
+        );
 
         this.subscriptions.add(this.HostStatusOverviewExtendedWidgetService.saveWidgetConfig(this.widget.id, this.config)
             .subscribe({

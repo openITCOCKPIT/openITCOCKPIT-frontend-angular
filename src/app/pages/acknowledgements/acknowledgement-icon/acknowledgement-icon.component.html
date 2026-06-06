@@ -23,15 +23,15 @@
                         </c-row>
                     } @else {
                         <h3 class="popover-header">
-                            <ng-container *ngIf="type === 'hosts'">
+                            @if (type === 'hosts') {
                                 {{ t('State of host is acknowledged') }}
-                            </ng-container>
-                            <ng-container *ngIf="type === 'services'">
+                            }
+                            @if (type === 'services') {
                                 {{ t('State of service is acknowledged') }}
-                            </ng-container>
-                            <ng-container *ngIf="acknowledgement?.is_sticky">
+                            }
+                            @if (acknowledgement?.is_sticky) {
                                 ({{ t('Sticky') }})
-                            </ng-container>
+                            }
                         </h3>
                         <div class="popover-body">
                             <dl class="row">
@@ -52,11 +52,15 @@
     } @else {
         <span class="p-1">
             <!-- User has no permissions to browser action -->
-            <fa-icon [icon]="['far', 'user']" *ngIf="acknowledgement_type === AcknowledgementTypes.Normal"
-                     [cTooltip]="'Acknowledgedment' | transloco" cTooltipPlacement="right"></fa-icon>
+            @if (acknowledgement_type === AcknowledgementTypes.Normal) {
+                <fa-icon [icon]="['far', 'user']"
+                         [cTooltip]="'Acknowledgedment' | transloco" cTooltipPlacement="right"></fa-icon>
+            }
 
-            <fa-icon [icon]="['fas', 'user']" *ngIf="acknowledgement_type === AcknowledgementTypes.Sticky"
-                     [cTooltip]="'Sticky Acknowledgement' | transloco" cTooltipPlacement="right"></fa-icon>
+            @if (acknowledgement_type === AcknowledgementTypes.Sticky) {
+                <fa-icon [icon]="['fas', 'user']"
+                         [cTooltip]="'Sticky Acknowledgement' | transloco" cTooltipPlacement="right"></fa-icon>
+            }
         </span>
     }
 </ng-container>

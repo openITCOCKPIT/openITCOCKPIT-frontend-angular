@@ -67,6 +67,8 @@ export interface Timeperiod {
     timeperiod_timeranges: TimeperiodRange[],
     validate_timeranges: true,
     description: string
+    calendar?: GenericIdAndName
+    exclude_timeperiod_id: number | null
 }
 
 export interface TimeperiodRange {
@@ -148,6 +150,7 @@ export interface TimeperiodUsedByObjects {
     Serviceescalations: GenericIdResponse[]
     Services: TimeperiodUsedByService[]
     Servicetemplates: GenericIdAndName[]
+    Timeperiods: GenericIdAndName[]
     Autoreports: GenericIdAndName[]
 }
 

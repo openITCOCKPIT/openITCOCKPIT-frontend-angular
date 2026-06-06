@@ -39,50 +39,49 @@
 
             <oitc-form-loader [isVisible]="contactgroups.length === 0"></oitc-form-loader>
 
-            <c-card class="mb-3" *ngFor="let contactgroup of contactgroups; let i = index">
-                <c-card-header>
-                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                    <span class="ms-1">
-                        {{ t('Source contact group:') }}
-                        {{ contactgroup.Source.name }}
-                    </span>
-                </c-card-header>
-                <c-card-body>
-
-                    <div class="mb-3">
-                        <label cLabel for="name{{i}}">
-                            {{ t('Name') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <input cFormControl
-                               required
-                               type="text"
-                               name="name{{i}}"
-                               id="name{{i}}"
-                               [(ngModel)]="contactgroup.Contactgroup.container.name"
-                               oitcFormError [errors]="contactgroup.Error" errorField="name">
-                        <oitc-form-feedback [errors]="contactgroup.Error" errorField="name"></oitc-form-feedback>
-                        <div class="help-block">
-                            {{ t('Name of the new contact group') }}
+            @for (contactgroup of contactgroups; track contactgroup; let i = $index) {
+                <c-card class="mb-3">
+                    <c-card-header>
+                        <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        <span class="ms-1">
+                            {{ t('Source contact group:') }}
+                            {{ contactgroup.Source.name }}
+                        </span>
+                    </c-card-header>
+                    <c-card-body>
+                        <div class="mb-3">
+                            <label cLabel for="name{{i}}">
+                                {{ t('Name') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl
+                                   required
+                                   type="text"
+                                   name="name{{i}}"
+                                   id="name{{i}}"
+                                   [(ngModel)]="contactgroup.Contactgroup.container.name"
+                                   oitcFormError [errors]="contactgroup.Error" errorField="name">
+                            <oitc-form-feedback [errors]="contactgroup.Error" errorField="name"></oitc-form-feedback>
+                            <div class="help-block">
+                                {{ t('Name of the new contact group') }}
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label cLabel for="description{{i}}">
-                            {{ t('Description') }}
-                        </label>
-                        <input cFormControl
-                               type="text"
-                               name="description{{i}}"
-                               id="description{{i}}"
-                               [(ngModel)]="contactgroup.Contactgroup.description"
-                               oitcFormError [errors]="contactgroup.Error" errorField="description">
-                        <oitc-form-feedback [errors]="contactgroup.Error"
-                                            errorField="description"></oitc-form-feedback>
-                    </div>
-
-                </c-card-body>
-            </c-card>
+                        <div class="mb-3">
+                            <label cLabel for="description{{i}}">
+                                {{ t('Description') }}
+                            </label>
+                            <input cFormControl
+                                   type="text"
+                                   name="description{{i}}"
+                                   id="description{{i}}"
+                                   [(ngModel)]="contactgroup.Contactgroup.description"
+                                   oitcFormError [errors]="contactgroup.Error" errorField="description">
+                            <oitc-form-feedback [errors]="contactgroup.Error"
+                                                errorField="description"></oitc-form-feedback>
+                        </div>
+                    </c-card-body>
+                </c-card>
+            }
 
         </c-card-body>
         <c-card-footer class="text-end">

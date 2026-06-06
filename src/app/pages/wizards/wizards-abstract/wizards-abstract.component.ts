@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
-import { Service, WizardGet, WizardPost } from '../wizards.interface';
+import { ServiceForWizard, WizardGet, WizardPost } from '../wizards.interface';
 import { WizardsService } from '../wizards.service';
 import {
     WizardsDynamicfieldsComponent
@@ -42,6 +42,7 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
     protected errors: GenericValidationError = {} as GenericValidationError;
 
     // These fields are implemented in the child classes
+    protected DiscoveryIsRunning: boolean = false;
     protected WizardService: WizardsService = {} as WizardsService;
     protected WizardGet: WizardGet = {} as WizardGet;
     protected post: WizardPost = {
@@ -68,7 +69,7 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
                             description: result.servicetemplates[key].description,
                             servicecommandargumentvalues: result.servicetemplates[key].servicetemplatecommandargumentvalues,
                             createService: !this.isServiceAlreadyPresent(result.servicesNamesForExistCheck, result.servicetemplates[key].name)
-                        } as Service);
+                        } as ServiceForWizard);
                 }
 
                 // Call custom implementation that may import specific fields from the given result.
@@ -91,13 +92,18 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
         const updatedPost = JSON.parse(JSON.stringify(this.post));
 
         // Remove all services from the copied object where createService is false
-        updatedPost.services = updatedPost.services.filter((service: Service) => {
+        updatedPost.services = updatedPost.services.filter((service: ServiceForWizard) => {
             return service.createService;
+        });
+        // Remove all services that have been filtered out
+        updatedPost.services = updatedPost.services.filter((service: ServiceForWizard) => {
+            return this.childComponent.hasName(service.name);
         });
 
         this.subscriptions.add(this.WizardService.submit(updatedPost)
             .subscribe((result: GenericResponseWrapper) => {
                 this.errors = {} as GenericValidationError;
+                this.cdr.markForCheck();
                 if (result.success) {
                     const title: string = this.TranslocoService.translate('Success');
                     const msg: string = this.TranslocoService.translate('Data saved successfully');
@@ -120,7 +126,20 @@ export abstract class WizardsAbstractComponent implements AfterViewInit, OnInit,
 
     // This hack is needed to make the child component to update its view.
     protected wizardLoad(result: WizardGet): void {
-        this.childComponent.cdr.markForCheck();
+        this.cdr.markForCheck();
+        if (this.childComponent) {
+            this.childComponent.cdr.markForCheck();
+        }
+    }
+
+    protected beginDiscovery(): void {
+        this.DiscoveryIsRunning = true;
+        this.cdr.markForCheck();
+    }
+
+    protected endDiscovery(): void {
+        this.DiscoveryIsRunning = false;
+        this.cdr.markForCheck();
     }
 
 }

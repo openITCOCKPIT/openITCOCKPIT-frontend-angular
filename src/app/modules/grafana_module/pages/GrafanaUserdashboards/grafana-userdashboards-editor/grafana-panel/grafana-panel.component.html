@@ -4,10 +4,12 @@
             <c-row class="mb-1">
                 <c-col xs="12">
                     {{ panelLocal.title }}
-                    <span class="text-muted italic" *ngIf="humanUnit">
-                        {{ t('in') }}
-                        {{ humanUnit }}
-                    </span>
+                    @if (humanUnit) {
+                        <span class="text-muted italic">
+                            {{ t('in') }}
+                            {{ humanUnit }}
+                        </span>
+                    }
 
                     <c-button-group role="group" class="float-end">
                         <button cButton color="default" class="ripple text-success" size="xs"
@@ -61,11 +63,12 @@
 
                     <c-col class="text-end p-0">
                         <div class="input-group input-group-sm justify-content-end">
-                            <span class="input-group-text py-0 border-end-0 border-start-0"
-                                  *ngIf="metric.color"
-                                  [style.background-color]="metric.color">
-                                <fa-icon [icon]="['fas', 'palette']" class="text-white"></fa-icon>
-                            </span>
+                            @if (metric.color) {
+                                <span class="input-group-text py-0 border-end-0 border-start-0"
+                                      [style.background-color]="metric.color">
+                                    <fa-icon [icon]="['fas', 'palette']" class="text-white"></fa-icon>
+                                </span>
+                            }
 
                             <span class="input-group-text py-0 chart-type-bg border-start-0">
                                 <oitc-chart-type-icon
@@ -91,12 +94,14 @@
                 </c-row>
             }
 
-            <c-row *ngIf="panelLocal.metrics.length === 0">
-                <c-col xs="12" class="text-info text-center p-2">
-                    <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                    {{ t('This panel is empty. Start by adding metrics.') }}
-                </c-col>
-            </c-row>
+            @if (panelLocal.metrics.length === 0) {
+                <c-row>
+                    <c-col xs="12" class="text-info text-center p-2">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('This panel is empty. Start by adding metrics.') }}
+                    </c-col>
+                </c-row>
+            }
 
         </div>
     }

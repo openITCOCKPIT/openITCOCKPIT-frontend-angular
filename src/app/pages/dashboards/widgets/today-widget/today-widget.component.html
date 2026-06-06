@@ -1,20 +1,25 @@
-<div class="d-flex h-100 flex-column" #calendarContainer *ngIf="widget">
-    <c-row class="h-100">
-        <c-col [xs]="12" class="flex-1 today-padding">
-            <c-card *ngIf="widget && response" class="h-100">
-                <c-card-header cBgColor="primary"
-                               class="text-white h-25 flex-align-items-center d-flex justify-content-center">
-                    {{ response.dateDetails.monthName }}
-                </c-card-header>
-                <c-card-body [id]="'day-'+widget.id" class="flex-align-items-center justify-content-center d-flex p-0"
-                             [style.font-size.px]="fontSize">
-                    {{ response.dateDetails.dayNumber }}
-                </c-card-body>
-                <c-card-footer cBgColor="primary"
-                               class="text-white text-center flex-align-items-center justify-content-center d-flex">
-                    <small>{{ response.dateDetails.weekday }}</small>
-                </c-card-footer>
-            </c-card>
-        </c-col>
-    </c-row>
-</div>
+@if (widget) {
+    <div class="d-flex h-100 flex-column" #calendarContainer>
+        <c-row class="h-100">
+            <c-col [xs]="12" class="flex-1 today-padding">
+                @if (widget && response) {
+                    <c-card class="h-100">
+                        <c-card-header cBgColor="primary"
+                                       class="text-white h-25 flex-align-items-center d-flex justify-content-center">
+                            {{ response.dateDetails.monthName }}
+                        </c-card-header>
+                        <c-card-body [id]="'day-'+widget.id"
+                                     class="flex-align-items-center justify-content-center d-flex p-0"
+                                     [style.font-size.px]="fontSize">
+                            {{ response.dateDetails.dayNumber }}
+                        </c-card-body>
+                        <c-card-footer cBgColor="primary"
+                                       class="text-white text-center flex-align-items-center justify-content-center d-flex">
+                            <small>{{ response.dateDetails.weekday }}</small>
+                        </c-card-footer>
+                    </c-card>
+                }
+            </c-col>
+        </c-row>
+    </div>
+}

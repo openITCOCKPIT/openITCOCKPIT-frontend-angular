@@ -22,7 +22,7 @@ import { ConnectionOperator, EvcTreeValidationErrors } from '../../eventcorrelat
 import { EFConnectableSide, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
 import { generateGuid } from '@foblex/utils';
 import { IPoint, PointExtensions } from '@foblex/2d';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ButtonGroupComponent, ColComponent, RowComponent, TooltipDirective } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -36,6 +36,7 @@ import { ServiceTypesEnum } from '../../../../../../pages/services/services.enum
 import { ISize } from '@foblex/2d/size/i-size';
 import { Subscription } from 'rxjs';
 import { EventcorrelationsService } from '../../eventcorrelations.service';
+import { LocalNumberPipe } from '../../../../../../pipes/local-number.pipe';
 
 interface LayerDetails {
     [key: string]: {
@@ -121,16 +122,16 @@ const GROUP_HEIGHT = 50;
         NgClass,
         RowComponent,
         ColComponent,
-        NgIf,
         TooltipDirective,
         FaIconComponent,
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        ButtonGroupComponent
+        ButtonGroupComponent,
+        LocalNumberPipe
     ],
     templateUrl: './evc-tree-edit.component.html',
-    styleUrl: './evc-tree-edit.component.css',
+    styleUrl: './evc-tree-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EvcTreeEditComponent implements OnDestroy {
@@ -180,6 +181,11 @@ export class EvcTreeEditComponent implements OnDestroy {
         this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered unknown');
 
         effect(() => {
+
+            // Whenever one of the inputs changes, we need to update the graph
+            // This read will "register" this effect to run whenever the evcTree input changes
+            const evcTree = this.evcTree();
+
             if (this.isInitialized) {
                 this.updateGraph();
             }
@@ -415,10 +421,18 @@ export class EvcTreeEditComponent implements OnDestroy {
 
                         // Add the operator
                         if (evcTreeItem.operator !== null) {
+                            let operator: EventcorrelationOperators = evcTreeItem.operator as EventcorrelationOperators;
+                            let operatorText = evcTreeItem.operator;
+                            if ([EventcorrelationOperators.SCORESCLALARGREATER,
+                                EventcorrelationOperators.SCORESCLALARLESSER,
+                                EventcorrelationOperators.SCORERANGEINCLUSIVE,
+                                EventcorrelationOperators.SCORERANGEEXCLUSIVE].includes(operator)) {
+                                operatorText = this.TranslocoService.translate('score') + ' ⚖️';
+                            }
                             nodes.push({
                                 id: `${evcTreeItem.id}_operator`,
                                 parentId: evcTreeItem.id.toString(),
-                                operator: evcTreeItem.operator,
+                                operator: operatorText,
                                 type: 'operator',
                                 layerIndex: layerIndex,
                                 totalHeight: totalHeight,
@@ -506,7 +520,7 @@ export class EvcTreeEditComponent implements OnDestroy {
         // https://flow.foblex.com/docs/f-canvas-component
         if (this.fCanvasComponent) {
             this.fCanvasComponent.resetScaleAndCenter(false);
-            this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
+            this.fCanvasComponent._setPosition(PointExtensions.initialize(0, 0));
 
             //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 50), false);
         }
@@ -531,4 +545,5 @@ export class EvcTreeEditComponent implements OnDestroy {
     protected readonly Number = Number;
     protected readonly EFConnectableSide = EFConnectableSide;
 
+    protected readonly EventcorrelationOperators = EventcorrelationOperators;
 }

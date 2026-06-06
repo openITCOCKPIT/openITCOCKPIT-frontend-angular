@@ -10,7 +10,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
     CardBodyComponent,
     CardComponent,
@@ -27,6 +27,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
     selector: 'oitc-resources-statuslog',
@@ -36,7 +37,6 @@ import {
         TranslocoDirective,
         RouterLink,
         BlockLoaderComponent,
-        NgIf,
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
@@ -44,13 +44,13 @@ import {
         ContainerComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
         NoRecordsComponent,
         XsButtonDirective,
         NgClass,
         ColComponent,
         PaginateOrScrollComponent,
-        RowComponent
+        RowComponent,
+        BackButtonDirective
     ],
     templateUrl: './resources-statuslog.component.html',
     styleUrl: './resources-statuslog.component.css',

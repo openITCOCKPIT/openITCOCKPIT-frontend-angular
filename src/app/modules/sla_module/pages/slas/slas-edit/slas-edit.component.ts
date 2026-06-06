@@ -39,7 +39,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import {
     TimeperiodDetailsTooltipComponent
@@ -69,7 +69,6 @@ import { TimeperiodsService } from '../../../../../pages/timeperiods/timeperiods
         RequiredIconComponent,
         SelectComponent,
         FormErrorDirective,
-        NgIf,
         FormFeedbackComponent,
         FormsModule,
         FormDirective,
@@ -92,7 +91,7 @@ import { TimeperiodsService } from '../../../../../pages/timeperiods/timeperiods
         FaStackItemSizeDirective,
         PermissionDirective,
         FormLoaderComponent,
-        AsyncPipe,
+        AsyncPipe
     ],
     templateUrl: './slas-edit.component.html',
     styleUrl: './slas-edit.component.css',

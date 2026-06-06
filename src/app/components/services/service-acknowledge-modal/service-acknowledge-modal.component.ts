@@ -55,7 +55,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
-import { NgIf } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ExternalCommandsService, ServiceAcknowledgeItem } from '../../../services/external-commands.service';
@@ -64,28 +64,27 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 @Component({
     selector: 'oitc-service-acknowledge-modal',
     imports: [
-    TranslocoDirective,
-    ModalComponent,
-    ButtonCloseDirective,
-    FaIconComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    ModalFooterComponent,
-    ModalBodyComponent,
-    ColComponent,
-    FormControlDirective,
-    FormLabelDirective,
-    FormTextDirective,
-    NgIf,
-    ReactiveFormsModule,
-    RowComponent,
-    FormsModule,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    TranslocoPipe,
-    XsButtonDirective
-],
+        TranslocoDirective,
+        ModalComponent,
+        ButtonCloseDirective,
+        FaIconComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ModalFooterComponent,
+        ModalBodyComponent,
+        ColComponent,
+        FormControlDirective,
+        FormLabelDirective,
+        FormTextDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        FormsModule,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        TranslocoPipe,
+        XsButtonDirective
+    ],
     templateUrl: './service-acknowledge-modal.component.html',
     styleUrl: './service-acknowledge-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

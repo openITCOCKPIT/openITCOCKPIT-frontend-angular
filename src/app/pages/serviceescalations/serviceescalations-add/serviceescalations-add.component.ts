@@ -38,7 +38,7 @@ import { Subscription } from 'rxjs';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
@@ -71,7 +71,6 @@ import { HistoryService } from '../../../history.service';
         FormErrorDirective,
         FormFeedbackComponent,
         FormLabelDirective,
-        NgIf,
         RequiredIconComponent,
         SelectComponent,
         MultiSelectComponent,

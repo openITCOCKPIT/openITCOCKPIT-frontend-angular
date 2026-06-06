@@ -18,6 +18,7 @@ import {
 import { formatDate } from '@angular/common';
 import { WidgetGetForRender } from '../../../../pages/dashboards/dashboards.interface';
 import { GenericResponseWrapper } from '../../../../generic-responses';
+import { getUserDate } from '../../../../services/timezone.service';
 
 @Injectable({
     providedIn: 'root'
@@ -92,7 +93,7 @@ export class CustomAlertsService {
     }
 
     public getServiceHistory(serviceId: number): Observable<CustomalertServiceHistory> {
-        let now = new Date();
+        let now: Date = getUserDate();
         // From: 30 days ago
         let fromStr: string = formatDate(new Date(now.getTime() - 86400000 * 30), 'yyyy-MM-ddTHH:mm', 'en-US');
         // To: Tomorrow

@@ -21,7 +21,6 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CheckAttemptsInputComponent
 } from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -31,7 +30,7 @@ import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/i
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { MacrosComponent } from '../../../components/macros/macros.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PaginatorModule } from 'primeng/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -91,8 +90,6 @@ import { HistoryService } from '../../../history.service';
         MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NgSelectModule,
         PaginatorModule,
         PermissionDirective,
@@ -135,6 +132,8 @@ export class ServicesAddComponent {
         areContactsInheritedFromHost: false,
         areContactsInheritedFromServicetemplate: false,
     };
+
+    public servicenameCheckedForDuplicates: string = '';
 
     public servicetemplates: SelectKeyValue[] = [];
     public servicegroups: SelectKeyValue[] = [];
@@ -380,6 +379,8 @@ export class ServicesAddComponent {
     public checkForDuplicateServicename() {
         const existingServicesNames: string[] = Object.values(this.existingServices);
         this.data.isServicenameInUse = existingServicesNames.includes(this.post.name);
+        // Ensure that the service name in the warning box will not change until the user changes the name again
+        this.servicenameCheckedForDuplicates = this.post.name;
         this.cdr.markForCheck();
     }
 

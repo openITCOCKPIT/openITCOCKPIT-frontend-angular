@@ -1,5 +1,5 @@
-import { Component, inject } from "@angular/core";
-import { DOCUMENT } from "@angular/common";
+import { Component, DOCUMENT, inject } from "@angular/core";
+
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { authGuard } from "./auth/auth.guard";
 import { snmpTrapModuleRoutes } from './modules/snmp_trap_module/snmp_trap_module.routes';
@@ -37,6 +37,31 @@ import { slackModuleRoutes } from './modules/slack_module/slack_module.routes';
 import { designModuleRoutes } from './modules/design_module/design_module.routes';
 import { mattermostModuleRoutes } from './modules/mattermost_module/mattermost_module.routes';
 import { servicenowModuleRoutes } from './modules/servicenow_module/servicenow_module.routes';
+import { dellModuleRoutes } from './modules/dell_module/dell_module.routes';
+import { proxmoxModuleRoutes } from './modules/proxmox_module/proxmox_module.routes';
+import { ms365ModuleRoutes } from './modules/ms365_module/ms365_module.routes';
+import { mshypervModuleRoutes } from './modules/mshyperv_module/mshyperv_module.routes';
+import { ciscoModuleRoutes } from './modules/cisco_module/cisco_module.routes';
+import { networkModuleRoutes } from './modules/network_module/network_module.routes';
+import { broadcomProxyModuleRoutes } from './modules/broadcomproxy_module/broadcomproxy_module.routes';
+import { apacheModuleRoutes } from './modules/apache_module/apache_module.routes';
+import { nutanixModuleRoutes } from './modules/nutanix_module/nutanix_module.routes';
+import { gudeModuleRoutes } from './modules/gude_module/gude_module.routes';
+import { nginxModuleRoutes } from './modules/nginx_module/nginx_module.routes';
+import { citrixModuleRoutes } from './modules/citrix_module/citrix_module.routes';
+import { arubaModuleRoutes } from './modules/aruba_module/aruba_module.routes';
+import { fortinetModuleRoutes } from './modules/fortinet_module/fortinet_module.routes';
+import { fujitsuModuleRoutes } from './modules/fujitsu_module/fujitsu_module.routes';
+import { netAppModuleRoutes } from './modules/netapp_module/netapp_module.routes';
+import { nextcloudModuleRoutes } from './modules/nextcloud_module/nextcloud_module.routes';
+import { paloAltoModuleRoutes } from './modules/palo_alto_module/palo_alto_module.routes';
+import { msWindowsAgentlessModuleRoutes } from './modules/mswindowsagentless_module/mswindowsagentless_module.routes';
+import { kubernetesModuleRoutes } from './modules/kubernetes_module/kubernetes_module.routes';
+import { broadcomModuleRoutes } from './modules/broadcom_module/broadcom_module.routes';
+import { redfishModuleRoutes } from './modules/redfish_module/redfish_module.routes';
+import { checkpointModuleRoutes } from './modules/checkpoint_module/checkpoint_module.routes';
+import { raritanModuleRoutes } from './modules/raritan_module/raritan_module.routes';
+import { sonicWallModuleRoutes } from './modules/sonic_wall_module/sonic_wall_module.routes';
 import { telegramModuleRoutes } from "./modules/telegram_module/telegram_module.routes";
 
 @Component({
@@ -97,6 +122,31 @@ const moduleRoutes: Routes = [
     ...designModuleRoutes,
     ...mattermostModuleRoutes,
     ...servicenowModuleRoutes,
+    ...dellModuleRoutes,
+    ...proxmoxModuleRoutes,
+    ...ms365ModuleRoutes,
+    ...mshypervModuleRoutes,
+    ...ciscoModuleRoutes,
+    ...broadcomProxyModuleRoutes,
+    ...apacheModuleRoutes,
+    ...nutanixModuleRoutes,
+    ...networkModuleRoutes,
+    ...gudeModuleRoutes,
+    ...nginxModuleRoutes,
+    ...citrixModuleRoutes,
+    ...arubaModuleRoutes,
+    ...fortinetModuleRoutes,
+    ...fujitsuModuleRoutes,
+    ...netAppModuleRoutes,
+    ...nextcloudModuleRoutes,
+    ...paloAltoModuleRoutes,
+    ...kubernetesModuleRoutes,
+    ...broadcomModuleRoutes,
+    ...redfishModuleRoutes,
+    ...msWindowsAgentlessModuleRoutes,
+    ...checkpointModuleRoutes,
+    ...raritanModuleRoutes,
+    ...sonicWallModuleRoutes,
     ...telegramModuleRoutes
 ];
 /***    Core routes   ***/
@@ -719,6 +769,70 @@ const coreRoutes: Routes = [{
 }, {
     path: 'administrators/debug',
     loadComponent: () => import('./pages/administrators/administrators-debug/administrators-debug.component').then(m => m.AdministratorsDebugComponent)
+}, {
+    path: 'organizationalcharts/index',
+    loadComponent: () => import('./pages/organizationalcharts/organizational-charts-index/organizational-charts-index.component').then(m => m.OrganizationalChartsIndexComponent)
+}, {
+    path: 'organizationalcharts/add',
+    loadComponent: () => import('./pages/organizationalcharts/organizational-charts-add/organizational-charts-add.component').then(m => m.OrganizationalChartsAddComponent)
+}, {
+    path: 'organizationalcharts/edit/:id',
+    loadComponent: () => import('./pages/organizationalcharts/organizational-charts-edit/organizational-charts-edit.component').then(m => m.OrganizationalChartsEditComponent)
+}, {
+    path: 'organizationalcharts/view/:id',
+    loadComponent: () => import('./pages/organizationalcharts/organizational-charts-view/organizational-charts-view.component').then(m => m.OrganizationalChartsViewComponent)
+}, {
+    path: 'organizationalcharts/browserView',
+    loadComponent: () => import('./pages/organizationalcharts/organizational-charts-browser-view/organizational-charts-browser-view.component').then(m => m.OrganizationalChartsBrowserViewComponent)
+}, {
+    path: 'statuspagegroups/add',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-add-step-one/statuspagegroups-add-step-one.component').then(m => m.StatuspagegroupsAddStepOneComponent)
+}, {
+    path: 'statuspagegroups/edit/:id',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-edit-step-one/statuspagegroups-edit-step-one.component').then(m => m.StatuspagegroupsEditStepOneComponent)
+}, {
+    path: 'statuspagegroups/editStepTwo/:id',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-edit-step-two/statuspagegroups-edit-step-two.component').then(m => m.StatuspagegroupsEditStepTwoComponent)
+}, {
+    path: 'statuspagegroups/view/:id',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-view/statuspagegroups-view.component').then(m => m.StatuspagegroupsViewComponent)
+}, {
+
+    path: 'statuspagegroups/index',
+    loadComponent: () => import('./pages/statuspagegroups/statuspagegroups-index/statuspagegroups-index.component').then(m => m.StatuspagegroupsIndexComponent)
+}, {
+    path: 'packages/linux',
+    loadComponent: () => import('./pages/packages/packages-linux/packages-linux.component').then(m => m.PackagesLinuxComponent)
+}, {
+    path: 'packages/view_linux/:id',
+    loadComponent: () => import('./pages/packages/packages-view-linux/packages-view-linux.component').then(m => m.PackagesViewLinuxComponent)
+}, {
+    path: 'packages/windows_updates',
+    loadComponent: () => import('./pages/packages/packages-windows-updates/packages-windows-updates.component').then(m => m.PackagesWindowsUpdatesComponent)
+}, {
+    path: 'packages/view_windows_update/:id',
+    loadComponent: () => import('./pages/packages/packages-view-windows-update/packages-view-windows-update.component').then(m => m.PackagesViewWindowsUpdateComponent)
+}, {
+    path: 'packages/windows',
+    loadComponent: () => import('./pages/packages/packages-windows/packages-windows.component').then(m => m.PackagesWindowsComponent)
+}, {
+    path: 'packages/view_windows/:id',
+    loadComponent: () => import('./pages/packages/packages-view-windows-app/packages-view-windows-app.component').then(m => m.PackagesViewWindowsAppComponent)
+}, {
+    path: 'packages/macos_updates',
+    loadComponent: () => import('./pages/packages/packages-macos-updates/packages-macos-updates.component').then(m => m.PackagesMacosUpdatesComponent)
+}, {
+    path: 'packages/view_macos_update/:id',
+    loadComponent: () => import('./pages/packages/packages-view-macos-update/packages-view-macos-update.component').then(m => m.PackagesViewMacosUpdateComponent)
+}, {
+    path: 'packages/macos',
+    loadComponent: () => import('./pages/packages/packages-macos/packages-macos.component').then(m => m.PackagesMacosComponent)
+}, {
+    path: 'packages/view_macos/:id',
+    loadComponent: () => import('./pages/packages/packages-view-macos-app/packages-view-macos-app.component').then(m => m.PackagesViewMacosAppComponent)
+}, {
+    path: 'patchstatus/index',
+    loadComponent: () => import('./pages/patchstatus/patchstatus-index/patchstatus-index.component').then(m => m.PatchstatusIndexComponent)
 }, {
     path: 'error/403',
     loadComponent: () => import('./layouts/coreui/errors/error403/error403.component').then(m => m.Error403Component)

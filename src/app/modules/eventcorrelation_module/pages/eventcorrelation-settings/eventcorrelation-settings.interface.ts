@@ -9,6 +9,7 @@ export interface CurrentEventcorrelationSettings {
     status_disabled_service: number
     status_downtime_service: number
     connection_line: string
+    subject_length_limit: number
     created: string
     modified: string
 }
@@ -19,6 +20,7 @@ export interface EventcorrelationSettingsPost {
     status_disabled_service: number
     status_downtime_service: number
     connection_line: string
+    subject_length_limit: number
     EVC_CONSIDER_STATETYPE: boolean
     EVC_CONSIDER_STATE_COUNT: boolean
     EVC_REFLECT_CRITICAL_STATE: boolean

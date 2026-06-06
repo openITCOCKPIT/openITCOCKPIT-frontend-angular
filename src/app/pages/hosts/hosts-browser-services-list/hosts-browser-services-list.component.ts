@@ -43,7 +43,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
 import {
     AcknowledgementIconComponent
@@ -145,8 +145,6 @@ import { HoststatusObject } from '../hosts.interface';
         ItemSelectComponent,
         MatSort,
         MatSortHeader,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         PopoverGraphComponent,
@@ -293,6 +291,8 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             return;
         }
 
+        this.SelectionServiceService.deselectAll();
+
         this.params['filter[Hosts.id]'] = this.hostId;
         this.params['filter[servicename]'] = this.filter.Services.name;
         this.params['filter[servicename_regex]'] = this.filter.Services.name_regex;
@@ -313,6 +313,8 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             return;
         }
 
+        this.SelectionServiceService.deselectAll();
+
         this.params['filter[Hosts.id]'] = this.hostId;
 
         this.subscriptions.add(this.ServicesService.getNotMonitored(this.params)
@@ -328,6 +330,8 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             return;
         }
 
+        this.SelectionServiceService.deselectAll();
+
         this.params['filter[Hosts.id]'] = this.hostId;
 
         this.subscriptions.add(this.ServicesService.getDisabled(this.params)
@@ -342,6 +346,8 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
         if (!this.hostId) {
             return;
         }
+
+        this.SelectionServiceService.deselectAll();
 
         this.params['filter[DeletedServices.host_id]'] = this.hostId;
 
@@ -643,9 +649,9 @@ export class HostsBrowserServicesListComponent implements OnInit, OnChanges, OnD
             this.router.navigate(['/', 'services', 'copy', ids]);
         } else {
 
-                const message = this.TranslocoService.translate('No items selected!');
-                this.notyService.genericError(message);
-                return;
+            const message = this.TranslocoService.translate('No items selected!');
+            this.notyService.genericError(message);
+            return;
         }
     }
 

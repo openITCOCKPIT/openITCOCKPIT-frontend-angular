@@ -4,10 +4,10 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import { TranslocoService } from "@jsverse/transloco";
 import { GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
-import { GetSlackSettings,SlackSettings, SlackSettingsPostResponse } from './slack-settings.interface';
+import { GetSlackSettings, SlackSettings, SlackSettingsPostResponse } from './slack-settings.interface';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class SlackSettingsService {
 
@@ -32,9 +32,8 @@ export class SlackSettingsService {
         const proxyPath: string = this.proxyPath;
 
         return this.http.post<SlackSettingsPostResponse>(`${proxyPath}/slack_module/slack_settings/index.json?angular=true`, {
-            SlackSettings: settings
-        }
-
+                SlackSettings: settings
+            }
         ).pipe(
             map((data: SlackSettingsPostResponse): any => {
                 // Return true on 200 Ok

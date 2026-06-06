@@ -1,6 +1,6 @@
 // The DbKey is used to identify a configuration file inside and outside the database.
 // Keep this in sync with GeneratorRegistry.php
-// https://github.com/it-novum/openITCOCKPIT/blob/development/src/itnovum/openITCOCKPIT/ConfigGenerator/GeneratorRegistry.php#L40
+// https://github.com/openITCOCKPIT/openITCOCKPIT/blob/development/src/itnovum/openITCOCKPIT/ConfigGenerator/GeneratorRegistry.php#L40
 export enum ConfigurationFilesDbKeys {
     NagiosCfg = 'NagiosCfg',
     ModGearmanModule = 'ModGearmanModule',

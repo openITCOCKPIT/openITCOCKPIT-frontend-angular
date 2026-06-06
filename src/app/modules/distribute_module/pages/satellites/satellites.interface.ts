@@ -137,6 +137,28 @@ export function getDefaultSatelliteTasksParams(): SatelliteTasksParams {
     }
 }
 
+export interface SatellitesInformationParams {
+    direction: 'asc' | 'desc' | '',
+    page: number,
+    scroll: boolean,
+    sort: string,
+    'filter[Satellites.name]': string,
+    'filter[SatelliteInformation.oitc_version]': string,
+    'filter[SatelliteInformation.os_version]': string,
+}
+
+export function getDefaultSatellitesInformationParams(): SatellitesInformationParams {
+    return {
+        direction: 'desc',
+        page: 1,
+        scroll: true,
+        sort: 'Satellites.name',
+        'filter[SatelliteInformation.oitc_version]': '',
+        'filter[SatelliteInformation.os_version]': '',
+        'filter[Satellites.name]': '',
+    }
+}
+
 // STATUS INDEX
 export interface SatelliteStatusIndex extends PaginateOrScroll {
     all_satellites: AllSatellite[]
@@ -155,36 +177,6 @@ export interface AllSatellite {
     container: string
     sync_method_name: string
     allow_edit: boolean
-}
-
-export interface SatellitesStatusParams {
-    angular: true,
-    direction: 'asc' | 'desc' | '',
-    page: number,
-    scroll: boolean,
-    sort: string,
-
-
-    'filter[Satellites.address]': string,
-    'filter[Satellites.name]': string,
-    'filter[Satellites.sync_method][]': string[],
-    'filter[status][]': number[],
-}
-
-export function getDefaultSatellitesStatusParams(): SatellitesStatusParams {
-    return {
-        angular: true,
-        direction: 'asc',
-        page: 1,
-        scroll: true,
-        sort: 'Satellites.name',
-
-
-        'filter[Satellites.address]': '',
-        'filter[Satellites.name]': '',
-        'filter[Satellites.sync_method][]': [],
-        'filter[status][]': [],
-    } as SatellitesStatusParams;
 }
 
 // SATELLITE INDEX
@@ -259,12 +251,12 @@ export interface IndexSatellite {
     name: string
     port: number
     private_key_path: string
-    proxy_url: string
+    proxy_url: string | null
     remote_port: number
     sync_method: string
     timeout: number
     timezone: string
-    url: string
+    url: string | null
     use_proxy: number
     use_timesync: number
     verify_certificate: number
@@ -318,4 +310,110 @@ export interface LoadHostsBySatelliteIds {
 export interface LoadHostsBySatelliteIdsHost {
     id: number,
     uuid: string
+}
+
+// Satellite info
+export interface SatellitesStatusParams {
+    angular: true,
+    direction: 'asc' | 'desc' | '',
+    page: number,
+    scroll: boolean,
+    sort: string,
+
+
+    'filter[Satellites.address]': string,
+    'filter[Satellites.name]': string,
+    'filter[Satellites.sync_method][]': string[],
+    'filter[status][]': number[],
+}
+
+export function getDefaultSatellitesStatusParams(): SatellitesStatusParams {
+    return {
+        angular: true,
+        direction: 'asc',
+        page: 1,
+        scroll: true,
+        sort: 'Satellites.name',
+
+
+        'filter[Satellites.address]': '',
+        'filter[Satellites.name]': '',
+        'filter[Satellites.sync_method][]': [],
+        'filter[status][]': [],
+    } as SatellitesStatusParams;
+}
+
+export interface SatelliteInfoIndex extends PaginateOrScroll {
+    all_satellite_information: AllSatelliteInformation[]
+}
+
+export interface AllSatelliteInformation {
+    id: number
+    satellite_id: string
+    oitc_version: string
+    os_version: string
+    php_version: string
+    number_of_hosts: number
+    number_of_services: number
+    system_health: string
+    modified: string
+    created: string
+    satellite: Satellite
+    last_update: string
+    system_health_json: SatelliteSystemHealthJson
+    allow_edit: boolean
+}
+
+export interface SatelliteSystemHealthJson {
+    oitc_version: string
+    oitc_is_debugging_mode: boolean
+    oitc_webinterface_enabled: boolean
+    os_version: string
+    os_kernel: string
+    os_architecture: string
+    cpu_processor: string
+    cpu_cores: number
+    cpu_load1: number
+    cpu_load5: number
+    cpu_load15: number
+    php_version: string
+    isContainer: boolean
+    LsbRelease: string
+    isDebianBased: boolean
+    isRhelBased: boolean
+    memory: {
+        memory: {
+            total: number
+            used: number
+            free: number
+            buffers: number
+            cached: number
+            percentage: number
+            state: string
+        },
+        swap: {
+            total: number
+            used: number
+            free: number
+            percentage: number
+            state: string
+        }
+    }
+    disks: {
+        disk: string
+        size: string
+        used: string
+        avail: string
+        use_percentage: number
+        mountpoint: string
+        state: string
+    }[]
+    monitoring_engine: string
+    naemonstats: {
+        NAGIOSVERSION: string
+        NAGIOSPID: number
+        NUMHOSTS: number
+        NUMSERVICES: number
+        PROGRUNTIME: string
+    }
 }

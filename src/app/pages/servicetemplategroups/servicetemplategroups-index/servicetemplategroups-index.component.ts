@@ -20,7 +20,11 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownComponent,
     DropdownDividerDirective,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormControlDirective,
     FormDirective,
     InputGroupComponent,
@@ -35,7 +39,7 @@ import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -55,6 +59,7 @@ import { NotyService } from "../../../layouts/coreui/noty.service";
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { IndexPage } from '../../../pages.interface';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
     selector: 'oitc-servicetemplategroups-index',
@@ -85,8 +90,6 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         MatSortHeader,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         ReactiveFormsModule,
@@ -96,7 +99,11 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         TranslocoPipe,
         XsButtonDirective,
         TableLoaderComponent,
-        AsyncPipe
+        AsyncPipe,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective
     ],
     templateUrl: './servicetemplategroups-index.component.html',
     styleUrl: './servicetemplategroups-index.component.css',
@@ -116,7 +123,7 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly cdr = inject(ChangeDetectorRef);
 
-    protected params: ServiceTemplateGroupsIndexParams = {} as ServiceTemplateGroupsIndexParams;
+    protected params: ServiceTemplateGroupsIndexParams = getDefaultServicetemplategroupsIndexParams();
     protected selectedItems: DeleteAllItem[] = [];
     protected readonly router: Router = inject(Router);
     protected hideFilter: boolean = true;
@@ -249,5 +256,25 @@ export class ServicetemplategroupsIndexComponent implements OnInit, OnDestroy, I
             this.notyService.genericError(message);
             return;
         }
+    }
+
+    public linkFor(format: 'pdf' | 'csv') {
+        let baseUrl = '/servicetemplategroups/listToPdf.pdf?';
+        if (format === 'csv') {
+            baseUrl = '/servicetemplategroups/listToCsv?';
+        }
+
+        let urlParams = {
+            'angular': true,
+            'sort': this.params.sort,
+            'page': this.params.page,
+            'direction': this.params.direction,
+            'filter[Servicetemplategroups.description]': this.params['filter[Servicetemplategroups.description]'],
+            'filter[Containers.name]': this.params['filter[Containers.name]']
+        };
+
+        let stringParams: HttpParams = new HttpParams();
+        stringParams = stringParams.appendAll(urlParams);
+        return baseUrl + stringParams.toString();
     }
 }

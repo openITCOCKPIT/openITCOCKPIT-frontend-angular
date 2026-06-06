@@ -19,7 +19,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -48,36 +48,34 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-servicetemplategroups-allocate-to-hostgroup',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormCheckInputDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NgSelectModule,
-    PermissionDirective,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    AlertComponent,
-    RowComponent,
-    MatTooltip,
-    TranslocoPipe,
-    ProgressComponent,
-    RouterLink,
-    SelectComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormCheckInputDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        AlertComponent,
+        RowComponent,
+        MatTooltip,
+        TranslocoPipe,
+        ProgressComponent,
+        RouterLink,
+        SelectComponent
+    ],
     templateUrl: './servicetemplategroups-allocate-to-hostgroup.component.html',
     styleUrl: './servicetemplategroups-allocate-to-hostgroup.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -115,20 +113,17 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
     }
 
 
-    private loadServices(): void {
+    public loadServices(): void {
         if (this.servicetemplategroupId === null || this.hostgroupId === null) {
             return;
         }
+
         this.ServicetemplategroupsService.allocateToHostgroupGet(this.servicetemplategroupId, this.hostgroupId).subscribe(
             (result: AllocateToHostGroupGet): void => {
                 this.cdr.markForCheck();
                 this.hostsWithServicetemplatesForDeploy = result.hostsWithServicetemplatesForDeploy
             }
         )
-    }
-
-    protected hostGroupIdChanged(): void {
-        this.loadServices();
     }
 
     protected handleHostSelect(hostIndex: number, areAllCreateServiceOnTargetHostTrue: boolean, services: AllocateToHostGroupGetService[]): void {
@@ -167,7 +162,10 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
     }
 
 
-    protected allocateToHostgroup(): void {
+    protected submit(): void {
+        if (this.servicetemplategroupId === null || this.hostgroupId === null) {
+            return;
+        }
         let i = 0;
         let count = this.hostsWithServicetemplatesForDeploy.length;
         this.isProcessing = true;
@@ -203,10 +201,10 @@ export class ServicetemplategroupsAllocateToHostgroupComponent implements OnInit
                     if (result.success) {
                         i++;
                         this.percentage = Math.round(i / count * 100);
-
                         if (i === count) {
                             this.notyService.genericSuccess();
-                            this.HistoryService.navigateWithFallback(['/services/notMonitored']);
+                            this.HistoryService.navigateWithFallback(['/', 'services', 'notMonitored']);
+                            return;
                         }
                         return;
                     }

@@ -19,7 +19,6 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -40,9 +39,8 @@ import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { formatDate, NgForOf, NgIf } from '@angular/common';
+import { formatDate } from '@angular/common';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-
 
 
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
@@ -52,47 +50,47 @@ import {
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { IndexPage } from '../../../pages.interface';
+import { NotificationReasonTypeComponent } from '../notification-reason-type/notification-reason-type.component';
 
 @Component({
     selector: 'oitc-notifications-index',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    ColComponent,
-    DebounceDirective,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    PaginatorModule,
-    RowComponent,
-    TranslocoPipe,
-    TrueFalseDirective,
-    MatSort,
-    MatSortHeader,
-    NgIf,
-    TableDirective,
-    NgForOf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    HoststatusSimpleIconComponent,
-    ContainerComponent,
-    TableLoaderComponent,
-    CardFooterComponent
-],
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        ColComponent,
+        DebounceDirective,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        PaginatorModule,
+        RowComponent,
+        TranslocoPipe,
+        TrueFalseDirective,
+        MatSort,
+        MatSortHeader,
+        TableDirective,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        HoststatusSimpleIconComponent,
+        ContainerComponent,
+        TableLoaderComponent,
+        CardFooterComponent,
+        NotificationReasonTypeComponent
+    ],
     templateUrl: './notifications-index.component.html',
     styleUrl: './notifications-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

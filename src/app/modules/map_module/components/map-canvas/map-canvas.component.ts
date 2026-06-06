@@ -1,5 +1,4 @@
 import {
-    AfterViewInit,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
@@ -9,35 +8,39 @@ import {
     inject,
     input,
     InputSignal,
+    OnDestroy,
     OnInit,
     ViewChild
 } from '@angular/core';
-import { NgClass, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { TranslocoService } from '@jsverse/transloco';
 import { Helplines } from '../../pages/mapeditors/mapeditors.interface';
 import { Map } from '../../pages/maps/maps.interface';
 import { BackgroundItemComponent } from '../background-item/background-item.component';
+import { fromEvent, Observable, Subscription } from 'rxjs';
+
 
 @Component({
     selector: 'oitc-map-canvas',
     standalone: true,
     imports: [
         NgClass,
-        NgIf,
         NgStyle
     ],
     templateUrl: './map-canvas.component.html',
     styleUrl: './map-canvas.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapCanvasComponent implements OnInit, AfterViewInit {
+export class MapCanvasComponent implements OnInit, OnDestroy {
     @ViewChild('mapCanvasContainer', {static: true}) canvasContainerRef!: ElementRef<HTMLDivElement>;
     @ViewChild('backgroundImageContainer', {static: true}) backgroundImageRef!: ElementRef<HTMLDivElement>;
     @ContentChild(BackgroundItemComponent) backgroundItem!: BackgroundItemComponent;
 
     private cdr = inject(ChangeDetectorRef);
     private readonly TranslocoService = inject(TranslocoService);
+    private resizeObservable$?: Observable<Event>;
+    private readonly subscriptions: Subscription = new Subscription();
 
     public helplines = input<Helplines>({enabled: true, size: 15});
     public map = input<Map | null | undefined>();
@@ -47,6 +50,7 @@ export class MapCanvasComponent implements OnInit, AfterViewInit {
         id: number,
         type: MapItemType
     }>();
+    public widgetHeight: InputSignal<number> = input<number>(0); // to calculate the correct height for map widget
 
     protected backgroundWidth: number | undefined | null;
     protected backgroundHeight: number | undefined | null;
@@ -63,14 +67,16 @@ export class MapCanvasComponent implements OnInit, AfterViewInit {
         });
     }
 
-    public ngOnInit(): void {
-        this.updateBackgroundSizeAndPosition();
+    ngOnDestroy(): void {
+        this.subscriptions?.unsubscribe()
     }
 
-    public ngAfterViewInit(): void {
-        setTimeout(() => {
+    public ngOnInit(): void {
+        this.resizeObservable$ = fromEvent(window, 'resize');
+        this.subscriptions.add(this.resizeObservable$.subscribe(e => {
             this.setCanvasMinHeight();
-        }, 400);
+        }));
+        this.updateBackgroundSizeAndPosition();
     }
 
     public getHelplinesClass(): string {
@@ -103,7 +109,14 @@ export class MapCanvasComponent implements OnInit, AfterViewInit {
     }
 
     private setCanvasMinHeight(): void {
-        this.canvasHeight = 600;
+        // default map height is window size
+        this.canvasHeight = window.innerHeight - 200;
+
+        // default map height in widgets
+        if (this.widgetHeight()) {
+            this.canvasHeight = this.widgetHeight();
+        }
+
         //calculate canvas height based on background position
         if (this.canvasContainerRef) {
 
@@ -121,7 +134,7 @@ export class MapCanvasComponent implements OnInit, AfterViewInit {
                 let posY = background.y - mapCanvas.y;
                 let height = posY + backgroundHeight + 11;
 
-                if (height > 600) {
+                if (height > this.canvasHeight) {
                     this.canvasHeight = height;
                 }
             }

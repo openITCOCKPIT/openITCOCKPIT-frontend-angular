@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { WizardsService } from '../../../../../pages/wizards/wizards.service';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { HpServerHardwareWizardGet, HpServerHardwareWizardPost } from './hpserverhardware-wizard.interface';
+import { WizardGet } from '../../../../../pages/wizards/wizards.interface';
+import { HpServerHardwareWizardPost } from './hpserverhardware-wizard.interface';
 
 @Injectable({
     providedIn: 'root'
 })
 export class HpServerHardwareWizardService extends WizardsService {
 
-    public fetch(hostId: number): Observable<HpServerHardwareWizardGet> {
-        return this.http.get<HpServerHardwareWizardGet>(`${this.proxyPath}/hpserverhardware_module/wizards/hpserverhardware/${hostId}.json?angular=true`).pipe(
-            map((data: HpServerHardwareWizardGet): HpServerHardwareWizardGet => {
+    public fetch(hostId: number): Observable<WizardGet> {
+        return this.http.get<WizardGet>(`${this.proxyPath}/hpserverhardware_module/wizards/hpserverhardware/${hostId}.json?angular=true`).pipe(
+            map((data: WizardGet): WizardGet => {
                 return data;
             })
         );

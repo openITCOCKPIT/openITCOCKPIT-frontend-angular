@@ -1,5 +1,5 @@
-import { inject, Injectable } from "@angular/core";
-import { DOCUMENT } from "@angular/common";
+import { inject, Injectable, DOCUMENT } from "@angular/core";
+
 import { HttpClient } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 import { PROXY_PATH } from "../../tokens/proxy-path.token";

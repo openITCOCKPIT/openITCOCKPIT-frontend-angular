@@ -34,22 +34,26 @@
                 </thead>
                 <tbody>
                     @for (metric of metrics; track metric; let index = $index) {
-                        <tr *ngIf="showAll || index < displayLimit">
-                            <td>
-                                <span class="bold">{{ metric.__name__ }}</span>
-                                &lbrace;<code class="no-padding">
-                                {{ metric.label.join(', ') }}
-                            </code>&rbrace;
+                        @if (showAll || index < displayLimit) {
+                            <tr>
+                                <td>
+                                    <span class="bold">{{ metric.__name__ }}</span>
+                                    &lbrace;<code class="no-padding">
+                                    {{ metric.label.join(', ') }}
+                                </code>&rbrace;
+                                </td>
+                                <td>{{ metric.value }}</td>
+                                <td>{{ metric.unit }}</td>
+                            </tr>
+                        }
+                    }
+                    @if (metrics.length > displayLimit) {
+                        <tr>
+                            <td colspan="3" class="text-center cursor-pointer" (click)="toggleShowAll()">
+                                <fa-icon [icon]="['fas', (showAll ? 'caret-up' : 'caret-down')]"></fa-icon>
                             </td>
-                            <td>{{ metric.value }}</td>
-                            <td>{{ metric.unit }}</td>
                         </tr>
                     }
-                <tr *ngIf="metrics.length > displayLimit">
-                    <td colspan="3" class="text-center cursor-pointer" (click)="toggleShowAll()">
-                        <fa-icon [icon]="['fas', (showAll ? 'caret-up' : 'caret-down')]"></fa-icon>
-                    </td>
-                </tr>
                 </tbody>
             </table>
         </c-col>

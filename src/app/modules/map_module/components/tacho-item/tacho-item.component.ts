@@ -1,6 +1,7 @@
 import {
     ChangeDetectionStrategy,
     Component,
+    DOCUMENT,
     effect,
     inject,
     input,
@@ -17,8 +18,7 @@ import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
-import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { DOCUMENT, NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { RadialGauge } from 'canvas-gauges';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 import {
@@ -29,18 +29,17 @@ import {
     ServiceForMapItem,
     Setup
 } from '../map-item-base/map-item-base.interface';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 @Component({
     selector: 'oitc-tacho-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgIf, NgClass],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgClass, AngularDraggableModule],
     templateUrl: './tacho-item.component.html',
     styleUrl: './tacho-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
-    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
-
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
 
@@ -82,6 +81,8 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     private responsePerfdata!: Perfdata;
     private color: string = '';
     private setup!: Setup;
+    protected allowView: boolean = false;
+
 
     constructor(parent: MapCanvasComponent, private renderer: Renderer2) {
         super(parent);
@@ -125,21 +126,25 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         };
 
         this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
-            .subscribe((result: MapItemRoot) => {
-                this.color = result.data.color!;
-                this.Host = result.data.Host;
-                this.Service = result.data.Service;
-                this.responsePerfdata = result.data.Perfdata;
+            .subscribe({
+                next: (result: MapItemRoot) => {
+                    this.color = result.data.color!;
+                    this.Host = result.data.Host;
+                    this.Service = result.data.Service;
+                    this.responsePerfdata = result.data.Perfdata;
+                    this.allowView = result.allowView!;
 
-                this.processPerfdata();
-                this.renderGauge();
+                    this.processPerfdata();
+                    this.renderGauge();
 
-                this.initRefreshTimer();
-                this.init = false;
-                if (this.resizableDirective) {
-                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
+                    this.initRefreshTimer();
+                    this.init = false;
+                    this.cdr.markForCheck();
+                },
+                error: (err) => {
+                    //error handling here
+                    this.cdr.markForCheck();
                 }
-                this.cdr.markForCheck();
             }));
     };
 

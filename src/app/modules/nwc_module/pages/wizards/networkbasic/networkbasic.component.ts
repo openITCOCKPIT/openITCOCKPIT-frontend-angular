@@ -1,27 +1,28 @@
-import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewChild, ViewChildren } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { NetworkbasicWizardService } from './networkbasic-wizard.service';
-import {
-    InterfaceServicetemplate,
-    N0,
-    NetworkbasicWizardGet,
-    NetworkbasicWizardPost
-} from './networkbasic-wizard.interface';
+import { NetworkbasicWizardGet, NetworkbasicWizardPost } from './networkbasic-wizard.interface';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
+    AccordionButtonDirective,
+    AccordionComponent,
+    AccordionItemComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    FormCheckComponent,
     FormCheckInputDirective,
+    FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
     InputGroupComponent,
     InputGroupTextDirective,
-    RowComponent
+    RowComponent,
+    TemplateIdDirective
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -29,7 +30,7 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
@@ -38,7 +39,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { Service } from '../../../../../pages/wizards/wizards.interface';
+import { ServiceForWizard, ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({
@@ -54,7 +55,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         SelectComponent,
         FormLabelDirective,
         FormControlDirective,
-        NgIf,
         WizardsDynamicfieldsComponent,
         TranslocoDirective,
         OitcAlertComponent,
@@ -65,22 +65,30 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         FormCheckInputDirective,
         InputGroupComponent,
         InputGroupTextDirective,
-        NgForOf,
         NgSelectComponent,
         RowComponent,
         BackButtonDirective,
         FormFeedbackComponent,
         FormErrorDirective,
-        FormsModule
+        FormsModule,
+        NgClass,
+        FormCheckComponent,
+        FormCheckLabelDirective,
+        AccordionComponent,
+        AccordionItemComponent,
+        TemplateIdDirective,
+        AccordionButtonDirective
     ],
     templateUrl: './networkbasic.component.html',
     styleUrl: './networkbasic.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NetworkbasicComponent extends WizardsAbstractComponent {
+    @ViewChildren('accordionItem') accordionItems: AccordionItemComponent[] = [];
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
     protected override WizardService: NetworkbasicWizardService = inject(NetworkbasicWizardService);
-    protected snmpErrors: GenericValidationError = {} as GenericValidationError;
+    public checked: boolean = false;
+    public accordionClosed: boolean = true;
 
     protected override post: NetworkbasicWizardPost = {
 // Default fields from the base wizard
@@ -121,7 +129,7 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         {key: '3DES', value: '3des'},
         {key: '3DESDE', value: '3desde'},
     ];
-    protected interfaceServicetemplate: InterfaceServicetemplate = {} as InterfaceServicetemplate;
+    protected interfaceServicetemplate: ServicetemplateForWizard = {} as ServicetemplateForWizard;
 
     protected override wizardLoad(result: NetworkbasicWizardGet): void {
         this.interfaceServicetemplate = result.interfaceServicetemplate;
@@ -134,14 +142,13 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         let request: NetworkbasicWizardPost = JSON.parse(JSON.stringify(this.post));
 
         // Remove all services from request where createService is false.
-        request.services = this.post.services.filter((service: Service) => {
-            return service.createService === true;
+        request.services = request.services.filter((service: ServiceForWizard) => {
+            return service.createService && this.childComponent.hasName(service.name);
         });
         // Remove all interfaces from request where createService is false.
-        request.interfaces = this.post.interfaces.filter((service: N0) => {
-            return service.createService === true;
-        });
-
+        request.interfaces = request.interfaces.filter(
+            (networkInterface: ServiceForWizard) => networkInterface.createService && this.hasName(networkInterface.name)
+        );
 
         this.subscriptions.add(this.WizardService.submit(request)
             .subscribe((result: GenericResponseWrapper) => {
@@ -157,31 +164,34 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
                 }
                 // Error
                 this.notyService.genericError();
+                this.notyService.scrollContentDivToTop();
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
+
                 }
                 this.cdr.markForCheck();
             })
         );
     }
 
-    protected toggleCheck(theService: Service | undefined): void {
-        if (theService) {
-            this.post.interfaces.forEach((service: N0) => {
-                if (service.name !== theService.name) {
-                    return;
-                }
-                service.createService = !service.createService
-            });
-            this.cdr.markForCheck();
-            return;
-        }
-        this.post.interfaces.forEach((service: N0) => {
+    protected toggleCheck(checked: boolean): void {
+        this.checked = checked;
+        this.post.interfaces.forEach((service: ServiceForWizard) => {
             if (!this.hasName(service.name)) {
                 return;
             }
-            service.createService = !service.createService
+            service.createService = this.checked;
+        });
+        this.cdr.markForCheck();
+    }
+
+    protected toggleAccordionClose(checked: boolean): void {
+        this.accordionClosed = checked;
+        this.accordionItems.forEach((accordionItem: AccordionItemComponent) => {
+            if ((accordionItem.visible && this.accordionClosed) || (!accordionItem.visible && !this.accordionClosed)) {
+                accordionItem.toggleItem();
+            }
         });
         this.cdr.markForCheck();
     }
@@ -209,11 +219,14 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
 
     protected runSnmpDiscovery(): void {
         this.post.interfaces = [];
+        this.beginDiscovery();
         this.cdr.markForCheck();
         this.WizardService.executeSNMPDiscovery(this.post).subscribe((data: any) => {
+            this.errors = {} as GenericValidationError;
+            this.accordionClosed = true;
             this.cdr.markForCheck();
             // Error
-            if (!data.error) {
+            if (data.interfaces) {
                 for (let key in data.interfaces) {
                     let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.interfaceServicetemplate.servicetemplatecommandargumentvalues));
                     servicetemplatecommandargumentvalues[0].value = data.interfaces[key].value.name;
@@ -228,14 +241,21 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
                         });
                 }
                 this.childComponentLocal.cdr.markForCheck();
+                this.endDiscovery();
                 this.cdr.markForCheck();
                 return;
             }
             this.notyService.genericError();
+
             const errorResponse: GenericValidationError = data.data as GenericValidationError;
             if (data.data) {
-                this.snmpErrors = errorResponse;
+                this.errors = errorResponse;
+                if (this.errors.hasOwnProperty('snmpCommunity')) {
+                    this.notyService.scrollContentDivToTop();
+                }
             }
+            this.endDiscovery();
+            this.cdr.markForCheck();
         });
     }
 }

@@ -27,10 +27,12 @@
                                 {{ t('Information') }}
                             </span>
                             <br>
-                            {{ t('Only custom notifications with a status of \"{0}\" or \"{1}\" can be closed. Custom notifications with a different status are automatically removed from the selection.', {
-                            '{0}' : t('New'),
-                            '{1}' : t('In progress')
-                        }) }}
+                            {{
+                                t('Only custom notifications with a status of \"{0}\" or \"{1}\" can be closed. Custom notifications with a different status are automatically removed from the selection.', {
+                                    '{0}': t('New'),
+                                    '{1}': t('In progress')
+                                })
+                            }}
                         </div>
                     </div>
                 </c-alert>
@@ -38,9 +40,11 @@
                 <c-row class="pt-2">
                     <c-col sm="12">
                         <ul class="mb-3">
-                            <li *ngFor="let item of items">
-                                {{ item.service.host.name }} / {{ item.servicename }}
-                            </li>
+                            @for (item of items; track item) {
+                                <li>
+                                    {{ item.service.host.name }} / {{ item.servicename }}
+                                </li>
+                            }
                         </ul>
                     </c-col>
                 </c-row>
@@ -48,7 +52,7 @@
                           [(ngModel)]="comment"
                           [ngClass]="{'is-invalid': comment.length > 1024}"
                 ></textarea>
-                <oitc-form-feedback [errors]="errors" errorField="comment" ></oitc-form-feedback>
+                <oitc-form-feedback [errors]="errors" errorField="comment"></oitc-form-feedback>
 
                 <div class="help-block mb-3"
                      [ngClass]="{'text-danger': comment.length > 1024}">
@@ -58,7 +62,8 @@
             </ng-container>
         </c-modal-body>
         <c-modal-footer>
-            <button (click)="closeManually()" [disabled]="isProcessing || comment.length > 1024 || comment.length === 0" cButton class="ripple" color="primary">
+            <button (click)="closeManually()" [disabled]="isProcessing || comment.length > 1024 || comment.length === 0"
+                    cButton class="ripple" color="primary">
                 <fa-icon [hidden]="!isProcessing" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
                 {{ t('Close manually') }}
             </button>

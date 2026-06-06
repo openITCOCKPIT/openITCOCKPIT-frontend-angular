@@ -2,19 +2,22 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ContainerComponent,
-  FormControlDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent
+    AlertComponent,
+    AlertHeadingDirective,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -25,16 +28,19 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
 import {
     ExternalMonitoringConfig,
+    ExternalMonitoringConfigFlowChief,
     ExternalMonitoringConfigIcinga2,
+    ExternalMonitoringConfigLibreNMS,
     ExternalMonitoringConfigOpmanager,
     ExternalMonitoringConfigPrtg,
+    ExternalMonitoringConnect,
     ExternalMonitoringPost
 } from '../external-monitorings.interface';
 
@@ -49,42 +55,47 @@ import { SystemnameService } from '../../../../../services/systemname.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
 import { HistoryService } from '../../../../../history.service';
+import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
 import { DynamicalFormFields } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 import {
     DynamicalFormFieldsComponent
 } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
+import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
 
 @Component({
     selector: 'oitc-external-monitorings-add',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    NgIf,
-    SelectComponent,
-    ContainerComponent,
-    NgForOf,
-    DynamicalFormFieldsComponent
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        SelectComponent,
+        ContainerComponent,
+        DynamicalFormFieldsComponent,
+        MultiSelectComponent,
+        AlertComponent,
+        RowComponent,
+        ColComponent,
+        AlertHeadingDirective
+    ],
     templateUrl: './external-monitorings-add.component.html',
     styleUrl: './external-monitorings-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -104,18 +115,31 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
     public readonly SystemnameService = inject(SystemnameService);
     public formFields?: DynamicalFormFields;
 
+    public connectStatus: boolean | null = null;
+    public connectMessage: string = '';
+
+    public messageTemplates: SelectKeyValue[] = [];
+
     protected readonly ExternalMonitoringTypes = [
         {
-            key: 'icinga2',
+            key: ExternalMonitoringSystems.FlowChief,
+            value: this.TranslocoService.translate('FlowChief')
+        },
+        {
+            key: ExternalMonitoringSystems.Icinga2,
             value: this.TranslocoService.translate('Icinga 2')
         },
         {
-            key: 'opmanager',
+            key: ExternalMonitoringSystems.OpManager,
             value: this.TranslocoService.translate('ManageEngine OpManager')
         },
         {
-            key: 'prtg',
+            key: ExternalMonitoringSystems.PRTG,
             value: this.TranslocoService.translate('Paessler PRTG System')
+        },
+        {
+            key: ExternalMonitoringSystems.LibreNMS,
+            value: this.TranslocoService.translate('LibreNMS')
         }
     ];
 
@@ -140,7 +164,8 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
             name: '',
             description: '',
             system_type: '',
-            json_data: {}
+            json_data: {},
+            message_template_ids: []
         }
     }
 
@@ -182,17 +207,29 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
                 .subscribe((result: ExternalMonitoringConfig) => {
                     this.errors = null;
                     switch (this.post.system_type) {
-                        case 'icinga2':
+                        case ExternalMonitoringSystems.Icinga2:
                             const icinga2 = result.config.config as ExternalMonitoringConfigIcinga2;
                             this.post.json_data = icinga2;
                             break;
-                        case 'opmanager':
+
+                        case ExternalMonitoringSystems.OpManager:
                             const opmanager = result.config.config as ExternalMonitoringConfigOpmanager;
                             this.post.json_data = opmanager;
                             break;
-                        case 'prtg':
+
+                        case ExternalMonitoringSystems.PRTG:
                             const prtg = result.config.config as ExternalMonitoringConfigPrtg;
                             this.post.json_data = prtg;
+                            break;
+
+                        case ExternalMonitoringSystems.FlowChief:
+                            const flowChief = result.config.config as ExternalMonitoringConfigFlowChief;
+                            this.post.json_data = flowChief;
+                            break;
+
+                        case ExternalMonitoringSystems.LibreNMS:
+                            const LibreNMS = result.config.config as ExternalMonitoringConfigLibreNMS;
+                            this.post.json_data = LibreNMS;
                             break;
                     }
 
@@ -203,5 +240,20 @@ export class ExternalMonitoringsAddComponent implements OnInit, OnDestroy {
         }
     }
 
+    public checkConnection() {
+        this.subscriptions.add(this.ExternalMonitoringsService.testConnection(this.post)
+            .subscribe((result: ExternalMonitoringConnect) => {
+                this.connectStatus = result.status.status;
+                if (result.status.msg) {
+                    this.connectMessage = result.status.msg.message;
+                }
+                if (result.messageTemplates) {
+                    this.messageTemplates = result.messageTemplates;
+                }
+                this.cdr.markForCheck();
+            }));
+    }
+
     protected readonly Object = Object;
+    protected readonly ExternalMonitoringSystems = ExternalMonitoringSystems;
 }

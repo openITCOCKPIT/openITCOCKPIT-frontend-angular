@@ -24,7 +24,7 @@ import { Subscription } from 'rxjs';
 import { HostsService } from '../hosts.service';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { HostBrowserMenu } from '../hosts.interface';
-import { AsyncPipe, NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -35,6 +35,7 @@ import { HoststatusIconComponent } from '../hoststatus-icon/hoststatus-icon.comp
 import {
     BrowserMenuLoaderComponent
 } from '../../../layouts/primeng/loading/browser-menu-loader/browser-menu-loader.component';
+import { HostTypesEnum } from '../hosts.enum';
 
 
 export interface HostBrowserMenuConfig {
@@ -50,7 +51,6 @@ export interface HostBrowserMenuConfig {
         ColComponent,
         RowComponent,
         FaIconComponent,
-        NgIf,
         NgClass,
         CopyToClipboardComponent,
         TranslocoDirective,
@@ -131,4 +131,5 @@ export class HostsBrowserMenuComponent implements OnInit, OnDestroy {
         this.toggleRescheduling.emit(true);
     }
 
+    protected readonly HostTypesEnum = HostTypesEnum;
 }

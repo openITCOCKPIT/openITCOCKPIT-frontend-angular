@@ -1,0 +1,19 @@
+<ng-container *transloco="let t">
+    @for (snapshot of nestedSnapshots(); track $index) {
+        <ol class="proxmox dd-list">
+            <li class="dd-item">
+
+                <ng-container
+                    *ngTemplateOutlet="containerTemplate(); context: { $implicit: snapshot, index:$index, collapsed:collapsed(), component:this }"></ng-container>
+
+                @if (snapshot.children.length > 0) {
+                    <oitc-proxmox-snapshot-nest
+                        [hidden]="collapsed()[$index]"
+                        [nestedSnapshots]="snapshot.children"
+                        [level]="(level()+1)"
+                        [containerTemplate]="containerTemplate()"></oitc-proxmox-snapshot-nest>
+                }
+            </li>
+        </ol>
+    }
+</ng-container>

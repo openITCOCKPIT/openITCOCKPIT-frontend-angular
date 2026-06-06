@@ -31,7 +31,7 @@ import { ResourcesPost } from '../resources.interface';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-resources-edit',
@@ -58,8 +58,7 @@ import { NgIf } from '@angular/common';
         XsButtonDirective,
         RouterLink,
         CardFooterComponent,
-        FormLoaderComponent,
-        NgIf
+        FormLoaderComponent
     ],
     templateUrl: './resources-edit.component.html',
     styleUrl: './resources-edit.component.css',

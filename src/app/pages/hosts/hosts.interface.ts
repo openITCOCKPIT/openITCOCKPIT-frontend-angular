@@ -1,7 +1,7 @@
 // This interface is 1:1 the same as the src/itnovum/openITCOCKPIT/Core/Views/Host.php class
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
-import { HostTypesEnum } from './hosts.enum';
+import { HostBrowserTabs, HostTypesEnum } from './hosts.enum';
 import { AcknowledgementTypes } from '../acknowledgements/acknowledgement-types.enum';
 import { ContactEntity, Customvariable } from '../contacts/contacts.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
@@ -15,6 +15,11 @@ import { TimeperiodEnity } from '../timeperiods/timeperiods.interface';
 import { ContainerWithHostJoinData } from '../containers/containers.interface';
 import { HostgroupEntityWithJoinData } from '../hostgroups/hostgroups.interface';
 import { ContactgroupEntity } from '../contactgroups/contactgroups.interface';
+import {
+    HostParentsChildrenTree
+} from '../../components/hosts/host-parents-children-tree/host-parents-children-tree.interface';
+import { ExternalSystems } from '../../modules/import_module/pages/externalsystems/external-systems.enum';
+
 
 export interface HostObject {
     id?: number
@@ -24,6 +29,8 @@ export interface HostObject {
     description?: string
     hosttemplate_id?: number
     active_checks_enabled?: boolean
+    checkIntervalHuman?: string
+    delayedHuman?: string
     satelliteId?: number
     containerId?: number
     containerIds?: number[]
@@ -39,7 +46,34 @@ export interface HostObject {
     satelliteName?: string // hosts/index
     satelliteRestricted?: boolean // hosts/index
     additionalInformationExists?: boolean // hosts/index
+    additionalInformation?: HostBrowserTabs // hosts/index
     type?: HostOrServiceType // hosts/index
+}
+
+export interface SoftwareInformationHost {
+    SoftwareInformationExists: boolean // hosts/index
+    packagesHostDetails: PackagesBrowserHostDetails
+}
+
+export interface PackagesBrowserHostDetails {
+    id: number
+    host_id: number
+    os_type: string
+    os_name: string
+    os_version: string
+    os_family: string
+    agent_version: string
+    reboot_required: boolean
+    system_uptime: number
+    last_update: string
+    available_updates: number
+    available_security_updates: number
+    last_error: any
+    created: string
+    modified: string
+    total: number
+    last_update_user: string
+    uptime_in_words: string
 }
 
 // Same as HostObject but with "Host" key in between as CakePHP 2 does.
@@ -237,6 +271,7 @@ export interface HostsIndexFilter {
     'Hoststatus.is_hardstate': string,
     'Hoststatus.active_checks_enabled': string,
     'hostpriority': string[]
+    'Hostgroups.id': number[]
 }
 
 export interface HostsCurrentStateFilter {
@@ -280,7 +315,8 @@ export function getDefaultHostsIndexFilter(): HostsIndexFilter {
         'Hoststatus.notifications_enabled': '',
         'Hoststatus.is_hardstate': '',
         'Hoststatus.active_checks_enabled': '',
-        'hostpriority': []
+        'hostpriority': [],
+        'Hostgroups.id': []
     }
 }
 
@@ -735,8 +771,9 @@ export interface HostBrowserMenu {
     hostAddress: string
     docuExists: boolean
     hostUrl: string
+    hostType: number
     allowEdit: boolean
-    includeHoststatus: boolean,
+    includeHoststatus: boolean
     Hoststatus: HoststatusObject
 }
 
@@ -776,8 +813,10 @@ export interface HostBrowserResult {
     parentHostStatus: {
         [key: string]: HoststatusObject
     },
+    parentAndChildHostsTree: HostParentsChildrenTree,
     acknowledgement?: AcknowledgementObject,
     downtime?: DowntimeObject,
+    plannedDowntimes: DowntimeObject[],
     checkCommand: CheckCommandCake2,
     checkPeriod: TimeperiodEnity,
     notifyPeriod: TimeperiodEnity,
@@ -810,4 +849,10 @@ export interface HostBrowserSlaOverview {
     determined_availability_percent?: number,
     warning_threshold?: number | null,
     minimal_availability?: number,
+}
+
+export interface LoadAdditionalInformationResult {
+    AdditionalInformationExists: boolean,
+    externalSystemType: null | ExternalSystems,
+    _csrfToken: string
 }

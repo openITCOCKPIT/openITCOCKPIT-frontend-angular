@@ -25,7 +25,7 @@ export class DebounceDirective {
      * 4. The Subject will emit "abc" again due to distinctUntilChanged is removed
      *
      * Original code before ITC-3422:
-     * https://github.com/it-novum/openITCOCKPIT-frontend-angular/blob/8222cb62306b4da262afd54082df396078c0873c/src/app/directives/debounce.directive.ts
+     * https://github.com/openITCOCKPIT/openITCOCKPIT-frontend-angular/blob/8222cb62306b4da262afd54082df396078c0873c/src/app/directives/debounce.directive.ts
      *
      */
 

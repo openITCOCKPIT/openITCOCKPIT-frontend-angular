@@ -34,6 +34,9 @@ export const importModuleRoutes: Routes = [{
     path: 'import_module/ExternalMonitorings/edit/:id',
     loadComponent: () => import('./pages/externalmonitorings/external-monitorings-edit/external-monitorings-edit.component').then(m => m.ExternalMonitoringsEditComponent)
 }, {
+    path: 'import_module/ExternalMonitorings/flowchiefNodeSelection/:id',
+    loadComponent: () => import('./pages/externalmonitorings/flowchief-node-selection/flowchief-node-selection.component').then(m => m.FlowchiefNodeSelectionComponent)
+}, {
     path: 'import_module/ImportedFiles/index',
     loadComponent: () => import('./pages/importedfiles/imported-files-index/imported-files-index.component').then(m => m.ImportedFilesIndexComponent)
 }, {

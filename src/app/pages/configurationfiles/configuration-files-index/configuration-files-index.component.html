@@ -38,84 +38,89 @@
             </c-nav>
         </c-card-header>
 
-        <c-card-body *ngIf="IS_CONTAINER">
-            <!-- openITCOCKPIT is running inside a Container like Docker -->
-            <c-row>
-                <c-col [xs]="12">
-                    <div class="alert border-faded bg-transparent text-secondary">
-                        <div class="d-flex align-items-center">
-                            <div class="alert-icon me-2">
-                                <span class="icon-stack icon-stack-md">
-                                    <i class="base-circle icon-stack-3x text-cyan-500"></i>
-                                    <i class="fas fa-box-open icon-stack-1x text-white"></i>
-                                </span>
-                            </div>
-                            <div class="flex-1">
-                                <span class="h5 text-cyan-500">
-                                    {{ t('Containerized installation') }}
-                                </span>
-                                <br>
-                                {{ t('Containerized installations are configured through environment variables') }}
+        @if (IS_CONTAINER) {
+            <c-card-body>
+                <!-- openITCOCKPIT is running inside a Container like Docker -->
+                <c-row>
+                    <c-col [xs]="12">
+                        <div class="alert border-faded bg-transparent text-secondary">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon me-2">
+                                    <span class="icon-stack icon-stack-md">
+                                        <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                        <i class="fas fa-box-open icon-stack-1x text-white"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="h5 text-cyan-500">
+                                        {{ t('Containerized installation') }}
+                                    </span>
+                                    <br>
+                                    {{ t('Containerized installations are configured through environment variables') }}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </c-col>
-            </c-row>
+                    </c-col>
+                </c-row>
+            </c-card-body>
+        }
 
-        </c-card-body>
-
-        <c-card-body *ngIf="!IS_CONTAINER">
-            <!-- openITCOCKPIT is running as a traditional installation through apt, dnf or git -->
-
-
-            <oitc-table-loader *ngIf="!configFileCategories"></oitc-table-loader>
-            <table *ngIf="configFileCategories" bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
-                <thead>
-                <tr>
-                    <th>
-                        {{ t('File name') }}
-                    </th>
-                    <th class="text-center width-30">
-                        <i class="fa fa-cog"></i>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                    @for (configFileCategory of configFileCategories.configFileCategories; track $index) {
+        @if (!IS_CONTAINER) {
+            <c-card-body>
+                <!-- openITCOCKPIT is running as a traditional installation through apt, dnf or git -->
+                @if (!configFileCategories) {
+                    <oitc-table-loader></oitc-table-loader>
+                }
+                @if (configFileCategories) {
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                        <thead>
                         <tr>
-                            <td colspan="2" class="bold text-primary">
-                                {{ configFileCategory.name }}
-                            </td>
+                            <th>
+                                {{ t('File name') }}
+                            </th>
+                            <th class="text-center width-30">
+                                <i class="fa fa-cog"></i>
+                            </th>
                         </tr>
-
-                        @for (configFile of configFileCategory.configFiles; track $index) {
-                            <tr>
-                                <td>
-                                    <span class="ms-2">{{ configFile.linkedOutfile }}</span>
-                                </td>
-                                <td>
-                                    @if (PermissionsService.hasPermissionObservable('configurationfiles.edit') | async) {
-                                        <a class="ripple btn btn-default btn-xs btn-lower-padding"
-                                           [routerLink]="['/', 'ConfigurationFiles', 'edit', configFile.dbKey]">
-                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                        </a>
-                                    } @else {
-                                        <button cButton class="ripple btn-lower-padding" color="default" size="xs"
-                                                disabled>
-                                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                                        </button>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    }
-
-                </tbody>
-            </table>
-
-            <oitc-no-records
-                *ngIf="configFileCategories && configFileCategories.configFileCategories.length === 0"></oitc-no-records>
-        </c-card-body>
+                        </thead>
+                        <tbody>
+                            @for (configFileCategory of configFileCategories.configFileCategories; track $index) {
+                                <tr>
+                                    <td colspan="2" class="bold text-primary">
+                                        {{ configFileCategory.name }}
+                                    </td>
+                                </tr>
+                                @for (configFile of configFileCategory.configFiles; track $index) {
+                                    <tr>
+                                        <td>
+                                            <span class="ms-2">{{ configFile.linkedOutfile }}</span>
+                                        </td>
+                                        <td>
+                                            @if (PermissionsService.hasPermissionObservable('configurationfiles.edit') | async) {
+                                                <a class="ripple btn btn-default btn-xs btn-lower-padding"
+                                                   [routerLink]="['/', 'ConfigurationFiles', 'edit', configFile.dbKey]">
+                                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                </a>
+                                            } @else {
+                                                <button cButton class="ripple btn-lower-padding" color="default"
+                                                        size="xs"
+                                                        disabled>
+                                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                                </button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+                @if (configFileCategories && configFileCategories.configFileCategories.length === 0) {
+                    <oitc-no-records
+                    ></oitc-no-records>
+                }
+            </c-card-body>
+        }
 
         <c-card-footer>
             &nbsp;

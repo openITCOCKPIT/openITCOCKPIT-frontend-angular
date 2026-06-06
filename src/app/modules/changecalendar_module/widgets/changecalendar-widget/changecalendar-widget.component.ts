@@ -16,7 +16,7 @@ import {
     signal,
     ViewChild
 } from '@angular/core';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -54,7 +54,6 @@ import { AnimationEvent } from '@angular/animations';
         ColComponent,
         FaIconComponent,
         FormLabelDirective,
-        NgIf,
         RowComponent,
         SelectComponent,
         TranslocoDirective,

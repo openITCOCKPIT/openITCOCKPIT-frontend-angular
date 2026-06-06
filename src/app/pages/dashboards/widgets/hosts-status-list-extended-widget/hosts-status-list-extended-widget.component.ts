@@ -10,7 +10,7 @@ import {
 import {
     AcknowledgementIconComponent
 } from '../../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
     ColComponent,
     ContainerComponent,
@@ -56,6 +56,9 @@ import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { HostsStatusListWidgetService } from '../hosts-status-list-widget/hosts-status-list-widget.service';
 import { RouterLink } from '@angular/router';
 import { HostsBrowserModalService } from '../../../hosts/hosts-browser/hosts-browser-modal/hosts-browser-modal.service';
+import { DebounceDirective } from '../../../../directives/debounce.directive';
+import { TrueFalseDirective } from '../../../../directives/true-false.directive';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-hosts-status-list-extended-widget',
@@ -81,7 +84,6 @@ import { HostsBrowserModalService } from '../../../hosts/hosts-browser/hosts-bro
         InputGroupTextDirective,
         MatSort,
         MatSortHeader,
-        NgIf,
         NgSelectComponent,
         NoRecordsComponent,
         ReactiveFormsModule,
@@ -96,7 +98,10 @@ import { HostsBrowserModalService } from '../../../hosts/hosts-browser/hosts-bro
         TrustAsHtmlPipe,
         XsButtonDirective,
         TooltipDirective,
-        RouterLink
+        RouterLink,
+        DebounceDirective,
+        TrueFalseDirective,
+        NgClass
     ],
     templateUrl: './hosts-status-list-extended-widget.component.html',
     styleUrl: './hosts-status-list-extended-widget.component.css',
@@ -120,9 +125,17 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
 
 
     // widget config will be loaded from the server
-    public config?: HostsStatusListWidgetConfig;
+    public config!: HostsStatusListWidgetConfig;
     public configKeyWords: string[] = [];
     public configNotKeyWords: string[] = [];
+
+    public priorityFilter: { [key: string]: boolean } = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
+    };
 
 
     private readonly HostsStatusListWidgetService = inject(HostsStatusListWidgetService);
@@ -225,6 +238,13 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
             this.configKeyWords = (config.Host.keywords !== '') ? config.Host.keywords.split(',') : [];
             this.configNotKeyWords = (config.Host.not_keywords !== '') ? config.Host.not_keywords.split(',') : [];
 
+            _.map(this.config.hostpriority,
+                (value) => {
+                    if (this.priorityFilter.hasOwnProperty(value)) {
+                        this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                    }
+                }
+            );
 
             this.loadHosts();
             this.cdr.markForCheck();
@@ -243,6 +263,15 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
 
         this.config.Host.keywords = this.configKeyWords.join(',');
         this.config.Host.not_keywords = this.configNotKeyWords.join(',');
+
+        this.config.hostpriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.hostpriority.push(Number(key));
+                }
+            }
+        );
 
         this.subscriptions.add(this.HostsStatusListWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -294,6 +323,15 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
             }
         }
 
+        this.config.hostpriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.hostpriority.push(Number(key));
+                }
+            }
+        );
+
         // Apply the config to the filter
         const params: HostsStatusListWidgetParams = {
             angular: true,
@@ -310,7 +348,8 @@ export class HostsStatusListExtendedWidgetComponent extends BaseWidgetComponent 
             'filter[Hoststatus.current_state][]': currentState,
             'filter[Hoststatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
             'filter[Hoststatus.scheduled_downtime_depth]': inDowntime,
-            'filter[Hoststatus.last_state_change][]': lastStateChange
+            'filter[Hoststatus.last_state_change][]': lastStateChange,
+            'filter[hostpriority][]': this.config.hostpriority
         };
 
         this.subscriptions.add(this.HostsStatusListWidgetService.loadHosts(params).subscribe(hosts => {

@@ -21,7 +21,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
@@ -41,7 +41,6 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
         FormLabelDirective,
         FormSelectDirective,
         FormsModule,
-        NgIf,
         RequiredIconComponent,
         TableDirective,
         TranslocoDirective,

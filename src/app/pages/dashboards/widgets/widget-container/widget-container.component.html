@@ -139,6 +139,16 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-automap-widget>
         }
+        @case (WidgetTypes.StatuspagegroupWidget) {
+            <oitc-statuspagegroup-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-statuspagegroup-widget>
+        }
+        @case (WidgetTypes.OrganizationalchartsWidget) {
+            <oitc-organizationalchart-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-organizationalchart-widget>
+        }
 
         <!-- Module Widgets -->
         @case (WidgetTypes.CustomalertsWidget) {
@@ -180,6 +190,11 @@
                 [widgetInput]="widget"
                 [isReadonly]="isReadonly()"></oitc-sla-calendar-widget>
         }
+        @case (WidgetTypes.SlasSummaryWidget) {
+            <oitc-slas-summary-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()"></oitc-slas-summary-widget>
+        }
         @case (WidgetTypes.ChangecalendarWidget) {
             <oitc-changecalendar-widget
                 [widgetInput]="widget"
@@ -197,9 +212,27 @@
         }
         @case (WidgetTypes.ResourcegroupsCronjobStatusWidget) {
             <oitc-resourcegroups-cronjob-status-widget
-                [widgetInput]="widget">
+                    [widgetInput]="widget"
                 [isReadonly]="isReadonly()">
             </oitc-resourcegroups-cronjob-status-widget>
+        }
+        @case (WidgetTypes.DelayedPassiveHostsWidget) {
+            <oitc-delayed-passive-hosts-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()">
+            </oitc-delayed-passive-hosts-widget>
+        }
+        @case (WidgetTypes.DelayedPassiveServicesWidget) {
+            <oitc-delayed-passive-services-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()">
+            </oitc-delayed-passive-services-widget>
+        }
+        @case (WidgetTypes.EvcsSummaryWidget) {
+            <oitc-evencorrelations-summary-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()">
+            </oitc-evencorrelations-summary-widget>
         }
 
         <!-- Fallback Widget -->

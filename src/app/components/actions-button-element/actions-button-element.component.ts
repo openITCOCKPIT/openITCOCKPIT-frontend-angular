@@ -33,11 +33,11 @@ import { NgTemplateOutlet } from '@angular/common';
 @Component({
     selector: 'oitc-actions-button-element',
     imports: [
-    RouterLink,
-    PermissionDirective,
-    DropdownItemDirective,
-    NgTemplateOutlet
-],
+        RouterLink,
+        PermissionDirective,
+        DropdownItemDirective,
+        NgTemplateOutlet
+    ],
     templateUrl: './actions-button-element.component.html',
     styleUrl: './actions-button-element.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

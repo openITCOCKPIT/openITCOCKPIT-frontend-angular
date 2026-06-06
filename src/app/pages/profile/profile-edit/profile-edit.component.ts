@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+    DOCUMENT
+} from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -25,7 +33,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { GenericValidationError } from '../../../generic-responses';
 import { ProfileMaxUploadLimit, ProfileUser } from '../profile.interface';
-import { DOCUMENT, NgIf } from '@angular/common';
+
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ProfileService } from '../profile.service';
@@ -34,7 +42,7 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { UsersService } from '../../users/users.service';
 import { UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { TimezoneConfiguration, TimezoneService } from '../../../services/timezone.service';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
@@ -63,14 +71,13 @@ import { SelectKeyValueString } from '../../../layouts/primeng/select.interface'
         FormLabelDirective,
         ReactiveFormsModule,
         RequiredIconComponent,
-        NgIf,
         FormsModule,
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
         NgSelectModule,
-        NgOptionHighlightModule,
+        NgOptionHighlightDirective,
         FormDirective,
         XsButtonDirective,
         BackButtonDirective,

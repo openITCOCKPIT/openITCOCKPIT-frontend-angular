@@ -20,7 +20,7 @@ import {
     RowComponent
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { GrafanaTimepickerChange } from './grafana-timepicker.interface';
 import { Subscription } from 'rxjs';
 
@@ -35,9 +35,7 @@ import { Subscription } from 'rxjs';
         DropdownMenuDirective,
         RowComponent,
         ColComponent,
-        NgForOf,
-        NgClass,
-        NgIf
+        NgClass
     ],
     templateUrl: './grafana-timepicker.component.html',
     styleUrl: './grafana-timepicker.component.css',

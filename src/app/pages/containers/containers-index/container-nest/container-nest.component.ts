@@ -1,14 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject, input, TemplateRef } from '@angular/core';
 import { ContainersIndexNested } from '../../containers.interface';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 
 import { TranslocoDirective } from '@jsverse/transloco';
 import { PermissionsService } from '../../../../permissions/permissions.service';
-
-
-
-
 
 
 import { ContainersService } from '../../containers.service';
@@ -16,10 +12,9 @@ import { ContainersService } from '../../containers.service';
 @Component({
     selector: 'oitc-container-nest',
     imports: [
-    NgIf,
-    TranslocoDirective,
-    CommonModule
-],
+        TranslocoDirective,
+        CommonModule
+    ],
     templateUrl: './container-nest.component.html',
     styleUrl: './container-nest.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

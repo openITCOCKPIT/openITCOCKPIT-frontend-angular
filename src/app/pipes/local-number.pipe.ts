@@ -12,8 +12,12 @@ export class LocalNumberPipe implements PipeTransform {
      * @param value
      * @param args
      */
-    transform(value: number | undefined, ...args: unknown[]): unknown {
+    transform(value: number | undefined | null, ...args: unknown[]): unknown {
         if (!value) {
+            if (value === null) {
+                return "0";
+            }
+
             return value;
         }
 

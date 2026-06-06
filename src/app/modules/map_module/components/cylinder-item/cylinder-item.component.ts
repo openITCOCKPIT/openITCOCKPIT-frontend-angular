@@ -17,8 +17,7 @@ import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
-import { ResizableDirective } from '../../../../directives/resizable.directive';
-import { NgClass, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import {
     HostForMapItem,
     MapItemRoot,
@@ -27,18 +26,18 @@ import {
     PerformanceData,
     ServiceForMapItem
 } from '../map-item-base/map-item-base.interface';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 @Component({
     selector: 'oitc-cylinder-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgStyle, NgIf, NgClass],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgStyle, NgClass, AngularDraggableModule],
     templateUrl: './cylinder-item.component.html',
     styleUrl: './cylinder-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
     @ViewChild('cylinderSvg', {static: false}) cylinderSvg!: ElementRef<SVGElement>;
-    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
 
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
@@ -58,6 +57,8 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
     private responsePerfdata!: Perfdata;
     private perfdataName: string = '';
     private perfdata: PerformanceData | undefined;
+    protected allowView: boolean = false;
+
 
     constructor(parent: MapCanvasComponent, private renderer: Renderer2) {
         super(parent);
@@ -99,23 +100,23 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
 
         this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
             .subscribe((result: MapItemRoot) => {
-                this.current_state = result.data.Servicestatus.currentState;
+                if (!result.allowView) {
+                    // nothing to view
+                    return;
+                }
+                this.allowView = result.allowView!;
 
-                this.Host = result.data.Host;
-                this.Service = result.data.Service;
-
-
-                this.responsePerfdata = result.data.Perfdata;
-                this.processPerfdata();
-                this.renderCylinder(this.perfdata);
-
+                if (result.data.Servicestatus) {
+                    this.current_state = result.data.Servicestatus.currentState;
+                    this.Host = result.data.Host;
+                    this.Service = result.data.Service;
+                    this.responsePerfdata = result.data.Perfdata;
+                    this.processPerfdata();
+                    this.renderCylinder(this.perfdata);
+                }
                 this.initRefreshTimer();
-
                 this.init = false;
 
-                if (this.resizableDirective) {
-                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
-                }
                 this.cdr.markForCheck();
             }));
     };

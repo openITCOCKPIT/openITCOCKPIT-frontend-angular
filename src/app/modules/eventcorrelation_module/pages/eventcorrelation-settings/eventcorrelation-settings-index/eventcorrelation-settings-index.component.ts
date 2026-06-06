@@ -1,16 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-  AlertComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormDirective,
-  FormLabelDirective
+    AlertComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    TextColorDirective
 } from '@coreui/angular';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -21,43 +22,45 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
+import { GenericValidationError } from '../../../../../generic-responses';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { EventcorrelationSettingsPost } from '../eventcorrelation-settings.interface';
 import { EventcorrelationSettingsService } from '../eventcorrelation-settings.service';
 import { BinaryConfigOptions } from '../configOptions.enum';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { NgIf } from '@angular/common';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
+import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
     selector: 'oitc-eventcorrelation-settings-index',
     imports: [
-    AlertComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormsModule,
-    PermissionDirective,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormLabelDirective,
-    RequiredIconComponent,
-    SelectComponent,
-    NgIf,
-    TrueFalseDirective
-],
+        AlertComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormFeedbackComponent,
+        FormsModule,
+        PermissionDirective,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormLabelDirective,
+        RequiredIconComponent,
+        SelectComponent,
+        TrueFalseDirective,
+        FormLoaderComponent,
+        FormControlDirective,
+        TextColorDirective,
+        FormControlDirective,
+        FormErrorDirective
+    ],
     templateUrl: './eventcorrelation-settings-index.component.html',
     styleUrl: './eventcorrelation-settings-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -194,7 +197,7 @@ export class EventcorrelationSettingsIndexComponent implements OnInit, OnDestroy
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
-                    const response = result.data as GenericIdResponse;
+                    this.errors = null;
                     const title = this.TranslocoService.translate('Data');
                     const msg = this.TranslocoService.translate('saved successfully');
                     this.notyService.genericSuccess(msg, title);
@@ -205,7 +208,9 @@ export class EventcorrelationSettingsIndexComponent implements OnInit, OnDestroy
                 this.notyService.genericError();
                 if (result) {
                     this.errors = errorResponse;
+
                 }
+                this.cdr.markForCheck();
             })
         );
     }

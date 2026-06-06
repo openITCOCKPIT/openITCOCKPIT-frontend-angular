@@ -15,7 +15,7 @@ export class HighlightSearchPipe implements PipeTransform {
      * This function is used to escape the text so that it can be safely used in the innerHTML.
      *
      * This code is highly inspired by the escapeExpression function in chosen.jquery.js
-     * https://github.com/it-novum/openITCOCKPIT/blob/50c4191a973ee67b849f2e1e1e0f264ac43c0e99/webroot/js/lib/chosen.jquery.min.js#L97-L120
+     * https://github.com/openITCOCKPIT/openITCOCKPIT/blob/50c4191a973ee67b849f2e1e1e0f264ac43c0e99/webroot/js/lib/chosen.jquery.min.js#L97-L120
      *
      * @param text
      * @private
@@ -83,7 +83,7 @@ export class HighlightSearchPipe implements PipeTransform {
 
         // Escape search text to avoid any issues with the regular expression
         // This is also copied from chosen.jquery.js
-        // https://github.com/it-novum/openITCOCKPIT/blob/50c4191a973ee67b849f2e1e1e0f264ac43c0e99/webroot/js/lib/chosen.jquery.min.js#L372
+        // https://github.com/openITCOCKPIT/openITCOCKPIT/blob/50c4191a973ee67b849f2e1e1e0f264ac43c0e99/webroot/js/lib/chosen.jquery.min.js#L372
         const escapedSearchText = searchText.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 
         // Match in a case-insensitive manner

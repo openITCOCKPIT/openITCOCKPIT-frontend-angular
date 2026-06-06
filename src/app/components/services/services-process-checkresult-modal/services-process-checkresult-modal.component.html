@@ -37,11 +37,13 @@
                         <input cFormControl id="output_service" name="output_service"
                                [placeholder]="'Test alert | counter=1' | transloco"
                                [(ngModel)]="processCheckresultModal.output">
-                        <div *ngIf="error" cFormText>
-                            <div class="help-block text-danger">
-                                {{ t('Output can not be empty') }}
+                        @if (error) {
+                            <div cFormText>
+                                <div class="help-block text-danger">
+                                    {{ t('Output can not be empty') }}
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                     <c-form-check class="mb-3">
                         <input cFormCheckInput id="force_hardstate_service" name="force_hardstate_service"

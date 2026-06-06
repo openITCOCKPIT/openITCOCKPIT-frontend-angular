@@ -28,7 +28,7 @@ import { MapLineComponent } from '../map-line/map-line.component';
 import { MapTextComponent } from '../map-text/map-text.component';
 import { MapItemComponent } from '../map-item/map-item.component';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { MapSummaryToasterService } from '../map-summary-toaster/map-summary-toaster.service';
 import { MapSummaryToasterComponent } from '../map-summary-toaster/map-summary-toaster.component';
 
@@ -49,8 +49,6 @@ import { MapSummaryToasterComponent } from '../map-summary-toaster/map-summary-t
         MapTextComponent,
         MapItemComponent,
         MapCanvasComponent,
-        NgForOf,
-        NgIf,
         MapSummaryToasterComponent
     ],
     templateUrl: './map-view.component.html',
@@ -63,6 +61,7 @@ export class MapViewComponent implements OnInit, OnDestroy {
     // default value is false, because to prevent to start reload interval on normal map view (too many item requests)
     // map item request are handled by map item component and the reload service
     public rotate: InputSignal<boolean | undefined> = input<boolean | undefined>(false);
+    public widgetHeight: InputSignal<number> = input<number>(0); // to pass the widget height to the map canvas
 
     private readonly router = inject(Router);
     private subscriptions: Subscription = new Subscription();
@@ -84,6 +83,7 @@ export class MapViewComponent implements OnInit, OnDestroy {
 
     constructor() {
         effect(() => {
+            this.widgetHeight();
             this.onMapIdChange();
         });
     }

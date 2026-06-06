@@ -112,94 +112,99 @@
             </c-container>
             <!-- End Filter -->
 
-            <oitc-table-loader *ngIf="!hosttemplates"></oitc-table-loader>
-            <table *ngIf="hosttemplates" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th class="width-50 text-center" scope="col">
-                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
-                    </th>
-                    <th scope="col" mat-sort-header="Hosttemplates.name">
-                        {{ t('Host template name') }}
-                    </th>
-                    <th scope="col" mat-sort-header="Hosttemplates.hosttemplatetype_id">
-                        {{ t('Type') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let hosttemplate of hosttemplates.all_hosttemplates">
-                    <td class="text-center">
-                        <oitc-item-select
-                            *oitcPermission="['hosttemplates', 'delete']"
-                            [disabled]="!hosttemplate.Hosttemplate.allow_edit"
-                            [item]="hosttemplate"></oitc-item-select>
+            @if (!hosttemplates) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (hosttemplates) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="Hosttemplates.name">
+                            {{ t('Host template name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Hosttemplates.hosttemplatetype_id">
+                            {{ t('Type') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (hosttemplate of hosttemplates.all_hosttemplates; track hosttemplate) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['hosttemplates', 'delete']"
+                                        [disabled]="!hosttemplate.Hosttemplate.allow_edit"
+                                        [item]="hosttemplate"></oitc-item-select>
+                                </td>
+                                <td>{{ hosttemplate.Hosttemplate.name }}</td>
+                                <td>
+                                    <span
+                                        class="badge border"
+                                        [ngClass]="[hosttemplate.Hosttemplate.type.class, hosttemplate.Hosttemplate.type.color]">
+                                        <fa-icon [icon]="hosttemplate.Hosttemplate.type.icon"
+                                                 [rotate]="hosttemplate.Hosttemplate.type.rotate"></fa-icon>
+                                        {{ hosttemplate.Hosttemplate.type.title }}
+                                    </span>
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'hosttemplates.edit'"
+                                                         [url]="'/hosttemplates/edit/' + hosttemplate.Hosttemplate.id"
+                                                         [allowEdit]="hosttemplate.Hosttemplate.allow_edit">
+                                        <oitc-actions-button-element [permission]="'hosttemplates.edit'"
+                                                                     [url]="'/hosttemplates/edit/' + hosttemplate.Hosttemplate.id">
+                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                            {{ t('Edit') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'changelogs.index'"
+                                                                     [url]="'/changelogs/entity/hosttemplate/' + hosttemplate.Hosttemplate.id">
+                                            <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                            {{ t('Changelog') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'hosttemplates.usedBy'"
+                                                                     [url]="'/hosttemplates/usedBy/' + hosttemplate.Hosttemplate.id">
+                                            <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
+                                            {{ t('Used By') }}
+                                        </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'documentations.view'"
+                                                                     [url]="'/documentations/view/' + hosttemplate.Hosttemplate.uuid+'/hosttemplate'">
+                                            <fa-icon [icon]="['fas', 'book']"></fa-icon>
+                                            {{ t('Documentation') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *oitcPermission="['hosttemplates', 'copy']"></li>
+                                        <oitc-actions-button-element [permission]="'hosttemplates.copy'"
+                                                                     [url]="'/hosttemplates/copy/' + hosttemplate.Hosttemplate.id">
+                                            <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                            {{ t('Copy') }}
+                                        </oitc-actions-button-element>
+                                        <li cDropdownDivider *oitcPermission="['hosttemplates', 'delete']"></li>
+                                        <oitc-actions-button-element (click)="toggleDeleteAllModal(hosttemplate)"
+                                                                     [permission]="'hosttemplates.delete'">
+                                            <span class="text-danger">
+                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                {{ t('Delete') }}
+                                            </span>
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-                    </td>
-                    <td>{{ hosttemplate.Hosttemplate.name }}</td>
-                    <td>
-                        <span
-                            class="badge border"
-                            [ngClass]="[hosttemplate.Hosttemplate.type.class, hosttemplate.Hosttemplate.type.color]">
-                            <fa-icon [icon]="hosttemplate.Hosttemplate.type.icon"
-                                     [rotate]="hosttemplate.Hosttemplate.type.rotate"></fa-icon>
-                            {{ hosttemplate.Hosttemplate.type.title }}
-                        </span>
-                    </td>
-
-
-                    <td class="width-50">
-                        <oitc-actions-button [permission]="'hosttemplates.edit'"
-                                             [url]="'/hosttemplates/edit/' + hosttemplate.Hosttemplate.id"
-                                             [allowEdit]="hosttemplate.Hosttemplate.allow_edit">
-                            <oitc-actions-button-element [permission]="'hosttemplates.edit'"
-                                                         [url]="'/hosttemplates/edit/' + hosttemplate.Hosttemplate.id">
-                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                {{ t('Edit') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'changelogs.index'"
-                                                         [url]="'/changelogs/entity/hosttemplate/' + hosttemplate.Hosttemplate.id">
-                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
-                                {{ t('Changelog') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'hosttemplates.usedBy'"
-                                                         [url]="'/hosttemplates/usedBy/' + hosttemplate.Hosttemplate.id">
-                                <fa-icon [icon]="['fas', 'reply-all']" flip="horizontal"></fa-icon>
-                                {{ t('Used By') }}
-                            </oitc-actions-button-element>
-                            <oitc-actions-button-element [permission]="'documentations.view'"
-                                                         [url]="'/documentations/view/' + hosttemplate.Hosttemplate.uuid+'/hosttemplate'">
-                                <fa-icon [icon]="['fas', 'book']"></fa-icon>
-                                {{ t('Documentation') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *oitcPermission="['hosttemplates', 'copy']"></li>
-                            <oitc-actions-button-element [permission]="'hosttemplates.copy'"
-                                                         [url]="'/hosttemplates/copy/' + hosttemplate.Hosttemplate.id">
-                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                {{ t('Copy') }}
-                            </oitc-actions-button-element>
-                            <li cDropdownDivider *oitcPermission="['hosttemplates', 'delete']"></li>
-                            <oitc-actions-button-element (click)="toggleDeleteAllModal(hosttemplate)"
-                                                         [permission]="'hosttemplates.delete'">
-                                <span class="text-danger">
-                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                    {{ t('Delete') }}
-                                </span>
-                            </oitc-actions-button-element>
-                        </oitc-actions-button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <oitc-no-records
-                *ngIf="hosttemplates && hosttemplates.all_hosttemplates.length === 0"></oitc-no-records>
-            <ng-container *ngIf="hosttemplates && hosttemplates.all_hosttemplates">
+            @if (hosttemplates && hosttemplates.all_hosttemplates.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (hosttemplates && hosttemplates.all_hosttemplates) {
                 <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
                              [fluid]="true">
                     <c-row>
@@ -210,13 +215,13 @@
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button class="btn btn-outline-primary col-3 border-0" type="button"
-                                         *oitcPermission="['hosttemplates', 'copy']"
+                                        *oitcPermission="['hosttemplates', 'copy']"
                                         (click)="navigateCopy()">
                                     <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                     {{ t('Copy') }}
                                 </button>
                                 <button (click)="toggleDeleteAllModal()"
-                                         *oitcPermission="['hosttemplates', 'copy']"
+                                        *oitcPermission="['hosttemplates', 'copy']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -226,16 +231,17 @@
                         </c-col>
                     </c-row>
                 </c-container>
-            </ng-container>
+            }
 
             <c-container
                 [fluid]="true">
                 <c-row>
                     <c-col>
-                        <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            *ngIf="hosttemplates"
-                            [paginateOrScroll]="hosttemplates"></oitc-paginate-or-scroll>
+                        @if (hosttemplates) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="hosttemplates"></oitc-paginate-or-scroll>
+                        }
                     </c-col>
                 </c-row>
             </c-container>

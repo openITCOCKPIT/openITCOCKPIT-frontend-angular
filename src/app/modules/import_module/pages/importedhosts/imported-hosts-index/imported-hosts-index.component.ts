@@ -56,7 +56,7 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -72,6 +72,8 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
 import { ImportersService } from '../../importers/importers.service';
 import { ImportDataComponent } from '../../../components/import-data/import-data.component';
 import { ImportCsvDataComponent } from '../../../components/import-csv-data/import-csv-data.component';
+import { IconDirective } from '@coreui/icons-angular';
+import { cibProxmox } from '@coreui/icons';
 
 @Component({
     selector: 'oitc-imported-hosts-index',
@@ -108,8 +110,6 @@ import { ImportCsvDataComponent } from '../../../components/import-csv-data/impo
         MatSortHeader,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         PermissionDirective,
@@ -126,7 +126,8 @@ import { ImportCsvDataComponent } from '../../../components/import-csv-data/impo
         MultiSelectComponent,
         ImportDataComponent,
         ImportCsvDataComponent,
-        KeyValuePipe
+        KeyValuePipe,
+        IconDirective
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostsService} // Inject the ImportedhostsService into the DeleteAllModalComponent
@@ -142,6 +143,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     public importedhosts: Importedhost[] = [];
     public importers: Importer[] = [];
+    public isLoadingImporters: boolean = true;
     public maxUploadLimit?: MaxUploadLimit;
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
@@ -169,6 +171,8 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     public marked_hosts_with_changes = 0;
     public marked_for_re_enable = 0;
 
+    public coreuiIcons = {cibProxmox};
+
     constructor() {
     }
 
@@ -178,6 +182,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
             // You can do something with these parameters here.
             //console.log(params);
             this.load();
+            this.loadImporters();
         }));
     }
 
@@ -248,7 +253,6 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.allImportedHosts = result;
                 this.importedhosts = result.importedhosts;
-                this.importers = result.importers;
                 this.maxUploadLimit = result.maxUploadLimit;
                 this.cdr.markForCheck();
             })
@@ -363,6 +367,20 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     public hasFlag(importedHostFlag: number, compareFlag: ImportedHostFlagsEnum) {
         return importedHostFlag & compareFlag;
+    }
+
+    public loadImporters() {
+        this.importers = [];
+        this.isLoadingImporters = true;
+        this.cdr.markForCheck();
+
+        this.subscriptions.add(this.ImportedhostsService.getImporters()
+            .subscribe((result) => {
+                this.importers = result.importers;
+                this.isLoadingImporters = false;
+                this.cdr.markForCheck();
+            })
+        );
     }
 
     protected readonly Object = Object;

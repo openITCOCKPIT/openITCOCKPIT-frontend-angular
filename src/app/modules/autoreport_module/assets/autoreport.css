@@ -23,6 +23,7 @@
 .service_icon {
     color: #DEE3E5;
 }
+
 /*
 .html-report-host-row {
     background-color: rgba(80, 80, 80, 0.2)!important;
@@ -38,11 +39,11 @@
 }
 
 body.dark-theme .host_option {
-    background: #92A2A842!important;
+    background: #92A2A842 !important;
 }
 
 body.dark-theme .service_option {
-    background: #DEE3E542!important;
+    background: #DEE3E542 !important;
 }
 
 .report-table-bordered {
@@ -61,6 +62,7 @@ i[class*='all_select_'] {
     cursor: pointer;
     padding: 0 3px;
 }
+
 /*
 .helptext {
     cursor: help;
@@ -85,17 +87,19 @@ i[class*='all_select_'] {
 }
 
 .offset-md-3 {
-    margin-left: 25%; }
+    margin-left: 25%;
+}
 
 .img-fluid {
     max-width: 100%;
-    height: auto; }
+    height: auto;
+}
 
 .html-report-host-row {
-    background-color: rgba(80, 80, 80, 0.2)!important;
+    background-color: rgba(80, 80, 80, 0.2) !important;
 }
 
 .badge {
     display: inline;
-    margin-top: 0px!important;
+    margin-top: 0px !important;
 }

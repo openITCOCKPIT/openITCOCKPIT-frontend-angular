@@ -5,16 +5,13 @@ import { HoststatusObject } from '../hosts/hosts.interface';
 
 /** INDEX PARAMS **/
 export interface HostgroupsIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
     page: number,
-    direction: 'asc' | 'desc' | '', // asc or desc
-    'filter[Hostgroups.id][]': number[],
-    'filter[Hostgroups.description]': string,
-    'filter[Containers.name]': string,
+    direction: 'asc' | 'desc' | ''
 }
+
 
 export function getDefaultHostgroupsIndexParams(): HostgroupsIndexParams {
     return {
@@ -22,22 +19,38 @@ export function getDefaultHostgroupsIndexParams(): HostgroupsIndexParams {
         scroll: true,
         sort: 'Containers.name',
         page: 1,
-        direction: 'asc',
-        'filter[Hostgroups.id][]': [],
-        'filter[Hostgroups.description]': "",
-        'filter[Containers.name]': ""
+        direction: 'asc'
+    }
+}
+
+export interface HostgroupsIndexFilter {
+    'Hostgroups.id': number[]
+    'Containers.name': string
+    'Hostgroups.description': string
+    'Hostgroups.keywords': string[]
+    'Hostgroups.not_keywords': string[]
+}
+
+export function getDefaultHostgroupsIndexFilter(): HostgroupsIndexFilter {
+    return {
+        'Hostgroups.id': [],
+        'Containers.name': '',
+        'Hostgroups.description': '',
+        'Hostgroups.keywords': [],
+        'Hostgroups.not_keywords': []
     }
 }
 
 /** EXTENDED VIEW PARAMS **/
 export interface HostgroupsExtendedParams {
     // Same again? Maybe create an intermediate class? OOP FTW :-P
-    angular: true,
-    scroll: boolean,
-    page: number,
-
-    selected: number;
-    'filter[Hosts.name]': string,
+    angular: true
+    scroll: boolean
+    page: number
+    sort: string
+    direction: 'asc' | 'desc' | ''
+    selected: number
+    'filter[Hosts.name]': string
     'filter[Hoststatus.current_state][]': string[]
 }
 
@@ -46,7 +59,8 @@ export function getDefaultHostgroupsExtendedParams(): HostgroupsExtendedParams {
         angular: true,
         scroll: true,
         page: 1,
-
+        sort: 'cumulated_service_status',
+        direction: 'desc',
         selected: 0,
         "filter[Hosts.name]": '',
         "filter[Hoststatus.current_state][]": [],
@@ -169,6 +183,7 @@ export interface Hostgroup {
     }
     description: string
     hostgroup_url: string
+    tags: string
     hosts: {
         _ids: number[]
     }

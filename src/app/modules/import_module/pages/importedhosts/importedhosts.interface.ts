@@ -12,7 +12,7 @@ import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 export interface ImportedhostsIndexRoot extends PaginateOrScroll {
     importedhosts: Importedhost[]
     maxUploadLimit: MaxUploadLimit
-    importers: Importer[]
+    //importers: Importer[] Removed ITC-3512
     _csrfToken: string
 }
 
@@ -285,6 +285,7 @@ export interface ImportedHostPost {
     identifier: string
     name: string
     description: string
+    tags: string
     address: string
     container_id: number
     hosttemplate_id: number

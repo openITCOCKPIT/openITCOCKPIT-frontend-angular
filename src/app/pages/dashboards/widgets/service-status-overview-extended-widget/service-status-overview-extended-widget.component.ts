@@ -16,7 +16,7 @@ import { ServiceStatusOverviewExtendedWidgetService } from './service-status-ove
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { GenericValidationError } from '../../../../generic-responses';
 import {
@@ -48,12 +48,12 @@ import {
 } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { ContainersService } from '../../../containers/containers.service';
 import { ContainersLoadContainersByStringParams } from '../../../containers/containers.interface';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-service-status-overview-extended-widget',
     imports: [
         FaIconComponent,
-        NgIf,
         TranslocoDirective,
         RowComponent,
         NgClass,
@@ -88,7 +88,7 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
     public readonly ContainersService: ContainersService = inject(ContainersService);
     public readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
 
-    public config?: ServiceStatusOverviewExtendedWidgetConfig;
+    public config!: ServiceStatusOverviewExtendedWidgetConfig;
     private readonly ServiceStatusOverviewExtendedWidgetService = inject(ServiceStatusOverviewExtendedWidgetService);
     public statusCount: number | null = null;
     public serviceIds: number[] = [];
@@ -110,6 +110,14 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
     public errors: GenericValidationError | null = null;
 
     @ViewChild('boxContainer') boxContainer?: ElementRef;
+
+    public priorityFilter: { 1: boolean; 2: boolean; 3: boolean; 4: boolean; 5: boolean } = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
+    };
 
     constructor() {
         super();
@@ -136,6 +144,15 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
                     this.containerIds = this.config.Container._ids.split(',').map(Number).filter(Boolean);
                     this.servicegroupsIds = this.config.Servicegroup._ids.split(',').map(Number).filter(Boolean);
                     this.serviceIds = result.serviceIds;
+
+                    _.map(this.config.servicepriority,
+                        (value) => {
+                            if (this.priorityFilter.hasOwnProperty(value)) {
+                                this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                            }
+                        }
+                    );
+
                     this.cdr.markForCheck();
                 }));
         }
@@ -208,6 +225,15 @@ export class ServiceStatusOverviewExtendedWidget extends BaseWidgetComponent imp
         this.config.Service.not_keywords = this.notKeywords.join(',');
         this.config.Container._ids = this.containerIds.join(',');
         this.config.Servicegroup._ids = this.servicegroupsIds.join(',');
+
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
+            }
+        );
 
         this.subscriptions.add(this.ServiceStatusOverviewExtendedWidgetService.saveWidgetConfig(this.widget.id, this.config)
             .subscribe({

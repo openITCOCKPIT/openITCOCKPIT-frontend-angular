@@ -20,7 +20,7 @@ import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import {
     AcknowledgementIconComponent
 } from '../../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
     ColComponent,
     ContainerComponent,
@@ -60,6 +60,8 @@ import { RouterLink } from '@angular/router';
 import {
     ServiceBrowserModalService
 } from '../../../services/services-browser/service-browser-modal/service-browser-modal.service';
+import { DebounceDirective } from '../../../../directives/debounce.directive';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-services-status-list-extended-widget',
@@ -84,7 +86,6 @@ import {
         InputGroupTextDirective,
         MatSort,
         MatSortHeader,
-        NgIf,
         NgSelectComponent,
         NoRecordsComponent,
         ReactiveFormsModule,
@@ -101,7 +102,8 @@ import {
         XsButtonDirective,
         RouterLink,
         NgClass,
-        TooltipDirective
+        TooltipDirective,
+        DebounceDirective
     ],
     templateUrl: './services-status-list-extended-widget.component.html',
     styleUrl: './services-status-list-extended-widget.component.css',
@@ -125,7 +127,7 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
 
 
     // widget config will be loaded from the server
-    public config?: ServicesStatusListWidgetConfig;
+    public config!: ServicesStatusListWidgetConfig;
     public configHostKeyWords: string[] = [];
     public configHostNotKeyWords: string[] = [];
     public configServiceKeyWords: string[] = [];
@@ -134,6 +136,14 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
 
     private readonly ServicesStatusListWidgetService = inject(ServicesStatusListWidgetService);
     private readonly ServiceBrowserModalService = inject(ServiceBrowserModalService);
+
+    public priorityFilter: { 1: boolean; 2: boolean; 3: boolean; 4: boolean; 5: boolean } = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
+    };
 
     public override load() {
         // Handled by ngAfterViewInit as we need the widget height for the correct limit
@@ -236,6 +246,14 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
             this.configServiceKeyWords = (config.Service.keywords !== '') ? config.Service.keywords.split(',') : [];
             this.configServiceNotKeyWords = (config.Service.not_keywords !== '') ? config.Service.not_keywords.split(',') : [];
 
+            _.map(this.config.servicepriority,
+                (value) => {
+                    if (this.priorityFilter.hasOwnProperty(value)) {
+                        this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                    }
+                }
+            );
+
 
             this.loadServices();
             this.cdr.markForCheck();
@@ -256,6 +274,15 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
         this.config.Host.not_keywords = this.configHostNotKeyWords.join(',');
         this.config.Service.keywords = this.configServiceKeyWords.join(',');
         this.config.Service.not_keywords = this.configServiceNotKeyWords.join(',');
+
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
+            }
+        );
 
         this.subscriptions.add(this.ServicesStatusListWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -309,6 +336,16 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
             }
         }
 
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
+            }
+        );
+
+
         // Apply the config to the filter
         const params: ServicesStatusListWidgetParams = {
             angular: true,
@@ -329,7 +366,8 @@ export class ServicesStatusListExtendedWidgetComponent extends BaseWidgetCompone
             'filter[Servicestatus.current_state][]': currentState,
             'filter[Servicestatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
             'filter[Servicestatus.scheduled_downtime_depth]': inDowntime,
-            'filter[Servicestatus.last_state_change][]': lastStateChange
+            'filter[Servicestatus.last_state_change][]': lastStateChange,
+            'filter[servicepriority][]': this.config.servicepriority
         };
 
         this.subscriptions.add(this.ServicesStatusListWidgetService.loadServices(params).subscribe(services => {

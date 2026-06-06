@@ -33,7 +33,7 @@ import {
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
 import {
@@ -76,11 +76,9 @@ import { SelectionServiceService } from '../../../../../layouts/coreui/select-al
         ReactiveFormsModule,
         RowComponent,
         TranslocoPipe,
-        NgIf,
         TableLoaderComponent,
         ActionsButtonComponent,
         ActionsButtonElementComponent,
-        NgForOf,
         TableDirective,
         NoRecordsComponent,
         PrometheusPopoverGraphComponent,

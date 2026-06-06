@@ -25,36 +25,35 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { RegistersService } from '../registers.service';
-import { NgIf } from '@angular/common';
+
 import { LicenseResponse } from '../registers.interface';
 import { CreditsComponent } from '../credits/credits.component';
 
 @Component({
     selector: 'oitc-registers-index',
     imports: [
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    FormDirective,
-    FormsModule,
-    ReactiveFormsModule,
-    CardBodyComponent,
-    CardFooterComponent,
-    FormControlDirective,
-    FormLabelDirective,
-    RequiredIconComponent,
-    RowComponent,
-    ColComponent,
-    NgIf,
-    CreditsComponent
-],
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        FormDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        CardBodyComponent,
+        CardFooterComponent,
+        FormControlDirective,
+        FormLabelDirective,
+        RequiredIconComponent,
+        RowComponent,
+        ColComponent,
+        CreditsComponent
+    ],
     templateUrl: './registers-index.component.html',
     styleUrl: './registers-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

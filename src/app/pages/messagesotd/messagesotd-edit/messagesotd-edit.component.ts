@@ -29,7 +29,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
@@ -53,46 +53,45 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 @Component({
     selector: 'oitc-messagesotd-edit',
     imports: [
-    BackButtonDirective,
-    BbCodeEditorComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    FaIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormControlDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    MultiSelectComponent,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PermissionDirective,
-    RequiredIconComponent,
-    RowComponent,
-    SelectComponent,
-    TranslocoDirective,
-    TrustAsHtmlPipe,
-    XsButtonDirective,
-    RouterLink,
-    FormLoaderComponent,
-    FormCheckLabelDirective,
-    TrueFalseDirective,
-    NgClass
-],
+        BackButtonDirective,
+        BbCodeEditorComponent,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormControlDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        MultiSelectComponent,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        RequiredIconComponent,
+        RowComponent,
+        SelectComponent,
+        TranslocoDirective,
+        TrustAsHtmlPipe,
+        XsButtonDirective,
+        RouterLink,
+        FormLoaderComponent,
+        FormCheckLabelDirective,
+        TrueFalseDirective,
+        NgClass
+    ],
     templateUrl: './messagesotd-edit.component.html',
     styleUrl: './messagesotd-edit.component.css'
 })
@@ -150,7 +149,7 @@ export class MessagesotdEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.MessagesOfTheDayService.getEdit(id)
             .subscribe((result: EditableMessageOfTheDay) => {
                 this.post = result;
-                this.post.expire = !! this.post.expiration_duration;
+                this.post.expire = !!this.post.expiration_duration;
                 this.html = this.BbCodeParserService.parse(this.post.content);
             }));
     }

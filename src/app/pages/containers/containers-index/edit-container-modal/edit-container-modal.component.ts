@@ -25,7 +25,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -39,27 +39,26 @@ import { ContainersService } from '../../containers.service';
 @Component({
     selector: 'oitc-edit-container-modal',
     imports: [
-    ButtonCloseDirective,
-    FaIconComponent,
-    FormControlDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    NgIf,
-    ReactiveFormsModule,
-    RequiredIconComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    XsButtonDirective
-],
+        ButtonCloseDirective,
+        FaIconComponent,
+        FormControlDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        ReactiveFormsModule,
+        RequiredIconComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        XsButtonDirective
+    ],
     templateUrl: './edit-container-modal.component.html',
     styleUrl: './edit-container-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

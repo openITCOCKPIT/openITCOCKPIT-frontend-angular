@@ -23,7 +23,7 @@ import {
     TooltipDirective
 } from '@coreui/angular';
 
-import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgClass } from '@angular/common';
 import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
@@ -139,7 +139,6 @@ import { TitleService } from '../../../services/title.service';
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        NgIf,
         QueryHandlerCheckerComponent,
         TranslocoDirective,
         ServicesBrowserMenuComponent,
@@ -177,7 +176,6 @@ import { TitleService } from '../../../services/title.service';
         TableDirective,
         PrometheusServiceBrowserComponent,
         HoststatusSimpleIconComponent,
-        NgForOf,
         BrowserTimelineComponent,
         ServiceTimelineLegendComponent,
         FormCheckComponent,
@@ -318,6 +316,7 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
                 this.tags = String(result.mergedService.tags).split(',');
             }
 
+            this.availableDataSources = [];
             for (let key in result.mergedService.Perfdata) {
                 const gauge = result.mergedService.Perfdata[key];
                 this.availableDataSources.push({

@@ -40,15 +40,15 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 @Component({
     selector: 'oitc-actions-button',
     imports: [
-    ButtonGroupComponent,
-    DropdownComponent,
-    PermissionDirective,
-    FaIconComponent,
-    XsButtonDirective,
-    DropdownToggleDirective,
-    DropdownMenuDirective,
-    RouterLink
-],
+        ButtonGroupComponent,
+        DropdownComponent,
+        PermissionDirective,
+        FaIconComponent,
+        XsButtonDirective,
+        DropdownToggleDirective,
+        DropdownMenuDirective,
+        RouterLink
+    ],
     templateUrl: './actions-button.component.html',
     styleUrl: './actions-button.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -60,7 +60,8 @@ export class ActionsButtonComponent {
     @Input({required: true}) url: string = '';
     @Input({required: true}) permission: string = '';
     @Input({required: false}) style: string = 'default';
-    @Input({required: false}) click: (element: any) => void = () => {};
+    @Input({required: false}) click: (element: any) => void = () => {
+    };
     @Input({required: false}) element: any = null;
     @Input() queryParams: Params | undefined | null;
 

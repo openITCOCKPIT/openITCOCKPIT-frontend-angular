@@ -1,23 +1,30 @@
+import { GenericIdAndName } from '../../../generic.interfaces';
+
 export interface ResourcesWidgetResponse {
     resources: ResourcesWidgetOverview
-    deadline: string
-    deadlineExceeded: boolean
     _csrfToken: any
 }
 
 export interface ResourcesWidgetOverview {
     status_overview: number[]
     resource_ids: number[][]
+    deadlines: Deadline[]
     total: number
 }
 
 export interface ResourcegroupsCronjobWidgetResponse {
     resources: ResourcesWidgetOverview
-    deadline: string
-    deadlineExceeded: boolean
     timerangeArrives: boolean
     cronjobStatus: ResourcegroupsCronjobStatus
+    deadlines: Deadline[]
     _csrfToken: any
+}
+
+export interface Deadline {
+    key: string
+    resourcegroups: GenericIdAndName[]
+    exceeded: boolean
+    timerangeArrives?: boolean
 }
 
 export interface ResourcegroupsCronjobStatus {

@@ -30,7 +30,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 
 
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -64,7 +64,6 @@ import {
         FormsModule,
         NavComponent,
         NavItemComponent,
-        NgIf,
         PermissionDirective,
         ReactiveFormsModule,
         RowComponent,
@@ -172,29 +171,14 @@ export class AgentconnectorShowOutputComponent implements OnInit, OnDestroy {
                     if (!isEditing && isBoolean(props.value)) {
                         renderers.push({
                             component: BooleanToggle,
-                            props: {
-                                path: props.path,
-                                value: props.value,
-                                readOnly: props.readOnly,
-                                onPatch: props.onPatch,
-                                focus: props.focus
-                            }
+                            props
                         });
                     }
 
                     if (!isEditing) {
                         renderers.push({
                             component: ReadonlyValue,
-                            props: {
-                                path: props.path,
-                                value: props.value,
-                                mode: props.mode,
-                                readOnly: props.readOnly,
-                                parser: props.parser,
-                                normalization: props.normalization,
-                                searchResultItems: props.searchResultItems,
-                                onSelect: props.onSelect
-                            }
+                            props
                         });
                     }
 

@@ -19,91 +19,83 @@
         </ol>
     </nav>
 
-    <oitc-form-loader [isVisible]="!host" />
+    <oitc-form-loader [isVisible]="!host"/>
 
     <form cForm (ngSubmit)="submit()">
-        <c-card class="mb-3" *ngIf="host">
-            <c-card-header>
-                <h5 cCardTitle>
-                    {{ t('Sharing for') }}
-                    <small class="fw-300">
-                        {{ host.Host.name }}
-                    </small>
-                </h5>
-
-                <c-nav class="card-toolbar card-header-pills">
-                    <oitc-object-uuid [uuid]="host.Host.uuid"></oitc-object-uuid>
-                </c-nav>
-
-                <c-nav class="card-toolbar card-header-pills">
-                    <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['hosts', 'index']" cButton class="ripple" color="default"
-                                oitcBackButton
-                                size="xs">
-                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                            {{ t('Back') }}
-                        </button>
-                    </c-nav-item>
-                </c-nav>
-
-            </c-card-header>
-            <c-card-body>
-
-                <div class="mb-3">
-                    <label cLabel for="container">
-                        {{ t(' Primary container') }}
-                        <oitc-required-icon></oitc-required-icon>
-                    </label>
-
-                    <oitc-select
-                        name="container"
-                        id="container"
-                        optionValue="key"
-                        optionLabel="value"
-                        [disabled]="true"
-                        [(ngModel)]="host.Host.container_id"
-                        [options]="primaryContainerPathSelect"
-                        oitcFormError [errors]="errors" errorField="container_id">
-                    </oitc-select>
-                    <div class="help-block text-info">
-                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                        {{ t('Due to dependencies it is not possible to change the primary container in this view.') }}
+        @if (host) {
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>
+                        {{ t('Sharing for') }}
+                        <small class="fw-300">
+                            {{ host.Host.name }}
+                        </small>
+                    </h5>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <oitc-object-uuid [uuid]="host.Host.uuid"></oitc-object-uuid>
+                    </c-nav>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['hosts', 'index']" cButton class="ripple" color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
+                    <div class="mb-3">
+                        <label cLabel for="container">
+                            {{ t(' Primary container') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-select
+                            name="container"
+                            id="container"
+                            optionValue="key"
+                            optionLabel="value"
+                            [disabled]="true"
+                            [(ngModel)]="host.Host.container_id"
+                            [options]="primaryContainerPathSelect"
+                            oitcFormError [errors]="errors" errorField="container_id">
+                        </oitc-select>
+                        <div class="help-block text-info">
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('Due to dependencies it is not possible to change the primary container in this view.') }}
+                        </div>
+                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                     </div>
-                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
-                    <label cLabel for="HostSharedContainer">
-                        {{ t('Shared containers') }}
-                    </label>
-
-                    <oitc-multi-select
-                        name="HostSharedContainer"
-                        id="HostSharedContainer"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="host.Host.hosts_to_containers_sharing._ids"
-                        [options]="sharingContainers"
-                        oitcFormError [errors]="errors" errorField="hosts_to_containers_sharing">
-                    </oitc-multi-select>
-                    <oitc-form-feedback [errors]="errors"
-                                        errorField="hosts_to_containers_sharing"></oitc-form-feedback>
-                </div>
-
-            </c-card-body>
-            <c-card-footer class="text-end">
-                <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Update sharing') }}
-                </button>
-                <button [fallbackUrl]="['commands', 'index']" cButton class="ms-1 ripple" color="default"
-                        oitcBackButton
-                        type="button">
-                    {{ t('Cancel') }}
-                </button>
-
-
-            </c-card-footer>
-        </c-card>
+                    <div class="mb-3">
+                        <label cLabel for="HostSharedContainer">
+                            {{ t('Shared containers') }}
+                        </label>
+                        <oitc-multi-select
+                            name="HostSharedContainer"
+                            id="HostSharedContainer"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="host.Host.hosts_to_containers_sharing._ids"
+                            [options]="sharingContainers"
+                            oitcFormError [errors]="errors" errorField="hosts_to_containers_sharing">
+                        </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="hosts_to_containers_sharing"></oitc-form-feedback>
+                    </div>
+                </c-card-body>
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Update sharing') }}
+                    </button>
+                    <button [fallbackUrl]="['commands', 'index']" cButton class="ms-1 ripple" color="default"
+                            oitcBackButton
+                            type="button">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        }
     </form>
 
 

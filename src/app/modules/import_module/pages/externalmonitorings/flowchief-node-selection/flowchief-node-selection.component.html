@@ -1,0 +1,140 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Import Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['importmodule','ExternalMonitorings', 'index']"
+                   [routerLink]="['/', 'import_module', 'ExternalMonitorings', 'index']">
+                    <fa-icon [icon]="['fas', 'tower-observation']"></fa-icon>
+                    {{ t('External Monitoring Systems') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'folder-tree']"></fa-icon>
+                {{ t('Select FlowChief nodes') }}
+            </li>
+        </ol>
+    </nav>
+
+    <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
+
+    @if (post) {
+        <form cForm (ngSubmit)="submit()">
+            <c-card class="mb-3">
+                <c-card-header>
+                    <h5 cCardTitle>{{ t('Select FlowChief Nodes') }}</h5>
+                    <c-nav class="card-toolbar card-header-pills">
+                        <c-nav-item class="px-1">
+                            <button [fallbackUrl]="['import_module', 'ExternalMonitorings', 'index']" cButton
+                                    class="ripple"
+                                    color="default"
+                                    oitcBackButton
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                                {{ t('Back') }}
+                            </button>
+                        </c-nav-item>
+                    </c-nav>
+                </c-card-header>
+                <c-card-body>
+                    <div class="mb-3">
+                        <label cLabel for="FlowChiefNodesSelect">
+                            {{ t('FlowChief Nodes (Plantexplorer)') }}
+                        </label>
+                        <oitc-multi-select
+                            name="FlowChiefNodesSelect"
+                            id="FlowChiefNodesSelect"
+                            optionValue="key"
+                            optionLabel="value"
+                            [options]="flowchiefNodes"
+                            [(ngModel)]="selectedNodes"
+                            [debounce]="true"
+                            [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
+                            [searchCallback]="loadFlowchiefNodes"
+                            (ngModelChange)="updateNodesMembership()">
+                        </oitc-multi-select>
+                        <div class="help-block small">
+                            {{ t('openITCOCKPIT will import all Process Variables from the selected nodes.') }}
+                            <br>
+                            {{ t('In case the list is empty, execute the command') }}
+                            <oitc-copy-to-clipboard
+                                [data]="'oitc import_module.flowchief_import_nodes --external-monitoring-system-id '+post.id">
+                                <code>oitc import_module.flowchief_import_nodes
+                                    --external-monitoring-system-id {{ post.id }}</code>
+                            </oitc-copy-to-clipboard>
+                            {{ t('on the openITCOCKPIT server to get the list of available nodes.') }}
+                        </div>
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="flowchief_nodes_membership"></oitc-form-feedback>
+                    </div>
+
+                    <div class="mb-3">
+                        @if (post.flowchief_nodes_membership.length > 0) {
+                            <c-alert color="warning">
+                                <h4 cAlertHeading>
+                                    <div class='icon-stack  icon-stack-sm'>
+                                        <i class="base base-9 icon-stack-3x opacity-100 text-warning"></i>
+                                        <i class="fas fa-exclamation-circle icon-stack-1x opacity-100 text-white"></i>
+                                    </div>
+                                    {{ t('Attention!') }}
+                                </h4>
+                                <p class="mb-0">
+                                    {{ t('Please note that enabling the "Include sub-tree PVs" option may result in a large number of unnecessary imports, which can cause performance issues.') }}
+                                </p>
+                            </c-alert>
+                        }
+
+                        @for (nodeMembership of post.flowchief_nodes_membership; track $index) {
+                            <div class="my-2 py-1 ps-2 border-start border-primary border-4"
+                                 [ngClass]="{odd: $index % 2 === 0, even: $index % 2 !== 0}">
+                                @if (nodeMembership.is_recursive) {
+                                    <fa-icon [icon]="['far', 'folder-open']" [cTextColor]="'primary'"></fa-icon>
+                                } @else {
+                                    <fa-icon [icon]="['far', 'folder']" [cTextColor]="'primary'"></fa-icon>
+                                }
+                                {{ nodeMembership.path }}
+                                <c-form-check>
+                                    <input
+                                        cFormCheckInput
+                                        class="checkbox-lg checkbox-primary"
+                                        [id]="'is_recursive'+$index"
+                                        [name]="'is_recursive'+$index"
+                                        type="checkbox"
+                                        [(ngModel)]="nodeMembership.is_recursive"/>
+
+                                    <label cFormCheckLabel
+                                           [for]="'is_recursive'+$index"
+                                           class="ms-1 mt-1">
+                                        {{ t('Include sub-tree PVs') }}
+                                    </label>
+                                </c-form-check>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </c-card-body>
+
+                <c-card-footer class="text-end">
+                    <button cButton class="ripple" color="primary" type="submit">
+                        {{ t('Save') }}
+                    </button>
+                    <button [fallbackUrl]="['import_module','ExternalMonitorings', 'index']" cButton class="ms-1 ripple"
+                            color="default" oitcBackButton type="button">
+                        {{ t('Cancel') }}
+                    </button>
+                </c-card-footer>
+            </c-card>
+        </form>
+    }
+</ng-container>

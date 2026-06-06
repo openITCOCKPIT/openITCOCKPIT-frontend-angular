@@ -4,15 +4,19 @@ import { SelectKeyValue } from "../../layouts/primeng/select.interface";
 
 /** INDEX PARAMS **/
 export interface ServicegroupsIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
     page: number,
-    direction: 'asc' | 'desc' | '', // asc or desc
-    'filter[Servicegroups.id][]': number[],
-    'filter[Servicegroups.description]': string,
-    'filter[Containers.name]': string,
+    direction: 'asc' | 'desc' | ''
+}
+
+export interface ServicegroupsIndexFilter {
+    'Servicegroups.id': number[]
+    'Containers.name': string
+    'Servicegroups.description': string
+    'Servicegroups.keywords': string[]
+    'Servicegroups.not_keywords': string[]
 }
 
 export function getDefaultServicegroupsIndexParams(): ServicegroupsIndexParams {
@@ -21,10 +25,17 @@ export function getDefaultServicegroupsIndexParams(): ServicegroupsIndexParams {
         scroll: true,
         sort: 'Containers.name',
         page: 1,
-        direction: 'asc',
-        'filter[Servicegroups.id][]': [],
-        'filter[Servicegroups.description]': "",
-        'filter[Containers.name]': ""
+        direction: 'asc'
+    }
+}
+
+export function getDefaultServicegroupsIndexFilter(): ServicegroupsIndexFilter {
+    return {
+        'Servicegroups.id': [],
+        'Containers.name': '',
+        'Servicegroups.description': '',
+        'Servicegroups.keywords': [],
+        'Servicegroups.not_keywords': []
     }
 }
 
@@ -34,7 +45,8 @@ export interface ServicegroupsExtendedParams {
     angular: true,
     scroll: boolean,
     page: number,
-
+    sort: string
+    direction: 'asc' | 'desc' | ''
     selected: number;
     'filter[Services.name]': string,
     'filter[servicename]': string,
@@ -46,7 +58,8 @@ export function getDefaultServicegroupsExtendedParams(): ServicegroupsExtendedPa
         angular: true,
         scroll: true,
         page: 1,
-
+        sort: 'Servicestatus.current_state',
+        direction: 'desc',
         selected: 0,
         "filter[Services.name]": '',
         "filter[servicename]": '',
@@ -168,6 +181,7 @@ export interface Servicegroup {
     }
     description: string
     servicegroup_url: string
+    tags: string
     services: {
         _ids: number[]
     }

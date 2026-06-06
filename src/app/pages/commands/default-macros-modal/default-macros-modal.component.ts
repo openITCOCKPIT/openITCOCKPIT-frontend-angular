@@ -21,7 +21,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { NgFor, NgIf } from '@angular/common';
+
 import { MacrosService } from '../../macros/macros.service';
 import { DefaultMacros } from '../../../components/code-mirror-container/code-mirror-container.interface';
 
@@ -38,8 +38,6 @@ import { DefaultMacros } from '../../../components/code-mirror-container/code-mi
         ButtonCloseDirective,
         TranslocoDirective,
         TableDirective,
-        NgIf,
-        NgFor,
         ModalFooterComponent
     ],
     templateUrl: './default-macros-modal.component.html',

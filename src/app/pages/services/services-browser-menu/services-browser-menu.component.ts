@@ -32,13 +32,14 @@ import {
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
-import { AsyncPipe, NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
     ServicestatusIconComponent
 } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { RouterLink } from '@angular/router';
+import { HostTypesEnum } from '../../hosts/hosts.enum';
 
 
 export interface ServiceBrowserMenuConfig {
@@ -61,7 +62,6 @@ export interface ServiceBrowserMenuConfig {
         DropdownMenuDirective,
         DropdownToggleDirective,
         FaIconComponent,
-        NgIf,
         PermissionDirective,
         RowComponent,
         TitleCasePipe,
@@ -143,4 +143,5 @@ export class ServicesBrowserMenuComponent implements OnInit, OnChanges, OnDestro
         this.toggleRescheduling.emit(true);
     }
 
+    protected readonly HostTypesEnum = HostTypesEnum;
 }

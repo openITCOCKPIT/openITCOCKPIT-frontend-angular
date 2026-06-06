@@ -1,9 +1,11 @@
-import { HostgroupSummaryStateHosts } from '../../../hosts/summary_state.interface';
+import { SummaryStateHosts } from '../../../hosts/summary_state.interface';
 
 export interface TacticalOverviewHostsResponse {
     config: TacticalOverviewHostsConfig
-    hoststatusSummary: HostgroupSummaryStateHosts
+    hoststatusSummary: SummaryStateHosts
     servicestatusSummary: any[]
+    hoststatusCountPercentage: number[]
+    servicestatusCountPercentage: number[]
     _csrfToken: string
 }
 
@@ -12,10 +14,15 @@ export interface TacticalOverviewHostsConfig {
     Service: TacticalOverviewServiceConfig
     Hostgroup: {
         _ids: number[]
+        keywords: string
+        not_keywords: string
     }
     Servicegroup: {
         _ids: number[]
+        keywords: string
+        not_keywords: string
     }
+    hostpriority: string[],
 }
 
 export interface TacticalOverviewHostConfig {

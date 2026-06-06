@@ -1,7 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, DOCUMENT } from '@angular/core';
 import { map, Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { DOCUMENT } from '@angular/common';
+
 import { PROXY_PATH } from '../../../../../tokens/proxy-path.token';
 
 @Injectable({
@@ -14,6 +14,7 @@ export class OpenstreetmapToasterService {
 
     constructor() {
     }
+
     private containerIds$$: Subject<number[]> = new Subject<number[]>();
     public containerIds$: Observable<number[]> = this.containerIds$$.asObservable();
 

@@ -34,7 +34,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-records.component';
 import { ScrollIndexComponent } from '../../../../layouts/coreui/paginator/scroll-index/scroll-index.component';
 import { SliderTimeComponent } from '../../../../components/slider-time/slider-time.component';
@@ -52,6 +52,7 @@ import {
     RegexHelperTooltipComponent
 } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-hosts-status-list-widget',
@@ -67,7 +68,6 @@ import { NgSelectComponent } from '@ng-select/ng-select';
         InputGroupTextDirective,
         MatSort,
         MatSortHeader,
-        NgIf,
         NoRecordsComponent,
         ReactiveFormsModule,
         RowComponent,
@@ -92,7 +92,8 @@ import { NgSelectComponent } from '@ng-select/ng-select';
         DropdownMenuDirective,
         DropdownToggleDirective,
         FormCheckComponent,
-        FormCheckLabelDirective
+        FormCheckLabelDirective,
+        NgClass
     ],
     templateUrl: './hosts-status-list-widget.component.html',
     styleUrl: './hosts-status-list-widget.component.css',
@@ -113,12 +114,19 @@ export class HostsStatusListWidgetComponent extends BaseWidgetComponent implemen
 
 
     // widget config will be loaded from the server
-    public config?: HostsStatusListWidgetConfig;
+    public config!: HostsStatusListWidgetConfig;
     public configKeyWords: string[] = [];
     public configNotKeyWords: string[] = [];
 
-
     private readonly HostsStatusListWidgetService = inject(HostsStatusListWidgetService);
+
+    public priorityFilter: { [key: string]: boolean } = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
+    };
 
     public override load() {
         // Handled by ngAfterViewInit as we need the widget height for the correct limit
@@ -217,6 +225,13 @@ export class HostsStatusListWidgetComponent extends BaseWidgetComponent implemen
             this.configKeyWords = (config.Host.keywords !== '') ? config.Host.keywords.split(',') : [];
             this.configNotKeyWords = (config.Host.not_keywords !== '') ? config.Host.not_keywords.split(',') : [];
 
+            _.map(this.config.hostpriority,
+                (value) => {
+                    if (this.priorityFilter.hasOwnProperty(value)) {
+                        this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                    }
+                }
+            );
 
             this.loadHosts();
             this.cdr.markForCheck();
@@ -235,6 +250,14 @@ export class HostsStatusListWidgetComponent extends BaseWidgetComponent implemen
 
         this.config.Host.keywords = this.configKeyWords.join(',');
         this.config.Host.not_keywords = this.configNotKeyWords.join(',');
+        this.config.hostpriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.hostpriority.push(Number(key));
+                }
+            }
+        );
 
         this.subscriptions.add(this.HostsStatusListWidgetService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -286,6 +309,15 @@ export class HostsStatusListWidgetComponent extends BaseWidgetComponent implemen
             }
         }
 
+        this.config.hostpriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.hostpriority.push(Number(key));
+                }
+            }
+        );
+
         // Apply the config to the filter
         const params: HostsStatusListWidgetParams = {
             angular: true,
@@ -302,7 +334,8 @@ export class HostsStatusListWidgetComponent extends BaseWidgetComponent implemen
             'filter[Hoststatus.current_state][]': currentState,
             'filter[Hoststatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
             'filter[Hoststatus.scheduled_downtime_depth]': inDowntime,
-            'filter[Hoststatus.last_state_change][]': lastStateChange
+            'filter[Hoststatus.last_state_change][]': lastStateChange,
+            'filter[hostpriority][]': this.config.hostpriority
         };
 
         this.subscriptions.add(this.HostsStatusListWidgetService.loadHosts(params).subscribe(hosts => {

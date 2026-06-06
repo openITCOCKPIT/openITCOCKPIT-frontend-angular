@@ -17,9 +17,9 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
@@ -29,7 +29,7 @@ import {
 } from '../../hosts/hosts-browser-menu/hosts-browser-menu.component';
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { formatDate, NgClass, NgForOf, NgIf } from '@angular/common';
+import { formatDate, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -49,48 +49,49 @@ import { getDefaultHostchecksIndexParams, HostchecksIndexParams, HostchecksIndex
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 
 import { IndexPage } from '../../../pages.interface';
+import { LocalNumberPipe } from '../../../pipes/local-number.pipe';
 
 @Component({
     selector: 'oitc-hostchecks-index',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    FaIconComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    FormCheckLabelDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    HostsBrowserMenuComponent,
-    HoststatusSimpleIconComponent,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    MatSort,
-    MatSortHeader,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NoRecordsComponent,
-    PaginateOrScrollComponent,
-    PaginatorModule,
-    RowComponent,
-    TableDirective,
-    TableLoaderComponent,
-    TranslocoDirective,
-    TranslocoPipe,
-    TrueFalseDirective,
-    XsButtonDirective,
-    TrustAsHtmlPipe,
-    NgClass,
-    CardFooterComponent
-],
+        CardBodyComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        FaIconComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        FormCheckLabelDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        HostsBrowserMenuComponent,
+        HoststatusSimpleIconComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        MatSort,
+        MatSortHeader,
+        NavComponent,
+        NavItemComponent,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        PaginatorModule,
+        RowComponent,
+        TableDirective,
+        TableLoaderComponent,
+        TranslocoDirective,
+        TranslocoPipe,
+        TrueFalseDirective,
+        XsButtonDirective,
+        TrustAsHtmlPipe,
+        NgClass,
+        CardFooterComponent,
+        LocalNumberPipe,
+        TooltipDirective
+    ],
     templateUrl: './hostchecks-index.component.html',
     styleUrl: './hostchecks-index.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

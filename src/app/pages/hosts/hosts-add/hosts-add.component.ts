@@ -36,7 +36,7 @@ import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/i
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { MacrosComponent } from '../../../components/macros/macros.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
@@ -91,8 +91,6 @@ import { HistoryService } from '../../../history.service';
         MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NgSelectModule,
         PermissionDirective,
         PriorityComponent,
@@ -134,6 +132,9 @@ export class HostsAddComponent implements OnInit, OnDestroy {
 
         isHostnameInUse: false
     };
+
+    public hostnameCheckedForDuplicates: string = '';
+
 
     public hosttemplates: SelectKeyValue[] = [];
     public hostgroups: SelectKeyValue[] = [];
@@ -417,6 +418,8 @@ export class HostsAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.HostsService.checkForDuplicateHostname(this.post.name)
             .subscribe((result) => {
                 this.data.isHostnameInUse = result;
+                // Ensure that the host name in the warning box will not change until the user changes the name again
+                this.hostnameCheckedForDuplicates = this.post.name;
                 this.cdr.markForCheck();
             })
         );

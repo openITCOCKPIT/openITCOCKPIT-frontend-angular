@@ -14,7 +14,6 @@ import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { PrinterWizardService } from './printer-wizard.service';
-import { PrinterWizardPost } from './printer-wizard.interface';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -22,8 +21,9 @@ import { FormsModule } from '@angular/forms';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
-import { NgIf } from '@angular/common';
+
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import { SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-printer',
@@ -44,7 +44,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         FormsModule,
         RequiredIconComponent,
         SelectComponent,
-        NgIf,
         BackButtonDirective
     ],
     templateUrl: './printer.component.html',
@@ -54,7 +53,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 export class PrinterComponent extends WizardsAbstractComponent {
     protected override WizardService: PrinterWizardService = inject(PrinterWizardService);
 
-    protected override post: PrinterWizardPost = {
+    protected override post: SNMPWizardPost = {
 // Default fields from the base wizard
         host_id: 0,
         services: [],
@@ -68,7 +67,7 @@ export class PrinterComponent extends WizardsAbstractComponent {
         securityName: '',
         snmpCommunity: '',
         snmpVersion: '2'
-    } as PrinterWizardPost;
+    } as SNMPWizardPost;
     protected snmpVersions: SelectKeyValueString[] = [
         {value: '1', key: 'SNMP V 1'},
         {value: '2', key: 'SNMP V 2c'},

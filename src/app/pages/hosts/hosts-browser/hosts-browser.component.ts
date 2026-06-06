@@ -28,12 +28,13 @@ import {
     NavItemComponent,
     RowComponent,
     TableDirective,
+    TextColorDirective,
     TooltipDirective
 } from '@coreui/angular';
 import { HostBrowserMenuConfig, HostsBrowserMenuComponent } from '../hosts-browser-menu/hosts-browser-menu.component';
-import { AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, KeyValuePipe, NgClass } from '@angular/common';
 import { BrowserLoaderComponent } from '../../../layouts/primeng/loading/browser-loader/browser-loader.component';
-import { HostBrowserResult, HostBrowserSlaOverview, MergedHost } from '../hosts.interface';
+import { HostBrowserResult, HostBrowserSlaOverview, MergedHost, SoftwareInformationHost } from '../hosts.interface';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { HostBrowserTabs } from '../hosts.enum';
@@ -119,6 +120,25 @@ import {
     IsarFlowHostBrowserTabComponent
 } from '../../../modules/isarflow_module/components/isar-flow-host-browser-tab/isar-flow-host-browser-tab.component';
 import { TitleService } from '../../../services/title.service';
+import {
+    BrowserSoftwareLinuxComponent
+} from './browser-software/browser-software-linux/browser-software-linux.component';
+import {
+    BrowserSoftwareWindowsComponent
+} from './browser-software/browser-software-windows/browser-software-windows.component';
+import {
+    BrowserSoftwareMacosComponent
+} from './browser-software/browser-software-macos/browser-software-macos.component';
+import { PatchstatusIconComponent } from '../../patchstatus/patchstatus-icon/patchstatus-icon.component';
+import {
+    HostParentsChildrenTreeComponent
+} from '../../../components/hosts/host-parents-children-tree/host-parents-children-tree.component';
+import { ExternalSystems } from '../../../modules/import_module/pages/externalsystems/external-systems.enum';
+import { IconDirective } from '@coreui/icons-angular';
+import { cibProxmox } from '@coreui/icons';
+import {
+    ProxmoxHostBrowserTabComponent
+} from '../../../modules/import_module/components/proxmox-host-browser-tab/proxmox-host-browser-tab.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -131,7 +151,6 @@ import { TitleService } from '../../../services/title.service';
         RowComponent,
         ColComponent,
         HostsBrowserMenuComponent,
-        NgIf,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
@@ -165,7 +184,6 @@ import { TitleService } from '../../../services/title.service';
         TableDirective,
         CopyToClipboardComponent,
         BadgeComponent,
-        NgForOf,
         HoststatusSimpleIconComponent,
         LabelLinkComponent,
         KeyValuePipe,
@@ -179,7 +197,16 @@ import { TitleService } from '../../../services/title.service';
         AdditionalHostInformationComponent,
         AsyncPipe,
         SlaHostInformationElementComponent,
-        IsarFlowHostBrowserTabComponent
+        IsarFlowHostBrowserTabComponent,
+        TextColorDirective,
+        BrowserSoftwareLinuxComponent,
+        BrowserSoftwareWindowsComponent,
+        BrowserSoftwareMacosComponent,
+        PatchstatusIconComponent,
+        HostParentsChildrenTreeComponent,
+        IconDirective,
+        ProxmoxHostBrowserTabComponent
+
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
@@ -190,6 +217,8 @@ import { TitleService } from '../../../services/title.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostsBrowserComponent implements OnInit, OnDestroy {
+
+    public coreuiIcons = {cibProxmox};
 
     public id: number = 0;
 
@@ -210,7 +239,10 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public selectedGrafanaAutorefresh: string = '1m';
 
     public AdditionalInformationExists: boolean = false;
+    public ExternalSystemType: null | ExternalSystems = null;
+
     public isarFlowInformationExists: boolean = false;
+    public softwareInformation?: SoftwareInformationHost;
 
     public SlaOverview: false | HostBrowserSlaOverview = false;
 
@@ -229,6 +261,9 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     private readonly DowntimesService = inject(DowntimesService);
     private readonly AcknowledgementsService = inject(AcknowledgementsService);
     private cdr = inject(ChangeDetectorRef);
+
+    protected readonly HostBrowserTabs = HostBrowserTabs;
+    protected readonly ExternalSystems = ExternalSystems;
 
     constructor() {
     }
@@ -254,6 +289,21 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             if (selectedTab) {
                 this.changeTab(selectedTab);
                 this.cdr.markForCheck();
+            }
+            const idOrUuid = params['idOrUuid'] || undefined;
+            if (idOrUuid) {
+                const uuid = new UUID();
+                if (uuid.isUuid(idOrUuid)) {
+                    // UUID was passed via URL
+                    this.subscriptions.add(this.HostsService.getHostByUuid(idOrUuid).subscribe((host) => {
+                        this.id = host.id;
+                        this.loadHost();
+                    }));
+                } else {
+                    // ID was passed via URL
+                    this.id = Number(idOrUuid);
+                    this.loadHost();
+                }
             }
         });
 
@@ -296,6 +346,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             this.loadAdditionalInformation();
             this.loadIsarFlowInformation();
             this.loadSlaInformation();
+            this.loadSoftwareInformation();
 
             this.lastUpdated = new Date();
 
@@ -330,7 +381,8 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public loadAdditionalInformation(): void {
         if (this.result?.mergedHost) {
             this.subscriptions.add(this.HostsService.loadAdditionalInformation(this.result.mergedHost.id).subscribe((result) => {
-                this.AdditionalInformationExists = result;
+                this.AdditionalInformationExists = result.AdditionalInformationExists;
+                this.ExternalSystemType = result.externalSystemType;
                 this.cdr.markForCheck();
             }));
         }
@@ -349,6 +401,15 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         if (this.result?.mergedHost && this.result.mergedHost.sla_id) {
             this.subscriptions.add(this.HostsService.loadSlaInformation(this.result.mergedHost.id, this.result.mergedHost.sla_id).subscribe((result) => {
                 this.SlaOverview = result;
+                this.cdr.markForCheck();
+            }));
+        }
+    }
+
+    public loadSoftwareInformation(): void {
+        if (this.result?.mergedHost) {
+            this.subscriptions.add(this.HostsService.loadSoftwareInformation(this.result.mergedHost.id).subscribe((result) => {
+                this.softwareInformation = result;
                 this.cdr.markForCheck();
             }));
         }
@@ -566,8 +627,8 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         }
     }
 
-    protected readonly HostBrowserTabs = HostBrowserTabs;
     protected readonly Number = Number;
     protected readonly String = String;
     protected readonly Boolean = Boolean;
+    protected readonly Object = Object;
 }

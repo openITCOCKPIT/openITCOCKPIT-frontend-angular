@@ -4,7 +4,7 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { Subscription } from 'rxjs';
@@ -46,6 +46,7 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
     selector: 'oitc-imported-hosts-edit',
@@ -55,7 +56,6 @@ import {
         RouterLink,
         PermissionDirective,
         FormLoaderComponent,
-        NgIf,
         FormsModule,
         ReactiveFormsModule,
         CardComponent,
@@ -85,7 +85,8 @@ import {
         InputGroupComponent,
         InputGroupTextDirective,
         RegexHelperTooltipComponent,
-        CardFooterComponent
+        CardFooterComponent,
+        NgSelectModule
     ],
     templateUrl: './imported-hosts-edit.component.html',
     styleUrl: './imported-hosts-edit.component.css',
@@ -94,6 +95,7 @@ import {
 export class ImportedHostsEditComponent implements OnInit, OnDestroy {
 
     public post!: ImportedHostPost;
+    public tagsForSelect: string[] = [];
     public errors: GenericValidationError | null = null;
 
     public containers: SelectKeyValue[] = [];
@@ -130,7 +132,9 @@ export class ImportedHostsEditComponent implements OnInit, OnDestroy {
     public loadImportedHost(id: number): void {
         this.subscriptions.add(this.ImportedhostsService.getEdit(id).subscribe((response) => {
             this.post = response;
-
+            if (this.post.tags) {
+                this.tagsForSelect = this.post.tags.split(',');
+            }
             this.loadContainer();
             this.loadElements();
 
@@ -172,6 +176,7 @@ export class ImportedHostsEditComponent implements OnInit, OnDestroy {
     }
 
     public submit() {
+        this.post.tags = this.tagsForSelect.join(',');
         this.subscriptions.add(this.ImportedhostsService.saveImportedHostEdit(this.post)
             .subscribe((result) => {
                 this.cdr.markForCheck();

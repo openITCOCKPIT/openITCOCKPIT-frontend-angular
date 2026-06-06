@@ -89,15 +89,21 @@
             </c-row>
         </c-modal-body>
         <c-modal-footer>
-            <button *ngIf="event.id" cButton color="danger" (click)="onDeleteClick.emit(event)" style="margin-right: auto;">
-                {{ t('Delete') }}
-            </button>
-            <button *ngIf="event.id" cButton color="success" (click)="onEventChange.emit(event)">
-                {{ t('Save') }}
-            </button>
-            <button *ngIf="! event.id" cButton color="success" (click)="onEventCreate.emit(event)">
-                {{ t('Create') }}
-            </button>
+            @if (event.id) {
+                <button cButton color="danger" (click)="onDeleteClick.emit(event)" style="margin-right: auto;">
+                    {{ t('Delete') }}
+                </button>
+            }
+            @if (event.id) {
+                <button cButton color="success" (click)="onEventChange.emit(event)">
+                    {{ t('Save') }}
+                </button>
+            }
+            @if (!event.id) {
+                <button cButton color="success" (click)="onEventCreate.emit(event)">
+                    {{ t('Create') }}
+                </button>
+            }
             <button cButton color="default" (click)="hideModal()">
                 {{ t('Close') }}
             </button>

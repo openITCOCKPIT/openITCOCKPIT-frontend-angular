@@ -37,7 +37,7 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { LocationsService } from '../locations.service';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
@@ -60,47 +60,45 @@ import { IndexPage } from '../../../pages.interface';
 @Component({
     selector: 'oitc-locations-index',
     imports: [
-    CardComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    PermissionDirective,
-    TranslocoDirective,
-    RouterLink,
-    NavComponent,
-    NavItemComponent,
-    XsButtonDirective,
-    CardBodyComponent,
-    ColComponent,
-    ContainerComponent,
-    DebounceDirective,
-    FormControlDirective,
-    FormDirective,
-    FormsModule,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    RowComponent,
-    TranslocoPipe,
-    MatSort,
-    TableDirective,
-    MatSortHeader,
-    NgIf,
-    TableLoaderComponent,
-    NgForOf,
-    ItemSelectComponent,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    DropdownDividerDirective,
-    DeleteAllModalComponent,
-    NoRecordsComponent,
-    SelectAllComponent,
-    PaginateOrScrollComponent,
-    CardFooterComponent
-],
+        CardComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        RouterLink,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        RowComponent,
+        TranslocoPipe,
+        MatSort,
+        TableDirective,
+        MatSortHeader,
+        TableLoaderComponent,
+        ItemSelectComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        DropdownDividerDirective,
+        DeleteAllModalComponent,
+        NoRecordsComponent,
+        SelectAllComponent,
+        PaginateOrScrollComponent,
+        CardFooterComponent
+    ],
     templateUrl: './locations-index.component.html',
     styleUrl: './locations-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: LocationsService } // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: LocationsService} // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

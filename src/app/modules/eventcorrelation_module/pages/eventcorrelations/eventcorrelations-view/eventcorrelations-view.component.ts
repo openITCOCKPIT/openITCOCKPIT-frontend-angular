@@ -2,22 +2,21 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 
 
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  NavComponent,
-  NavItemComponent,
-  RowComponent
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    NavComponent,
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
@@ -27,33 +26,38 @@ import { EvcTree, EventcorrelationRootElement } from '../eventcorrelations.inter
 import { BlockLoaderComponent } from '../../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { EvcTreeComponent } from './evc-tree/evc-tree.component';
 import { EvcTreeDirection } from './evc-tree/evc-tree.enum';
+import { ExternalCommandsService, HostRescheduleItem } from '../../../../../services/external-commands.service';
+import { ExternalCommandsEnum } from '../../../../../enums/external-commands.enum';
+import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { PermissionsService } from '../../../../../permissions/permissions.service';
 
 
 @Component({
     selector: 'oitc-eventcorrelations-view',
     imports: [
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    ColComponent,
-    FaIconComponent,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgIf,
-    PermissionDirective,
-    ReactiveFormsModule,
-    RowComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    RouterLink,
-    BackButtonDirective,
-    BlockLoaderComponent,
-    EvcTreeComponent,
-    NgClass
-],
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        ColComponent,
+        FaIconComponent,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        ReactiveFormsModule,
+        RowComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        RouterLink,
+        BackButtonDirective,
+        BlockLoaderComponent,
+        EvcTreeComponent,
+        NgClass,
+        AsyncPipe
+    ],
     templateUrl: './eventcorrelations-view.component.html',
     styleUrl: './eventcorrelations-view.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -61,7 +65,7 @@ import { EvcTreeDirection } from './evc-tree/evc-tree.enum';
 export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
 
     public id: number = 0;
-    public show:boolean = true;
+    public show: boolean = true;
 
     public evcTree: EvcTree[] = [];
     public evcTreeDirection: EvcTreeDirection = EvcTreeDirection.RIGHT_TO_LEFT;
@@ -82,10 +86,28 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private cdr = inject(ChangeDetectorRef);
+    public highlightHostId: number = 0;
+    public highlightServiceId: number = 0;
+    private readonly notyService = inject(NotyService);
+    private readonly TranslocoService = inject(TranslocoService);
+    private readonly ExternalCommandsService = inject(ExternalCommandsService);
+    public readonly PermissionsService = inject(PermissionsService);
+
 
     public ngOnInit(): void {
         this.route.queryParams.subscribe(params => {
             this.id = Number(this.route.snapshot.paramMap.get('id'));
+            // Query String Parameters
+            const highlightHostId = Number(params['highlightHostId']) || 0;
+            if (highlightHostId > 0) {
+                this.highlightHostId = highlightHostId;
+            }
+
+            const highlightServiceId = Number(params['highlightServiceId']) || 0;
+            if (highlightServiceId > 0) {
+                this.highlightServiceId = highlightServiceId;
+            }
+
             this.loadEventcorrelation();
         });
     }
@@ -98,7 +120,10 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
         this.show = false;
         this.cdr.markForCheck();
         this.evcTreeDirection = $event;
-        setTimeout(() =>{this.show = true; this.cdr.markForCheck();}, 100);
+        setTimeout(() => {
+            this.show = true;
+            this.cdr.markForCheck();
+        }, 100);
     }
 
     public loadEventcorrelation() {
@@ -118,5 +143,30 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
             this.stateForDowntimedService = result.stateForDowntimedService;
 
         }));
+    }
+
+    public resetChecktime(rootElement: EventcorrelationRootElement) {
+
+        const commands: HostRescheduleItem[] = [
+            {
+                command: ExternalCommandsEnum.rescheduleHost,
+                hostUuid: String(rootElement.host.uuid),
+                satelliteId: 0, // evc is master only, so satelliteId is always 0
+                type: 'hostOnly'
+            }
+        ];
+
+        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
+            if (result.message) {
+                const title = this.TranslocoService.translate('Reschedule');
+                this.notyService.genericSuccess(result.message, title);
+            } else {
+                this.notyService.genericError();
+            }
+        }));
+
+        setTimeout(() => {
+            this.loadEventcorrelation()
+        }, 5000);
     }
 }

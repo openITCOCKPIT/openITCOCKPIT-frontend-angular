@@ -3,21 +3,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MyResourcesSummaryWidgetComponent } from './my-resources-summary-widget.component';
 
 describe('MyResourcesSummaryWidgetComponent', () => {
-  let component: MyResourcesSummaryWidgetComponent;
-  let fixture: ComponentFixture<MyResourcesSummaryWidgetComponent>;
+    let component: MyResourcesSummaryWidgetComponent;
+    let fixture: ComponentFixture<MyResourcesSummaryWidgetComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [MyResourcesSummaryWidgetComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [MyResourcesSummaryWidgetComponent]
+        })
+            .compileComponents();
 
-    fixture = TestBed.createComponent(MyResourcesSummaryWidgetComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(MyResourcesSummaryWidgetComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

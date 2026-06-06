@@ -15,7 +15,7 @@ import {
     ServicesTopAlertsWidgetParams
 } from './services-top-alerts-widget.interface';
 import { ServicesTopAlertsService } from './services-top-alerts.service';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
     BadgeComponent,
     ColComponent,
@@ -46,6 +46,8 @@ import {
     ServicestatusSimpleIconComponent
 } from '../../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
 import { RouterLink } from '@angular/router';
+import { DebounceDirective } from '../../../../directives/debounce.directive';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-services-top-alerts-widget',
@@ -65,7 +67,6 @@ import { RouterLink } from '@angular/router';
         FormControlDirective,
         InputGroupComponent,
         InputGroupTextDirective,
-        NgIf,
         NoRecordsComponent,
         ReactiveFormsModule,
         RowComponent,
@@ -80,7 +81,8 @@ import { RouterLink } from '@angular/router';
         ServicestatusSimpleIconComponent,
         RouterLink,
         FormsModule,
-        TooltipDirective
+        TooltipDirective,
+        DebounceDirective
     ],
     templateUrl: './services-top-alerts-widget.component.html',
     styleUrl: './services-top-alerts-widget.component.css',
@@ -101,11 +103,18 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
 
 
     // widget config will be loaded from the server
-    public config?: ServicesTopAlertsWidgetConfig;
+    public config!: ServicesTopAlertsWidgetConfig;
 
 
     private readonly ServicesTopAlertsService = inject(ServicesTopAlertsService);
 
+    public priorityFilter: { 1: boolean; 2: boolean; 3: boolean; 4: boolean; 5: boolean } = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false
+    };
 
     public override load() {
         // Handled by ngAfterViewInit as we need the widget height for the correct limit
@@ -198,6 +207,15 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
             // Save the widget config
             this.config = config;
             this.loadDowntimes();
+
+            _.map(this.config.servicepriority,
+                (value) => {
+                    if (this.priorityFilter.hasOwnProperty(value)) {
+                        this.priorityFilter[value as keyof typeof this.priorityFilter] = true;
+                    }
+                }
+            );
+
             this.cdr.markForCheck();
 
             if (this.config.useScroll) {
@@ -211,6 +229,15 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
         if (!this.widget || !this.config) {
             return;
         }
+
+        this.config.servicepriority = [];
+        _.map(this.priorityFilter,
+            (value, key) => {
+                if (value) {
+                    this.config.servicepriority.push(Number(key));
+                }
+            }
+        );
 
         this.subscriptions.add(this.ServicesTopAlertsService.saveWidgetConfig(this.widget.id, this.config).subscribe((response) => {
             // Close config
@@ -226,6 +253,15 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
             return;
         }
 
+        let priorityFilter: number[] = [];
+        for (let key in this.priorityFilter) {
+            //@ts-ignore
+            if (this.priorityFilter[key] === true) {
+                priorityFilter.push(Number(key));
+            }
+        }
+
+
         // Apply the config to the filter
         const params: ServicesTopAlertsWidgetParams = {
             angular: true,
@@ -234,6 +270,7 @@ export class ServicesTopAlertsWidgetComponent extends BaseWidgetComponent implem
             limit: this.limit,
             'filter[NotificationServices.state][]': [this.config.state],
             'filter[not_older_than]': this.getOlderThanInMinutes(),
+            'filter[servicepriority][]': priorityFilter
         };
 
         this.subscriptions.add(this.ServicesTopAlertsService.loadServiceTopAlerts(params).subscribe(alerts => {

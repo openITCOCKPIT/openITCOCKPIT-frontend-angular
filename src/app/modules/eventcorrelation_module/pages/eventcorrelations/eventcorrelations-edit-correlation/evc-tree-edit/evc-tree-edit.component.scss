@@ -1,0 +1,33 @@
+@use "../../../../assets/evc_flow";
+@use "../../../../assets/eventcorrelation_module.scss";
+
+.f-group {
+    border-left: var(--cui-card-border-width) dashed var(--cui-card-border-color);
+    border-right: var(--cui-card-border-width) dashed var(--cui-card-border-color);
+}
+
+.f-group-error {
+    background-color: var(--cui-danger-bg-subtle);
+    border: 2px solid var(--cui-danger-border-subtle);
+    border-radius: var(--cui-border-radius);
+}
+
+
+.f-node, .f-group {
+    position: relative;
+    padding: 0;
+    text-align: left;
+}
+
+.with-padding {
+    padding: 0;
+}
+
+.title {
+    padding: 4px 12px;
+}
+
+.operator-color {
+    color: transparent;
+    text-shadow: 0 0 0 #ffffff;
+}

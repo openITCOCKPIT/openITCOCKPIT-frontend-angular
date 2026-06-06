@@ -3,23 +3,23 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
-  DropdownDividerDirective,
-  FormControlDirective,
-  FormDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  ModalService,
-  NavComponent,
-  NavItemComponent,
-  RowComponent,
-  TableDirective
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    ColComponent,
+    ContainerComponent,
+    DropdownDividerDirective,
+    FormControlDirective,
+    FormDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
+    ModalService,
+    NavComponent,
+    NavItemComponent,
+    RowComponent,
+    TableDirective
 } from '@coreui/angular';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -27,7 +27,7 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import { FormsModule } from '@angular/forms';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
 import {
@@ -57,47 +57,45 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 @Component({
     selector: 'oitc-mkagents-index',
     imports: [
-    TranslocoDirective,
-    RouterLink,
-    FaIconComponent,
-    CardComponent,
-    CardHeaderComponent,
-    NavComponent,
-    NavItemComponent,
-    PermissionDirective,
-    XsButtonDirective,
-    FormDirective,
-    RowComponent,
-    ColComponent,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    DebounceDirective,
-    FormControlDirective,
-    FormsModule,
-    TableLoaderComponent,
-    TableDirective,
-    MatSort,
-    NgForOf,
-    NgIf,
-    ItemSelectComponent,
-    ActionsButtonComponent,
-    ActionsButtonElementComponent,
-    DropdownDividerDirective,
-    NoRecordsComponent,
-    ContainerComponent,
-    SelectAllComponent,
-    PaginateOrScrollComponent,
-    CardFooterComponent,
-    DeleteAllModalComponent,
-    CardBodyComponent,
-    TranslocoPipe,
-    MatSortHeader,
-    CardTitleDirective
-],
+        TranslocoDirective,
+        RouterLink,
+        FaIconComponent,
+        CardComponent,
+        CardHeaderComponent,
+        NavComponent,
+        NavItemComponent,
+        PermissionDirective,
+        XsButtonDirective,
+        FormDirective,
+        RowComponent,
+        ColComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        DebounceDirective,
+        FormControlDirective,
+        FormsModule,
+        TableLoaderComponent,
+        TableDirective,
+        MatSort,
+        ItemSelectComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        DropdownDividerDirective,
+        NoRecordsComponent,
+        ContainerComponent,
+        SelectAllComponent,
+        PaginateOrScrollComponent,
+        CardFooterComponent,
+        DeleteAllModalComponent,
+        CardBodyComponent,
+        TranslocoPipe,
+        MatSortHeader,
+        CardTitleDirective
+    ],
     templateUrl: './mkagents-index.component.html',
     styleUrl: './mkagents-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: MkagentsService } // Inject the CommandsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: MkagentsService} // Inject the CommandsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

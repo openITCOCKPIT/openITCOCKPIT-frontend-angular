@@ -2,13 +2,14 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    DOCUMENT,
     ElementRef,
     HostListener,
     inject,
     OnDestroy,
     ViewChild
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+
 import { interval, Subscription } from 'rxjs';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -51,7 +52,7 @@ export class CreditsComponent implements OnDestroy {
         }
     }
 
-    @HostListener("document:fullscreenchange", ['$event']) fullScreen() {
+    @HostListener("document:fullscreenchange") fullScreen() {
         if (this.isFullScreen) {
             // Leave full screen
             if (this.scrollInterval) {

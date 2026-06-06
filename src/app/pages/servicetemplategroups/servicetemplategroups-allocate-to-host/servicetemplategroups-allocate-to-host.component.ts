@@ -1,25 +1,24 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
-  AlertComponent,
-  CardBodyComponent,
-  CardComponent,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-  FormCheckInputDirective,
-  FormDirective,
-  FormLabelDirective,
-  NavComponent,
-  NavItemComponent,
-  ProgressComponent,
-  TooltipDirective
+    AlertComponent,
+    CardBodyComponent,
+    CardComponent,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    FormCheckInputDirective,
+    FormDirective,
+    FormLabelDirective,
+    NavComponent,
+    NavItemComponent,
+    TooltipDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -48,35 +47,32 @@ import { HistoryService } from '../../../history.service';
 @Component({
     selector: 'oitc-servicetemplategroups-allocate-to-host',
     imports: [
-    BackButtonDirective,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
-    FaIconComponent,
-    FormCheckInputDirective,
-    FormDirective,
-    FormErrorDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NavComponent,
-    NavItemComponent,
-    NgForOf,
-    NgIf,
-    NgSelectModule,
-    PermissionDirective,
-    RequiredIconComponent,
-    TranslocoDirective,
-    XsButtonDirective,
-    AlertComponent,
-    TranslocoPipe,
-    ProgressComponent,
-    RouterLink,
-    SelectComponent,
-    TooltipDirective
-],
+        BackButtonDirective,
+        CardBodyComponent,
+        CardComponent,
+        CardFooterComponent,
+        CardHeaderComponent,
+        CardTitleDirective,
+        FaIconComponent,
+        FormCheckInputDirective,
+        FormDirective,
+        FormErrorDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NavComponent,
+        NavItemComponent,
+        NgSelectModule,
+        PermissionDirective,
+        RequiredIconComponent,
+        TranslocoDirective,
+        XsButtonDirective,
+        AlertComponent,
+        TranslocoPipe,
+        RouterLink,
+        SelectComponent,
+        TooltipDirective
+    ],
     templateUrl: './servicetemplategroups-allocate-to-host.component.html',
     styleUrl: './servicetemplategroups-allocate-to-host.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -100,14 +96,11 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
     protected hostsWithServicetemplatesForDeploy: AllocateToHostGetServicetemplatesForDeploy[] = [];
     protected servicetemplategroupId: number = 0;
     protected hostId: number = 0;
-    protected percentage: number = 0;
-    protected isProcessing: boolean = false;
 
     public ngOnInit() {
         this.servicetemplategroupId = Number(this.route.snapshot.paramMap.get('id'));
         let hostId: number = Number(this.route.snapshot.paramMap.get('hostId'));
         if (hostId > 0) {
-
             this.hostId = hostId;
         }
         this.loadServicetemplategroups('');
@@ -119,7 +112,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
     }
 
 
-    private loadServices(): void {
+    public loadServices(): void {
         if (this.servicetemplategroupId === 0 || this.hostId === 0) {
             return;
         }
@@ -129,10 +122,6 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
                 this.hostsWithServicetemplatesForDeploy = result.servicetemplatesForDeploy
             }
         )
-    }
-
-    protected hostIdChanged(): void {
-        this.loadServices();
     }
 
     protected selectAll(): void {
@@ -155,7 +144,7 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
     }
 
 
-    protected allocateToHost(): void {
+    protected submit(): void {
         let item: AllocateToHostPost =
             {
                 Host: {
@@ -170,19 +159,10 @@ export class ServicetemplategroupsAllocateToHostComponent implements OnInit, OnD
                 item.Servicetemplates._ids.push(this.hostsWithServicetemplatesForDeploy[hostIndex].servicetemplate.id);
             }
         }
-        this.isProcessing = true;
-        let i = 0;
-        let count =  item.Servicetemplates._ids.length;
-        this.ServicetemplategroupsService.allocateToHost(this.servicetemplategroupId, item);
-
-
         this.subscriptions.add(this.ServicetemplategroupsService.allocateToHost(this.servicetemplategroupId, item)
             .subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
                 if (result.success) {
-                    i++;
-                    this.percentage = Math.round(i / count * 100);
-
                     this.notyService.genericSuccess();
                     this.HistoryService.navigateWithFallback(['/servicetemplategroups/index']);
                     return;

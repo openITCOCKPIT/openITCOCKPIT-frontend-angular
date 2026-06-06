@@ -51,8 +51,8 @@ export interface ServicenowIncident {
     incident_id: string
     sys_id: string
     state: string
-    resolution_code: string
-    resolution_notes: string
+    resolution_code: string | null
+    resolution_notes: string | null
     host_uuid: string
     service_uuid: string
     created: string

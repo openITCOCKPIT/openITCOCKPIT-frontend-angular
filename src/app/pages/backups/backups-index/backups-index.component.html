@@ -82,24 +82,26 @@
 
                 </c-col>
 
-                <c-col [xs]="12" *ngIf="backupIsRunning">
-                    <ng-template #contentTemplate let-data>
-                        <span class="h5" [ngClass]="['text-'+data.color]" *ngIf="data">
-                            {{ t('Backup in progress...') }}
-                        </span>
-                        <div class="mt-2">
-                            <p-progressBar mode="indeterminate"
-                                           [style]="{ height: '6px' }"/>
-                        </div>
-
-                    </ng-template>
-
-                    <oitc-alert
+                @if (backupIsRunning) {
+                    <c-col [xs]="12">
+                        <ng-template #contentTemplate let-data>
+                            @if (data) {
+                                <span class="h5" [ngClass]="['text-'+data.color]">
+                                    {{ t('Backup in progress...') }}
+                                </span>
+                            }
+                            <div class="mt-2">
+                                <p-progressBar mode="indeterminate"
+                                               [style]="{ height: '6px' }"/>
+                            </div>
+                        </ng-template>
+                        <oitc-alert
                             baseIcon="circle"
                             color="primary"
                             [icon]="['fas', 'hourglass']"
                             [contentTemplate]="contentTemplate"></oitc-alert>
-                </c-col>
+                    </c-col>
+                }
             </c-row>
         </c-card-body>
 

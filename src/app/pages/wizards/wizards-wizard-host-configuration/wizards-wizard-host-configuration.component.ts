@@ -26,7 +26,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { HostAddEditSuccessResponse, HostDnsLookup, HostPost } from '../../hosts/hosts.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
@@ -37,6 +37,7 @@ import { ValidateInputFromAngularPost, WizardElement, WizardsIndex } from '../wi
 import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
 import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
     selector: 'oitc-wizards-wizard-host-configuration',
@@ -56,7 +57,6 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
         SelectComponent,
         FormErrorDirective,
         FormFeedbackComponent,
-        NgIf,
         AlertComponent,
         FormControlDirective,
         FormLabelDirective,
@@ -66,7 +66,8 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
         InputGroupComponent,
         InputGroupTextDirective,
         TemplateDiffComponent,
-        BackButtonDirective
+        BackButtonDirective,
+        BadgeOutlineComponent
     ],
     templateUrl: './wizards-wizard-host-configuration.component.html',
     styleUrl: './wizards-wizard-host-configuration.component.css',
@@ -90,7 +91,6 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     protected hostgroups: SelectKeyValue[] = [];
     protected satellites: SelectKeyValue[] = [];
     protected hostId: number | null = null;
-    protected parenthosts: SelectKeyValue[] = [];
     protected hostPost: HostPost = {
         address: '',
         container_id: 0,
@@ -182,22 +182,6 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
 
     }
 
-    public onSatelliteChange() {
-        this.loadParentHosts('');
-    }
-
-    public loadParentHosts = (searchString: string) => {
-        if (!this.hostPost.container_id) {
-            return;
-        }
-
-        this.Subscriptions.add(this.HostsService.loadParentHosts(searchString, this.hostPost.container_id, this.hostPost.parenthosts._ids, this.hostPost.satellite_id)
-            .subscribe((result) => {
-                this.parenthosts = result;
-                this.cdr.markForCheck();
-            })
-        );
-    };
 
     protected onContainerChange(): void {
         this.Subscriptions.add(this.WizardsService.loadElements(this.hostPost.container_id)
@@ -292,6 +276,7 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
         // /:typeId/:title/:hostId/:state/:selectedOs
         this.typeId = String(this.route.snapshot.paramMap.get('typeId'));
         this.title = String(this.route.snapshot.paramMap.get('title'));
+
         if (Number(this.route.snapshot.paramMap.get('hostId'))) {
             this.hostId = Number(this.route.snapshot.paramMap.get('hostId'));
         }

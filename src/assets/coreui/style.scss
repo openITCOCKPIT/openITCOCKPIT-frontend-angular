@@ -1,23 +1,23 @@
-@import "variables";
-@import '../../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
-@import '@angular/cdk/overlay-prebuilt.css';
+@use "@fortawesome/fontawesome-free/scss/fontawesome";
+@use "@angular/cdk/overlay-prebuilt.css";
+@use "@ng-select/ng-select/themes/default.theme.css";
+@use "dropzone/dist/dropzone.css";
 
-@import "@coreui/coreui/scss/coreui";
-@import "@ng-select/ng-select/themes/default.theme.css";
-@import "ng-select-dark";
-@import "dropzone/dist/dropzone.css";
-
-@import "animate.css";
-
-@import "uplot/dist/uPlot.min.css";
-
-// regular style toast
-@import 'ngx-toastr/toastr';
-@import "toast";
+@use "animate.css";
+@use "uplot/dist/uPlot.min.css";
+@use 'ngx-toastr/toastr';
 
 // Import vis-network css required for the tooltip
 // https://github.com/almende/vis/issues/3192#issuecomment-309995797
-@import "vis-network/dist/dist/vis-network.css";
+@use "vis-network/dist/dist/vis-network.css";
+
+@use "flag-icons/css/flag-icons.min.css";
+
+@use "openitcockpit";
+//  Modules
+@forward "../../app/modules/import_module/assets/import_module";
+@forward "../../app/modules/eventcorrelation_module/assets/eventcorrelation_module";
+@forward "../../app/modules/map_module/assets/map_module";
 
 /*
  * Importing FontAwesome globally that we can Web Fonts which support gradients
@@ -29,82 +29,31 @@
  * Use the Angular-FontAwesome <fa-icon> component whenever possible
  * https://docs.fontawesome.com/web/dig-deeper/webfont-vs-svg
  * https://github.com/FortAwesome/angular-fontawesome/issues/173#issuecomment-2321811742
+ *
  */
-@import "@fortawesome/fontawesome-free/scss/functions";
-@import "@fortawesome/fontawesome-free/scss/variables";
-@import "@fortawesome/fontawesome-free/scss/mixins";
-@import "@fortawesome/fontawesome-free/scss/core";
-@import "@fortawesome/fontawesome-free/scss/sizing";
-@import "@fortawesome/fontawesome-free/scss/fixed-width";
-@import "@fortawesome/fontawesome-free/scss/list";
-@import "@fortawesome/fontawesome-free/scss/bordered-pulled";
-@import "@fortawesome/fontawesome-free/scss/animated";
-@import "@fortawesome/fontawesome-free/scss/rotated-flipped";
-/* Stacked icons breaks angular-fontawesome  */
-/*@import "@fortawesome/fontawesome-free/scss/stacked";*/
-@import "@fortawesome/fontawesome-free/scss/icons";
-@import "@fortawesome/fontawesome-free/scss/screen-reader";
-@import "@fortawesome/fontawesome-free/scss/solid";
-@import "@fortawesome/fontawesome-free/scss/regular";
+@use "@fortawesome/fontawesome-free/scss/functions";
+@use "@fortawesome/fontawesome-free/scss/variables";
+@use "@fortawesome/fontawesome-free/scss/mixins";
+@use "@fortawesome/fontawesome-free/scss/core";
+@use "@fortawesome/fontawesome-free/scss/sizing";
+// @use "@fortawesome/fontawesome-free/scss/fixed-width";
+@use "@fortawesome/fontawesome-free/scss/list";
+// @use "@fortawesome/fontawesome-free/scss/bordered-pulled";
+@use "@fortawesome/fontawesome-free/scss/animated";
+@use "@fortawesome/fontawesome-free/scss/rotated-flipped";
 
-// Add 'Font Awesome 6 Free Solid' for vis-network
+/* Stacked icons breaks angular-fontawesome  */
+/*@use "@fortawesome/fontawesome-free/scss/stacked";*/
+@use "@fortawesome/fontawesome-free/scss/icons";
+// @use "@fortawesome/fontawesome-free/scss/screen-reader";
+@use "@fortawesome/fontawesome-free/scss/solid";
+@use "@fortawesome/fontawesome-free/scss/regular";
+
+// Add 'Font Awesome 7 Free Solid' for vis-network
 @font-face {
-    font-family: 'Font Awesome 6 Free Solid';
+    font-family: 'Font Awesome 7 Free Solid';
     font-style: normal;
     font-weight: 900;
     font-display: block;
-    src: url("../../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2") format("woff2"), url("../../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf") format("truetype");
+    src: url("../../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2") format("woff2");
 }
-
-@import "flag-icons/css/flag-icons.min.css";
-
-@import "theme";
-@import "card";
-@import "fonts";
-@import "forms";
-@import "layout";
-@import "cursor";
-@import "colors";
-
-@import "scrollbar";
-
-@import "buttons";
-@import "checkboxes";
-@import "ripple";
-@import "selectall";
-@import "highlighting";
-@import "icon-colors";
-@import "status-colors";
-@import "popover";
-
-@import "object_types";
-
-@import "fullcalendar_hollidays";
-@import "primeng";
-@import "fontawesome";
-@import "flex";
-
-@import "chart-loader";
-
-@import "browser";
-@import "vis";
-@import "badge";
-@import "opacity";
-@import "alert";
-@import "nestable";
-@import "timeline";
-
-@import "apexcharts";
-@import "wizard";
-@import "statuspages";
-@import "flow";
-
-@import "widget";
-@import "sunburst";
-
-@import "uplot";
-
-//  Modules
-@import "../../app/modules/import_module/assets/import_module";
-@import "../../app/modules/eventcorrelation_module/assets/eventcorrelation_module";
-@import "../../app/modules/map_module/assets/map_module";

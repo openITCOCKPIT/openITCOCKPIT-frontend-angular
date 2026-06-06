@@ -18,7 +18,7 @@ import {
     FormLabelDirective,
     RowComponent
 } from '@coreui/angular';
-import { NgIf } from '@angular/common';
+
 import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -45,7 +45,6 @@ import { IconProp, RotateProp } from '@fortawesome/fontawesome-svg-core';
     imports: [
         FaIconComponent,
         FormLabelDirective,
-        NgIf,
         RequiredIconComponent,
         SelectComponent,
         TranslocoDirective,
@@ -145,7 +144,7 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
             this.EventcorrelationWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {
                 this.host_id = response.host_id;
                 this.config = response.config;
-                this.direction= EvcTreeDirection[this.config.direction];
+                this.direction = EvcTreeDirection[this.config.direction];
 
                 if (this.host_id) {
                     this.loadEventcorrelation();
@@ -210,7 +209,10 @@ export class EventcorrelationWidgetComponent extends BaseWidgetComponent impleme
         this.show = false;
         this.cdr.markForCheck();
         this.direction = $event;
-        setTimeout(() =>{this.show = true; this.cdr.markForCheck();}, 100);
+        setTimeout(() => {
+            this.show = true;
+            this.cdr.markForCheck();
+        }, 100);
     }
 
     public saveConfig() {

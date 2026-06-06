@@ -3,21 +3,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { OracleComponent } from './oracle.component';
 
 describe('OracleComponent', () => {
-  let component: OracleComponent;
-  let fixture: ComponentFixture<OracleComponent>;
+    let component: OracleComponent;
+    let fixture: ComponentFixture<OracleComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [OracleComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [OracleComponent]
+        })
+            .compileComponents();
 
-    fixture = TestBed.createComponent(OracleComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(OracleComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

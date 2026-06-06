@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { NgForOf, NgIf, NgStyle } from '@angular/common';
+import { NgStyle } from '@angular/common';
 
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -51,7 +51,6 @@ import { FormsModule } from '@angular/forms';
     imports: [
         TranslocoDirective,
         SkeletonModule,
-        NgIf,
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
@@ -64,7 +63,6 @@ import { FormsModule } from '@angular/forms';
         InputGroupTextDirective,
         NavComponent,
         NavItemComponent,
-        NgForOf,
         NoRecordsComponent,
         PermissionDirective,
         RowComponent,

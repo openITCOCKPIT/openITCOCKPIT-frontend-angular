@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
+import { getUserDate } from '../../services/timezone.service';
 
 /**********************
  *    Host action    *
@@ -17,7 +18,7 @@ export interface StatehistoryHostParams {
 }
 
 export function getDefaultStatehistoryHostParams(): StatehistoryHostParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,
@@ -69,7 +70,7 @@ export interface StatehistoryServiceParams {
 }
 
 export function getDefaultStatehistoryServiceParams(): StatehistoryServiceParams {
-    let now = new Date();
+    let now: Date = getUserDate();
     return {
         angular: true,
         scroll: true,

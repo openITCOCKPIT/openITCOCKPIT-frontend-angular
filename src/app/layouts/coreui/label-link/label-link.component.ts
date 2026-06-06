@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { RouterLink } from '@angular/router';
-import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -9,7 +9,6 @@ import { Observable } from 'rxjs';
     imports: [
         RouterLink,
         NgTemplateOutlet,
-        NgIf,
         AsyncPipe
     ],
     templateUrl: './label-link.component.html',

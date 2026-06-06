@@ -11,12 +11,12 @@ import {
     BadgeComponent,
     CardBodyComponent,
     CardComponent,
+    CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
     FormControlDirective,
     FormDirective,
-    HeaderComponent,
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
@@ -28,7 +28,7 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import {
     PaginateOrScrollComponent
@@ -51,7 +51,6 @@ import { RouterLink } from '@angular/router';
         FormControlDirective,
         FormDirective,
         FormsModule,
-        HeaderComponent,
         InputGroupComponent,
         InputGroupTextDirective,
         MatSort,
@@ -59,8 +58,6 @@ import { RouterLink } from '@angular/router';
         MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NoRecordsComponent,
         PaginateOrScrollComponent,
         PermissionDirective,
@@ -71,7 +68,8 @@ import { RouterLink } from '@angular/router';
         TranslocoPipe,
         XsButtonDirective,
         RouterLink,
-        BadgeComponent
+        BadgeComponent,
+        CardHeaderComponent
     ],
     templateUrl: './satellites-tasks.component.html',
     styleUrl: './satellites-tasks.component.css',

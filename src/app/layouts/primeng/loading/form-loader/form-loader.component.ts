@@ -1,13 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TitleService } from '../../../../services/title.service';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'oitc-form-loader',
     imports: [
-        SkeletonModule,
-        NgIf
+        SkeletonModule
     ],
     templateUrl: './form-loader.component.html',
     styleUrl: './form-loader.component.css',

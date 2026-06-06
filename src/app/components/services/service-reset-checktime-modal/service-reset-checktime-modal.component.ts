@@ -10,16 +10,16 @@ import {
     Output
 } from '@angular/core';
 import {
-  ButtonCloseDirective,
-  ColComponent,
-  FormSelectDirective,
-  ModalBodyComponent,
-  ModalComponent,
-  ModalFooterComponent,
-  ModalHeaderComponent,
-  ModalService,
-  ModalTitleDirective,
-  RowComponent
+    ButtonCloseDirective,
+    ColComponent,
+    FormSelectDirective,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalFooterComponent,
+    ModalHeaderComponent,
+    ModalService,
+    ModalTitleDirective,
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -38,22 +38,22 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 @Component({
     selector: 'oitc-service-reset-checktime-modal',
     imports: [
-    ButtonCloseDirective,
-    ColComponent,
-    FaIconComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalFooterComponent,
-    ModalHeaderComponent,
-    ModalTitleDirective,
-    RowComponent,
-    TranslocoDirective,
-    FormsModule,
-    NgSelectModule,
-    RequiredIconComponent,
-    FormSelectDirective,
-    XsButtonDirective
-],
+        ButtonCloseDirective,
+        ColComponent,
+        FaIconComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalFooterComponent,
+        ModalHeaderComponent,
+        ModalTitleDirective,
+        RowComponent,
+        TranslocoDirective,
+        FormsModule,
+        NgSelectModule,
+        RequiredIconComponent,
+        FormSelectDirective,
+        XsButtonDirective
+    ],
     templateUrl: './service-reset-checktime-modal.component.html',
     styleUrl: './service-reset-checktime-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush

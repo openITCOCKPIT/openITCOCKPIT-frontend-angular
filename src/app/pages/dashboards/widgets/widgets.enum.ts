@@ -28,6 +28,10 @@ export enum WidgetTypes {
     ServiceStatusOverviewExtendedWidget = 20,
     AutomapWidget = 19,
     WebsiteWidget = 18,
+    StatuspagegroupWidget = 37,
+    OrganizationalchartsWidget = 38,
+    DelayedPassiveHostsWidget = 39,
+    DelayedPassiveServicesWidget = 40,
 
     // MapModule Widgets.php (Core Module)
     MapWidget = 100,
@@ -41,7 +45,8 @@ export enum WidgetTypes {
 
 
     // EventcorrelationModule Widgets.php (EE Module)
-    EvcWidget = 300,
+    EvcWidget = 300,            //evc-widget
+    EvcsSummaryWidget = 301,    //evcs-summary-widget
 
     // AutoreportModule Widgets.php (EE Module)
     AutoreportWidget = 400,
@@ -50,6 +55,7 @@ export enum WidgetTypes {
     SlaWidget = 500,
     SlaCalendarWidget = 501,
     SlaSummaryWidget = 502,
+    SlasSummaryWidget = 503,
 
     // CustomalertModule Widgets.php (EE Module)
     CustomalertsWidget = 600,

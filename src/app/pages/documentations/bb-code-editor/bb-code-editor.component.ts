@@ -44,7 +44,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { DocumentationLink } from '../documentations.interface';
-import { NgIf } from '@angular/common';
 
 
 @Component({
@@ -81,8 +80,7 @@ import { NgIf } from '@angular/common';
         CardComponent,
         CardFooterComponent,
         CardHeaderComponent,
-        CardTitleDirective,
-        NgIf
+        CardTitleDirective
     ],
     templateUrl: './bb-code-editor.component.html',
     styleUrl: './bb-code-editor.component.css',

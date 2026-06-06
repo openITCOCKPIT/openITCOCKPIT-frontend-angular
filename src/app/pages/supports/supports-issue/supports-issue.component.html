@@ -42,7 +42,7 @@
                                     </h4>
                                 </div>
                                 <div class="col-12 text-end fst-italic">
-                                    {{ t('it-novum GmbH') }}
+                                    {{ t('AVENDIS GmbH') }}
                                 </div>
                             </div>
                         </div>
@@ -74,18 +74,22 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="float-end">
-                                        <a href="mailto:support@itsm.it-novum.com" class="btn btn-primary btn-sm"
-                                           role="button" *ngIf="hasLicense">
-                                            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                                            {{ t('Create a Ticket') }}
-                                        </a>
-                                        <a href="https://it-services.it-novum.com/support-2/"
-                                           target="_blank"
-                                           class="btn btn-primary btn-sm"
-                                           role="button" *ngIf="!hasLicense">
-                                            <fa-icon [icon]="['fas', 'shopping-cart']"></fa-icon>
-                                            {{ t('Request a quote') }}
-                                        </a>
+                                        @if (hasLicense) {
+                                            <a href="mailto:oss-support@avendis.com" class="btn btn-primary btn-sm"
+                                               role="button">
+                                                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                                {{ t('Create a Ticket') }}
+                                            </a>
+                                        }
+                                        @if (!hasLicense) {
+                                            <a href="https://avendis.com/kontakt/"
+                                               target="_blank"
+                                               class="btn btn-primary btn-sm"
+                                               role="button">
+                                                <fa-icon [icon]="['fas', 'shopping-cart']"></fa-icon>
+                                                {{ t('Request a quote') }}
+                                            </a>
+                                        }
                                     </div>
 
                                 </div>
@@ -146,7 +150,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="float-end">
-                                        <a href="https://github.com/it-novum/openITCOCKPIT/issues"
+                                        <a href="https://github.com/openITCOCKPIT/openITCOCKPIT/issues"
                                            target="_blank"
                                            class="btn btn-default btn-sm me-1">
                                             <fa-icon [icon]="['fab', 'github']"></fa-icon>
