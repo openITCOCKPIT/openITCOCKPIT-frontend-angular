@@ -145,6 +145,22 @@
     color: oitc.$secondary !important;
 }
 
+.ok-glow-svg, .up-glow-svg {
+    filter: drop-shadow(0 0 9px oitc.$success);
+}
+
+.warning-glow-svg {
+    filter: drop-shadow(0 0 9px oitc.$warning);
+}
+
+.critical-glow-svg, .down-glow-svg {
+    filter: drop-shadow(0 0 9px oitc.$danger);
+}
+
+.unknown-glow-svg, .unknown-glow-svg {
+    filter: drop-shadow(0 0 9px oitc.$secondary);
+}
+
 .txt-ack {
     color: #774DFF !important;
 }

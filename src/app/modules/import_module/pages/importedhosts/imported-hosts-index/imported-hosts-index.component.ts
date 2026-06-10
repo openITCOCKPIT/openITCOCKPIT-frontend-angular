@@ -72,6 +72,8 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
 import { ImportersService } from '../../importers/importers.service';
 import { ImportDataComponent } from '../../../components/import-data/import-data.component';
 import { ImportCsvDataComponent } from '../../../components/import-csv-data/import-csv-data.component';
+import { IconDirective } from '@coreui/icons-angular';
+import { cibProxmox } from '@coreui/icons';
 
 @Component({
     selector: 'oitc-imported-hosts-index',
@@ -124,7 +126,8 @@ import { ImportCsvDataComponent } from '../../../components/import-csv-data/impo
         MultiSelectComponent,
         ImportDataComponent,
         ImportCsvDataComponent,
-        KeyValuePipe
+        KeyValuePipe,
+        IconDirective
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostsService} // Inject the ImportedhostsService into the DeleteAllModalComponent
@@ -167,6 +170,8 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     public marked_for_disabled = 0;
     public marked_hosts_with_changes = 0;
     public marked_for_re_enable = 0;
+
+    public coreuiIcons = {cibProxmox};
 
     constructor() {
     }

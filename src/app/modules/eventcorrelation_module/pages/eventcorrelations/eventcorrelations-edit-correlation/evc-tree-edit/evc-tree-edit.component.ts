@@ -520,7 +520,7 @@ export class EvcTreeEditComponent implements OnDestroy {
         // https://flow.foblex.com/docs/f-canvas-component
         if (this.fCanvasComponent) {
             this.fCanvasComponent.resetScaleAndCenter(false);
-            this.fCanvasComponent.setPosition(PointExtensions.initialize(0, 0));
+            this.fCanvasComponent._setPosition(PointExtensions.initialize(0, 0));
 
             //this.fCanvasComponent.fitToScreen(PointExtensions.initialize(50, 50), false);
         }

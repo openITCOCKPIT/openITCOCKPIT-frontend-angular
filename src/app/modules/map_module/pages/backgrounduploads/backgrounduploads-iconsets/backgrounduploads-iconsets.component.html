@@ -1,0 +1,231 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Map Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['mapmodule','backgroundUploads', 'index']"
+                   [routerLink]="['/', 'map_module', 'backgrounduploads', 'backgrounduploads']">
+                    <fa-icon [icon]="['fas', 'images']"></fa-icon>
+                    {{ t('Uploads') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Iconsets') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Uploads') }}
+                <small class="fw-300">
+                    {{ t('iconsets') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadItems()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col [xs]="12" [md]="12">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[MapUploads.upload_name]']"
+                                       [placeholder]="'Filter by file name' | transloco"
+                                       aria-label="File name"
+                                       cFormControl
+                                       name="File.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            <c-nav variant="underline-border" class="card-toolbar card-header-pills me-3 justify-content-end mt-1">
+                <c-nav-item>
+                    <a [routerLink]="['/', 'map_module', 'backgrounduploads', 'backgrounds']" class="nav-link"
+                       [class.active]="activeTab === 'backgrounds'">
+                        <fa-icon [icon]="['fas', 'images']"></fa-icon>
+                        {{ t('Backgrounds') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'map_module', 'backgrounduploads', 'icons']" class="nav-link"
+                       [class.active]="activeTab === 'icons'">
+                        <fa-icon [icon]="['fas', 'icons']"></fa-icon>
+                        {{ t('Icons') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item>
+                    <a [routerLink]="['/', 'map_module', 'backgrounduploads', 'iconsets']" class="nav-link"
+                       [class.active]="activeTab === 'iconsets'">
+                        <fa-icon [icon]="['fas', 'swatchbook']"></fa-icon>
+                        {{ t('Icon sets') }}
+                    </a>
+                </c-nav-item>
+            </c-nav>
+
+            @if (!items) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (items) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="MapUploads.upload_name">
+                            {{ t('File name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="MapUploads.saved_name">
+                            {{ t('Saved name') }}
+                        </th>
+                        <th>
+                            {{ t('Maps') }}
+                        </th>
+                        <th class="width-50 text-center">
+                            <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'user-lock']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of items.all_items; track $index) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['mapmodule','backgroundUploads', 'delete']"
+                                        [disabled]="!item.allowEdit"
+                                        [item]="item"></oitc-item-select>
+                                </td>
+                                <td>
+                                    {{ item.upload_name }}
+                                </td>
+                                <td>
+                                    {{ item.saved_name }}
+                                </td>
+                                <td>
+                                    <ul class="my-0 ps-3">
+                                        @for (map of item.maps; track $index) {
+                                            <li>
+                                                <oitc-label-link
+                                                    [objectId]="map.id"
+                                                    [route]="'/map_module/mapeditors/view'"
+                                                    [permissions]="'mapmodule.mapeditors.view'">
+                                                    {{ map.name }}
+                                                </oitc-label-link>
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td class="text-center">
+                                    @if (!item.allowEdit) {
+                                        <fa-icon [icon]="['fas', 'low-vision']"
+                                                 [cTooltip]="'Restricted view' | transloco"
+                                                 cTooltipPlacement="right"></fa-icon>
+                                    }
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [allowEdit]="item.allowEdit"
+                                                         [permission]="'mapmodule.backgrounduploads.editContainers'"
+                                                         [icon]="['fas', 'folder-tree']"
+                                                         [url]="'/map_module/backgrounduploads/editContainers/' + item.id">
+                                        <oitc-actions-button-element
+                                            [permission]="'mapmodule.backgrounduploads.editContainers'"
+                                            [allow]="item.allowEdit"
+                                            [url]="'/map_module/backgrounduploads/editContainers/' + item.id">
+                                            <fa-icon [icon]="['fas', 'folder-tree']"></fa-icon>
+                                            {{ t('Container assignments') }}
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+
+            @if (items?.all_items?.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            @if (items && items.all_items) {
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            &nbsp;
+                        </c-col>
+
+                    </c-row>
+                </c-container>
+                <c-container
+                    [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            @if (items) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="items"></oitc-paginate-or-scroll>
+                            }
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
+        </c-card-body>
+        <c-card-footer></c-card-footer>
+    </c-card>
+</ng-container>
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

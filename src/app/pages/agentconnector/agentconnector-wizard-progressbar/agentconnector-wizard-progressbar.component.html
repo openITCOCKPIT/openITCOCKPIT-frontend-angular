@@ -1,6 +1,6 @@
 <ng-container *transloco="let t">
     <!-- Wizard progressbar -->
-    <div class="row m-0 text-center" style="min-height: 22px;">
+    <div class="row m-0 text-center">
         <div
             class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center"
             [ngClass]="{'wizard-active': step() == AgentconnectorWizardStepsEnum.SelectHost, 'wizard-success': stepCount() > 1}">

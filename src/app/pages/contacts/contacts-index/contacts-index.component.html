@@ -279,11 +279,13 @@
                                     <oitc-actions-button [allowEdit]="contact.Contact.allow_edit"
                                                          [permission]="'contacts.edit'"
                                                          [url]="'/contacts/edit/' + contact.Contact.id">
-                                        <oitc-actions-button-element [permission]="'contacts.edit'"
-                                                                     [url]="'/contacts/edit/' + contact.Contact.id">
-                                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                                            {{ t('Edit') }}
-                                        </oitc-actions-button-element>
+                                        @if (contact.Contact.allow_edit) {
+                                            <oitc-actions-button-element [permission]="'contacts.edit'"
+                                                                         [url]="'/contacts/edit/' + contact.Contact.id">
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
                                         <oitc-actions-button-element [permission]="'changelogs.index'"
                                                                      [url]="'/changelogs/entity/contact/' + contact.Contact.id">
                                             <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>

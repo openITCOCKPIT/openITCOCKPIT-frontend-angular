@@ -17,6 +17,7 @@ import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-
 
 import { IdoitOverviewComponent } from './idoit/idoit-overview/idoit-overview.component';
 import { ItopOverviewComponent } from './itop/itop-overview/itop-overview.component';
+import { ExternalSystems } from '../../pages/externalsystems/external-systems.enum';
 
 @Component({
     selector: 'oitc-additional-host-information',
@@ -75,4 +76,5 @@ export class AdditionalHostInformationComponent implements OnInit, OnChanges, On
     }
 
 
+    protected readonly ExternalSystems = ExternalSystems;
 }

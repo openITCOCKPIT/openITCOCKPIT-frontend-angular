@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FExternalItemDirective } from '@foblex/flow';
+import { FExternalItem } from '@foblex/flow';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
 
@@ -8,7 +8,7 @@ import { ContainerTypesEnum } from '../../../changelogs/object-types.enum';
     selector: 'oitc-nodes-palette',
     imports: [
         FaIconComponent,
-        FExternalItemDirective,
+        FExternalItem,
         TranslocoDirective
     ],
     templateUrl: './nodes-palette.component.html',

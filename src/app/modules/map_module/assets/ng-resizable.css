@@ -1,0 +1,20 @@
+.ng-resizable-handle {
+    position: absolute;
+    font-size: 0.1em;
+    display: block;
+    -ms-touch-action: none;
+    touch-action: none;
+}
+
+.ng-resizable-handle.ng-resizable-se {
+    cursor: se-resize;
+    width: 12px;
+    height: 12px;
+    right: 1px;
+    bottom: 1px;
+}
+
+.ng-resizable-diagonal {
+    border-bottom: 12px solid var(--cui-primary);
+    border-left: 12px solid transparent;
+}

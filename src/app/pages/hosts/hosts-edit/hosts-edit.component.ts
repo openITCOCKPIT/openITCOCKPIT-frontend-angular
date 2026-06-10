@@ -286,7 +286,7 @@ export class HostsEditComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.HostsService.loadParentHosts(searchString, this.post.container_id, this.post.parenthosts._ids, this.post.satellite_id)
+        this.subscriptions.add(this.HostsService.loadParentHosts(searchString, this.post.container_id, this.post.parenthosts._ids, this.post.satellite_id, this.id)
             .subscribe((result) => {
                 this.parenthosts = result;
                 this.cdr.markForCheck();

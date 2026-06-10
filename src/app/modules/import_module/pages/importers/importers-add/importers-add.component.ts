@@ -57,6 +57,7 @@ import {
     DynamicalFormFieldsComponent
 } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ExternalSystems } from '../../externalsystems/external-systems.enum';
 
 @Component({
     selector: 'oitc-importers-add',
@@ -142,7 +143,7 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
             value: this.TranslocoService.translate('CSV without header')
         },
         {
-            key: 'idoit',
+            key: ExternalSystems.Idoit,
             value: this.TranslocoService.translate('i-doit')
         },
         {
@@ -150,13 +151,17 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
             value: this.TranslocoService.translate('openITCOCKPIT Agent')
         },
         {
-            key: 'itop',
+            key: ExternalSystems.Itop,
             value: this.TranslocoService.translate('iTop')
         },
         {
             key: 'external_monitoring',
             value: this.TranslocoService.translate('External Monitoring')
-        }
+        },
+        {
+            key: ExternalSystems.Proxmox,
+            value: this.TranslocoService.translate('Proxmox VE'),
+        },
     ];
 
     protected readonly matchFields = [
@@ -254,6 +259,7 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
 
     public onContainerChange() {
         this.loadElements();
+        this.loadExternalSystems();
         this.cdr.markForCheck();
     }
 
@@ -264,18 +270,44 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.ImportersService.loadElements(containerId, this.post.data_source)
+        this.subscriptions.add(this.ImportersService.loadElements(containerId)
             .subscribe((result) => {
                 this.hostdefaultsAsList = _.map(result.hostdefaults, function (value, key) {
                     return {key: key, value: value.name};
                 });
                 this.hostdefaults = result.hostdefaults;
-                this.externalsystems = result.externalsystems.externalsystems;
                 this.externalmonitorings = result.externalMonitorings.externalMonitorings;
                 this.cdr.markForCheck();
             })
         );
 
+    }
+
+    private loadExternalSystems = (): void => {
+        if (!this.post.container_id) {
+            return;
+        }
+        let dataSource = null;
+        switch (this.post.data_source) {
+            case 'itop':
+            case 'idoit':
+            case 'proxmox':
+                dataSource = this.post.data_source;
+                break;
+        }
+
+        this.subscriptions.add(this.ImportersService.loadExternalSystems(this.post.container_id, dataSource)
+            .subscribe((result) => {
+                this.externalsystems = result;
+                this.cdr.markForCheck();
+            })
+        );
+    }
+
+    public loadElementsByDataSource() {
+        this.loadExternalSystems();
+        this.loadConfigFieldsByDataSource();
+        this.cdr.markForCheck();
     }
 
     public loadConfigFieldsByDataSource() {
@@ -292,7 +324,7 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
                     this.formFields = result.config.formFields;
                     this.cdr.markForCheck();
                 })
-            );
+            )
         }
     }
 
@@ -370,4 +402,5 @@ export class ImportersAddComponent implements OnInit, OnDestroy {
 
     protected readonly Boolean = Boolean;
 
+    protected readonly ExternalSystems = ExternalSystems;
 }
