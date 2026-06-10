@@ -4509,5 +4509,6 @@
   "Gracefully reboots the Container by sending a ACPI shutdown signal. This will also apply pending hardware changes.": "Gracefully reboots the Container by sending a ACPI shutdown signal. This will also apply pending hardware changes.",
   "Are you sure you want to reset the VM?": "Are you sure you want to reset the VM?",
   "Forces the VM to reset immediately, which may lead to data loss. Use this if the VM is not responding to the reboot command.": "Forces the VM to reset immediately, which may lead to data loss. Use this if the VM is not responding to the reboot command.",
-  "Please confirm that you want to perform this action": "Please confirm that you want to perform this action"
+  "Please confirm that you want to perform this action": "Please confirm that you want to perform this action",
+  "Future openITCOCKPIT releases will require at least PHP version {0}": "Future openITCOCKPIT releases will require at least PHP version {{0}}"
 }
