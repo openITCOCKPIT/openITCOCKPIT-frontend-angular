@@ -68,7 +68,8 @@
     <!-- End of life alerts -->
     @if (data && !data.result.data.isContainer) {
         <oitc-eol-alerts
-            [codename]="data.result.data.LsbRelease"></oitc-eol-alerts>
+            [codename]="data.result.data.LsbRelease"
+            [phpversion]="data.result.data.php_version"></oitc-eol-alerts>
     }
 
     <!--- da list -->

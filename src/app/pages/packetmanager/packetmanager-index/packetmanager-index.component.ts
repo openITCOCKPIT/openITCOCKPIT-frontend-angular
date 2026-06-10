@@ -99,6 +99,7 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
                 changelog: [],
                 isDebianBased: false,
                 isRhelBased: false,
+                php_version: '',
                 isContainer: false,
                 LsbRelease: '',
                 systemname: '',
