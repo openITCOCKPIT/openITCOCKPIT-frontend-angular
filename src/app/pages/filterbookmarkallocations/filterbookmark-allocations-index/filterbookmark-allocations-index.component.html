@@ -86,7 +86,7 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            
+
             @if (!FilterbookmarkAllocations) {
                 <oitc-table-loader></oitc-table-loader>
             }
@@ -125,15 +125,14 @@
                                 <tr>
                                     <td class="text-center">
                                         <oitc-item-select
-                                                *oitcPermission="['FilterBookmarksAllocations', 'delete']"
-                                                [disabled]="!bookmarkAllocation.allowEdit"
-                                                [item]="bookmarkAllocation"></oitc-item-select>
+                                            *oitcPermission="['FilterBookmarksAllocations', 'delete']"
+                                            [disabled]="!bookmarkAllocation.allowEdit"
+                                            [item]="bookmarkAllocation"></oitc-item-select>
                                     </td>
                                     <td>
-                                        @if(bookmarkAllocation.filter_bookmark){
+                                        @if (bookmarkAllocation.filter_bookmark) {
                                             {{ bookmarkAllocation.filter_bookmark.name }}
-                                        }
-                                        @else {
+                                        } @else {
                                             {{ bookmarkAllocation.name }}
                                         }
                                     </td>
@@ -142,8 +141,8 @@
                                     </td>
                                     <td>
                                         <c-badge color="primary" class="mx-1">
-                                            @if(bookmarkAllocation.filter_bookmark) {
-                                                @switch(bookmarkAllocation.filter_bookmark.controller){
+                                            @if (bookmarkAllocation.filter_bookmark) {
+                                                @switch (bookmarkAllocation.filter_bookmark.controller) {
                                                     @case ('Hosts') {
                                                         <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                                     }
@@ -155,7 +154,7 @@
                                                     }
                                                 }
 
-                                                {{ bookmarkAllocation.filter_bookmark.controller}}
+                                                {{ bookmarkAllocation.filter_bookmark.controller }}
                                             }
                                         </c-badge>
                                     </td>
@@ -179,17 +178,18 @@
                                         <oitc-actions-button [permission]="'FilterBookmarksAllocations.edit'"
                                                              [url]="'/FilterbookmarkAllocations/edit/' + bookmarkAllocation.id"
                                                              [allowEdit]="bookmarkAllocation.allowEdit">
-                                            @if(bookmarkAllocation.allowEdit) {
-                                                <oitc-actions-button-element [permission]="'FilterBookmarksAllocations.edit'"
-                                                                             [url]="'/FilterbookmarkAllocations/edit/' + bookmarkAllocation.id">
+                                            @if (bookmarkAllocation.allowEdit) {
+                                                <oitc-actions-button-element
+                                                    [permission]="'FilterBookmarksAllocations.edit'"
+                                                    [url]="'/FilterbookmarkAllocations/edit/' + bookmarkAllocation.id">
                                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                                     {{ t('Edit') }}
                                                 </oitc-actions-button-element>
 
                                                 <li cDropdownDivider></li>
                                                 <oitc-actions-button-element
-                                                        (click)="toggleDeleteAllModal(bookmarkAllocation)"
-                                                        [permission]="'FilterBookmarksAllocations.delete'">
+                                                    (click)="toggleDeleteAllModal(bookmarkAllocation)"
+                                                    [permission]="'FilterBookmarksAllocations.delete'">
                                                     <span class="text-danger">
                                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                                         {{ t('Delete') }}
@@ -215,11 +215,12 @@
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                    [itemsCount]="FilterbookmarkAllocations.all_filterbookmark_allocations.length"></oitc-select-all>
+                                [itemsCount]="FilterbookmarkAllocations.all_filterbookmark_allocations.length"></oitc-select-all>
                         </c-col>
                         <c-col>
                             <div class="btn-group d-flex flex-row" role="group">
                                 <button (click)="toggleDeleteAllModal()"
+                                        *oitcPermission="['filterBookmarksAllocations', 'delete']"
                                         class="btn btn-outline-danger col-3 border-0"
                                         type="button">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -231,13 +232,13 @@
                 </c-container>
             }
             <c-container
-                    [fluid]="true">
+                [fluid]="true">
                 <c-row>
                     <c-col>
                         @if (FilterbookmarkAllocations) {
                             <oitc-paginate-or-scroll
-                                    (paginatorChange)="onPaginatorChange($event)"
-                                    [paginateOrScroll]="FilterbookmarkAllocations"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="FilterbookmarkAllocations"></oitc-paginate-or-scroll>
                         }
                     </c-col>
                 </c-row>

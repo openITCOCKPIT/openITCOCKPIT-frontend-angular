@@ -79,7 +79,7 @@
                             [(ngModel)]="post.filter_bookmark_id"
                             (onChange)="onBookmarkChange()"
                             [disabled]="true"
-                            >
+                        >
                         </oitc-select>
                         <oitc-form-feedback [errors]="errors"
                                             errorField="filter_bookmark_id"></oitc-form-feedback>
@@ -98,6 +98,7 @@
                             [(ngModel)]="post.users._ids"
                             [options]="users">
                         </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors" errorField="users"></oitc-form-feedback>
                     </div>
                     <div class="mb-3">
                         <label cLabel for="UserrolesSelect">
@@ -113,6 +114,7 @@
                             [(ngModel)]="post.usergroups._ids"
                             [options]="usergroups">
                         </oitc-multi-select>
+                        <oitc-form-feedback [errors]="errors" errorField="usergroups"></oitc-form-feedback>
                     </div>
                 </c-card-body>
                 <c-card-footer class="text-end">

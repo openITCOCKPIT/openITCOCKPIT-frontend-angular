@@ -69,7 +69,9 @@ import { FormsModule } from '@angular/forms';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { CustomAlertsIndexFilter } from '../../modules/customalert_module/pages/customalerts/customalerts.interface';
 import { PermissionsService } from '../../permissions/permissions.service';
-import { FilterBookmarkAllocationModalComponent } from './filter-bookmark-allocation-modal/filter-bookmark-allocation-modal.component';
+import {
+    FilterBookmarkAllocationModalComponent
+} from './filter-bookmark-allocation-modal/filter-bookmark-allocation-modal.component';
 import { AsyncPipe } from '@angular/common';
 
 

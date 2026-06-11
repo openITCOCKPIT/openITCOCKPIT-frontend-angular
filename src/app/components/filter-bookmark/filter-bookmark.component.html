@@ -48,7 +48,9 @@
                             <b>
                                 <span>
                                     {{ item.name }}
-                                    <span [hidden]="item.ownership ">(allocated <fa-icon [icon]="['fas', 'file-import']"></fa-icon>)</span>
+                                    <span [hidden]="item.ownership ">({{ t('allocated') }}
+                                        <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                                        )</span>
                                 </span>
                             </b>
                         </ng-template>
@@ -71,7 +73,7 @@
                                 <fa-icon [icon]="['fas', 'bookmark']"></fa-icon>
                             </button>
                             @if (( PermissionsService.hasPermissionObservable(['FilterBookmarksAllocations', 'add'])|async ) && ( PermissionsService.hasPermissionObservable(['FilterBookmarksAllocations', 'edit'])|async )) {
-                                @if(selectedBookmark?.ownership) {
+                                @if (selectedBookmark?.ownership) {
                                     <button cButton class="ripple " color="primary" size="xs"
                                             title="{{t('allocate Filter')}}" (click)="allocateBookmark()">
                                         <fa-icon [icon]="['fas', 'bookmark']"></fa-icon>
@@ -104,7 +106,9 @@
                                      [action]="action" [filter]="filter"></oitc-filter-bookmark-save-modal>
     <oitc-delete-bookmark-modal (completed)="deleted($event)" [items]="deleteItems"></oitc-delete-bookmark-modal>
     <oitc-filter-bookmark-export-modal [urlString]="computedUrl"/>
-    @if(selectedBookmark) {
-        <oitc-filter-bookmark-allocation-modal [plugin]="plugin" [controller]="controller" [action]="action"  [bookmark]="selectedBookmark" (triggerReloadEvent)="loadBookmarks(selectedBookmark.id)"/>
+    @if (selectedBookmark) {
+        <oitc-filter-bookmark-allocation-modal [plugin]="plugin" [controller]="controller" [action]="action"
+                                               [bookmark]="selectedBookmark"
+                                               (triggerReloadEvent)="loadBookmarks(selectedBookmark.id)"/>
     }
 </ng-container>
