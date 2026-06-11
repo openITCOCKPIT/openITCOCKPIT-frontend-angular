@@ -199,6 +199,9 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     this.particlesOptions = this.getBubbleConfig();
                     break;
 
+                case 'football':
+                    this.particlesOptions = this.getBallConfig();
+                    break;
                 default:
                     this.particlesOptions = this.getDefaultConfig();
                     break;
@@ -788,4 +791,102 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             "fpsLimit": 30
         };
     };
+    private getBallConfig = () => {
+        return {
+            "key": "dataImages",
+            "name": "Data URI Images",
+            "interactivity": {
+                "events": {
+                    "onClick": {
+                        "enable": false,
+                        "mode": "push"
+                    },
+                    "onHover": {
+                        "enable": false,
+                        "mode": "bubble"
+                    }
+                },
+                "modes": {
+                    "bubble": {
+                        "distance": 400,
+                        "duration": 2,
+                        "opacity": 0.8,
+                        "size": 40
+                    },
+                    "connect": {
+                        "distance": 80,
+                        "links": {
+                            "opacity": 0.5
+                        },
+                        "radius": 60
+                    },
+                    "grab": {
+                        "distance": 400,
+                        "links": {
+                            "opacity": 1
+                        }
+                    },
+                    "push": {
+                        "quantity": 4
+                    },
+                    "remove": {
+                        "quantity": 2
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    }
+                }
+            },
+            "particles": {
+                "move": {
+                    "direction": "none",
+                    "enable": true,
+                    "speed": 2
+                },
+                "number": {
+                    "density": {
+                        "enable": true
+                    },
+                    "value": 80
+                },
+                "opacity": {
+                    "value": 0.8
+                },
+                "rotate": {
+                    "animation": {
+                        "enable": true,
+                        "speed": 5,
+                        "sync": false
+                    },
+                    "direction": "random",
+                    "value": {
+                        "min": 0,
+                        "max": 360
+                    }
+                },
+                "shape": {
+                    options: {
+                        character: {
+                            value: ['⚽']
+                        }
+                    },
+                    type: "character"
+                },
+                size: {
+                    value: { min: 4, max: 14 },
+                    random: {
+                        enable: true,
+                        minimumValue: 4
+                    },
+                    animation: {
+                        enable: true,
+                        speed: 2,
+                        sync: false,
+                        startValue: "random"
+                    }
+                }
+            }
+        };
+    }
 }
