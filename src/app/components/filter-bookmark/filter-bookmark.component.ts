@@ -73,6 +73,7 @@ import {
     FilterBookmarkAllocationModalComponent
 } from './filter-bookmark-allocation-modal/filter-bookmark-allocation-modal.component';
 import { AsyncPipe } from '@angular/common';
+import { snakeCase } from 'lodash';
 
 
 @Component({
@@ -227,7 +228,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
             this.selected.emit('');
             this.showEdit = false;
             this.selectedBookmark = null;
-            this.router.navigate([this.controller.toLowerCase(), this.action.toLowerCase()], {
+            this.router.navigate([snakeCase(this.plugin), this.controller.toLowerCase(), this.action.toLowerCase()], {
                 queryParams: {filter: null},
                 queryParamsHandling: 'merge',
             });
@@ -240,7 +241,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
         }
         this.showEdit = true;
         if (this.filterUuid != null && selectedBookmark != null) {
-            this.router.navigate([this.controller.toLowerCase(), this.action.toLowerCase()], {
+            this.router.navigate([snakeCase(this.plugin), this.controller.toLowerCase(), this.action.toLowerCase()], {
                 queryParams: {filter: selectedBookmark.uuid},
                 queryParamsHandling: 'merge',
             });
@@ -329,7 +330,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
             this.loadBookmarks(null);
             this.showEdit = false
             this.selected.emit('');
-            this.router.navigate([this.controller.toLowerCase(), this.action.toLowerCase()]);
+            this.router.navigate([snakeCase(this.plugin), this.controller.toLowerCase(), this.action.toLowerCase()]);
         }
         if (!$result) {
             this.notyService.genericError();
