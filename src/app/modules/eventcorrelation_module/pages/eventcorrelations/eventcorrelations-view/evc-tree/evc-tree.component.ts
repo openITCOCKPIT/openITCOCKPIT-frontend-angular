@@ -11,7 +11,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { EFConnectableSide, EFMarkerType, FCanvasComponent, FFlowComponent, FFlowModule } from '@foblex/flow';
-import dagre from '@dagrejs/dagre';
+import dagre, { Edge, graphlib, Point } from '@dagrejs/dagre';
 
 import { IPoint, PointExtensions } from '@foblex/2d';
 import { generateGuid } from '@foblex/utils';
@@ -47,7 +47,7 @@ import { OperatorScoreTooltipComponent } from './operator-score-tooltip/operator
 //import { NgxResizeObserverModule } from 'ngx-resize-observer';
 
 // Extend the interface of the dagre-Node to make TypeScript happy when we get the nodes back from getNodes()
-interface EvcNode extends dagre.Node {
+interface EvcNode extends Point {
     evcNode: EvcGraphNode
 }
 
@@ -230,7 +230,7 @@ export class EvcTreeComponent {
     }
 
 
-    private updateGraph(graph: dagre.graphlib.Graph, direction: EvcTreeDirection): void {
+    private updateGraph(graph: graphlib.Graph, direction: EvcTreeDirection): void {
         if (this.isAutoLayout) {
             if (this.fFlowComponent) {
                 this.fFlowComponent.reset();
@@ -243,7 +243,7 @@ export class EvcTreeComponent {
         this.cdr.markForCheck();
     }
 
-    private setGraph(graph: dagre.graphlib.Graph, direction: EvcTreeDirection): void {
+    private setGraph(graph: graphlib.Graph, direction: EvcTreeDirection): void {
         this.configuration = CONFIGURATION[direction];
 
         const evcTree = this.evcTree();
@@ -298,7 +298,7 @@ export class EvcTreeComponent {
         dagre.layout(graph);
     }
 
-    private getNodes(graph: dagre.graphlib.Graph): INodeViewModel[] {
+    private getNodes(graph: graphlib.Graph): INodeViewModel[] {
         return graph.nodes().map((x: any) => {
             let node = graph.node(x);
             // x = node.id (15, 15_operator, 16, 16_operator etc)
@@ -420,8 +420,8 @@ export class EvcTreeComponent {
     }
 
 
-    private getConnections(graph: dagre.graphlib.Graph): ConnectionOperator[] {
-        return graph.edges().map((x: dagre.Edge) => {
+    private getConnections(graph: graphlib.Graph): ConnectionOperator[] {
+        return graph.edges().map((x: Edge) => {
             return {
                 id: generateGuid(),
                 from: x.v,

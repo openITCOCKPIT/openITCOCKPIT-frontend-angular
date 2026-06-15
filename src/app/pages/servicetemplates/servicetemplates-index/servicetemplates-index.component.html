@@ -308,6 +308,9 @@
     </c-card>
 </ng-container>
 
-<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>
+<oitc-delete-all-modal
+    (completed)="onMassActionComplete($event)"
+    [items]="selectedItems"
+    [helpMessage]="'When deleting the service template, also all services created by this template will be deleted!' | transloco"></oitc-delete-all-modal>
 <oitc-add-servicetemplates-to-servicetemplategroup-modal
     [items]="selectedItems"></oitc-add-servicetemplates-to-servicetemplategroup-modal>
