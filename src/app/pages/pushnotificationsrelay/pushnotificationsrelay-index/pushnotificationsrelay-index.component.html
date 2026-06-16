@@ -7,7 +7,8 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['notificationsrelay', 'index']" [routerLink]="['/', 'pushnotificationsrelay', 'index']">
+                <a *oitcPermission="['notificationsrelay', 'index']"
+                   [routerLink]="['/', 'pushnotificationsrelay', 'index']">
                     <fa-icon [icon]="['fas', 'globe']"></fa-icon>
                     {{ t('Push-Notifications Relay') }}
                 </a>
@@ -33,8 +34,22 @@
                     </h5>
                 </c-card-header>
                 <c-card-body>
+
                     <div class="row">
                         <div class="col-12">
+                            <c-alert color="info">
+                                <fa-icon [icon]="['fas', 'info-circle']" class="fa-lg"></fa-icon>
+                                {{ t('To send push notifications to mobile devices, openITCOCKPIT uses a push gateway provided by') }}
+                                <a href="https://avendis.com/" target="_blank">
+                                    AVENDIS GmbH
+                                </a>.
+                            </c-alert>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+
                             <div class="mb-3">
                                 <label cLabel for="address">
                                     {{ t('Relay address') }}
@@ -42,36 +57,12 @@
                                 </label>
                                 <input cFormControl id="address" required type="text"
                                        name="address"
-                                       placeholder="relay.example.org"
+                                       placeholder="https://pushrelay.openitcockpit.io"
                                        oitcFormError [errors]="errors" errorField="address"
                                        [(ngModel)]="post.address">
                                 <oitc-form-feedback [errors]="errors" errorField="address"></oitc-form-feedback>
                             </div>
-                            <div class="mb-3">
-                                <div>
-                                <label cLabel for="authkey">
-                                    {{ t('Auth-Key') }}
-                                    <oitc-required-icon></oitc-required-icon>
-                                </label>
-                                <input cFormControl id="authkey" required type="text"
-                                       name="authkey"
-                                       oitcFormError [errors]="errors" errorField="auth_key"
-                                       [(ngModel)]="post.auth_key">
-                                <oitc-form-feedback [errors]="errors" errorField="auth_key"></oitc-form-feedback>
-                                </div>
-                                <button
-                                        cButton
-                                        class="ripple"
-                                        color="success"
-                                        size="xs"
-                                        (click)="createAuth()">
-                                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                    {{ t('New auth key') }}
-                                </button>
-                                <div>
 
-                                </div>
-                            </div>
                             <div class="mb-3">
                                 <label cLabel for="port">
                                     {{ t('Port') }}
@@ -81,27 +72,84 @@
                                        name="port"
                                        min="1"
                                        max="65535"
-                                       placeholder="8080"
+                                       placeholder="443"
                                        oitcFormError [errors]="errors" errorField="port"
                                        [(ngModel)]="post.port">
                                 <oitc-form-feedback [errors]="errors" errorField="port"></oitc-form-feedback>
                             </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="authkey">
+                                    {{ t('Auth-Key') }}
+                                    <oitc-required-icon/>
+                                </label>
+                                <c-input-group>
+                                    <input cFormControl
+                                           required
+                                           disabled
+                                           id="authkey"
+                                           type="text"
+                                           name="authkey"
+                                           oitcFormError
+                                           [errors]="errors"
+                                           errorField="auth_key"
+                                           [(ngModel)]="post.auth_key">
+                                    <button cButton color="success" class="ripple" (click)="checkPushrelayConnection()">
+                                        <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                                        {{ t('Request and test Auth-Key') }}
+                                    </button>
+                                </c-input-group>
+                                <oitc-form-feedback [errors]="errors" errorField="auth_key"></oitc-form-feedback>
+                            </div>
+
+                            @if (hasPushrelayConnectionError && pushrelayErrors) {
+                                <oitc-alert color="danger"
+                                            [baseIcon]="'circle'"
+                                            [icon]="['fas', 'exclamation-triangle']"
+                                            [errorHeadline]="pushrelayErrors.status + ' - '+pushrelayErrors.statusText"
+                                            [errorText]="pushrelayErrors.message">
+                                </oitc-alert>
+                            }
+                            @if (hasPushrelayConnectionError === false) {
+                                <oitc-alert color="success"
+                                            [baseIcon]="'circle'"
+                                            [icon]="['fas', 'check']"
+                                            [errorHeadline]="'Success'|transloco"
+                                            [errorText]="'Connection established successfully.'|transloco">
+                                </oitc-alert>
+                            }
+
+                            <div class="mb-3">
+                                <label cLabel for="systemIdReadonly">
+                                    {{ t('System ID') }}
+                                </label>
+                                <input cFormControl
+                                       disabled
+                                       id="systemIdReadonly"
+                                       type="text"
+                                       name="systemIdReadonly"
+                                       [(ngModel)]="systemId">
+                                <div class="help-block">
+                                    {{ t('Unique identifier of the openITCOCKPIT Server') }}
+                                </div>
+                            </div>
+
                             <div class="mb-3">
                                 <c-form-check>
                                     <input
-                                            cFormCheckInput
-                                            name="enabled"
-                                            id="enabled"
-                                            type="checkbox"
-                                            oitcFormError [errors]="errors" errorField="enabled"
-                                            [(ngModel)]="post.enabled"/>
+                                        cFormCheckInput
+                                        name="enabled"
+                                        id="enabled"
+                                        type="checkbox"
+                                        oitcFormError [errors]="errors" errorField="enabled"
+                                        [(ngModel)]="post.enabled"/>
                                     <label cFormCheckLabel for="enabled">
                                         {{ t('Enable') }}
                                     </label>
                                 </c-form-check>
                                 <oitc-form-feedback [errors]="errors" errorField="enabled"></oitc-form-feedback>
                                 <div class="help-block">
-                                    {{ t('If disabled no push-notifcations to mobile') }}
+                                    {{ t('If disabled no push notifcations will be send to mobile devices.') }}
                                 </div>
                             </div>
                         </div>

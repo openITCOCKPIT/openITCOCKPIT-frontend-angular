@@ -1,13 +1,12 @@
-
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
-import { RelayPost } from './pushnotificationsrelay.interface';
+import { PushrelayRegisterAndTestResult, RelayPost } from './pushnotificationsrelay.interface';
 import { GenericResponseWrapper, GenericSuccessResponse, GenericValidationError } from '../../generic-responses';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class PushnotificationsrelayService {
 
@@ -17,15 +16,15 @@ export class PushnotificationsrelayService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    public getRelaySettings(): Observable<RelayPost> {
+    public getRelaySettings(): Observable<{ relay: RelayPost, systemId: string }> {
         const proxyPath = this.proxyPath;
-        return this.http.get<{ relay: RelayPost }>(`${proxyPath}/notificationsrelay/index.json`, {
+        return this.http.get<{ relay: RelayPost, systemId: string }>(`${proxyPath}/notificationsrelay/index.json`, {
             params: {
                 angular: true
             }
         }).pipe(
             map(data => {
-                return data.relay
+                return data
             })
         )
     }
@@ -51,5 +50,10 @@ export class PushnotificationsrelayService {
             })
         );
     }
-  
+
+    public registerAndTestToRelay(data: { address: string, port: number }): Observable<PushrelayRegisterAndTestResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<PushrelayRegisterAndTestResult>(`${proxyPath}/notificationsrelay/testAndRegisterRelay.json`, data);
+    }
+
 }

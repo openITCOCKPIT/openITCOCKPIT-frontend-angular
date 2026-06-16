@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardFooterComponent,
@@ -14,7 +15,8 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective
+    FormLabelDirective,
+    InputGroupComponent
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { RelayPost } from '../pushnotificationsrelay.interface';
@@ -29,10 +31,11 @@ import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { PushnotificationsrelayService } from '../pushnotificationsrelay.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { v4 as uuidv4 } from 'uuid';
+import { HttpErrorResponse } from '@angular/common/http';
+import { OitcAlertComponent } from '../../../components/alert/alert.component';
 
 @Component({
-  selector: 'oitc-pushnotificationsrelay-index',
+    selector: 'oitc-pushnotificationsrelay-index',
     imports: [
         FaIconComponent,
         PermissionDirective,
@@ -55,25 +58,39 @@ import { v4 as uuidv4 } from 'uuid';
         BackButtonDirective,
         CardFooterComponent,
         XsButtonDirective,
-        FormLoaderComponent
+        FormLoaderComponent,
+        AlertComponent,
+        InputGroupComponent,
+        OitcAlertComponent,
+        TranslocoPipe
     ],
-  templateUrl: './pushnotificationsrelay-index.component.html',
-  styleUrl: './pushnotificationsrelay-index.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './pushnotificationsrelay-index.component.html',
+    styleUrl: './pushnotificationsrelay-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PushnotificationsrelayIndexComponent {
 
     public post: RelayPost = {
         id: 1, //its 1 every time
-        address: "",
+        address: "https://pushrelay.openitcockpit.io",
         port: 443,
         auth_key: "",
-        enabled: false
+        enabled: true
     }
     public errors: GenericValidationError | null = null;
 
+    // The openITCOCKPIT System ID of this system
+    public systemId: string = '';
+
+    public hasPushrelayConnectionError: boolean | null = null;
+    public pushrelayErrors = {
+        status: '',
+        statusText: '',
+        message: ''
+    };
+
     private readonly subscriptions: Subscription = new Subscription();
-    private RelayService = inject(PushnotificationsrelayService);
+    private PushnotificationsrelayService = inject(PushnotificationsrelayService);
     private readonly notyService = inject(NotyService);
     private cdr = inject(ChangeDetectorRef);
     protected isLoading: boolean = true;
@@ -81,8 +98,9 @@ export class PushnotificationsrelayIndexComponent {
     public ngOnInit() {
         this.isLoading = true;
         this.subscriptions.add(
-            this.RelayService.getRelaySettings().subscribe(data => {
-                this.post = data;
+            this.PushnotificationsrelayService.getRelaySettings().subscribe(data => {
+                this.post = data.relay;
+                this.systemId = data.systemId;
                 this.isLoading = false;
                 this.cdr.markForCheck();
             })
@@ -93,17 +111,11 @@ export class PushnotificationsrelayIndexComponent {
         this.subscriptions.unsubscribe();
     }
 
-    protected createAuth() {
-        const uuid = uuidv4();
-        this.post.auth_key = uuid;
-        this.cdr.markForCheck();
-    }
-
     public submit() {
         this.errors = null;
 
         this.subscriptions.add(
-            this.RelayService.saveRelaySettings(this.post).subscribe(data => {
+            this.PushnotificationsrelayService.saveRelaySettings(this.post).subscribe(data => {
                 this.cdr.markForCheck();
 
                 if (data.success) {
@@ -114,6 +126,47 @@ export class PushnotificationsrelayIndexComponent {
                 }
             })
         );
+    }
+
+    public checkPushrelayConnection() {
+        this.hasPushrelayConnectionError = null; // Not checked yet
+
+        const sub = this.PushnotificationsrelayService.registerAndTestToRelay(this.post).subscribe({
+            next: (result) => {
+                //console.log(result);
+                // 200 ok
+
+                this.hasPushrelayConnectionError = false;
+                if (result.result.error) {
+                    this.hasPushrelayConnectionError = true;
+
+                    this.pushrelayErrors.status = String(result.result.status);
+                    this.pushrelayErrors.statusText = result.result.reason_phrase;
+                    this.pushrelayErrors.message = result.result.response_msg;
+                    this.cdr.markForCheck();
+
+                    return;
+                }
+
+                if (result.result.system?.auth_key) {
+                    // Update auth_key with the one provided by the Push Gateway
+                    this.post.auth_key = result.result.system.auth_key;
+                }
+
+                this.cdr.markForCheck();
+            },
+            error: (error: HttpErrorResponse) => {
+                this.hasPushrelayConnectionError = true;
+
+                this.pushrelayErrors.status = String(error.status);
+                this.pushrelayErrors.statusText = error.statusText;
+                this.pushrelayErrors.message = error.message
+
+                this.cdr.markForCheck();
+            }
+        });
+
+        this.subscriptions.add(sub);
     }
 
 }
