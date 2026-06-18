@@ -291,25 +291,20 @@
                                             </button>
                                         }
                                     </div>
-                                    @if (post.host_push_notifications_enabled && pushNotificationHasPermission !== undefined && !pushNotificationHasPermission) {
-                                        <div
-                                        >
+                                    @if (websocketConnectionError) {
+                                        <c-alert color="danger" class="mt-2">
+                                            {{ t('Error whiel connecting to WebSocket backend!') }}
+                                        </c-alert>
+                                    }
+                                    @if (post.host_push_notifications_enabled && pushNotificationHasPermission === false) {
+                                        <div>
                                             <c-alert color="danger" class="mt-2">
                                                 {{ t('No permission for push notification. Enable it in your browser settings!') }}
                                             </c-alert>
                                         </div>
                                     }
-                                    @if (post.host_push_notifications_enabled && pushNotificationHasPermission !== undefined && pushNotificationConnected !== undefined && pushNotificationHasPermission && !pushNotificationConnected) {
-                                        <div
-                                        >
-                                            <c-alert color="danger" class="mt-2">
-                                                {{ t('Connection to push notification service is not established') }}
-                                            </c-alert>
-                                        </div>
-                                    }
                                     @if (post.host_push_notifications_enabled && pushNotificationHasPermission !== undefined && pushNotificationConnected !== undefined && pushNotificationHasPermission && pushNotificationConnected) {
-                                        <div
-                                        >
+                                        <div>
                                             <c-alert color="success" class="mt-2">
                                                 {{ t('Connection to push notification service established successfully') }}
                                             </c-alert>

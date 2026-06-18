@@ -47,6 +47,9 @@ import { HeaderInfo, HeaderInfoService } from './header-info.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { DesignsService } from '../../../modules/design_module/pages/designs/designs.service';
 import { DesignsEditRoot } from '../../../modules/design_module/pages/designs/designs.interface';
+import {
+    WebsocketConnectionErrorComponent
+} from '../../../components/websocket-connection-error/websocket-connection-error.component';
 
 @Component({
     selector: 'oitc-coreui-header',
@@ -76,7 +79,8 @@ import { DesignsEditRoot } from '../../../modules/design_module/pages/designs/de
         HeaderEditionComponent,
         HeaderExportComponent,
         VersionCheckComponent,
-        AsyncPipe
+        AsyncPipe,
+        WebsocketConnectionErrorComponent
     ],
     templateUrl: './coreui-header.component.html',
     styleUrl: './coreui-header.component.css',
