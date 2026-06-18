@@ -62,6 +62,7 @@ import { redfishModuleRoutes } from './modules/redfish_module/redfish_module.rou
 import { checkpointModuleRoutes } from './modules/checkpoint_module/checkpoint_module.routes';
 import { raritanModuleRoutes } from './modules/raritan_module/raritan_module.routes';
 import { sonicWallModuleRoutes } from './modules/sonic_wall_module/sonic_wall_module.routes';
+import { telegramModuleRoutes } from "./modules/telegram_module/telegram_module.routes";
 
 @Component({
     selector: 'legacy-redirect',
@@ -145,7 +146,8 @@ const moduleRoutes: Routes = [
     ...msWindowsAgentlessModuleRoutes,
     ...checkpointModuleRoutes,
     ...raritanModuleRoutes,
-    ...sonicWallModuleRoutes
+    ...sonicWallModuleRoutes,
+    ...telegramModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
