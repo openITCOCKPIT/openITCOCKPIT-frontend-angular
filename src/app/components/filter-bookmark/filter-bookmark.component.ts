@@ -68,6 +68,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { CustomAlertsIndexFilter } from '../../modules/customalert_module/pages/customalerts/customalerts.interface';
+import { PermissionsService } from '../../permissions/permissions.service';
+import {
+    FilterBookmarkAllocationModalComponent
+} from './filter-bookmark-allocation-modal/filter-bookmark-allocation-modal.component';
+import { AsyncPipe } from '@angular/common';
+import { snakeCase } from 'lodash';
 
 
 @Component({
@@ -83,10 +89,12 @@ import { CustomAlertsIndexFilter } from '../../modules/customalert_module/pages/
         ButtonGroupComponent,
         DeleteBookmarkModalComponent,
         FilterBookmarkExportModalComponent,
+        FilterBookmarkAllocationModalComponent,
         NgSelectModule,
         FormsModule,
         NgOptionHighlightDirective,
-        ContainerComponent
+        ContainerComponent,
+        AsyncPipe
     ],
     templateUrl: './filter-bookmark.component.html',
     styleUrl: './filter-bookmark.component.css',
@@ -116,12 +124,12 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
     public actionType: string = '';
     public deleteItems: any[] = [];
     public TranslocoService: TranslocoService = inject(TranslocoService);
-    private init: boolean = false;
     private filterUuid: string | null = null;
     private subscriptions: Subscription = new Subscription();
     private BookmarksService: BookmarksService = inject(BookmarksService);
     private readonly modalService = inject(ModalService);
     private readonly notyService = inject(NotyService);
+    public readonly PermissionsService = inject(PermissionsService);
 
     private cdr = inject(ChangeDetectorRef);
 
@@ -202,7 +210,17 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
                 });
             }, 0);
         }
+    }
 
+    allocateBookmark() {
+        if (this.selectedBookmark && this.selectedBookmark.uuid != '') {
+            setTimeout(() => {
+                this.modalService.toggle({
+                    show: true,
+                    id: 'bookmarkAllocateModal',
+                });
+            }, 0);
+        }
     }
 
     onBookmarkChange() {
@@ -210,7 +228,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
             this.selected.emit('');
             this.showEdit = false;
             this.selectedBookmark = null;
-            this.router.navigate([this.controller.toLowerCase(), this.action.toLowerCase()], {
+            this.router.navigate([snakeCase(this.plugin), this.controller.toLowerCase(), this.action.toLowerCase()], {
                 queryParams: {filter: null},
                 queryParamsHandling: 'merge',
             });
@@ -223,7 +241,7 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
         }
         this.showEdit = true;
         if (this.filterUuid != null && selectedBookmark != null) {
-            this.router.navigate([this.controller.toLowerCase(), this.action.toLowerCase()], {
+            this.router.navigate([snakeCase(this.plugin), this.controller.toLowerCase(), this.action.toLowerCase()], {
                 queryParams: {filter: selectedBookmark.uuid},
                 queryParamsHandling: 'merge',
             });
@@ -283,9 +301,10 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
         let items: DeleteAllItem[] = [];
         if (this.selectedBookmark) {
             // User just want to delete a single command
+            const displayName = (this.selectedBookmark.filter_bookmark_allocation) ? `${this.selectedBookmark.name} (Attention: this item is allocated)` : this.selectedBookmark.name;
             items = [{
                 id: Number(this.selectedBookmark.id),
-                displayName: String(this.selectedBookmark.name)
+                displayName: displayName
             }];
 
             this.deleteItems = items;
@@ -311,12 +330,11 @@ export class FilterBookmarkComponent implements OnInit, OnDestroy {
             this.loadBookmarks(null);
             this.showEdit = false
             this.selected.emit('');
-            this.router.navigate([this.controller.toLowerCase(), this.action.toLowerCase()]);
+            this.router.navigate([snakeCase(this.plugin), this.controller.toLowerCase(), this.action.toLowerCase()]);
         }
         if (!$result) {
             this.notyService.genericError();
         }
-
     }
 
     ngOnDestroy() {

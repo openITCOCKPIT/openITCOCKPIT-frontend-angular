@@ -89,6 +89,7 @@ export class DeleteBookmarkModalComponent implements OnInit, OnDestroy {
         this.percentage = 0;
         this.hasErrors = false;
         this.errors = [];
+        //this.deleteMessage = '';
 
         this.cdr.markForCheck();
 
