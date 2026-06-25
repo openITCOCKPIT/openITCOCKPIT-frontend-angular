@@ -1,0 +1,245 @@
+<ng-container *transloco="let t">
+    @if (!dependenciesTree) {
+        <ng-container>
+            <oitc-block-loader height="25rem"></oitc-block-loader>
+        </ng-container>
+    }
+    @if (dependenciesTree) {
+        @if (dependenciesTree.hostdependenciesTree.nodes && dependenciesTree.hostdependenciesTree.nodes.length > 0) {
+            <f-flow fDraggable class="h-25" (fFullRendered)="loaded()">
+                <f-background>
+                    <f-rect-pattern></f-rect-pattern>
+                </f-background>
+                <f-canvas #canvas fZoom>
+                    @for (node of dependenciesTree.hostdependenciesTree.nodes | filter: {type: 'host'}; track node.id) {
+                        <div fNode
+                             [fNodeId]="node.id"
+                             [fNodePosition]="node.position! || {x:0,y:0}"
+                             class="custom-flow-node">
+
+                            <div class="ports-column inputs-column">
+                                @for (conn of dependenciesTree.hostdependenciesTree.connections; track conn.id) {
+                                    @if (conn.target === node.id) {
+                                        <div fNodeInput
+                                             [fInputId]="conn.id + '_input'"
+                                             class="visual-port-dot">
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+                            <c-card class="host-node font-xx-small">
+                                <c-card-header class="border-0 p-1 d-inline-block text-truncate host-node-header"
+                                               [title]="node.name">
+                                    @if (node.Hoststatus) {
+                                        <oitc-hoststatus-icon [hoststatus]="node.Hoststatus"></oitc-hoststatus-icon>
+                                    }
+                                    <oitc-label-link class="ps-1"
+                                                     [objectId]="node.host_id"
+                                                     [route]="'/hosts/browser'"
+                                                     [permissions]="'hosts.browser'">
+                                        {{ node.name }}
+                                    </oitc-label-link>
+                                </c-card-header>
+                                <c-card-body class="border-0 py-1 px-2 font-xs">
+                                    <c-row>
+                                        <c-col [xs]="12" class="text-truncate">
+                                            {{ t('IP address') }}
+                                        </c-col>
+                                        <c-col [xs]="12" class="text-truncate" [title]="node.address">
+                                            {{ node.address }}
+                                        </c-col>
+                                    </c-row>
+                                    <c-row class="pt-1">
+                                        <c-col class="text-end italic" [title]="node.Hoststatus.lastCheck">
+                                            {{ 'State since' }}
+                                            {{ node.Hoststatus.lastCheckInWords }}
+                                        </c-col>
+                                    </c-row>
+                                </c-card-body>
+                            </c-card>
+
+                            <div class="ports-column outputs-column">
+                                @for (conn of dependenciesTree.hostdependenciesTree.connections; track conn.id) {
+                                    @if (conn.source === node.id) {
+                                        <div fNodeOutput
+                                             [fOutputId]="conn.id + '_output'"
+                                             class="visual-port-dot">
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    @for (node of dependenciesTree.hostdependenciesTree.nodes | filter: {type: 'dependency'}; track node.id) {
+                        <div fNode
+                             [fNodeId]="node.id"
+                             [fNodePosition]="node.position! || {x:0,y:0}"
+                             class="custom-flow-node">
+                            <div class="ports-column inputs-column">
+                                @for (conn of dependenciesTree.hostdependenciesTree.connections; track conn.id) {
+                                    @if (conn.target === node.id) {
+                                        <div fNodeInput
+                                             [fInputId]="conn.id + '_input'"
+                                             class="visual-port-dot">
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+                            <c-card class="font-xx-small w-100 h-100 m-0">
+                                <c-card-header class="border-0 p-1">
+                                    #
+                                    <oitc-label-link class="ps-1"
+                                                     [objectId]="node.hostdependency_id"
+                                                     [route]="'/hostdependencies/edit'"
+                                                     [permissions]="'hostdependencies.edit'">
+                                        {{ node.hostdependency_id }}
+                                    </oitc-label-link>
+                                </c-card-header>
+                                <c-card-body class="border-0 py-1 px-2 font-xs">
+                                    <c-row>
+                                        <c-col [xs]="12">
+                                            {{ t('Inherits parent') }}
+                                            @if (node.inherits_parent) {
+                                                <span class="badge bg-success me-1" title="{{ t('Yes') }}"
+                                                >
+                                                    {{ t('Yes') }}
+                                                </span>
+                                            }
+                                            @if (!node.inherits_parent) {
+                                                <span class="badge bg-danger me-1" title="{{ t('No') }}"
+                                                >
+                                                    {{ t('No') }}
+                                                </span>
+                                            }
+                                        </c-col>
+                                    </c-row>
+                                    <c-row>
+                                        <c-col [xs]="12">
+                                            <span class="badge px-0">
+                                                <fa-icon [icon]="['fas', 'terminal']" class="me-1 fa-lg"
+                                                         [title]="t('Execution failure criteria')"
+                                                ></fa-icon>
+                                            </span>
+                                            @if (node.execution_fail_on_up) {
+                                                <span class="badge bg-success me-1" title="{{ t('Up') }}"
+                                                >
+                                                    {{ t('O') }}
+                                                </span>
+                                            }
+                                            @if (node.execution_fail_on_down) {
+                                                <span class="badge bg-danger me-1" title="{{ t('Down') }}"
+                                                >
+                                                    {{ t('D') }}
+                                                </span>
+                                            }
+                                            @if (node.execution_fail_on_unreachable) {
+                                                <span class="badge bg-secondary me-1" title="{{ t('Unreachable') }}"
+                                                >
+                                                    {{ t('U') }}
+                                                </span>
+                                            }
+                                            @if (node.execution_fail_on_pending) {
+                                                <span class="badge bg-primary me-1" title="{{ t('Pending') }}"
+                                                >
+                                                    {{ t('P') }}
+                                                </span>
+                                            }
+                                            @if (node.execution_none) {
+                                                <span class="badge bg-primary me-1" title="{{ t('Execution none') }}"
+                                                >
+                                                    {{ t('N') }}
+                                                </span>
+                                            }
+                                        </c-col>
+                                    </c-row>
+                                    <c-row class="mb-1">
+                                        <c-col [xs]="12">
+                                            <span class="badge px-0 ">
+                                                <fa-icon [icon]="['far', 'envelope']" class="me-1 fa-lg"
+                                                         [title]="t('Notification failure criteria')"
+                                                ></fa-icon>
+                                            </span>
+
+                                            @if (node.notification_fail_on_up) {
+                                                <span class="badge bg-success me-1" title="{{ t('Up') }}"
+                                                >
+                                                    {{ t('O') }}
+                                                </span>
+                                            }
+                                            @if (node.notification_fail_on_down) {
+                                                <span class="badge bg-danger me-1" title="{{ t('Down') }}"
+                                                >
+                                                    {{ t('D') }}
+                                                </span>
+                                            }
+                                            @if (node.notification_fail_on_unreachable) {
+                                                <span class="badge bg-secondary me-1" title="{{ t('Unreachable') }}"
+                                                >
+                                                    {{ t('U') }}
+                                                </span>
+                                            }
+                                            @if (node.notification_fail_on_pending) {
+                                                <span class="badge bg-primary me-1" title="{{ t('Pending') }}"
+                                                >
+                                                    {{ t('P') }}
+                                                </span>
+                                            }
+                                            @if (node.notification_none) {
+                                                <span class="badge bg-primary me-1" title="{{ t('Execution none') }}"
+                                                >
+                                                    {{ t('N') }}
+                                                </span>
+                                            }
+                                        </c-col>
+                                    </c-row>
+
+                                    @if (node.timeperiod && node.timeperiod.name) {
+                                        <c-row>
+                                            <c-col [xs]="12">
+                                                <fa-icon [icon]="['fas', 'business-time']" class="me-1"
+                                                         [title]="t('Timeperiod')"
+                                                ></fa-icon>
+                                                {{ node.timeperiod.name }}
+                                            </c-col>
+                                        </c-row>
+                                    }
+                                </c-card-body>
+                            </c-card>
+                            <div class="ports-column outputs-column">
+                                @for (conn of dependenciesTree.hostdependenciesTree.connections; track conn.id) {
+                                    @if (conn.source === node.id) {
+                                        <div fNodeOutput
+                                             [fOutputId]="conn.id + '_output'"
+                                             class="visual-port-dot">
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- ==================== CONNECTIONS ==================== -->
+                    @for (conn of dependenciesTree.hostdependenciesTree.connections; track conn.id) {
+                        <f-connection [fConnectionId]="conn.id"
+                                      [fOffset]="20"
+                                      [fSelectionDisabled]="true"
+                                      [fReassignDisabled]="true"
+                                      [fBehavior]="EFConnectionBehavior.FIXED"
+                                      [fType]="EFConnectionType.SEGMENT"
+                                      [fOutputId]="conn.id + '_output'"
+                                      [fInputId]="conn.id + '_input'"
+                                      fBehavior="fixed"
+                                      [class]="'status-' + (
+                            hostStatusMap()[conn.source] !== null && hostStatusMap()[conn.source] !== undefined
+                            ? hostStatusMap()[conn.source]
+                            : (hostStatusMap()[conn.target] || null))">
+                        </f-connection>
+                    }
+                </f-canvas>
+            </f-flow>
+        }
+    }
+</ng-container>

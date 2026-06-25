@@ -1,5 +1,7 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { SelectKeyValue, SelectKeyValueWithDisabled } from '../../layouts/primeng/select.interface';
+import { GenericIdAndName } from '../../generic.interfaces';
+import { HoststatusObject } from '../hosts/hosts.interface';
 
 
 export interface HostdependencyIndexRoot extends PaginateOrScroll {

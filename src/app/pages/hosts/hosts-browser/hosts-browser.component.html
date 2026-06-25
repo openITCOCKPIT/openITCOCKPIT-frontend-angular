@@ -70,7 +70,7 @@
                             <button *oitcPermission="['hostdependencies', 'dependencyTree']" class="nav-link"
                                     [ngClass]="{'active': selectedTab == HostBrowserTabs.DependencyTree}"
                                     (click)="changeTab(HostBrowserTabs.DependencyTree)">
-                                <fa-icon [icon]="['fas', 'code-fork']"  [rotate]="180"></fa-icon>
+                                <fa-icon [icon]="['fas', 'code-fork']" [rotate]="180"></fa-icon>
                                 {{ t('Dependency tree') }}
                             </button>
                         </c-nav-item>
@@ -1235,9 +1235,8 @@
                 <!-- DependencyTree start -->
                 @if (selectedTab == HostBrowserTabs.DependencyTree && result && result.mergedHost && result.hasHostDependencies) {
                     <div class="host-dependency-tree-container border">
-                        <oitc-host-service-dependencies-tree [hostId]="result.mergedHost.id"
-                                                             [lastUpdated]="lastUpdated">
-                        </oitc-host-service-dependencies-tree>
+                        <oitc-hostdependencies-tree [hostId]="result.mergedHost.id">
+                        </oitc-hostdependencies-tree>
                     </div>
                 }
                 <!-- DependencyTree end -->

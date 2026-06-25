@@ -1,0 +1,159 @@
+.f-node {
+    border: 0;
+    background: transparent;
+}
+
+.host-node {
+    width: 150px;
+}
+
+.font-xx-small {
+    font-size: xx-small !important;
+}
+
+
+/* Zustand bei Auswahl / Hover */
+.f-connection.f-selected {
+    stroke: #ff5722; /* Orangefarbene Linie */
+    stroke-width: 3px;
+}
+
+.f-connection.status-up {
+    stroke: var(--cui-success);
+}
+
+.f-connection.status-down {
+    stroke: var(--cui-danger);
+}
+
+.f-connection.status-unreachable {
+    stroke: var(--cui-secondary);
+}
+
+.f-connection.status-not-monitored {
+    stroke: var(--cui-secondary);
+}
+
+.f-connection.status-disabled {
+    stroke: var(--cui-secondary);
+    stroke-dasharray: 5;
+    stroke-opacity: 0.5;
+}
+
+@keyframes flowMovement {
+    to {
+        stroke-dashoffset: -20;
+    }
+}
+
+@keyframes errorPulse {
+    0% {
+        stroke: #ff4757;
+        stroke-width: 1px;
+        filter: drop-shadow(0 0 0px rgba(255, 71, 87, 0));
+    }
+    50% {
+        stroke: #ff1f35;
+        stroke-width: 3px;
+        filter: drop-shadow(0 0 4px rgba(255, 71, 87, 0.6));
+    }
+    100% {
+        stroke: #ff4757;
+        stroke-width: 1px;
+        filter: drop-shadow(0 0 0px rgba(255, 71, 87, 0));
+    }
+}
+
+.f-connection {
+    stroke: var(--cui-secondary);
+    stroke-width: 1px;
+    fill: none;
+    transition: stroke 0.3s ease;
+}
+
+.f-connection.status-up {
+    stroke: var(--cui-success); /* Schönes Monitoring-Grün */
+    stroke-dasharray: 12, 12;
+    stroke-dashoffset: -24;
+    animation: smoothFlow 0.8s linear infinite;
+    will-change: stroke-dashoffset;
+}
+
+@keyframes smoothFlow {
+    from {
+        stroke-dashoffset: 0;
+    }
+    to {
+        stroke-dashoffset: -24;
+    }
+}
+
+@keyframes smoothFlowReverse {
+    from {
+        stroke-dashoffset: -24;
+    }
+    to {
+        stroke-dashoffset: -0;
+    }
+}
+
+.f-connection.status-down {
+    animation: errorPulse 2.5s ease-in-out infinite;
+    stroke-linecap: butt;
+}
+
+.custom-flow-node {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible; /* Wichtig, damit die Punkte links/rechts herausschauen dürfen */
+
+    /* Falls Ihre Karten keine feste Breite haben, hier eine Basisgröße definieren */
+    min-width: 150px;
+}
+
+/* Die unsichtbaren vertikalen Spalten links und rechts am Rand der Card */
+.ports-column {
+    display: flex;
+    flex-direction: column;   /* Ordnet mehrere Punkte sauber UNTEREINANDER an */
+    justify-content: center;  /* Zentriert sie vertikal an der Card-Wand */
+    gap: 6px;                 /* Abstand zwischen den Punkten, falls es mehrere sind */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    z-index: 10;              /* Liegt über der Card */
+
+    &.inputs-column {
+        left: -5px;             /* Platziert die Eingangs-Punkte genau auf dem linken Rahmen */
+    }
+
+    &.outputs-column {
+        right: -5px;            /* Platziert die Ausgangs-Punkte genau auf dem rechten Rahmen */
+    }
+}
+
+/* Das Design der kleinen visuellen Stecker-Punkte */
+.visual-port-dot {
+    width: 10px;
+    height: 10px;
+    background: #4a5568;      /* Schickes, neutrales Grau im Ruhezustand */
+    border: 2px solid #ffffff; /* Weißer Kontur-Ring, damit es sauber auf dem Rahmen aussieht */
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+::ng-deep {
+    .f-connection-center,
+    .f-connection-handle,
+    .f-connection-drag-handle,
+    .f-connection-endpoint {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+}
