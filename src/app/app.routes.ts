@@ -63,6 +63,7 @@ import { checkpointModuleRoutes } from './modules/checkpoint_module/checkpoint_m
 import { raritanModuleRoutes } from './modules/raritan_module/raritan_module.routes';
 import { sonicWallModuleRoutes } from './modules/sonic_wall_module/sonic_wall_module.routes';
 
+
 @Component({
     selector: 'legacy-redirect',
     template: `If you can read this, something has to be fixed ;)`,
@@ -356,6 +357,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'proxy/index',
     loadComponent: () => import('./pages/proxy/proxy-index/proxy-index.component').then(m => m.ProxyIndexComponent)
+}, {
+    path: 'notificationsrelay/index',
+    loadComponent: () => import('./pages/pushnotificationsrelay/pushnotificationsrelay-index/pushnotificationsrelay-index.component').then(m => m.PushnotificationsrelayIndexComponent)
 }, {
     path: 'registers/index',
     loadComponent: () => import('./pages/registers/registers-index/registers-index.component').then(m => m.RegistersIndexComponent)
