@@ -3,10 +3,13 @@ import {
     ChangeDetectorRef,
     Component,
     computed,
+    effect,
     inject,
-    Input,
+    input,
+    OnChanges,
     OnDestroy,
     OnInit,
+    SimpleChanges,
     ViewChild
 } from '@angular/core';
 import {
@@ -74,7 +77,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HostdependenciesTreeComponent implements OnInit, OnDestroy {
+export class HostdependenciesTreeComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(private layoutEngine: DagreLayoutEngine) {
         // Writeback für die automatischen Positionen
@@ -88,6 +91,11 @@ export class HostdependenciesTreeComponent implements OnInit, OnDestroy {
                 }
             });
         });
+        effect(() => {
+            const hostId = this.hostId();
+            this.dependenciesTree = undefined; // Reset the tree when hostId changes
+            this.load();
+        });
     }
 
     @ViewChild(FFlowComponent, {static: false})
@@ -100,17 +108,28 @@ export class HostdependenciesTreeComponent implements OnInit, OnDestroy {
     public fZoomDirective!: FZoomDirective;
     private readonly subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
-    @Input() public hostId: number = 0;
+
+    public hostId = input<number>(0);
 
     private HostdependenciesTreeService = inject(HostdependenciesTreeService);
     public dependenciesTree?: HostdependenciesTree;
 
     public ngOnInit(): void {
+
         this.load();
     }
 
+    public ngOnChanges(changes: SimpleChanges): void {
+        // Parent component wants to trigger an update
+        if (changes['lastUpdated'] && !changes['lastUpdated'].isFirstChange()) {
+            //this.load();
+            return;
+        }
+
+    }
+
     private load() {
-        this.subscriptions.add(this.HostdependenciesTreeService.loadDependencyTree(this.hostId)
+        this.subscriptions.add(this.HostdependenciesTreeService.loadDependencyTree(this.hostId())
             .subscribe((result: HostdependenciesTree) => {
                 this.dependenciesTree = result;
                 this.cdr.markForCheck();
