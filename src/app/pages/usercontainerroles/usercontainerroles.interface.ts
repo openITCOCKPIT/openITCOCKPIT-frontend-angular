@@ -114,3 +114,12 @@ export interface SelectedContainerWithPermission {
 export interface UsercontainerrolesGet {
     usercontainerrole: UsercontainerrolesPost
 }
+
+export interface UsercontainerrolesAppend {
+    Usercontainerrole: {
+        ldapgroups: {
+            _ids: number[]
+        }
+        id: number
+    }
+}

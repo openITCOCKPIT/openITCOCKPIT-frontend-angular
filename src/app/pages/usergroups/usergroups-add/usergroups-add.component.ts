@@ -117,10 +117,17 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
     protected createAnother: boolean = false;
     protected ldapGroups: SelectKeyValue[] = [];
     protected controllerFilter: string = '';
+    private preselectedLdapgroupIds: number[] = [];
     protected post: UsergroupsAddRoot = this.getDefaultPost() as UsergroupsAddRoot;
     protected readonly keepOrder = keepOrder;
 
     public ngOnInit() {
+
+        const ldapgroupIds = this.route.snapshot.paramMap.get('ldapgroupIds');
+        if (ldapgroupIds) {
+            this.preselectedLdapgroupIds = ldapgroupIds.split(',').map(Number);
+        }
+
         this.loadAcos();
         this.loadLdapGroups('');
     }
@@ -160,6 +167,11 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search, selected).subscribe((ldapgroups: LoadLdapgroups) => {
             this.ldapGroups = ldapgroups.ldapgroups;
+
+            // Preselect ldapgroups if they were passed in the URL.
+            if (this.preselectedLdapgroupIds.length) {
+                this.post.Usergroup.ldapgroups._ids = this.preselectedLdapgroupIds;
+            }
             this.cdr.markForCheck();
         }));
     }
