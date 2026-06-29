@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserDefaultTemplatesAddComponent } from './user-default-templates-add.component';
 
-describe('UsersLdapComponent', () => {
+describe('UserDefaultTemplatesAddComponent', () => {
     let component: UserDefaultTemplatesAddComponent;
     let fixture: ComponentFixture<UserDefaultTemplatesAddComponent>;
 

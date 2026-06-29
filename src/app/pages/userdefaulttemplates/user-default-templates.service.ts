@@ -40,10 +40,10 @@ export class UserDefaultTemplatesService {
         )
     }
 
-    public add(user: UserDefaultTemplatesPost): Observable<GenericResponseWrapper> {
+    public add(userDefaultTemplate: UserDefaultTemplatesPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/userDefaultTemplates/add.json?angular=true`, {
-            User: user
+            Userdefaulttemplate: userDefaultTemplate
         })
             .pipe(
                 map(data => {
@@ -63,7 +63,7 @@ export class UserDefaultTemplatesService {
             );
     }
 
-    public getLdapImportSettingsEdit(id: number): Observable<UserDefaultTemplatesEditResponse> {
+    public getUserDefaultTemplatesEdit(id: number): Observable<UserDefaultTemplatesEditResponse> {
         const proxyPath = this.proxyPath;
         return this.http.get<UserDefaultTemplatesEditResponse>(`${proxyPath}/userDefaultTemplates/edit/${id}.json`, {
             params: {
@@ -76,10 +76,10 @@ export class UserDefaultTemplatesService {
         );
     }
 
-    public saveLdapImportSettingsEdit(user: UserDefaultTemplatesPost): Observable<GenericResponseWrapper> {
+    public saveUserDefaultTemplatesEdit(userDefaultTemplate: UserDefaultTemplatesPost): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/userDefaultTemplates/edit/${user.id}.json?angular=true`, {
-            User: user
+        return this.http.post<any>(`${proxyPath}/userDefaultTemplates/edit/${userDefaultTemplate.id}.json?angular=true`, {
+            Userdefaulttemplate: userDefaultTemplate
         })
             .pipe(
                 map(data => {

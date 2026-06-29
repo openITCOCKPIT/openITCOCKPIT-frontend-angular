@@ -31,9 +31,9 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { UserDefaultTemplatesPost, } from '../user-default-templates.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { UsersService } from '../../users/users.service';
@@ -46,9 +46,10 @@ import { LoadLdapgroups } from '../../usergroups/usergroups.interface';
 import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { UserContainerPermission, UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
+import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 @Component({
-    selector: 'oitc-user-default-templates-add',
+    selector: 'oitc-user-default-templates-edit',
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -81,15 +82,19 @@ import { UserContainerPermission, UserLocaleOption, UserTimezonesSelect } from '
         RowComponent,
         ColComponent,
         SliderTimeComponent,
-        TrueFalseDirective
+        TrueFalseDirective,
+        FormLoaderComponent
     ],
-    templateUrl: './user-default-templates-add.component.html',
-    styleUrl: './user-default-templates-add.component.css',
+    templateUrl: './user-default-templates-edit.component.html',
+    styleUrl: './user-default-templates-edit.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
-    public createAnother: boolean = false;
-    public post: UserDefaultTemplatesPost = this.getDefaultPost();
+export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
+
+    public notPermittedContainerIds: number[] = [];
+    public containerIdsWithWritePermissions: number[] = [];
+
+    public post?: UserDefaultTemplatesPost;
     public errors: GenericValidationError | null = null;
 
     public usergroups: SelectKeyValue[] = [];
@@ -113,49 +118,78 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
-        this.loadLdapGroups('');
-        this.loadContainer();
-        this.loadUsergroups();
-        this.loadDateformats();
-        this.loadLocaleOptions();
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            const id = Number(this.route.snapshot.paramMap.get('id'));
+            this.loadUserDefaultTemplate(id);
+            this.loadUsergroups();
+            this.loadDateformats();
+            this.loadLocaleOptions();
+        }));
     }
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
 
-    private getDefaultPost(): UserDefaultTemplatesPost {
+    public loadUserDefaultTemplate(id: number) {
 
-        this.selectedUserContainers = [];
-        this.selectedUserContainerWithPermission = [];
-
-        return {
-            name: '',
-            description: '',
-            showstatsinmenu: 0,
-            paginatorlength: 25,
-            dashboard_tab_rotation: 0,
-            recursive_browser: 0,
-            dateformat: 'H:i:s - d.m.Y',
-            timezone: 'Europe/Berlin',
-            i18n: 'en_US',
-            is_oauth: false,
-            usergroup_id: 0,
-            UserDefaultTemplatesToContainers: {},
-            ldapgroups: {
-                _ids: []
-            }
+        let requests = {
+            container: this.UsersService.loadContainersForAngular(),
+            userdefaulttemplate: this.UserDefaultTemplatesService.getUserDefaultTemplatesEdit(id)
         };
-    }
 
-    public loadContainer() {
-        this.subscriptions.add(this.UsersService.loadContainersForAngular().subscribe((result) => {
-            this.containers = result.containers;
-            this.cdr.markForCheck();
-        }));
+        this.subscriptions.add(forkJoin(requests).subscribe(
+            (results) => {
+                // Store container data
+                this.containers = results.container.containers;
+                this.containerIdsWithWritePermissions = results.container.containerIdsWithWritePermissions;
+
+                // Store user data
+                this.post = results.userdefaulttemplate.userDefaultTemplate;
+                this.notPermittedContainerIds = results.userdefaulttemplate.notPermittedContainerIds; // User has not written permissions to all selected containers
+
+                this.selectedUserContainerWithPermission = [];
+
+                if (results.userdefaulttemplate.userDefaultTemplate.containers) {
+                    //Reformat data that it looks like the same as it looks in the add method...
+
+                    // Pre-select the container select element
+                    this.selectedUserContainers = results.userdefaulttemplate.userDefaultTemplate.containers._ids;
+
+                    for (let containerId in results.userdefaulttemplate.userDefaultTemplate.UserDefaultTemplatesToContainers) {
+                        this.selectedUserContainerWithPermission.push({
+                            container_id: Number(containerId),
+                            container_name: this.getContainerName(Number(containerId)),
+                            permission_level: results.userdefaulttemplate.userDefaultTemplate.UserDefaultTemplatesToContainers[containerId]
+                        });
+                    }
+
+                    // Create the read/write list of containers
+                    this.onSelectedContainerIdsChange(null);
+
+                    // filter containers from the select box where the user has no permissions.
+                    // this is to avoid PrimeNG showing empty options in the select.
+                    // It is imporant to call onSelectedContainerIdsChange first - otherwise the container overview is empty.
+                    if (this.notPermittedContainerIds.length > 0) {
+                        // When notPermittedContainerIds is NOT empty, the select box is disabled.
+                        // The value of selectedUserContainers is not send to the server anymore, so we can remove the
+                        // not permitted container ids from selectedUserContainers without causing problems.
+                        this.selectedUserContainers = this.selectedUserContainers.filter(containerId => {
+                            return this.notPermittedContainerIds.indexOf(containerId) === -1;
+                        });
+                    }
+
+                }
+
+                this.loadLdapGroups('');
+
+                this.cdr.markForCheck();
+
+            }));
     }
 
     public loadUsergroups() {
@@ -168,7 +202,6 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
     public loadDateformats() {
         this.subscriptions.add(this.UsersService.getDateformats().subscribe((result) => {
             this.dateformats = result.dateformats;
-            this.post.dateformat = result.defaultDateFormat;
             this.timezones = result.timezones;
             this.serverTimeZone = result.serverTimeZone;
             this.serverTime = result.serverTime;
@@ -234,6 +267,9 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
     }
 
     public submit() {
+        if (!this.post) {
+            return;
+        }
 
         let ContainersUserDefaultTemplatesMemberships: { [key: number]: PermissionLevel } = {};
         this.selectedUserContainerWithPermission.forEach(container => {
@@ -241,25 +277,17 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
         });
         this.post.UserDefaultTemplatesToContainers = ContainersUserDefaultTemplatesMemberships;
 
-        this.subscriptions.add(this.UserDefaultTemplatesService.add(this.post)
+        this.subscriptions.add(this.UserDefaultTemplatesService.saveUserDefaultTemplatesEdit(this.post)
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('User Default Template');
-                    const msg = this.TranslocoService.translate('created successfully');
+                    const msg = this.TranslocoService.translate('updated successfully');
                     const url = ['userDefaultTemplates', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-
-                    if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/userDefaultTemplates/index']);
-                        return;
-                    }
-                    this.post = this.getDefaultPost();
-                    this.loadLdapGroups('');
-                    this.notyService.scrollContentDivToTop();
-                    this.errors = null;
+                    this.HistoryService.navigateWithFallback(['/userDefaultTemplates/index']);
                     return;
                 }
 
@@ -274,7 +302,7 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
 
     protected loadLdapGroups = (search: string = '') => {
         let selected: number[] = [];
-        if (this.post.ldapgroups && this.post.ldapgroups._ids) {
+        if (this.post && this.post.ldapgroups && this.post.ldapgroups._ids) {
             selected = this.post.ldapgroups._ids;
         }
         this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search, selected).subscribe((ldapgroups: LoadLdapgroups) => {

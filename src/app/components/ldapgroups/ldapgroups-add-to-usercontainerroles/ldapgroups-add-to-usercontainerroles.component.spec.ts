@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LdapgroupsAddToUsercontainerrolesComponent } from './ldapgroups-add-to-usercontainerroles.component';
 
-describe('LdapgroupsAddToUsergroupComponent', () => {
+describe('LdapgroupsAddToUsercontainerrolesComponent', () => {
     let component: LdapgroupsAddToUsercontainerrolesComponent;
     let fixture: ComponentFixture<LdapgroupsAddToUsercontainerrolesComponent>;
 

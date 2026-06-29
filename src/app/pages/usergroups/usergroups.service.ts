@@ -4,17 +4,23 @@ import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
     AcoRoot,
     LoadLdapgroups,
-    Usergroup,
     UsergroupsAddRoot,
+    UsergroupsAppend,
     UsergroupsCopyGetRoot,
     UsergroupsCopyPostRoot,
-    UsergroupsEditGetRoot, UsergroupsEditPostRoot,
+    UsergroupsEditGetRoot,
+    UsergroupsEditPostRoot,
     UsergroupsIndexParams,
     UsergroupsIndexRoot
 } from './usergroups.interface';
 import { catchError, map, Observable, of } from 'rxjs';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import {
+    GenericActionErrorResponse,
+    GenericIdResponse,
+    GenericResponseWrapper,
+    GenericValidationError
+} from '../../generic-responses';
 
 @Injectable({
     providedIn: 'root'
@@ -103,4 +109,30 @@ export class UsergroupsService {
                 })
             );
     }
+
+    public appendLdapgroups(param: UsergroupsAppend): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/usergroups/append/.json?angular=true`, param)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.message as GenericActionErrorResponse;
+                    return of({
+                        success: false,
+                        data: {
+                            usergroup_id: {
+                                err
+                            }
+                        }
+                    });
+                })
+            );
+    }
+
 }

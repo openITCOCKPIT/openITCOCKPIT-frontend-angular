@@ -7,7 +7,8 @@
                     {{ t('Home') }}
                 </a></li>
             <li class="breadcrumb-item">
-                <a *oitcPermission="['users', 'index']" [routerLink]="['/', 'users', 'index']">
+                <a *oitcPermission="['userDefaultTemplates', 'index']"
+                   [routerLink]="['/', 'userDefaultTemplates', 'index']">
                     <fa-icon [icon]="['fas', 'user-plus']"></fa-icon>
                     {{ t('User Default Templates') }}
                 </a>
@@ -24,7 +25,7 @@
                 <h5 cCardTitle>
                     {{ t('User Default Templates') }}
                     <small class="fw-300">
-                        {{ t('Add new templates for user creation') }}
+                        {{ t('Add new template for user creation') }}
                     </small>
                 </h5>
 
@@ -73,10 +74,8 @@
                 <div class="mb-3">
                     <label cLabel for="post.ldapgroups._ids">
                         {{ t('LDAP Groups') }}
-                        <oitc-required-icon/>
                     </label>
                     <oitc-multi-select
-                        required
                         name="post.ldapgroups._ids"
                         id="post.ldapgroups._ids"
                         [(ngModel)]="post.ldapgroups._ids"
@@ -91,7 +90,7 @@
 
 
                 <div class="mb-3">
-                    <label cLabel for="selectedContainerIds" class="hintmark">
+                    <label cLabel for="selectedContainerIds">
                         {{ t('Container') }}
                     </label>
                     <oitc-multi-select
@@ -150,7 +149,11 @@
 
                 <div class="mb-3">
                     <label cLabel for="post.usergroup_id">
-                        {{ t('Fallback User role') }}
+                        @if (post && post.ldapgroups && post.ldapgroups._ids && post.ldapgroups._ids.length > 0) {
+                            {{ t('Fallback User role') }}
+                        } @else {
+                            {{ t('User role') }}
+                        }
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
@@ -163,10 +166,12 @@
                         oitcFormError [errors]="errors" errorField="usergroup_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="usergroup_id"></oitc-form-feedback>
-                    <div class="help-block text-info">
-                        <fa-icon [icon]="['fas', 'info-circle']"/>
-                        {{ t('Fall back user role that is used by the system, when no user role assignment through LDAP is possible.') }}
-                    </div>
+                    @if (post && post.ldapgroups && post.ldapgroups._ids && post.ldapgroups._ids.length > 0) {
+                        <div class="help-block text-info">
+                            <fa-icon [icon]="['fas', 'info-circle']"/>
+                            {{ t('Fall back user role that is used by the system, when no user role assignment through LDAP is possible.') }}
+                        </div>
+                    }
                 </div>
 
                 <div class="mb-3">
@@ -330,9 +335,9 @@
                     {{ t('Create another') }}
                 </label>
                 <button cButton class="ripple" color="primary" type="submit">
-                    {{ t('Create user from LDAP') }}
+                    {{ t('Create user default template') }}
                 </button>
-                <button [fallbackUrl]="['users', 'index']" cButton class="ms-1 ripple" color="default"
+                <button [fallbackUrl]="['userDefaultTemplates', 'index']" cButton class="ms-1 ripple" color="default"
                         oitcBackButton
                         type="button">
                     {{ t('Cancel') }}

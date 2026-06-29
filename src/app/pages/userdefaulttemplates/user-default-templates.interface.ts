@@ -1,50 +1,6 @@
-import { SelectKeyValue, SelectKeyValueString } from '../../layouts/primeng/select.interface';
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { PermissionLevel } from '../users/permission-level';
-import { GenericIdAndName } from '../../generic.interfaces';
-
-/****************************
- *    Generic interfaces    *
- ****************************/
-
-export interface UserLocaleOption {
-    i18n: string
-    name: string
-}
-
-export interface UserDateformatsRoot {
-    dateformats: SelectKeyValueString[]
-    defaultDateFormat: string,
-    timezones: UserTimezonesSelect[],
-    serverTime: string,
-    serverTimeZone: string
-}
-
-export interface LoadUsersByContainerIdRoot {
-    users: SelectKeyValue[]
-}
-
-export interface UserTimezoneGroup {
-    // Africa / America / Antarctica / Asia / Atlantic / Australia / Europe / Indian / Pacific ...
-    [key: string]: UserTimezone
-}
-
-export interface UserTimezone {
-    // Africa/Abidjan: Abidjan
-    [key: string]: string
-}
-
-export interface UserTimezonesSelect {
-    group: string // Africa / America / Antarctica / Asia / Atlantic / Australia / Europe / Indian / Pacific ...
-    value: string // Africa/Abidjan
-    name: string // Abidjan
-}
-
-export interface UserType {
-    title: string
-    color: ('primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark')
-    class: string
-}
+import { UsersIndexUserContainer } from '../users/users.interface';
 
 /**********************
  *    Index action    *
@@ -75,13 +31,13 @@ export function getDefaultUserDefaultTemplatesIndexParams(): UserDefaultTemplate
 }
 
 export interface UserDefaultTemplatesIndexRoot extends PaginateOrScroll {
-    all_users: AllUser[]
+    all_userdefaulttemplates: AllUserdefaulttemplate[]
     myUserId: number
     isLdapAuth: boolean
     _csrfToken: string
 }
 
-export interface AllUser {
+export interface AllUserdefaulttemplate {
     id: number
     email: string
     company?: string
@@ -91,56 +47,12 @@ export interface AllUser {
     is_oauth: boolean
     last_login?: string
     full_name: string
-    usercontainerroles: UsersIndexUsercontainerrole[]
     containers: UsersIndexUserContainer
     usergroup: {
         id: number
         name: string
     }
     allow_edit: boolean
-    UserTypes: UserType[]
-}
-
-export interface UsersIndexUsercontainerrole {
-    id: number
-    name: string
-    _joinData: {
-        id: number
-        user_id: number
-        usercontainerrole_id: number
-        through_ldap: boolean
-    }
-    containers: UsersIndexContainer[]
-}
-
-export interface UsersIndexContainer {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: number
-    lft: number
-    rght: number
-    _joinData: {
-        id: number
-        usercontainerrole_id: number
-        container_id: number
-        permission_level: number
-    }
-}
-
-export interface UsersIndexUserContainer {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id?: number
-    lft: number
-    rght: number
-    _joinData: {
-        id: number
-        user_id: number
-        container_id: number
-        permission_level: number
-    }
 }
 
 /**********************
@@ -162,7 +74,7 @@ export interface UserDefaultTemplatesPost {
         _ids: number[]
     }
     usergroup_id: number
-    LdapImportSettingsToContainers: {
+    UserDefaultTemplatesToContainers: {
         [key: number]: PermissionLevel
     }
     ldapgroups: {
@@ -170,39 +82,7 @@ export interface UserDefaultTemplatesPost {
     }
 }
 
-export interface UserAddContainerRolePermission {
-    id: number
-    containertype_id: number
-    name: string
-    parent_id: number
-    lft: number
-    rght: number
-    _joinData: {
-        id: number
-        usercontainerrole_id: number
-        container_id: number
-        permission_level: PermissionLevel
-    }
-    path: string,
-
-    // Server response this as hahmap
-    user_roles: {
-        [key: string]: GenericIdAndName
-    }
-
-    // we use the array version in the Frontend to make Angular happy
-    user_roles_array?: GenericIdAndName[]
-}
-
-export interface UserDefaultTemplatesContainerPermission {
-    container_id: number,
-    container_name: string,
-    permission_level: PermissionLevel
-}
-
 export interface UserDefaultTemplatesEditResponse {
-    user: UserDefaultTemplatesPost
-    UserTypes: UserType[]
+    userDefaultTemplate: UserDefaultTemplatesPost
     notPermittedContainerIds: number[]
-    userContainerRolesReadonly: boolean
 }

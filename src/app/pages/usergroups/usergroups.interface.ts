@@ -164,3 +164,12 @@ export interface child {
         _delete: string
     }
 }
+
+export interface UsergroupsAppend {
+    Usergroup: {
+        ldapgroups: {
+            _ids: number[]
+        }
+        id: number
+    }
+}
