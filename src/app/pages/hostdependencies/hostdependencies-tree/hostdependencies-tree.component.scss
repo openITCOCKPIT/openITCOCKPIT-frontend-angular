@@ -11,13 +11,6 @@
     font-size: xx-small !important;
 }
 
-
-/* Zustand bei Auswahl / Hover */
-.f-connection.f-selected {
-    stroke: #ff5722; /* Orangefarbene Linie */
-    stroke-width: 3px;
-}
-
 .f-connection.status-up {
     stroke: var(--cui-success);
 }
@@ -107,41 +100,37 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: visible; /* Wichtig, damit die Punkte links/rechts herausschauen dürfen */
-
-    /* Falls Ihre Karten keine feste Breite haben, hier eine Basisgröße definieren */
+    overflow: visible;
     min-width: 150px;
 }
 
-/* Die unsichtbaren vertikalen Spalten links und rechts am Rand der Card */
 .ports-column {
     display: flex;
-    flex-direction: column;   /* Ordnet mehrere Punkte sauber UNTEREINANDER an */
-    justify-content: center;  /* Zentriert sie vertikal an der Card-Wand */
-    gap: 6px;                 /* Abstand zwischen den Punkten, falls es mehrere sind */
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
     position: absolute;
     top: 0;
     bottom: 0;
     width: 10px;
-    z-index: 10;              /* Liegt über der Card */
+    z-index: 10;
 
     &.inputs-column {
-        left: -5px;             /* Platziert die Eingangs-Punkte genau auf dem linken Rahmen */
+        left: -5px;
     }
 
     &.outputs-column {
-        right: -5px;            /* Platziert die Ausgangs-Punkte genau auf dem rechten Rahmen */
+        right: -5px;
     }
 }
 
-/* Das Design der kleinen visuellen Stecker-Punkte */
 .visual-port-dot {
     width: 10px;
     height: 10px;
-    background: #4a5568;      /* Schickes, neutrales Grau im Ruhezustand */
-    border: 2px solid #ffffff; /* Weißer Kontur-Ring, damit es sauber auf dem Rahmen aussieht */
+    background: #4a5568;
+    border: 2px solid #ffffff;
     border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -156,4 +145,9 @@
         width: 0 !important;
         height: 0 !important;
     }
+}
+
+.f-selected {
+    border: 1px solid var(--cui-info);
+    box-shadow: var(--cui-info) 1px 0 5px 0 !important;
 }

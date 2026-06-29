@@ -40,6 +40,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'oitc-hostdependencies-tree',
@@ -59,7 +60,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
         LabelLinkComponent,
         RowComponent,
         ColComponent,
-        FaIconComponent
+        FaIconComponent,
+        NgClass
     ],
     templateUrl: './hostdependencies-tree.component.html',
     styleUrl: './hostdependencies-tree.component.scss',
@@ -70,15 +72,13 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
             options: {
                 direction: EFLayoutDirection.LEFT_RIGHT, // 'TB'
                 nodeGap: 40,
-                layerGap: 60
-
+                layerGap: 160
             }
         }),
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostdependenciesTreeComponent implements OnInit, OnDestroy, OnChanges {
-
     constructor(private layoutEngine: DagreLayoutEngine) {
         // Writeback für die automatischen Positionen
         this.layoutEngine.setWriteback((nodePositions: any) => {
@@ -102,7 +102,6 @@ export class HostdependenciesTreeComponent implements OnInit, OnDestroy, OnChang
     public fFlowComponent!: FFlowComponent;
 
     @ViewChild(FCanvasComponent, {static: false}) fCanvas!: FCanvasComponent;
-    public fCanvasComponent!: FCanvasComponent;
 
     @ViewChild(FZoomDirective, {static: true})
     public fZoomDirective!: FZoomDirective;
@@ -115,7 +114,6 @@ export class HostdependenciesTreeComponent implements OnInit, OnDestroy, OnChang
     public dependenciesTree?: HostdependenciesTree;
 
     public ngOnInit(): void {
-
         this.load();
     }
 
@@ -125,7 +123,6 @@ export class HostdependenciesTreeComponent implements OnInit, OnDestroy, OnChang
             //this.load();
             return;
         }
-
     }
 
     private load() {
@@ -140,24 +137,14 @@ export class HostdependenciesTreeComponent implements OnInit, OnDestroy, OnChang
         this.subscriptions.unsubscribe();
     }
 
-
-    protected readonly String = String;
-
-    protected readonly EFConnectableSide = EFConnectableSide;
-
     protected loaded() {
-        console.log('Flow komplett gerendert!');
+        this.hostStatusMap();
         if (this.fCanvas) {
             // setTimeout stellt sicher, dass der Browser die echten DOM-Größen berechnet hat
             setTimeout(() => {
                 this.fCanvas.fitToScreen(new Point(10, 50), false);
             }, 50);
         }
-        //this.fCanvasComponent.fitToScreen(new Point(0, 0), false);
-    }
-
-    public onFitToScreenClick() {
-        this.fCanvas?.fitToScreen();
     }
 
     protected hostStatusMap = computed(() => {
@@ -167,9 +154,12 @@ export class HostdependenciesTreeComponent implements OnInit, OnDestroy, OnChang
                 map[node.id] = node.Hoststatus.humanState !== undefined && node.Hoststatus.humanState !== null ? String(node.Hoststatus.humanState) : null;
             }
         });
+        this.cdr.markForCheck();
         return map;
     });
 
+    protected readonly String = String;
+    protected readonly EFConnectableSide = EFConnectableSide;
     protected readonly EFConnectionBehavior = EFConnectionBehavior;
     protected readonly EFConnectionType = EFConnectionType;
 }

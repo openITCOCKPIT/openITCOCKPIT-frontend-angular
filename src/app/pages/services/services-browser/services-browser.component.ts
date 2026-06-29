@@ -129,9 +129,6 @@ import {
     CustomalertsServiceHistoryComponent
 } from '../../../modules/customalert_module/components/customalerts-service-history/customalerts-service-history.component';
 import { TitleService } from '../../../services/title.service';
-import {
-    HostServiceDependenciesTreeComponent
-} from '../../../components/host-service-dependencies-tree/host-service-dependencies-tree.component';
 
 @Component({
     selector: 'oitc-services-browser',
@@ -192,8 +189,7 @@ import {
         CancelServicedowntimeModalComponent,
         AsyncPipe,
         SlaServiceInformationElementComponent,
-        CustomalertsServiceHistoryComponent,
-        HostServiceDependenciesTreeComponent
+        CustomalertsServiceHistoryComponent
     ],
     templateUrl: './services-browser.component.html',
     styleUrl: './services-browser.component.css',

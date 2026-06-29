@@ -28,7 +28,8 @@
                                 }
                             </div>
 
-                            <c-card class="host-node font-xx-small">
+                            <c-card class="host-node font-xx-small"
+                                    [ngClass]="{ 'f-selected': hostId() == node.host_id}">
                                 <c-card-header class="border-0 p-1 d-inline-block text-truncate host-node-header"
                                                [title]="node.name">
                                     @if (node.Hoststatus) {
@@ -50,12 +51,73 @@
                                             {{ node.address }}
                                         </c-col>
                                     </c-row>
+
+                                    <hr class="border-dashed m-1"/>
+                                    <c-row>
+                                        <c-col [xs]="12" class="text-truncate">
+                                            <div class=" d-inline bold">
+                                                {{ t('Status') }}
+                                            </div>
+
+                                            <div class="d-inline d-inline position-absolute end-0 me-1">
+                                                @if (node.Hoststatus.currentState >= 0) {
+                                                    @if (node.Hoststatus.currentState > 0 && !node.Hoststatus.problemHasBeenAcknowledged && !node.Hoststatus.scheduledDowntimeDepth) {
+                                                        <div
+                                                            class="btn state-button-small font-xs text-center text-white bg-danger">
+                                                            <fa-icon class="text-light"
+                                                                     [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                                                            {{ t('Unhandled') }}
+                                                        </div>
+                                                    } @else if (node.Hoststatus.problemHasBeenAcknowledged || node.Hoststatus.scheduledDowntimeDepth) {
+                                                        @if (node.Hoststatus.problemHasBeenAcknowledged) {
+                                                            <div
+                                                                class="btn state-button-small font-xs text-center text-white bg-primary">
+                                                                <fa-icon class="text-light"
+                                                                         [icon]="['fas', 'user']"></fa-icon>
+                                                            </div>
+                                                        }
+                                                        @if (node.Hoststatus.scheduledDowntimeDepth) {
+                                                            <div
+                                                                class="btn state-button-small font-xs text-center text-white bg-primary">
+                                                                <fa-icon class="text-light"
+                                                                         [icon]="['fas', 'power-off']"></fa-icon>
+                                                            </div>
+                                                        }
+                                                    }
+                                                } @else {
+                                                    <div
+                                                        class="btn state-button-small font-xs text-center text-white bg-primary">
+                                                        <fa-icon class="text-light"
+                                                                 [icon]="['fas', 'eye-slash']"></fa-icon>
+                                                        {{ t('Not in monitoring') }}
+                                                    </div>
+                                                }
+
+                                            </div>
+                                        </c-col>
+                                        <c-col [xs]="12" class="mt-1">
+                                            <div class="d-inline bold">
+                                                {{ 'State type' }}
+                                            </div>
+                                            <div class="d-inline d-inline position-absolute end-0 me-1">
+                                                @if (node.Hoststatus.isHardstate) {
+                                                    {{ t('Hard state') }}
+                                                } @else {
+                                                    {{ t('Soft state') }}
+                                                }
+                                                ({{ node.Hoststatus.current_check_attempt }}
+                                                /{{ node.Hoststatus.max_check_attempts }})
+                                            </div>
+                                        </c-col>
+                                    </c-row>
                                     <c-row class="pt-1">
                                         <c-col class="text-end italic" [title]="node.Hoststatus.lastCheck">
                                             {{ 'State since' }}
                                             {{ node.Hoststatus.lastCheckInWords }}
                                         </c-col>
                                     </c-row>
+
+
                                 </c-card-body>
                             </c-card>
 
@@ -95,7 +157,8 @@
                                                      [objectId]="node.hostdependency_id"
                                                      [route]="'/hostdependencies/edit'"
                                                      [permissions]="'hostdependencies.edit'">
-                                        {{ node.hostdependency_id }}
+                                        {{ t('Host dependency') }}
+                                        [{{ t('ID') }}: {{ node.hostdependency_id }}]
                                     </oitc-label-link>
                                 </c-card-header>
                                 <c-card-body class="border-0 py-1 px-2 font-xs">
