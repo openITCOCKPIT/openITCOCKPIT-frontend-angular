@@ -140,7 +140,6 @@ export class HostdependenciesTreeComponent implements OnInit, OnDestroy, OnChang
     protected loaded() {
         this.hostStatusMap();
         if (this.fCanvas) {
-            // setTimeout stellt sicher, dass der Browser die echten DOM-Größen berechnet hat
             setTimeout(() => {
                 this.fCanvas.fitToScreen(new Point(10, 50), false);
             }, 50);
