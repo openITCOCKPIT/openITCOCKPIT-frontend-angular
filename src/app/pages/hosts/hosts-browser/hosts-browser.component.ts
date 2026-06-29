@@ -139,6 +139,9 @@ import { cibProxmox } from '@coreui/icons';
 import {
     ProxmoxHostBrowserTabComponent
 } from '../../../modules/import_module/components/proxmox-host-browser-tab/proxmox-host-browser-tab.component';
+import {
+    HostdependenciesTreeComponent
+} from '../../hostdependencies/hostdependencies-tree/hostdependencies-tree.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -205,8 +208,8 @@ import {
         PatchstatusIconComponent,
         HostParentsChildrenTreeComponent,
         IconDirective,
-        ProxmoxHostBrowserTabComponent
-
+        ProxmoxHostBrowserTabComponent,
+        HostdependenciesTreeComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',
@@ -269,41 +272,28 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        const idOrUuid = String(this.route.snapshot.paramMap.get('idOrUuid'));
+        this.subscriptions.add(this.route.paramMap.subscribe(params => {
+            const idOrUuid = String(params.get('idOrUuid'));
 
-        const uuid = new UUID();
-        if (uuid.isUuid(idOrUuid)) {
-            // UUID was passed via URL
-            this.subscriptions.add(this.HostsService.getHostByUuid(idOrUuid).subscribe((host) => {
-                this.id = host.id;
+            const uuid = new UUID();
+            if (uuid.isUuid(idOrUuid)) {
+                // UUID was passed via URL
+                this.subscriptions.add(this.HostsService.getHostByUuid(idOrUuid).subscribe((host) => {
+                    this.id = host.id;
+                    this.loadHost();
+                }));
+            } else {
+                // ID was passed via URL
+                this.id = Number(idOrUuid);
                 this.loadHost();
-            }));
-        } else {
-            // ID was passed via URL
-            this.id = Number(idOrUuid);
-            this.loadHost();
-        }
+            }
+        }));
 
         this.route.queryParams.subscribe(params => {
             let selectedTab = params['selectedTab'] || undefined;
             if (selectedTab) {
                 this.changeTab(selectedTab);
                 this.cdr.markForCheck();
-            }
-            const idOrUuid = params['idOrUuid'] || undefined;
-            if (idOrUuid) {
-                const uuid = new UUID();
-                if (uuid.isUuid(idOrUuid)) {
-                    // UUID was passed via URL
-                    this.subscriptions.add(this.HostsService.getHostByUuid(idOrUuid).subscribe((host) => {
-                        this.id = host.id;
-                        this.loadHost();
-                    }));
-                } else {
-                    // ID was passed via URL
-                    this.id = Number(idOrUuid);
-                    this.loadHost();
-                }
             }
         });
 

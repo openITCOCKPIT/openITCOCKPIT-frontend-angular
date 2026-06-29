@@ -1,0 +1,153 @@
+.f-node {
+    border: 0;
+    background: transparent;
+}
+
+.host-node {
+    width: 150px;
+}
+
+.font-xx-small {
+    font-size: xx-small !important;
+}
+
+.f-connection.status-up {
+    stroke: var(--cui-success);
+}
+
+.f-connection.status-down {
+    stroke: var(--cui-danger);
+}
+
+.f-connection.status-unreachable {
+    stroke: var(--cui-secondary);
+}
+
+.f-connection.status-not-monitored {
+    stroke: var(--cui-secondary);
+}
+
+.f-connection.status-disabled {
+    stroke: var(--cui-secondary);
+    stroke-dasharray: 5;
+    stroke-opacity: 0.5;
+}
+
+@keyframes flowMovement {
+    to {
+        stroke-dashoffset: -20;
+    }
+}
+
+@keyframes errorPulse {
+    0% {
+        stroke: #ff4757;
+        stroke-width: 1px;
+        filter: drop-shadow(0 0 0px rgba(255, 71, 87, 0));
+    }
+    50% {
+        stroke: #ff1f35;
+        stroke-width: 3px;
+        filter: drop-shadow(0 0 4px rgba(255, 71, 87, 0.6));
+    }
+    100% {
+        stroke: #ff4757;
+        stroke-width: 1px;
+        filter: drop-shadow(0 0 0px rgba(255, 71, 87, 0));
+    }
+}
+
+.f-connection {
+    stroke: var(--cui-secondary);
+    stroke-width: 1px;
+    fill: none;
+    transition: stroke 0.3s ease;
+}
+
+.f-connection.status-up {
+    stroke: var(--cui-success); /* Schönes Monitoring-Grün */
+    stroke-dasharray: 12, 12;
+    stroke-dashoffset: -24;
+    animation: smoothFlow 0.8s linear infinite;
+    will-change: stroke-dashoffset;
+}
+
+@keyframes smoothFlow {
+    from {
+        stroke-dashoffset: 0;
+    }
+    to {
+        stroke-dashoffset: -24;
+    }
+}
+
+@keyframes smoothFlowReverse {
+    from {
+        stroke-dashoffset: -24;
+    }
+    to {
+        stroke-dashoffset: -0;
+    }
+}
+
+.f-connection.status-down {
+    animation: errorPulse 2.5s ease-in-out infinite;
+    stroke-linecap: butt;
+}
+
+.custom-flow-node {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    min-width: 150px;
+}
+
+.ports-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    z-index: 10;
+
+    &.inputs-column {
+        left: -5px;
+    }
+
+    &.outputs-column {
+        right: -5px;
+    }
+}
+
+.visual-port-dot {
+    width: 10px;
+    height: 10px;
+    background: #4a5568;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+::ng-deep {
+    .f-connection-center,
+    .f-connection-handle,
+    .f-connection-drag-handle,
+    .f-connection-endpoint {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+}
+
+.f-selected {
+    border: 1px solid var(--cui-info);
+    box-shadow: var(--cui-info) 1px 0 5px 0 !important;
+}
