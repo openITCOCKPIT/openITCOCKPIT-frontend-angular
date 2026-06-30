@@ -1,0 +1,261 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['userDefaultTemplates', 'index']"
+                   [routerLink]="['/', 'userDefaultTemplates', 'index']">
+                    <fa-icon [icon]="['fas', 'user-plus']"></fa-icon>
+                    {{ t('User Default Templates') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Users') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadUserDefaultTemplates()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <a *oitcPermission="['userDefaultTemplates', 'add']"
+                       [routerLink]="['/', 'userDefaultTemplates', 'add']"
+                       cButton
+                       class="ripple"
+                       color="success"
+                       size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </a>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+
+        <c-card-body>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row class="mt-2">
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[UserDefaultTemplates.name]']"
+                                       [placeholder]="'Filter by name' | transloco"
+                                       aria-label="User default template name"
+                                       cFormControl
+                                       name="UserDefaultTemplates.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[UserDefaultTemplates.description]']"
+                                       [placeholder]="'Filter by description' | transloco"
+                                       aria-label="User default template description"
+                                       cFormControl
+                                       name="filter[UserDefaultTemplates.description]"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mt-2">
+                        <c-col [xs]="12" class="mb-1 ui-fluid">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                                </span>
+
+                                <oitc-multi-select
+                                    name="filter.usergroup_id"
+                                    id="filter.usergroup_id"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="params['filter[UserDefaultTemplates.usergroup_id][]']"
+                                    [options]="usergroups"
+                                    [debounce]="true"
+                                    [placeholder]="'Filter by user role' | transloco"
+                                    (onChange)="onFilterChange(null)">
+                                </oitc-multi-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            @if (!userdefaulttemplates) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            @if (userdefaulttemplates) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50 text-center" scope="col">
+                            <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                        </th>
+                        <th scope="col" mat-sort-header="UserDefaultTemplates.name" class="word-break">
+                            {{ t('Name') }}
+                        </th>
+                        <th scope="col" mat-sort-header="UserDefaultTemplates.description" class="word-break">
+                            {{ t('Description') }}
+                        </th>
+                        <th scope="col" mat-sort-header="UserDefaultTemplates.usergroup_id">
+                            {{ t('User role') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (userdefaulttemplate of userdefaulttemplates.all_userdefaulttemplates; track userdefaulttemplate) {
+                            <tr>
+                                <td class="text-center">
+                                    <oitc-item-select
+                                        *oitcPermission="['userDefaultTemplates', 'delete']"
+                                        [disabled]="!userdefaulttemplate.allow_edit"
+                                        [item]="userdefaulttemplate"></oitc-item-select>
+                                </td>
+                                <td>{{ userdefaulttemplate.name }}</td>
+                                <td>{{ userdefaulttemplate.description }}</td>
+                                <td>
+                                    {{ userdefaulttemplate.usergroup.name }}
+                                </td>
+                                <td class="width-50">
+                                    <oitc-actions-button [permission]="'userDefaultTemplates.edit'"
+                                                         [url]="'/userDefaultTemplates/edit/' + userdefaulttemplate.id"
+                                                         [allowEdit]="userdefaulttemplate.allow_edit">
+                                        @if (userdefaulttemplate.allow_edit) {
+                                            <oitc-actions-button-element [permission]="'userDefaultTemplates.edit'"
+                                                                         [url]="'/userDefaultTemplates/edit/' + userdefaulttemplate.id"
+                                            >
+                                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                                {{ t('Edit') }}
+                                            </oitc-actions-button-element>
+                                        }
+                                        @if (userdefaulttemplate.allow_edit) {
+                                            <li cDropdownDivider
+                                            ></li>
+                                        }
+                                        @if (userdefaulttemplate.allow_edit) {
+                                            <oitc-actions-button-element
+                                                (click)="toggleDeleteAllModal(userdefaulttemplate)"
+                                                [permission]="'userDefaultTemplates.delete'">
+                                                <span class="text-danger">
+                                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                                    {{ t('Delete') }}
+                                                </span>
+                                            </oitc-actions-button-element>
+                                        }
+                                    </oitc-actions-button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+
+            @if (userdefaulttemplates && userdefaulttemplates.all_userdefaulttemplates.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+            @if (userdefaulttemplates && userdefaulttemplates.all_userdefaulttemplates) {
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="userdefaulttemplates.all_userdefaulttemplates.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+                <c-container
+                    [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            @if (userdefaulttemplates) {
+                                <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="userdefaulttemplates"></oitc-paginate-or-scroll>
+                            }
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
+
+        </c-card-body>
+
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
+
+    </c-card>
+</ng-container>
+
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

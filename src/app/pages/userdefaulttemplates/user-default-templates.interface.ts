@@ -32,21 +32,14 @@ export function getDefaultUserDefaultTemplatesIndexParams(): UserDefaultTemplate
 
 export interface UserDefaultTemplatesIndexRoot extends PaginateOrScroll {
     all_userdefaulttemplates: AllUserdefaulttemplate[]
-    myUserId: number
-    isLdapAuth: boolean
     _csrfToken: string
 }
 
 export interface AllUserdefaulttemplate {
     id: number
-    email: string
-    company?: string
-    phone?: string
-    is_active: boolean
-    samaccountname?: string
+    name: string
+    description: string
     is_oauth: boolean
-    last_login?: string
-    full_name: string
     containers: UsersIndexUserContainer
     usergroup: {
         id: number

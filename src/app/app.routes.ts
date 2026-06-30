@@ -627,6 +627,9 @@ const coreRoutes: Routes = [{
     path: 'users/edit/:id',
     loadComponent: () => import('./pages/users/users-edit/users-edit.component').then(m => m.UsersEditComponent)
 }, {
+    path: 'userDefaultTemplates/index',
+    loadComponent: () => import('./pages/userdefaulttemplates/user-default-templates-index/user-default-templates-index.component').then(m => m.UserDefaultTemplatesIndexComponent)
+}, {
     path: 'userDefaultTemplates/add',
     loadComponent: () => import('./pages/userdefaulttemplates/user-default-templates-add/user-default-templates-add.component').then(m => m.UserDefaultTemplatesAddComponent)
 }, {

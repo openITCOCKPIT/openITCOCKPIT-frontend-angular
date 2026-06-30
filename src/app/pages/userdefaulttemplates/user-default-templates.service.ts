@@ -8,14 +8,14 @@ import {
     UserDefaultTemplatesIndexRoot,
     UserDefaultTemplatesPost
 } from './user-default-templates.interface';
-import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
 
 
 @Injectable({
     providedIn: 'root'
 })
-export class UserDefaultTemplatesService {
+export class UserDefaultTemplatesService implements DeleteAllModalService {
 
     constructor() {
     }
@@ -50,7 +50,7 @@ export class UserDefaultTemplatesService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data.user as GenericIdResponse
+                        data: data.userDefaultTemplate as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
@@ -86,7 +86,7 @@ export class UserDefaultTemplatesService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data.user as GenericIdResponse
+                        data: data.userDefaultTemplate as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
