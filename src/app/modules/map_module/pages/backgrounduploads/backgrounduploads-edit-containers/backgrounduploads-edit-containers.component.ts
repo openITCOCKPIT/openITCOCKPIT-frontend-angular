@@ -6,7 +6,6 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { HistoryService } from '../../../../../history.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { LoadContainersRoot } from '../../../../../pages/contacts/contacts.interface';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -34,6 +33,7 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackgrounduploadsService } from '../../mapeditors/backgrounduploads.service';
 import _ from 'lodash';
+import { LoadContainersRoot } from '../../../../../pages/containers/containers.interface';
 
 @Component({
     selector: 'oitc-backgrounduploads-edit-containers',

@@ -14,10 +14,10 @@ import {
     ContactgroupsIndexParams,
     ContactgroupsIndexRoot,
     ContactgroupsUsedByRoot,
-    GetContactsByContainerIdRoot,
-    LoadContainersRoot
+    GetContactsByContainerIdRoot
 } from './contactgroups.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { LoadContainersRoot } from '../containers/containers.interface';
 
 @Injectable({
     providedIn: 'root',

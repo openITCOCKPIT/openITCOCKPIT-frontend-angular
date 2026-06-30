@@ -5,7 +5,6 @@ import { Container, ContainerWithContactJoinData } from '../containers/container
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 export interface ContactsIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
@@ -473,13 +472,6 @@ export interface LdapConfig {
     base_dn: string
 }
 
-/*********************************
- *    Definition of Container    *
- *********************************/
-export interface LoadContainersRoot {
-    containers: SelectKeyValue[]
-    _csrfToken: string
-}
 
 // LoadUsersByContainerId
 export interface LoadUsersByContainerId {

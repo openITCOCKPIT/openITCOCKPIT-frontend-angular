@@ -12,7 +12,6 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -30,15 +29,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { ContactgroupsService } from '../contactgroups.service';
-import {
-    ContactgroupEditPostContactgroup,
-    ContactgroupsEditRoot,
-    LoadContainersRoot
-} from '../contactgroups.interface';
+import { ContactgroupEditPostContactgroup, ContactgroupsEditRoot, } from '../contactgroups.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HistoryService } from '../../../history.service';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { LoadContainersRoot } from '../../containers/containers.interface';
 
 @Component({
     selector: 'oitc-contactgroups-edit',

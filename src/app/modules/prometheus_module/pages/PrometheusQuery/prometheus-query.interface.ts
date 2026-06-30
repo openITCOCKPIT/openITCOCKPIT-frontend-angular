@@ -136,7 +136,6 @@ export interface LoadCurrentValueByMetricRoot {
 // prometheus_module/PrometheusQuery/index
 
 export interface PrometheusQueryIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
 
     hostId: number,
@@ -270,4 +269,3 @@ export interface Host {
     name: string
     container_id: number
 }
-

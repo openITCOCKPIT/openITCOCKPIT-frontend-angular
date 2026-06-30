@@ -4,7 +4,6 @@ import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { Container } from '../containers/containers.interface';
 
 export interface ServiceTemplateGroupsIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
@@ -128,12 +127,6 @@ export interface ServiceTemplateGroupsGetCopyGetServicetemplategroup {
     created: string
     modified: string
     container: Container
-}
-
-/* LOAD CONTAINERS */
-export interface LoadContainersRoot {
-    containers: SelectKeyValue[]
-    _csrfToken: string
 }
 
 /* LOAD SERVICE TEMPLATES */

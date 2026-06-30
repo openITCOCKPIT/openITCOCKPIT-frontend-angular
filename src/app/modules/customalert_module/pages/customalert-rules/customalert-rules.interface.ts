@@ -1,7 +1,7 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { getUserDate } from '../../../../services/timezone.service';
 
 export interface CustomAlertRulesIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
@@ -51,23 +51,8 @@ export interface EditableCustomAlertRule extends CustomAlertRule {
     allowEdit: boolean
 }
 
-// ADD
-export interface AddCustomAlertRulePost extends EditableCustomAlertRule {
-}
-
-// EDIT RESPONSES
-export interface EditCustomAlertRule {
-    customalertRule: EditableCustomAlertRule
-    _csrfToken: any
-}
-
-// EDIT POST
-export interface EditCustomAlertRulePost extends EditableCustomAlertRule {
-}
-
 // SERVICES PARAMS
 export interface CustomAlertRulesServicesParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
@@ -105,3 +90,62 @@ export interface CustomAlertRuleServices extends PaginateOrScroll {
     success: boolean
 }
 
+export function getDefaultCustomAlertRulesHistoryParams(): CustomAlertRulesHistoryParams {
+    let now: Date = getUserDate();
+    return {
+        angular: true,
+        scroll: true,
+        sort: 'CustomalertStatehistory.state_time',
+        page: 1,
+        direction: 'desc',
+        'filter[Hosts.name]': '',
+        'filter[servicename]': '',
+        'filter[CustomalertComments.comment]': '',
+        'filter[CustomalertStatehistory.state][]': [],
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 1000 * 30)),
+        'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
+    }
+}
+
+export interface CustomAlertRulesHistoryParams {
+    angular: true,
+    scroll: boolean,
+    sort: string,
+    page: number,
+    direction: 'asc' | 'desc' | '', // asc or desc,
+    'filter[from]': Date | string,
+    'filter[to]': Date | string,
+    'filter[CustomalertComments.comment]': string,
+    'filter[CustomalertStatehistory.state][]': number[],
+    'filter[Hosts.name]': string,
+    'filter[servicename]': string,
+}
+
+export interface CustomAlertsStateHistory extends PaginateOrScroll {
+    customalertStatehistory: CustomalertStatehistory[]
+    _csrfToken: any
+}
+
+export interface CustomalertStatehistory {
+    id: number
+    state: number
+    stateTime: string
+    stateTimeInHumanShort: string
+    stateInHuman: string
+    Hosts: {
+        id: number
+        name: string
+    }
+    Services: {
+        id: number
+    }
+    servicename: string
+    Users: {
+        id: number | null
+    }
+    full_name: string
+    "CustomalertComments": {
+        "comment": string | null
+        "entry_time": string | null
+    }
+}

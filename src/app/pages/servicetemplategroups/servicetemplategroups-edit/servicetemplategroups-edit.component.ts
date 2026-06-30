@@ -30,7 +30,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 
 import { ServicetemplategroupsService } from '../servicetemplategroups.service';
 import {
-    LoadContainersRoot,
     LoadServiceTemplatesRoot,
     ServiceTemplateGroupsGetEditRoot,
     ServiceTemplateGroupssGetEditPostServicetemplategroup,
@@ -39,6 +38,7 @@ import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/mult
 import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HistoryService } from '../../../history.service';
+import { LoadContainersRoot } from '../../containers/containers.interface';
 
 @Component({
     selector: 'oitc-servicetemplategroups-edit',

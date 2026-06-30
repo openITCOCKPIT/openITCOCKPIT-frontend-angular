@@ -4,7 +4,6 @@ import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 /* INDEX POST */
 export interface UsergroupsIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,

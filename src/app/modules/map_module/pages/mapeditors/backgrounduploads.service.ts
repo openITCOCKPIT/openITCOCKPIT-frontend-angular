@@ -29,14 +29,15 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { catchError, map, Observable, of } from 'rxjs';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import {
-    MapUploadsParams,
     BackgroundsRoot,
     MapUploadEdit,
-    MapUploadItem, UploadsIconsRoot, UploadsIconSetsRoot
+    MapUploadItem,
+    MapUploadsParams,
+    UploadsIconSetsRoot,
+    UploadsIconsRoot
 } from '../backgrounduploads/backgrounduploads.interface';
-import { LoadContainersRoot } from '../../../../pages/contacts/contacts.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { IconsetRoot } from './mapeditors.interface';
+import { LoadContainersRoot } from '../../../../pages/containers/containers.interface';
 
 @Injectable({
     providedIn: 'root'

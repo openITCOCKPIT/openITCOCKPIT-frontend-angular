@@ -1,6 +1,5 @@
 // Get custom alerts
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
-import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { formatDate } from '@angular/common';
 import { getUserDate } from '../../../../services/timezone.service';
 
@@ -76,7 +75,6 @@ export interface Service {
 
 // Index Params
 export interface CustomAlertsIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
@@ -112,11 +110,6 @@ export interface CustomAlertsIndexFilter {
     from: string,
     to: string,
     recursive: boolean,
-}
-
-export interface LoadContainersRoot {
-    containers: SelectKeyValue[]
-    _csrfToken: string
 }
 
 export function getDefaultCustomAlertsIndexParams(): CustomAlertsIndexParams {
@@ -196,13 +189,13 @@ export type CustomAlertsIndexCustomAlertsStateFilter = {
 // CHANGES
 export interface CustomAlertHistory {
     customalert: Customalert
-    history: History[]
+    history: CustomalertHistory[]
     success: boolean
     _csrfToken: any
 }
 
 
-export interface History {
+export interface CustomalertHistory {
     state_time: string
     timeAgoInWords: string
     user: boolean
@@ -240,30 +233,12 @@ export interface CustomalertServiceHistory extends PaginateOrScroll {
         state: number
         modified: string
         timeAgoInWords: string
-        customalert_statehistory: CustomalertStatehistory[]
+        customalert_statehistory: CustomalertHistory[]
     }[]
     success: boolean
     _csrfToken: any
 }
 
-export interface CustomalertStatehistory {
-    state_time: string
-    timeAgoInWords: string
-    user: boolean
-    customalert_comment: {
-        id: number
-        customalert_id: number
-        user_id: number
-        comment: string
-        entry_time: string
-        user: {
-            id: number
-            firstname: string
-            lastname: string
-        }
-    }
-    state: number
-}
 
 export interface CustomAlertsWidgetFilter {
     Customalerts: {

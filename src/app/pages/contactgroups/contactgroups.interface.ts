@@ -3,7 +3,6 @@ import { GenericValidationError } from '../../generic-responses';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 export interface ContactgroupsIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
@@ -239,15 +238,6 @@ export interface GetContactsByContainerIdRoot {
     contacts: SelectKeyValue[]
     _csrfToken: string
 }
-
-/*********************************
- *    Definition of Container    *
- *********************************/
-export interface LoadContainersRoot {
-    containers: SelectKeyValue[]
-    _csrfToken: string
-}
-
 
 /**********************
  *    Hosts Browser   *

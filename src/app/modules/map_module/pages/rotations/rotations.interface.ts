@@ -36,7 +36,6 @@ export interface RotationContainerJoinData {
 }
 
 export interface RotationsIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
@@ -88,6 +87,3 @@ export interface RotationsEditRoot {
 export interface LoadMapsByContainerIdRequest {
     'containerIds[]': number[]
 }
-
-
-

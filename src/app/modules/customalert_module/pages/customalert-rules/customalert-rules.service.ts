@@ -5,13 +5,16 @@ import { catchError, map, Observable, of } from 'rxjs';
 import {
     CustomAlertRule,
     CustomAlertRuleServices,
+    CustomAlertRulesHistoryParams,
     CustomAlertRulesIndex,
     CustomAlertRulesIndexParams,
     CustomAlertRulesServicesParams,
+    CustomAlertsStateHistory,
     EditableCustomAlertRule
 } from './customalert-rules.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -31,6 +34,19 @@ export class CustomalertRulesService {
             })
         );
     }
+
+
+    public getHistory(params: CustomAlertRulesHistoryParams): Observable<CustomAlertsStateHistory> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<CustomAlertsStateHistory>(`${proxyPath}/customalert_module/customalert_rules/history.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
 
     public delete(item: DeleteAllItem): Observable<Object> {
         return this.http.post(`${this.proxyPath}/customalert_module/customalert_rules/delete/${item.id}.json`, {});
@@ -99,5 +115,20 @@ export class CustomalertRulesService {
                 return data;
             })
         );
+    }
+
+    public loadCustomalertRules(): Observable<SelectKeyValue[]> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<{
+            customAlertRules: SelectKeyValue[]
+        }>(`${proxyPath}/customalert_module/customalert_rules/loadCustomalertRules.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                return data.customAlertRules;
+            })
+        )
     }
 }

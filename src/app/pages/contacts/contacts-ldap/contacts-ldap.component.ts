@@ -40,7 +40,6 @@ import {
     LdapConfig,
     LdapUser,
     LoadCommandsRoot,
-    LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
 } from '../contacts.interface';
@@ -51,6 +50,7 @@ import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HistoryService } from '../../../history.service';
+import { LoadContainersRoot } from '../../containers/containers.interface';
 
 @Component({
     selector: 'oitc-contacts-add',

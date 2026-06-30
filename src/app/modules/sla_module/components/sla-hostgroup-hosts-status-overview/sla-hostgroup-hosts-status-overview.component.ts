@@ -16,7 +16,6 @@ import {
     SlaHostgroupHostsStatusOverviewRoot,
     SlaStatusOverview
 } from './sla-hostgroup-hosts-status-overview.interface';
-import { LoadContainersRoot } from '../../../../pages/contactgroups/contactgroups.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import {
     CardBodyComponent,
@@ -45,6 +44,7 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { HttpParams } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { LoadContainersRoot } from '../../../../pages/containers/containers.interface';
 
 @Component({
     selector: 'oitc-sla-hostgroup-hosts-status-overview',
