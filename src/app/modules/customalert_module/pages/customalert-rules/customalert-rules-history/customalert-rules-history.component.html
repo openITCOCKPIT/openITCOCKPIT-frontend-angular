@@ -1,0 +1,348 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('Custom Alert Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['customalertmodule', 'customalertRules', 'index']"
+                   [routerLink]="['/', 'customalert_module', 'customalert_rules', 'index']">
+                    <fa-icon [icon]="['fas', 'compass-drafting']"></fa-icon>
+                    {{ t('Custom Alert Rules') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
+                {{ t('History') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Custom Alert') }}
+                <small class="fw-300">
+                    {{ t('History') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="default" size="xs" (click)="load()">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button cButton class="ripple" color="primary" size="xs" (click)="toggleFilter()">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col [xs]="12" [lg]="6">
+                            <c-input-group class="mb-2">
+                                <span cInputGroupText id="hostname">
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                </span>
+                                <input aria-describedby="hostname"
+                                       aria-label="hostname"
+                                       name="hostname"
+                                       cFormControl
+                                       placeholder="{{t('Filter by host name')}}"
+                                       (debouncedValue)="onFilterChange($event)"
+                                       oitcDebounce
+                                       [(ngModel)]="params['filter[Hosts.name]']"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [lg]="6">
+                            <c-input-group class="mb-2">
+                                <span cInputGroupText id="servicename">
+                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                </span>
+                                <input aria-describedby="servicename"
+                                       aria-label="servicename"
+                                       cFormControl
+                                       name="servicename"
+                                       placeholder="{{t('Filter by service name')}}"
+                                       (debouncedValue)="onFilterChange($event)"
+                                       oitcDebounce
+                                       [(ngModel)]="params['filter[servicename]']"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [placeholder]="'Filter by comment' | transloco"
+                                       cFormControl
+                                       name="filter.CustomalertStatehistory.comment"
+                                       id="filter.CustomalertStatehistory.message"
+                                       oitcDebounce
+                                       type="text"
+                                       [(ngModel)]="params['filter[CustomalertComments.comment]']"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'compass-drafting']"></fa-icon>
+                                </span>
+                                <oitc-multi-select
+                                    name="filter.Hosts.container_id"
+                                    id="filter.Hosts.container_id"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    (debouncedValue)="onFilterChange($event)"
+                                    oitcDebounce
+                                    [options]="customAlertRules"
+                                    class="flex-1"
+                                    [appendTo]="''">
+                                </oitc-multi-select>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{ t('From') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="from"
+                                       cFormControl
+                                       name="filter.from"
+                                       id="filter.from"
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{ t('To') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="to"
+                                       cFormControl
+                                       name="filter.to"
+                                       id="filter.to"
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col md="2">
+                            <h5>{{ t('Alert status') }}</h5>
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="filter.Customalerts.state[CustomAlertsState.New]"
+                                       type="checkbox"
+                                       class="checkbox-lg checkbox-danger"
+                                       name="filter.Customalerts.state[CustomAlertsState.New]"
+                                       [(ngModel)]="stateFilter[CustomAlertsState.New]"
+                                       (debouncedValue)="onFilterChange($event)"
+                                       oitcDebounce/>
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="filter.Customalerts.state[CustomAlertsState.New]">
+                                    {{ t('New') }}
+                                </label>
+                            </c-form-check>
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="filter.Customalerts.state[CustomAlertsState.InProgress]"
+                                       type="checkbox"
+                                       class="checkbox-lg checkbox-secondary"
+                                       name="filter.Customalerts.state[CustomAlertsState.InProgress]"
+                                       [(ngModel)]="stateFilter[CustomAlertsState.InProgress]"
+                                       (debouncedValue)="onFilterChange($event)"
+                                       oitcDebounce/>
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="filter.Customalerts.state[CustomAlertsState.InProgress]">
+                                    {{ t('In progress') }}
+                                </label>
+                            </c-form-check>
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput id="filter.Customalerts.state[CustomAlertsState.Done]"
+                                       type="checkbox"
+                                       class="checkbox-lg checkbox-success"
+                                       name="filter.Customalerts.state[CustomAlertsState.Done]"
+                                       [(ngModel)]="stateFilter[CustomAlertsState.Done]"
+                                       (debouncedValue)="onFilterChange($event)"
+                                       oitcDebounce/>
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="filter.Customalerts.state[CustomAlertsState.Done]">
+                                    {{ t('Done') }}
+                                </label>
+                            </c-form-check>
+                            <c-form-check class="mb-2">
+                                <input cFormCheckInput
+                                       id="filter.Customalerts.state[CustomAlertsState.ManuallyClosed]"
+                                       type="checkbox"
+                                       class="checkbox-lg custom-check-default"
+                                       name="filter.Customalerts.state[CustomAlertsState.ManuallyClosed]"
+                                       [(ngModel)]="stateFilter[CustomAlertsState.ManuallyClosed]"
+                                       (debouncedValue)="onFilterChange($event)"
+                                       oitcDebounce/>
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="filter.Customalerts.state[CustomAlertsState.ManuallyClosed]">
+                                    {{ t('Manually closed') }}
+                                </label>
+                            </c-form-check>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset Filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+
+            @if (!result) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+
+            @if (result) {
+                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-15" scope="col" mat-sort-header="CustomalertStatehistory.state">
+                            {{ t('State') }}
+                        </th>
+                        <th class="col-1" scope="col" mat-sort-header="CustomalertStatehistory.state_time">
+                            {{ t('State time') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Hosts.name">
+                            {{ t('Host') }}
+                        </th>
+                        <th scope="col" mat-sort-header="servicename">
+                            {{ t('Service') }}
+                        </th>
+                        <th scope="col" mat-sort-header="full_name">
+                            {{ t('User') }}
+                        </th>
+                        <th scope="col" mat-sort-header="CustomalertComments.comment">
+                            {{ t('Comment') }}
+                        </th>
+                        <th scope="col" mat-sort-header="CustomalertComments.entry_time">
+                            {{ t('Comment entry time') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (customAlert of result.customalertStatehistory; track customAlert) {
+                            <tr>
+                                <td [title]="customAlert.stateInHuman" class="text-center">
+                                    @switch (customAlert.state) {
+                                        @case (0) {
+                                            <i class="fa-solid fa-fire-flame-curved flame"
+                                               [title]="customAlert.stateInHuman"></i>
+                                        }
+                                        @case (1) {
+                                            <i class="fa-solid fa-person-digging text-secondary"
+                                               [title]="customAlert.stateInHuman"></i>
+                                        }
+                                        @case (2) {
+                                            <i class="fa-solid fa-clipboard-check text-success"
+                                               [title]="customAlert.stateInHuman"></i>
+                                        }
+                                        @case (3) {
+                                            <i class="fa-solid fa-folder-closed text-primary"
+                                               [title]="customAlert.stateInHuman"></i>
+                                        }
+                                    }
+                                </td>
+                                <td [title]="customAlert.stateTime">
+                                    {{ customAlert.stateTimeInHumanShort }}
+                                </td>
+                                <td>
+                                    <oitc-label-link
+                                        [objectId]="customAlert.Hosts.id"
+                                        [route]="'/hosts/browser'"
+                                        [permissions]="'hosts.browser'">
+                                        {{ customAlert.Hosts.name }}
+                                    </oitc-label-link>
+                                </td>
+                                <td>
+                                    <oitc-label-link
+                                        [objectId]="customAlert.Services.id"
+                                        [route]="'/services/browser'"
+                                        [permissions]="'hosts.browser'">
+                                        {{ customAlert.servicename }}
+                                    </oitc-label-link>
+                                </td>
+                                <td>
+                                    @if (customAlert.full_name) {
+                                        <oitc-label-link
+                                            [objectId]="customAlert.Services.id"
+                                            [route]="'/services/browser'"
+                                            [permissions]="'hosts.browser'">
+                                            {{ customAlert.servicename }}
+                                        </oitc-label-link>
+                                    }
+                                </td>
+                                <td>
+                                    @if (customAlert.CustomalertComments.comment) {
+                                        {{ customAlert.CustomalertComments.comment }}
+                                    }
+                                </td>
+                                <td>
+                                    {{ customAlert.CustomalertComments.entry_time }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @if (result && result.customalertStatehistory.length === 0) {
+                <oitc-no-records
+                ></oitc-no-records>
+            }
+
+            <c-container
+                [fluid]="true">
+                <c-row>
+                    <c-col>
+                        @if (result) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                        }
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+
+    </c-card>
+</ng-container>
