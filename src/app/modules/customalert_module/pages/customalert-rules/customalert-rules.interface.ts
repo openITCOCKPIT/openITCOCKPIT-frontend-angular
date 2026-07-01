@@ -102,6 +102,7 @@ export function getDefaultCustomAlertRulesHistoryParams(): CustomAlertRulesHisto
         'filter[servicename]': '',
         'filter[CustomalertComments.comment]': '',
         'filter[CustomalertStatehistory.state][]': [],
+        'filter[CustomalertRules.id][]': [],
         'filter[from]': new Date(now.getTime() - (3600 * 24 * 1000 * 30)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
     }
@@ -117,6 +118,7 @@ export interface CustomAlertRulesHistoryParams {
     'filter[to]': Date | string,
     'filter[CustomalertComments.comment]': string,
     'filter[CustomalertStatehistory.state][]': number[],
+    'filter[CustomalertRules.id][]': number[],
     'filter[Hosts.name]': string,
     'filter[servicename]': string,
 }
@@ -130,6 +132,7 @@ export interface CustomalertStatehistory {
     id: number
     state: number
     stateTime: string
+    stateDate: string
     stateTimeInHumanShort: string
     stateInHuman: string
     Hosts: {

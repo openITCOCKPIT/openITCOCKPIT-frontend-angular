@@ -117,6 +117,7 @@
                                     id="filter.Hosts.container_id"
                                     optionValue="key"
                                     optionLabel="value"
+                                    [(ngModel)]="params['filter[CustomalertRules.id][]']"
                                     (debouncedValue)="onFilterChange($event)"
                                     oitcDebounce
                                     [options]="customAlertRules"
@@ -260,7 +261,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                        @for (customAlert of result.customalertStatehistory; track customAlert) {
+                        @for (customAlert of result.customalertStatehistory; track customAlert; let idx = $index) {
+                            @if (idx === 0 || customAlert.stateDate !== result.customalertStatehistory[idx - 1].stateDate) {
+                                <tr style="background-color: #f5f5f5; font-weight: bold;">
+                                    <td colspan="7" class="text-end text-primary fs-5">
+                                        <fa-icon [icon]="['fas', 'calendar-day']"></fa-icon>
+                                        {{ customAlert.stateDate }}
+                                    </td>
+                                </tr>
+                            }
                             <tr>
                                 <td [title]="customAlert.stateInHuman" class="text-center">
                                     @switch (customAlert.state) {

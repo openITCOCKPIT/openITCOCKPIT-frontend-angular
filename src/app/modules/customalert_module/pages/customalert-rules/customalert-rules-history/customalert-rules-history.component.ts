@@ -167,6 +167,12 @@ export class CustomalertRulesHistoryComponent implements OnInit, OnDestroy, Inde
     }
 
     public resetFilter() {
+        this.stateFilter = {
+            [CustomAlertsState.New]: false,
+            [CustomAlertsState.InProgress]: false,
+            [CustomAlertsState.Done]: false,
+            [CustomAlertsState.ManuallyClosed]: false
+        };
         this.params = getDefaultCustomAlertRulesHistoryParams();
         this.load();
     }
