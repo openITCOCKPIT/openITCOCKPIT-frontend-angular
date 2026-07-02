@@ -232,6 +232,13 @@
             }
 
             @if (result) {
+                <div style="border: 2px solid red;"> &nbsp;
+                    <oitc-customalerts-stacked-bar-echart
+                        [barChartData]="result.customalertStateOverview"
+                        [fromDate]="String(from | date:'dd.MM.yyyy')"
+                        [toDate]="String(to | date:'dd.MM.yyyy')"
+                    ></oitc-customalerts-stacked-bar-echart>
+                </div>
                 <table bordered cTable class="mt-2 mb-0" hover striped matSort
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -263,7 +270,7 @@
                     <tbody>
                         @for (customAlert of result.customalertStatehistory; track customAlert; let idx = $index) {
                             @if (idx === 0 || customAlert.stateDate !== result.customalertStatehistory[idx - 1].stateDate) {
-                                <tr style="background-color: #f5f5f5; font-weight: bold;">
+                                <tr>
                                     <td colspan="7" class="text-end text-primary fs-5">
                                         <fa-icon [icon]="['fas', 'calendar-day']"></fa-icon>
                                         {{ customAlert.stateDate }}

@@ -41,10 +41,13 @@ import { CustomalertRulesService } from '../customalert-rules.service';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { CustomAlertsIndexCustomAlertsStateFilter, CustomAlertsState } from '../../customalerts/customalerts.interface';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
-import { formatDate } from '@angular/common';
+import { DatePipe, formatDate } from '@angular/common';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import {
+    CustomalertsStackedBarEchartComponent
+} from '../../../components/charts/customalerts-stacked-bar-echart/customalerts-stacked-bar-echart.component';
 
 @Component({
     selector: 'oitc-customalert-rules-history',
@@ -80,7 +83,9 @@ import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface'
         TranslocoPipe,
         MatSortHeader,
         LabelLinkComponent,
-        MultiSelectComponent
+        MultiSelectComponent,
+        CustomalertsStackedBarEchartComponent,
+        DatePipe
     ],
     templateUrl: './customalert-rules-history.component.html',
     styleUrl: './customalert-rules-history.component.css',
@@ -94,8 +99,8 @@ export class CustomalertRulesHistoryComponent implements OnInit, OnDestroy, Inde
     protected result?: CustomAlertsStateHistory;
     protected hideFilter: boolean = true;
 
-    public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
-    public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+    public from:string = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+    public to:string = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
     protected customAlertRules: SelectKeyValue[] = [];
 
@@ -193,4 +198,5 @@ export class CustomalertRulesHistoryComponent implements OnInit, OnDestroy, Inde
     }
 
     protected readonly CustomAlertsState = CustomAlertsState;
+    protected readonly String = String;
 }
