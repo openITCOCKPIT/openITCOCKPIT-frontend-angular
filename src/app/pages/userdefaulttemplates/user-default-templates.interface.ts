@@ -63,11 +63,14 @@ export interface UserDefaultTemplatesPost {
     paginatorlength: number
     dashboard_tab_rotation: number
     recursive_browser: 0 | 1
-    containers?: { // Edit only
+    containers: { // Edit only
+        _ids: number[]
+    }
+    user_containers?: { // Edit only
         _ids: number[]
     }
     usergroup_id: number
-    UserDefaultTemplatesToContainers: {
+    UserDefaultTemplatesToUserContainers: {
         [key: number]: PermissionLevel
     }
     ldapgroups: {
@@ -77,5 +80,5 @@ export interface UserDefaultTemplatesPost {
 
 export interface UserDefaultTemplatesEditResponse {
     userDefaultTemplate: UserDefaultTemplatesPost
-    notPermittedContainerIds: number[]
+    notPermittedUserContainerIds: number[]
 }

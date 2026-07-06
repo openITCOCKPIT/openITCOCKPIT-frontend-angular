@@ -47,6 +47,7 @@ import { SliderTimeComponent } from '../../../components/slider-time/slider-time
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { UserContainerPermission, UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+import { ContainersService } from '../../containers/containers.service';
 
 @Component({
     selector: 'oitc-user-default-templates-edit',
@@ -91,13 +92,14 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 })
 export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
 
-    public notPermittedContainerIds: number[] = [];
+    public notPermittedUserContainerIds: number[] = [];
     public containerIdsWithWritePermissions: number[] = [];
 
     public post?: UserDefaultTemplatesPost;
     public errors: GenericValidationError | null = null;
 
     public usergroups: SelectKeyValue[] = [];
+    public userContainers: SelectKeyValue[] = [];
     public containers: SelectKeyValue[] = [];
     public localeOptions: UserLocaleOption[] = [];
     public dateformats: SelectKeyValueString[] = [];
@@ -115,6 +117,7 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
     private readonly UsersService: UsersService = inject(UsersService);
     private readonly UserDefaultTemplatesService: UserDefaultTemplatesService = inject(UserDefaultTemplatesService);
     private readonly UsergroupsService: UsergroupsService = inject(UsergroupsService);
+    private readonly ContainersService = inject(ContainersService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
@@ -150,21 +153,23 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
 
                 // Store user data
                 this.post = results.userdefaulttemplate.userDefaultTemplate;
-                this.notPermittedContainerIds = results.userdefaulttemplate.notPermittedContainerIds; // User has not written permissions to all selected containers
+                this.notPermittedUserContainerIds = results.userdefaulttemplate.notPermittedUserContainerIds; // User has not written permissions to all selected containers
+
+                this.loadUserContainer(this.post.containers._ids);
 
                 this.selectedUserContainerWithPermission = [];
 
-                if (results.userdefaulttemplate.userDefaultTemplate.containers) {
+                if (results.userdefaulttemplate.userDefaultTemplate.user_containers) {
                     //Reformat data that it looks like the same as it looks in the add method...
 
                     // Pre-select the container select element
-                    this.selectedUserContainers = results.userdefaulttemplate.userDefaultTemplate.containers._ids;
+                    this.selectedUserContainers = results.userdefaulttemplate.userDefaultTemplate.user_containers._ids;
 
-                    for (let containerId in results.userdefaulttemplate.userDefaultTemplate.UserDefaultTemplatesToContainers) {
+                    for (let containerId in results.userdefaulttemplate.userDefaultTemplate.UserDefaultTemplatesToUserContainers) {
                         this.selectedUserContainerWithPermission.push({
                             container_id: Number(containerId),
                             container_name: this.getContainerName(Number(containerId)),
-                            permission_level: results.userdefaulttemplate.userDefaultTemplate.UserDefaultTemplatesToContainers[containerId]
+                            permission_level: results.userdefaulttemplate.userDefaultTemplate.UserDefaultTemplatesToUserContainers[containerId]
                         });
                     }
 
@@ -174,12 +179,12 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
                     // filter containers from the select box where the user has no permissions.
                     // this is to avoid PrimeNG showing empty options in the select.
                     // It is imporant to call onSelectedContainerIdsChange first - otherwise the container overview is empty.
-                    if (this.notPermittedContainerIds.length > 0) {
+                    if (this.notPermittedUserContainerIds.length > 0) {
                         // When notPermittedContainerIds is NOT empty, the select box is disabled.
                         // The value of selectedUserContainers is not send to the server anymore, so we can remove the
                         // not permitted container ids from selectedUserContainers without causing problems.
                         this.selectedUserContainers = this.selectedUserContainers.filter(containerId => {
-                            return this.notPermittedContainerIds.indexOf(containerId) === -1;
+                            return this.notPermittedUserContainerIds.indexOf(containerId) === -1;
                         });
                     }
 
@@ -275,7 +280,7 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
         this.selectedUserContainerWithPermission.forEach(container => {
             ContainersUserDefaultTemplatesMemberships[container.container_id] = container.permission_level;
         });
-        this.post.UserDefaultTemplatesToContainers = ContainersUserDefaultTemplatesMemberships;
+        this.post.UserDefaultTemplatesToUserContainers = ContainersUserDefaultTemplatesMemberships;
 
         this.subscriptions.add(this.UserDefaultTemplatesService.saveUserDefaultTemplatesEdit(this.post)
             .subscribe((result) => {
@@ -307,6 +312,19 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
         }
         this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search, selected).subscribe((ldapgroups: LoadLdapgroups) => {
             this.ldapGroups = ldapgroups.ldapgroups;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public onContainerChange(): void {
+        if (this.post) {
+            this.loadUserContainer(this.post.containers._ids);
+        }
+    }
+
+    public loadUserContainer(containerIds: number[]) {
+        this.subscriptions.add(this.ContainersService.loadContainersByContainerIds(containerIds).subscribe((result) => {
+            this.userContainers = result.containers;
             this.cdr.markForCheck();
         }));
     }

@@ -46,6 +46,7 @@ import { LoadLdapgroups } from '../../usergroups/usergroups.interface';
 import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { UserContainerPermission, UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
+import { ContainersService } from '../../containers/containers.service';
 
 @Component({
     selector: 'oitc-user-default-templates-add',
@@ -94,6 +95,7 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
 
     public usergroups: SelectKeyValue[] = [];
     public containers: SelectKeyValue[] = [];
+    public userContainers: SelectKeyValue[] = [];
     public localeOptions: UserLocaleOption[] = [];
     public dateformats: SelectKeyValueString[] = [];
     public timezones: UserTimezonesSelect[] = [];
@@ -110,6 +112,7 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
     private readonly UsersService: UsersService = inject(UsersService);
     private readonly UserDefaultTemplatesService: UserDefaultTemplatesService = inject(UserDefaultTemplatesService);
     private readonly UsergroupsService: UsergroupsService = inject(UsergroupsService);
+    private readonly ContainersService = inject(ContainersService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
@@ -117,7 +120,7 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.loadLdapGroups('');
-        this.loadContainer();
+        this.loadContainers();
         this.loadUsergroups();
         this.loadDateformats();
         this.loadLocaleOptions();
@@ -144,16 +147,26 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
             i18n: 'en_US',
             is_oauth: false,
             usergroup_id: 0,
-            UserDefaultTemplatesToContainers: {},
+            UserDefaultTemplatesToUserContainers: {},
             ldapgroups: {
+                _ids: []
+            },
+            containers: {
                 _ids: []
             }
         };
     }
 
-    public loadContainer() {
+    private loadContainers(): void {
         this.subscriptions.add(this.UsersService.loadContainersForAngular().subscribe((result) => {
             this.containers = result.containers;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public loadUserContainer(containerIds: number[]) {
+        this.subscriptions.add(this.ContainersService.loadContainersByContainerIds(containerIds).subscribe((result) => {
+            this.userContainers = result.containers;
             this.cdr.markForCheck();
         }));
     }
@@ -226,7 +239,7 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
     }
 
     private getContainerName(containerId: number): string {
-        const container = this.containers.find(container => container.key === containerId);
+        const container = this.userContainers.find(container => container.key === containerId);
         if (container) {
             return container.value;
         }
@@ -239,7 +252,7 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
         this.selectedUserContainerWithPermission.forEach(container => {
             ContainersUserDefaultTemplatesMemberships[container.container_id] = container.permission_level;
         });
-        this.post.UserDefaultTemplatesToContainers = ContainersUserDefaultTemplatesMemberships;
+        this.post.UserDefaultTemplatesToUserContainers = ContainersUserDefaultTemplatesMemberships;
 
         this.subscriptions.add(this.UserDefaultTemplatesService.add(this.post)
             .subscribe((result) => {
@@ -281,6 +294,10 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
             this.ldapGroups = ldapgroups.ldapgroups;
             this.cdr.markForCheck();
         }));
+    }
+
+    public onContainerChange(): void {
+        this.loadUserContainer(this.post.containers._ids);
     }
 
     protected readonly PermissionLevel = PermissionLevel;
