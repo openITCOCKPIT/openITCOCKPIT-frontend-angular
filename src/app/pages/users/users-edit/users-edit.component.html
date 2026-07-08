@@ -241,6 +241,26 @@
                             </c-col>
                         }
                     </c-row>
+
+                    <div class="mb-3">
+                        <label cLabel for="userDefaultTemplate">
+                            {{ t('User Default Template') }}
+                        </label>
+                        <oitc-select
+                            name="userDefaultTemplate"
+                            id="userDefaultTemplate"
+                            [placeholder]="'Please choose' | transloco"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="selectedUserDefaultTemplate"
+                            [options]="userDefaultTemplates"
+                            (onChange)="onUserDefaultTemplateChange($event)"
+                            oitcFormError [errors]="errors" errorField="userDefaultTemplate">
+                        </oitc-select>
+
+                        <oitc-form-feedback [errors]="errors" errorField="userDefaultTemplate"></oitc-form-feedback>
+                    </div>
+
                     <div class="mb-3">
                         <label cLabel for="selectedContainerIds" class="hintmark">
                             {{ t('Container') }}

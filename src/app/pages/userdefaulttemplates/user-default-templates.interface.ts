@@ -48,9 +48,9 @@ export interface AllUserdefaulttemplate {
     allow_edit: boolean
 }
 
-/**********************
- *    Add action    *
- **********************/
+/***************************
+ *    Add / Edit action    *
+ ***************************/
 export interface UserDefaultTemplatesPost {
     id?: number
     name: string

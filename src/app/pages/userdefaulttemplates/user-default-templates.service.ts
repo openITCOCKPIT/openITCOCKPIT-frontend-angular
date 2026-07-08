@@ -98,4 +98,5 @@ export class UserDefaultTemplatesService implements DeleteAllModalService {
                 })
             );
     }
+
 }
