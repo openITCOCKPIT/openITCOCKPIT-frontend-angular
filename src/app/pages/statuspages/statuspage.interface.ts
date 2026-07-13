@@ -15,6 +15,7 @@ export interface StatuspageProperties {
     public: boolean
     public_title: string | null,
     public_identifier: string | null,
+    public_refresh: number;
     showDowntimes: boolean
     showDowntimeComments: boolean
     showAcknowledgements: boolean
@@ -57,6 +58,7 @@ export interface StatuspagePost {
     description: '',
     public: boolean,
     public_identifier: string | null,
+    public_refresh: number,
     show_downtimes: boolean,
     show_downtime_comments: boolean,
     show_acknowledgements: boolean,
@@ -87,6 +89,7 @@ export interface StatuspagePostEdit {
     description: '',
     public_title: ''
     public_identifier: string | null,
+    public_refresh: number,
     public: boolean,
     show_downtimes: boolean,
     show_downtime_comments: boolean,
