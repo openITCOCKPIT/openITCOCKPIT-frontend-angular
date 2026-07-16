@@ -62,6 +62,7 @@ import { redfishModuleRoutes } from './modules/redfish_module/redfish_module.rou
 import { checkpointModuleRoutes } from './modules/checkpoint_module/checkpoint_module.routes';
 import { raritanModuleRoutes } from './modules/raritan_module/raritan_module.routes';
 import { sonicWallModuleRoutes } from './modules/sonic_wall_module/sonic_wall_module.routes';
+import { aristaNetworksModuleRoutes } from './modules/aristanetworks_module/aristanetworks_module.routes';
 
 
 @Component({
@@ -146,7 +147,8 @@ const moduleRoutes: Routes = [
     ...msWindowsAgentlessModuleRoutes,
     ...checkpointModuleRoutes,
     ...raritanModuleRoutes,
-    ...sonicWallModuleRoutes
+    ...sonicWallModuleRoutes,
+    ...aristaNetworksModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
