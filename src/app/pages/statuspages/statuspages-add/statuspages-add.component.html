@@ -151,6 +151,20 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="my-2">
+                        <label cLabel for="publicRefresh">
+                            {{ t('Public Refresh') }}
+
+                        </label>
+                        <input cFormControl id="publicRefresh"
+                               name="publicRefresh"
+                               oitcFormError [errors]="errors" errorField="public_refresh"
+                               [(ngModel)]="post.public_refresh">
+                        <oitc-form-feedback [errors]="errors" errorField="public_refresh"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Public status pages update interval in seconds') }}
+                        </div>
+                    </div>
                 }
 
 
