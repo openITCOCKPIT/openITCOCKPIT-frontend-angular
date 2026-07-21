@@ -137,7 +137,6 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
     public selectedUserRoleThroughLdap: number = 0;
 
     public selectedUserContainers: number[] = [];
-    public selectedUserDefaultTemplate: number = 0;
     public selectedUserContainerWithPermission: UserContainerPermission[] = [];
     public userContainerRoleContainerPermissions: UserAddContainerRolePermission[] = [];
 
@@ -202,7 +201,9 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
                 _ids: []
             },
             ContainersUsersMemberships: {},
-            apikeys: []
+            apikeys: [],
+            container_id: 0,
+            user_default_template_id: 0
         };
     }
 
@@ -481,6 +482,11 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.UsersService.loadUserDefaultTemplates(params).subscribe((result) => {
                 this.userDefaultTemplates = result.userDefaultTemplates;
                 this.userDefaultTemplateDetails = result.userDefaultTemplateDetails;
+                // preselect first user default template if available
+                if (this.userDefaultTemplates.length) {
+                    this.post.user_default_template_id = this.userDefaultTemplates[0].key
+                    this.onUserDefaultTemplateChange({value: this.post.user_default_template_id} as MultiSelectChangeEvent);
+                }
                 this.cdr.markForCheck();
             }));
         }
@@ -489,7 +495,8 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
     public onUserDefaultTemplateChange(event: MultiSelectChangeEvent) {
         let selectedUserDefaultTemplate = this.userDefaultTemplateDetails[event.value];
         this.post.usergroup_id = selectedUserDefaultTemplate.usergroup_id;
-        this.post.is_oauth = selectedUserDefaultTemplate.is_oauth
+        this.post.container_id = selectedUserDefaultTemplate.container_id;
+        this.post.is_oauth = selectedUserDefaultTemplate.is_oauth;
         this.post.paginatorlength = selectedUserDefaultTemplate.paginatorlength;
         this.post.showstatsinmenu = selectedUserDefaultTemplate.showstatsinmenu;
         this.post.recursive_browser = selectedUserDefaultTemplate.recursive_browser;

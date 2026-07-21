@@ -99,7 +99,7 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError | null = null;
 
     public usergroups: SelectKeyValue[] = [];
-    public userContainers: SelectKeyValue[] = [];
+    public filteredContainersByContainerIds: SelectKeyValue[] = [];
     public containers: SelectKeyValue[] = [];
     public localeOptions: UserLocaleOption[] = [];
     public dateformats: SelectKeyValueString[] = [];
@@ -155,7 +155,7 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
                 this.post = results.userdefaulttemplate.userDefaultTemplate;
                 this.notPermittedUserContainerIds = results.userdefaulttemplate.notPermittedUserContainerIds; // User has not written permissions to all selected containers
 
-                this.loadUserContainer(this.post.containers._ids);
+                this.loadFilteredContainersByContainerids(this.post.containers._ids);
 
                 this.selectedUserContainerWithPermission = [];
 
@@ -318,13 +318,13 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
 
     public onContainerChange(): void {
         if (this.post) {
-            this.loadUserContainer(this.post.containers._ids);
+            this.loadFilteredContainersByContainerids(this.post.containers._ids);
         }
     }
 
-    public loadUserContainer(containerIds: number[]) {
+    public loadFilteredContainersByContainerids(containerIds: number[]) {
         this.subscriptions.add(this.ContainersService.loadContainersByContainerIds(containerIds).subscribe((result) => {
-            this.userContainers = result.containers;
+            this.filteredContainersByContainerIds = result.containers;
             this.cdr.markForCheck();
         }));
     }

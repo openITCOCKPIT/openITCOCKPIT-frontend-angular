@@ -232,6 +232,8 @@ export interface UserPost {
         [key: number]: PermissionLevel
     }
     apikeys: UserAddEditApiKey[]
+    container_id: number
+    user_default_template_id?: number | null
 }
 
 export interface UserAddEditApiKey {

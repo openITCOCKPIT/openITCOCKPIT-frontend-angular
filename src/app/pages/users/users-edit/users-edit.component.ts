@@ -523,7 +523,8 @@ export class UsersEditComponent implements OnInit, OnDestroy {
         if (this.post) {
             let selectedUserDefaultTemplate = this.userDefaultTemplateDetails[event.value];
             this.post.usergroup_id = selectedUserDefaultTemplate.usergroup_id;
-            this.post.is_oauth = selectedUserDefaultTemplate.is_oauth
+            this.post.container_id = selectedUserDefaultTemplate.container_id;
+            this.post.is_oauth = selectedUserDefaultTemplate.is_oauth;
             this.post.paginatorlength = selectedUserDefaultTemplate.paginatorlength;
             this.post.showstatsinmenu = selectedUserDefaultTemplate.showstatsinmenu;
             this.post.recursive_browser = selectedUserDefaultTemplate.recursive_browser;

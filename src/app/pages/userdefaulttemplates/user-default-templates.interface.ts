@@ -76,6 +76,7 @@ export interface UserDefaultTemplatesPost {
     ldapgroups: {
         _ids: any[]
     }
+    container_id: number
 }
 
 export interface UserDefaultTemplatesEditResponse {

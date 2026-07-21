@@ -95,7 +95,7 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
 
     public usergroups: SelectKeyValue[] = [];
     public containers: SelectKeyValue[] = [];
-    public userContainers: SelectKeyValue[] = [];
+    public filteredContainersByContainerIds: SelectKeyValue[] = [];
     public localeOptions: UserLocaleOption[] = [];
     public dateformats: SelectKeyValueString[] = [];
     public timezones: UserTimezonesSelect[] = [];
@@ -153,7 +153,8 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
             },
             containers: {
                 _ids: []
-            }
+            },
+            container_id: 0
         };
     }
 
@@ -164,9 +165,9 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public loadUserContainer(containerIds: number[]) {
+    public loadContainersByContainerIds(containerIds: number[]) {
         this.subscriptions.add(this.ContainersService.loadContainersByContainerIds(containerIds).subscribe((result) => {
-            this.userContainers = result.containers;
+            this.filteredContainersByContainerIds = result.containers;
             this.cdr.markForCheck();
         }));
     }
@@ -239,7 +240,7 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
     }
 
     private getContainerName(containerId: number): string {
-        const container = this.userContainers.find(container => container.key === containerId);
+        const container = this.filteredContainersByContainerIds.find(container => container.key === containerId);
         if (container) {
             return container.value;
         }
@@ -297,7 +298,7 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
     }
 
     public onContainerChange(): void {
-        this.loadUserContainer(this.post.containers._ids);
+        this.loadContainersByContainerIds(this.post.containers._ids);
     }
 
     protected readonly PermissionLevel = PermissionLevel;
