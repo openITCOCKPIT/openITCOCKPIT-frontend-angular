@@ -6,6 +6,10 @@ import {
     CardTitleDirective,
     ColComponent,
     ContainerComponent,
+    DropdownComponent,
+    DropdownItemDirective,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -48,6 +52,7 @@ import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface'
 import {
     CustomalertsStackedBarEchartComponent
 } from '../../../components/charts/customalerts-stacked-bar-echart/customalerts-stacked-bar-echart.component';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
     selector: 'oitc-customalert-rules-history',
@@ -85,7 +90,11 @@ import {
         LabelLinkComponent,
         MultiSelectComponent,
         CustomalertsStackedBarEchartComponent,
-        DatePipe
+        DatePipe,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective
     ],
     templateUrl: './customalert-rules-history.component.html',
     styleUrl: './customalert-rules-history.component.css',
@@ -147,6 +156,48 @@ export class CustomalertRulesHistoryComponent implements OnInit, OnDestroy, Inde
                 this.cdr.markForCheck();
             }));
 
+    }
+
+    public linkFor(format: 'csv') {
+        let baseUrl = '/customalert_module/customalert_rules/listToCsv?';
+
+        this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
+        this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
+
+        this.params['filter[CustomalertStatehistory.state][]'] = [];
+        if (this.stateFilter[CustomAlertsState.New]) {
+            this.params['filter[CustomalertStatehistory.state][]'].push(CustomAlertsState.New);
+        }
+        if (this.stateFilter[CustomAlertsState.InProgress]) {
+            this.params['filter[CustomalertStatehistory.state][]'].push(CustomAlertsState.InProgress);
+        }
+        if (this.stateFilter[CustomAlertsState.Done]) {
+            this.params['filter[CustomalertStatehistory.state][]'].push(CustomAlertsState.Done);
+        }
+        if (this.stateFilter[CustomAlertsState.ManuallyClosed]) {
+            this.params['filter[CustomalertStatehistory.state][]'].push(CustomAlertsState.ManuallyClosed);
+        }
+
+        this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
+        this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
+
+        let urlParams = {
+            'angular': true,
+            'sort': 'CustomalertStatehistory.state_time',
+            'page': this.params.page,
+            'direction': 'asc',
+            'filter[Hosts.name]': this.params['filter[Hosts.name]'],
+            'filter[servicename]': this.params['filter[servicename]'],
+            'filter[CustomalertComments.comment]': this.params['filter[CustomalertComments.comment]'],
+            'filter[CustomalertStatehistory.state][]': this.params['filter[CustomalertStatehistory.state][]'],
+            'filter[CustomalertRules.id][]': this.params['filter[CustomalertRules.id][]'],
+            'filter[from]': this.params['filter[from]'],
+            'filter[to]': this.params['filter[to]']
+        };
+
+        let stringParams: HttpParams = new HttpParams();
+        stringParams = stringParams.appendAll(urlParams);
+        return baseUrl + stringParams.toString();
     }
 
 
