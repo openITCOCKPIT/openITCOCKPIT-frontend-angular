@@ -475,7 +475,6 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
 
             let params: UserDefaultTemplatesParams = {
                 angular: true,
-                'usercontainerRoleIds[]': [],
                 'ldapgroupIds[]': ldapgroups
             }
 

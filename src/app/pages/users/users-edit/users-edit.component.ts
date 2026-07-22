@@ -278,8 +278,6 @@ export class UsersEditComponent implements OnInit, OnDestroy {
                             // Store permissions for the read / write radio buttons
                             this.userContainerRoleContainerPermissionsLdap = result.userContainerRoleContainerPermissionsLdapArray || [];
 
-                            this.loadUserDefaultTemplates();
-
                             this.cdr.markForCheck();
                         }
                     }));
@@ -287,6 +285,7 @@ export class UsersEditComponent implements OnInit, OnDestroy {
 
                 this.loadContainerRoles('');
                 this.onUsercontainerrolesSelectChange(null);
+                this.loadUserDefaultTemplates();
 
                 this.cdr.markForCheck();
 
@@ -311,9 +310,6 @@ export class UsersEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.UsersService.loadUserContainerRoles(searchString, selected)
             .subscribe((result) => {
                 this.usercontainerroles = result;
-                if (!this.isLdapUser) {
-                    this.loadUserDefaultTemplates();
-                }
                 this.cdr.markForCheck();
             }));
     }
@@ -391,10 +387,6 @@ export class UsersEditComponent implements OnInit, OnDestroy {
                 this.selectedUserContainerRolesContainerIds = result.map((item) => item.id);
                 this.cdr.markForCheck();
             }));
-
-            if (!this.isLdapUser) {
-                this.loadUserDefaultTemplates();
-            }
         }
     }
 
@@ -492,7 +484,6 @@ export class UsersEditComponent implements OnInit, OnDestroy {
         if (this.post) {
             let params: UserDefaultTemplatesParams = {
                 angular: true,
-                'usercontainerRoleIds[]': this.post.usercontainerroles._ids,
                 'ldapgroupIds[]': []
             }
 
@@ -505,7 +496,6 @@ export class UsersEditComponent implements OnInit, OnDestroy {
 
                     params = {
                         angular: true,
-                        'usercontainerRoleIds[]': [],
                         'ldapgroupIds[]': ldapgroups
                     }
                 }

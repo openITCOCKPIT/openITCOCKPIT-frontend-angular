@@ -138,6 +138,7 @@ export class UsersAddComponent implements OnInit, OnDestroy {
         this.loadUsergroups();
         this.loadDateformats();
         this.loadLocaleOptions();
+        this.loadUserDefaultTemplates();
     }
 
     public ngOnDestroy(): void {
@@ -255,8 +256,6 @@ export class UsersAddComponent implements OnInit, OnDestroy {
             this.userContainerRoleContainerPermissions = result;
             this.cdr.markForCheck();
         }));
-
-        this.loadUserDefaultTemplates();
     }
 
     public onSelectedContainerIdsChange(event: any) {
@@ -358,18 +357,12 @@ export class UsersAddComponent implements OnInit, OnDestroy {
 
         let params: UserDefaultTemplatesParams = {
             angular: true,
-            'usercontainerRoleIds[]': this.post.usercontainerroles._ids,
             'ldapgroupIds[]': []
         }
 
         this.subscriptions.add(this.UsersService.loadUserDefaultTemplates(params).subscribe((result) => {
             this.userDefaultTemplates = result.userDefaultTemplates;
             this.userDefaultTemplateDetails = result.userDefaultTemplateDetails;
-            // preselect first user default template if available
-            if (this.userDefaultTemplates.length) {
-                this.post.user_default_template_id = this.userDefaultTemplates[0].key
-                this.onUserDefaultTemplateChange({value: this.post.user_default_template_id} as MultiSelectChangeEvent);
-            }
             this.cdr.markForCheck();
         }));
     }

@@ -330,7 +330,6 @@ export interface UsersEditResponse {
 
 export interface UserDefaultTemplatesParams {
     angular: true,
-    'usercontainerRoleIds[]': number[]
     'ldapgroupIds[]': number[]
 }
 
