@@ -99,8 +99,8 @@ export class CustomalertRulesHistoryComponent implements OnInit, OnDestroy, Inde
     protected result?: CustomAlertsStateHistory;
     protected hideFilter: boolean = true;
 
-    public from:string = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
-    public to:string = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+    public from: string = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+    public to: string = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
     protected customAlertRules: SelectKeyValue[] = [];
 
@@ -127,6 +127,7 @@ export class CustomalertRulesHistoryComponent implements OnInit, OnDestroy, Inde
     protected load(): void {
         this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
         this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
+
         this.params['filter[CustomalertStatehistory.state][]'] = [];
         if (this.stateFilter[CustomAlertsState.New]) {
             this.params['filter[CustomalertStatehistory.state][]'].push(CustomAlertsState.New);
@@ -140,7 +141,6 @@ export class CustomalertRulesHistoryComponent implements OnInit, OnDestroy, Inde
         if (this.stateFilter[CustomAlertsState.ManuallyClosed]) {
             this.params['filter[CustomalertStatehistory.state][]'].push(CustomAlertsState.ManuallyClosed);
         }
-
         this.subscriptions.add(this.CustomAlertRulesService.getHistory(this.params)
             .subscribe((result: CustomAlertsStateHistory) => {
                 this.result = result;
@@ -179,6 +179,8 @@ export class CustomalertRulesHistoryComponent implements OnInit, OnDestroy, Inde
             [CustomAlertsState.ManuallyClosed]: false
         };
         this.params = getDefaultCustomAlertRulesHistoryParams();
+        this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+        this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.load();
     }
 
@@ -189,9 +191,6 @@ export class CustomalertRulesHistoryComponent implements OnInit, OnDestroy, Inde
             this.params.direction = sort.direction;
             this.load();
         }
-    }
-
-    public toggleDeleteAllModal(): void {
     }
 
     public onMassActionComplete() {

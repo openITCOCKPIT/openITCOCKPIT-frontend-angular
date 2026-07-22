@@ -132,7 +132,10 @@ export interface CustomAlertsStateHistory extends PaginateOrScroll {
 export interface CustomalertStateOverview {
     total: number[]
     data: {
-        string: number[]
+        [key: string]: number[]
+    }
+    seriesData: {
+        [key: number]: number[]
     }
     fromDate: string
     fromDateTimestamp: number

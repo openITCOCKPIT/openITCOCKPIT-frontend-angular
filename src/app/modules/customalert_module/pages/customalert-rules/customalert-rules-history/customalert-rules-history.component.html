@@ -27,7 +27,7 @@
     </nav>
     <c-card class="mb-3">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Custom Alert') }}
+            <h5 cCardTitle>{{ t('Custom Alert States') }}
                 <small class="fw-300">
                     {{ t('History') }}
                 </small>
@@ -232,7 +232,7 @@
             }
 
             @if (result) {
-                <div style="border: 2px solid red;"> &nbsp;
+                <div>
                     <oitc-customalerts-stacked-bar-echart
                         [barChartData]="result.customalertStateOverview"
                         [fromDate]="String(from | date:'dd.MM.yyyy')"
