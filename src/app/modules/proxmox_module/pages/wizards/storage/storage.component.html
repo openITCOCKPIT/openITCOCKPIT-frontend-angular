@@ -156,6 +156,20 @@
                     <oitc-form-feedback [errors]="errors" errorField="pveApiTokenSecret"></oitc-form-feedback>
                 </div>
 
+                <div class="mb-3">
+                    <label cLabel for="post.pveNodeName">
+                        {{ t('Node Name') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.pveNodeName"
+                           type="text"
+                           name="post.pveNodeName"
+                           oitcFormError [errors]="errors" errorField="pveNodeName"
+                           [(ngModel)]="post.pveNodeName">
+                    <oitc-form-feedback [errors]="errors" errorField="pveNodeName"></oitc-form-feedback>
+                </div>
+
             </fieldset>
 
 
