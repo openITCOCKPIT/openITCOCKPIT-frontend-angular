@@ -33,7 +33,7 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
     CustomAlertRulesHistoryParams,
     CustomAlertsStateHistory,
@@ -107,6 +107,7 @@ export class CustomalertRulesHistoryComponent implements OnInit, OnDestroy, Inde
     protected params: CustomAlertRulesHistoryParams = getDefaultCustomAlertRulesHistoryParams();
     protected result?: CustomAlertsStateHistory;
     protected hideFilter: boolean = true;
+    private readonly route = inject(ActivatedRoute);
 
     public from: string = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
     public to: string = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
@@ -121,8 +122,14 @@ export class CustomalertRulesHistoryComponent implements OnInit, OnDestroy, Inde
     };
 
     public ngOnInit(): void {
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            // Here, params is an object containing the current query parameters.
+            // You can do something with these parameters here.
+            this.load();
+        }));
+
         this.loadCustomalertRules();
-        this.load();
+
     }
 
     public loadCustomalertRules = (): void => {
@@ -150,6 +157,7 @@ export class CustomalertRulesHistoryComponent implements OnInit, OnDestroy, Inde
         if (this.stateFilter[CustomAlertsState.ManuallyClosed]) {
             this.params['filter[CustomalertStatehistory.state][]'].push(CustomAlertsState.ManuallyClosed);
         }
+
         this.subscriptions.add(this.CustomAlertRulesService.getHistory(this.params)
             .subscribe((result: CustomAlertsStateHistory) => {
                 this.result = result;
@@ -210,7 +218,7 @@ export class CustomalertRulesHistoryComponent implements OnInit, OnDestroy, Inde
         this.hideFilter = !this.hideFilter;
     }
 
-    public onFilterChange(event: any) {
+    public onFilterChange(event: any): void {
         this.params.page = 1;
         this.load();
     }

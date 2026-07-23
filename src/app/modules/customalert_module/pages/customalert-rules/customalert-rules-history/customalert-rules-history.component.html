@@ -100,7 +100,7 @@
                                        [placeholder]="'Filter by comment' | transloco"
                                        cFormControl
                                        name="filter.CustomalertStatehistory.comment"
-                                       id="filter.CustomalertStatehistory.message"
+                                       id="filter.CustomalertStatehistory.comment"
                                        oitcDebounce
                                        type="text"
                                        [(ngModel)]="params['filter[CustomalertComments.comment]']"
@@ -112,17 +112,17 @@
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'compass-drafting']"></fa-icon>
                                 </span>
+
                                 <oitc-multi-select
-                                    name="filter.Hosts.container_id"
-                                    id="filter.Hosts.container_id"
+                                    name="filter.CustomalertRules"
+                                    id="filter.CustomalertRules"
                                     optionValue="key"
                                     optionLabel="value"
                                     [(ngModel)]="params['filter[CustomalertRules.id][]']"
-                                    (debouncedValue)="onFilterChange($event)"
-                                    oitcDebounce
                                     [options]="customAlertRules"
-                                    class="flex-1"
-                                    [appendTo]="''">
+                                    [debounce]="true"
+                                    (onChange)="onFilterChange(null)"
+                                    class="flex-1">
                                 </oitc-multi-select>
                             </c-input-group>
                         </c-col>
