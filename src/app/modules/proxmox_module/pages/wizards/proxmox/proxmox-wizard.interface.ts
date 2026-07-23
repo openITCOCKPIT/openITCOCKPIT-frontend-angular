@@ -5,6 +5,7 @@ export interface ProxmoxWizardGet extends WizardGet {
     pveUsername: string
     pveApiTokenName: string
     pveApiTokenSecret: string
+    pveNodeName: string
 }
 
 
@@ -13,5 +14,6 @@ export interface ProxmoxWizardPost extends WizardPost {
     pveUsername: string
     pveApiTokenName: string
     pveApiTokenSecret: string
+    pveNodeName: string
     storageServices: any[] | undefined
 }

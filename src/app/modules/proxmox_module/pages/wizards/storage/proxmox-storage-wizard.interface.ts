@@ -5,6 +5,7 @@ export interface ProxmoxStorageWizardGet extends WizardGet {
     pveUsername: string
     pveApiTokenName: string
     pveApiTokenSecret: string
+    pveNodeName: string
     storageServicetemplate: ServicetemplateForWizard
 }
 
@@ -14,6 +15,7 @@ export interface ProxmoxStorageWizardPost extends WizardPost {
     pveUsername: string
     pveApiTokenName: string
     pveApiTokenSecret: string
+    pveNodeName: string
 }
 
 
