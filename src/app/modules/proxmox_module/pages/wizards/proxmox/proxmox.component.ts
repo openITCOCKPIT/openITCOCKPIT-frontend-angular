@@ -66,6 +66,7 @@ export class ProxmoxComponent extends WizardsAbstractComponent {
         pveApiTokenName: '',
         pveApiTokenSecret: '',
         storageServices: [],
+        pveNodeName: '',
 // Default fields from the base wizard
         host_id: 0,
         services: [],
@@ -76,6 +77,7 @@ export class ProxmoxComponent extends WizardsAbstractComponent {
         this.post.pveUsername = result.pveUsername;
         this.post.pveApiTokenName = result.pveApiTokenName;
         this.post.pveApiTokenSecret = result.pveApiTokenSecret;
+        this.post.pveNodeName = result.pveNodeName;
         super.wizardLoad(result);
     }
 
