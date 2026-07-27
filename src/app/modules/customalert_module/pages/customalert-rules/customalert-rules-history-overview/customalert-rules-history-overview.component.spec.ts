@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CustomalertRulesHistoryComponent } from './customalert-rules-history.component';
+import { CustomalertRulesHistoryOverviewComponent } from './customalert-rules-history-overview.component';
 
 describe('CustomalertRulesHistoryComponent', () => {
-    let component: CustomalertRulesHistoryComponent;
-    let fixture: ComponentFixture<CustomalertRulesHistoryComponent>;
+    let component: CustomalertRulesHistoryOverviewComponent;
+    let fixture: ComponentFixture<CustomalertRulesHistoryOverviewComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CustomalertRulesHistoryComponent],
+            imports: [CustomalertRulesHistoryOverviewComponent],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(CustomalertRulesHistoryComponent);
+        fixture = TestBed.createComponent(CustomalertRulesHistoryOverviewComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

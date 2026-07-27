@@ -15,7 +15,7 @@ export const customalertModuleRoutes: Routes = [
     },
     {
         path: 'customalert_module/customalert_rules/history',
-        loadComponent: () => import('./pages/customalert-rules/customalert-rules-history/customalert-rules-history.component').then(m => m.CustomalertRulesHistoryComponent)
+        loadComponent: () => import('./pages/customalert-rules/customalert-rules-history-overview/customalert-rules-history-overview.component').then(m => m.CustomalertRulesHistoryOverviewComponent)
     },
     {
         path: 'customalert_module/customalert_rules/services/:id',
