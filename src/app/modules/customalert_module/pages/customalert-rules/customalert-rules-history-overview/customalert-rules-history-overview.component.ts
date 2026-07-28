@@ -27,17 +27,15 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { Sort } from '@angular/material/sort';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { isActive, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import {
     CustomAlertRulesHistoryParams,
     CustomAlertsStateHistory,
     getDefaultCustomAlertRulesHistoryParams
 } from '../customalert-rules.interface';
-import { IndexPage } from '../../../../../pages.interface';
 import { Subscription } from 'rxjs';
 import { CustomalertRulesService } from '../customalert-rules.service';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
@@ -46,10 +44,12 @@ import { DebounceDirective } from '../../../../../directives/debounce.directive'
 import { formatDate, NgClass } from '@angular/common';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import { HostBrowserTabs } from '../../../../../pages/hosts/hosts.enum';
 import {
     CustomalertsRulesHistoryComponent
 } from '../../../components/customalerts-rules-history/customalerts-rules-history.component';
+import {
+    CustomalertsRulesStatusDistributionComponent
+} from '../../../components/customalerts-rules-status-distribution/customalerts-rules-status-distribution.component';
 
 @Component({
     selector: 'oitc-customalert-rules-history',
@@ -80,13 +80,14 @@ import {
         TranslocoPipe,
         MultiSelectComponent,
         NgClass,
-        CustomalertsRulesHistoryComponent
+        CustomalertsRulesHistoryComponent,
+        CustomalertsRulesStatusDistributionComponent
     ],
     templateUrl: './customalert-rules-history-overview.component.html',
     styleUrl: './customalert-rules-history-overview.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomalertRulesHistoryOverviewComponent implements OnInit, OnDestroy, IndexPage {
+export class CustomalertRulesHistoryOverviewComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
     private readonly CustomAlertRulesService: CustomalertRulesService = inject(CustomalertRulesService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
@@ -114,10 +115,18 @@ export class CustomalertRulesHistoryOverviewComponent implements OnInit, OnDestr
     };
 
     @ViewChild(CustomalertsRulesHistoryComponent) CustomalertsRulesHistoryComponent!: CustomalertsRulesHistoryComponent;
+    @ViewChild(CustomalertsRulesStatusDistributionComponent) CustomalertsRulesStatusDistributionComponent!: CustomalertsRulesStatusDistributionComponent;
 
     public ngOnInit(): void {
         this.loadCustomalertRules();
+    }
 
+    public load() {
+        if (this.selectedTab === 'history') {
+            this.CustomalertsRulesHistoryComponent.load();
+        } else if (this.selectedTab === 'status_distribution') {
+            this.CustomalertsRulesStatusDistributionComponent.load();
+        }
     }
 
     public loadCustomalertRules = (): void => {
@@ -126,10 +135,6 @@ export class CustomalertRulesHistoryOverviewComponent implements OnInit, OnDestr
                 this.customAlertRules = result;
                 this.cdr.markForCheck();
             }));
-    }
-
-    protected load() {
-        console.log('Refresh right tab !!!');
     }
 
     public ngOnDestroy(): void {
@@ -143,7 +148,11 @@ export class CustomalertRulesHistoryOverviewComponent implements OnInit, OnDestr
 
     public onFilterChange(event: any): void {
         this.params.page = 1;
-        this.CustomalertsRulesHistoryComponent.load();
+        if (this.selectedTab === 'history') {
+            this.CustomalertsRulesHistoryComponent.load();
+        } else if (this.selectedTab === 'status_distribution') {
+            this.CustomalertsRulesStatusDistributionComponent.load();
+        }
     }
 
 
@@ -164,18 +173,17 @@ export class CustomalertRulesHistoryOverviewComponent implements OnInit, OnDestr
         this.params = getDefaultCustomAlertRulesHistoryParams();
         this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
-        this.CustomalertsRulesHistoryComponent.load();
-
+        this.cdr.markForCheck();
+        if (this.selectedTab === 'history') {
+            this.CustomalertsRulesHistoryComponent.load();
+        } else if (this.selectedTab === 'status_distribution') {
+            this.CustomalertsRulesStatusDistributionComponent.load();
+        }
     }
 
-    public onMassActionComplete() {
-    }
 
     public changeTab(newTab: string): void {
         this.selectedTab = newTab;
-    }
-
-    public onSortChange(sort: Sort) {
     }
 
     protected readonly CustomAlertsState = CustomAlertsState;

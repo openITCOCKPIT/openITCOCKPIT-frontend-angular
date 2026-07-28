@@ -250,12 +250,12 @@
             </c-nav>
             <!-- Daily alert status distribution -->
             @if (selectedTab == tabs.status_distribution) {
-
-                <div>
-
-                </div>
+                <oitc-customalerts-rules-status-distribution [params]="params" [stateFilter]="stateFilter"
+                                                             [from]="from"
+                                                             [to]="to">
+                </oitc-customalerts-rules-status-distribution>
             }
-
+            <!-- Custom alerts state history -->
             @if (selectedTab == tabs.history) {
                 <oitc-customalerts-rules-history [params]="params" [stateFilter]="stateFilter"
                                                  [from]="from"

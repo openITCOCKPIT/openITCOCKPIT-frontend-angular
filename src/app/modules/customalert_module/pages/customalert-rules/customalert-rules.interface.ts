@@ -125,8 +125,11 @@ export interface CustomAlertRulesHistoryParams {
 
 export interface CustomAlertsStateHistory extends PaginateOrScroll {
     customalertStatehistory: CustomalertStatehistory[]
-    customalertStateOverview: CustomalertStateOverview
     _csrfToken: any
+}
+
+export interface CustomalertStateOverviewData{
+    customalertStateOverview: CustomalertStateOverview
 }
 
 export interface CustomalertStateOverview {

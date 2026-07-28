@@ -9,7 +9,7 @@ import {
     CustomAlertRulesIndex,
     CustomAlertRulesIndexParams,
     CustomAlertRulesServicesParams,
-    CustomAlertsStateHistory,
+    CustomAlertsStateHistory, CustomalertStateOverview, CustomalertStateOverviewData,
     EditableCustomAlertRule
 } from './customalert-rules.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -47,6 +47,16 @@ export class CustomalertRulesService {
         )
     }
 
+    public getStatusDistribution(params: CustomAlertRulesHistoryParams): Observable<CustomalertStateOverviewData> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<CustomalertStateOverviewData>(`${proxyPath}/customalert_module/customalert_rules/statusDistribution.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
 
     public delete(item: DeleteAllItem): Observable<Object> {
         return this.http.post(`${this.proxyPath}/customalert_module/customalert_rules/delete/${item.id}.json`, {});

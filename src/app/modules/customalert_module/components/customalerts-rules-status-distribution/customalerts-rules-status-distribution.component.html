@@ -1,0 +1,14 @@
+<ng-container *transloco="let t">
+    @if (!result) {
+        <oitc-table-loader></oitc-table-loader>
+    }
+
+    @if (result) {
+        <oitc-customalerts-stacked-bar-echart
+            [barChartData]="result.customalertStateOverview"
+            [fromDate]="String(from() | date:'dd.MM.yyyy')"
+            [toDate]="String(to() | date:'dd.MM.yyyy')"
+        ></oitc-customalerts-stacked-bar-echart>
+
+    }
+</ng-container>

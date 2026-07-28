@@ -1,0 +1,147 @@
+<ng-container *transloco="let t">
+    @if (!result) {
+        <oitc-table-loader></oitc-table-loader>
+    }
+
+    @if (result) {
+        <table bordered cTable class="mt-2 mb-0" hover striped matSort
+               (matSortChange)="onSortChange($event)"
+               [matSortActive]="params().sort" [matSortDirection]="params().direction">
+            <thead>
+            <tr>
+                <th class="width-15" scope="col" mat-sort-header="CustomalertStatehistory.state">
+                    {{ t('State') }}
+                </th>
+                <th class="col-1" scope="col" mat-sort-header="CustomalertStatehistory.state_time">
+                    {{ t('State time') }}
+                </th>
+                <th scope="col" mat-sort-header="Hosts.name">
+                    {{ t('Host') }}
+                </th>
+                <th scope="col" mat-sort-header="servicename">
+                    {{ t('Service') }}
+                </th>
+                <th scope="col" mat-sort-header="full_name">
+                    {{ t('User') }}
+                </th>
+                <th scope="col" mat-sort-header="CustomalertComments.comment">
+                    {{ t('Comment') }}
+                </th>
+                <th scope="col" mat-sort-header="CustomalertComments.entry_time">
+                    {{ t('Comment entry time') }}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                @for (customAlert of result.customalertStatehistory; track customAlert; let idx = $index) {
+                    @if (idx === 0 || customAlert.stateDate !== result.customalertStatehistory[idx - 1].stateDate) {
+                        <tr>
+                            <td colspan="7" class="text-end text-primary fs-5">
+                                <fa-icon [icon]="['fas', 'calendar-day']"></fa-icon>
+                                {{ customAlert.stateDate }}
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td [title]="customAlert.stateInHuman" class="text-center">
+                            @switch (customAlert.state) {
+                                @case (0) {
+                                    <i class="fa-solid fa-fire-flame-curved flame"
+                                       [title]="customAlert.stateInHuman"></i>
+                                }
+                                @case (1) {
+                                    <i class="fa-solid fa-person-digging text-secondary"
+                                       [title]="customAlert.stateInHuman"></i>
+                                }
+                                @case (2) {
+                                    <i class="fa-solid fa-clipboard-check text-success"
+                                       [title]="customAlert.stateInHuman"></i>
+                                }
+                                @case (3) {
+                                    <i class="fa-solid fa-folder-closed text-primary"
+                                       [title]="customAlert.stateInHuman"></i>
+                                }
+                            }
+                        </td>
+                        <td [title]="customAlert.stateTime">
+                            {{ customAlert.stateTimeInHumanShort }}
+                        </td>
+                        <td>
+                            <oitc-label-link
+                                [objectId]="customAlert.Hosts.id"
+                                [route]="'/hosts/browser'"
+                                [permissions]="'hosts.browser'">
+                                {{ customAlert.Hosts.name }}
+                            </oitc-label-link>
+                        </td>
+                        <td>
+                            <oitc-label-link
+                                [objectId]="customAlert.Services.id"
+                                [route]="'/services/browser'"
+                                [permissions]="'hosts.browser'">
+                                {{ customAlert.servicename }}
+                            </oitc-label-link>
+                        </td>
+                        <td>
+                            @if (customAlert.full_name) {
+                                <oitc-label-link
+                                    [objectId]="customAlert.Users.id"
+                                    [route]="'/users/edit'"
+                                    [permissions]="'users.edit'">
+                                    {{ customAlert.full_name }}
+                                </oitc-label-link>
+                            }
+                        </td>
+                        <td>
+                            @if (customAlert.CustomalertComments.comment) {
+                                {{ customAlert.CustomalertComments.comment }}
+                            }
+                        </td>
+                        <td>
+                            {{ customAlert.CustomalertComments.entry_time }}
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (result && result.customalertStatehistory.length === 0) {
+            <oitc-no-records
+            ></oitc-no-records>
+        }
+
+        @if (result && result.customalertStatehistory) {
+            <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                         [fluid]="true">
+                <c-row>
+                    <c-col md="12">
+                        <div class="btn-group d-flex flex-row-reverse" role="group">
+                            <c-dropdown>
+                                <button cButton cDropdownToggle color="default">
+                                    {{ t('More actions') }}
+                                </button>
+                                <ul cDropdownMenu>
+                                    <li><a href="{{linkFor('csv')}}" cDropdownItem>
+                                        <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                        {{ t('List as csv') }}</a></li>
+                                </ul>
+                            </c-dropdown>
+                        </div>
+                    </c-col>
+                </c-row>
+            </c-container>
+        }
+
+        <c-container
+            [fluid]="true">
+            <c-row>
+                <c-col>
+                    @if (result) {
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                    }
+                </c-col>
+            </c-row>
+        </c-container>
+    }
+</ng-container>
