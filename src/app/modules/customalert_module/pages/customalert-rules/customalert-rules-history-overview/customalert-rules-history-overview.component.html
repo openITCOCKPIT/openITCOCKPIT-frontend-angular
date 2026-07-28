@@ -250,16 +250,21 @@
             </c-nav>
             <!-- Daily alert status distribution -->
             @if (selectedTab == tabs.status_distribution) {
-                <oitc-customalerts-rules-status-distribution [params]="params" [stateFilter]="stateFilter"
+                <oitc-customalerts-rules-status-distribution [params]="params"
+                                                             [stateFilter]="stateFilter"
                                                              [from]="from"
-                                                             [to]="to">
+                                                             [to]="to"
+                                                             [refresh]="refreshTrigger()"> <!-- DIESE ZEILE HIER HINZUFÜGEN -->
                 </oitc-customalerts-rules-status-distribution>
             }
+
             <!-- Custom alerts state history -->
             @if (selectedTab == tabs.history) {
-                <oitc-customalerts-rules-history [params]="params" [stateFilter]="stateFilter"
+                <oitc-customalerts-rules-history [params]="params"
+                                                 [stateFilter]="stateFilter"
                                                  [from]="from"
-                                                 [to]="to">
+                                                 [to]="to"
+                                                 [refresh]="refreshTrigger()"> <!-- HIER EBENFALLS HINZUFÜGEN -->
                 </oitc-customalerts-rules-history>
             }
 

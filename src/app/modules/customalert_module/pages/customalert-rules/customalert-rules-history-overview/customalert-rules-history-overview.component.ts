@@ -5,6 +5,7 @@ import {
     inject,
     OnDestroy,
     OnInit,
+    signal,
     ViewChild
 } from '@angular/core';
 import {
@@ -38,7 +39,6 @@ import {
 } from '../customalert-rules.interface';
 import { Subscription } from 'rxjs';
 import { CustomalertRulesService } from '../customalert-rules.service';
-import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { CustomAlertsIndexCustomAlertsStateFilter, CustomAlertsState } from '../../customalerts/customalerts.interface';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { formatDate, NgClass } from '@angular/common';
@@ -117,16 +117,14 @@ export class CustomalertRulesHistoryOverviewComponent implements OnInit, OnDestr
     @ViewChild(CustomalertsRulesHistoryComponent) CustomalertsRulesHistoryComponent!: CustomalertsRulesHistoryComponent;
     @ViewChild(CustomalertsRulesStatusDistributionComponent) CustomalertsRulesStatusDistributionComponent!: CustomalertsRulesStatusDistributionComponent;
 
+    public refreshTrigger = signal<number>(0);
+
     public ngOnInit(): void {
         this.loadCustomalertRules();
     }
 
     public load() {
-        if (this.selectedTab === 'history') {
-            this.CustomalertsRulesHistoryComponent.load();
-        } else if (this.selectedTab === 'status_distribution') {
-            this.CustomalertsRulesStatusDistributionComponent.load();
-        }
+        this.refreshTrigger.update(v => v + 1);
     }
 
     public loadCustomalertRules = (): void => {
@@ -147,21 +145,12 @@ export class CustomalertRulesHistoryOverviewComponent implements OnInit, OnDestr
     }
 
     public onFilterChange(event: any): void {
-        this.params.page = 1;
-        if (this.selectedTab === 'history') {
-            this.CustomalertsRulesHistoryComponent.load();
-        } else if (this.selectedTab === 'status_distribution') {
-            this.CustomalertsRulesStatusDistributionComponent.load();
-        }
+        this.params = {
+            ...this.params,
+            page: 1
+        };
     }
 
-
-    // Callback for Paginator or Scroll Index Component
-    public onPaginatorChange(change: PaginatorChangeEvent): void {
-        this.params.page = change.page;
-        this.params.scroll = change.scroll;
-        this.CustomalertsRulesHistoryComponent.load();
-    }
 
     public resetFilter() {
         this.stateFilter = {
@@ -175,9 +164,9 @@ export class CustomalertRulesHistoryOverviewComponent implements OnInit, OnDestr
         this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.cdr.markForCheck();
         if (this.selectedTab === 'history') {
-            this.CustomalertsRulesHistoryComponent.load();
+            //this.CustomalertsRulesHistoryComponent.load(this.params, this.stateFilter);
         } else if (this.selectedTab === 'status_distribution') {
-            this.CustomalertsRulesStatusDistributionComponent.load();
+            //this.CustomalertsRulesStatusDistributionComponent.load();
         }
     }
 

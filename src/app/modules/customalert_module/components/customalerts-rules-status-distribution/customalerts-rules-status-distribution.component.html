@@ -1,14 +1,19 @@
 <ng-container *transloco="let t">
-    @if (!result) {
+    <!-- Show the loader only during the very first, initial page load -->
+    @if (distributionResource.isLoading() && !stableResult()) {
         <oitc-table-loader></oitc-table-loader>
     }
 
-    @if (result) {
-        <oitc-customalerts-stacked-bar-echart
-            [barChartData]="result.customalertStateOverview"
-            [fromDate]="String(from() | date:'dd.MM.yyyy')"
-            [toDate]="String(to() | date:'dd.MM.yyyy')"
-        ></oitc-customalerts-stacked-bar-echart>
+    <!-- Use the stable buffered signal. 'result' remains identical for the chart component -->
+    @if (stableResult(); as result) {
 
+        <!-- Slightly dim the chart during background reloads (filtering/refreshing) for a smooth UX -->
+        <div [class.opacity-50]="distributionResource.status() === 'reloading'">
+            <oitc-customalerts-stacked-bar-echart
+                [barChartData]="result.customalertStateOverview"
+                [fromDate]="String(from() | date:'dd.MM.yyyy')"
+                [toDate]="String(to() | date:'dd.MM.yyyy')"
+            ></oitc-customalerts-stacked-bar-echart>
+        </div>
     }
 </ng-container>
