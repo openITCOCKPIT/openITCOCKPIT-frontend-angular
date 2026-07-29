@@ -29,7 +29,8 @@ export interface StatuspageProperties {
 export interface Item {
     type: string
     id: number
-    name: string
+    name: string,
+    tagstring?: string
     cumulatedStateName: string
     cumulatedColorId: number
     cumulatedColor: string
@@ -122,7 +123,8 @@ export interface SelectKeyValueExtended {
     value: string,
     id: number,
     _joinData: {
-        display_alias: ''
+        display_alias: '',
+        group_tags?: string | string[]| null
     }
 }
 

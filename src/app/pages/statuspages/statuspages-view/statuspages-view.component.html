@@ -124,7 +124,7 @@
                                         <div class="col-12 text-truncate h4">
                                             @if (this.PermissionsService.hasPermissionObservable(['hostgroups', 'extended'])|async) {
                                                 <a [routerLink]="['/', 'hostgroups', 'extended', item.id]">
-                                                    {{ item.name }}
+                                               {{ item.name }}
                                                 </a>
                                             } @else {
                                                 {{ item.name }}

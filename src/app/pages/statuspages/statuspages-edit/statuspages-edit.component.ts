@@ -24,7 +24,7 @@
  */
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -64,6 +64,7 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { intersection } from 'lodash';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
     selector: 'oitc-statuspages-edit',
@@ -97,7 +98,9 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         AsyncPipe,
         InputGroupTextDirective,
         ColComponent,
-        ObjectUuidComponent
+        ObjectUuidComponent,
+        NgSelectComponent,
+        TranslocoPipe
     ],
     templateUrl: './statuspages-edit.component.html',
     styleUrl: './statuspages-edit.component.css',
@@ -162,13 +165,16 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: ''}
+                        _joinData: {display_alias: '', group_tags: null}
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
                     if (selectedHostgroup) {
-                        objectEntry._joinData.display_alias = selectedHostgroup._joinData.display_alias
+                        console.log(selectedHostgroup)
+                        objectEntry._joinData.display_alias = selectedHostgroup._joinData.display_alias;
+                        objectEntry._joinData.group_tags = (typeof selectedHostgroup._joinData.group_tags === 'string') ? selectedHostgroup._joinData.group_tags.split(',') : null;
+
                     }
                     hostgroupObjects.push(objectEntry);
                 });
@@ -192,13 +198,14 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: ''}
+                        _joinData: {display_alias: '', group_tags: null}
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
                     if (selectedHost) {
-                        objectEntry._joinData.display_alias = selectedHost._joinData.display_alias
+                        objectEntry._joinData.display_alias = selectedHost._joinData.display_alias;
+                        objectEntry._joinData.group_tags = (typeof selectedHost._joinData.group_tags === 'string') ? selectedHost._joinData.group_tags.split(',') : null;
                     }
                     hostObjects.push(objectEntry);
                 });
@@ -223,13 +230,14 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: ''}
+                        _joinData: {display_alias: '', group_tags: null}
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value.servicename;
                     if (selectedService) {
-                        objectEntry._joinData.display_alias = selectedService._joinData.display_alias
+                        objectEntry._joinData.display_alias = selectedService._joinData.display_alias;
+                        objectEntry._joinData.group_tags = (typeof selectedService._joinData.group_tags === 'string') ? selectedService._joinData.group_tags.split(',') : null;
                     }
                     serviceObjects.push(objectEntry);
                 });
@@ -254,13 +262,14 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: ''}
+                        _joinData: {display_alias: '', group_tags: null}
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
                     if (selectedServicegroup) {
                         objectEntry._joinData.display_alias = selectedServicegroup._joinData.display_alias
+                        objectEntry._joinData.group_tags = (typeof selectedServicegroup._joinData.group_tags === 'string') ? selectedServicegroup._joinData.group_tags.split(',') : null;
                     }
                     servicegroupsObjects.push(objectEntry);
                 });
@@ -402,6 +411,11 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                 return;
             }
         });
+
+        this.post.hostgroups = this.normalizeGroupTags(this.post.hostgroups);
+        this.post.hosts = this.normalizeGroupTags(this.post.hosts);
+        this.post.servicegroups = this.normalizeGroupTags(this.post.servicegroups);
+        this.post.services = this.normalizeGroupTags(this.post.services);
     }
 
     private cleanUpForSubmit = () => {
@@ -421,6 +435,18 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
             this.services.map(service => service.key),
             this.post.selected_services._ids
         );
+    }
+
+    private normalizeGroupTags(items: any[]): any[] {
+        return items.map(item => ({
+            ...item,
+            _joinData: {
+                ...item._joinData,
+                group_tags: Array.isArray(item._joinData?.group_tags)
+                    ? item._joinData.group_tags.join(',')
+                    : (item._joinData?.group_tags ?? null)
+            }
+        }));
     }
 
     public onPublicIdentifierInputChange(event: Event) {
