@@ -56,7 +56,10 @@ export interface PlannedDowntimeDaum {
 }
 
 export interface GroupedItem {
-    key: string;
+    group: string
+    colorId: number
+    cumulatedColor: string
+    isUngrouped: boolean
     items: Item[];
 }
 

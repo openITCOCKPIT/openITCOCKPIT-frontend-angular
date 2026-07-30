@@ -171,7 +171,6 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
                     if (selectedHostgroup) {
-                        console.log(selectedHostgroup)
                         objectEntry._joinData.display_alias = selectedHostgroup._joinData.display_alias;
                         objectEntry._joinData.group_tags = (typeof selectedHostgroup._joinData.group_tags === 'string') ? selectedHostgroup._joinData.group_tags.split(',') : [];
 
