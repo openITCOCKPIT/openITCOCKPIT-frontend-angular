@@ -75,6 +75,7 @@ export class ChangecalendarsCalendarEditorComponent {
         return this._initialView;
     }
 
+    @Output() datesSet = new EventEmitter<any>();
     @Output() eventsChange = new EventEmitter<CalendarEvent[]>();
     @Output() eventClick = new EventEmitter<EventClickArg>();
     @Output() onCreateClick = new EventEmitter<any>();
@@ -143,9 +144,14 @@ export class ChangecalendarsCalendarEditorComponent {
         this.cdr.detectChanges(); // workaround for pressionChangedAfterItHasBeenCheckedError
     }
 
+    /**
+     * When you browse the calendar, FullCalendar emits the datesSet callback.
+     * This is used to make the editor fetch the events for the new date range.
+     * @param dateInfo
+     */
     public handleDatesSet(dateInfo: { startStr: string, endStr: string, start: Date, end: Date, view: any }) {
         this.calendarOptions.update(options => ({...options, events: this.events}));
-        this.eventsChange.emit(this.events);
+        this.datesSet.emit(dateInfo);
     }
 
 }
