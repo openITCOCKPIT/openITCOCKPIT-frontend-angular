@@ -13,51 +13,43 @@ import {
     FormControlDirective,
     FormDirective,
     FormLabelDirective,
-    InputGroupComponent,
     NavComponent,
     NavItemComponent,
     RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormsModule } from '@angular/forms';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { RouterLink } from '@angular/router';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import {
-    UserAddContainerRolePermission,
-    UserContainerPermission,
-    UserDefaultTemplatesParams,
-    UserLocaleOption,
-    UserPost,
-    UserTimezonesSelect
-} from '../users.interface';
-import { Subscription } from 'rxjs';
-import { UsersService } from '../users.service';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { HistoryService } from '../../../history.service';
-import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
+import { FormsModule } from '@angular/forms';
+import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
-import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { UserDefaultTemplatesPost, } from '../user-default-templates.interface';
+import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
+import { Subscription } from 'rxjs';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+import { RouterLink } from '@angular/router';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
-import { AsyncPipe, NgClass } from '@angular/common';
-import { ProfileService } from '../../profile/profile.service';
-import { PermissionLevel } from '../permission-level';
-import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { UsersService } from '../../users/users.service';
+import { UsergroupsService } from '../../usergroups/usergroups.service';
+import { HistoryService } from '../../../history.service';
+import { PermissionLevel } from '../../users/permission-level';
 import { ROOT_CONTAINER } from '../../changelogs/object-types.enum';
-import { MultiSelectChangeEvent } from 'primeng/types/multiselect';
-import { UserDefaultTemplatesPost } from '../../userdefaulttemplates/user-default-templates.interface';
+import { UserDefaultTemplatesService } from '../user-default-templates.service';
+import { LoadLdapgroups } from '../../usergroups/usergroups.interface';
+import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
+import { TrueFalseDirective } from '../../../directives/true-false.directive';
+import { UserContainerPermission, UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
+import { ContainersService } from '../../containers/containers.service';
 
 @Component({
-    selector: 'oitc-users-add',
+    selector: 'oitc-user-default-templates-add',
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -83,35 +75,27 @@ import { UserDefaultTemplatesPost } from '../../userdefaulttemplates/user-defaul
         SelectComponent,
         FormCheckComponent,
         FormCheckLabelDirective,
-        TrueFalseDirective,
         FormControlDirective,
-        SliderTimeComponent,
         NgOptionTemplateDirective,
         NgSelectComponent,
         NgOptionHighlightDirective,
         RowComponent,
         ColComponent,
-        InputGroupComponent,
-        NgClass,
-        BadgeOutlineComponent,
-        AsyncPipe,
-        TranslocoPipe
+        SliderTimeComponent,
+        TrueFalseDirective
     ],
-    templateUrl: './users-add.component.html',
-    styleUrl: './users-add.component.css',
+    templateUrl: './user-default-templates-add.component.html',
+    styleUrl: './user-default-templates-add.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UsersAddComponent implements OnInit, OnDestroy {
-
+export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
     public createAnother: boolean = false;
-    public post: UserPost = this.getDefaultPost();
+    public post: UserDefaultTemplatesPost = this.getDefaultPost();
     public errors: GenericValidationError | null = null;
 
-    public usercontainerroles: SelectKeyValue[] = [];
     public usergroups: SelectKeyValue[] = [];
     public containers: SelectKeyValue[] = [];
-    public userDefaultTemplates: SelectKeyValue[] = [];
-    public userDefaultTemplateDetails: UserDefaultTemplatesPost[] = [];
+    public filteredContainersByContainerIds: SelectKeyValue[] = [];
     public localeOptions: UserLocaleOption[] = [];
     public dateformats: SelectKeyValueString[] = [];
     public timezones: UserTimezonesSelect[] = [];
@@ -120,38 +104,40 @@ export class UsersAddComponent implements OnInit, OnDestroy {
 
     public selectedUserContainers: number[] = [];
     public selectedUserContainerWithPermission: UserContainerPermission[] = [];
-    public userContainerRoleContainerPermissions: UserAddContainerRolePermission[] = [];
+    protected ldapGroups: SelectKeyValue[] = [];
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
 
     private subscriptions: Subscription = new Subscription();
     private readonly UsersService: UsersService = inject(UsersService);
-    private readonly ProfileService: ProfileService = inject(ProfileService);
+    private readonly UserDefaultTemplatesService: UserDefaultTemplatesService = inject(UserDefaultTemplatesService);
+    private readonly UsergroupsService: UsergroupsService = inject(UsergroupsService);
+    private readonly ContainersService = inject(ContainersService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
-        this.loadContainerRoles('');
-        this.loadContainer();
+        this.loadLdapGroups('');
+        this.loadContainers();
         this.loadUsergroups();
         this.loadDateformats();
         this.loadLocaleOptions();
-        this.loadUserDefaultTemplates();
     }
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
 
-    private getDefaultPost(): UserPost {
+    private getDefaultPost(): UserDefaultTemplatesPost {
+
+        this.selectedUserContainers = [];
+        this.selectedUserContainerWithPermission = [];
+
         return {
-            firstname: '',
-            lastname: '',
-            email: '',
-            phone: '',
-            is_active: 1,
+            name: '',
+            description: '',
             showstatsinmenu: 0,
             paginatorlength: 25,
             dashboard_tab_rotation: 0,
@@ -159,33 +145,29 @@ export class UsersAddComponent implements OnInit, OnDestroy {
             dateformat: 'H:i:s - d.m.Y',
             timezone: 'Europe/Berlin',
             i18n: 'en_US',
-            password: '',
-            confirm_password: '',
             is_oauth: false,
             usergroup_id: 0,
-            usercontainerroles: {
+            UserDefaultTemplatesToUserContainers: {},
+            ldapgroups: {
                 _ids: []
             },
-            ContainersUsersMemberships: {},
-            apikeys: [],
-            container_id: 0,
-            user_default_template_id: 0
-        }
+            containers: {
+                _ids: []
+            },
+            container_id: 0
+        };
     }
 
-    public loadContainerRoles = (searchString: string): void => {
-        let selected = this.post.usercontainerroles._ids;
-
-        this.subscriptions.add(this.UsersService.loadUserContainerRoles(searchString, selected)
-            .subscribe((result) => {
-                this.usercontainerroles = result;
-                this.cdr.markForCheck();
-            }));
-    }
-
-    public loadContainer() {
+    private loadContainers(): void {
         this.subscriptions.add(this.UsersService.loadContainersForAngular().subscribe((result) => {
             this.containers = result.containers;
+            this.cdr.markForCheck();
+        }));
+    }
+
+    public loadContainersByContainerIds(containerIds: number[]) {
+        this.subscriptions.add(this.ContainersService.loadContainersByContainerIds(containerIds).subscribe((result) => {
+            this.filteredContainersByContainerIds = result.containers;
             this.cdr.markForCheck();
         }));
     }
@@ -215,51 +197,7 @@ export class UsersAddComponent implements OnInit, OnDestroy {
         }));
     }
 
-
-    public addApikey(): void {
-        this.subscriptions.add(this.ProfileService.generateNewApiKey()
-            .subscribe((result) => {
-                this.post.apikeys = [...this.post.apikeys, result];
-                this.cdr.markForCheck();
-            })
-        );
-    }
-
-    public removeApikey(index: number): void {
-        this.post.apikeys.splice(index, 1);
-        this.cdr.markForCheck();
-    }
-
-    public refreshApiKey(index: number): void {
-        this.subscriptions.add(this.ProfileService.generateNewApiKey()
-            .subscribe((result) => {
-                this.post.apikeys[index].apikey = result.apikey;
-
-                // Get a new reference to trigger the change detection
-                this.post.apikeys = [...this.post.apikeys];
-
-                this.cdr.markForCheck();
-            })
-        );
-    }
-
-    public onUsercontainerrolesSelectChange(event: any) {
-        // Called when an usercontainerrole is selected or unselected
-
-        if (this.post.usercontainerroles._ids.length === 0) {
-            this.userContainerRoleContainerPermissions = [];
-            this.cdr.markForCheck();
-            return;
-        }
-
-        this.subscriptions.add(this.UsersService.loadContainerPermissions(this.post.usercontainerroles._ids).subscribe((result) => {
-            this.userContainerRoleContainerPermissions = result;
-            this.cdr.markForCheck();
-        }));
-    }
-
     public onSelectedContainerIdsChange(event: any) {
-
         // Called when a container is selected or unselected
         if (this.selectedUserContainers.length === 0) {
             // No user containers selected
@@ -302,7 +240,7 @@ export class UsersAddComponent implements OnInit, OnDestroy {
     }
 
     private getContainerName(containerId: number): string {
-        const container = this.containers.find(container => container.key === containerId);
+        const container = this.filteredContainersByContainerIds.find(container => container.key === containerId);
         if (container) {
             return container.value;
         }
@@ -311,34 +249,29 @@ export class UsersAddComponent implements OnInit, OnDestroy {
 
     public submit() {
 
-        let ContainersUsersMemberships: { [key: number]: PermissionLevel } = {};
+        let ContainersUserDefaultTemplatesMemberships: { [key: number]: PermissionLevel } = {};
         this.selectedUserContainerWithPermission.forEach(container => {
-            ContainersUsersMemberships[container.container_id] = container.permission_level;
+            ContainersUserDefaultTemplatesMemberships[container.container_id] = container.permission_level;
         });
-        this.post.ContainersUsersMemberships = ContainersUsersMemberships;
+        this.post.UserDefaultTemplatesToUserContainers = ContainersUserDefaultTemplatesMemberships;
 
-        if (this.post.is_oauth) {
-            //oAuth 2 users don't have a password
-            this.post.password = '';
-            this.post.confirm_password = '';
-        }
-
-        this.subscriptions.add(this.UsersService.add(this.post)
+        this.subscriptions.add(this.UserDefaultTemplatesService.add(this.post)
             .subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('User');
+                    const title = this.TranslocoService.translate('User Default Template');
                     const msg = this.TranslocoService.translate('created successfully');
-                    const url = ['users', 'edit', response.id];
+                    const url = ['userDefaultTemplates', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/users/index']);
+                        this.HistoryService.navigateWithFallback(['/userDefaultTemplates/index']);
                         return;
                     }
                     this.post = this.getDefaultPost();
+                    this.loadLdapGroups('');
                     this.notyService.scrollContentDivToTop();
                     this.errors = null;
                     return;
@@ -353,45 +286,19 @@ export class UsersAddComponent implements OnInit, OnDestroy {
             }));
     }
 
-    public loadUserDefaultTemplates() {
-
-        let params: UserDefaultTemplatesParams = {
-            angular: true,
-            'ldapgroupIds[]': []
+    protected loadLdapGroups = (search: string = '') => {
+        let selected: number[] = [];
+        if (this.post.ldapgroups && this.post.ldapgroups._ids) {
+            selected = this.post.ldapgroups._ids;
         }
-
-        this.subscriptions.add(this.UsersService.loadUserDefaultTemplates(params).subscribe((result) => {
-            this.userDefaultTemplates = result.userDefaultTemplates;
-            this.userDefaultTemplateDetails = result.userDefaultTemplateDetails;
+        this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search, selected).subscribe((ldapgroups: LoadLdapgroups) => {
+            this.ldapGroups = ldapgroups.ldapgroups;
             this.cdr.markForCheck();
         }));
     }
 
-    public onUserDefaultTemplateChange(event: MultiSelectChangeEvent) {
-        let selectedUserDefaultTemplate = this.userDefaultTemplateDetails[event.value];
-        this.post.usergroup_id = selectedUserDefaultTemplate.usergroup_id;
-        this.post.container_id = selectedUserDefaultTemplate.container_id;
-        this.post.is_oauth = selectedUserDefaultTemplate.is_oauth
-        this.post.paginatorlength = selectedUserDefaultTemplate.paginatorlength;
-        this.post.showstatsinmenu = selectedUserDefaultTemplate.showstatsinmenu;
-        this.post.recursive_browser = selectedUserDefaultTemplate.recursive_browser;
-        this.post.dashboard_tab_rotation = selectedUserDefaultTemplate.dashboard_tab_rotation;
-        this.post.dateformat = selectedUserDefaultTemplate.dateformat;
-        this.post.timezone = selectedUserDefaultTemplate.timezone;
-        this.post.i18n = selectedUserDefaultTemplate.i18n;
-
-        if (selectedUserDefaultTemplate.user_containers) {
-            this.selectedUserContainers = selectedUserDefaultTemplate.user_containers._ids;
-            for (let containerId in selectedUserDefaultTemplate.UserDefaultTemplatesToUserContainers) {
-                this.selectedUserContainerWithPermission.push({
-                    container_id: Number(containerId),
-                    container_name: this.getContainerName(Number(containerId)),
-                    permission_level: selectedUserDefaultTemplate.UserDefaultTemplatesToUserContainers[containerId]
-                });
-            }
-            this.onSelectedContainerIdsChange(null);
-        }
-        this.cdr.markForCheck();
+    public onContainerChange(): void {
+        this.loadContainersByContainerIds(this.post.containers._ids);
     }
 
     protected readonly PermissionLevel = PermissionLevel;

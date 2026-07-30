@@ -58,6 +58,27 @@
                     </c-nav>
                 </c-card-header>
                 <c-card-body>
+
+                    <div class="mb-3">
+                        <label cLabel for="post.user_default_template_id">
+                            {{ t('User Default Template') }}
+                        </label>
+                        <oitc-select
+                            name="post.user_default_template_id"
+                            id="post.user_default_template_id"
+                            [placeholder]="'Please choose' | transloco"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.user_default_template_id"
+                            [options]="userDefaultTemplates"
+                            (onChange)="onUserDefaultTemplateChange($event)"
+                            oitcFormError [errors]="errors" errorField="post.user_default_template_id">
+                        </oitc-select>
+
+                        <oitc-form-feedback [errors]="errors"
+                                            errorField="post.user_default_template_id"></oitc-form-feedback>
+                    </div>
+
                     @if (isLdapUser) {
                         <div class="mb-3">
                             <!-- We do not submit this data, the UsersController will ask the LDAP server again so no manipulations could occur -->
@@ -241,6 +262,7 @@
                             </c-col>
                         }
                     </c-row>
+
                     <div class="mb-3">
                         <label cLabel for="selectedContainerIds" class="hintmark">
                             {{ t('Container') }}
@@ -345,6 +367,26 @@
                                 {{ t('Fall back user role that is used by the system, when no user role assignment through LDAP is possible.') }}
                             </div>
                         }
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="post.container_id">
+                            {{ t('Fallback Container') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <oitc-select
+                            name="post.container_id"
+                            id="post.container_id"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.container_id"
+                            [options]="containers"
+                            oitcFormError [errors]="errors" errorField="container_id">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                        <div class="help-block text-info">
+                            <fa-icon [icon]="['fas', 'info-circle']"/>
+                            {{ t('Fall back container that is used by the system, when no container role assignment through LDAP is possible and no other container roles or containers are available.') }}
+                        </div>
                     </div>
                     <div class="mb-3">
                         <c-form-check>

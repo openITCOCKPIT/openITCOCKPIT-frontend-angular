@@ -19,7 +19,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsercontainerrolesService } from '../usercontainerroles.service';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
@@ -91,6 +91,7 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
     private readonly ContainersService = inject(ContainersService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
     public post = this.getClearForm();
     public createAnother: boolean = false;
     public PermissionsService: PermissionsService = inject(PermissionsService);
@@ -101,11 +102,18 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
     public ldapgroups: SelectKeyValue[] = [];
     public isLdapAuth: boolean = false;
     protected readonly ROOT_CONTAINER = ROOT_CONTAINER;
+    private preselectedLdapgroupIds: number[] = [];
 
     private cdr = inject(ChangeDetectorRef);
     public errors: GenericValidationError | null = null;
 
     public ngOnInit(): void {
+
+        const ldapgroupIds = this.route.snapshot.paramMap.get('ldapgroupIds');
+        if (ldapgroupIds) {
+            this.preselectedLdapgroupIds = ldapgroupIds.split(',').map(Number);
+        }
+
         this.loadContainers();
         this.loadLdapGroups('');
     }
@@ -122,6 +130,11 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.UsercontainerrolesService.loadLdapGroups(searchString).subscribe((result) => {
             this.isLdapAuth = result.isLdapAuth;
             this.ldapgroups = result.ldapgroups;
+
+            // Preselect ldapgroups if they were passed in the URL.
+            if (this.preselectedLdapgroupIds.length) {
+                this.post.ldapgroups._ids = this.preselectedLdapgroupIds;
+            }
             this.cdr.markForCheck();
         }));
     }

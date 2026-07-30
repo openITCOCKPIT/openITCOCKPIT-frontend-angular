@@ -37,6 +37,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import {
     UserAddContainerRolePermission,
     UserContainerPermission,
+    UserDefaultTemplatesParams,
     UserLocaleOption,
     UserPost,
     UsersLdapUserDetails,
@@ -59,6 +60,8 @@ import { LdapConfig } from '../../contacts/contacts.interface';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
 import _ from 'lodash';
 import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
+import { UserDefaultTemplatesPost } from '../../userdefaulttemplates/user-default-templates.interface';
+import { MultiSelectChangeEvent } from 'primeng/types/multiselect';
 
 @Component({
     selector: 'oitc-users-ldap',
@@ -119,6 +122,8 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
     public usercontainerroles: SelectKeyValue[] = [];
     public usergroups: SelectKeyValue[] = [];
     public containers: SelectKeyValue[] = [];
+    public userDefaultTemplates: SelectKeyValue[] = [];
+    public userDefaultTemplateDetails: UserDefaultTemplatesPost[] = [];
     public localeOptions: UserLocaleOption[] = [];
     public dateformats: SelectKeyValueString[] = [];
     public timezones: UserTimezonesSelect[] = [];
@@ -196,7 +201,9 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
                 _ids: []
             },
             ContainersUsersMemberships: {},
-            apikeys: []
+            apikeys: [],
+            container_id: 0,
+            user_default_template_id: 0
         };
     }
 
@@ -342,6 +349,8 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
                 // Store permissions for the read / write radio buttons
                 this.userContainerRoleContainerPermissionsLdap = result.userContainerRoleContainerPermissionsLdapArray || [];
 
+                this.loadUserDefaultTemplates();
+
                 this.cdr.markForCheck();
             }));
         }
@@ -454,6 +463,59 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
                     this.errors = errorResponse;
                 }
             }));
+    }
+
+    public loadUserDefaultTemplates() {
+        if (this.ldapUserDetails?.ldapgroups && this.ldapUserDetails.ldapgroups.length > 0) {
+
+            let ldapgroups: number[] = [];
+            for (let ldapgroup of this.ldapUserDetails.ldapgroups) {
+                ldapgroups.push(ldapgroup.id);
+            }
+
+            let params: UserDefaultTemplatesParams = {
+                angular: true,
+                'ldapgroupIds[]': ldapgroups
+            }
+
+            this.subscriptions.add(this.UsersService.loadUserDefaultTemplates(params).subscribe((result) => {
+                this.userDefaultTemplates = result.userDefaultTemplates;
+                this.userDefaultTemplateDetails = result.userDefaultTemplateDetails;
+                // preselect first user default template if available
+                if (this.userDefaultTemplates.length) {
+                    this.post.user_default_template_id = this.userDefaultTemplates[0].key
+                    this.onUserDefaultTemplateChange({value: this.post.user_default_template_id} as MultiSelectChangeEvent);
+                }
+                this.cdr.markForCheck();
+            }));
+        }
+    }
+
+    public onUserDefaultTemplateChange(event: MultiSelectChangeEvent) {
+        let selectedUserDefaultTemplate = this.userDefaultTemplateDetails[event.value];
+        this.post.usergroup_id = selectedUserDefaultTemplate.usergroup_id;
+        this.post.container_id = selectedUserDefaultTemplate.container_id;
+        this.post.is_oauth = selectedUserDefaultTemplate.is_oauth;
+        this.post.paginatorlength = selectedUserDefaultTemplate.paginatorlength;
+        this.post.showstatsinmenu = selectedUserDefaultTemplate.showstatsinmenu;
+        this.post.recursive_browser = selectedUserDefaultTemplate.recursive_browser;
+        this.post.dashboard_tab_rotation = selectedUserDefaultTemplate.dashboard_tab_rotation;
+        this.post.dateformat = selectedUserDefaultTemplate.dateformat;
+        this.post.timezone = selectedUserDefaultTemplate.timezone;
+        this.post.i18n = selectedUserDefaultTemplate.i18n;
+
+        if (selectedUserDefaultTemplate.user_containers) {
+            this.selectedUserContainers = selectedUserDefaultTemplate.user_containers._ids;
+            for (let containerId in selectedUserDefaultTemplate.UserDefaultTemplatesToUserContainers) {
+                this.selectedUserContainerWithPermission.push({
+                    container_id: Number(containerId),
+                    container_name: this.getContainerName(Number(containerId)),
+                    permission_level: selectedUserDefaultTemplate.UserDefaultTemplatesToUserContainers[containerId]
+                });
+            }
+            this.onSelectedContainerIdsChange(null);
+        }
+        this.cdr.markForCheck();
     }
 
     protected readonly PermissionLevel = PermissionLevel;

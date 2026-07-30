@@ -39,6 +39,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import {
     UserAddContainerRolePermission,
     UserContainerPermission,
+    UserDefaultTemplatesParams,
     UserLocaleOption,
     UserPost,
     UsersLdapUserDetails,
@@ -62,6 +63,8 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
+import { MultiSelectChangeEvent } from 'primeng/types/multiselect';
+import { UserDefaultTemplatesPost } from '../../userdefaulttemplates/user-default-templates.interface';
 
 @Component({
     selector: 'oitc-users-edit',
@@ -127,6 +130,8 @@ export class UsersEditComponent implements OnInit, OnDestroy {
     public usercontainerroles: SelectKeyValue[] = [];
     public usergroups: SelectKeyValue[] = [];
     public containers: SelectKeyValue[] = [];
+    public userDefaultTemplates: SelectKeyValue[] = [];
+    public userDefaultTemplateDetails: UserDefaultTemplatesPost[] = [];
     public containerIdsWithWritePermissions: number[] = [];
     public localeOptions: UserLocaleOption[] = [];
     public dateformats: SelectKeyValueString[] = [];
@@ -141,6 +146,7 @@ export class UsersEditComponent implements OnInit, OnDestroy {
     public selectedUserRoleThroughLdap: number = 0;
 
     public selectedUserContainers: number[] = [];
+    public selectedUserDefaultTemplate: number = 0;
     public selectedUserContainerWithPermission: UserContainerPermission[] = [];
     public userContainerRoleContainerPermissions: UserAddContainerRolePermission[] = [];
 
@@ -279,6 +285,7 @@ export class UsersEditComponent implements OnInit, OnDestroy {
 
                 this.loadContainerRoles('');
                 this.onUsercontainerrolesSelectChange(null);
+                this.loadUserDefaultTemplates();
 
                 this.cdr.markForCheck();
 
@@ -471,6 +478,64 @@ export class UsersEditComponent implements OnInit, OnDestroy {
                     this.errors = errorResponse;
                 }
             }));
+    }
+
+    public loadUserDefaultTemplates() {
+        if (this.post) {
+            let params: UserDefaultTemplatesParams = {
+                angular: true,
+                'ldapgroupIds[]': []
+            }
+
+            if (this.isLdapUser) {
+                if (this.ldapUserDetails?.ldapgroups && this.ldapUserDetails.ldapgroups.length > 0) {
+                    let ldapgroups: number[] = [];
+                    for (let ldapgroup of this.ldapUserDetails.ldapgroups) {
+                        ldapgroups.push(ldapgroup.id);
+                    }
+
+                    params = {
+                        angular: true,
+                        'ldapgroupIds[]': ldapgroups
+                    }
+                }
+            }
+
+            this.subscriptions.add(this.UsersService.loadUserDefaultTemplates(params).subscribe((result) => {
+                this.userDefaultTemplates = result.userDefaultTemplates;
+                this.userDefaultTemplateDetails = result.userDefaultTemplateDetails;
+                this.cdr.markForCheck();
+            }));
+        }
+    }
+
+    public onUserDefaultTemplateChange(event: MultiSelectChangeEvent) {
+        if (this.post) {
+            let selectedUserDefaultTemplate = this.userDefaultTemplateDetails[event.value];
+            this.post.usergroup_id = selectedUserDefaultTemplate.usergroup_id;
+            this.post.container_id = selectedUserDefaultTemplate.container_id;
+            this.post.is_oauth = selectedUserDefaultTemplate.is_oauth;
+            this.post.paginatorlength = selectedUserDefaultTemplate.paginatorlength;
+            this.post.showstatsinmenu = selectedUserDefaultTemplate.showstatsinmenu;
+            this.post.recursive_browser = selectedUserDefaultTemplate.recursive_browser;
+            this.post.dashboard_tab_rotation = selectedUserDefaultTemplate.dashboard_tab_rotation;
+            this.post.dateformat = selectedUserDefaultTemplate.dateformat;
+            this.post.timezone = selectedUserDefaultTemplate.timezone;
+            this.post.i18n = selectedUserDefaultTemplate.i18n;
+
+            if (selectedUserDefaultTemplate.user_containers) {
+                this.selectedUserContainers = selectedUserDefaultTemplate.user_containers._ids;
+                for (let containerId in selectedUserDefaultTemplate.UserDefaultTemplatesToUserContainers) {
+                    this.selectedUserContainerWithPermission.push({
+                        container_id: Number(containerId),
+                        container_name: this.getContainerName(Number(containerId)),
+                        permission_level: selectedUserDefaultTemplate.UserDefaultTemplatesToUserContainers[containerId]
+                    });
+                }
+                this.onSelectedContainerIdsChange(null);
+            }
+            this.cdr.markForCheck();
+        }
     }
 
     protected readonly PermissionLevel = PermissionLevel;
