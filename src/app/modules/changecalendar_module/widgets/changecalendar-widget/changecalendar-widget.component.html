@@ -32,7 +32,8 @@
                                                 <oitc-changecalendars-calendar
                                                     [(events)]="events"
                                                     [initialView]="widgetConfig.displayType"
-                                                    (eventClick)="toggleChangecalendarModal($event)"/>
+                                                    (eventClick)="toggleChangecalendarModal($event)"
+                                                    (datesSet)="datesSet($event)"/>
                                             }
                                         </c-col>
                                     </c-row>

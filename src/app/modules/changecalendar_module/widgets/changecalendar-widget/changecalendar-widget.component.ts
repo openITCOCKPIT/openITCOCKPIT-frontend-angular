@@ -73,6 +73,8 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
     private readonly ChangeCalendarWidgetService: ChangecalendarWidgetService = inject(ChangecalendarWidgetService);
     private readonly ModalService: ModalService = inject(ModalService);
     private readonly TimezoneService: TimezoneService = inject(TimezoneService);
+    private start: string = '';
+    private end: string = '';
 
 
     public changeCalendarId: number | null = null;
@@ -152,7 +154,7 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
         if (this.widget) {
             let widgetId = this.widget.id;
             this.subscriptions.add(
-                this.ChangeCalendarWidgetService.loadWidgetConfig(widgetId).subscribe((response: ChangecalendarWidgetResponse) => {
+                this.ChangeCalendarWidgetService.loadWidgetConfig(widgetId, this.start, this.end).subscribe((response: ChangecalendarWidgetResponse) => {
                     this.EditableChangecalendar = response;
 
                     // Put data to POSTable object.
@@ -246,5 +248,17 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
             this.show = false;
             this.cdr.markForCheck();
         }
+    }
+
+    /**
+     * I hook to datesSet from FullCalendar. If the displayed range changes, I fetch the events for the new range.
+     * @see https://fullcalendar.io/docs/datesSet
+     * @param event
+     */
+    public datesSet(event: any): void {
+        this.start = event.startStr;
+        this.end = event.endStr;
+
+        this.load();
     }
 }
