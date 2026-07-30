@@ -173,7 +173,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                     if (selectedHostgroup) {
                         console.log(selectedHostgroup)
                         objectEntry._joinData.display_alias = selectedHostgroup._joinData.display_alias;
-                        objectEntry._joinData.group_tags = (typeof selectedHostgroup._joinData.group_tags === 'string') ? selectedHostgroup._joinData.group_tags.split(',') : null;
+                        objectEntry._joinData.group_tags = (typeof selectedHostgroup._joinData.group_tags === 'string') ? selectedHostgroup._joinData.group_tags.split(',') : [];
 
                     }
                     hostgroupObjects.push(objectEntry);
@@ -205,7 +205,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                     objectEntry.value = item.value;
                     if (selectedHost) {
                         objectEntry._joinData.display_alias = selectedHost._joinData.display_alias;
-                        objectEntry._joinData.group_tags = (typeof selectedHost._joinData.group_tags === 'string') ? selectedHost._joinData.group_tags.split(',') : null;
+                        objectEntry._joinData.group_tags = (typeof selectedHost._joinData.group_tags === 'string') ? selectedHost._joinData.group_tags.split(',') : [];
                     }
                     hostObjects.push(objectEntry);
                 });
@@ -237,7 +237,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                     objectEntry.value = item.value.servicename;
                     if (selectedService) {
                         objectEntry._joinData.display_alias = selectedService._joinData.display_alias;
-                        objectEntry._joinData.group_tags = (typeof selectedService._joinData.group_tags === 'string') ? selectedService._joinData.group_tags.split(',') : null;
+                        objectEntry._joinData.group_tags = (typeof selectedService._joinData.group_tags === 'string') ? selectedService._joinData.group_tags.split(',') : [];
                     }
                     serviceObjects.push(objectEntry);
                 });
@@ -269,7 +269,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                     objectEntry.value = item.value;
                     if (selectedServicegroup) {
                         objectEntry._joinData.display_alias = selectedServicegroup._joinData.display_alias
-                        objectEntry._joinData.group_tags = (typeof selectedServicegroup._joinData.group_tags === 'string') ? selectedServicegroup._joinData.group_tags.split(',') : null;
+                        objectEntry._joinData.group_tags = (typeof selectedServicegroup._joinData.group_tags === 'string') ? selectedServicegroup._joinData.group_tags.split(',') : [];
                     }
                     servicegroupsObjects.push(objectEntry);
                 });
@@ -411,7 +411,6 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                 return;
             }
         });
-
         this.post.hostgroups = this.normalizeGroupTags(this.post.hostgroups);
         this.post.hosts = this.normalizeGroupTags(this.post.hosts);
         this.post.servicegroups = this.normalizeGroupTags(this.post.servicegroups);
@@ -438,15 +437,18 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
     }
 
     private normalizeGroupTags(items: any[]): any[] {
-        return items.map(item => ({
-            ...item,
-            _joinData: {
-                ...item._joinData,
-                group_tags: Array.isArray(item._joinData?.group_tags)
-                    ? item._joinData.group_tags.join(',')
-                    : (item._joinData?.group_tags ?? null)
-            }
-        }));
+        return items.map(item => {
+            const tags = item._joinData?.group_tags;
+            const hasTags = Array.isArray(tags) && tags.length > 0;
+
+            return {
+                ...item,
+                _joinData: {
+                    ...item._joinData,
+                    group_tags: hasTags ? tags.join(',') : null
+                }
+            };
+        });
     }
 
     public onPublicIdentifierInputChange(event: Event) {

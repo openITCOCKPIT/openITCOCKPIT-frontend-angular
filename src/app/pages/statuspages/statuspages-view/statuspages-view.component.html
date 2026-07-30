@@ -54,6 +54,15 @@
                         }
                     </c-nav-item>
                 }
+                @if(statuspage){
+                <c-nav-item class="px-1" *oitcPermission="['statuspages', 'edit']">
+                    <button cButton class="ripple" color="success" size="xs"
+                            [routerLink]="['/', 'statuspages', 'edit', statuspage.Statuspage.statuspage.id]">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('Edit') }}
+                    </button>
+                </c-nav-item>
+                }
                 <c-nav-item class="px-1">
                     <button [fallbackUrl]="['statuspages', 'index']" cButton oitcBackButton class="ripple"
                             color="default" size="xs">
@@ -89,7 +98,7 @@
                         <i class="{{statuspage.Statuspage.statuspage.cumulatedIcon}} statuspage-icon position-absolute pos-right pos-bottom opacity-15 pr-1"></i>
                     </div>
                 </div>
-                @for (item of statuspage.Statuspage.items; track item) {
+                    @for (item of statuspage.Statuspage.items; track item) {
                     <div class="no-padding margin-bottom-10">
                         <div class="card d-flex flex-row mt-2 min-h-110">
                             <div class="p-2">
@@ -100,6 +109,13 @@
                                 <c-row class="p-2">
                                     @if (item.type === 'host') {
                                         <div class="col-12 text-truncate h4">
+                                            @if(item.tags &&item.tags.length > 0) {
+                                                (
+                                                @for (tag of item.tags; track tag; let isLast = $last) {
+                                                    {{ tag }}{{ isLast ? '' : ', ' }}
+                                                }
+                                                )
+                                            }
                                             @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                                 <a [routerLink]="['/', 'hosts', 'browser', item.id]">
                                                     {{ item.name }}
@@ -111,6 +127,13 @@
                                     }
                                     @if (item.type === 'service') {
                                         <div class="col-12 text-truncate h4">
+                                            @if(item.tags &&item.tags.length > 0) {
+                                                (
+                                                @for (tag of item.tags; track tag; let isLast = $last) {
+                                                    {{ tag }}{{ isLast ? '' : ', ' }}
+                                                }
+                                                )
+                                            }
                                             @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
                                                 <a [routerLink]="['/', 'services', 'browser', item.id]">
                                                     {{ item.name }}
@@ -122,6 +145,13 @@
                                     }
                                     @if (item.type === 'hostgroup') {
                                         <div class="col-12 text-truncate h4">
+                                            @if(item.tags &&item.tags.length > 0) {
+                                                (
+                                                @for (tag of item.tags; track tag; let isLast = $last) {
+                                                    {{ tag }}{{ isLast ? '' : ', ' }}
+                                                }
+                                                )
+                                            }
                                             @if (this.PermissionsService.hasPermissionObservable(['hostgroups', 'extended'])|async) {
                                                 <a [routerLink]="['/', 'hostgroups', 'extended', item.id]">
                                                {{ item.name }}
@@ -133,6 +163,13 @@
                                     }
                                     @if (item.type === 'servicegroup') {
                                         <div class="col-12 text-truncate h4">
+                                            @if(item.tags &&item.tags.length > 0) {
+                                                (
+                                                @for (tag of item.tags; track tag; let isLast = $last) {
+                                                    {{ tag }}{{ isLast ? '' : ', ' }}
+                                                }
+                                                )
+                                            }
                                             @if (this.PermissionsService.hasPermissionObservable(['servicegroups', 'extended'])|async) {
                                                 <a [routerLink]="['/', 'servicegroups', 'extended', item.id]">
                                                     {{ item.name }}

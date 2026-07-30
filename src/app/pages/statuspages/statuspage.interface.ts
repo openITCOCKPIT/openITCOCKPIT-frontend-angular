@@ -5,17 +5,20 @@ export interface StatuspageRoot {
 
 export interface Statuspage {
     statuspage: StatuspageProperties
-    items: Item[]
+    items?: Item[],
+    groupedItems?: GroupedItem[] | undefined
 }
 
 export interface StatuspageProperties {
     uuid: string
+    id: number
     name: string
     description: string
     public: boolean
+    grouped: boolean
     public_title: string | null,
     public_identifier: string | null,
-    public_refresh: number;
+    public_refresh: number
     showDowntimes: boolean
     showDowntimeComments: boolean
     showAcknowledgements: boolean
@@ -30,7 +33,7 @@ export interface Item {
     type: string
     id: number
     name: string,
-    tagstring?: string
+    tags: string[],
     cumulatedStateName: string
     cumulatedColorId: number
     cumulatedColor: string
@@ -50,6 +53,11 @@ export interface PlannedDowntimeDaum {
     scheduledStartTime: string
     scheduledEndTime: string
     comment: string
+}
+
+export interface GroupedItem {
+    key: string;
+    items: Item[];
 }
 
 export interface StatuspagePost {

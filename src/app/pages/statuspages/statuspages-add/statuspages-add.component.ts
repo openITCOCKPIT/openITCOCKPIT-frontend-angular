@@ -414,15 +414,18 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     }
 
     private normalizeGroupTags(items: any[]): any[] {
-        return items.map(item => ({
-            ...item,
-            _joinData: {
-                ...item._joinData,
-                group_tags: Array.isArray(item._joinData?.group_tags)
-                    ? item._joinData.group_tags.join(',')
-                    : (item._joinData?.group_tags ?? null)
-            }
-        }));
+        return items.map(item => {
+            const tags = item._joinData?.group_tags;
+            const hasTags = Array.isArray(tags) && tags.length > 0;
+
+            return {
+                ...item,
+                _joinData: {
+                    ...item._joinData,
+                    group_tags: hasTags ? tags.join(',') : null
+                }
+            };
+        });
     }
 
     public onPublicIdentifierInputChange(event: Event) {
