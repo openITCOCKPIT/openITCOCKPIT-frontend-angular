@@ -156,6 +156,28 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
         );
     }
 
+    /**
+     * I hook to datesSet from FullCalendar. If the displayed range changes, I fetch the events for the new range.
+     * @see https://fullcalendar.io/docs/datesSet
+     * @param event
+     */
+    public datesSet(event: any): void {
+        this.loadEvents(event.startStr, event.endStr);
+    }
+
+    /**
+     * I load the Events for the given Range.
+     * @param start
+     * @param end
+     */
+    private loadEvents(start: any, end: any): void {
+        this.subscriptions.add(this.ChangecalendarsService.loadEvents(this.post.changeCalendar.id, start, end)
+            .subscribe((result: EditChangecalendar) => {
+                this.events = result.events;
+                this.cdr.markForCheck();
+            }));
+    }
+
     public eventMove(event: ChangecalendarEventMove): void {
         // Fill this event with the same event from this.events where the originId matches event.id
         this.event = this.post.changeCalendar.changecalendar_events.find((eventItem: ChangecalendarEvent) => {
