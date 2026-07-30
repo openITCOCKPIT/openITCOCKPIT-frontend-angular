@@ -55,7 +55,7 @@ export class ChangecalendarsService {
             );
     }
 
-    public loadEvents(id: number, start: any, end: any): Observable<EditChangecalendar> {
+    public loadEvents(id: number, start: string, end: string): Observable<EditChangecalendar> {
         return this.http.get<EditChangecalendarRoot>(`${this.proxyPath}/changecalendar_module/changecalendars/edit/${id}.json?angular=true`,
             {
                 params: {
