@@ -55,6 +55,34 @@ export class ChangecalendarsService {
             );
     }
 
+    public loadEvents(id: number, start: any, end: any): Observable<EditChangecalendar> {
+        return this.http.get<EditChangecalendarRoot>(`${this.proxyPath}/changecalendar_module/changecalendars/edit/${id}.json?angular=true`,
+            {
+                params: {
+                    start: start,
+                    end: end
+                }
+            }
+        )
+            .pipe(
+                map((data: EditChangecalendarRoot) => {
+                    let returnData: EditChangecalendar = data as EditChangecalendar;
+                    returnData.events = [] as CalendarEvent[];
+                    data.changeCalendar.changecalendar_events.forEach((event: ChangecalendarEvent) => {
+                        returnData.events.push({
+                            originId: event.id as number,
+                            start: event.start,
+                            end: event.end,
+                            title: event.title,
+                            default_holiday: false,
+                            className: ''
+                        });
+                    });
+                    return returnData;
+                })
+            );
+    }
+
     public updateChangecalendar(changecalendar: EditChangecalendarRoot): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/changecalendar_module/changecalendars/edit/${changecalendar.changeCalendar.id}.json?angular=true`, changecalendar)
