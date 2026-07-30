@@ -12,13 +12,14 @@ import {
     CustomAlertsIndexParams,
     CustomAlertsState,
     CustomAlertsWidget,
-    CustomAlertsWidgetFilter,
-    LoadContainersRoot
+    CustomAlertsWidgetFilter
 } from './customalerts.interface';
 import { formatDate } from '@angular/common';
 import { WidgetGetForRender } from '../../../../pages/dashboards/dashboards.interface';
 import { GenericResponseWrapper } from '../../../../generic-responses';
 import { getUserDate } from '../../../../services/timezone.service';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { LoadContainersRoot } from '../../../../pages/containers/containers.interface';
 
 @Injectable({
     providedIn: 'root'
