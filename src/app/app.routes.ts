@@ -63,6 +63,7 @@ import { checkpointModuleRoutes } from './modules/checkpoint_module/checkpoint_m
 import { raritanModuleRoutes } from './modules/raritan_module/raritan_module.routes';
 import { sonicWallModuleRoutes } from './modules/sonic_wall_module/sonic_wall_module.routes';
 import { symantecModuleRoutes } from './modules/symantec_module/symantec_module.routes';
+import { aristaNetworksModuleRoutes } from './modules/aristanetworks_module/aristanetworks_module.routes';
 
 
 @Component({
@@ -148,7 +149,8 @@ const moduleRoutes: Routes = [
     ...checkpointModuleRoutes,
     ...raritanModuleRoutes,
     ...sonicWallModuleRoutes,
-    ...symantecModuleRoutes
+    ...symantecModuleRoutes,
+    ...aristaNetworksModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{
