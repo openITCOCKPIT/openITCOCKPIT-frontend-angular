@@ -106,6 +106,8 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     protected containers: SelectKeyValue[] = [];
     protected eventErrors: GenericValidationError = {} as GenericValidationError;
     protected errors: GenericValidationError = {} as GenericValidationError;
+    private startStr: string = '';
+    private endStr: string = '';
 
     protected event: ChangecalendarEvent = {
         title: '',
@@ -162,18 +164,19 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
      * @param event
      */
     public datesSet(event: any): void {
-        this.loadEvents(event.startStr, event.endStr);
+        this.startStr = event.startStr;
+        this.endStr = event.endStr;
+        this.loadEvents();
     }
 
     /**
      * I load the Events for the given Range.
-     * @param start
-     * @param end
      */
-    private loadEvents(start: any, end: any): void {
-        this.subscriptions.add(this.ChangecalendarsService.loadEvents(this.post.changeCalendar.id, start, end)
+    private loadEvents(): void {
+        this.subscriptions.add(this.ChangecalendarsService.loadEvents(this.post.changeCalendar.id, this.startStr, this.endStr)
             .subscribe((result: EditChangecalendar) => {
                 this.events = result.events;
+                this.post.changeCalendar.changecalendar_events = result.changeCalendar.changecalendar_events;
                 this.cdr.markForCheck();
             }));
     }
@@ -210,7 +213,6 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     }
 
     public createEvent(event: any): void {
-        console.log(event);
         this.event = {
             title: '',
             description: '',
@@ -238,7 +240,7 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
 
                     this.hideModal();
 
-                    this.ngOnInit();
+                    this.loadEvents();
                     return;
                 }
                 // Error
@@ -265,7 +267,11 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
 
         this.ChangecalendarsService.deleteEvent(changecalendar, eventItem).subscribe(() => {
             this.hideModal();
-            this.ngOnInit();
+            const title: string = this.TranslocoService.translate('Changecalendar Event');
+            const msg: string = this.TranslocoService.translate('deleted successfully');
+
+            this.notyService.genericSuccess(msg, title);
+            this.loadEvents();
         });
     }
 
