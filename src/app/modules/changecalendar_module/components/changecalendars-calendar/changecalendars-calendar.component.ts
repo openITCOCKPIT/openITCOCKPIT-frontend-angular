@@ -78,6 +78,11 @@ export class ChangecalendarsCalendarComponent {
         this.fullCalendar.getApi().updateSize();
     }
 
+    @Input()
+    public set timeZone(timeZone: string) {
+        this.calendarOptions.update(options => ({...options, timeZone: timeZone}));
+    }
+
     @Output() datesSet = new EventEmitter<any>();
     @Output() eventsChange = new EventEmitter<CalendarEvent[]>();
     @Output() eventClick = new EventEmitter<EventClickArg>();

@@ -71,6 +71,11 @@ export class ChangecalendarsCalendarEditorComponent {
         this._initialView = initialView;
     }
 
+    @Input()
+    public set timeZone(timeZone: string) {
+        this.calendarOptions.update(options => ({...options, timeZone: timeZone}));
+    }
+
     public get initialView(): string {
         return this._initialView;
     }
