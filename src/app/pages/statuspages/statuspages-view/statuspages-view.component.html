@@ -169,7 +169,7 @@
                                                                 <div>
                                                                     <fa-icon [icon]="['far', 'user']" class="fa-lg"></fa-icon>
                                                                     @if (item.acknowledgeComment && item.acknowledgeComment.length > 0) {
-                                                                        <span>
+                                                                        <span
                                                                                 class="text-center ps-1"
                                                                                 (click)="toggleAcknowledgeComments(toString(item.type + item.id))"
                                                                                 title="{{ t('expand comments') }}">
