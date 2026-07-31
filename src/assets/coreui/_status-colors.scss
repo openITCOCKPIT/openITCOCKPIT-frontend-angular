@@ -192,7 +192,7 @@
 .border-critical, .border-down {
   border-color: oitc.$danger !important;
 }
-.border-unknown {
+.border-unknown, .border-unreachable {
   border-color: oitc.$secondary !important;
 }
 
