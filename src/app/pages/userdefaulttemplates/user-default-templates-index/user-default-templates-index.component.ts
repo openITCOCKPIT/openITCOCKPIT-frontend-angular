@@ -235,7 +235,7 @@ export class UserDefaultTemplatesIndexComponent implements OnInit, OnDestroy, In
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: item.full_name
+                    displayName: item.name
                 };
             });
         }

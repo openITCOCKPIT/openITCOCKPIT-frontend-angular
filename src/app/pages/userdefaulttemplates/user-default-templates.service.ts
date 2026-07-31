@@ -50,7 +50,7 @@ export class UserDefaultTemplatesService implements DeleteAllModalService {
                     // Return true on 200 Ok
                     return {
                         success: true,
-                        data: data.userDefaultTemplate as GenericIdResponse
+                        data: data as GenericIdResponse
                     };
                 }),
                 catchError((error: any) => {
