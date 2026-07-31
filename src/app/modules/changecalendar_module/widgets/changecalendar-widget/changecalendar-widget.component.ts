@@ -133,7 +133,7 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
     }
 
     public override resizeWidget(event?: KtdResizeEnd) {
-        this.load();
+        this.resizeTrigger++;
 
         this.cdr.markForCheck();
     }
