@@ -107,8 +107,6 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
     private readonly ChangecalendarWidgetModalService: ChangecalendarWidgetModalService = inject(ChangecalendarWidgetModalService);
 
     public ngAfterViewInit(): void {
-        this.getUserTimezone();
-        this.resizeWidget();
     }
 
     private getUserTimezone() {
@@ -153,6 +151,7 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
 
     public override load() {
         if (this.widget) {
+            this.getUserTimezone();
             let widgetId = this.widget.id;
             this.subscriptions.add(
                 this.ChangeCalendarWidgetService.loadWidgetConfig(widgetId, this.start, this.end).subscribe((response: ChangecalendarWidgetResponse) => {
@@ -251,12 +250,18 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
         }
     }
 
+    private datesSetCalled: boolean = false;
+
     /**
      * I hook to datesSet from FullCalendar. If the displayed range changes, I fetch the events for the new range.
      * @see https://fullcalendar.io/docs/datesSet
      * @param event
      */
     public datesSet(event: any): void {
+        if (!this.datesSetCalled) {
+            this.datesSetCalled = true;
+            return;
+        }
         this.start = event.startStr;
         this.end = event.endStr;
 
