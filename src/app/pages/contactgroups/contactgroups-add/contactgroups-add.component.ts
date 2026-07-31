@@ -13,7 +13,6 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -31,11 +30,12 @@ import { Router, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 
 import { ContactgroupsService } from '../contactgroups.service';
-import { ContactgroupAddPostContactgroup, LoadContainersRoot } from '../contactgroups.interface';
+import { ContactgroupAddPostContactgroup } from '../contactgroups.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HistoryService } from '../../../history.service';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
+import { LoadContainersRoot } from '../../containers/containers.interface';
 
 @Component({
     selector: 'oitc-contactgroups-add',

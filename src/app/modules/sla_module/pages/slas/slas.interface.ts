@@ -18,7 +18,6 @@ export interface SlasEditRoot {
 }
 
 export interface SlasIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
@@ -331,7 +330,6 @@ export interface ReportErrorObject {
  ***************************/
 
 export interface SlasViewDetailsParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
@@ -343,7 +341,6 @@ export interface SlasViewDetailsParams {
 }
 
 export interface SlaAvailabilityStatusLogIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,

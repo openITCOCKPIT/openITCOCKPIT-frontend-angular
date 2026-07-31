@@ -31,11 +31,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 
 import { HostgroupsService } from '../hostgroups.service';
-import { Hostgroup, LoadContainersRoot, LoadHostsResponse, LoadHosttemplates } from "../hostgroups.interface";
+import { Hostgroup, LoadHostsResponse, LoadHosttemplates } from "../hostgroups.interface";
 import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
 import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
 import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
 import { HistoryService } from '../../../history.service';
+import { LoadContainersRoot } from '../../containers/containers.interface';
 
 @Component({
     selector: 'oitc-hostgroups-add',

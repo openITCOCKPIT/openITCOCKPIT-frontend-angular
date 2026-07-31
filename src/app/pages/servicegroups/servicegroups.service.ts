@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from "rxjs";
 import {
     AddServicegroupsPost,
-    LoadContainersRoot,
     LoadServicesForServices,
     LoadServicesRequest,
     LoadServicesResponse,
@@ -31,6 +30,7 @@ import {
 } from "../../generic-responses";
 import { DeleteAllItem } from "../../layouts/coreui/delete-all-modal/delete-all.interface";
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
+import { LoadContainersRoot } from '../containers/containers.interface';
 
 
 @Injectable({
