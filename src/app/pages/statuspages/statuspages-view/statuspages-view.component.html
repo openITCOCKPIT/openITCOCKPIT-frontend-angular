@@ -98,15 +98,15 @@
                         <i class="{{statuspage.Statuspage.statuspage.cumulatedIcon}} statuspage-icon position-absolute pos-right pos-bottom opacity-15 pr-1"></i>
                     </div>
                 </div>
-                @for (group of statuspage.Statuspage.groupedItems; track group){
-                        <c-card class="mt-2">
+                @for (group of statuspage.Statuspage.groupedItems; track group.group + '_' + group.colorId){
+                        <c-card class="border-{{group.cumulatedColor}} mt-2">
                             @if(!group.isUngrouped){
-                            <c-card-header class="bg-{{group.cumulatedColor}} text-white">
+                            <c-card-header class="border-{{group.cumulatedColor}}">
                                 <h5>{{group.group}}</h5>
                             </c-card-header>
                             }
                             <c-card-body>
-                                @for (item of group.items; track item){
+                                @for (item of group.items; track (item.id ?? '') + '_' + $index){
                                     <div class="card d-flex flex-row mt-2 min-h-110">
                                         <div class="p-2">
                                             <div
@@ -191,7 +191,7 @@
                                                             }
                                                             @if (showAcknowledgeComments[item.type + item.id]) {
                                                                 <div>
-                                                                    @for (comment of item.acknowledgeComment; track comment) {
+                                                                    @for (comment of item.acknowledgeComment; track $index) {
                                                                         <div>
                                                                             <div class="text-truncate">
                                                                                 {{ t('Comment') }}:  {{ comment }}
@@ -228,7 +228,7 @@
                                                         @if (showCurrentDowntimes[item.type + item.id]) {
                                                             <c-row>
                                                                 <div class="col-12 text-truncate">
-                                                                    @for (downtime of item.downtimeData; track downtime) {
+                                                                    @for (downtime of item.downtimeData; track $index) {
                                                                         <div class="row">
                                                                             <div class="col-xs-12 col-md-3">
                                                                                 {{ t('Start') }}: {{ downtime.scheduledStartTime }}
@@ -271,162 +271,7 @@
                                                         @if (showPlannedDowntimes[item.type + item.id]) {
                                                             <c-row>
                                                                 <div class="col-12 text-truncate">
-                                                                    @for (downtime of item.plannedDowntimeData; track downtime) {
-                                                                        <div class="row">
-                                                                            <div class="col-xs-12 col-md-3">
-                                                                                {{ t('Start') }}: {{ downtime.scheduledStartTime }}
-                                                                            </div>
-                                                                            <div class="col-xs-12 col-md-3">
-                                                                                {{ t('End') }} {{ downtime.scheduledEndTime }}
-                                                                            </div>
-                                                                            <div class="col-xs-12 col-md-3">
-                                                                                {{ t('Comment') }}: {{ downtime.comment }}
-                                                                            </div>
-                                                                        </div>
-                                                                    }
-                                                                </div>
-                                                            </c-row>
-                                                        }
-                                                    </div>
-                                                }
-                                                <!-- end of planed downtimes -->
-                                            </c-row>
-                                        </div>
-                                        <div class="p-2 hidden-md-down">
-                                            <div
-                                                    class="h-100 status-line bg-{{item.cumulatedColor}} shadow-{{item.cumulatedColor}}"></div>
-                                        </div>
-                                    </div>
-                                }
-                            </c-card-body>
-                        </c-card>
-
-                    @if(group.isUngrouped){
-                        <c-card class="py-2 mt-2">
-                            <c-card-body>
-                                @for (item of group.items; track item){
-                                    <div class="card d-flex flex-row mt-2 min-h-110">
-                                        <div class="p-2">
-                                            <div
-                                                    class="h-100 status-line bg-{{item.cumulatedColor}} shadow-{{item.cumulatedColor}}"></div>
-                                        </div>
-                                        <div class="flex-1">
-                                            <c-row class="p-2">
-                                                @if (item.type === 'host') {
-                                                    <div class="col-12 text-truncate h4">
-                                                        @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
-                                                            <a [routerLink]="['/', 'hosts', 'browser', item.id]">
-                                                                {{ item.name }}
-                                                            </a>
-                                                        } @else {
-                                                            {{ item.name }}
-                                                        }
-                                                    </div>
-                                                }
-                                                @if (item.type === 'service') {
-                                                    <div class="col-12 text-truncate h4">
-                                                        @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
-                                                            <a [routerLink]="['/', 'services', 'browser', item.id]">
-                                                                {{ item.name }}
-                                                            </a>
-                                                        } @else {
-                                                            {{ item.name }}
-                                                        }
-                                                    </div>
-                                                }
-                                                @if (item.type === 'hostgroup') {
-                                                    <div class="col-12 text-truncate h4">
-                                                        @if (this.PermissionsService.hasPermissionObservable(['hostgroups', 'extended'])|async) {
-                                                            <a [routerLink]="['/', 'hostgroups', 'extended', item.id]">
-                                                                {{ item.name }}
-                                                            </a>
-                                                        } @else {
-                                                            {{ item.name }}
-                                                        }
-                                                    </div>
-                                                }
-                                                @if (item.type === 'servicegroup') {
-                                                    <div class="col-12 text-truncate h4">
-                                                        @if (this.PermissionsService.hasPermissionObservable(['servicegroups', 'extended'])|async) {
-                                                            <a [routerLink]="['/', 'servicegroups', 'extended', item.id]">
-                                                                {{ item.name }}
-                                                            </a>
-                                                        } @else {
-                                                            {{ item.name }}
-                                                        }
-                                                    </div>
-                                                }
-                                                <div class="col-12">
-                                                    <h5 class="{{item.cumulatedColor}}">{{ item.cumulatedStateName }}</h5>
-                                                </div>
-                                                <!-- Handle acknowledgement comments -->
-                                                <div class="col-12 text-truncate">
-                                                    <div class="row">
-                                                        <div class="col-12 text-truncate">
-                                                            @if (item.acknowledgedProblemsText && item.cumulatedColorId > 0 && statuspage.Statuspage.statuspage.showAcknowledgements) {
-                                                                <div
-                                                                >
-                                                                    <fa-icon [icon]="['far', 'user']" class="fa-lg"></fa-icon>
-                                                                    @if (item.acknowledgeComment && item.acknowledgeComment.length > 0) {
-                                                                        <span
-                                                                                class="text-center ps-1"
-                                                                                (click)="toggleAcknowledgeComments(toString(item.type + item.id))"
-                                                                                title="{{ t('expand comments') }}">
-                                                                            @if (!showAcknowledgeComments[item.type + item.id]) {
-                                                                                <fa-icon [icon]="['fas', 'plus-square']"
-                                                                                         class="fa-lg"
-                                                                                />
-                                                                            }
-                                                                            @if (showAcknowledgeComments[item.type + item.id]) {
-                                                                                <fa-icon [icon]="['fas', 'minus-square']"
-                                                                                         class="fa-lg"
-                                                                                />
-                                                                            }
-                                                                        </span>
-                                                                    }
-                                                                    {{ item.acknowledgedProblemsText }}
-                                                                </div>
-                                                            }
-                                                            @if (showAcknowledgeComments[item.type + item.id]) {
-                                                                <div>
-                                                                    @for (comment of item.acknowledgeComment; track comment) {
-                                                                        <div>
-                                                                            <div class="text-truncate">
-                                                                                {{ t('Comment') }}:  {{ comment }}
-                                                                            </div>
-                                                                        </div>
-                                                                    }
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end of acknowledgements -->
-                                                <!-- handle current downtimes -->
-                                                @if (item.downtimeData.length > 0 && statuspage.Statuspage.statuspage.showDowntimes) {
-                                                    <div class="col-12 text-truncate"
-                                                    >
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <fa-icon [icon]="['fas', 'power-off']" class="fa-lg"></fa-icon>
-                                                                <span class="text-center ps-1"
-                                                                      (click)="toggleCurrentDowntimes(item.type + item.id)">
-                                                                    @if (!showCurrentDowntimes[item.type + item.id]) {
-                                                                        <fa-icon [icon]="['fas', 'plus-square']" class="fa-lg"
-                                                                                 title="expand downtime data"/>
-                                                                    }
-                                                                    @if (showCurrentDowntimes[item.type + item.id]) {
-                                                                        <fa-icon [icon]="['fas', 'minus-square']" class="fa-lg"
-                                                                        />
-                                                                    }
-                                                                </span>
-                                                                {{ item.downtimeData.length }} {{ t('current maintenances') }}
-                                                            </div>
-                                                        </div>
-                                                        @if (showCurrentDowntimes[item.type + item.id]) {
-                                                            <c-row>
-                                                                <div class="col-12 text-truncate">
-                                                                    @for (downtime of item.downtimeData; track downtime) {
+                                                                    @for (downtime of item.plannedDowntimeData; track $index) {
                                                                         <div class="row">
                                                                             <div class="col-xs-12 col-md-3">
                                                                                 {{ t('Start') }}: {{ downtime.scheduledStartTime }}
@@ -444,49 +289,6 @@
                                                         }
                                                     </div>
                                                 }
-                                                <!-- end of current downtimes -->
-                                                <!-- handle planed downtimes -->
-                                                @if (item.plannedDowntimeData.length > 0 && statuspage.Statuspage.statuspage.showDowntimes) {
-                                                    <div class="col-12 text-truncate"
-                                                    >
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <fa-icon [icon]="['fas', 'power-off']" class="fa-lg"></fa-icon>
-                                                                <span class="text-center ps-1"
-                                                                      (click)="togglePlannedDowntimes(item.type + item.id)">
-                                                                    @if (!showPlannedDowntimes[item.type + item.id]) {
-                                                                        <fa-icon [icon]="['fas', 'plus-square']" class="fa-lg"
-                                                                                 title="expand downtime data"/>
-                                                                    }
-                                                                    @if (showPlannedDowntimes[item.type + item.id]) {
-                                                                        <fa-icon [icon]="['fas', 'minus-square']" class="fa-lg"
-                                                                        />
-                                                                    }
-                                                                </span>
-                                                                {{ item.plannedDowntimeData.length }} {{ t('scheduled maintenances for the next 10 days') }}
-                                                            </div>
-                                                        </div>
-                                                        @if (showPlannedDowntimes[item.type + item.id]) {
-                                                            <c-row>
-                                                                <div class="col-12 text-truncate">
-                                                                    @for (downtime of item.plannedDowntimeData; track downtime) {
-                                                                        <div class="row">
-                                                                            <div class="col-xs-12 col-md-3">
-                                                                                {{ t('Start') }}: {{ downtime.scheduledStartTime }}
-                                                                            </div>
-                                                                            <div class="col-xs-12 col-md-3">
-                                                                                {{ t('End') }} {{ downtime.scheduledEndTime }}
-                                                                            </div>
-                                                                            <div class="col-xs-12 col-md-3">
-                                                                                {{ t('Comment') }}: {{ downtime.comment }}
-                                                                            </div>
-                                                                        </div>
-                                                                    }
-                                                                </div>
-                                                            </c-row>
-                                                        }
-                                                    </div>
-                                                }
                                                 <!-- end of planed downtimes -->
                                             </c-row>
                                         </div>
@@ -498,8 +300,6 @@
                                 }
                             </c-card-body>
                         </c-card>
-
-                    }
                 }
             }
         </c-card-body>
