@@ -75,6 +75,7 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
     private readonly TimezoneService: TimezoneService = inject(TimezoneService);
     private start: string = '';
     private end: string = '';
+    protected resizeTrigger: number = 0;
 
 
     public changeCalendarId: number | null = null;

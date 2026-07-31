@@ -33,7 +33,8 @@
                                                     [(events)]="events"
                                                     [initialView]="widgetConfig.displayType"
                                                     (eventClick)="toggleChangecalendarModal($event)"
-                                                    (datesSet)="datesSet($event)"/>
+                                                    (datesSet)="datesSet($event)"
+                                                    [resize]="resizeTrigger"/>
                                             }
                                         </c-col>
                                     </c-row>
