@@ -127,6 +127,7 @@
                         </label>
                         <br/>
                         <oitc-changecalendars-calendar-editor
+                            [timeZone]="timezone.user_timezone"
                             [(events)]="events"
                             [colour]="post.changeCalendar.colour"
                             (eventClick)="editEvent($event);"
