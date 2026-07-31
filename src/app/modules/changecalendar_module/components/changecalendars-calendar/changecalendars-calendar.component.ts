@@ -70,6 +70,14 @@ export class ChangecalendarsCalendarComponent {
         return this._initialView;
     }
 
+    @Input()
+    public set resize(value: number) {
+        if (!this.fullCalendar) {
+            return;
+        }
+        this.fullCalendar.getApi().updateSize();
+    }
+
     @Output() datesSet = new EventEmitter<any>();
     @Output() eventsChange = new EventEmitter<CalendarEvent[]>();
     @Output() eventClick = new EventEmitter<EventClickArg>();
