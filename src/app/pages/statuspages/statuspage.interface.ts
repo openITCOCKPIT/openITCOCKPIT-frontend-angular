@@ -15,7 +15,6 @@ export interface StatuspageProperties {
     name: string
     description: string
     public: boolean
-    grouped: boolean
     public_title: string | null,
     public_identifier: string | null,
     public_refresh: number

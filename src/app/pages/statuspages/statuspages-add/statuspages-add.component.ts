@@ -205,7 +205,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
         if (this.post.container_id === null) {
             return;
         }
-        console.log('searchString', searchString);
+        //console.log('searchString', searchString);
         this.subscriptions.add(this.StatuspagesService.loadServices(this.post.container_id, searchString, this.post.selected_services._ids)
             .subscribe((result) => {
                 let servicesObjects: SelectKeyValueExtended[] = [];

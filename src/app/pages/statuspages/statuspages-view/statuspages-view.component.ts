@@ -73,20 +73,7 @@ export class StatuspagesViewComponent implements OnInit, OnDestroy {
     public load(): void {
         this.subscriptions.add(this.StatuspagesService.getStatuspageViewData(this.id)
             .subscribe((result) => {
-              /*  let raw = result;
-
-                if (raw.Statuspage.groupedItems) {
-                    const groupedItemsObj = raw.Statuspage.groupedItems;
-
-                    // @ts-ignore
-                    raw.Statuspage.groupedItems = Object.keys(groupedItemsObj).map(key => ({
-                        key: key as string,
-                        items: groupedItemsObj[key as keyof typeof groupedItemsObj]
-                    }));
-                } */
-
                 this.statuspage = result;
-                console.log(this.statuspage);
                 this.cdr.detectChanges();
             }));
     }
