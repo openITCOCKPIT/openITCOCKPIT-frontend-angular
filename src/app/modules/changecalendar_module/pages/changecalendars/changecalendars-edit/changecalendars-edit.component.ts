@@ -118,18 +118,8 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     } as ChangecalendarEvent;
 
 
-    private stripZone(date: Date): string {
-
-        let ZeroForMonth = (date.getMonth() + 1) < 10 ? '0' : '', ZeroForDay = date.getDate() < 10 ? '0' : '',
-            ZeroForHour = date.getHours() < 10 ? '0' : '', ZeroForMinute = date.getMinutes() < 10 ? '0' : '',
-            ZeroForSecond = date.getSeconds() < 10 ? '0' : '', Year = date.getFullYear(),
-            Month = ZeroForMonth + (date.getMonth() + 1), Day = ZeroForDay + date.getDate(),
-            Hour = ZeroForHour + date.getHours(), Minute = ZeroForMinute + date.getMinutes(),
-            Second = ZeroForSecond + date.getSeconds(), Zone = this.timezone.user_offset / 60 / 60,
-            ZeroForZone = Zone < 10 ? '0' : '', TimeZone = "+" + ZeroForZone + Zone,
-            dS = Year + "-" + Month + "-" + Day + "T" + Hour + ":" + Minute + ":" + Second;
-
-        return dS;
+    private stripZone(date: string): string {
+        return date.split('+')[0];
     }
 
     protected updateEvent(event: ChangecalendarEvent) {
@@ -302,8 +292,15 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
             return event.id === clickInfo.event._def.extendedProps['originId'];
         }) as ChangecalendarEvent;
 
-        this.event.start = this.stripZone(new Date(this.event.start));
-        this.event.end = this.stripZone(new Date(this.event.end));
+        let event: CalendarEvent = this.events.find((event: CalendarEvent) => {
+            if (!event.originId) {
+                return false;
+            }
+            return event.originId === clickInfo.event._def.extendedProps['originId'];
+        }) as CalendarEvent;
+
+        this.event.start = this.stripZone(event.start);
+        this.event.end = this.stripZone(event.end?.toString() || '');
 
         this.showModal();
     }
