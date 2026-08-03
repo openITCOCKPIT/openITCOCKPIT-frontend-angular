@@ -38,26 +38,6 @@
             <c-card-body>
 
                 <div class="mb-3">
-                    <label cLabel for="post.user_default_template_id">
-                        {{ t('User Default Template') }}
-                    </label>
-                    <oitc-select
-                        name="post.user_default_template_id"
-                        id="post.user_default_template_id"
-                        [placeholder]="'Please choose' | transloco"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.user_default_template_id"
-                        [options]="userDefaultTemplates"
-                        (onChange)="onUserDefaultTemplateChange($event)"
-                        oitcFormError [errors]="errors" errorField="post.user_default_template_id">
-                    </oitc-select>
-
-                    <oitc-form-feedback [errors]="errors"
-                                        errorField="post.user_default_template_id"></oitc-form-feedback>
-                </div>
-
-                <div class="mb-3">
                     <label cLabel for="post.usercontainerroles._ids" class="hintmark">
                         {{ t('Container Roles') }}
                     </label>
@@ -217,7 +197,7 @@
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors" errorField="usergroup_id"></oitc-form-feedback>
                 </div>
-                
+
                 <div class="mb-3">
                     <c-form-check>
                         <input

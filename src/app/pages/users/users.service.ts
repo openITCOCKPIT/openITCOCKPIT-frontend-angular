@@ -7,8 +7,6 @@ import {
     UserAddContainerRolePermission,
     UserAddUserContainerRoleContainerPermissionsResponse,
     UserDateformatsRoot,
-    UserDefaultTemplatesParams,
-    UserDefaultTemplatesRoot,
     UserLocaleOption,
     UserPost,
     UsersEditResponse,
@@ -350,16 +348,4 @@ export class UsersService {
                 })
             );
     }
-
-    public loadUserDefaultTemplates(params: UserDefaultTemplatesParams): Observable<UserDefaultTemplatesRoot> {
-        const proxyPath = this.proxyPath;
-        return this.http.get<UserDefaultTemplatesRoot>(`${proxyPath}/users/getUserDefaultTemplatesForUserEdit.json`, {
-            params: params as {}
-        }).pipe(
-            map(data => {
-                return data
-            })
-        )
-    }
-
 }

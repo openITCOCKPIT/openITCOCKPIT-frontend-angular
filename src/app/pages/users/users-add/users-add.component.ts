@@ -21,7 +21,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
@@ -31,7 +31,6 @@ import { GenericIdResponse, GenericValidationError } from '../../../generic-resp
 import {
     UserAddContainerRolePermission,
     UserContainerPermission,
-    UserDefaultTemplatesParams,
     UserLocaleOption,
     UserPost,
     UserTimezonesSelect
@@ -53,8 +52,6 @@ import { PermissionLevel } from '../permission-level';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { ROOT_CONTAINER } from '../../changelogs/object-types.enum';
-import { MultiSelectChangeEvent } from 'primeng/types/multiselect';
-import { UserDefaultTemplatesPost } from '../../userdefaulttemplates/user-default-templates.interface';
 
 @Component({
     selector: 'oitc-users-add',
@@ -94,8 +91,7 @@ import { UserDefaultTemplatesPost } from '../../userdefaulttemplates/user-defaul
         InputGroupComponent,
         NgClass,
         BadgeOutlineComponent,
-        AsyncPipe,
-        TranslocoPipe
+        AsyncPipe
     ],
     templateUrl: './users-add.component.html',
     styleUrl: './users-add.component.css',
@@ -110,8 +106,6 @@ export class UsersAddComponent implements OnInit, OnDestroy {
     public usercontainerroles: SelectKeyValue[] = [];
     public usergroups: SelectKeyValue[] = [];
     public containers: SelectKeyValue[] = [];
-    public userDefaultTemplates: SelectKeyValue[] = [];
-    public userDefaultTemplateDetails: UserDefaultTemplatesPost[] = [];
     public localeOptions: UserLocaleOption[] = [];
     public dateformats: SelectKeyValueString[] = [];
     public timezones: UserTimezonesSelect[] = [];
@@ -138,7 +132,7 @@ export class UsersAddComponent implements OnInit, OnDestroy {
         this.loadUsergroups();
         this.loadDateformats();
         this.loadLocaleOptions();
-        this.loadUserDefaultTemplates();
+
     }
 
     public ngOnDestroy(): void {
@@ -167,9 +161,7 @@ export class UsersAddComponent implements OnInit, OnDestroy {
                 _ids: []
             },
             ContainersUsersMemberships: {},
-            apikeys: [],
-            container_id: 0,
-            user_default_template_id: 0
+            apikeys: []
         }
     }
 
@@ -258,7 +250,9 @@ export class UsersAddComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public onSelectedContainerIdsChange(event: any) {
+    public onSelectedContainerIdsChange(values: number[]) {
+        console.log('onSelectedContainerIdsChange', values);
+        console.log(this.selectedUserContainers);
 
         // Called when a container is selected or unselected
         if (this.selectedUserContainers.length === 0) {
@@ -351,47 +345,6 @@ export class UsersAddComponent implements OnInit, OnDestroy {
                     this.errors = errorResponse;
                 }
             }));
-    }
-
-    public loadUserDefaultTemplates() {
-
-        let params: UserDefaultTemplatesParams = {
-            angular: true,
-            'ldapgroupIds[]': []
-        }
-
-        this.subscriptions.add(this.UsersService.loadUserDefaultTemplates(params).subscribe((result) => {
-            this.userDefaultTemplates = result.userDefaultTemplates;
-            this.userDefaultTemplateDetails = result.userDefaultTemplateDetails;
-            this.cdr.markForCheck();
-        }));
-    }
-
-    public onUserDefaultTemplateChange(event: MultiSelectChangeEvent) {
-        let selectedUserDefaultTemplate = this.userDefaultTemplateDetails[event.value];
-        this.post.usergroup_id = selectedUserDefaultTemplate.usergroup_id;
-        this.post.container_id = selectedUserDefaultTemplate.container_id;
-        this.post.is_oauth = selectedUserDefaultTemplate.is_oauth
-        this.post.paginatorlength = selectedUserDefaultTemplate.paginatorlength;
-        this.post.showstatsinmenu = selectedUserDefaultTemplate.showstatsinmenu;
-        this.post.recursive_browser = selectedUserDefaultTemplate.recursive_browser;
-        this.post.dashboard_tab_rotation = selectedUserDefaultTemplate.dashboard_tab_rotation;
-        this.post.dateformat = selectedUserDefaultTemplate.dateformat;
-        this.post.timezone = selectedUserDefaultTemplate.timezone;
-        this.post.i18n = selectedUserDefaultTemplate.i18n;
-
-        if (selectedUserDefaultTemplate.user_containers) {
-            this.selectedUserContainers = selectedUserDefaultTemplate.user_containers._ids;
-            for (let containerId in selectedUserDefaultTemplate.UserDefaultTemplatesToUserContainers) {
-                this.selectedUserContainerWithPermission.push({
-                    container_id: Number(containerId),
-                    container_name: this.getContainerName(Number(containerId)),
-                    permission_level: selectedUserDefaultTemplate.UserDefaultTemplatesToUserContainers[containerId]
-                });
-            }
-            this.onSelectedContainerIdsChange(null);
-        }
-        this.cdr.markForCheck();
     }
 
     protected readonly PermissionLevel = PermissionLevel;

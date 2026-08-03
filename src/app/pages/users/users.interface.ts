@@ -2,7 +2,6 @@ import { SelectKeyValue, SelectKeyValueString } from '../../layouts/primeng/sele
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { PermissionLevel } from './permission-level';
 import { GenericIdAndName } from '../../generic.interfaces';
-import { UserDefaultTemplatesPost } from '../userdefaulttemplates/user-default-templates.interface';
 
 /****************************
  *    Generic interfaces    *
@@ -232,8 +231,6 @@ export interface UserPost {
         [key: number]: PermissionLevel
     }
     apikeys: UserAddEditApiKey[]
-    container_id: number
-    user_default_template_id?: number | null
 }
 
 export interface UserAddEditApiKey {
@@ -326,15 +323,4 @@ export interface UsersEditResponse {
     UserTypes: UserType[]
     notPermittedContainerIds: number[]
     userContainerRolesReadonly: boolean
-}
-
-export interface UserDefaultTemplatesParams {
-    angular: true,
-    'ldapgroupIds[]': number[]
-}
-
-export interface UserDefaultTemplatesRoot {
-    userDefaultTemplateDetails: UserDefaultTemplatesPost[]
-    userDefaultTemplates: SelectKeyValue[]
-    _csrfToken: string
 }
