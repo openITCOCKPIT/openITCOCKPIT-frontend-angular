@@ -98,6 +98,13 @@ export class ChangecalendarsCalendarEditorComponent {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
         },
+        displayEventTime: true,
+        displayEventEnd: true,
+        eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        },
         initialView: this._initialView,
         //initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
         events: this.events,
