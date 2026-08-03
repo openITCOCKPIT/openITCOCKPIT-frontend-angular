@@ -116,18 +116,8 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
         }));
     }
 
-    private stripZone(date: Date): string {
-
-        let ZeroForMonth = (date.getMonth() + 1) < 10 ? '0' : '', ZeroForDay = date.getDate() < 10 ? '0' : '',
-            ZeroForHour = date.getHours() < 10 ? '0' : '', ZeroForMinute = date.getMinutes() < 10 ? '0' : '',
-            ZeroForSecond = date.getSeconds() < 10 ? '0' : '', Year = date.getFullYear(),
-            Month = ZeroForMonth + (date.getMonth() + 1), Day = ZeroForDay + date.getDate(),
-            Hour = ZeroForHour + date.getHours(), Minute = ZeroForMinute + date.getMinutes(),
-            Second = ZeroForSecond + date.getSeconds(), Zone = this.timezone.user_offset / 60 / 60,
-            ZeroForZone = Zone < 10 ? '0' : '', TimeZone = "+" + ZeroForZone + Zone,
-            dS = Year + "-" + Month + "-" + Day + "T" + Hour + ":" + Minute + ":" + Second;
-
-        return dS;
+    private stripZone(date: string): string {
+        return date.split('+')[0];
     }
 
     public override resizeWidget(event?: KtdResizeEnd) {
@@ -145,6 +135,16 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
             return event.originId === clickInfo.event._def.extendedProps['originId'];
         }) as unknown as ChangecalendarEvent;
         if (this.event) {
+            let event: CalendarEvent = this.events.find((event: CalendarEvent) => {
+                if (!event.originId) {
+                    return false;
+                }
+                return event.originId === clickInfo.event._def.extendedProps['originId'];
+            }) as CalendarEvent;
+
+            this.event.start = this.stripZone(event.start);
+            this.event.end = this.stripZone(event.end?.toString() || '');
+
             this.ChangecalendarWidgetModalService.openChangecalendarModal(this.event);
         }
     }
