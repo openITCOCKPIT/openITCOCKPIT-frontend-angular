@@ -1,11 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    OnDestroy,
-    OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, } from '@angular/core';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
@@ -13,22 +6,24 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
     AlertComponent,
     CardBodyComponent,
-    CardComponent, CardFooterComponent,
+    CardComponent,
+    CardFooterComponent,
     CardHeaderComponent,
-    CardTitleDirective, ColComponent, ContainerComponent, FormControlDirective, FormDirective, FormLabelDirective,
+    CardTitleDirective,
+    ColComponent,
+    FormControlDirective,
+    FormDirective,
+    FormLabelDirective,
     NavComponent,
-    NavItemComponent, RowComponent
+    NavItemComponent,
+    RowComponent
 } from '@coreui/angular';
-import { AsyncPipe, DecimalPipe, formatDate, NgClass, KeyValuePipe } from '@angular/common';
+import { AsyncPipe, DecimalPipe, formatDate, KeyValuePipe, NgClass } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AutoreportsService } from '../autoreports.service';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {
-    AutoreportIndex,
-    ReportError,
-    GenerateResponse
-} from '../autoreports.interface';
+import { AutoreportIndex, GenerateResponse, ReportError } from '../autoreports.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -40,6 +35,7 @@ import { DateTime } from 'luxon';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { saveAs } from 'file-saver';
+import { LayoutService } from '../../../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-autoreport-generate',
@@ -87,6 +83,7 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
+    private readonly LayoutService = inject(LayoutService);
     private cdr = inject(ChangeDetectorRef);
 
     protected readonly keepOrder = keepOrder;
@@ -108,7 +105,8 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
             id: this.id,
             format: 'html',
             from_date: this.now.minus({days: 30}).toISODate(),
-            to_date: this.now.toISODate()
+            to_date: this.now.toISODate(),
+            theme: 'light'
         }
     };
     public from = "";
@@ -118,6 +116,19 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
         {key: 'html', value: this.TranslocoService.translate('HTML')},
         {key: 'zip', value: this.TranslocoService.translate('CSV')},
     ];
+
+    private theme: 'light' | 'dark' = 'light';
+
+    public constructor() {
+        this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
+            this.theme = 'light';
+            if (theme === 'dark') {
+                this.theme = 'dark';
+            }
+
+            this.cdr.markForCheck();
+        }));
+    }
 
     public ngOnInit(): void {
         this.from = this.post.Autoreport.from_date;
@@ -140,6 +151,7 @@ export class AutoreportGenerateComponent implements OnInit, OnDestroy {
 
     public submitReport() {
         this.report_error = null;
+        this.post.Autoreport.theme = this.theme;
         // this.report = null;
         this.cdr.markForCheck();
         this.post.Autoreport.from_date = formatDate(this.from, 'dd.MM.y', 'en-US');
