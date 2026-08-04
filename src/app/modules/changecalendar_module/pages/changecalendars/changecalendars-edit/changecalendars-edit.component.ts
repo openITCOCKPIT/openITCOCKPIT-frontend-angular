@@ -117,9 +117,14 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
         changecalendar_id: 0,
     } as ChangecalendarEvent;
 
+    private stripZone(param: string): string {
+        const matchExpression: RegExp = /^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?)/;
+        const match: RegExpExecArray | null = matchExpression.exec(param.trim());
+        if (!match) {
+            throw new Error(`Kein ISO-8601-Zeitstempel: "${param}"`);
+        }
 
-    private stripZone(date: string): string {
-        return date.split('+')[0];
+        return `${match[1]}T${match[2]}`;
     }
 
     protected updateEvent(event: ChangecalendarEvent) {

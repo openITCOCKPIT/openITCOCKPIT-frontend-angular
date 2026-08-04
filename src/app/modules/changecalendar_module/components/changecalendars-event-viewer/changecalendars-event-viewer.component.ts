@@ -112,26 +112,22 @@ export class ChangecalendarsEventViewerComponent implements OnInit, OnChanges {
         }));
     }
 
-    private stripZone(date: Date): string {
+    private stripZone(param: string): string {
+        const matchExpression: RegExp = /^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?)/;
+        const match: RegExpExecArray | null = matchExpression.exec(param.trim());
+        if (!match) {
+            throw new Error(`Kein ISO-8601-Zeitstempel: "${param}"`);
+        }
 
-        let ZeroForMonth = (date.getMonth() + 1) < 10 ? '0' : '', ZeroForDay = date.getDate() < 10 ? '0' : '',
-            ZeroForHour = date.getHours() < 10 ? '0' : '', ZeroForMinute = date.getMinutes() < 10 ? '0' : '',
-            ZeroForSecond = date.getSeconds() < 10 ? '0' : '', Year = date.getFullYear(),
-            Month = ZeroForMonth + (date.getMonth() + 1), Day = ZeroForDay + date.getDate(),
-            Hour = ZeroForHour + date.getHours(), Minute = ZeroForMinute + date.getMinutes(),
-            Second = ZeroForSecond + date.getSeconds(), Zone = this.timezone.user_offset / 60 / 60,
-            ZeroForZone = Zone < 10 ? '0' : '', TimeZone = "+" + ZeroForZone + Zone,
-            dS = Year + "-" + Month + "-" + Day + "T" + Hour + ":" + Minute + ":" + Second;
-
-        return dS;
+        return `${match[1]}T${match[2]}`;
     }
 
     public ngOnInit() {
         this.getUserTimezone();
         this.subscriptions.add(this.ChangecalendarWidgetModalService.event$.subscribe((event) => {
             this.event = event;
-            this.event.start = this.stripZone(new Date(this.event.start));
-            this.event.end = this.stripZone(new Date(this.event.end));
+            this.event.start = this.stripZone(this.event.start);
+            this.event.end = this.stripZone(this.event.end);
 
 
             this.html = this.BbCodeParserService.parse(this.event.description || '');

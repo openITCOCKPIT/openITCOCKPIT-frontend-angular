@@ -116,8 +116,14 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
         }));
     }
 
-    private stripZone(date: string): string {
-        return date.split('+')[0];
+    private stripZone(param: string): string {
+        const matchExpression: RegExp = /^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?)/;
+        const match: RegExpExecArray | null = matchExpression.exec(param.trim());
+        if (!match) {
+            throw new Error(`Kein ISO-8601-Zeitstempel: "${param}"`);
+        }
+
+        return `${match[1]}T${match[2]}`;
     }
 
     public override resizeWidget(event?: KtdResizeEnd) {
