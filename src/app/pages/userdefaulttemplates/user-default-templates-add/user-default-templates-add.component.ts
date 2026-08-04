@@ -7,6 +7,7 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    ContainerComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -45,8 +46,16 @@ import { UserDefaultTemplatesService } from '../user-default-templates.service';
 import { LoadLdapgroups } from '../../usergroups/usergroups.interface';
 import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { UserContainerPermission, UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
+import {
+    UserAddContainerRolePermission,
+    UserContainerPermission,
+    UserLocaleOption,
+    UserTimezonesSelect
+} from '../../users/users.interface';
 import { ContainersService } from '../../containers/containers.service';
+import { OitcAlertComponent } from '../../../components/alert/alert.component';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
     selector: 'oitc-user-default-templates-add',
@@ -82,7 +91,12 @@ import { ContainersService } from '../../containers/containers.service';
         RowComponent,
         ColComponent,
         SliderTimeComponent,
-        TrueFalseDirective
+        TrueFalseDirective,
+        OitcAlertComponent,
+        ContainerComponent,
+        NgClass,
+        AsyncPipe,
+        BadgeOutlineComponent
     ],
     templateUrl: './user-default-templates-add.component.html',
     styleUrl: './user-default-templates-add.component.css',
@@ -94,7 +108,6 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
     public errors: GenericValidationError | null = null;
 
     public usergroups: SelectKeyValue[] = [];
-    public containers: SelectKeyValue[] = [];
     public filteredContainersByContainerIds: SelectKeyValue[] = [];
     public localeOptions: UserLocaleOption[] = [];
     public dateformats: SelectKeyValueString[] = [];
@@ -102,9 +115,17 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
     public serverTime: string = '';
     public serverTimeZone: string = '';
 
+    protected ldapGroups: SelectKeyValue[] = [];
+
+
+    public containers: SelectKeyValue[] = [];
+    public usercontainerroles: SelectKeyValue[] = [];
+    public usercontainers: SelectKeyValue[] = [];
+
     public selectedUserContainers: number[] = [];
     public selectedUserContainerWithPermission: UserContainerPermission[] = [];
-    protected ldapGroups: SelectKeyValue[] = [];
+    public userContainerRoleContainerPermissions: UserAddContainerRolePermission[] = [];
+
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
 
@@ -154,7 +175,13 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
             containers: {
                 _ids: []
             },
-            container_id: 0
+            usercontainerroles: {
+                _ids: []
+            },
+            usercontainers: {
+                _ids: []
+            },
+            ContainersUsersMemberships: {},
         };
     }
 
@@ -299,6 +326,36 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
 
     public onContainerChange(): void {
         this.loadContainersByContainerIds(this.post.containers._ids);
+    }
+
+    public onLdapGroupsChange(): void {
+        this.loadContainerRoles('');
+    }
+
+    public loadContainerRoles = (searchString: string): void => {
+        let ldapGroupIds = this.post.ldapgroups._ids;
+        let selected = this.post.usercontainerroles._ids;
+
+        this.subscriptions.add(this.UserDefaultTemplatesService.loadUserContainerRolesByLdapGroupIds(searchString, ldapGroupIds)
+            .subscribe((result) => {
+                this.usercontainerroles = result;
+                this.cdr.markForCheck();
+            }));
+    }
+
+    public onUsercontainerrolesSelectChange(event: any) {
+        // Called when an usercontainerrole is selected or unselected
+
+        if (this.post.usercontainerroles._ids.length === 0) {
+            this.userContainerRoleContainerPermissions = [];
+            this.cdr.markForCheck();
+            return;
+        }
+
+        this.subscriptions.add(this.UsersService.loadContainerPermissions(this.post.usercontainerroles._ids).subscribe((result) => {
+            this.userContainerRoleContainerPermissions = result;
+            this.cdr.markForCheck();
+        }));
     }
 
     protected readonly PermissionLevel = PermissionLevel;

@@ -159,11 +159,11 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
 
                 this.selectedUserContainerWithPermission = [];
 
-                if (results.userdefaulttemplate.userDefaultTemplate.user_containers) {
+                if (results.userdefaulttemplate.userDefaultTemplate.usercontainers) {
                     //Reformat data that it looks like the same as it looks in the add method...
 
                     // Pre-select the container select element
-                    this.selectedUserContainers = results.userdefaulttemplate.userDefaultTemplate.user_containers._ids;
+                    this.selectedUserContainers = results.userdefaulttemplate.userDefaultTemplate.usercontainers._ids;
 
                     for (let containerId in results.userdefaulttemplate.userDefaultTemplate.UserDefaultTemplatesToUserContainers) {
                         this.selectedUserContainerWithPermission.push({

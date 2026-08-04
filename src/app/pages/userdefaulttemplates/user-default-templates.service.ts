@@ -10,6 +10,7 @@ import {
 } from './user-default-templates.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 
 @Injectable({
@@ -97,6 +98,21 @@ export class UserDefaultTemplatesService implements DeleteAllModalService {
                     });
                 })
             );
+    }
+
+    public loadUserContainerRolesByLdapGroupIds(searchString: string = '', ldapGroupIds: number[] = []): Observable<SelectKeyValue[]> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{ usercontainerroles: SelectKeyValue[] }>(`${proxyPath}/userDefaultTemplates/loadContainerRolesByLdapGroupIds.json`, {
+            params: {
+                angular: true,
+                'filter[Usercontainerroles.name]': searchString,
+                'ldapGroupIds[]': ldapGroupIds
+            }
+        }).pipe(
+            map(data => {
+                return data.usercontainerroles;
+            })
+        )
     }
 
 }

@@ -10,7 +10,7 @@
                 <a *oitcPermission="['userDefaultTemplates', 'index']"
                    [routerLink]="['/', 'userDefaultTemplates', 'index']">
                     <fa-icon [icon]="['fas', 'user-plus']"></fa-icon>
-                    {{ t('User Default Templates') }}
+                    {{ t('LDAP User Default') }}
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
@@ -27,7 +27,7 @@
             <c-card class="mb-3">
                 <c-card-header>
                     <h5 cCardTitle>
-                        {{ t('Edit user default template:') }}
+                        {{ t('Edit LDAP user default:') }}
                         <small class="fw-300">
                             {{ post.name }}
                         </small>
@@ -205,26 +205,6 @@
                         }
                     </div>
 
-                    <div class="mb-3">
-                        <label cLabel for="post.container_id">
-                            {{ t('Fallback Container') }}
-                            <oitc-required-icon></oitc-required-icon>
-                        </label>
-                        <oitc-select
-                            name="post.container_id"
-                            id="post.container_id"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.container_id"
-                            [options]="filteredContainersByContainerIds"
-                            oitcFormError [errors]="errors" errorField="container_id">
-                        </oitc-select>
-                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
-                        <div class="help-block text-info">
-                            <fa-icon [icon]="['fas', 'info-circle']"/>
-                            {{ t('Fall back container that is used by the system, when no container role assignment through LDAP is possible and no other container roles or containers are available.') }}
-                        </div>
-                    </div>
 
                     <div class="mb-3">
                         <c-form-check>
@@ -395,6 +375,3 @@
         }
     </form>
 </ng-container>
-
-
-

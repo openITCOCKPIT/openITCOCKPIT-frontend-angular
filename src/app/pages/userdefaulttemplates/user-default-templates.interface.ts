@@ -1,6 +1,6 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { PermissionLevel } from '../users/permission-level';
-import { UsersIndexUserContainer } from '../users/users.interface';
+import { UserAddEditApiKey, UsersIndexUserContainer } from '../users/users.interface';
 
 /**********************
  *    Index action    *
@@ -63,10 +63,13 @@ export interface UserDefaultTemplatesPost {
     paginatorlength: number
     dashboard_tab_rotation: number
     recursive_browser: 0 | 1
-    containers: { // Edit only
+    containers:{
         _ids: number[]
     }
-    user_containers?: { // Edit only
+    usercontainerroles: {
+        _ids: number[]
+    },
+    usercontainers: { // Edit only
         _ids: number[]
     }
     usergroup_id: number
@@ -74,9 +77,36 @@ export interface UserDefaultTemplatesPost {
         [key: number]: PermissionLevel
     }
     ldapgroups: {
-        _ids: any[]
+        _ids: number[]
     }
-    container_id: number
+    ContainersUsersMemberships: {
+        [key: number]: PermissionLevel
+    }
+}
+
+export interface UserDefaultTemplatesPost {
+    id?: number
+    showstatsinmenu: 0 | 1
+    paginatorlength: number
+    dashboard_tab_rotation: number
+    recursive_browser: 0 | 1
+    dateformat: string
+    timezone: string
+    i18n: string
+    is_oauth: boolean  // (number for add but boolean for edit)
+    ldapgroups: {
+        _ids: number[]
+    }
+    containers: { // Edit only
+        _ids: number[]
+    }
+    usergroup_id: number
+    usercontainerroles: {
+        _ids: number[]
+    },
+    ContainersUsersMemberships: {
+        [key: number]: PermissionLevel
+    }
 }
 
 export interface UserDefaultTemplatesEditResponse {
