@@ -159,7 +159,7 @@
                             <c-col>
                                 <div class="mt-2 mb-3">
                                     <label cLabel for="post.usercontainerroles._ids" class="hintmark">
-                                        {{ t('Additional Container Roles') }}
+                                        {{ t('Automatically Assigned Container Roles') }}
                                     </label>
                                     <oitc-multi-select
                                         name="post.usercontainerroles._ids"
@@ -168,8 +168,8 @@
                                         optionLabel="value"
                                         [(ngModel)]="post.usercontainerroles._ids"
                                         [searchCallback]="loadContainerRoles"
-                                        (onChange)="onUsercontainerrolesSelectChange($event)"
                                         [options]="usercontainerroles"
+                                        [disabled]=true
                                         [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
                                         oitcFormError [errors]="errors" errorField="usercontainerroles">
                                     </oitc-multi-select>
@@ -188,13 +188,13 @@
                                         <c-col [md]="10">
                                             <legend class="p-0 text-primary fs-6">
                                                 {{ userContainerRole.path }}
-                                                @if (selectedUserContainers.indexOf(userContainerRole._joinData.container_id) !== -1) {
+                                                @if (post.usercontainers._ids.indexOf(userContainerRole._joinData.container_id) !== -1) {
                                                     <fa-icon [icon]="['fas', 'minus-square']" class="text-danger"
                                                     ></fa-icon>
                                                 }
                                             </legend>
                                             <div class="d-inline-block"
-                                                 [ngClass]="{'user-strike' : selectedUserContainers.indexOf(userContainerRole._joinData.container_id) !== -1}">
+                                                 [ngClass]="{'user-strike' : post.usercontainers._ids.indexOf(userContainerRole._joinData.container_id) !== -1}">
                                                 <input cFormCheckInput
                                                        [attr.id]="'group-'+userContainerRole.id+'_read'"
                                                        [name]="'group-'+userContainerRole.id"
@@ -234,9 +234,8 @@
                                     </c-row>
                                 }
                                 <c-row>
-                                    @if (post.usercontainerroles._ids.length > 0 && selectedUserContainers.length > 0) {
-                                        <c-col [md]="4" class="text-end font-xs text-primary italic mt-2"
-                                        >
+                                    @if (post.usercontainerroles._ids.length > 0 && post.usercontainers._ids.length > 0) {
+                                        <c-col [md]="4" class="text-end font-xs text-primary italic mt-2">
                                             {{ t('The user permissions will be extended or adapted with additional containers') }}
                                             <fa-icon [icon]="['fas', 'down-long']"></fa-icon>
                                         </c-col>
@@ -245,21 +244,20 @@
 
 
                                 <div class="mb-3">
-                                    <label cLabel for="selectedContainerIds" class="hintmark">
+                                    <label cLabel for="usercontainerIds" class="hintmark">
                                         {{ t('Additional Container') }}
                                     </label>
                                     <oitc-multi-select
-                                        name="selectedContainerIds"
-                                        id="selectedContainerIds"
+                                        name="usercontainerIds"
+                                        id="usercontainerIds"
                                         optionValue="key"
                                         optionLabel="value"
-                                        [(ngModel)]="selectedUserContainers"
+                                        [(ngModel)]="post.usercontainers._ids"
                                         [options]="filteredContainersByContainerIds"
-                                        (ngModelChange)="onSelectedContainerIdsChange($event)"
-                                        oitcFormError [errors]="errors" errorField="containers">
+                                        oitcFormError [errors]="errors" errorField="usercontainers">
                                     </oitc-multi-select>
                                     <oitc-form-feedback [errors]="errors"
-                                                        errorField="containers"></oitc-form-feedback>
+                                                        errorField="usercontainers"></oitc-form-feedback>
                                     <div class="help-block text-info">
                                         <fa-icon [icon]="['fas', 'info-circle']"/>
                                         {{ t('Container assignments defined in the user will overwrite permissions inherited from Container Roles!') }}

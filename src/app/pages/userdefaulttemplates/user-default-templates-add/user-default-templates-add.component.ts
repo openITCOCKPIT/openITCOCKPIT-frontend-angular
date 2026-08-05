@@ -56,6 +56,7 @@ import { ContainersService } from '../../containers/containers.service';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-user-default-templates-add',
@@ -120,9 +121,8 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
 
     public containers: SelectKeyValue[] = [];
     public usercontainerroles: SelectKeyValue[] = [];
-    public usercontainers: SelectKeyValue[] = [];
+    public containerroles: SelectKeyValue[] = [];
 
-    public selectedUserContainers: number[] = [];
     public selectedUserContainerWithPermission: UserContainerPermission[] = [];
     public userContainerRoleContainerPermissions: UserAddContainerRolePermission[] = [];
 
@@ -152,8 +152,6 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
     }
 
     private getDefaultPost(): UserDefaultTemplatesPost {
-
-        this.selectedUserContainers = [];
         this.selectedUserContainerWithPermission = [];
 
         return {
@@ -224,47 +222,18 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public onSelectedContainerIdsChange(event: any) {
-        // Called when a container is selected or unselected
-        if (this.selectedUserContainers.length === 0) {
-            // No user containers selected
-            this.selectedUserContainerWithPermission = [];
-            this.cdr.markForCheck();
-            return;
+    protected loadLdapGroups = (search: string = '') => {
+        let selected: number[] = [];
+        if (this.post.ldapgroups && this.post.ldapgroups._ids) {
+            selected = this.post.ldapgroups._ids;
         }
-
-        // Add new selected containers to the list
-        this.selectedUserContainers.forEach(selectedContainerId => {
-            const containerWithPermission = this.selectedUserContainerWithPermission.find(container => container.container_id === selectedContainerId);
-            if (!containerWithPermission) {
-                let permission_level: PermissionLevel = PermissionLevel.READ_RIGHT;
-                if (selectedContainerId === ROOT_CONTAINER) {
-                    // ROOT_CONTAINER is always read/write !
-                    permission_level = PermissionLevel.WRITE_RIGHT;
-                }
-
-                this.selectedUserContainerWithPermission.push({
-                    container_id: selectedContainerId,
-                    container_name: this.getContainerName(selectedContainerId),
-                    permission_level: permission_level
-                });
-            }
-        });
-
-        //Remove "unselected" containers
-        const selectedUserContainerWithPermission: UserContainerPermission[] = [];
-
-        this.selectedUserContainerWithPermission.forEach((container, index) => {
-            if (this.selectedUserContainers.indexOf(container.container_id) !== -1) {
-                // Container is still selected
-                selectedUserContainerWithPermission.push(container);
-            }
-        });
-
-        this.selectedUserContainerWithPermission = selectedUserContainerWithPermission;
-
-        this.cdr.markForCheck();
+        this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search, selected).subscribe((ldapgroups: LoadLdapgroups) => {
+            this.ldapGroups = ldapgroups.ldapgroups;
+            this.cdr.markForCheck();
+        }));
     }
+
+
 
     private getContainerName(containerId: number): string {
         const container = this.filteredContainersByContainerIds.find(container => container.key === containerId);
@@ -275,7 +244,6 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
     }
 
     public submit() {
-
         let ContainersUserDefaultTemplatesMemberships: { [key: number]: PermissionLevel } = {};
         this.selectedUserContainerWithPermission.forEach(container => {
             ContainersUserDefaultTemplatesMemberships[container.container_id] = container.permission_level;
@@ -313,17 +281,6 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
             }));
     }
 
-    protected loadLdapGroups = (search: string = '') => {
-        let selected: number[] = [];
-        if (this.post.ldapgroups && this.post.ldapgroups._ids) {
-            selected = this.post.ldapgroups._ids;
-        }
-        this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search, selected).subscribe((ldapgroups: LoadLdapgroups) => {
-            this.ldapGroups = ldapgroups.ldapgroups;
-            this.cdr.markForCheck();
-        }));
-    }
-
     public onContainerChange(): void {
         this.loadContainersByContainerIds(this.post.containers._ids);
     }
@@ -334,20 +291,23 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
 
     public loadContainerRoles = (searchString: string): void => {
         let ldapGroupIds = this.post.ldapgroups._ids;
-        let selected = this.post.usercontainerroles._ids;
 
         this.subscriptions.add(this.UserDefaultTemplatesService.loadUserContainerRolesByLdapGroupIds(searchString, ldapGroupIds)
             .subscribe((result) => {
                 this.usercontainerroles = result;
+                this.post.usercontainerroles._ids = _.map(this.usercontainerroles, function (value, key) {
+                    return value.key;
+                });
+
+                this.loadUserContainerRoleContainerPermissions();
                 this.cdr.markForCheck();
             }));
     }
 
-    public onUsercontainerrolesSelectChange(event: any) {
-        // Called when an usercontainerrole is selected or unselected
-
+    public loadUserContainerRoleContainerPermissions() {
         if (this.post.usercontainerroles._ids.length === 0) {
             this.userContainerRoleContainerPermissions = [];
+            this.containerroles = [];
             this.cdr.markForCheck();
             return;
         }
