@@ -254,6 +254,7 @@
                                         optionLabel="value"
                                         [(ngModel)]="post.usercontainers._ids"
                                         [options]="filteredContainersByContainerIds"
+                                        (ngModelChange)="onSelectedContainerIdsChange($event)"
                                         oitcFormError [errors]="errors" errorField="usercontainers">
                                     </oitc-multi-select>
                                     <oitc-form-feedback [errors]="errors"

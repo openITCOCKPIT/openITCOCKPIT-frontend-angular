@@ -334,6 +334,51 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
         }));
     }
 
+    public onSelectedContainerIdsChange(values: number[]) {
+        console.log('onSelectedContainerIdsChange', values);
+        console.log(this.post.usercontainers._ids);
+
+        // Called when a container is selected or unselected
+        if (this.post.usercontainers._ids.length === 0) {
+            // No user containers selected
+            this.selectedUserContainerWithPermission = [];
+            this.cdr.markForCheck();
+            return;
+        }
+
+        // Add new selected containers to the list
+        this.post.usercontainers._ids.forEach(selectedContainerId => {
+            const containerWithPermission = this.selectedUserContainerWithPermission.find(container => container.container_id === selectedContainerId);
+            if (!containerWithPermission) {
+                let permission_level: PermissionLevel = PermissionLevel.READ_RIGHT;
+                if (selectedContainerId === ROOT_CONTAINER) {
+                    // ROOT_CONTAINER is always read/write !
+                    permission_level = PermissionLevel.WRITE_RIGHT;
+                }
+
+                this.selectedUserContainerWithPermission.push({
+                    container_id: selectedContainerId,
+                    container_name: this.getContainerName(selectedContainerId),
+                    permission_level: permission_level
+                });
+            }
+        });
+
+        //Remove "unselected" containers
+        const selectedUserContainerWithPermission: UserContainerPermission[] = [];
+
+        this.selectedUserContainerWithPermission.forEach((container, index) => {
+            if (this.post.usercontainers._ids.indexOf(container.container_id) !== -1) {
+                // Container is still selected
+                selectedUserContainerWithPermission.push(container);
+            }
+        });
+
+        this.selectedUserContainerWithPermission = selectedUserContainerWithPermission;
+
+        this.cdr.markForCheck();
+    }
+
     protected readonly PermissionLevel = PermissionLevel;
     protected readonly ROOT_CONTAINER = ROOT_CONTAINER;
 }
