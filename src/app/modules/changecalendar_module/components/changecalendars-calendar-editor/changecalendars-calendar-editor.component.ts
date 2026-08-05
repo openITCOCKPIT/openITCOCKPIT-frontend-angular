@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions, EventApi, EventClickArg } from '@fullcalendar/core';
+import { CalendarOptions, EventApi, EventChangeArg, EventClickArg } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -19,8 +19,8 @@ import listPlugin from '@fullcalendar/list';
 import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { formatDate, NgStyle } from '@angular/common';
-import { ChangecalendarEventMove } from "../../pages/changecalendars/changecalendars.interface";
+import { NgStyle } from '@angular/common';
+import luxonPlugin from '@fullcalendar/luxon3';
 
 @Component({
     selector: 'oitc-changecalendars-calendar-editor',
@@ -84,10 +84,11 @@ export class ChangecalendarsCalendarEditorComponent {
     @Output() eventsChange = new EventEmitter<CalendarEvent[]>();
     @Output() eventClick = new EventEmitter<EventClickArg>();
     @Output() onCreateClick = new EventEmitter<any>();
-    @Output() onEventMove = new EventEmitter<ChangecalendarEventMove>();
+    @Output() onEventMove = new EventEmitter<EventChangeArg>();
 
     calendarOptions = signal<CalendarOptions>({
         plugins: [
+            luxonPlugin,
             interactionPlugin,
             dayGridPlugin,
             timeGridPlugin,
@@ -115,22 +116,16 @@ export class ChangecalendarsCalendarEditorComponent {
         selectMirror: true,
         weekNumbers: true,
         weekNumberCalculation: 'ISO',
-        eventOverlap: false,
-        eventDurationEditable: false,
+        eventOverlap: true,
+        eventDurationEditable: true,
         datesSet: this.handleDatesSet.bind(this),
         eventClick: this.handleEventClick.bind(this),
         eventsSet: this.handleEvents.bind(this),
         droppable: true,
         dragScroll: false,
         eventColor: this.colour,
-        eventChange: (info) => {
-            console.error(info.event.extendedProps);
-            let event: ChangecalendarEventMove = {
-                id: info.event.extendedProps['originId'],
-                start: formatDate(info.event.start as Date, 'yyyy-MM-ddTHH:mm', 'en-US'),
-                end: formatDate(info.event.end as Date, 'yyyy-MM-ddTHH:mm', 'en-US')
-            }
-            this.onEventMove.emit(event);
+        eventChange: (info: EventChangeArg): void => {
+            this.onEventMove.emit(info);
         }
     });
     currentEvents = signal<EventApi[]>([]);

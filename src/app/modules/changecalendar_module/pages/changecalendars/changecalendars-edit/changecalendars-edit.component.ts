@@ -33,24 +33,20 @@ import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface'
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { ChangecalendarsService } from '../changecalendars.service';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
-import {
-    ChangecalendarEvent,
-    ChangecalendarEventMove,
-    EditChangecalendar,
-    EditChangecalendarRoot
-} from '../changecalendars.interface';
+import { ChangecalendarEvent, EditChangecalendar, EditChangecalendarRoot } from '../changecalendars.interface';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { CalendarEvent } from '../../../../../pages/calendars/calendars.interface';
 import {
     ChangecalendarsEventEditorComponent
 } from '../../../components/changecalendars-event-editor/changecalendars-event-editor.component';
-import { EventClickArg } from '@fullcalendar/core';
+import { EventChangeArg, EventClickArg } from '@fullcalendar/core';
 import { TimezoneObject } from '../../../../../pages/services/timezone.interface';
 import { TimezoneService } from '../../../../../services/timezone.service';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
     ChangecalendarsCalendarEditorComponent
 } from '../../../components/changecalendars-calendar-editor/changecalendars-calendar-editor.component';
+import { DateTime } from 'luxon';
 
 @Component({
     selector: 'oitc-changecalendars-edit',
@@ -176,15 +172,22 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
             }));
     }
 
-    public eventMove(event: ChangecalendarEventMove): void {
+    public eventMove(info: EventChangeArg): void {
         // Fill this event with the same event from this.events where the originId matches event.id
         this.event = this.post.changeCalendar.changecalendar_events.find((eventItem: ChangecalendarEvent) => {
-            return eventItem.id === event.id;
+            return eventItem.id === info.event.extendedProps['originId'];
         }) as ChangecalendarEvent;
 
-        // Then update start and end.
-        this.event.start = formatDate(event.start, 'yyyy-MM-ddTHH:mm', 'en-US');
-        this.event.end = formatDate(event.end, 'yyyy-MM-ddTHH:mm', 'en-US');
+
+        this.event.start = DateTime
+            .fromJSDate(info.event.start!)
+            .setZone(this.timezone.user_timezone)
+            .toFormat("yyyy-MM-dd'T'HH:mm");
+
+        this.event.end = DateTime
+            .fromJSDate(info.event.end!)
+            .setZone(this.timezone.user_timezone)
+            .toFormat("yyyy-MM-dd'T'HH:mm");
 
         this.subscriptions.add(this.ChangecalendarsService.updateEvent(this.event)
             .subscribe((result: GenericResponseWrapper) => {

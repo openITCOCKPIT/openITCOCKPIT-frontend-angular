@@ -75,6 +75,7 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
     private readonly TimezoneService: TimezoneService = inject(TimezoneService);
     private start: string = '';
     private end: string = '';
+    private datesSetCalled: boolean = false;
     protected resizeTrigger: number = 0;
 
 
@@ -255,8 +256,6 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
             this.cdr.markForCheck();
         }
     }
-
-    private datesSetCalled: boolean = false;
 
     /**
      * I hook to datesSet from FullCalendar. If the displayed range changes, I fetch the events for the new range.
