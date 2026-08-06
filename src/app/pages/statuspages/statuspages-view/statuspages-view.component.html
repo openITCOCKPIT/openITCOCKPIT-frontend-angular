@@ -88,12 +88,14 @@
                             {{ statuspage.Statuspage.statuspage.description }}
                         </small>
                     </div>
-                    <div
-                        class="p-3 bg-{{statuspage.Statuspage.statuspage.cumulatedColor}} rounded overflow-hidden position-relative text-white">
-                        <div>
-                            <h2 class="d-block l-h-n m-0 fw-500">
+                    <div class="p-3 bg-{{statuspage.Statuspage.statuspage.cumulatedColor}} rounded overflow-hidden position-relative text-white">
+                        <div class="d-flex align-items-baseline gap-2">
+                            <span class="h2 l-h-n m-0 fw-500">
                                 {{ statuspage.Statuspage.statuspage.cumulatedHumanStatus }}
-                            </h2>
+                            </span>
+                            @if (statuspage.Statuspage.statuspage.cumulatedColorId > 0 && statuspage.Statuspage.statuspage.lastStateChange) {
+                                <span>({{ t('State since') }}: {{ statuspage.Statuspage.statuspage.lastStateChange }})</span>
+                            }
                         </div>
                         <i class="{{statuspage.Statuspage.statuspage.cumulatedIcon}} statuspage-icon position-absolute pos-right pos-bottom opacity-15 pr-1"></i>
                     </div>
@@ -159,7 +161,13 @@
                                                     </div>
                                                 }
                                                 <div class="col-12">
-                                                    <h5 class="{{item.cumulatedColor}}">{{ item.cumulatedStateName }}</h5>
+                                                    <span>
+                                                        <span class="h5 {{ item.cumulatedColor }} me-2">{{ item.cumulatedStateName }}</span>
+
+                                                        @if (item.cumulatedColorId > 0 && item.lastStateChange) {
+                                                            ({{ t('State since') }}: {{ item.lastStateChange }})
+                                                        }
+                                                    </span>
                                                 </div>
                                                 <!-- Handle acknowledgement comments -->
                                                 <div class="col-12 text-truncate">

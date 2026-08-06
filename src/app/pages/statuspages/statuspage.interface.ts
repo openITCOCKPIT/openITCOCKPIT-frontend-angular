@@ -26,6 +26,8 @@ export interface StatuspageProperties {
     cumulatedColor: string
     cumulatedHumanStatus: string
     cumulatedIcon: string
+    lastStateChange?: string
+
 }
 
 export interface Item {
@@ -36,6 +38,7 @@ export interface Item {
     cumulatedStateName: string
     cumulatedColorId: number
     cumulatedColor: string
+    lastStateChange?: string | null
     isAcknowledge: boolean
     acknowledgeComment: string[]
     scheduledStartTime: any
