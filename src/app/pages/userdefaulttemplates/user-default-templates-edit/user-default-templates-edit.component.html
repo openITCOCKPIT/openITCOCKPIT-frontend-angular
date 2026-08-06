@@ -137,6 +137,14 @@
                                                             errorField="ldapgroups"></oitc-form-feedback>
                                     </div>
                                 </c-col>
+
+                            </c-row>
+                            <c-row>
+                                <c-col>
+
+                                    ***{{ usercontainerrolesByLdapGroup|json }}***
+                                    INFO VIEW WITH ALL CONTAINER ROLES TO LDAP GROUPS MAPPING
+                                </c-col>
                             </c-row>
                         </fieldset>
                     </c-container>
@@ -157,92 +165,6 @@
                             </legend>
                             <c-row>
                                 <c-col>
-                                    <div class="mt-2 mb-3">
-                                        <label cLabel for="post.usercontainerroles._ids" class="hintmark">
-                                            {{ t('Automatically Assigned Container Roles') }}
-                                        </label>
-                                        <oitc-multi-select
-                                            name="post.usercontainerroles._ids"
-                                            id="post.usercontainerroles._ids"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [(ngModel)]="post.usercontainerroles._ids"
-                                            [searchCallback]="loadContainerRoles"
-                                            [options]="usercontainerroles"
-                                            [disabled]=true
-                                            [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
-                                            oitcFormError [errors]="errors" errorField="usercontainerroles">
-                                        </oitc-multi-select>
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="usercontainerroles"></oitc-form-feedback>
-                                        <div class="help-block text-info">
-                                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
-                                            {{ t('Container Roles are handy to grant the same permissions to multiple users. Container Roles will overwrite automatically assignments via LDAP groups.') }}
-                                        </div>
-                                    </div>
-
-                                    <!-- User Container Roles permissions read/write -->
-                                    @for (userContainerRole of userContainerRoleContainerPermissions; track $index) {
-                                        <c-row class="mb-2">
-                                            <c-col [md]="2"><!-- spacer --></c-col>
-                                            <c-col [md]="10">
-                                                <legend class="p-0 text-primary fs-6">
-                                                    {{ userContainerRole.path }}
-                                                    @if (post.usercontainers._ids.indexOf(userContainerRole._joinData.container_id) !== -1) {
-                                                        <fa-icon [icon]="['fas', 'minus-square']" class="text-danger"
-                                                        ></fa-icon>
-                                                    }
-                                                </legend>
-                                                <div class="d-inline-block"
-                                                     [ngClass]="{'user-strike' : post.usercontainers._ids.indexOf(userContainerRole._joinData.container_id) !== -1}">
-                                                    <input cFormCheckInput
-                                                           [attr.id]="'group-'+userContainerRole.id+'_read'"
-                                                           [name]="'group-'+userContainerRole.id"
-                                                           type="radio"
-                                                           disabled="disabled"
-                                                           [value]="PermissionLevel.READ_RIGHT"
-                                                           [(ngModel)]="userContainerRole._joinData.permission_level"/>
-                                                    <label cFormCheckLabel class="ps-2 pe-4">
-                                                        {{ t('read') }}
-                                                    </label>
-
-                                                    <input cFormCheckInput
-                                                           [attr.id]="'group-'+userContainerRole.id+'_write'"
-                                                           [name]="'group-'+userContainerRole.id"
-                                                           type="radio"
-                                                           disabled="disabled"
-                                                           [value]="PermissionLevel.WRITE_RIGHT"
-                                                           [(ngModel)]="userContainerRole._joinData.permission_level"/>
-                                                    <label cFormCheckLabel class="ps-2 pe-4">
-                                                        {{ t('read/write') }}
-                                                    </label>
-                                                </div>
-
-                                                @for (userRole of userContainerRole.user_roles_array; track $index) {
-                                                    <oitc-badge-outline color="primary" class="me-1">
-                                                        @if (PermissionsService.hasPermissionObservable(['usercontainerroles', 'edit'])|async) {
-                                                            <a [routerLink]="['/', 'usercontainerroles', 'edit', userRole.id]">
-                                                                {{ userRole.name }}
-                                                            </a>
-                                                        } @else {
-                                                            {{ userRole.name }}
-
-                                                        }
-                                                    </oitc-badge-outline>
-                                                }
-                                            </c-col>
-                                        </c-row>
-                                    }
-                                    <c-row>
-                                        @if (post.usercontainerroles._ids.length > 0 && post.usercontainers._ids.length > 0) {
-                                            <c-col [md]="4" class="text-end font-xs text-primary italic mt-2">
-                                                {{ t('The user permissions will be extended or adapted with additional containers') }}
-                                                <fa-icon [icon]="['fas', 'down-long']"></fa-icon>
-                                            </c-col>
-                                        }
-                                    </c-row>
-
-
                                     <div class="mb-3">
                                         <label cLabel for="usercontainerIds" class="hintmark">
                                             {{ t('Additional Container') }}

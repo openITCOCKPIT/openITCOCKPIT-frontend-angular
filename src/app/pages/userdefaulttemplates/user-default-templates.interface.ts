@@ -66,9 +66,6 @@ export interface UserDefaultTemplatesPost {
     containers:{
         _ids: number[]
     }
-    usercontainerroles: {
-        _ids: number[]
-    },
     usercontainers: { // Edit only
         _ids: number[]
     }
@@ -101,9 +98,6 @@ export interface UserDefaultTemplatesPost {
         _ids: number[]
     }
     usergroup_id: number
-    usercontainerroles: {
-        _ids: number[]
-    },
     ContainersUsersMemberships: {
         [key: number]: PermissionLevel
     }
@@ -112,4 +106,21 @@ export interface UserDefaultTemplatesPost {
 export interface UserDefaultTemplatesEditResponse {
     userDefaultTemplate: UserDefaultTemplatesPost
     notPermittedUserContainerIds: number[]
+}
+
+export interface UsercontainerrolesByLdapGroupResponse{
+    usercontainerrolesByLdapGroup: UsercontainerrolesByLdapGroup[]
+}
+
+
+export interface UsercontainerrolesByLdapGroup {
+    key: number
+    value: {
+        id: number
+        cn: string
+        dn: string
+        containerroles: {
+            [key: number]: number
+        }
+    }
 }

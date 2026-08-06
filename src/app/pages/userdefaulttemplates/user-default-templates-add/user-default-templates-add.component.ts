@@ -29,7 +29,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { UserDefaultTemplatesPost, } from '../user-default-templates.interface';
+import { UsercontainerrolesByLdapGroup, UserDefaultTemplatesPost, } from '../user-default-templates.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 import { Subscription } from 'rxjs';
@@ -46,17 +46,9 @@ import { UserDefaultTemplatesService } from '../user-default-templates.service';
 import { LoadLdapgroups } from '../../usergroups/usergroups.interface';
 import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import {
-    UserAddContainerRolePermission,
-    UserContainerPermission,
-    UserLocaleOption,
-    UserTimezonesSelect
-} from '../../users/users.interface';
+import { UserContainerPermission, UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
 import { ContainersService } from '../../containers/containers.service';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
-import { AsyncPipe, NgClass } from '@angular/common';
-import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
-import _ from 'lodash';
 
 @Component({
     selector: 'oitc-user-default-templates-add',
@@ -94,10 +86,7 @@ import _ from 'lodash';
         SliderTimeComponent,
         TrueFalseDirective,
         OitcAlertComponent,
-        ContainerComponent,
-        NgClass,
-        AsyncPipe,
-        BadgeOutlineComponent
+        ContainerComponent
     ],
     templateUrl: './user-default-templates-add.component.html',
     styleUrl: './user-default-templates-add.component.css',
@@ -120,11 +109,9 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
 
 
     public containers: SelectKeyValue[] = [];
-    public usercontainerroles: SelectKeyValue[] = [];
-    public containerroles: SelectKeyValue[] = [];
+    public usercontainerrolesByLdapGroup: UsercontainerrolesByLdapGroup[] = [];
 
     public selectedUserContainerWithPermission: UserContainerPermission[] = [];
-    public userContainerRoleContainerPermissions: UserAddContainerRolePermission[] = [];
 
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
@@ -171,9 +158,6 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
                 _ids: []
             },
             containers: {
-                _ids: []
-            },
-            usercontainerroles: {
                 _ids: []
             },
             usercontainers: {
@@ -234,7 +218,6 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
     }
 
 
-
     private getContainerName(containerId: number): string {
         const container = this.filteredContainersByContainerIds.find(container => container.key === containerId);
         if (container) {
@@ -291,31 +274,14 @@ export class UserDefaultTemplatesAddComponent implements OnInit, OnDestroy {
 
     public loadContainerRoles = (searchString: string): void => {
         let ldapGroupIds = this.post.ldapgroups._ids;
+        /*
+                this.subscriptions.add(this.UserDefaultTemplatesService.loadUserContainerRolesByLdapGroupIds(searchString, ldapGroupIds)
+                    .subscribe((result) => {
+                        this.usercontainerrolesByLdapGroupResponse = result;
+                        this.cdr.markForCheck();
+                    }));
 
-        this.subscriptions.add(this.UserDefaultTemplatesService.loadUserContainerRolesByLdapGroupIds(searchString, ldapGroupIds)
-            .subscribe((result) => {
-                this.usercontainerroles = result;
-                this.post.usercontainerroles._ids = _.map(this.usercontainerroles, function (value, key) {
-                    return value.key;
-                });
-
-                this.loadUserContainerRoleContainerPermissions();
-                this.cdr.markForCheck();
-            }));
-    }
-
-    public loadUserContainerRoleContainerPermissions() {
-        if (this.post.usercontainerroles._ids.length === 0) {
-            this.userContainerRoleContainerPermissions = [];
-            this.containerroles = [];
-            this.cdr.markForCheck();
-            return;
-        }
-
-        this.subscriptions.add(this.UsersService.loadContainerPermissions(this.post.usercontainerroles._ids).subscribe((result) => {
-            this.userContainerRoleContainerPermissions = result;
-            this.cdr.markForCheck();
-        }));
+         */
     }
 
     public onSelectedContainerIdsChange(values: number[]) {

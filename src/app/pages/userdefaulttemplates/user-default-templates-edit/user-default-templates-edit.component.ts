@@ -29,7 +29,7 @@ import { RequiredIconComponent } from '../../../components/required-icon/require
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { UserDefaultTemplatesPost, } from '../user-default-templates.interface';
+import { UsercontainerrolesByLdapGroup, UserDefaultTemplatesPost, } from '../user-default-templates.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
 import { SelectKeyValue, SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 import { forkJoin, Subscription } from 'rxjs';
@@ -46,17 +46,10 @@ import { UserDefaultTemplatesService } from '../user-default-templates.service';
 import { LoadLdapgroups } from '../../usergroups/usergroups.interface';
 import { SliderTimeComponent } from '../../../components/slider-time/slider-time.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import {
-    UserAddContainerRolePermission,
-    UserContainerPermission,
-    UserLocaleOption,
-    UserTimezonesSelect
-} from '../../users/users.interface';
+import { UserContainerPermission, UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { ContainersService } from '../../containers/containers.service';
-import _ from 'lodash';
-import { AsyncPipe, NgClass } from '@angular/common';
-import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
+import { JsonPipe } from '@angular/common';
 
 @Component({
     selector: 'oitc-user-default-templates-edit',
@@ -95,9 +88,7 @@ import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/bad
         TrueFalseDirective,
         FormLoaderComponent,
         ContainerComponent,
-        AsyncPipe,
-        BadgeOutlineComponent,
-        NgClass
+        JsonPipe
     ],
     templateUrl: './user-default-templates-edit.component.html',
     styleUrl: './user-default-templates-edit.component.css',
@@ -120,13 +111,11 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
     public serverTimeZone: string = '';
 
     public containers: SelectKeyValue[] = [];
-    public usercontainerroles: SelectKeyValue[] = [];
-    public containerroles: SelectKeyValue[] = [];
+    public usercontainerrolesByLdapGroup: UsercontainerrolesByLdapGroup[] = [];
 
     protected ldapGroups: SelectKeyValue[] = [];
 
     public selectedUserContainerWithPermission: UserContainerPermission[] = [];
-    public userContainerRoleContainerPermissions: UserAddContainerRolePermission[] = [];
 
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
@@ -174,7 +163,7 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
                 this.notPermittedUserContainerIds = results.userdefaulttemplate.notPermittedUserContainerIds; // User has not written permissions to all selected containers
 
                 this.loadContainersByContainerIds(this.post.containers._ids);
-                this.loadContainerRoles('');
+                this.loadLdapGroupRoles('');
 
                 this.selectedUserContainerWithPermission = [];
 
@@ -299,10 +288,10 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
     }
 
     public onLdapGroupsChange(): void {
-        this.loadContainerRoles('');
+        this.loadLdapGroupRoles('');
     }
 
-    public loadContainerRoles = (searchString: string): void => {
+    public loadLdapGroupRoles = (searchString: string): void => {
         if (!this.post) {
             return;
         }
@@ -310,34 +299,13 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.UserDefaultTemplatesService.loadUserContainerRolesByLdapGroupIds(searchString, ldapGroupIds)
             .subscribe((result) => {
-                this.usercontainerroles = result;
-                this.post.usercontainerroles._ids = _.map(this.usercontainerroles, function (value, key) {
-                    return value.key;
-                });
-
-                this.loadUserContainerRoleContainerPermissions();
+                console.log(result);
+                this.usercontainerrolesByLdapGroup = result;
                 this.cdr.markForCheck();
             }));
     }
 
-    public loadUserContainerRoleContainerPermissions() {
-        if (this.post.usercontainerroles._ids.length === 0) {
-            this.userContainerRoleContainerPermissions = [];
-            this.containerroles = [];
-            this.cdr.markForCheck();
-            return;
-        }
-
-        this.subscriptions.add(this.UsersService.loadContainerPermissions(this.post.usercontainerroles._ids).subscribe((result) => {
-            this.userContainerRoleContainerPermissions = result;
-            this.cdr.markForCheck();
-        }));
-    }
-
     public onSelectedContainerIdsChange(values: number[]) {
-        console.log('onSelectedContainerIdsChange', values);
-        console.log(this.post.usercontainers._ids);
-
         // Called when a container is selected or unselected
         if (this.post.usercontainers._ids.length === 0) {
             // No user containers selected

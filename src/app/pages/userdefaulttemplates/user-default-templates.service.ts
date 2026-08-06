@@ -3,6 +3,8 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import {
+    UsercontainerrolesByLdapGroup,
+    UsercontainerrolesByLdapGroupResponse,
     UserDefaultTemplatesEditResponse,
     UserDefaultTemplatesIndexParams,
     UserDefaultTemplatesIndexRoot,
@@ -10,7 +12,6 @@ import {
 } from './user-default-templates.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
-import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 
 
 @Injectable({
@@ -100,9 +101,11 @@ export class UserDefaultTemplatesService implements DeleteAllModalService {
             );
     }
 
-    public loadUserContainerRolesByLdapGroupIds(searchString: string = '', ldapGroupIds: number[] = []): Observable<SelectKeyValue[]> {
+    public loadUserContainerRolesByLdapGroupIds(searchString: string = '', ldapGroupIds: number[] = []): Observable<UsercontainerrolesByLdapGroup[]> {
         const proxyPath = this.proxyPath;
-        return this.http.get<{ usercontainerroles: SelectKeyValue[] }>(`${proxyPath}/userDefaultTemplates/loadContainerRolesByLdapGroupIds.json`, {
+        return this.http.get<{
+            usercontainerrolesByLdapGroup: UsercontainerrolesByLdapGroup[]
+        }>(`${proxyPath}/userDefaultTemplates/loadContainerRolesByLdapGroupIds.json`, {
             params: {
                 angular: true,
                 'filter[Usercontainerroles.name]': searchString,
@@ -110,7 +113,7 @@ export class UserDefaultTemplatesService implements DeleteAllModalService {
             }
         }).pipe(
             map(data => {
-                return data.usercontainerroles;
+                return data.usercontainerrolesByLdapGroup;
             })
         )
     }
