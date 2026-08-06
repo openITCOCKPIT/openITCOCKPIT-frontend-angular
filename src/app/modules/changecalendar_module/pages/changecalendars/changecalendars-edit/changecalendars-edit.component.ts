@@ -198,6 +198,8 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
 
                     this.notyService.genericSuccess(msg, title);
 
+                    this.ngOnInit();
+
                     return;
                 }
                 // Error
