@@ -12,6 +12,7 @@ import {
 } from './user-default-templates.interface';
 import { DeleteAllItem, DeleteAllModalService } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { LoadLdapgroups } from '../usergroups/usergroups.interface';
 
 
 @Injectable({
@@ -116,6 +117,13 @@ export class UserDefaultTemplatesService implements DeleteAllModalService {
                 return data.usercontainerrolesByLdapGroup;
             })
         )
+    }
+
+    public loadLdapgroupsForAngular(search: string = '', selected?: number[]): Observable<LoadLdapgroups> {
+        return this.http.get<LoadLdapgroups>(`${this.proxyPath}/userDefaultTemplates/loadLdapgroupsWithContainerRolesForAngular.json?angular=true&filter[Ldapgroups.cn]=${search}`,
+            {
+                params: selected ? {'selected[]': selected} : {}
+            });
     }
 
 }

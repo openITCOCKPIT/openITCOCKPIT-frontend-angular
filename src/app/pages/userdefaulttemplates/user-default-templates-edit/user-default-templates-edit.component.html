@@ -135,15 +135,82 @@
                                         </oitc-multi-select>
                                         <oitc-form-feedback [errors]="errors"
                                                             errorField="ldapgroups"></oitc-form-feedback>
+                                        <div class="help-block">
+                                            {{ t('Only LDAP groups are displayed, where a user container role is assigned.') }}
+                                        </div>
                                     </div>
                                 </c-col>
 
                             </c-row>
                             <c-row>
                                 <c-col>
+                                    <oitc-alert
+                                        color="info"
+                                        [errorHeadline]="'Notice' | transloco"
+                                        [errorText]="'Container roles are assigned based on the user\'s LDAP groups and accumulate automatically, if a user belongs to multiple groups. If multiple roles apply, the highest permission level always wins. This means write access will overwrite read-only access for the same container.' | transloco"
+                                        [baseIcon]="'circle'"
+                                        [icon]="['fas', 'info']"></oitc-alert>
+                                </c-col>
+                            </c-row>
+                            <c-row class="mt-2">
 
-                                    ***{{ usercontainerrolesByLdapGroup|json }}***
-                                    INFO VIEW WITH ALL CONTAINER ROLES TO LDAP GROUPS MAPPING
+                                <c-col>
+                                    @for (ldapGroup of usercontainerrolesByLdapGroup; track ldapGroup) {
+                                        <h6>
+                                            {{ ldapGroup.value.cn }}
+                                            <span class="italic font-sm ps-2 text-muted fw-light">
+                                                ({{ ldapGroup.value.dn }})
+                                            </span>
+                                        </h6>
+                                        @for (userContainerRole of ldapGroup.value.containerroles; track $index) {
+                                            <div class="my-2 p-2" [ngClass]="{'odd': $index % 2 != 0}">
+                                                <div class="mb-2">
+                                                    <strong>
+                                                        <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                                                        {{ userContainerRole.name }}
+                                                    </strong>
+                                                </div>
+
+                                                @for (container of userContainerRole.containerPermissions.containers; track container) {
+                                                    <c-row class="mb-2">
+                                                        <c-col [md]="1"><!-- spacer --></c-col>
+                                                        <c-col [md]="11">
+                                                            <legend class="p-0 text-info fs-6">
+                                                                {{ container.path }}
+                                                            </legend>
+                                                            <div class="d-inline-block"
+                                                                 [ngClass]="{'user-strike' : post.usercontainers._ids.indexOf(container.id) !== -1}">
+                                                                <input cFormCheckInput
+                                                                       [attr.id]="'ldap_ucgroup-'+container.id+'_read'"
+                                                                       [name]="'ldap_ucgroup-'+container.id"
+                                                                       type="radio"
+                                                                       [value]="PermissionLevel.READ_RIGHT"
+                                                                       [(ngModel)]="container._joinData.permission_level"
+                                                                       [disabled]="true"/>
+                                                                <label cFormCheckLabel class="ps-2 pe-4"
+                                                                       [for]="'ldap_ucgroup-'+container.id+'_read'">
+                                                                    {{ t('read') }}
+                                                                </label>
+
+                                                                <input cFormCheckInput
+                                                                       [attr.id]="'ldap_ucgroup-'+container.id+'_write'"
+                                                                       [name]="'ldap_ucgroup-'+container.id"
+                                                                       type="radio"
+                                                                       [disabled]="true"
+                                                                       [value]="PermissionLevel.WRITE_RIGHT"
+                                                                       [(ngModel)]="container._joinData.permission_level"/>
+                                                                <label cFormCheckLabel class="ps-2 pe-4"
+                                                                       [for]="'ldap_ucgroup-'+container.id+'_write'">
+                                                                    {{ t('read/write') }}
+                                                                </label>
+                                                            </div>
+                                                        </c-col>
+                                                    </c-row>
+
+                                                }
+                                            </div>
+                                        }
+                                    }
                                 </c-col>
                             </c-row>
                         </fieldset>

@@ -31,7 +31,8 @@
 
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
-                        <button [fallbackUrl]="['userDefaultTemplates', 'index']" cButton class="ripple" color="default"
+                        <button [fallbackUrl]="['userDefaultTemplates', 'index']" cButton class="ripple"
+                                color="default"
                                 oitcBackButton
                                 size="xs">
                             <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
@@ -46,8 +47,8 @@
                     color="info"
                     baseIcon="circle"
                     [icon]="['fas', 'info']"
-                    [errorHeadline]="'What are LDAP user defaults?'"
-                    [errorText]="'Define defaults like which container, use role and user settings should assigned to imported LDAP users, depending on the defined LDAP groups.'">
+                    [errorHeadline]="'What are LDAP user defaults?' | transloco"
+                    [errorText]="'Define defaults like which container, use role and user settings should assigned to imported LDAP users, depending on the defined LDAP groups.' | transloco">
                 </oitc-alert>
                 <div class="mb-3">
                     <label cLabel for="container">
@@ -134,8 +135,84 @@
                                         [options]="ldapGroups"
                                         oitcFormError [errors]="errors" errorField="ldapgroups">
                                     </oitc-multi-select>
-                                    <oitc-form-feedback [errors]="errors" errorField="ldapgroups"></oitc-form-feedback>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="ldapgroups"></oitc-form-feedback>
+                                    <div class="help-block">
+                                        {{ t('Only LDAP groups are displayed, where a user container role is assigned.') }}
+                                    </div>
                                 </div>
+                            </c-col>
+
+                        </c-row>
+                        <c-row>
+                            <c-col>
+                                <oitc-alert
+                                    color="info"
+                                    [errorHeadline]="'Notice' | transloco"
+                                    [errorText]="'Container roles are assigned based on the user\'s LDAP groups and accumulate automatically, if a user belongs to multiple groups. If multiple roles apply, the highest permission level always wins. This means write access will overwrite read-only access for the same container.' | transloco"
+                                    [baseIcon]="'circle'"
+                                    [icon]="['fas', 'info']"></oitc-alert>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mt-2">
+
+                            <c-col>
+                                @for (ldapGroup of usercontainerrolesByLdapGroup; track ldapGroup) {
+                                    <h6>
+                                        {{ ldapGroup.value.cn }}
+                                        <span class="italic font-sm ps-2 text-muted fw-light">
+                                            ({{ ldapGroup.value.dn }})
+                                        </span>
+                                    </h6>
+                                    @for (userContainerRole of ldapGroup.value.containerroles; track $index) {
+                                        <div class="my-2 p-2" [ngClass]="{'odd': $index % 2 != 0}">
+                                            <div class="mb-2">
+                                                <strong>
+                                                    <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                                                    {{ userContainerRole.name }}
+                                                </strong>
+                                            </div>
+
+                                            @for (container of userContainerRole.containerPermissions.containers; track container) {
+                                                <c-row class="mb-2">
+                                                    <c-col [md]="1"><!-- spacer --></c-col>
+                                                    <c-col [md]="11">
+                                                        <legend class="p-0 text-info fs-6">
+                                                            {{ container.path }}
+                                                        </legend>
+                                                        <div class="d-inline-block"
+                                                             [ngClass]="{'user-strike' : post.usercontainers._ids.indexOf(container.id) !== -1}">
+                                                            <input cFormCheckInput
+                                                                   [attr.id]="'ldap_ucgroup-'+container.id+'_read'"
+                                                                   [name]="'ldap_ucgroup-'+container.id"
+                                                                   type="radio"
+                                                                   [value]="PermissionLevel.READ_RIGHT"
+                                                                   [(ngModel)]="container._joinData.permission_level"
+                                                                   [disabled]="true"/>
+                                                            <label cFormCheckLabel class="ps-2 pe-4"
+                                                                   [for]="'ldap_ucgroup-'+container.id+'_read'">
+                                                                {{ t('read') }}
+                                                            </label>
+
+                                                            <input cFormCheckInput
+                                                                   [attr.id]="'ldap_ucgroup-'+container.id+'_write'"
+                                                                   [name]="'ldap_ucgroup-'+container.id"
+                                                                   type="radio"
+                                                                   [disabled]="true"
+                                                                   [value]="PermissionLevel.WRITE_RIGHT"
+                                                                   [(ngModel)]="container._joinData.permission_level"/>
+                                                            <label cFormCheckLabel class="ps-2 pe-4"
+                                                                   [for]="'ldap_ucgroup-'+container.id+'_write'">
+                                                                {{ t('read/write') }}
+                                                            </label>
+                                                        </div>
+                                                    </c-col>
+                                                </c-row>
+
+                                            }
+                                        </div>
+                                    }
+                                }
                             </c-col>
                         </c-row>
                     </fieldset>
@@ -344,7 +421,8 @@
                                         [options]="dateformats"
                                         oitcFormError [errors]="errors" errorField="dateformat">
                                     </oitc-select>
-                                    <oitc-form-feedback [errors]="errors" errorField="dateformat"></oitc-form-feedback>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="dateformat"></oitc-form-feedback>
                                 </div>
 
                                 <div class="mb-3">
@@ -365,7 +443,8 @@
                                             <div [ngOptionHighlight]="search">{{ timezone.name }}</div>
                                         </ng-template>
                                     </ng-select>
-                                    <oitc-form-feedback [errors]="errors" errorField="timezone"></oitc-form-feedback>
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="timezone"></oitc-form-feedback>
                                     <div class="help-block">
                                         {{ t('Server timezone is:') }}
                                         <strong>
@@ -398,8 +477,6 @@
                         </c-row>
                     </fieldset>
                 </c-container>
-
-
             </c-card-body>
             <c-card-footer class="text-end">
                 <label class="me-2">
@@ -415,7 +492,6 @@
                         type="button">
                     {{ t('Cancel') }}
                 </button>
-
             </c-card-footer>
         </c-card>
     </form>

@@ -27,7 +27,7 @@ import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-sele
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { UsercontainerrolesByLdapGroup, UserDefaultTemplatesPost, } from '../user-default-templates.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
@@ -49,7 +49,8 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { UserContainerPermission, UserLocaleOption, UserTimezonesSelect } from '../../users/users.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { ContainersService } from '../../containers/containers.service';
-import { JsonPipe } from '@angular/common';
+import { NgClass } from '@angular/common';
+import { OitcAlertComponent } from '../../../components/alert/alert.component';
 
 @Component({
     selector: 'oitc-user-default-templates-edit',
@@ -88,7 +89,9 @@ import { JsonPipe } from '@angular/common';
         TrueFalseDirective,
         FormLoaderComponent,
         ContainerComponent,
-        JsonPipe
+        NgClass,
+        OitcAlertComponent,
+        TranslocoPipe
     ],
     templateUrl: './user-default-templates-edit.component.html',
     styleUrl: './user-default-templates-edit.component.css',
@@ -270,7 +273,7 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
         if (this.post && this.post.ldapgroups && this.post.ldapgroups._ids) {
             selected = this.post.ldapgroups._ids;
         }
-        this.subscriptions.add(this.UsergroupsService.loadLdapgroupsForAngular(search, selected).subscribe((ldapgroups: LoadLdapgroups) => {
+        this.subscriptions.add(this.UserDefaultTemplatesService.loadLdapgroupsForAngular(search, selected).subscribe((ldapgroups: LoadLdapgroups) => {
             this.ldapGroups = ldapgroups.ldapgroups;
             this.cdr.markForCheck();
         }));
@@ -299,7 +302,6 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.UserDefaultTemplatesService.loadUserContainerRolesByLdapGroupIds(searchString, ldapGroupIds)
             .subscribe((result) => {
-                console.log(result);
                 this.usercontainerrolesByLdapGroup = result;
                 this.cdr.markForCheck();
             }));

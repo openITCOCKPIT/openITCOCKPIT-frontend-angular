@@ -1,6 +1,6 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { PermissionLevel } from '../users/permission-level';
-import { UserAddEditApiKey, UsersIndexUserContainer } from '../users/users.interface';
+import { UsersIndexContainer, UsersIndexUserContainer } from '../users/users.interface';
 
 /**********************
  *    Index action    *
@@ -63,7 +63,7 @@ export interface UserDefaultTemplatesPost {
     paginatorlength: number
     dashboard_tab_rotation: number
     recursive_browser: 0 | 1
-    containers:{
+    containers: {
         _ids: number[]
     }
     usercontainers: { // Edit only
@@ -108,7 +108,7 @@ export interface UserDefaultTemplatesEditResponse {
     notPermittedUserContainerIds: number[]
 }
 
-export interface UsercontainerrolesByLdapGroupResponse{
+export interface UsercontainerrolesByLdapGroupResponse {
     usercontainerrolesByLdapGroup: UsercontainerrolesByLdapGroup[]
 }
 
@@ -119,8 +119,34 @@ export interface UsercontainerrolesByLdapGroup {
         id: number
         cn: string
         dn: string
-        containerroles: {
-            [key: number]: number
-        }
+        containerroles: LdapUserContainerRoles[]
     }
+}
+
+export interface LdapUserContainerRoles {
+    id: number
+    name: string
+    containerPermissions: {
+        id: number
+        name: string
+        containers: LdapContainerRoleContainer[]
+    }
+
+}
+
+
+export interface LdapContainerRoleContainer {
+    id: number
+    containertype_id: number
+    name: string
+    parent_id: number
+    lft: number
+    rght: number
+    _joinData: {
+        id: number
+        usercontainerrole_id: number
+        container_id: number
+        permission_level: number
+    }
+    path: string
 }
