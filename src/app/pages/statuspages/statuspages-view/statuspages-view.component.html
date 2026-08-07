@@ -89,12 +89,12 @@
                         </small>
                     </div>
                     <div class="p-3 bg-{{statuspage.Statuspage.statuspage.cumulatedColor}} rounded overflow-hidden position-relative text-white">
-                        <div class="d-flex align-items-baseline gap-2">
+                        <div class="d-flex align-items-baseline justify-content-between position-relative z-1 pe-5">
                             <span class="h2 l-h-n m-0 fw-500">
                                 {{ statuspage.Statuspage.statuspage.cumulatedHumanStatus }}
                             </span>
                             @if (statuspage.Statuspage.statuspage.cumulatedColorId > 0 && statuspage.Statuspage.statuspage.lastStateChange) {
-                                <span>({{ t('State since') }}: {{ statuspage.Statuspage.statuspage.lastStateChange }})</span>
+                                <span>{{ t('State since') }}: {{ statuspage.Statuspage.statuspage.lastStateChange }}</span>
                             }
                         </div>
                         <i class="{{statuspage.Statuspage.statuspage.cumulatedIcon}} statuspage-icon position-absolute pos-right pos-bottom opacity-15 pr-1"></i>
@@ -161,13 +161,13 @@
                                                     </div>
                                                 }
                                                 <div class="col-12">
-                                                    <span>
-                                                        <span class="h5 {{ item.cumulatedColor }} me-2">{{ item.cumulatedStateName }}</span>
+                                                    <div class="d-flex justify-content-between align-items-baseline">
+                                                        <span class="h5 {{ item.cumulatedColor }} me-2 m-0">{{ item.cumulatedStateName }}</span>
 
                                                         @if (item.cumulatedColorId > 0 && item.lastStateChange) {
-                                                            ({{ t('State since') }}: {{ item.lastStateChange }})
+                                                            <span>{{ t('State since') }}: {{ item.lastStateChange }}</span>
                                                         }
-                                                    </span>
+                                                    </div>
                                                 </div>
                                                 <!-- Handle acknowledgement comments -->
                                                 <div class="col-12 text-truncate">
