@@ -9,7 +9,8 @@ import {
     FormCheckInputDirective,
     FormControlDirective,
     FormDirective,
-    FormLabelDirective, InputGroupComponent,
+    FormLabelDirective,
+    InputGroupComponent,
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
@@ -31,7 +32,6 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
 
 import { ServicegroupsService } from '../servicegroups.service';
 import {
-    LoadContainersRoot,
     LoadServicesResponse,
     LoadServicetemplates,
     Servicegroup,
@@ -44,6 +44,7 @@ import { HistoryService } from '../../../history.service';
 import {
     MultiSelectOptgroupComponent
 } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { LoadContainersRoot } from '../../containers/containers.interface';
 
 @Component({
     selector: 'oitc-servicegroups-add',

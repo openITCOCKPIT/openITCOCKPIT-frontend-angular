@@ -30,18 +30,13 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { HostgroupsService } from '../hostgroups.service';
-import {
-    Hostgroup,
-    HostgroupsEditGet,
-    LoadContainersRoot,
-    LoadHostsResponse,
-    LoadHosttemplates
-} from "../hostgroups.interface";
+import { Hostgroup, HostgroupsEditGet, LoadHostsResponse, LoadHosttemplates } from "../hostgroups.interface";
 import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
 import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
 import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
+import { LoadContainersRoot } from '../../containers/containers.interface';
 
 @Component({
     selector: 'oitc-hostgroups-edit',

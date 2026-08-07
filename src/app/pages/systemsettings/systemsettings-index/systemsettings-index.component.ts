@@ -11,10 +11,14 @@ import {
     CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
+    ColComponent,
     FormControlDirective,
     FormDirective,
     FormSelectDirective,
+    InputGroupComponent,
+    InputGroupTextDirective,
     ModalService,
+    RowComponent,
     TableDirective,
     TooltipDirective
 } from '@coreui/angular';
@@ -29,7 +33,7 @@ import { KeyValuePipe } from '@angular/common';
 
 import { PermissionDirective } from '../../../permissions/permission.directive';
 
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
 import { SystemsettingsCategories } from '../systemsettings.interface';
@@ -40,6 +44,7 @@ import {
 } from '../../../layouts/coreui/reload-interface-modal/reload-interface-modal.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'oitc-systemsettings-index',
@@ -65,7 +70,12 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         FormSelectDirective,
         NgSwitchMultiCasePipe,
         ReloadInterfaceModalComponent,
-        TableLoaderComponent
+        TableLoaderComponent,
+        ColComponent,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        RowComponent,
+        TranslocoPipe
     ],
     templateUrl: './systemsettings-index.component.html',
     styleUrl: './systemsettings-index.component.css',
@@ -75,6 +85,8 @@ export class SystemsettingsIndexComponent implements OnInit, OnDestroy {
 
     public SystemsettingsCategories?: SystemsettingsCategories;
     public archiveAgeOptions: string[] = this.generateArchiveAgeOptions();
+
+    public filterKey: string = '';
 
     private readonly SystemsettingsService = inject(SystemsettingsService);
     private readonly TranslocoService = inject(TranslocoService);
@@ -143,4 +155,5 @@ export class SystemsettingsIndexComponent implements OnInit, OnDestroy {
         }
     }
 
+    protected readonly filter = filter;
 }
