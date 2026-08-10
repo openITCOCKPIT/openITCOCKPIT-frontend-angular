@@ -51,6 +51,9 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 import { ContainersService } from '../../containers/containers.service';
 import { NgClass } from '@angular/common';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
+import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
+import { FakeSelectComponent } from '../../../layouts/coreui/fake-select/fake-select.component';
+import _ from 'lodash';
 
 @Component({
     selector: 'oitc-user-default-templates-edit',
@@ -91,7 +94,9 @@ import { OitcAlertComponent } from '../../../components/alert/alert.component';
         ContainerComponent,
         NgClass,
         OitcAlertComponent,
-        TranslocoPipe
+        TranslocoPipe,
+        LabelLinkComponent,
+        FakeSelectComponent
     ],
     templateUrl: './user-default-templates-edit.component.html',
     styleUrl: './user-default-templates-edit.component.css',
@@ -107,6 +112,8 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
 
     public usergroups: SelectKeyValue[] = [];
     public filteredContainersByContainerIds: SelectKeyValue[] = [];
+    public filteredContainerIds: number[] = [];
+
     public localeOptions: UserLocaleOption[] = [];
     public dateformats: SelectKeyValueString[] = [];
     public timezones: UserTimezonesSelect[] = [];
@@ -284,8 +291,10 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
     }
 
     public loadContainersByContainerIds(containerIds: number[]) {
+        this.filteredContainerIds = [];
         this.subscriptions.add(this.ContainersService.loadContainersByContainerIds(containerIds).subscribe((result) => {
             this.filteredContainersByContainerIds = result.containers;
+            this.filteredContainerIds = _.map(this.filteredContainersByContainerIds, 'key')
             this.cdr.markForCheck();
         }));
     }

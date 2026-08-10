@@ -54,17 +54,25 @@
                             <oitc-required-icon></oitc-required-icon>
                         </label>
 
-                        <oitc-multi-select
-                            name="container"
-                            id="container"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.containers._ids"
-                            [options]="containers"
-                            [debounce]="true"
-                            (onChange)="onContainerChange()"
-                            oitcFormError [errors]="errors" errorField="containers">
-                        </oitc-multi-select>
+                        @if (notPermittedUserContainerIds.length === 0) {
+                            <oitc-multi-select
+                                name="container"
+                                id="container"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="post.containers._ids"
+                                [disabled]="notPermittedUserContainerIds.length > 0"
+                                [options]="containers"
+                                [debounce]="true"
+                                (onChange)="onContainerChange()"
+                                oitcFormError [errors]="errors" errorField="containers">
+                            </oitc-multi-select>
+                        } @else {
+                            <oitc-fake-select>
+                                {{ t('Restricted view') }}
+                            </oitc-fake-select>
+                        }
+
 
                         @if (post.containers._ids.length === 0) {
                             <div class="text-warning-glow pt-1">
@@ -153,7 +161,6 @@
                                 </c-col>
                             </c-row>
                             <c-row class="mt-2">
-
                                 <c-col>
                                     @for (ldapGroup of usercontainerrolesByLdapGroup; track ldapGroup) {
                                         <h6>
@@ -166,8 +173,18 @@
                                             <div class="my-2 p-2" [ngClass]="{'odd': $index % 2 != 0}">
                                                 <div class="mb-2">
                                                     <strong>
-                                                        <fa-icon [icon]="['fas', 'users']"></fa-icon>
-                                                        {{ userContainerRole.name }}
+                                                        @if (userContainerRole.allowEdit) {
+                                                            <oitc-label-link
+                                                                [objectId]="userContainerRole.id"
+                                                                [route]="'/usercontainerroles/edit'"
+                                                                [permissions]="'usercontainerroles.edit'">
+                                                                <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                                                                {{ userContainerRole.name }}
+                                                            </oitc-label-link>
+                                                        } @else {
+                                                            <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                                                            {{ userContainerRole.name }}
+                                                        }
                                                     </strong>
                                                 </div>
 
@@ -176,7 +193,27 @@
                                                         <c-col [md]="1"><!-- spacer --></c-col>
                                                         <c-col [md]="11">
                                                             <legend class="p-0 text-info fs-6">
-                                                                {{ container.path }}
+                                                                @if (container.allowView) {
+                                                                    <oitc-label-link
+                                                                        [objectId]="container.id"
+                                                                        [route]="'/containers/index'"
+                                                                        [permissions]="'containers.index'">
+                                                                        <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                                                                        {{ container.path }}
+                                                                    </oitc-label-link>
+                                                                } @else {
+                                                                    <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                                                                    {{ container.path }}
+                                                                }
+                                                                @if (filteredContainerIds.indexOf(container.id) === -1) {
+                                                                    <span class="text-warning italic ps-3"
+                                                                          [title]="'Container is not assigned to the selected container!' | transloco">
+                                                                        <fa-icon
+                                                                            [icon]="['fas', 'shield-halved']"></fa-icon>
+
+                                                                        {{ t('Container not in selected range!') }}
+                                                                    </span>
+                                                                }
                                                             </legend>
                                                             <div class="d-inline-block"
                                                                  [ngClass]="{'user-strike' : post.usercontainers._ids.indexOf(container.id) !== -1}">
@@ -206,7 +243,6 @@
                                                             </div>
                                                         </c-col>
                                                     </c-row>
-
                                                 }
                                             </div>
                                         }
@@ -236,18 +272,26 @@
                                         <label cLabel for="usercontainerIds" class="hintmark">
                                             {{ t('Additional Container') }}
                                         </label>
-                                        <oitc-multi-select
-                                            name="usercontainerIds"
-                                            id="usercontainerIds"
-                                            optionValue="key"
-                                            optionLabel="value"
-                                            [(ngModel)]="post.usercontainers._ids"
-                                            [options]="filteredContainersByContainerIds"
-                                            (ngModelChange)="onSelectedContainerIdsChange($event)"
-                                            oitcFormError [errors]="errors" errorField="usercontainers">
-                                        </oitc-multi-select>
-                                        <oitc-form-feedback [errors]="errors"
-                                                            errorField="usercontainers"></oitc-form-feedback>
+
+                                        @if (notPermittedUserContainerIds.length === 0) {
+                                            <oitc-multi-select
+                                                name="usercontainerIds"
+                                                id="usercontainerIds"
+                                                optionValue="key"
+                                                optionLabel="value"
+                                                [(ngModel)]="post.usercontainers._ids"
+                                                [options]="filteredContainersByContainerIds"
+                                                (ngModelChange)="onSelectedContainerIdsChange($event)"
+                                                oitcFormError [errors]="errors" errorField="usercontainers">
+                                            </oitc-multi-select>
+                                            <oitc-form-feedback [errors]="errors"
+                                                                errorField="usercontainers"></oitc-form-feedback>
+                                        } @else {
+                                            <oitc-fake-select>
+                                                {{ t('Restricted view') }}
+                                            </oitc-fake-select>
+                                        }
+
                                         <div class="help-block text-info">
                                             <fa-icon [icon]="['fas', 'info-circle']"/>
                                             {{ t('Container assignments defined in the user will overwrite permissions inherited from Container Roles!') }}

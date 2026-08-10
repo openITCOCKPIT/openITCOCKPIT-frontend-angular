@@ -1,6 +1,6 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { PermissionLevel } from '../users/permission-level';
-import { UsersIndexContainer, UsersIndexUserContainer } from '../users/users.interface';
+import { UsersIndexUserContainer } from '../users/users.interface';
 
 /**********************
  *    Index action    *
@@ -126,6 +126,7 @@ export interface UsercontainerrolesByLdapGroup {
 export interface LdapUserContainerRoles {
     id: number
     name: string
+    allowEdit: boolean
     containerPermissions: {
         id: number
         name: string
@@ -149,4 +150,5 @@ export interface LdapContainerRoleContainer {
         permission_level: number
     }
     path: string
+    allowView: boolean
 }

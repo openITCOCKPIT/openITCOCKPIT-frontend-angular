@@ -155,7 +155,6 @@
                             </c-col>
                         </c-row>
                         <c-row class="mt-2">
-
                             <c-col>
                                 @for (ldapGroup of usercontainerrolesByLdapGroup; track ldapGroup) {
                                     <h6>
@@ -168,17 +167,49 @@
                                         <div class="my-2 p-2" [ngClass]="{'odd': $index % 2 != 0}">
                                             <div class="mb-2">
                                                 <strong>
-                                                    <fa-icon [icon]="['fas', 'users']"></fa-icon>
-                                                    {{ userContainerRole.name }}
+                                                    @if (userContainerRole.allowEdit) {
+                                                        <oitc-label-link
+                                                            [objectId]="userContainerRole.id"
+                                                            [route]="'/usercontainerroles/edit'"
+                                                            [permissions]="'usercontainerroles.edit'">
+                                                            <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                                                            {{ userContainerRole.name }}
+                                                        </oitc-label-link>
+                                                    } @else {
+                                                        <fa-icon [icon]="['fas', 'users']"></fa-icon>
+                                                        {{ userContainerRole.name }}
+                                                    }
+
                                                 </strong>
                                             </div>
 
-                                            @for (container of userContainerRole.containerPermissions.containers; track container) {
+                                            @for (container of userContainerRole.containerPermissions.containers; track container.id) {
                                                 <c-row class="mb-2">
                                                     <c-col [md]="1"><!-- spacer --></c-col>
                                                     <c-col [md]="11">
                                                         <legend class="p-0 text-info fs-6">
-                                                            {{ container.path }}
+                                                            @if (container.allowView) {
+                                                                <oitc-label-link
+                                                                    [objectId]="container.id"
+                                                                    [route]="'/containers/index'"
+                                                                    [permissions]="'containers.index'">
+                                                                    <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                                                                    {{ container.path }}
+                                                                </oitc-label-link>
+                                                            } @else {
+                                                                <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                                                                {{ container.path }}
+                                                            }
+                                                            @if (filteredContainerIds.indexOf(container.id) === -1) {
+                                                                <span class="text-warning italic ps-3"
+                                                                      [title]="'Container is not assigned to the selected container!' | transloco">
+                                                                    <fa-icon
+                                                                        [icon]="['fas', 'shield-halved']"></fa-icon>
+
+                                                                    {{ t('Container not in selected range!') }}
+                                                                </span>
+                                                            }
+
                                                         </legend>
                                                         <div class="d-inline-block"
                                                              [ngClass]="{'user-strike' : post.usercontainers._ids.indexOf(container.id) !== -1}">
@@ -208,7 +239,6 @@
                                                         </div>
                                                     </c-col>
                                                 </c-row>
-
                                             }
                                         </div>
                                     }
