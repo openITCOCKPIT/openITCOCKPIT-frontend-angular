@@ -1,0 +1,64 @@
+{
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "modificationsIfAvailable",
+    "files.eol": "\n",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "never"
+    },
+    "js/ts.updateImportsOnFileMove.enabled": "always",
+    "js/ts.suggest.autoImports": true,
+    "js/ts.preferences.quoteStyle": "single",
+    "js/ts.preferences.includePackageJsonAutoImports": "auto",
+    "js/ts.format.insertSpaceBeforeFunctionParenthesis": false,
+    "js/ts.format.insertSpaceAfterKeywordsInControlFlowStatements": true,
+    "js/ts.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+    "js/ts.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+    "js/ts.format.placeOpenBraceOnNewLineForFunctions": false,
+    "js/ts.format.placeOpenBraceOnNewLineForControlBlocks": false,
+    "js/ts.format.wrapLineLength": 120,
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.rulers": [
+        120
+    ],
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features",
+        "editor.formatOnSave": true,
+        "files.trimTrailingWhitespace": true,
+        "editor.codeActionsOnSave": {
+            "source.addMissingImports": "always"
+        }
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features",
+        "editor.formatOnSave": true,
+        "files.trimTrailingWhitespace": true,
+        "editor.codeActionsOnSave": {
+            "source.addMissingImports": "always"
+        }
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "vscode.css-language-features",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2
+    },
+    "[sass]": {
+        "editor.defaultFormatter": "vscode.css-language-features",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2
+    },
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2
+    },
+    "[json]": {
+        "editor.formatOnSave": true,
+        "editor.tabSize": 4
+    },
+    "[jsonc]": {
+        "editor.formatOnSave": true,
+        "editor.tabSize": 4
+    }
+}
