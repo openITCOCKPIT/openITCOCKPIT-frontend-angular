@@ -38,7 +38,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { UsersService } from '../../users/users.service';
-import { UsergroupsService } from '../../usergroups/usergroups.service';
 import { HistoryService } from '../../../history.service';
 import { PermissionLevel } from '../../users/permission-level';
 import { ROOT_CONTAINER } from '../../changelogs/object-types.enum';
@@ -121,6 +120,7 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
     public serverTimeZone: string = '';
 
     public containers: SelectKeyValue[] = [];
+    public containerIds: number[] = [];
     public usercontainerrolesByLdapGroup: UsercontainerrolesByLdapGroup[] = [];
 
     protected ldapGroups: SelectKeyValue[] = [];
@@ -133,7 +133,6 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private readonly UsersService: UsersService = inject(UsersService);
     private readonly UserDefaultTemplatesService: UserDefaultTemplatesService = inject(UserDefaultTemplatesService);
-    private readonly UsergroupsService: UsergroupsService = inject(UsergroupsService);
     private readonly ContainersService = inject(ContainersService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -167,11 +166,11 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
                 // Store container data
                 this.containers = results.container.containers;
                 this.containerIdsWithWritePermissions = results.container.containerIdsWithWritePermissions;
+                this.containerIds = _.map(this.containers, 'key');
 
                 // Store user data
                 this.post = results.userdefaulttemplate.userDefaultTemplate;
                 this.notPermittedUserContainerIds = results.userdefaulttemplate.notPermittedUserContainerIds; // User has not written permissions to all selected containers
-
                 this.loadContainersByContainerIds(this.post.containers._ids);
                 this.loadLdapGroupRoles('');
 
@@ -294,7 +293,7 @@ export class UserDefaultTemplatesEditComponent implements OnInit, OnDestroy {
         this.filteredContainerIds = [];
         this.subscriptions.add(this.ContainersService.loadContainersByContainerIds(containerIds).subscribe((result) => {
             this.filteredContainersByContainerIds = result.containers;
-            this.filteredContainerIds = _.map(this.filteredContainersByContainerIds, 'key')
+            this.filteredContainerIds = _.map(this.filteredContainersByContainerIds, 'key');
             this.cdr.markForCheck();
         }));
     }

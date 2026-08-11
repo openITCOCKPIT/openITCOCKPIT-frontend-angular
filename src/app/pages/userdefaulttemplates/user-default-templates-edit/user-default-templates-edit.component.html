@@ -311,7 +311,7 @@
                                                            [attr.id]="'ucgroup-'+userContainer.container_id+'_read'"
                                                            [name]="'ucgroup-'+userContainer.container_id"
                                                            type="radio"
-                                                           [disabled]="userContainer.container_id === ROOT_CONTAINER"
+                                                           [disabled]="(userContainer.container_id === ROOT_CONTAINER || !containerIds.includes(userContainer.container_id))"
                                                            [value]="PermissionLevel.READ_RIGHT"
                                                            [(ngModel)]="userContainer.permission_level"/>
                                                     <label cFormCheckLabel class="ps-2 pe-4"
@@ -323,7 +323,7 @@
                                                            [attr.id]="'ucgroup-'+userContainer.container_id+'_write'"
                                                            [name]="'ucgroup-'+userContainer.container_id"
                                                            type="radio"
-                                                           [disabled]="userContainer.container_id === ROOT_CONTAINER"
+                                                           [disabled]="(userContainer.container_id === ROOT_CONTAINER || !containerIds.includes(userContainer.container_id))"
                                                            [value]="PermissionLevel.WRITE_RIGHT"
                                                            [(ngModel)]="userContainer.permission_level"/>
                                                     <label cFormCheckLabel class="ps-2 pe-4"
