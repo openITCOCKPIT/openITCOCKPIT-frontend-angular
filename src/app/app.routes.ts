@@ -215,6 +215,9 @@ const coreRoutes: Routes = [{
     path: 'usercontainerroles/add',
     loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-add/usercontainerroles-add.component').then(m => m.UsercontainerrolesAddComponent)
 }, {
+    path: 'usercontainerroles/add/:ldapgroupIds',
+    loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-add/usercontainerroles-add.component').then(m => m.UsercontainerrolesAddComponent)
+}, {
     path: 'usercontainerroles/copy/:ids',
     loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-copy/usercontainerroles-copy.component').then(m => m.UserContainerRolesCopyComponent)
 }, {
@@ -223,6 +226,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'usercontainerroles/index',
     loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-index/usercontainerroles-index.component').then(m => m.UsercontainerrolesIndexComponent)
+}, {
+    path: 'usercontainerroles/append/:ldapgroupIds',
+    loadComponent: () => import('./pages/usercontainerroles/usercontainerroles-append/usercontainerroles-append.component').then(m => m.UsercontainerrolesAppendComponent)
 }, {
     path: 'contacts/index',
     loadComponent: () => import('./pages/contacts/contacts-index/contacts-index.component').then(m => m.ContactsIndexComponent)
@@ -605,6 +611,9 @@ const coreRoutes: Routes = [{
     path: 'usergroups/add',
     loadComponent: () => import('./pages/usergroups/usergroups-add/usergroups-add.component').then(m => m.UsergroupsAddComponent)
 }, {
+    path: 'usergroups/add/:ldapgroupIds',
+    loadComponent: () => import('./pages/usergroups/usergroups-add/usergroups-add.component').then(m => m.UsergroupsAddComponent)
+}, {
     path: 'usergroups/edit/:id',
     loadComponent: () => import('./pages/usergroups/usergroups-edit/usergroups-edit.component').then(m => m.UsergroupsEditComponent)
 }, {
@@ -613,6 +622,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'usergroups/index',
     loadComponent: () => import('./pages/usergroups/usergroups-index/usergroups-index.component').then(m => m.UsergroupsIndexComponent)
+}, {
+    path: 'usergroups/append/:ldapgroupIds',
+    loadComponent: () => import('./pages/usergroups/usergroups-append/usergroups-append.component').then(m => m.UsergroupsAppendComponent)
 }, {
     path: 'users/login',
     loadComponent: () => import('./pages/users/users-login/users-login.component').then(m => m.UsersLoginComponent)
@@ -628,6 +640,18 @@ const coreRoutes: Routes = [{
 }, {
     path: 'users/edit/:id',
     loadComponent: () => import('./pages/users/users-edit/users-edit.component').then(m => m.UsersEditComponent)
+}, {
+    path: 'userDefaultTemplates/index',
+    loadComponent: () => import('./pages/userdefaulttemplates/user-default-templates-index/user-default-templates-index.component').then(m => m.UserDefaultTemplatesIndexComponent)
+}, {
+    path: 'userDefaultTemplates/add',
+    loadComponent: () => import('./pages/userdefaulttemplates/user-default-templates-add/user-default-templates-add.component').then(m => m.UserDefaultTemplatesAddComponent)
+}, {
+    path: 'userDefaultTemplates/edit/:id',
+    loadComponent: () => import('./pages/userdefaulttemplates/user-default-templates-edit/user-default-templates-edit.component').then(m => m.UserDefaultTemplatesEditComponent)
+}, {
+    path: 'ldapgroups/index',
+    loadComponent: () => import('./pages/ldapgroups/ldapgroups-index/ldapgroups-index.component').then(m => m.LdapgroupsIndexComponent)
 }, {
     path: 'acknowledgements/host/:id',
     loadComponent: () => import('./pages/acknowledgements/acknowledgements-host/acknowledgements-host.component').then(m => m.AcknowledgementsHostComponent)
