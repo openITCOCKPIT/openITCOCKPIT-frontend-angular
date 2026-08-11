@@ -42,8 +42,16 @@ export class UsercontainerrolesService {
         return this.http.post<UsergroupsCopyPostRoot>(`${this.proxyPath}/usercontainerroles/copy/.json?angular=true`, {data: post});
     }
 
-    public loadLdapGroups(searchString: string) {
-        return this.http.get<LoadLdapgroups>(`${this.proxyPath}/usercontainerroles/loadLdapgroupsForAngular.json?angular=true&filter[Ldapgroups.cn]=${searchString}`);
+    public loadLdapGroups(searchString: string, selected: number[] = []) {
+        const params = {
+            'angular': true,
+            'filter[Ldapgroups.cn]': searchString,
+            'selected[]': selected
+        };
+
+        return this.http.get<LoadLdapgroups>(`${this.proxyPath}/usercontainerroles/loadLdapgroupsForAngular.json`, {
+            params: params
+        });
     }
 
     /**********************

@@ -127,7 +127,12 @@ export class UsercontainerrolesAddComponent implements OnInit, OnDestroy {
     }
 
     public loadLdapGroups = (searchString: string) => {
-        this.subscriptions.add(this.UsercontainerrolesService.loadLdapGroups(searchString).subscribe((result) => {
+        let selected: number[] = [];
+        if (this.post && this.post.ldapgroups._ids) {
+            selected = this.post.ldapgroups._ids;
+        }
+
+        this.subscriptions.add(this.UsercontainerrolesService.loadLdapGroups(searchString, selected).subscribe((result) => {
             this.isLdapAuth = result.isLdapAuth;
             this.ldapgroups = result.ldapgroups;
 
