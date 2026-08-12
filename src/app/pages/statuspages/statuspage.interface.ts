@@ -5,17 +5,19 @@ export interface StatuspageRoot {
 
 export interface Statuspage {
     statuspage: StatuspageProperties
-    items: Item[]
+    items?: Item[],
+    groupedItems?: GroupedItem[] | undefined
 }
 
 export interface StatuspageProperties {
     uuid: string
+    id: number
     name: string
     description: string
     public: boolean
     public_title: string | null,
     public_identifier: string | null,
-    public_refresh: number;
+    public_refresh: number
     showDowntimes: boolean
     showDowntimeComments: boolean
     showAcknowledgements: boolean
@@ -24,15 +26,19 @@ export interface StatuspageProperties {
     cumulatedColor: string
     cumulatedHumanStatus: string
     cumulatedIcon: string
+    lastStateChange?: string
+
 }
 
 export interface Item {
     type: string
     id: number
-    name: string
+    name: string,
+    tags: string[],
     cumulatedStateName: string
     cumulatedColorId: number
     cumulatedColor: string
+    lastStateChange?: string | null
     isAcknowledge: boolean
     acknowledgeComment: string[]
     scheduledStartTime: any
@@ -49,6 +55,14 @@ export interface PlannedDowntimeDaum {
     scheduledStartTime: string
     scheduledEndTime: string
     comment: string
+}
+
+export interface GroupedItem {
+    group: string
+    colorId: number
+    cumulatedColor: string
+    isUngrouped: boolean
+    items: Item[];
 }
 
 export interface StatuspagePost {
@@ -122,7 +136,8 @@ export interface SelectKeyValueExtended {
     value: string,
     id: number,
     _joinData: {
-        display_alias: ''
+        display_alias: '',
+        group_tags?: string | string[]| null
     }
 }
 
