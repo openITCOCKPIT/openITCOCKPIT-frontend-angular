@@ -103,7 +103,7 @@ export function getDefaultCustomAlertRulesHistoryParams(): CustomAlertRulesHisto
         'filter[CustomalertComments.comment]': '',
         'filter[CustomalertStatehistory.state][]': [],
         'filter[CustomalertRules.id][]': [],
-        'filter[from]': new Date(now.getTime() - (3600 * 24 * 1000 * 30)),
+        'filter[from]': new Date(now.getTime() - (3600 * 24 * 1000 * 14)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5)),
     }
 }
@@ -128,7 +128,7 @@ export interface CustomAlertsStateHistory extends PaginateOrScroll {
     _csrfToken: any
 }
 
-export interface CustomalertStateOverviewData{
+export interface CustomalertStateOverviewData {
     customalertStateOverview: CustomalertStateOverview
 }
 
