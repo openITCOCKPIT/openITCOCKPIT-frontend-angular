@@ -1,8 +1,8 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { ExternalMonitoringsAsList } from '../externalmonitorings/external-monitorings.interface';
-import { ExternalSystemsAsList } from '../externalsystems/external-systems.interface';
 import { DynamicalFormFields } from '../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 import { ImportedHostRawData } from '../importedhosts/importedhosts.interface';
+import { ImporterStatusEnum } from './importer-status.enum';
 
 export interface ImportersIndexRoot extends PaginateOrScroll {
     importers: Importer[]
@@ -17,6 +17,9 @@ export interface Importer {
     connected?: boolean | null
     description: string
     hostdefault_id: number
+    start_time: string | null
+    end_time: string | null
+    status: ImporterStatusEnum | null
     container: string
     allowEdit: boolean
     config?: {
