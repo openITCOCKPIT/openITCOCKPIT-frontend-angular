@@ -116,7 +116,7 @@ export class ChangecalendarsEventViewerComponent implements OnInit, OnChanges {
         const matchExpression: RegExp = /^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?)/;
         const match: RegExpExecArray | null = matchExpression.exec(param.trim());
         if (!match) {
-            throw new Error(`Kein ISO-8601-Zeitstempel: "${param}"`);
+            throw new Error(`Not a valid ISO-8601 timestamp: "${param}"`);
         }
 
         return `${match[1]}T${match[2]}`;
