@@ -8,6 +8,7 @@ import {
 } from '../../components/map-item-base/map-item-base.interface';
 import { Map } from '../maps/maps.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { Statuspage } from '../../../../pages/statuspages/statuspage.interface';
 
 export interface MapeditorsEditRoot {
     map: MapRoot
@@ -398,6 +399,13 @@ export interface Summary {
     ServiceIdsGroupByState: number[][]
     NotOkServices: any[]
     CumulatedHumanState: string
+    Statuspage: StatuspageForMap
+}
+
+export interface StatuspageForMap {
+    name: string
+    description: string
+    object_id: number
 }
 
 export interface ServicesForSummaryRoot {

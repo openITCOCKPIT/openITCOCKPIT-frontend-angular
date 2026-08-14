@@ -70,7 +70,7 @@
                                                 <c-col lg="8" [hidden]="!summaryState.Hoststatus.isInMonitoring"
                                                        class="text-center text-white text-capitalize bg-{{(summaryState.Hoststatus.isHardstate)?summaryState.Hoststatus.humanState:summaryState.Hoststatus.humanState+'-soft'}}">
                                                     <span
-                                                        class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
+                                                            class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
                                                     <fa-icon [icon]="['fas', 'user']"
                                                              [hidden]="!summaryState.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
                                                     <fa-icon [icon]="['fas', 'power-off']"
@@ -148,9 +148,9 @@
                                                         </c-col>
                                                         <c-col lg="11">
                                                             <div
-                                                                class="btn-group btn-group-xs btn-group-justified w-100"
-                                                                role="group" *oitcPermission="['services', 'index']"
-                                                                [hidden]="summaryState.ServiceSummary.total === 0">
+                                                                    class="btn-group btn-group-xs btn-group-justified w-100"
+                                                                    role="group" *oitcPermission="['services', 'index']"
+                                                                    [hidden]="summaryState.ServiceSummary.total === 0">
                                                                 <a class="btn btn-success"
                                                                    [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}"
                                                                    [routerLink]="['/', 'services', 'index']"
@@ -177,10 +177,10 @@
                                                                 </a>
                                                             </div>
                                                             <div
-                                                                class="btn-group btn-group-xs btn-group-justified w-100"
-                                                                role="group"
-                                                                *oitcPermission="['services', 'index']; negate: true"
-                                                                [hidden]="summaryState.ServiceSummary.total === 0">
+                                                                    class="btn-group btn-group-xs btn-group-justified w-100"
+                                                                    role="group"
+                                                                    *oitcPermission="['services', 'index']; negate: true"
+                                                                    [hidden]="summaryState.ServiceSummary.total === 0">
                                                                 <a class="btn btn-success"
                                                                    [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}">
                                                                     {{ summaryState.ServiceSummary.state[0] }}
@@ -295,7 +295,7 @@
                                                 <c-col lg="8" [hidden]="!summaryState.Hoststatus.isInMonitoring"
                                                        class="text-center text-white text-capitalize bg-{{(summaryState.Hoststatus.isHardstate)?summaryState.Hoststatus.humanState:summaryState.Hoststatus.humanState+'-soft'}}">
                                                     <span
-                                                        class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
+                                                            class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
                                                     <fa-icon [icon]="['fas', 'user']"
                                                              [hidden]="!summaryState.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
                                                     <fa-icon [icon]="['fas', 'power-off']"
@@ -337,7 +337,7 @@
                                                 <c-col lg="8" [hidden]="!summaryState.Servicestatus.isInMonitoring"
                                                        class="text-center text-white text-capitalize bg-{{(summaryState.Servicestatus.isHardstate)?summaryState.Servicestatus.humanState:summaryState.Servicestatus.humanState+'-soft'}}">
                                                     <span
-                                                        class="padding-5">{{ summaryState.Servicestatus.humanState }}</span>
+                                                            class="padding-5">{{ summaryState.Servicestatus.humanState }}</span>
                                                     <fa-icon [icon]="['fas', 'user']"
                                                              [hidden]="!summaryState.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
                                                     <fa-icon [icon]="['fas', 'power-off']"
@@ -450,7 +450,7 @@
                                                 </c-col>
                                                 <c-col lg="8" class="p-0">
                                                     <div
-                                                        class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                            class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
                                                         {{ summaryState.CumulatedHumanState }}
                                                     </div>
                                                 </c-col>
@@ -693,7 +693,7 @@
                                                 <c-col lg="8" class="p-0"
                                                        [hidden]="summaryState.ServiceSummary.total === 0">
                                                     <div
-                                                        class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                            class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
                                                         {{ summaryState.CumulatedHumanState }}
                                                     </div>
                                                 </c-col>
@@ -844,7 +844,7 @@
                                                         </a>
                                                     </span>
                                                     <span
-                                                        *oitcPermission="['mapmodule', 'mapeditors', 'view']; negate: true">
+                                                            *oitcPermission="['mapmodule', 'mapeditors', 'view']; negate: true">
                                                         {{ summaryState.Map.name }}
                                                     </span>
                                                 </c-col>
@@ -864,7 +864,7 @@
                                                 <c-col lg="8" class="p-0"
                                                        [hidden]="summaryState.HostSummary.total === 0|| summaryState.ServiceSummary.total === 0">
                                                     <div
-                                                        class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                            class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
                                                         {{ summaryState.CumulatedHumanState }}
                                                     </div>
                                                 </c-col>
@@ -1024,7 +1024,7 @@
                                                                     </a>
                                                                 </span>
                                                                 <span
-                                                                    *oitcPermission="['hosts', 'browser']; negate: true">
+                                                                        *oitcPermission="['hosts', 'browser']; negate: true">
                                                                     {{ notOkHost.Host.hostname }}
                                                                 </span>
                                                             </c-col>
@@ -1072,7 +1072,7 @@
                                                                     </a>
                                                                 </span>
                                                                 <span
-                                                                    *oitcPermission="['services', 'browser']; negate: true">
+                                                                        *oitcPermission="['services', 'browser']; negate: true">
                                                                     {{ notOkService.Service.servicename }}
                                                                 </span>
                                                             </c-col>
@@ -1099,6 +1099,182 @@
                                                     }
                                                 </div>
                                             }
+                                        </div>
+                                    </div>
+                                </article>
+                            }
+                            @if (iconType == 'statuspage') {
+                                <article>
+                                    <div class="bg-color-white pt-2 pl-2 pb-2">
+                                        <header>
+                                            <h2 class="bold txt-color-blueDark">
+                                                <fa-icon [icon]="['fas', 'circle-info']" size="lg"
+                                                         class="txt-color-blueDark"></fa-icon>
+                                                {{ t('Status page') }}
+                                            </h2>
+                                            <c-col lg="12" class="p-0">
+                                                <c-progress thin>
+                                                    <c-progress-bar [value]="toastPercentage"></c-progress-bar>
+                                                </c-progress>
+                                            </c-col>
+                                        </header>
+                                        <div class="txt-color-blueDark font-xs pt-2 pb-2">
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Status page name') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    <span *oitcPermission="[ 'statuspages', 'view']">
+                                                        <a [routerLink]="['/', 'statuspages', 'view', summaryState.Statuspage.object_id, false]">
+                                                            {{ summaryState.Statuspage.name }}
+                                                        </a>
+                                                    </span>
+                                                    <span
+                                                            *oitcPermission="[ 'statuspages', 'view']; negate: true">
+                                                        {{ summaryState.Statuspage.name }}
+                                                    </span>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row>
+                                                <c-col lg="3">
+                                                    {{ t('Statuspage description') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    {{ summaryState.Statuspage.description }}
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Summary state') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0"
+                                                       [hidden]="summaryState.HostSummary.total === 0|| summaryState.ServiceSummary.total === 0">
+                                                    <div
+                                                            class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                        {{ summaryState.CumulatedHumanState }}
+                                                    </div>
+                                                </c-col>
+                                                <c-col lg="8" class="p-0"
+                                                       [hidden]="summaryState.HostSummary.total > 0 && summaryState.ServiceSummary.total > 0">
+                                                    <div class="text-center text-white text-capitalize bg-primary">
+                                                        {{ summaryState.CumulatedHumanState }}
+                                                    </div>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Summary output') }}
+                                                </c-col>
+                                                <c-col lg="4" class="p-0">
+                                                    {{ t('Hosts: ') }}{{ summaryState.HostSummary.total }}
+                                                </c-col>
+                                                <c-col lg="4" class="p-0">
+                                                    {{ t('Services: ') }}{{ summaryState.ServiceSummary.total }}
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Hosts overview') }}
+                                                </c-col>
+                                                <c-col lg="8" class="p-0">
+                                                    <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                         role="group"
+                                                         *oitcPermission="['hosts', 'index']"
+                                                         [hidden]="summaryState.ServiceSummary.total === 0">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[0]}"
+                                                           [routerLink]="['/', 'hosts', 'index']"
+                                                           [queryParams]="{'id': summaryState.HostIdsGroupByState[0]}">
+                                                            {{ summaryState.HostSummary.state[0] }}
+                                                        </a>
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[1]}"
+                                                           [routerLink]="['/', 'hosts', 'index']"
+                                                           [queryParams]="{'id': summaryState.HostIdsGroupByState[1]}">
+                                                            {{ summaryState.HostSummary.state[1] }}
+                                                        </a>
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[2]}"
+                                                           [routerLink]="['/', 'hosts', 'index']"
+                                                           [queryParams]="{'id': summaryState.HostIdsGroupByState[2]}">
+                                                            {{ summaryState.HostSummary.state[2] }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                         role="group"
+                                                         *oitcPermission="['hosts', 'index']; negate: true"
+                                                         [hidden]="summaryState.ServiceSummary.total === 0">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[0]}">
+                                                            {{ summaryState.HostSummary.state[0] }}
+                                                        </a>
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[1]}">
+                                                            {{ summaryState.HostSummary.state[1] }}
+                                                        </a>
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.HostSummary.state[2]}">
+                                                            {{ summaryState.HostSummary.state[2] }}
+                                                        </a>
+                                                    </div>
+                                                </c-col>
+                                            </c-row>
+                                            <c-row class="pt-2">
+                                                <c-col lg="3">
+                                                    {{ t('Services overview') }}
+                                                </c-col>
+                                                <div class="col-lg-8 p-0">
+                                                    <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                         role="group" *oitcPermission="['services', 'index']"
+                                                         [hidden]="summaryState.ServiceSummary.total === 0">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}"
+                                                           [routerLink]="['/', 'services', 'index']"
+                                                           [queryParams]="{'id': summaryState.ServiceIdsGroupByState[0]}">
+                                                            {{ summaryState.ServiceSummary.state[0] }}
+                                                        </a>
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}"
+                                                           [routerLink]="['/', 'services', 'index']"
+                                                           [queryParams]="{'id': summaryState.ServiceIdsGroupByState[1]}">
+                                                            {{ summaryState.ServiceSummary.state[1] }}
+                                                        </a>
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}"
+                                                           [routerLink]="['/', 'services', 'index']"
+                                                           [queryParams]="{'id': summaryState.ServiceIdsGroupByState[2]}">
+                                                            {{ summaryState.ServiceSummary.state[2] }}
+                                                        </a>
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}"
+                                                           [routerLink]="['/', 'services', 'index']"
+                                                           [queryParams]="{'id': summaryState.ServiceIdsGroupByState[3]}">
+                                                            {{ summaryState.ServiceSummary.state[3] }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="btn-group btn-group-xs btn-group-justified w-100"
+                                                         role="group"
+                                                         *oitcPermission="['services', 'index']; negate: true"
+                                                         [hidden]="summaryState.ServiceSummary.total === 0">
+                                                        <a class="btn btn-success"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}">
+                                                            {{ summaryState.ServiceSummary.state[0] }}
+                                                        </a>
+                                                        <a class="btn btn-warning"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[1]}">
+                                                            {{ summaryState.ServiceSummary.state[1] }}
+                                                        </a>
+                                                        <a class="btn btn-danger"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[2]}">
+                                                            {{ summaryState.ServiceSummary.state[2] }}
+                                                        </a>
+                                                        <a class="btn btn-secondary"
+                                                           [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[3]}">
+                                                            {{ summaryState.ServiceSummary.state[3] }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </c-row>
                                         </div>
                                     </div>
                                 </article>
