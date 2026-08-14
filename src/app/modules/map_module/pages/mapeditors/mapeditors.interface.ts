@@ -7,6 +7,7 @@ import {
     ServicestatusForMapItem
 } from '../../components/map-item-base/map-item-base.interface';
 import { Map } from '../maps/maps.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 export interface MapeditorsEditRoot {
     map: MapRoot
@@ -307,14 +308,20 @@ export interface MapsByStringParams {
     'excluded[]'?: number[]
 }
 
+export interface StatuspagesByStringParams {
+    'angular': boolean
+    'filter[Statuspages.name]': string
+    'selected[]': number[]
+}
+
 export interface MapsByStringRoot {
-    maps: MapsByStringMap[]
+    maps: SelectKeyValue[]
     _csrfToken: string
 }
 
-export interface MapsByStringMap {
-    key: number
-    value: string
+export interface StatuspagesByStringRoot {
+    statuspages: SelectKeyValue[]
+    _csrfToken: string
 }
 
 /********************************

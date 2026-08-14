@@ -67,6 +67,7 @@ import {
     MapsByStringParams,
     MaxUploadLimit,
     ServicesByStringParams,
+    StatuspagesByStringParams,
     VisibleLayers
 } from '../mapeditors.interface';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
@@ -92,9 +93,7 @@ import { HostsService } from '../../../../../pages/hosts/hosts.service';
 import { HostsLoadHostsByStringParams } from '../../../../../pages/hosts/hosts.interface';
 import { HostgroupsService } from '../../../../../pages/hostgroups/hostgroups.service';
 import { HostgroupsLoadHostgroupsByStringParams } from '../../../../../pages/hostgroups/hostgroups.interface';
-import {
-    ServicegroupsLoadServicegroupsByStringParams
-} from '../../../../../pages/servicegroups/servicegroups.interface';
+import { ServicegroupsLoadServicegroupsByStringParams } from '../../../../../pages/servicegroups/servicegroups.interface';
 import { ServicegroupsService } from '../../../../../pages/servicegroups/servicegroups.service';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -396,14 +395,31 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 });
             }
         }));
-        selectItemObjectTypes.push({
-            key: 'map',
-            value: this.TranslocoService.translate('Map')
-        });
-        selectLineObjectTypes.push({
-            key: 'map',
-            value: this.TranslocoService.translate('Map')
-        });
+        this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['mapmodule', 'maps', 'index']).subscribe(hasPermission => {
+            if (hasPermission) {
+                selectItemObjectTypes.push({
+                    key: 'map',
+                    value: this.TranslocoService.translate('Map')
+                });
+                selectLineObjectTypes.push({
+                    key: 'map',
+                    value: this.TranslocoService.translate('Map')
+                });
+            }
+        }));
+        this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['statuspages', 'index']).subscribe(hasPermission => {
+            if (hasPermission) {
+                selectItemObjectTypes.push({
+                    key: 'statuspage',
+                    value: this.TranslocoService.translate('Status page')
+                });
+                selectLineObjectTypes.push({
+                    key: 'statuspage',
+                    value: this.TranslocoService.translate('Status page')
+                });
+            }
+        }));
+
         selectLineObjectTypes.push({
             key: 'stateless',
             value: this.TranslocoService.translate('Stateless line')
@@ -2434,6 +2450,24 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     };
 
+    private loadStatuspages(searchString: string, selected: number[]) {
+        if (typeof selected === "undefined") {
+            selected = [];
+        }
+
+        const params: StatuspagesByStringParams = {
+            'angular': true,
+            'filter[Statuspages.name]': searchString,
+            'selected[]': selected
+        }
+
+        this.subscriptions.add(this.MapeditorsService.loadStatuspagesByString(params)
+            .subscribe((result) => {
+                this.itemObjects = result.statuspages;
+                this.cdr.markForCheck();
+            }));
+    };
+
     private createDropzones() {
         let backgroundDropzone = this.document.getElementById('backgroundDropzone');
         if (backgroundDropzone) {
@@ -2718,6 +2752,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             if (this.currentItem.type === 'map') {
                 this.loadMaps('', objectId);
             }
+
+            if (this.currentItem.type === 'statuspage') {
+                this.loadStatuspages('', objectId);
+            }
         }
 
         if (this.currentItem.hasOwnProperty('gadget') && typeof objectId !== "undefined") {
@@ -2774,6 +2812,4 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             size_y: this.map.Map.background_size_y!,
         }
     }
-
-    protected readonly parseInt = parseInt;
 }
