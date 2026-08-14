@@ -104,10 +104,36 @@
                                     </li>
                                 </ol>
                                 <p>
-
                                     <img width="600" [src]="'./assets/images/wizards/proxmox_screenshot.png'"
                                          alt="Proxmox Wizard "/>
                                 </p>
+                                <hr/>
+                                <p>
+                                    {{ t('The easiest way is to assign the PVEAuditor role to your monitoring user. To do so, follow these steps:') }}
+                                </p>
+                                <ol>
+                                    <li>{{ t('Go to [Datacenter] -> [Permissions]') }}</li>
+                                    <li>
+                                        {{ t('Click [Add] -> [API Token Permission]') }}
+                                        <ol type="a">
+                                            <li>{{ t('Path = "/"') }}</li>
+                                            <li>{{ t('API Token (your Monitoring Token)') }}</li>
+                                            <li>{{ t('Role PVEAuditor') }}</li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                                <p>
+
+                                    <img width="600" [src]="'./assets/images/wizards/proxmox_api_token_permission.png'"
+                                         alt="Proxmox Wizard "/>
+                                </p>
+                                <p>
+                                    {{ t('If you want to restrict the permissions even further, you can create a custom role with the following permissions:') }}
+                                </p>
+                                <ul>
+                                    <li>sys.audit</li>
+                                    <li>datastore.audit</li>
+                                </ul>
                             </div>
                         </ng-template>
                     </c-accordion-item>

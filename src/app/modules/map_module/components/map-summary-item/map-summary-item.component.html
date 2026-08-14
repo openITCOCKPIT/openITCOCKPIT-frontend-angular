@@ -75,11 +75,19 @@
     <div #container class="map-element-container cursor-normal" [ngClass]="{'cursor-pointer': enablePointerCursor()}">
         @if (allowView && ( item()!.label_possition == 1 || item()!.label_possition == 2 )) {
             <div class="text-center">
-                <div [hidden]="!(item()!.show_label && item()!.label_possition == 1)">{{ label }}</div>
+                <div [hidden]="!(item()!.show_label && item()!.label_possition == 1)"
+                     [style.width.px]="item()!.size_x"
+                     class="text-break">
+                    {{ label }}
+                </div>
                 <img
-                    [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
-                    onerror="this.src='/map_module/img/items/missing.png';"/>
-                <div [hidden]="!(item()!.show_label && item()!.label_possition == 2)">{{ label }}</div>
+                        [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
+                        onerror="this.src='/map_module/img/items/missing.png';"/>
+                <div [hidden]="!(item()!.show_label && item()!.label_possition == 2)"
+                     [style.width.px]="item()!.size_x"
+                     class="text-break">
+                    {{ label }}
+                </div>
             </div>
         }
 
@@ -87,8 +95,8 @@
             <div class="text-center">
                 <span [hidden]="!(item()!.show_label && item()!.label_possition == 4)">{{ label }}</span>
                 <img
-                    [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
-                    onerror="this.src='/map_module/img/items/missing.png';"/>
+                        [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
+                        onerror="this.src='/map_module/img/items/missing.png';"/>
                 <span [hidden]="!(item()!.show_label && item()!.label_possition == 3)">{{ label }}</span>
             </div>
         }

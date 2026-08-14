@@ -29,13 +29,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {
-    Contact,
-    LoadCommandsRoot,
-    LoadContainersRoot,
-    LoadTimeperiodsPost,
-    LoadTimeperiodsRoot,
-} from '../contacts.interface';
+import { Contact, LoadCommandsRoot, LoadTimeperiodsPost, LoadTimeperiodsRoot, } from '../contacts.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { LoadUsersByContainerIdRoot } from '../../users/users.interface';
 import { Subscription } from 'rxjs';
@@ -53,6 +47,7 @@ import { HistoryService } from '../../../history.service';
 import { PushNotificationsService } from '../../../services/push-notifications.service';
 import _ from 'lodash';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { LoadContainersRoot } from '../../containers/containers.interface';
 
 @Component({
     selector: 'oitc-contacts-edit',
