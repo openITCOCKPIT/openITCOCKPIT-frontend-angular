@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import {
     CardBodyComponent,
     CardComponent,
@@ -17,45 +17,40 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
-} from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { NotificationsService } from '../notifications.service';
+    TableDirective,
+} from "@coreui/angular";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { PermissionDirective } from "../../../permissions/permission.directive";
+import { TranslocoDirective, TranslocoPipe } from "@jsverse/transloco";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { Subscription } from "rxjs";
+import { NotificationsService } from "../notifications.service";
 
 import {
     getDefaultNotificationsServicesParams,
     getServiceNotificationStateForApi,
     NotificationServicesParams,
     NotificationServicesRoot,
-    ServiceNotificationsStateFilter
-} from '../notifications.interface';
-import { DebounceDirective } from '../../../directives/debounce.directive';
-import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { formatDate } from '@angular/common';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
+    ServiceNotificationsStateFilter,
+} from "../notifications.interface";
+import { DebounceDirective } from "../../../directives/debounce.directive";
+import { FormsModule } from "@angular/forms";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { PaginatorChangeEvent } from "../../../layouts/coreui/paginator/paginator.interface";
+import { MatSort, MatSortHeader, Sort } from "@angular/material/sort";
+import { formatDate } from "@angular/common";
+import { TrueFalseDirective } from "../../../directives/true-false.directive";
 
-
-import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import {
-    ServicestatusSimpleIconComponent
-} from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { IndexPage } from '../../../pages.interface';
-import { NotificationReasonTypeComponent } from '../notification-reason-type/notification-reason-type.component';
+import { NoRecordsComponent } from "../../../layouts/coreui/no-records/no-records.component";
+import { PaginateOrScrollComponent } from "../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component";
+import { ServicestatusSimpleIconComponent } from "../../services/servicestatus-simple-icon/servicestatus-simple-icon.component";
+import { TableLoaderComponent } from "../../../layouts/primeng/loading/table-loader/table-loader.component";
+import { IndexPage } from "../../../pages.interface";
+import { NotificationReasonTypeComponent } from "../notification-reason-type/notification-reason-type.component";
 
 @Component({
-    selector: 'oitc-notifications-index',
+    selector: "oitc-notifications-index",
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -91,14 +86,14 @@ import { NotificationReasonTypeComponent } from '../notification-reason-type/not
         ContainerComponent,
         TableLoaderComponent,
         CardFooterComponent,
-        NotificationReasonTypeComponent
+        NotificationReasonTypeComponent,
     ],
-    templateUrl: './notifications-services.component.html',
-    styleUrl: './notifications-services.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./notifications-services.component.html",
+    styleUrl: "./notifications-services.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationsServicesComponent implements OnInit, OnDestroy, IndexPage {
-    private NotificationsService = inject(NotificationsService)
+    private NotificationsService = inject(NotificationsService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     public params: NotificationServicesParams = getDefaultNotificationsServicesParams();
@@ -106,38 +101,38 @@ export class NotificationsServicesComponent implements OnInit, OnDestroy, IndexP
         ok: false,
         warning: false,
         critical: false,
-        unknown: false
+        unknown: false,
     };
     public notifications?: NotificationServicesRoot;
     public hideFilter: boolean = true;
     private subscriptions: Subscription = new Subscription();
-    public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
-    public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+    public from = formatDate(this.params["filter[from]"], "yyyy-MM-ddTHH:mm", "en-US");
+    public to = formatDate(this.params["filter[to]"], "yyyy-MM-ddTHH:mm", "en-US");
 
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            this.loadNotifications();
-        }));
+        this.subscriptions.add(
+            this.route.queryParams.subscribe((params) => {
+                // Here, params is an object containing the current query parameters.
+                // You can do something with these parameters here.
+                this.loadNotifications();
+            }),
+        );
     }
 
-    public ngOnDestroy(): void {
-    }
-
+    public ngOnDestroy(): void {}
 
     public loadNotifications() {
-        this.params['filter[NotificationServices.state][]'] = getServiceNotificationStateForApi(this.stateFilter);
-        this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
-        this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
+        this.params["filter[NotificationServices.state][]"] = getServiceNotificationStateForApi(this.stateFilter);
+        this.params["filter[from]"] = formatDate(new Date(this.from), "dd.MM.y HH:mm", "en-US");
+        this.params["filter[to]"] = formatDate(new Date(this.to), "dd.MM.y HH:mm", "en-US");
 
-        this.subscriptions.add(this.NotificationsService.getServices(this.params)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.NotificationsService.getServices(this.params).subscribe((result) => {
                 this.notifications = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
@@ -148,13 +143,13 @@ export class NotificationsServicesComponent implements OnInit, OnDestroy, IndexP
 
     public resetFilter() {
         this.params = getDefaultNotificationsServicesParams();
-        this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
-        this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+        this.from = formatDate(this.params["filter[from]"], "yyyy-MM-ddTHH:mm", "en-US");
+        this.to = formatDate(this.params["filter[to]"], "yyyy-MM-ddTHH:mm", "en-US");
         this.stateFilter = {
             ok: false,
             warning: false,
             critical: false,
-            unknown: false
+            unknown: false,
         };
         this.loadNotifications();
     }
@@ -165,7 +160,6 @@ export class NotificationsServicesComponent implements OnInit, OnDestroy, IndexP
         this.params.scroll = change.scroll;
         this.loadNotifications();
     }
-
 
     // Callback when a filter has changed
     public onFilterChange(event: Event) {
@@ -182,7 +176,5 @@ export class NotificationsServicesComponent implements OnInit, OnDestroy, IndexP
         }
     }
 
-    public onMassActionComplete(success: boolean) {
-    }
-
+    public onMassActionComplete(success: boolean) {}
 }

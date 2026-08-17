@@ -1,18 +1,18 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { MapgeneratorsService } from '../mapgenerators.service';
-import { PermissionsService } from '../../../../../permissions/permissions.service';
-import { HistoryService } from '../../../../../history.service';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { GenericValidationError } from '../../../../../generic-responses';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { NotyService } from "../../../../../layouts/coreui/noty.service";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { Subscription } from "rxjs";
+import { MapgeneratorsService } from "../mapgenerators.service";
+import { PermissionsService } from "../../../../../permissions/permissions.service";
+import { HistoryService } from "../../../../../history.service";
+import { TranslocoDirective, TranslocoService } from "@jsverse/transloco";
+import { GenericValidationError } from "../../../../../generic-responses";
 import {
     GeneratedMapsAndItems,
     Mapgenerator,
     MapgeneratorGenerateRoot,
-    MapgeneratorsEditRoot
-} from '../mapgenerators.interface';
+    MapgeneratorsEditRoot,
+} from "../mapgenerators.interface";
 import {
     AlertComponent,
     BorderDirective,
@@ -25,21 +25,21 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
-} from '@coreui/angular';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { FormsModule } from '@angular/forms';
-import { AsyncPipe } from '@angular/common';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { ProgressBar } from 'primeng/progressbar';
-import { Map } from '../../maps/maps.interface';
-import { MapgeneratorTypes } from '../mapgenerator-types';
+    TableDirective,
+} from "@coreui/angular";
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from "@fortawesome/angular-fontawesome";
+import { FormsModule } from "@angular/forms";
+import { AsyncPipe } from "@angular/common";
+import { PermissionDirective } from "../../../../../permissions/permission.directive";
+import { XsButtonDirective } from "../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { FormLoaderComponent } from "../../../../../layouts/primeng/loading/form-loader/form-loader.component";
+import { BackButtonDirective } from "../../../../../directives/back-button.directive";
+import { ProgressBar } from "@openng/optimus-ui/progressbar";
+import { Map } from "../../maps/maps.interface";
+import { MapgeneratorTypes } from "../mapgenerator-types";
 
 @Component({
-    selector: 'oitc-mapgenerators-generate',
+    selector: "oitc-mapgenerators-generate",
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -64,14 +64,13 @@ import { MapgeneratorTypes } from '../mapgenerator-types';
         NavItemComponent,
         ProgressBar,
         FaStackComponent,
-        FaStackItemSizeDirective
+        FaStackItemSizeDirective,
     ],
-    templateUrl: './mapgenerators-generate.component.html',
-    styleUrl: './mapgenerators-generate.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./mapgenerators-generate.component.html",
+    styleUrl: "./mapgenerators-generate.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
-
     private readonly MapgeneratorsService: MapgeneratorsService = inject(MapgeneratorsService);
     private readonly TranslocoService = inject(TranslocoService);
     public PermissionsService: PermissionsService = inject(PermissionsService);
@@ -82,13 +81,15 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
     public readonly route = inject(ActivatedRoute);
-    public errors: {
-        field: string;
-        errors: {
-            errorKey: string;
-            errorMessage: string;
-        }[];
-    }[] | null = null;
+    public errors:
+        | {
+              field: string;
+              errors: {
+                  errorKey: string;
+                  errorMessage: string;
+              }[];
+          }[]
+        | null = null;
 
     private cdr = inject(ChangeDetectorRef);
 
@@ -104,11 +105,10 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
     protected mapgenerator: Mapgenerator = {} as Mapgenerator;
     protected mapCount: number = 0;
 
-    constructor() {
-    }
+    constructor() {}
 
     ngOnInit(): void {
-        this.mapgeneratorId = Number(this.route.snapshot.paramMap.get('id'));
+        this.mapgeneratorId = Number(this.route.snapshot.paramMap.get("id"));
         this.loadMapgenerator();
     }
 
@@ -117,31 +117,33 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
     }
 
     private loadMapgenerator(): void {
-        this.subscriptions.add(this.MapgeneratorsService.getGenerator(this.mapgeneratorId)
-            .subscribe((result: MapgeneratorsEditRoot) => {
+        this.subscriptions.add(
+            this.MapgeneratorsService.getGenerator(this.mapgeneratorId).subscribe((result: MapgeneratorsEditRoot) => {
                 this.mapgenerator = result.mapgenerator;
-                this.mapgenerator.map_refresh_interval = (parseInt(this.mapgenerator.map_refresh_interval.toString(), 10) / 1000);
+                this.mapgenerator.map_refresh_interval =
+                    parseInt(this.mapgenerator.map_refresh_interval.toString(), 10) / 1000;
                 if (result.mapgenerator.maps?.length) {
                     this.mapCount = result.mapgenerator.maps?.length;
-                    this.allGeneratedMaps = this.mapgenerator.maps!.map(map => (map as Map).id);
+                    this.allGeneratedMaps = this.mapgenerator.maps!.map((map) => (map as Map).id);
                 }
                 this.init = false;
                 this.cdr.markForCheck();
-            }))
+            }),
+        );
     }
 
     public generate() {
         this.isGeneratorRunning = true;
         this.isGeneratorFinished = false;
-        this.subscriptions.add(this.MapgeneratorsService.generate(this.mapgeneratorId)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.MapgeneratorsService.generate(this.mapgeneratorId).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.isGeneratorRunning = false;
                 this.isGeneratorFinished = true;
                 if (result.success) {
                     const response = result.data as MapgeneratorGenerateRoot;
-                    const title = this.TranslocoService.translate('Data');
-                    const msg = this.TranslocoService.translate('created successfully');
+                    const title = this.TranslocoService.translate("Data");
+                    const msg = this.TranslocoService.translate("created successfully");
 
                     this.generatedMapsAndItems = response.generatedMapsAndItems;
                     this.allGeneratedMaps = this.generatedMapsAndItems.maps;
@@ -163,9 +165,9 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
                 this.notyService.genericError();
                 if (result) {
                     this.errors = this.genericValidationErrorObjectToArray(errorResponse);
-
                 }
-            }))
+            }),
+        );
     }
 
     private genericValidationErrorObjectToArray(errorObject: GenericValidationError) {
@@ -174,8 +176,8 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
                 field,
                 errors: Object.entries(errors).map(([errorKey, errorMessage]) => ({
                     errorKey,
-                    errorMessage
-                }))
+                    errorMessage,
+                })),
             };
         });
     }

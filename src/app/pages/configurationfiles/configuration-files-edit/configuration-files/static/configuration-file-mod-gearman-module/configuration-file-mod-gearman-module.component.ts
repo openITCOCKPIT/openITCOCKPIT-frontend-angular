@@ -6,34 +6,34 @@ import {
     inject,
     input,
     OnDestroy,
-    OnInit
-} from '@angular/core';
-import { ConfigurationFilesDbKeys, ConfigurationFilesFieldTypes } from '../../../../configuration-files.enum';
-import { Observable, Subscription } from 'rxjs';
-import { GenericValidationError } from '../../../../../../generic-responses';
-import { ConfigurationEditorConfig, ConfigurationEditorField } from '../../../../configuration-files.interface';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NotyService } from '../../../../../../layouts/coreui/noty.service';
-import { ConfigurationFilesService } from '../../../../configuration-files.service';
+    OnInit,
+} from "@angular/core";
+import { ConfigurationFilesDbKeys, ConfigurationFilesFieldTypes } from "../../../../configuration-files.enum";
+import { Observable, Subscription } from "rxjs";
+import { GenericValidationError } from "../../../../../../generic-responses";
+import { ConfigurationEditorConfig, ConfigurationEditorField } from "../../../../configuration-files.interface";
+import { ActivatedRoute, Router } from "@angular/router";
+import { NotyService } from "../../../../../../layouts/coreui/noty.service";
+import { ConfigurationFilesService } from "../../../../configuration-files.service";
 import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
-    FormSelectDirective
-} from '@coreui/angular';
-import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { PaginatorModule } from 'primeng/paginator';
-import { RequiredIconComponent } from '../../../../../../components/required-icon/required-icon.component';
+    FormSelectDirective,
+} from "@coreui/angular";
+import { FormErrorDirective } from "../../../../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../../../../layouts/coreui/form-feedback/form-feedback.component";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { RequiredIconComponent } from "../../../../../../components/required-icon/required-icon.component";
 
-import { TranslocoDirective } from '@jsverse/transloco';
-import { TrueFalseDirective } from '../../../../../../directives/true-false.directive';
-import { FormsModule } from '@angular/forms';
+import { TranslocoDirective } from "@jsverse/transloco";
+import { TrueFalseDirective } from "../../../../../../directives/true-false.directive";
+import { FormsModule } from "@angular/forms";
 
 @Component({
-    selector: 'oitc-configuration-file-mod-gearman-module',
+    selector: "oitc-configuration-file-mod-gearman-module",
     imports: [
         FormControlDirective,
         FormErrorDirective,
@@ -47,14 +47,13 @@ import { FormsModule } from '@angular/forms';
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
-        FormsModule
+        FormsModule,
     ],
-    templateUrl: './configuration-file-mod-gearman-module.component.html',
-    styleUrl: './configuration-file-mod-gearman-module.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./configuration-file-mod-gearman-module.component.html",
+    styleUrl: "./configuration-file-mod-gearman-module.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfigurationFileModGearmanModuleComponent implements OnInit, OnDestroy {
-
     public dbKey = input.required<ConfigurationFilesDbKeys>();
     public submit$ = input.required<Observable<void>>();
 
@@ -88,9 +87,11 @@ export class ConfigurationFileModGearmanModuleComponent implements OnInit, OnDes
     public ngOnInit(): void {
         const submit$ = this.submit$();
 
-        this.subscriptions.add(submit$.subscribe(() => {
-            this.submit();
-        }));
+        this.subscriptions.add(
+            submit$.subscribe(() => {
+                this.submit();
+            }),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -98,20 +99,20 @@ export class ConfigurationFileModGearmanModuleComponent implements OnInit, OnDes
     }
 
     public loadConfigFile(): void {
-        const dbKey = this.dbKey()
+        const dbKey = this.dbKey();
         if (dbKey) {
-            this.subscriptions.add(this.ConfigurationFilesService.getConfigFileForEditor(dbKey, null).subscribe((result) => {
-                this.cdr.markForCheck();
-                this.config = result.config;
-                this.fields = result.fields;
-            }));
-
+            this.subscriptions.add(
+                this.ConfigurationFilesService.getConfigFileForEditor(dbKey, null).subscribe((result) => {
+                    this.cdr.markForCheck();
+                    this.config = result.config;
+                    this.fields = result.fields;
+                }),
+            );
         }
     }
 
     private submit() {
         if (this.config && this.fields) {
-
             // Copy the values from the fields array back into the config object.
             for (const field of this.fields) {
                 const fieldName = field.field;
@@ -124,26 +125,28 @@ export class ConfigurationFileModGearmanModuleComponent implements OnInit, OnDes
                 }
             }
 
-            this.subscriptions.add(this.ConfigurationFilesService.saveConfigFileFromEditor(this.dbKey(), null, this.config)
-                .subscribe((result) => {
-                    this.cdr.markForCheck();
+            this.subscriptions.add(
+                this.ConfigurationFilesService.saveConfigFileFromEditor(this.dbKey(), null, this.config).subscribe(
+                    (result) => {
+                        this.cdr.markForCheck();
 
-                    if (result.success) {
-                        this.notyService.genericSuccess();
-                        this.router.navigate(['/', 'ConfigurationFiles', 'index']);
+                        if (result.success) {
+                            this.notyService.genericSuccess();
+                            this.router.navigate(["/", "ConfigurationFiles", "index"]);
 
-                        return;
-                    }
+                            return;
+                        }
 
-                    // Error
-                    const errorResponse = result.data as GenericValidationError;
-                    this.notyService.genericError();
-                    if (result) {
-                        this.errors = errorResponse;
-                    }
-                }));
+                        // Error
+                        const errorResponse = result.data as GenericValidationError;
+                        this.notyService.genericError();
+                        if (result) {
+                            this.errors = errorResponse;
+                        }
+                    },
+                ),
+            );
         }
-
     }
 
     protected readonly ConfigurationFilesFieldTypes = ConfigurationFilesFieldTypes;

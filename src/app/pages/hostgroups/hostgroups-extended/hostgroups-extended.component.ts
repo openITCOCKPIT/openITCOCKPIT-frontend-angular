@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { AsyncPipe, NgClass } from '@angular/common';
-import { Subscription } from 'rxjs';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enable-modal.component';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { AsyncPipe, NgClass } from "@angular/common";
+import { Subscription } from "rxjs";
+import { BackButtonDirective } from "../../../directives/back-button.directive";
+import { EnableModalComponent } from "../../../layouts/coreui/enable-modal/enable-modal.component";
 import {
     CardBodyComponent,
     CardComponent,
@@ -25,20 +25,19 @@ import {
     NavItemComponent,
     RowComponent,
     TableDirective,
-} from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+} from "@coreui/angular";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 
+import { FormsModule } from "@angular/forms";
 
-import { FormsModule } from '@angular/forms';
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { PermissionDirective } from "../../../permissions/permission.directive";
 
-import { PaginatorModule } from 'primeng/paginator';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { HostgroupsService } from '../hostgroups.service';
+import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from "@jsverse/transloco";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { HostgroupsService } from "../hostgroups.service";
 import {
     getDefaultHostgroupsExtendedParams,
     getDefaultHostgroupsExtendedServiceListParams,
@@ -50,78 +49,58 @@ import {
     HostgroupsExtendedServiceListParams,
     HostgroupsLoadHostgroupsByStringParams,
     LoadServicesForHosts,
-    ServicesList
-} from '../hostgroups.interface';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
+    ServicesList,
+} from "../hostgroups.interface";
+import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
+import { ActionsButtonComponent } from "../../../components/actions-button/actions-button.component";
+import { ActionsButtonElementComponent } from "../../../components/actions-button-element/actions-button-element.component";
 
-import {
-    ServiceResetChecktimeModalComponent
-} from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
+import { ServiceResetChecktimeModalComponent } from "../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component";
 import {
     HostAcknowledgeItem,
     HostDisableNotificationsItem,
     HostDowntimeItem,
     HostEnableNotificationsItem,
-} from '../../../services/external-commands.service';
-import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
-import {
-    HostsMaintenanceModalComponent
-} from '../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
-import {
-    HostsDisableNotificationsModalComponent
-} from '../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component';
-import {
-    HostsEnableNotificationsModalComponent
-} from '../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component';
-import { DebounceDirective } from '../../../directives/debounce.directive';
+} from "../../../services/external-commands.service";
+import { SelectionServiceService } from "../../../layouts/coreui/select-all/selection-service.service";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { DisableModalComponent } from "../../../layouts/coreui/disable-modal/disable-modal.component";
+import { HostsMaintenanceModalComponent } from "../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component";
+import { HostsDisableNotificationsModalComponent } from "../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component";
+import { HostsEnableNotificationsModalComponent } from "../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component";
+import { DebounceDirective } from "../../../directives/debounce.directive";
 
-import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
-import { HostObject } from '../../hosts/hosts.interface';
-import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import {
-    ServiceCumulatedStatusIconComponent
-} from '../../../components/services/service-cumulated-status-icon/service-cumulated-status-icon.component';
-import {
-    ServicestatusIconComponent
-} from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
-import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
-import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../services/timezone.service';
-import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { HoststatusIconComponent } from "../../hosts/hoststatus-icon/hoststatus-icon.component";
+import { HostObject } from "../../hosts/hosts.interface";
+import { DeleteAllItem } from "../../../layouts/coreui/delete-all-modal/delete-all.interface";
+import { ServiceCumulatedStatusIconComponent } from "../../../components/services/service-cumulated-status-icon/service-cumulated-status-icon.component";
+import { ServicestatusIconComponent } from "../../../components/services/servicestatus-icon/servicestatus-icon.component";
+import { PopoverGraphComponent } from "../../../components/popover-graph/popover-graph.component";
+import { TimezoneConfiguration as TimezoneObject, TimezoneService } from "../../../services/timezone.service";
+import { NoRecordsComponent } from "../../../layouts/coreui/no-records/no-records.component";
+import { PaginateOrScrollComponent } from "../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component";
 
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
-import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
-import {
-    HostAcknowledgeModalComponent
-} from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
-import { PermissionsService } from '../../../permissions/permissions.service';
-import { HostgroupExtendedTabs } from '../hostgroups.enum';
-import {
-    SlaHostgroupHostsStatusOverviewComponent
-} from '../../../modules/sla_module/components/sla-hostgroup-hosts-status-overview/sla-hostgroup-hosts-status-overview.component';
-import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
-import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
-import { HostsService } from '../../hosts/hosts.service';
-import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
-import { ServicesService } from '../../services/services.service';
-import { EnableItem } from '../../../layouts/coreui/enable-modal/enable.interface';
-import { ENABLE_SERVICE_TOKEN } from '../../../tokens/enable-injection.token';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { PaginatorChangeEvent } from "../../../layouts/coreui/paginator/paginator.interface";
+import { ExternalCommandsEnum } from "../../../enums/external-commands.enum";
+import { AcknowledgementTypes } from "../../acknowledgements/acknowledgement-types.enum";
+import { HostAcknowledgeModalComponent } from "../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component";
+import { TableLoaderComponent } from "../../../layouts/primeng/loading/table-loader/table-loader.component";
+import { ObjectUuidComponent } from "../../../layouts/coreui/object-uuid/object-uuid.component";
+import { PermissionsService } from "../../../permissions/permissions.service";
+import { HostgroupExtendedTabs } from "../hostgroups.enum";
+import { SlaHostgroupHostsStatusOverviewComponent } from "../../../modules/sla_module/components/sla-hostgroup-hosts-status-overview/sla-hostgroup-hosts-status-overview.component";
+import { DisableItem } from "../../../layouts/coreui/disable-modal/disable.interface";
+import { DISABLE_SERVICE_TOKEN } from "../../../tokens/disable-injection.token";
+import { HostsService } from "../../hosts/hosts.service";
+import { DeleteAllModalComponent } from "../../../layouts/coreui/delete-all-modal/delete-all-modal.component";
+import { DELETE_SERVICE_TOKEN } from "../../../tokens/delete-injection.token";
+import { ServicesService } from "../../services/services.service";
+import { EnableItem } from "../../../layouts/coreui/enable-modal/enable.interface";
+import { ENABLE_SERVICE_TOKEN } from "../../../tokens/enable-injection.token";
+import { MatSort, MatSortHeader, Sort } from "@angular/material/sort";
 
 @Component({
-    selector: 'oitc-hostgroups-extended',
+    selector: "oitc-hostgroups-extended",
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -180,17 +159,16 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
         MatSortHeader,
         MatSort,
     ],
-    templateUrl: './hostgroups-extended.component.html',
-    styleUrl: './hostgroups-extended.component.css',
+    templateUrl: "./hostgroups-extended.component.html",
+    styleUrl: "./hostgroups-extended.component.css",
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
-        {provide: ENABLE_SERVICE_TOKEN, useClass: HostsService},
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService}
+        { provide: DISABLE_SERVICE_TOKEN, useClass: HostsService },
+        { provide: ENABLE_SERVICE_TOKEN, useClass: HostsService },
+        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService },
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
-
     private readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
@@ -203,7 +181,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     protected deleteService: any = undefined;
     public readonly PermissionsService = inject(PermissionsService);
     public selectedTab: HostgroupExtendedTabs = HostgroupExtendedTabs.Hosts;
-    private userFullname: string = '';
+    private userFullname: string = "";
 
     protected hostgroupId: number = 0;
     protected hostgroups: SelectKeyValue[] = [];
@@ -211,14 +189,14 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         Hosts: [],
         Hostgroup: {
             id: 0,
-            uuid: '',
+            uuid: "",
             container_id: 0,
-            description: '',
-            hostgroup_url: '',
+            description: "",
+            hostgroup_url: "",
             container: {
                 id: 0,
                 containertype_id: 0,
-                name: '',
+                name: "",
                 parent_id: 0,
                 lft: 0,
                 rght: 0,
@@ -228,7 +206,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         StatusSummary: {
             up: 0,
             down: 0,
-            unreachable: 0
+            unreachable: 0,
         },
         hasSLAHosts: false,
     } as HostgroupExtended;
@@ -238,26 +216,26 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
     protected filter: any = {
         Host: {
-            name: ''
+            name: "",
         },
         Hoststatus: {
             current_state: {
                 up: false,
                 down: false,
-                unreachable: false
-            }
+                unreachable: false,
+            },
         },
         Service: {
-            name: ''
+            name: "",
         },
         Servicestatus: {
             current_state: {
                 ok: false,
                 warning: false,
                 critical: false,
-                unknown: false
-            }
-        }
+                unknown: false,
+            },
+        },
     };
     public selectedItems: any[] = [];
     public hostParams: HostgroupsExtendedParams = getDefaultHostgroupsExtendedParams();
@@ -268,10 +246,10 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         // Fetch the id from the URL
-        this.hostgroupId = Number(this.route.snapshot.paramMap.get('id'));
+        this.hostgroupId = Number(this.route.snapshot.paramMap.get("id"));
         this.hostParams.selected = this.hostgroupId;
 
-        let selectedTab: string | null = this.route.snapshot.paramMap.get('selectedTab');
+        let selectedTab: string | null = this.route.snapshot.paramMap.get("selectedTab");
         if (selectedTab !== null) {
             this.changeTab(selectedTab as HostgroupExtendedTabs);
         }
@@ -280,7 +258,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         this.getUserTimezone();
 
         // Load all hostgroups for the dropdown
-        this.loadHostgroups('');
+        this.loadHostgroups("");
 
         this.cdr.markForCheck();
     }
@@ -297,20 +275,19 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     }
 
-
     public toggleResetCheckModal() {
         this.selectedItems = this.hostgroupExtended.Hosts.map((host) => {
             return {
                 command: ExternalCommandsEnum.rescheduleHost,
                 hostUuid: host.Host.uuid,
-                type: '',
-                satelliteId: 0
+                type: "",
+                satelliteId: 0,
             };
         });
 
         this.modalService.toggle({
             show: true,
-            id: 'serviceResetChecktimeModal'
+            id: "serviceResetChecktimeModal",
         });
     }
 
@@ -326,52 +303,58 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
     }
 
     private loadHostgroupExtended(): void {
-        this.subscriptions.add(this.HostgroupsService.loadHostgroupWithHostsById(this.hostgroupId, this.hostParams)
-            .subscribe((result: HostgroupExtendedRoot) => {
-                this.hostgroupExtended = result.hostgroup;
-                this.userFullname = result.username;
-                this.hostgroupExtended.Hosts.forEach((host: HostGroupExtendedHost) => {
-                    host.serviceParams = getDefaultHostgroupsExtendedServiceListParams();
-                    host.serviceParams['filter[Hosts.id]'] = host.Host.id;
+        this.subscriptions.add(
+            this.HostgroupsService.loadHostgroupWithHostsById(this.hostgroupId, this.hostParams).subscribe(
+                (result: HostgroupExtendedRoot) => {
+                    this.hostgroupExtended = result.hostgroup;
+                    this.userFullname = result.username;
+                    this.hostgroupExtended.Hosts.forEach((host: HostGroupExtendedHost) => {
+                        host.serviceParams = getDefaultHostgroupsExtendedServiceListParams();
+                        host.serviceParams["filter[Hosts.id]"] = host.Host.id;
 
-
-                    host.Servicestatus = {
-                        current_state: {
-                            ok: false,
-                            warning: false,
-                            critical: false,
-                            unknown: false
-                        }
-                    }
-                });
-                this.hostgroupExtendedRoot = result;
-                this.cdr.markForCheck();
-            }));
+                        host.Servicestatus = {
+                            current_state: {
+                                ok: false,
+                                warning: false,
+                                critical: false,
+                                unknown: false,
+                            },
+                        };
+                    });
+                    this.hostgroupExtendedRoot = result;
+                    this.cdr.markForCheck();
+                },
+            ),
+        );
     }
 
     public loadHostgroups = (searchString: string) => {
         let params: HostgroupsLoadHostgroupsByStringParams = {
             angular: true,
-            'selected[]': [this.hostgroupId],
-            'filter[Containers.name]': searchString
-        }
-        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString(params)
-            .subscribe((result: SelectKeyValue[]) => {
+            "selected[]": [this.hostgroupId],
+            "filter[Containers.name]": searchString,
+        };
+        this.subscriptions.add(
+            this.HostgroupsService.loadHostgroupsByString(params).subscribe((result: SelectKeyValue[]) => {
                 // Put the hostgroups to the instance
                 this.hostgroups = result;
 
                 // Then load the selected data.
                 this.onHostgroupChange();
                 this.cdr.markForCheck();
-            }));
-    }
+            }),
+        );
+    };
 
     private loadAdditionalInformation(): void {
-        this.subscriptions.add(this.HostgroupsService.loadAdditionalInformation(this.hostgroupId)
-            .subscribe((result: HostgroupAdditionalInformation) => {
-                this.AdditionalInformationExists = result.AdditionalInformationExists;
-                this.cdr.markForCheck();
-            }));
+        this.subscriptions.add(
+            this.HostgroupsService.loadAdditionalInformation(this.hostgroupId).subscribe(
+                (result: HostgroupAdditionalInformation) => {
+                    this.AdditionalInformationExists = result.AdditionalInformationExists;
+                    this.cdr.markForCheck();
+                },
+            ),
+        );
     }
 
     public ngOnDestroy() {
@@ -386,23 +369,24 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
         if (host) {
             // User just want to delete a single command
-            items = [{
-                id: Number(host.id),
-                displayName: String(host.hostname)
-            }];
+            items = [
+                {
+                    id: Number(host.id),
+                    displayName: String(host.hostname),
+                },
+            ];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.Host.id,
-                    displayName: item.Host.hostname
+                    displayName: item.Host.hostname,
                 };
             });
         }
 
-
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
@@ -413,7 +397,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         // open modal
         this.modalService.toggle({
             show: true,
-            id: 'deleteAllModal',
+            id: "deleteAllModal",
         });
     }
 
@@ -425,15 +409,16 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
         if (service) {
             // User just want to delete a single command
-            items = [{
-                id: Number(service.Service.id),
-                displayName: String(service.Service.servicename)
-            }];
+            items = [
+                {
+                    id: Number(service.Service.id),
+                    displayName: String(service.Service.servicename),
+                },
+            ];
         }
 
-
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
@@ -444,7 +429,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
         this.modalService.toggle({
             show: true,
-            id: 'deleteAllModal',
+            id: "deleteAllModal",
         });
     }
 
@@ -457,21 +442,20 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
                 start: 0,
                 end: 0,
                 author: this.userFullname,
-                comment: '',
-                downtimetype: ''
+                comment: "",
+                downtimetype: "",
             };
         });
         if (this.selectedItems.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
         this.modalService.toggle({
             show: true,
-            id: 'hostMaintenanceModal',
+            id: "hostMaintenanceModal",
         });
     }
-
 
     // Called by (click) - no manual change detection required
     public disableNotifications() {
@@ -479,19 +463,19 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
             return {
                 command: ExternalCommandsEnum.submitDisableHostNotifications,
                 hostUuid: host.Host.uuid,
-                type: 'hostOnly',
+                type: "hostOnly",
             };
         });
 
         if (this.selectedItems.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
 
         this.modalService.toggle({
             show: true,
-            id: 'hostDisableNotificationsModal',
+            id: "hostDisableNotificationsModal",
         });
     }
 
@@ -501,19 +485,19 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
             return {
                 command: ExternalCommandsEnum.submitEnableHostNotifications,
                 hostUuid: host.Host.uuid,
-                type: 'hostOnly',
+                type: "hostOnly",
             };
         });
 
         if (this.selectedItems.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
 
         this.modalService.toggle({
             show: true,
-            id: 'hostEnableNotificationsModal',
+            id: "hostEnableNotificationsModal",
         });
     }
 
@@ -523,30 +507,33 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
             if (element.Host.id !== hostId) {
                 return;
             }
-            if (typeof element.services !== 'undefined') {
+            if (typeof element.services !== "undefined") {
                 element.services = undefined;
                 return;
             }
             this.loadServicesList(element);
-        })
+        });
     }
 
     // Called by (click) - no manual change detection required
     private loadServicesList(element: HostGroupExtendedHost): void {
-        element.serviceParams['filter[Servicestatus.current_state][]'] = [];
+        element.serviceParams["filter[Servicestatus.current_state][]"] = [];
         if (element.Servicestatus.current_state.ok) {
-            element.serviceParams['filter[Servicestatus.current_state][]'].push('ok');
+            element.serviceParams["filter[Servicestatus.current_state][]"].push("ok");
         }
         if (element.Servicestatus.current_state.warning) {
-            element.serviceParams['filter[Servicestatus.current_state][]'].push('warning');
+            element.serviceParams["filter[Servicestatus.current_state][]"].push("warning");
         }
         if (element.Servicestatus.current_state.critical) {
-            element.serviceParams['filter[Servicestatus.current_state][]'].push('critical');
+            element.serviceParams["filter[Servicestatus.current_state][]"].push("critical");
         }
         if (element.Servicestatus.current_state.unknown) {
-            element.serviceParams['filter[Servicestatus.current_state][]'].push('unknown');
+            element.serviceParams["filter[Servicestatus.current_state][]"].push("unknown");
         }
-        this.HostgroupsService.loadServicesByHostId(element.Host.id, element.serviceParams as HostgroupsExtendedServiceListParams).subscribe((root: LoadServicesForHosts) => {
+        this.HostgroupsService.loadServicesByHostId(
+            element.Host.id,
+            element.serviceParams as HostgroupsExtendedServiceListParams,
+        ).subscribe((root: LoadServicesForHosts) => {
             element.services = root.all_services;
             element.servicesRoot = root;
             this.cdr.markForCheck();
@@ -555,24 +542,25 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
         return;
     }
 
-
     // Called by (click) - no manual change detection required
     private getUserTimezone() {
-        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
-            this.timezone = data;
-        }));
+        this.subscriptions.add(
+            this.TimezoneService.getTimezoneConfiguration().subscribe((data) => {
+                this.timezone = data;
+            }),
+        );
     }
 
     protected onHostFilterChange(event: Event): void {
-        this.hostParams['filter[Hoststatus.current_state][]'] = [];
+        this.hostParams["filter[Hoststatus.current_state][]"] = [];
         if (this.filter.Hoststatus.current_state.up) {
-            this.hostParams['filter[Hoststatus.current_state][]'].push('up');
+            this.hostParams["filter[Hoststatus.current_state][]"].push("up");
         }
         if (this.filter.Hoststatus.current_state.down) {
-            this.hostParams['filter[Hoststatus.current_state][]'].push('down');
+            this.hostParams["filter[Hoststatus.current_state][]"].push("down");
         }
         if (this.filter.Hoststatus.current_state.unreachable) {
-            this.hostParams['filter[Hoststatus.current_state][]'].push('unreachable');
+            this.hostParams["filter[Hoststatus.current_state][]"].push("unreachable");
         }
         this.hostParams.page = 1;
         this.loadHostgroupExtended();
@@ -601,20 +589,22 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
         if (host) {
             // User just want to delete a single command
-            items = [{
-                id: Number(host.id),
-                displayName: String(host.name)
-            }];
+            items = [
+                {
+                    id: Number(host.id),
+                    displayName: String(host.name),
+                },
+            ];
         } else {
             items = this.SelectionServiceService.getSelectedItems().map((item): DisableItem => {
                 return {
                     id: item.Host.id,
-                    displayName: item.Host.name
+                    displayName: item.Host.name,
                 };
             });
         }
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
@@ -623,7 +613,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
         this.modalService.toggle({
             show: true,
-            id: 'disableModal',
+            id: "disableModal",
         });
     }
 
@@ -632,20 +622,22 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
         if (host) {
             // User just want to delete a single command
-            items = [{
-                id: Number(host.id),
-                displayName: String(host.name)
-            }];
+            items = [
+                {
+                    id: Number(host.id),
+                    displayName: String(host.name),
+                },
+            ];
         } else {
             items = this.SelectionServiceService.getSelectedItems().map((item): EnableItem => {
                 return {
                     id: item.Host.id,
-                    displayName: item.Host.name
+                    displayName: item.Host.name,
                 };
             });
         }
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
@@ -654,32 +646,34 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
 
         this.modalService.toggle({
             show: true,
-            id: 'enableModal',
+            id: "enableModal",
         });
     }
 
     // Called by (click) - no manual change detection required
     public acknowledgeStatus() {
-        let items: HostAcknowledgeItem[] = this.hostgroupExtended.Hosts.map((host: HostGroupExtendedHost): HostAcknowledgeItem => {
-            return {
-                command: ExternalCommandsEnum.submitHoststateAck,
-                hostUuid: host.Host.uuid,
-                hostAckType: 'hostOnly',
-                author: this.userFullname,
-                comment: '',
-                notify: true,
-                sticky: 0
-            };
-        });
+        let items: HostAcknowledgeItem[] = this.hostgroupExtended.Hosts.map(
+            (host: HostGroupExtendedHost): HostAcknowledgeItem => {
+                return {
+                    command: ExternalCommandsEnum.submitHoststateAck,
+                    hostUuid: host.Host.uuid,
+                    hostAckType: "hostOnly",
+                    author: this.userFullname,
+                    comment: "",
+                    notify: true,
+                    sticky: 0,
+                };
+            },
+        );
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
         this.selectedItems = items;
         this.modalService.toggle({
             show: true,
-            id: 'hostAcknowledgeModal',
+            id: "hostAcknowledgeModal",
         });
     }
 

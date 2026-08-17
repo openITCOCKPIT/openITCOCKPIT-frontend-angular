@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { CoreuiComponent } from "../../../layouts/coreui/coreui.component";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { PermissionDirective } from "../../../permissions/permission.directive";
 
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { TranslocoDirective, TranslocoService } from "@jsverse/transloco";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { BackButtonDirective } from "../../../directives/back-button.directive";
 import {
     CardBodyComponent,
     CardComponent,
@@ -20,38 +20,36 @@ import {
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
-    NavItemComponent
-} from '@coreui/angular';
-import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ServiceescalationContainerResult, ServiceescalationPost } from '../serviceescalations.interface';
-import { ServiceescalationsService } from '../serviceescalations.service';
+    NavItemComponent,
+} from "@coreui/angular";
+import { FormsModule } from "@angular/forms";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { ServiceescalationContainerResult, ServiceescalationPost } from "../serviceescalations.interface";
+import { ServiceescalationsService } from "../serviceescalations.service";
 import {
     SelectItemOptionGroup,
     SelectKeyValue,
-    SelectKeyValueWithDisabled
-} from '../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { Subscription } from 'rxjs';
-import { PermissionsService } from '../../../permissions/permissions.service';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+    SelectKeyValueWithDisabled,
+} from "../../../layouts/primeng/select.interface";
+import { GenericIdResponse, GenericValidationError } from "../../../generic-responses";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { Subscription } from "rxjs";
+import { PermissionsService } from "../../../permissions/permissions.service";
+import { FormErrorDirective } from "../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../layouts/coreui/form-feedback/form-feedback.component";
 
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
-import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import {
-    MultiSelectOptgroupComponent
-} from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
-import { HistoryService } from '../../../history.service';
+import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
+import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
+import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import { IntervalInputComponent } from "../../../layouts/coreui/interval-input/interval-input.component";
+import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
+import { TrueFalseDirective } from "../../../directives/true-false.directive";
+import { MultiSelectOptgroupComponent } from "../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component";
+import { HistoryService } from "../../../history.service";
 
 @Component({
-    selector: 'oitc-serviceescalations-add',
+    selector: "oitc-serviceescalations-add",
     imports: [
         FaIconComponent,
         PermissionDirective,
@@ -83,13 +81,12 @@ import { HistoryService } from '../../../history.service';
         FormCheckInputDirective,
         TrueFalseDirective,
         CardFooterComponent,
-        MultiSelectOptgroupComponent
+        MultiSelectOptgroupComponent,
     ],
-    templateUrl: './serviceescalations-add.component.html',
-    styleUrl: './serviceescalations-add.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./serviceescalations-add.component.html",
+    styleUrl: "./serviceescalations-add.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
     public containers: ServiceescalationContainerResult | undefined;
     public post: ServiceescalationPost = {} as ServiceescalationPost;
@@ -113,13 +110,13 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
-
-    constructor(private route: ActivatedRoute, private cdr: ChangeDetectorRef) {
-    }
-
+    constructor(
+        private route: ActivatedRoute,
+        private cdr: ChangeDetectorRef,
+    ) {}
 
     public ngOnInit(): void {
-        this.route.queryParams.subscribe(params => {
+        this.route.queryParams.subscribe((params) => {
             //Fire on page load
             this.loadContainers();
             this.post = this.getDefaultPost();
@@ -127,8 +124,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnDestroy(): void {
-    }
+    public ngOnDestroy(): void {}
 
     private getDefaultPost(): ServiceescalationPost {
         return {
@@ -142,32 +138,32 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
             escalate_on_critical: 0,
             escalate_on_unknown: 0,
             contacts: {
-                _ids: []
+                _ids: [],
             },
             contactgroups: {
-                _ids: []
+                _ids: [],
             },
             services: {
-                _ids: []
+                _ids: [],
             },
             services_excluded: {
-                _ids: []
+                _ids: [],
             },
             servicegroups: {
-                _ids: []
+                _ids: [],
             },
             servicegroups_excluded: {
-                _ids: []
-            }
+                _ids: [],
+            },
         };
     }
 
     public loadContainers() {
-        this.subscriptions.add(this.ServiceescalationsService.loadContainers()
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadContainers().subscribe((result) => {
                 this.cdr.markForCheck();
                 this.containers = result;
-            })
+            }),
         );
     }
 
@@ -178,12 +174,12 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.ServiceescalationsService.loadElements(containerId)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadElements(containerId).subscribe((result) => {
                 this.servicegroups = result.servicegroups;
-                this.servicegroups = this.servicegroups.map(obj => ({
+                this.servicegroups = this.servicegroups.map((obj) => ({
                     ...obj,
-                    disabled: this.post.servicegroups_excluded._ids.includes(obj.key)
+                    disabled: this.post.servicegroups_excluded._ids.includes(obj.key),
                 }));
 
                 this.processChosenExcludedServicegroups();
@@ -192,8 +188,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
                 this.contacts = result.contacts;
                 this.contactgroups = result.contactgroups;
                 this.cdr.markForCheck();
-
-            })
+            }),
         );
     }
 
@@ -203,26 +198,27 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.ServiceescalationsService.loadServices(containerId, searchString, this.post.services._ids)
-            .subscribe((result) => {
-                this.cdr.markForCheck();
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadServices(containerId, searchString, this.post.services._ids).subscribe(
+                (result) => {
+                    this.cdr.markForCheck();
 
-                this.services = result.services;
-                console.log(this.services);
-                this.services.map(obj => {
-                    obj.items.map(service => {
-                        if (service.disabled === true) {
-                            this.disabled_services.push(service.value);
-                        }
-                    })
-                });
-                this.processChosenServices();
-            })
+                    this.services = result.services;
+                    console.log(this.services);
+                    this.services.map((obj) => {
+                        obj.items.map((service) => {
+                            if (service.disabled === true) {
+                                this.disabled_services.push(service.value);
+                            }
+                        });
+                    });
+                    this.processChosenServices();
+                },
+            ),
         );
-    }
+    };
 
     public loadExcludedServices = (searchString: string) => {
-
         const containerId = this.post.container_id;
         if (!containerId) {
             return;
@@ -231,23 +227,27 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
             this.post.services_excluded._ids = [];
             return;
         }
-        this.subscriptions.add(this.ServiceescalationsService.loadExcludedServices(containerId, searchString, this.post.services_excluded._ids, this.post.servicegroups._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadExcludedServices(
+                containerId,
+                searchString,
+                this.post.services_excluded._ids,
+                this.post.servicegroups._ids,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
 
                 this.services_excluded = result.excludedServices;
-                this.services_excluded.map(obj => {
-                    obj.items.map(service => {
+                this.services_excluded.map((obj) => {
+                    obj.items.map((service) => {
                         if (service.disabled === true) {
                             this.disabled_excluded_services.push(service.value);
                         }
-                    })
-
+                    });
                 });
                 this.processChosenExcludedServices();
-            }));
-
-    }
+            }),
+        );
+    };
 
     public loadExcludedServicegroups(searchString: string) {
         const containerId = this.post.container_id;
@@ -259,23 +259,29 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
             this.post.servicegroups_excluded._ids = [];
             return;
         }
-        this.subscriptions.add(this.ServiceescalationsService.loadExcludedServicegroups(containerId, searchString, this.post.services._ids, this.post.servicegroups_excluded._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadExcludedServicegroups(
+                containerId,
+                searchString,
+                this.post.services._ids,
+                this.post.servicegroups_excluded._ids,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
 
                 this.servicegroups_excluded = result.excludedServicegroups;
-                this.servicegroups_excluded = this.servicegroups_excluded.map(obj => {
+                this.servicegroups_excluded = this.servicegroups_excluded.map((obj) => {
                     return {
                         ...obj,
-                        disabled: this.post.servicegroups._ids.includes(obj.key)
-                    }
+                        disabled: this.post.servicegroups._ids.includes(obj.key),
+                    };
                 });
-            }));
+            }),
+        );
     }
 
     public onContainerChange() {
         this.loadElements();
-        this.loadServices('');
+        this.loadServices("");
     }
 
     public processChosenServices() {
@@ -283,12 +289,13 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.services) {
-            for (let itemKey in this.services[key]['items']) {
-                if (this.disabled_services.includes(this.services[key]['items'][itemKey].value)) {
+            for (let itemKey in this.services[key]["items"]) {
+                if (this.disabled_services.includes(this.services[key]["items"][itemKey].value)) {
                     continue;
                 }
-                this.services[key]['items'][itemKey].disabled = this.post.services_excluded._ids.includes(this.services[key]['items'][itemKey].value);
-
+                this.services[key]["items"][itemKey].disabled = this.post.services_excluded._ids.includes(
+                    this.services[key]["items"][itemKey].value,
+                );
             }
         }
         this.cdr.detectChanges();
@@ -301,11 +308,13 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.services_excluded) {
-            for (let itemKey in this.services_excluded[key]['items']) {
-                if (this.disabled_excluded_services.includes(this.services_excluded[key]['items'][itemKey].value)) {
+            for (let itemKey in this.services_excluded[key]["items"]) {
+                if (this.disabled_excluded_services.includes(this.services_excluded[key]["items"][itemKey].value)) {
                     continue;
                 }
-                this.services_excluded[key]['items'][itemKey].disabled = this.post.services._ids.includes(this.services_excluded[key]['items'][itemKey].value);
+                this.services_excluded[key]["items"][itemKey].disabled = this.post.services._ids.includes(
+                    this.services_excluded[key]["items"][itemKey].value,
+                );
             }
         }
     }
@@ -317,7 +326,9 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.servicegroups) {
-            this.servicegroups[key].disabled = this.post.servicegroups_excluded._ids.includes(this.servicegroups[key].key);
+            this.servicegroups[key].disabled = this.post.servicegroups_excluded._ids.includes(
+                this.servicegroups[key].key,
+            );
         }
     }
 
@@ -328,28 +339,29 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.servicegroups_excluded) {
-            this.servicegroups_excluded[key].disabled = this.post.servicegroups._ids.includes(this.servicegroups_excluded[key].key);
+            this.servicegroups_excluded[key].disabled = this.post.servicegroups._ids.includes(
+                this.servicegroups_excluded[key].key,
+            );
         }
     }
 
-
     public submit() {
-        this.subscriptions.add(this.ServiceescalationsService.add(this.post)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.add(this.post).subscribe((result) => {
                 this.cdr.markForCheck();
 
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('Service escalation');
-                    const msg = this.TranslocoService.translate('created successfully');
-                    const url = ['serviceescalations', 'edit', response.id];
+                    const title = this.TranslocoService.translate("Service escalation");
+                    const msg = this.TranslocoService.translate("created successfully");
+                    const url = ["serviceescalations", "edit", response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
                     this.post = this.getDefaultPost();
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
-                    this.HistoryService.navigateWithFallback(['/serviceescalations/index']);
+                    this.HistoryService.navigateWithFallback(["/serviceescalations/index"]);
                     return;
                 }
 
@@ -359,7 +371,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
-            })
+            }),
         );
     }
 }

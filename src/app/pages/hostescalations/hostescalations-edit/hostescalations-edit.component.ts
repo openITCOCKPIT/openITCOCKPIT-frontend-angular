@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { CoreuiComponent } from "../../../layouts/coreui/coreui.component";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { PermissionDirective } from "../../../permissions/permission.directive";
 
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { TranslocoDirective, TranslocoService } from "@jsverse/transloco";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { BackButtonDirective } from "../../../directives/back-button.directive";
 import {
     CardBodyComponent,
     CardComponent,
@@ -20,33 +20,33 @@ import {
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
-    NavItemComponent
-} from '@coreui/angular';
-import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { HostescalationContainerResult, HostescalationGet, HostescalationPost } from '../hostescalations.interface';
-import { HostescalationsService } from '../hostescalations.service';
-import { SelectKeyValue, SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { Subscription } from 'rxjs';
-import { PermissionsService } from '../../../permissions/permissions.service';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+    NavItemComponent,
+} from "@coreui/angular";
+import { FormsModule } from "@angular/forms";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { HostescalationContainerResult, HostescalationGet, HostescalationPost } from "../hostescalations.interface";
+import { HostescalationsService } from "../hostescalations.service";
+import { SelectKeyValue, SelectKeyValueWithDisabled } from "../../../layouts/primeng/select.interface";
+import { GenericIdResponse, GenericValidationError } from "../../../generic-responses";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { Subscription } from "rxjs";
+import { PermissionsService } from "../../../permissions/permissions.service";
+import { FormErrorDirective } from "../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../layouts/coreui/form-feedback/form-feedback.component";
 
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
-import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { HistoryService } from '../../../history.service';
-import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
+import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
+import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import { IntervalInputComponent } from "../../../layouts/coreui/interval-input/interval-input.component";
+import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
+import { TrueFalseDirective } from "../../../directives/true-false.directive";
+import { FormLoaderComponent } from "../../../layouts/primeng/loading/form-loader/form-loader.component";
+import { HistoryService } from "../../../history.service";
+import { ObjectUuidComponent } from "../../../layouts/coreui/object-uuid/object-uuid.component";
 
 @Component({
-    selector: 'oitc-hostescalations-add',
+    selector: "oitc-hostescalations-add",
     imports: [
         FaIconComponent,
         PermissionDirective,
@@ -79,11 +79,11 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         TrueFalseDirective,
         CardFooterComponent,
         FormLoaderComponent,
-        ObjectUuidComponent
+        ObjectUuidComponent,
     ],
-    templateUrl: './hostescalations-edit.component.html',
-    styleUrl: './hostescalations-edit.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./hostescalations-edit.component.html",
+    styleUrl: "./hostescalations-edit.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HostescalationsEditComponent implements OnInit, OnDestroy {
     public containers: HostescalationContainerResult | undefined;
@@ -108,14 +108,12 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {
-    }
-
+    constructor(private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.HostescalationsService.getEdit(id)
-            .subscribe((result) => {
+        const id = Number(this.route.snapshot.paramMap.get("id"));
+        this.subscriptions.add(
+            this.HostescalationsService.getEdit(id).subscribe((result) => {
                 this.cdr.markForCheck();
 
                 this.get = result.hostescalation;
@@ -131,32 +129,31 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
                     escalate_on_down: this.get.escalate_on_down,
                     escalate_on_unreachable: this.get.escalate_on_unreachable,
                     hosts: {
-                        _ids: this.get.hosts.filter(obj => obj._joinData.excluded === 0).map(obj => obj.id)
+                        _ids: this.get.hosts.filter((obj) => obj._joinData.excluded === 0).map((obj) => obj.id),
                     },
                     hosts_excluded: {
-                        _ids: this.get.hosts.filter(obj => obj._joinData.excluded === 1).map(obj => obj.id)
+                        _ids: this.get.hosts.filter((obj) => obj._joinData.excluded === 1).map((obj) => obj.id),
                     },
                     hostgroups: {
-                        _ids: this.get.hostgroups.filter(obj => obj._joinData.excluded === 0).map(obj => obj.id)
+                        _ids: this.get.hostgroups.filter((obj) => obj._joinData.excluded === 0).map((obj) => obj.id),
                     },
                     hostgroups_excluded: {
-                        _ids: this.get.hostgroups.filter(obj => obj._joinData.excluded === 1).map(obj => obj.id)
+                        _ids: this.get.hostgroups.filter((obj) => obj._joinData.excluded === 1).map((obj) => obj.id),
                     },
                     contacts: {
-                        _ids: this.get.contacts.map(obj => obj.id)
+                        _ids: this.get.contacts.map((obj) => obj.id),
                     },
                     contactgroups: {
-                        _ids: this.get.contactgroups.map(obj => obj.id)
-                    }
+                        _ids: this.get.contactgroups.map((obj) => obj.id),
+                    },
                 };
 
                 this.loadContainers();
-                this.loadExcludedHosts('');
-                this.loadExcludedHostgroups('');
+                this.loadExcludedHosts("");
+                this.loadExcludedHostgroups("");
                 this.loadElements();
-            })
+            }),
         );
-
     }
 
     public ngOnDestroy(): void {
@@ -164,12 +161,11 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
     }
 
     public loadContainers() {
-        this.subscriptions.add(this.HostescalationsService.loadContainers()
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostescalationsService.loadContainers().subscribe((result) => {
                 this.containers = result;
                 this.cdr.markForCheck();
-
-            })
+            }),
         );
     }
 
@@ -179,33 +175,32 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.HostescalationsService.loadElements(containerId)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostescalationsService.loadElements(containerId).subscribe((result) => {
                 this.cdr.markForCheck();
 
                 this.hosts = result.hosts;
-                this.hosts = this.hosts.map(obj => {
-
+                this.hosts = this.hosts.map((obj) => {
                     return {
                         ...obj,
-                        disabled: this.post.hosts_excluded._ids.includes(obj.key)
-                    }
+                        disabled: this.post.hosts_excluded._ids.includes(obj.key),
+                    };
                 });
                 this.processChosenExcludedHosts();
 
                 this.hostgroups = result.hostgroups;
-                this.hostgroups = this.hostgroups.map(obj => {
+                this.hostgroups = this.hostgroups.map((obj) => {
                     return {
                         ...obj,
-                        disabled: this.post.hostgroups_excluded._ids.includes(obj.key)
-                    }
+                        disabled: this.post.hostgroups_excluded._ids.includes(obj.key),
+                    };
                 });
 
                 this.processChosenExcludedHostgroups();
                 this.timeperiods = result.timeperiods;
                 this.contacts = result.contacts;
                 this.contactgroups = result.contactgroups;
-            })
+            }),
         );
     }
 
@@ -214,19 +209,21 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
         if (!containerId) {
             return;
         }
-        this.subscriptions.add(this.HostescalationsService.loadHosts(containerId, searchString, this.post.hosts._ids)
-            .subscribe((result) => {
-                this.cdr.markForCheck();
-                this.hosts = result.hosts;
-                this.hosts = this.hosts.map(obj => {
-                    return {
-                        ...obj,
-                        disabled: this.post.hosts_excluded._ids.includes(obj.key)
-                    }
-                });
-            })
+        this.subscriptions.add(
+            this.HostescalationsService.loadHosts(containerId, searchString, this.post.hosts._ids).subscribe(
+                (result) => {
+                    this.cdr.markForCheck();
+                    this.hosts = result.hosts;
+                    this.hosts = this.hosts.map((obj) => {
+                        return {
+                            ...obj,
+                            disabled: this.post.hosts_excluded._ids.includes(obj.key),
+                        };
+                    });
+                },
+            ),
         );
-    }
+    };
 
     public loadExcludedHosts = (searchString: string) => {
         const containerId = this.post.container_id;
@@ -237,18 +234,24 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
             this.post.hosts_excluded._ids = [];
             return;
         }
-        this.subscriptions.add(this.HostescalationsService.loadExcludedHosts(containerId, searchString, this.post.hosts_excluded._ids, this.post.hostgroups._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostescalationsService.loadExcludedHosts(
+                containerId,
+                searchString,
+                this.post.hosts_excluded._ids,
+                this.post.hostgroups._ids,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.hosts_excluded = result.excludedHosts;
-                this.hosts_excluded = this.hosts_excluded.map(obj => {
+                this.hosts_excluded = this.hosts_excluded.map((obj) => {
                     return {
                         ...obj,
-                        disabled: this.post.hosts._ids.includes(obj.key)
-                    }
+                        disabled: this.post.hosts._ids.includes(obj.key),
+                    };
                 });
-            }));
-    }
+            }),
+        );
+    };
 
     public loadExcludedHostgroups(searchString: string) {
         const containerId = this.post.container_id;
@@ -259,17 +262,23 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
             this.post.hostgroups_excluded._ids = [];
             return;
         }
-        this.subscriptions.add(this.HostescalationsService.loadExcludedHostgroups(containerId, searchString, this.post.hosts._ids, this.post.hostgroups_excluded._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostescalationsService.loadExcludedHostgroups(
+                containerId,
+                searchString,
+                this.post.hosts._ids,
+                this.post.hostgroups_excluded._ids,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.hostgroups_excluded = result.excludedHostgroups;
-                this.hostgroups_excluded = this.hostgroups_excluded.map(obj => {
+                this.hostgroups_excluded = this.hostgroups_excluded.map((obj) => {
                     return {
                         ...obj,
-                        disabled: this.post.hostgroups._ids.includes(obj.key)
-                    }
+                        disabled: this.post.hostgroups._ids.includes(obj.key),
+                    };
                 });
-            }));
+            }),
+        );
     }
 
     public onContainerChange() {
@@ -313,25 +322,25 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.hostgroups_excluded) {
-            this.hostgroups_excluded[key].disabled = this.post.hostgroups._ids.includes(this.hostgroups_excluded[key].key);
+            this.hostgroups_excluded[key].disabled = this.post.hostgroups._ids.includes(
+                this.hostgroups_excluded[key].key,
+            );
         }
     }
 
-
     public submit() {
-        this.subscriptions.add(this.HostescalationsService.edit(this.post)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostescalationsService.edit(this.post).subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('Host escalation');
-                    const msg = this.TranslocoService.translate('updated successfully');
-                    const url = ['hostescalations', 'edit', response.id];
+                    const title = this.TranslocoService.translate("Host escalation");
+                    const msg = this.TranslocoService.translate("updated successfully");
+                    const url = ["hostescalations", "edit", response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
-
-                    this.HistoryService.navigateWithFallback(['/hostescalations/index']);
+                    this.HistoryService.navigateWithFallback(["/hostescalations/index"]);
                     this.notyService.scrollContentDivToTop();
                     return;
                 }
@@ -342,7 +351,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
-            }));
-
+            }),
+        );
     }
 }

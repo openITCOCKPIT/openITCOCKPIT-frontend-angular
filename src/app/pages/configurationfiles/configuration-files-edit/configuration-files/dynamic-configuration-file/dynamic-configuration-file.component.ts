@@ -6,30 +6,29 @@ import {
     inject,
     input,
     OnDestroy,
-    OnInit
-} from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { ConfigurationFilesDbKeys, ConfigurationFilesFieldTypes } from '../../../configuration-files.enum';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ConfigurationFilesService } from '../../../configuration-files.service';
+    OnInit,
+} from "@angular/core";
+import { Observable, Subscription } from "rxjs";
+import { ConfigurationFilesDbKeys, ConfigurationFilesFieldTypes } from "../../../configuration-files.enum";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ConfigurationFilesService } from "../../../configuration-files.service";
 import {
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
     FormControlDirective,
-    FormLabelDirective
-} from '@coreui/angular';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { PaginatorModule } from 'primeng/paginator';
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { ConfigurationEditorConfig, ConfigurationEditorField } from '../../../configuration-files.interface';
+    FormLabelDirective,
+} from "@coreui/angular";
+import { FormErrorDirective } from "../../../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../../../layouts/coreui/form-feedback/form-feedback.component";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { RequiredIconComponent } from "../../../../../components/required-icon/required-icon.component";
+import { ConfigurationEditorConfig, ConfigurationEditorField } from "../../../configuration-files.interface";
 
-
-import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
-import { GenericValidationError } from '../../../../../generic-responses';
-import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { FormsModule } from '@angular/forms';
+import { TrueFalseDirective } from "../../../../../directives/true-false.directive";
+import { GenericValidationError } from "../../../../../generic-responses";
+import { NotyService } from "../../../../../layouts/coreui/noty.service";
+import { FormsModule } from "@angular/forms";
 
 /**
  * This component will just loop through all configuration fields and will create an input according to the field type.
@@ -39,7 +38,7 @@ import { FormsModule } from '@angular/forms';
  * the value of another field, you should create a new component for that configuration file.
  */
 @Component({
-    selector: 'oitc-dynamic-configuration-file',
+    selector: "oitc-dynamic-configuration-file",
     imports: [
         FormControlDirective,
         FormErrorDirective,
@@ -51,14 +50,13 @@ import { FormsModule } from '@angular/forms';
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
-        FormsModule
+        FormsModule,
     ],
-    templateUrl: './dynamic-configuration-file.component.html',
-    styleUrl: './dynamic-configuration-file.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./dynamic-configuration-file.component.html",
+    styleUrl: "./dynamic-configuration-file.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DynamicConfigurationFileComponent implements OnInit, OnDestroy {
-
     public dbKey = input.required<ConfigurationFilesDbKeys>();
     public moduleUrl = input.required<null | string>();
     public submit$ = input.required<Observable<void>>();
@@ -93,9 +91,11 @@ export class DynamicConfigurationFileComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         const submit$ = this.submit$();
 
-        this.subscriptions.add(submit$.subscribe(() => {
-            this.submit();
-        }));
+        this.subscriptions.add(
+            submit$.subscribe(() => {
+                this.submit();
+            }),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -103,20 +103,20 @@ export class DynamicConfigurationFileComponent implements OnInit, OnDestroy {
     }
 
     public loadConfigFile(): void {
-        const dbKey = this.dbKey()
+        const dbKey = this.dbKey();
         if (dbKey) {
-            this.subscriptions.add(this.ConfigurationFilesService.getConfigFileForEditor(dbKey, this.moduleUrl()).subscribe((result) => {
-                this.cdr.markForCheck();
-                this.config = result.config;
-                this.fields = result.fields;
-            }));
-
+            this.subscriptions.add(
+                this.ConfigurationFilesService.getConfigFileForEditor(dbKey, this.moduleUrl()).subscribe((result) => {
+                    this.cdr.markForCheck();
+                    this.config = result.config;
+                    this.fields = result.fields;
+                }),
+            );
         }
     }
 
     private submit() {
         if (this.config && this.fields) {
-
             // Copy the values from the fields array back into the config object.
             for (const field of this.fields) {
                 const fieldName = field.field;
@@ -129,13 +129,17 @@ export class DynamicConfigurationFileComponent implements OnInit, OnDestroy {
                 }
             }
 
-            this.subscriptions.add(this.ConfigurationFilesService.saveConfigFileFromEditor(this.dbKey(), this.moduleUrl(), this.config)
-                .subscribe((result) => {
+            this.subscriptions.add(
+                this.ConfigurationFilesService.saveConfigFileFromEditor(
+                    this.dbKey(),
+                    this.moduleUrl(),
+                    this.config,
+                ).subscribe((result) => {
                     this.cdr.markForCheck();
 
                     if (result.success) {
                         this.notyService.genericSuccess();
-                        this.router.navigate(['/', 'ConfigurationFiles', 'index']);
+                        this.router.navigate(["/", "ConfigurationFiles", "index"]);
 
                         return;
                     }
@@ -146,9 +150,9 @@ export class DynamicConfigurationFileComponent implements OnInit, OnDestroy {
                     if (result) {
                         this.errors = errorResponse;
                     }
-                }));
+                }),
+            );
         }
-
     }
 
     protected readonly ConfigurationFilesFieldTypes = ConfigurationFilesFieldTypes;

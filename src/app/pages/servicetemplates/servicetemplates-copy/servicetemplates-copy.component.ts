@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import {
     AlertComponent,
     CardBodyComponent,
@@ -8,35 +8,35 @@ import {
     CardTitleDirective,
     FormControlDirective,
     FormLabelDirective,
-    NavComponent
-} from '@coreui/angular';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+    NavComponent,
+} from "@coreui/angular";
+import { BackButtonDirective } from "../../../directives/back-button.directive";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { FormErrorDirective } from "../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../layouts/coreui/form-feedback/form-feedback.component";
 
-import { PaginatorModule } from 'primeng/paginator';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { PermissionDirective } from "../../../permissions/permission.directive";
+import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
+import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
+import { TranslocoDirective } from "@jsverse/transloco";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import {
     ServicetemplateCommandArgument,
-    ServicetemplateCopyPost
-} from '../../servicetemplates/servicetemplates.interface';
-import { HttpErrorResponse } from '@angular/common/http';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { Subscription } from 'rxjs';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ServicetemplatesService } from '../servicetemplates.service';
-import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { HistoryService } from '../../../history.service';
-import { FormsModule } from '@angular/forms';
+    ServicetemplateCopyPost,
+} from "../../servicetemplates/servicetemplates.interface";
+import { HttpErrorResponse } from "@angular/common/http";
+import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
+import { Subscription } from "rxjs";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { ServicetemplatesService } from "../servicetemplates.service";
+import { FormLoaderComponent } from "../../../layouts/primeng/loading/form-loader/form-loader.component";
+import { HistoryService } from "../../../history.service";
+import { FormsModule } from "@angular/forms";
 
 @Component({
-    selector: 'oitc-servicetemplates-copy',
+    selector: "oitc-servicetemplates-copy",
     imports: [
         AlertComponent,
         BackButtonDirective,
@@ -59,11 +59,11 @@ import { FormsModule } from '@angular/forms';
         XsButtonDirective,
         RouterLink,
         FormLoaderComponent,
-        FormsModule
+        FormsModule,
     ],
-    templateUrl: './servicetemplates-copy.component.html',
-    styleUrl: './servicetemplates-copy.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./servicetemplates-copy.component.html",
+    styleUrl: "./servicetemplates-copy.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServicetemplatesCopyComponent implements OnInit, OnDestroy {
     public servicetemplates: ServicetemplateCopyPost[] = [];
@@ -79,35 +79,39 @@ export class ServicetemplatesCopyComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
-        const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
+        const ids = String(this.route.snapshot.paramMap.get("ids")).split(",").map(Number);
         if (!ids) {
             // No ids given
-            this.router.navigate(['/', 'servicetemplates', 'index']);
+            this.router.navigate(["/", "servicetemplates", "index"]);
         }
 
         if (ids) {
-            this.subscriptions.add(this.ServicetemplatesService.getServicetemplatesCopy(ids).subscribe(response => {
-                for (let servicetemplate of response.servicetemplates) {
+            this.subscriptions.add(
+                this.ServicetemplatesService.getServicetemplatesCopy(ids).subscribe((response) => {
+                    for (let servicetemplate of response.servicetemplates) {
+                        let st = <ServicetemplateCopyPost>{
+                            Source: {
+                                id: servicetemplate.id,
+                                name: servicetemplate.name,
+                            },
+                            Servicetemplate: servicetemplate,
+                            Error: null,
+                        };
+                        st.Servicetemplate.servicetemplatecommandargumentvalues =
+                            this.removeFieldsFromServicetemplatecommandargumentvalues(
+                                st.Servicetemplate.servicetemplatecommandargumentvalues,
+                            );
 
-                    let st = <ServicetemplateCopyPost>{
-                        Source: {
-                            id: servicetemplate.id,
-                            name: servicetemplate.name
-                        },
-                        Servicetemplate: servicetemplate,
-                        Error: null
-                    };
-                    st.Servicetemplate.servicetemplatecommandargumentvalues = this.removeFieldsFromServicetemplatecommandargumentvalues(st.Servicetemplate.servicetemplatecommandargumentvalues);
+                        delete st.Servicetemplate.id; // important
 
-                    delete st.Servicetemplate.id; // important
+                        this.servicetemplates.push(st);
+                    }
 
-                    this.servicetemplates.push(st);
-                }
-
-                this.commands = response.commands;
-                this.eventhandlerCommands = response.eventhandlerCommands;
-                this.cdr.markForCheck();
-            }));
+                    this.commands = response.commands;
+                    this.eventhandlerCommands = response.eventhandlerCommands;
+                    this.cdr.markForCheck();
+                }),
+            );
         }
     }
 
@@ -116,13 +120,19 @@ export class ServicetemplatesCopyComponent implements OnInit, OnDestroy {
     }
 
     public loadCommandArguments(sourceServicetemplateId: number, commandId: number, index: number) {
-        this.subscriptions.add(this.ServicetemplatesService.loadCommandArguments(commandId, sourceServicetemplateId).subscribe(response => {
-            this.servicetemplates[index].Servicetemplate.servicetemplatecommandargumentvalues = response;
-            this.cdr.markForCheck();
-        }));
+        this.subscriptions.add(
+            this.ServicetemplatesService.loadCommandArguments(commandId, sourceServicetemplateId).subscribe(
+                (response) => {
+                    this.servicetemplates[index].Servicetemplate.servicetemplatecommandargumentvalues = response;
+                    this.cdr.markForCheck();
+                },
+            ),
+        );
     }
 
-    private removeFieldsFromServicetemplatecommandargumentvalues(servicetemplatecommandargumentvalues: ServicetemplateCommandArgument[]) {
+    private removeFieldsFromServicetemplatecommandargumentvalues(
+        servicetemplatecommandargumentvalues: ServicetemplateCommandArgument[],
+    ) {
         this.cdr.markForCheck();
         if (servicetemplatecommandargumentvalues.length === 0) {
             return [];
@@ -142,7 +152,7 @@ export class ServicetemplatesCopyComponent implements OnInit, OnDestroy {
                 //console.log(value); // Serve result with the new copied host templates
                 // 200 ok
                 this.notyService.genericSuccess();
-                this.HistoryService.navigateWithFallback(['/', 'servicetemplates', 'index']);
+                this.HistoryService.navigateWithFallback(["/", "servicetemplates", "index"]);
             },
             error: (error: HttpErrorResponse) => {
                 // We run into a validation error.
@@ -154,7 +164,7 @@ export class ServicetemplatesCopyComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
                 this.notyService.genericError();
                 this.servicetemplates = error.error.result as ServicetemplateCopyPost[];
-            }
+            },
         });
 
         this.subscriptions.add(sub);

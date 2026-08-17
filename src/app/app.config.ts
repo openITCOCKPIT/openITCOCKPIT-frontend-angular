@@ -23,34 +23,34 @@
  *     confirmation.
  */
 
-import { ApplicationConfig, isDevMode, LOCALE_ID } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { ApplicationConfig, isDevMode, LOCALE_ID } from "@angular/core";
+import { provideRouter } from "@angular/router";
 
-import { routes } from './app.routes';
+import { routes } from "./app.routes";
 import { LEGACY_BASE_URL } from "./tokens/legacy-base-url.token";
 import { AuthService } from "./auth/auth.service";
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { PROXY_PATH } from "./tokens/proxy-path.token";
 import { authInterceptor } from "./auth/auth.interceptor";
 import { csrfInterceptor } from "./auth/csrf.interceptor";
-import { TranslocoHttpLoader } from './transloco-loader';
-import { provideTransloco } from '@jsverse/transloco';
-import { DropdownService } from '@coreui/angular';
-import { loaderInterceptor } from './interceptors/loader.interceptor';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideToastr } from 'ngx-toastr';
-import { providePrimeNG } from 'primeng/config';
+import { TranslocoHttpLoader } from "./transloco-loader";
+import { provideTransloco } from "@jsverse/transloco";
+import { DropdownService } from "@coreui/angular";
+import { loaderInterceptor } from "./interceptors/loader.interceptor";
+import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
+import { provideToastr } from "ngx-toastr";
+import { provideOptimus } from "@openng/optimus-ui/config";
 
 //import Aura from '@primeng/themes/aura';
-import OItcPrimeNGPreset from './layouts/primeng/primeng.preset';
+import OItcPrimeNGPreset from "./layouts/primeng/primeng.preset";
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        {provide: LOCALE_ID, useValue: 'en-US'},
-        {provide: LEGACY_BASE_URL, useValue: '/#!'}, // Must be replaced by real staged URL
-        {provide: PROXY_PATH, useValue: ''},
-        {provide: Window, useValue: window},
-        {provide: AuthService, useClass: AuthService},
+        { provide: LOCALE_ID, useValue: "en-US" },
+        { provide: LEGACY_BASE_URL, useValue: "/#!" }, // Must be replaced by real staged URL
+        { provide: PROXY_PATH, useValue: "" },
+        { provide: Window, useValue: window },
+        { provide: AuthService, useClass: AuthService },
         provideHttpClient(
             withInterceptors([authInterceptor, csrfInterceptor, loaderInterceptor]),
             /*
@@ -70,26 +70,26 @@ export const appConfig: ApplicationConfig = {
         provideTransloco({
             // All options: https://jsverse.github.io/transloco/docs/getting-started/config-options
             config: {
-                availableLangs: ['en_US', 'de_DE', 'es_ES', 'fr_FR', 'pl_PL', 'ru_RU', 'uk_UA'],
-                defaultLang: 'en_US',
+                availableLangs: ["en_US", "de_DE", "es_ES", "fr_FR", "pl_PL", "ru_RU", "uk_UA"],
+                defaultLang: "en_US",
                 failedRetries: 1,
                 // Remove this option if your application doesn't support changing language in runtime.
                 reRenderOnLangChange: true,
                 prodMode: !isDevMode(),
             },
-            loader: TranslocoHttpLoader
+            loader: TranslocoHttpLoader,
         }),
         provideAnimationsAsync(),
         DropdownService,
-        providePrimeNG({
+        provideOptimus({
             theme: {
                 preset: OItcPrimeNGPreset,
                 options: {
-                    prefix: 'p',
-                    darkModeSelector: '.dark-theme',
-                    cssLayer: false
-                }
-            }
-        })
-    ]
+                    prefix: "p",
+                    darkModeSelector: ".dark-theme",
+                    cssLayer: false,
+                },
+            },
+        }),
+    ],
 };

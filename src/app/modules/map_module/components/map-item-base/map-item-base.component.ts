@@ -10,33 +10,33 @@ import {
     input,
     InputSignal,
     Output,
-    ViewChild
-} from '@angular/core';
-import { ContextAction, MapitemBase, MapitemBaseActionObject, ResizedEvent } from './map-item-base.interface';
-import { CdkDrag, CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
-import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { ContextMenuModule } from 'primeng/contextmenu';
-import { MenuItem } from 'primeng/api';
-import { TranslocoService } from '@jsverse/transloco';
-import { Mapitem, Mapline } from '../../pages/mapeditors/mapeditors.interface';
-import { ContextActionType, MapItemType } from './map-item-base.enum';
+    ViewChild,
+} from "@angular/core";
+import { ContextAction, MapitemBase, MapitemBaseActionObject, ResizedEvent } from "./map-item-base.interface";
+import { CdkDrag, CdkDragEnd, CdkDragMove } from "@angular/cdk/drag-drop";
+import { MapCanvasComponent } from "../map-canvas/map-canvas.component";
+import { ContextMenuModule } from "@openng/optimus-ui/contextmenu";
+import { MenuItem } from "@openng/optimus-ui/api";
+import { TranslocoService } from "@jsverse/transloco";
+import { Mapitem, Mapline } from "../../pages/mapeditors/mapeditors.interface";
+import { ContextActionType, MapItemType } from "./map-item-base.enum";
 
-import { MapItemBaseService } from './map-item-base.service';
+import { MapItemBaseService } from "./map-item-base.service";
 
 @Component({
-    selector: 'oitc-map-item-base',
+    selector: "oitc-map-item-base",
     standalone: true,
     imports: [CdkDrag, ContextMenuModule],
-    templateUrl: './map-item-base.component.html',
-    styleUrl: './map-item-base.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./map-item-base.component.html",
+    styleUrl: "./map-item-base.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewInit {
-    @ViewChild('container', {static: false}) containerRef!: ElementRef<HTMLDivElement>;
+    @ViewChild("container", { static: false }) containerRef!: ElementRef<HTMLDivElement>;
 
     public item: InputSignal<T | undefined> = input.required<T | undefined>();
-    public layers: InputSignal<{ key: string, value: string }[]> = input<{ key: string, value: string }[]>([]); // Layer options for context menu
-    public gridSize: InputSignal<{ x: number, y: number }> = input<{ x: number, y: number }>({x: 25, y: 25}); // Grid size for snapping
+    public layers: InputSignal<{ key: string; value: string }[]> = input<{ key: string; value: string }[]>([]); // Layer options for context menu
+    public gridSize: InputSignal<{ x: number; y: number }> = input<{ x: number; y: number }>({ x: 25, y: 25 }); // Grid size for snapping
     public gridEnabled: InputSignal<boolean> = input<boolean>(true);
     public isViewMode: InputSignal<boolean> = input<boolean>(false); // View mode for disabling drag and drop and context menu
     public enablePointerCursor: InputSignal<boolean> = input<boolean>(false); // Enable pointer cursor for drag and drop
@@ -116,7 +116,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                 x = this.startX!;
                 y = this.startY!;
             } else {
-                x = this.x
+                x = this.x;
                 y = this.y;
             }
             this.containerRef.nativeElement.style.left = `${x}px`;
@@ -134,7 +134,13 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
     // difference between mapline and all other item, cause maplines have no x and y
     public isMapline(item: any): item is Mapline {
-        return item && item.startX !== undefined && item.startY !== undefined && item.endX !== undefined && item.endY !== undefined;
+        return (
+            item &&
+            item.startX !== undefined &&
+            item.startY !== undefined &&
+            item.endX !== undefined &&
+            item.endY !== undefined
+        );
     }
 
     // check if item is deleted to prevent multiple request after delete through effect()
@@ -145,7 +151,6 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
     //grid snapping logic
     public onDragMove(event: CdkDragMove<any>) {
-
         let posX;
         let posY;
         const distanceX = event.distance.x;
@@ -165,7 +170,6 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
     // fires drag end event and grid snapping logic
     public onDragEnd(cdkEvent: CdkDragEnd<any>) {
-
         // grid snapping logic
         const mapCanvas = this.mapCanvasComponent.canvasContainerRef.nativeElement.getBoundingClientRect();
         const mapItem = cdkEvent.source.element.nativeElement.getBoundingClientRect();
@@ -195,21 +199,20 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
             this.endX = parseInt((this.oldEndX! + distanceX).toString(), 10);
             this.endY = parseInt((this.oldEndY! + distanceY).toString(), 10);
 
-            this.startX = parseInt((posX).toString(), 10);
-            this.startY = parseInt((posY).toString(), 10);
+            this.startX = parseInt(posX.toString(), 10);
+            this.startY = parseInt(posY.toString(), 10);
 
             this.oldStartX = this.startX;
             this.oldStartY = this.startY;
             this.oldEndX = this.endX;
             this.oldEndY = this.endY;
-
         } else {
-            this.x = parseInt((posX).toString(), 10);
-            this.y = parseInt((posY).toString(), 10);
+            this.x = parseInt(posX.toString(), 10);
+            this.y = parseInt(posY.toString(), 10);
         }
 
         this.setPosition();
-        cdkEvent.source.element.nativeElement.style.transform = 'none';
+        cdkEvent.source.element.nativeElement.style.transform = "none";
 
         // emit drop event
         this.dropItemEvent.emit({
@@ -221,10 +224,10 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                 startX: this.startX,
                 startY: this.startY,
                 endX: this.endX,
-                endY: this.endY
+                endY: this.endY,
             },
-            action: 'dragstop',
-            type: this.type
+            action: "dragstop",
+            type: this.type,
         });
 
         this.cdr.markForCheck();
@@ -232,14 +235,13 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
 
     // generates context menu
     private getContextMenuItems(): MenuItem[] {
-
         let layerOptions: MenuItem[] = [];
         for (let key in this.layers()) {
             let icon = "";
             if (this.layers()[key].key === this.item()!.z_index) {
                 icon = "fa fa-check";
             }
-            let layer = this.layers().find(layer => layer.key === this.layers()[key].key);
+            let layer = this.layers().find((layer) => layer.key === this.layers()[key].key);
             layerOptions.push({
                 label: layer?.value,
                 icon: icon,
@@ -251,20 +253,20 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                             x: this.x,
                             y: this.y,
                             map_id: this.mapId,
-                            z_index: this.layers()[key].key
+                            z_index: this.layers()[key].key,
                         } as Mapitem,
-                        itemType: this.type
+                        itemType: this.type,
                     });
                     this.cdr.markForCheck();
-                }
+                },
             });
         }
 
         const extraItems = this.getExtraContextMenuItems().flat();
         return [
             {
-                label: this.TranslocoService.translate('Edit'),
-                icon: 'fa fa-cog',
+                label: this.TranslocoService.translate("Edit"),
+                icon: "fa fa-cog",
                 command: () => {
                     this.contextActionEvent.emit({
                         type: ContextActionType.EDIT,
@@ -275,14 +277,14 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                             map_id: this.mapId,
                         },
                         itemType: this.type,
-                        item: this.item()
+                        item: this.item(),
                     });
                     this.cdr.markForCheck();
-                }
+                },
             },
             {
-                label: this.TranslocoService.translate('Copy'),
-                icon: 'fa fa-copy',
+                label: this.TranslocoService.translate("Copy"),
+                icon: "fa fa-copy",
                 visible: this.isCopyable,
                 command: () => {
                     this.contextActionEvent.emit({
@@ -294,30 +296,30 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                             map_id: this.mapId,
                         },
                         itemType: this.type,
-                        item: this.item()
+                        item: this.item(),
                     });
                     this.cdr.markForCheck();
-                }
+                },
             },
             {
                 separator: true,
-                visible: (layerOptions.length > 0 || extraItems.length > 0) ? true : false
+                visible: layerOptions.length > 0 || extraItems.length > 0 ? true : false,
             },
             {
-                label: this.TranslocoService.translate('Layers'),
-                icon: 'fa fa-layer-group',
+                label: this.TranslocoService.translate("Layers"),
+                icon: "fa fa-layer-group",
                 items: layerOptions,
-                visible: (layerOptions.length > 0) ? true : false
+                visible: layerOptions.length > 0 ? true : false,
             },
             ...extraItems,
             {
                 separator: true,
-                visible: (layerOptions.length > 0 || extraItems.length > 0) ? true : false
+                visible: layerOptions.length > 0 || extraItems.length > 0 ? true : false,
             },
             {
-                label: this.TranslocoService.translate('Delete'),
-                styleClass: 'text-danger',
-                icon: 'fa fa-trash',
+                label: this.TranslocoService.translate("Delete"),
+                styleClass: "text-danger",
+                icon: "fa fa-trash",
                 command: () => {
                     this.contextActionEvent.emit({
                         type: ContextActionType.DELETE,
@@ -327,11 +329,11 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
                             y: this.y,
                             map_id: this.mapId,
                         },
-                        itemType: this.type
+                        itemType: this.type,
                     });
                     this.cdr.markForCheck();
-                }
-            }
+                },
+            },
         ];
     }
 
@@ -343,7 +345,7 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
     // resize event for resizable items
     // type has to be given here because the type of parent class is wrong
     // in template of child you have to use the onResizeStop event to emit the event (example: (resizeStop)="onResizeStop($event, type)"
-    protected onResizeStop(event: { width: number, height: number }, itemType: MapItemType) {
+    protected onResizeStop(event: { width: number; height: number }, itemType: MapItemType) {
         let width = event.width - 10;
         let height = event.height - 10;
         if (itemType === MapItemType.SUMMARYITEM) {
@@ -362,21 +364,21 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
             mapId: this.mapId,
             width: width,
             height: height,
-            itemType: itemType
+            itemType: itemType,
         });
         this.cdr.markForCheck();
     }
 
     protected onResizeStart(element: HTMLElement) {
-        if (!element.classList.contains('resize-border')) {
-            element.classList.add('resize-border');
+        if (!element.classList.contains("resize-border")) {
+            element.classList.add("resize-border");
         }
         this.cdr.markForCheck();
     }
 
     protected onResizing(element: HTMLElement) {
-        if (!element.classList.contains('opacity-50')) {
-            element.classList.add('opacity-50');
+        if (!element.classList.contains("opacity-50")) {
+            element.classList.add("opacity-50");
         }
         this.cdr.markForCheck();
     }
@@ -387,10 +389,9 @@ export class MapItemBaseComponent<T extends MapitemBase> implements AfterViewIni
         }
 
         if (shortenEnd) {
-            return '...' + text.substring(text.length - (maxLength - 3));
+            return "..." + text.substring(text.length - (maxLength - 3));
         }
 
-        return text.substring(0, maxLength - 3) + '...';
+        return text.substring(0, maxLength - 3) + "...";
     }
-
 }

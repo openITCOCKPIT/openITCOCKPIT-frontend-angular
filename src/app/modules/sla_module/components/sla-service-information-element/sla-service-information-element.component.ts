@@ -6,38 +6,31 @@ import {
     Input,
     OnChanges,
     OnDestroy,
-    SimpleChanges
-} from '@angular/core';
-import { Subscription } from 'rxjs';
+    SimpleChanges,
+} from "@angular/core";
+import { Subscription } from "rxjs";
 
-import { AsyncPipe, DecimalPipe, KeyValuePipe, NgClass } from '@angular/common';
+import { AsyncPipe, DecimalPipe, KeyValuePipe, NgClass } from "@angular/common";
 
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { SkeletonModule } from 'primeng/skeleton';
-import { SlaServiceInformationElementService } from './sla-service-information-element.service';
-import { PermissionsService } from '../../../../permissions/permissions.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Response, SlaServiceInformationElementRoot } from './sla-service-information-element.interface';
-import {
-    AlertComponent,
-    BadgeComponent,
-    ColComponent,
-    RowComponent,
-    TableDirective
-} from '@coreui/angular';
+import { TranslocoDirective, TranslocoService } from "@jsverse/transloco";
+import { SkeletonModule } from "@openng/optimus-ui/skeleton";
+import { SlaServiceInformationElementService } from "./sla-service-information-element.service";
+import { PermissionsService } from "../../../../permissions/permissions.service";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { Response, SlaServiceInformationElementRoot } from "./sla-service-information-element.interface";
+import { AlertComponent, BadgeComponent, ColComponent, RowComponent, TableDirective } from "@coreui/angular";
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 
+import { FormsModule } from "@angular/forms";
+import { Sla } from "../../pages/slas/slas.interface";
+import { WeekDays } from "../timeperiod-details-tooltip/timeperiod-details-tooltip.interface";
 
-import { FormsModule } from '@angular/forms';
-import { Sla } from '../../pages/slas/slas.interface';
-import { WeekDays } from '../timeperiod-details-tooltip/timeperiod-details-tooltip.interface';
-
-import { BadgeOutlineComponent } from '../../../../layouts/coreui/badge-outline/badge-outline.component';
-import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-loader/table-loader.component';
+import { BadgeOutlineComponent } from "../../../../layouts/coreui/badge-outline/badge-outline.component";
+import { TableLoaderComponent } from "../../../../layouts/primeng/loading/table-loader/table-loader.component";
 
 @Component({
-    selector: 'oitc-sla-service-information-element',
+    selector: "oitc-sla-service-information-element",
     imports: [
         TranslocoDirective,
         SkeletonModule,
@@ -54,14 +47,13 @@ import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-
         BadgeComponent,
         AlertComponent,
         TableLoaderComponent,
-        DecimalPipe
+        DecimalPipe,
     ],
-    templateUrl: './sla-service-information-element.component.html',
-    styleUrl: './sla-service-information-element.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./sla-service-information-element.component.html",
+    styleUrl: "./sla-service-information-element.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SlaServiceInformationElementComponent implements OnDestroy, OnChanges {
-
     @Input() public serviceId: number = 0;
 
     private subscriptions: Subscription = new Subscription();
@@ -77,14 +69,14 @@ export class SlaServiceInformationElementComponent implements OnDestroy, OnChang
 
     public isLoading: boolean = true;
 
-    protected weekdayNames: { id: number, name: string }[] = [
-        {id: 1, name: this.TranslocoService.translate('Monday')},
-        {id: 2, name: this.TranslocoService.translate('Tuesday')},
-        {id: 3, name: this.TranslocoService.translate('Wednesday')},
-        {id: 4, name: this.TranslocoService.translate('Thursday')},
-        {id: 5, name: this.TranslocoService.translate('Friday')},
-        {id: 6, name: this.TranslocoService.translate('Saturday')},
-        {id: 7, name: this.TranslocoService.translate('Sunday')}
+    protected weekdayNames: { id: number; name: string }[] = [
+        { id: 1, name: this.TranslocoService.translate("Monday") },
+        { id: 2, name: this.TranslocoService.translate("Tuesday") },
+        { id: 3, name: this.TranslocoService.translate("Wednesday") },
+        { id: 4, name: this.TranslocoService.translate("Thursday") },
+        { id: 5, name: this.TranslocoService.translate("Friday") },
+        { id: 6, name: this.TranslocoService.translate("Saturday") },
+        { id: 7, name: this.TranslocoService.translate("Sunday") },
     ];
 
     public ngOnDestroy() {
@@ -92,39 +84,39 @@ export class SlaServiceInformationElementComponent implements OnDestroy, OnChang
     }
 
     public load() {
-
         this.isLoading = true;
         this.sla_information = null;
 
         if (this.serviceId > 0) {
+            this.subscriptions.add(
+                this.SlaServiceInformationElementService.loadSlaServiceInformation(this.serviceId).subscribe(
+                    (result: SlaServiceInformationElementRoot) => {
+                        this.isLoading = false;
+                        this.sla_information = result.response;
+                        this.sla = result.sla;
 
-            this.subscriptions.add(this.SlaServiceInformationElementService.loadSlaServiceInformation(this.serviceId)
-                .subscribe((result: SlaServiceInformationElementRoot) => {
-                    this.isLoading = false;
-                    this.sla_information = result.response;
-                    this.sla = result.sla;
-
-                    this.weekDays = [];
-                    for (let i = 0; i <= 6; i++) {
-                        // Array required to keep order
-                        this.weekDays[i] = [];
-                    }
-
-
-                    if (this.sla.timeperiod.timeperiod_timeranges) {
-                        for (let key in this.sla.timeperiod.timeperiod_timeranges) {
-                            let timerange = this.sla.timeperiod.timeperiod_timeranges[key];
-                            // Server day 1 - 7
-                            // JavaScript days 0 - 6 to get an array (array has to start with 0!) :(
-                            let day = timerange.day - 1;
-                            this.weekDays[day].push({
-                                start: timerange.start,
-                                end: timerange.end
-                            });
+                        this.weekDays = [];
+                        for (let i = 0; i <= 6; i++) {
+                            // Array required to keep order
+                            this.weekDays[i] = [];
                         }
-                    }
-                    this.cdr.markForCheck();
-                }));
+
+                        if (this.sla.timeperiod.timeperiod_timeranges) {
+                            for (let key in this.sla.timeperiod.timeperiod_timeranges) {
+                                let timerange = this.sla.timeperiod.timeperiod_timeranges[key];
+                                // Server day 1 - 7
+                                // JavaScript days 0 - 6 to get an array (array has to start with 0!) :(
+                                let day = timerange.day - 1;
+                                this.weekDays[day].push({
+                                    start: timerange.start,
+                                    end: timerange.end,
+                                });
+                            }
+                        }
+                        this.cdr.markForCheck();
+                    },
+                ),
+            );
         }
     }
 
@@ -132,5 +124,4 @@ export class SlaServiceInformationElementComponent implements OnDestroy, OnChang
         this.load();
         this.cdr.markForCheck();
     }
-
 }

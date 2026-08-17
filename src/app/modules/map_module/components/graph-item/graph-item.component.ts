@@ -6,27 +6,27 @@ import {
     input,
     InputSignal,
     OnDestroy,
-    OnInit
-} from '@angular/core';
-import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
-import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { ContextMenuModule } from 'primeng/contextmenu';
-import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
-import { MapItemType } from '../map-item-base/map-item-base.enum';
-import { forkJoin, interval, Subscription } from 'rxjs';
-import { GraphItemService } from './graph-item.service';
-import { GraphItemParams, GraphItemRoot, PerfdataParams } from './graph-item.interface';
-import { NgClass } from '@angular/common';
-import { EChartsOption, VisualMapComponentOption } from 'echarts';
-import { DateTime } from 'luxon';
-import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
-import { PopoverGraphService } from '../../../../components/popover-graph/popover-graph.service';
-import { LayoutService } from '../../../../layouts/coreui/layout.service';
-import { HtmlspecialcharsPipe } from '../../../../pipes/htmlspecialchars.pipe';
-import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
-import * as echarts from 'echarts/core';
-import 'echarts/theme/dark.js';
+    OnInit,
+} from "@angular/core";
+import { CdkDrag, CdkDragHandle } from "@angular/cdk/drag-drop";
+import { MapCanvasComponent } from "../map-canvas/map-canvas.component";
+import { ContextMenuModule } from "@openng/optimus-ui/contextmenu";
+import { MapItemBaseComponent } from "../map-item-base/map-item-base.component";
+import { Mapgadget } from "../../pages/mapeditors/mapeditors.interface";
+import { MapItemType } from "../map-item-base/map-item-base.enum";
+import { forkJoin, interval, Subscription } from "rxjs";
+import { GraphItemService } from "./graph-item.service";
+import { GraphItemParams, GraphItemRoot, PerfdataParams } from "./graph-item.interface";
+import { NgClass } from "@angular/common";
+import { EChartsOption, VisualMapComponentOption } from "echarts";
+import { DateTime } from "luxon";
+import { NgxEchartsDirective, provideEchartsCore } from "ngx-echarts";
+import { PopoverGraphService } from "../../../../components/popover-graph/popover-graph.service";
+import { LayoutService } from "../../../../layouts/coreui/layout.service";
+import { HtmlspecialcharsPipe } from "../../../../pipes/htmlspecialchars.pipe";
+import { ScaleTypes } from "../../../../components/popover-graph/scale-types";
+import * as echarts from "echarts/core";
+import "echarts/theme/dark.js";
 import {
     GridComponent,
     LegendComponent,
@@ -34,28 +34,44 @@ import {
     TitleComponent,
     ToolboxComponent,
     TooltipComponent,
-    VisualMapComponent
-} from 'echarts/components';
-import { LineChart } from 'echarts/charts';
-import { PerformanceData } from '../../../../components/popover-graph/popover-graph.interface';
-import { AlertComponent } from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TimezoneConfiguration, TimezoneService } from '../../../../services/timezone.service';
-import { HostForMapItem, ServiceForMapItem, Setup } from '../map-item-base/map-item-base.interface';
-import { AngularDraggableModule } from 'angular2-draggable';
+    VisualMapComponent,
+} from "echarts/components";
+import { LineChart } from "echarts/charts";
+import { PerformanceData } from "../../../../components/popover-graph/popover-graph.interface";
+import { AlertComponent } from "@coreui/angular";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { TimezoneConfiguration, TimezoneService } from "../../../../services/timezone.service";
+import { HostForMapItem, ServiceForMapItem, Setup } from "../map-item-base/map-item-base.interface";
+import { AngularDraggableModule } from "angular2-draggable";
 
-echarts.use([LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent, MarkLineComponent]);
+echarts.use([
+    LineChart,
+    GridComponent,
+    LegendComponent,
+    TitleComponent,
+    TooltipComponent,
+    ToolboxComponent,
+    VisualMapComponent,
+    MarkLineComponent,
+]);
 
 @Component({
-    selector: 'oitc-graph-item',
+    selector: "oitc-graph-item",
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgxEchartsDirective, AlertComponent, FaIconComponent, NgClass, AngularDraggableModule],
-    templateUrl: './graph-item.component.html',
-    styleUrl: './graph-item.component.css',
-    providers: [
-        provideEchartsCore({echarts}),
+    imports: [
+        CdkDrag,
+        ContextMenuModule,
+        CdkDragHandle,
+        NgxEchartsDirective,
+        AlertComponent,
+        FaIconComponent,
+        NgClass,
+        AngularDraggableModule,
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./graph-item.component.html",
+    styleUrl: "./graph-item.component.css",
+    providers: [provideEchartsCore({ echarts })],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
@@ -80,8 +96,8 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         },
         metric: {
             value: 0,
-            unit: 'X',
-            name: 'No data available',
+            unit: "X",
+            name: "No data available",
         },
         warn: {
             low: null,
@@ -90,7 +106,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         crit: {
             low: null,
             high: null,
-        }
+        },
     };
 
     protected init: boolean = true;
@@ -110,22 +126,24 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     private graphEnd = 0;
     protected hasEnoughData = false;
     public chartOption: EChartsOption = {};
-    public theme: string = '';
-    protected notEnoughDataString = this.TranslocoService.translate('Not enough data to display chart.');
+    public theme: string = "";
+    protected notEnoughDataString = this.TranslocoService.translate("Not enough data to display chart.");
 
     // any :(
     public echartsInstance: any;
 
     constructor(parent: MapCanvasComponent) {
         super(parent);
-        this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
-            this.theme = '';
-            if (theme === 'dark') {
-                this.theme = 'dark';
-            }
+        this.subscriptions.add(
+            this.LayoutService.theme$.subscribe((theme) => {
+                this.theme = "";
+                if (theme === "dark") {
+                    this.theme = "dark";
+                }
 
-            this.cdr.markForCheck();
-        }));
+                this.cdr.markForCheck();
+            }),
+        );
         effect(() => {
             this.onObjectIdChange();
             this.onItemSizeXShowLabel();
@@ -139,7 +157,6 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     }
 
     public ngOnInit(): void {
-
         this.item()!.size_x = parseInt(this.item()!.size_x.toString(), 10);
         this.item()!.size_y = parseInt(this.item()!.size_y.toString(), 10);
 
@@ -154,48 +171,48 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     }
 
     private load() {
-
         const params: GraphItemParams = {
-            'angular': true,
-            'disableGlobalLoader': true,
-            'serviceId': this.item()!.object_id,
-            'type': this.item()!.type
+            angular: true,
+            disableGlobalLoader: true,
+            serviceId: this.item()!.object_id,
+            type: this.item()!.type,
         };
 
         let request = [
             this.GraphItemService.getGraphItem(params),
             this.TimezoneService.getUserTimezone({
-                'angular': true,
-                'disableGlobalLoader': true
-            })
+                angular: true,
+                disableGlobalLoader: true,
+            }),
         ];
 
-        this.subscriptions.add(forkJoin(request).subscribe({
-            next: (results) => {
-                const graphItem = results[0] as GraphItemRoot;
-                const userTimezone = results[1] as { timezone: TimezoneConfiguration };
-                this.host = graphItem.host;
-                this.service = graphItem.service;
-                this.allowView = graphItem.allowView;
-                this.timezone = userTimezone.timezone;
-                this.serverTimeDateObject = new Date(this.timezone.server_time_iso);
+        this.subscriptions.add(
+            forkJoin(request).subscribe({
+                next: (results) => {
+                    const graphItem = results[0] as GraphItemRoot;
+                    const userTimezone = results[1] as { timezone: TimezoneConfiguration };
+                    this.host = graphItem.host;
+                    this.service = graphItem.service;
+                    this.allowView = graphItem.allowView;
+                    this.timezone = userTimezone.timezone;
+                    this.serverTimeDateObject = new Date(this.timezone.server_time_iso);
 
-                this.initRefreshTimer();
+                    this.initRefreshTimer();
 
-                this.loadGraph(this.host.uuid, this.service.uuid);
-                this.cdr.markForCheck();
-            },
-            error: (err) => {
-                this.allowView = false;
-                this.cdr.markForCheck();
-            }
-        }));
-
-    };
+                    this.loadGraph(this.host.uuid, this.service.uuid);
+                    this.cdr.markForCheck();
+                },
+                error: (err) => {
+                    this.allowView = false;
+                    this.cdr.markForCheck();
+                },
+            }),
+        );
+    }
 
     private loadGraph(hostUuid: string, serviceuuid: string) {
         this.graphEnd = parseInt(String(new Date(this.timezone.server_time_iso).getTime() / 1000), 10);
-        this.graphStart = (parseInt(String(new Date(this.timezone.server_time_iso).getTime() / 1000), 10) - (1 * 3600));
+        this.graphStart = parseInt(String(new Date(this.timezone.server_time_iso).getTime() / 1000), 10) - 1 * 3600;
 
         this.isLoadingGraph = true;
 
@@ -210,12 +227,12 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
             isoTimestamp: 1,
         };
 
-        this.subscriptions.add(this.PopoverGraphService.getPerfdata(params)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.PopoverGraphService.getPerfdata(params).subscribe((result) => {
                 // ECharts needs at least 2 data points to render the chart
                 this.hasEnoughData = false;
                 if (Array.isArray(result.performance_data) && result.performance_data.length > 0) {
-                    this.hasEnoughData = (Object.keys(result.performance_data[0].data).length >= 2);
+                    this.hasEnoughData = Object.keys(result.performance_data[0].data).length >= 2;
                 }
                 this.isLoadingGraph = false;
                 this.responsePerfdata = result.performance_data;
@@ -228,12 +245,11 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 this.init = false;
 
                 this.cdr.markForCheck();
-            }));
-
-    };
+            }),
+        );
+    }
 
     private getThresholds(gauge: PerformanceData): VisualMapComponentOption | false {
-
         let pieces: any[] = []; // VisualPiece is not public
 
         switch (gauge.datasource.setup.scale.type) {
@@ -245,7 +261,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 // ✅
                 pieces.push({
                     lte: gauge.datasource?.setup.warn.low, // -3
-                    color: 'rgba(234, 184, 57, 1)',
+                    color: "rgba(234, 184, 57, 1)",
                     //label: this.TranslocoService.translate('Warning')
                 });
 
@@ -253,8 +269,8 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 // https://github.com/apache/echarts/issues/18948
                 // https://echarts.apache.org/examples/en/editor.html?c=line-simple&code=PYBwLglsB2AEC8sDeAoWsCeBBAHhAzgFzIC-ANGrDrgcUrGBiAKbEDkAxgIZjMDmwAE4Y2scpXzNBEZkVgBtSulTpVDJq1hsANhGjM2ZWLv0BlRts30A7hAAmYABbEArGIpr0XQcy7mMlnQkSmKUALoesHY8XJJgxIpqKp52EAC2zND4UFkJbBi-goZaIILAAGYQYGwRIej4wACughyaiZ7KdZ4F3uwATAAMAIwDhl1qpRVVxCMD4-7zyR3oPYL9w0Njy6qTlfGwg3Pb4ttLy6vrQ31b27C707AAtEMuR8sny2cdF1qDQwDMN22932_wGbw6wQ6YRCUNgtXQADcCI0uNoALJcEAJEJfBigVwDSJqaR8Rz7IldEAyVpydodejaXjER4DAB04OGRg4wG0QnYPjsog-HQA9KLYGi0sB8GBYPhGhxWsw7PjYI57MwGI4tQAvKTAYxcABGzG0i1gfH2rI54KGRiZxHZnPtsB5fLWWjAgi4WRA3ky1QdJrN7C0Is89Ctmmddu5vP5WmN2kaBlC0OJqiaYAA8uUAEq-vhWebuxNsADEADZmDWa2wunD0HCYSQANxAA
                 pieces.push({
-                    gt: (Number(gauge.datasource?.setup.warn.low) + 0.00001), // -3
-                    color: 'rgba(86, 166, 75, 1)',
+                    gt: Number(gauge.datasource?.setup.warn.low) + 0.00001, // -3
+                    color: "rgba(86, 166, 75, 1)",
                     //label: this.TranslocoService.translate('Ok')
                 });
 
@@ -265,37 +281,36 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
                 pieces.push({
                     lte: gauge.datasource?.setup.crit.low, // -5
-                    color: 'rgba(224, 47, 68, 1)',
+                    color: "rgba(224, 47, 68, 1)",
                     //label: this.TranslocoService.translate('Critical')
                 });
 
                 pieces.push({
                     gt: gauge.datasource?.setup.crit.low, // -5
                     lte: gauge.datasource?.setup.warn.low, // -3
-                    color: 'rgba(234, 184, 57, 1)',
+                    color: "rgba(234, 184, 57, 1)",
                     //label: this.TranslocoService.translate('Warning')
                 });
 
                 pieces.push({
                     gt: gauge.datasource?.setup.warn.low, // -3
-                    color: 'rgba(86, 166, 75, 1)',
+                    color: "rgba(86, 166, 75, 1)",
                     //label: this.TranslocoService.translate('Ok')
                 });
                 break;
-
 
             case ScaleTypes.O_W:
                 // ✅
                 pieces.push({
                     lt: gauge.datasource?.setup.warn.high, // 3
-                    color: 'rgba(86, 166, 75, 1)',
+                    color: "rgba(86, 166, 75, 1)",
                     //label: this.TranslocoService.translate('Ok')
                 });
 
                 // +0.00001 because a bug in echarts that does not render if both values are the same
                 pieces.push({
                     gte: Number(gauge.datasource?.setup.warn.high) + 0.00001, // 3
-                    color: 'rgba(234, 184, 57, 1)',
+                    color: "rgba(234, 184, 57, 1)",
                     //label: this.TranslocoService.translate('Warning')
                 });
                 break;
@@ -309,20 +324,20 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
                 pieces.push({
                     lt: gauge.datasource?.setup.warn.low, // 3
-                    color: 'rgba(86, 166, 75, 1)',
+                    color: "rgba(86, 166, 75, 1)",
                     //label: this.TranslocoService.translate('Ok')
                 });
 
                 pieces.push({
                     gte: gauge.datasource?.setup.warn.low, // 3
                     lt: gauge.datasource?.setup.crit.low, // 5
-                    color: 'rgba(234, 184, 57, 1)',
+                    color: "rgba(234, 184, 57, 1)",
                     //label: this.TranslocoService.translate('Warning')
                 });
 
                 pieces.push({
                     gte: gauge.datasource?.setup.crit.low, // 5
-                    color: 'rgba(224, 47, 68, 1)',
+                    color: "rgba(224, 47, 68, 1)",
                     //label: this.TranslocoService.translate('Critical')
                 });
                 break;
@@ -333,81 +348,79 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
                 pieces.push({
                     lte: gauge.datasource?.setup.crit.low, // -5
-                    color: 'rgba(224, 47, 68, 1)',
+                    color: "rgba(224, 47, 68, 1)",
                     //label: this.TranslocoService.translate('Critical low')
                 });
 
                 pieces.push({
                     lte: gauge.datasource?.setup.warn.low, // -3
-                    color: 'rgba(234, 184, 57, 1)',
+                    color: "rgba(234, 184, 57, 1)",
                     //label: this.TranslocoService.translate('Warning low')
                 });
 
                 pieces.push({
                     gt: gauge.datasource?.setup.warn.low, // -3
                     lt: gauge.datasource?.setup.warn.high, // 3
-                    color: 'rgba(86, 166, 75, 1)',
+                    color: "rgba(86, 166, 75, 1)",
                     //label: this.TranslocoService.translate('Ok')
                 });
 
                 pieces.push({
                     gte: gauge.datasource?.setup.warn.high, // 3
                     lt: gauge.datasource?.setup.crit.high, // 5
-                    color: 'rgba(234, 184, 57, 1)',
+                    color: "rgba(234, 184, 57, 1)",
                     //label: this.TranslocoService.translate('Warning high')
                 });
 
                 pieces.push({
                     gte: gauge.datasource?.setup.crit.high, // 5
-                    color: 'rgba(224, 47, 68, 1)',
+                    color: "rgba(224, 47, 68, 1)",
                     //label: this.TranslocoService.translate('Critical high')
                 });
 
                 break;
-
 
             case ScaleTypes.O_W_C_W_O:
                 // ✅
 
                 pieces.push({
                     lt: gauge.datasource?.setup.warn.low, // -5
-                    color: 'rgba(86, 166, 75, 1)',
+                    color: "rgba(86, 166, 75, 1)",
                     //label: this.TranslocoService.translate('Ok')
                 });
 
                 pieces.push({
                     gte: gauge.datasource?.setup.warn.low, // -5
                     lt: gauge.datasource?.setup.crit.low, // -3
-                    color: 'rgba(234, 184, 57, 1)',
+                    color: "rgba(234, 184, 57, 1)",
                     //label: this.TranslocoService.translate('Warning low')
                 });
 
                 pieces.push({
                     gte: gauge.datasource?.setup.crit.low, // -3
                     lte: gauge.datasource?.setup.crit.high, // 3
-                    color: 'rgba(224, 47, 68, 1)',
+                    color: "rgba(224, 47, 68, 1)",
                     //label: this.TranslocoService.translate('Critical')
                 });
 
                 pieces.push({
                     gt: gauge.datasource?.setup.crit.high, // 3
                     lte: gauge.datasource?.setup.warn.high, // 5
-                    color: 'rgba(234, 184, 57, 1)',
+                    color: "rgba(234, 184, 57, 1)",
                     //label: this.TranslocoService.translate('Warning high')
                 });
 
                 pieces.push({
                     gt: gauge.datasource?.setup.warn.high, // 5
-                    color: 'rgba(86, 166, 75, 1)',
+                    color: "rgba(86, 166, 75, 1)",
                     //label: this.TranslocoService.translate('Ok')
                 });
                 break;
         }
 
-
-        let cssSecondaryBg = getComputedStyle(document.documentElement).getPropertyValue('--cui-secondary-bg').trim();
+        let cssSecondaryBg = getComputedStyle(document.documentElement).getPropertyValue("--cui-secondary-bg").trim();
         // Add some transparency to the background color
-        cssSecondaryBg += '66';
+        cssSecondaryBg += "66";
 
         if (pieces.length > 0) {
             let visualMap: VisualMapComponentOption = {
@@ -418,8 +431,8 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 backgroundColor: cssSecondaryBg,
                 outOfRange: {
                     //color: 'rgba(86, 166, 75, 1)'
-                    color: 'rgba(204, 204, 204, 0.6)'
-                }
+                    color: "rgba(204, 204, 204, 0.6)",
+                },
             };
 
             return visualMap;
@@ -429,7 +442,6 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     }
 
     private getThresholdLines(gauge: PerformanceData): any[] {
-
         let markLineData: any[] = [];
 
         switch (gauge.datasource.setup.scale.type) {
@@ -443,12 +455,12 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.warn.low,
                     name: gauge.datasource?.setup.warn.low?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(234, 184, 57, 1)'
+                        type: "solid",
+                        color: "rgba(234, 184, 57, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
                 break;
 
@@ -458,12 +470,12 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.crit.low,
                     name: gauge.datasource?.setup.crit.low?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(224, 47, 68, 1)'
+                        type: "solid",
+                        color: "rgba(224, 47, 68, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
 
                 // Warning
@@ -471,15 +483,14 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.warn.low,
                     name: gauge.datasource?.setup.warn.low?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(234, 184, 57, 1)'
+                        type: "solid",
+                        color: "rgba(234, 184, 57, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
                 break;
-
 
             case ScaleTypes.O_W:
                 // Warning
@@ -487,12 +498,12 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.warn.high,
                     name: gauge.datasource?.setup.warn.high?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(234, 184, 57, 1)'
+                        type: "solid",
+                        color: "rgba(234, 184, 57, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
                 break;
 
@@ -502,12 +513,12 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.crit.low,
                     name: gauge.datasource?.setup.crit.low?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(224, 47, 68, 1)'
+                        type: "solid",
+                        color: "rgba(224, 47, 68, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
 
                 // Warning
@@ -515,12 +526,12 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.warn.low,
                     name: gauge.datasource?.setup.warn.low?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(234, 184, 57, 1)'
+                        type: "solid",
+                        color: "rgba(234, 184, 57, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
                 break;
 
@@ -530,12 +541,12 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.crit.low,
                     name: gauge.datasource?.setup.crit.low?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(224, 47, 68, 1)'
+                        type: "solid",
+                        color: "rgba(224, 47, 68, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
 
                 // Warning
@@ -543,12 +554,12 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.warn.low,
                     name: gauge.datasource?.setup.warn.low?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(234, 184, 57, 1)'
+                        type: "solid",
+                        color: "rgba(234, 184, 57, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
 
                 // Warning
@@ -556,12 +567,12 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.warn.high,
                     name: gauge.datasource?.setup.warn.high?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(234, 184, 57, 1)'
+                        type: "solid",
+                        color: "rgba(234, 184, 57, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
 
                 // Critical
@@ -569,15 +580,14 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.crit.high,
                     name: gauge.datasource?.setup.crit.high?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(224, 47, 68, 1)'
+                        type: "solid",
+                        color: "rgba(224, 47, 68, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
                 break;
-
 
             case ScaleTypes.O_W_C_W_O:
                 // Warning
@@ -585,12 +595,12 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.warn.low,
                     name: gauge.datasource?.setup.warn.low?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(234, 184, 57, 1)'
+                        type: "solid",
+                        color: "rgba(234, 184, 57, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
 
                 // Critical
@@ -598,12 +608,12 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.crit.low,
                     name: gauge.datasource?.setup.crit.low?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(224, 47, 68, 1)'
+                        type: "solid",
+                        color: "rgba(224, 47, 68, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
 
                 // Critical
@@ -611,12 +621,12 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.crit.high,
                     name: gauge.datasource?.setup.crit.high?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(224, 47, 68, 1)'
+                        type: "solid",
+                        color: "rgba(224, 47, 68, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
 
                 // Warning
@@ -624,18 +634,17 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     yAxis: gauge.datasource?.setup.warn.high,
                     name: gauge.datasource?.setup.warn.high?.toString(),
                     lineStyle: {
-                        type: 'solid',
-                        color: 'rgba(234, 184, 57, 1)'
+                        type: "solid",
+                        color: "rgba(234, 184, 57, 1)",
                     },
                     label: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 });
                 break;
         }
 
         return markLineData;
-
     }
 
     onChartInit(ec: any) {
@@ -649,7 +658,6 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
             return;
         }
 
-
         let gaugeData = [];
         // Data format for eCharts
         // https://stackoverflow.com/a/68461548
@@ -659,7 +667,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
         let label = this.service.servicename + ' "' + setup.metric.name + '"';
         if (setup.metric.unit) {
-            label = label + ' in ' + setup.metric.unit;
+            label = label + " in " + setup.metric.unit;
         }
 
         //label = this.HtmlspecialcharsPipe.transform(label);
@@ -682,18 +690,17 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 formatter: (name: string) => {
                     return label;
                 },
-                orient: 'horizontal',   // 'horizontal' or 'vertical'
-                bottom: 0,              // Position at the bottom
-                left: 'center',         // Center horizontally
+                orient: "horizontal", // 'horizontal' or 'vertical'
+                bottom: 0, // Position at the bottom
+                left: "center", // Center horizontally
                 textStyle: {
-                    fontSize: '0.9em'   // Responsive relative to container
+                    fontSize: "0.9em", // Responsive relative to container
                 },
-                icon: 'none'
+                icon: "none",
             },
             tooltip: {
-                trigger: 'axis',
+                trigger: "axis",
                 formatter: (params: any) => {
-
                     // Maybe add a loop if we want to support multiple gauges in one chart
                     const gauge = params[0];
                     const dateTime = DateTime.fromISO(gauge.data[0]).setZone(this.timezone.user_timezone);
@@ -704,28 +711,27 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
                     const html = `<div class="row">
                         <div class="col-12">
-                            ${dateTime.toFormat('dd.MM.yyyy HH:mm:ss')}
+                            ${dateTime.toFormat("dd.MM.yyyy HH:mm:ss")}
                         </div>
                         <div class="col-12">
-                            ${marker} ${seriesName} <span class="float-end bold" style="color:${color};">${value} ${setup.metric.unit ? setup.metric.unit : ''}</span>
+                            ${marker} ${seriesName} <span class="float-end bold" style="color:${color};">${value} ${setup.metric.unit ? setup.metric.unit : ""}</span>
                         </div>
                         </div>`;
 
                     return html;
-                }
-
+                },
             },
             xAxis: {
-                type: 'time',
+                type: "time",
                 min: new Date(this.graphStart * 1000).toISOString(),
                 max: new Date(this.graphEnd * 1000).toISOString(),
                 axisLabel: {
                     hideOverlap: true,
                     formatter: (value) => {
                         const dateTime = DateTime.fromMillis(value as number).setZone(this.timezone.user_timezone);
-                        return dateTime.toFormat('HH:mm:ss');
+                        return dateTime.toFormat("HH:mm:ss");
                     },
-                    show: showTicks
+                    show: showTicks,
                 },
                 splitLine: {
                     show: true,
@@ -734,39 +740,38 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     show: showTicks,
                 },
                 minorSplitLine: {
-                    show: false
-                }
-
+                    show: false,
+                },
             },
             yAxis: {
-                type: 'value',
+                type: "value",
                 axisLabel: {
                     formatter: (value) => {
-                        return `${value} ${setup.metric.unit ? setup.metric.unit : ''}`
-                    }
+                        return `${value} ${setup.metric.unit ? setup.metric.unit : ""}`;
+                    },
                 },
                 splitLine: {
                     show: true,
                 },
                 minorTick: {
-                    show: false
+                    show: false,
                 },
                 minorSplitLine: {
-                    show: false
-                }
+                    show: false,
+                },
             },
             grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '10%',
-                top: '3%',
-                containLabel: label.length > 0 // containLabel is deprecated https://echarts.apache.org/en/option.html#grid.containLabel
+                left: "3%",
+                right: "4%",
+                bottom: "10%",
+                top: "3%",
+                containLabel: label.length > 0, // containLabel is deprecated https://echarts.apache.org/en/option.html#grid.containLabel
             },
 
             // Workaround to hide the toolbar and to auto select the dataZoom in this.onChartFinished method
             // https://github.com/apache/echarts/issues/13397#issuecomment-814864873
             toolbox: {
-                orient: 'vertical',
+                orient: "vertical",
                 itemSize: 13,
                 top: 15,
                 right: -6,
@@ -774,7 +779,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
             dataset: {
                 source: gaugeData,
-                dimensions: ['timestamp', performance_data.datasource.name],
+                dimensions: ["timestamp", performance_data.datasource.name],
             },
 
             // thresholds
@@ -788,7 +793,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
             series: [
                 {
                     name: performance_data.datasource.name,
-                    type: 'line',
+                    type: "line",
                     lineStyle: {
                         width: 2,
                         //color: 'rgb(88,86,214)',
@@ -797,16 +802,16 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                     smooth: false,
                     showSymbol: false,
                     areaStyle: {
-                        opacity: 0.2
+                        opacity: 0.2,
                     },
                     encode: {
-                        x: 'timestamp',
-                        y: performance_data.datasource.name // refer gauge (rta) value
+                        x: "timestamp",
+                        y: performance_data.datasource.name, // refer gauge (rta) value
                     },
                     markLine: {
-                        symbol: 'none',
-                        data: thresholdsLines as []
-                    }
+                        symbol: "none",
+                        data: thresholdsLines as [],
+                    },
                 },
             ],
         } as EChartsOption;
@@ -818,12 +823,10 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         } else {
             // Set default line color to primary
             // @ts-ignore
-            this.chartOption.series[0].lineStyle.color = 'rgb(88,86,214)';
+            this.chartOption.series[0].lineStyle.color = "rgb(88,86,214)";
         }
         this.cdr.markForCheck();
-
-
-    };
+    }
 
     private processPerfdata() {
         // default data if no setup is passed whatsoever.
@@ -850,7 +853,7 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 }
             }
         }
-    };
+    }
 
     private initRefreshTimer() {
         if (this.refreshInterval() > 0 && !this.intervalStartet) {
@@ -859,14 +862,14 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 this.load();
             });
         }
-    };
+    }
 
     private stop() {
         if (this.intervalStartet) {
             this.statusUpdateInterval.unsubscribe();
             this.cdr.markForCheck();
         }
-    };
+    }
 
     private onItemSizeXShowLabel() {
         if (this.init) {
@@ -906,5 +909,4 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         this.renderGraph();
         this.cdr.markForCheck();
     }
-
 }

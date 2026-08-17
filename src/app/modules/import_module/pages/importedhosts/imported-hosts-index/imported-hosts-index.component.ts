@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { DeleteAllItem } from "../../../../../layouts/coreui/delete-all-modal/delete-all.interface";
 import {
     BadgeComponent,
     CardBodyComponent,
@@ -27,56 +27,52 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
-} from '@coreui/angular';
+    TableDirective,
+} from "@coreui/angular";
 import {
     getDefaultImportedHostsIndexParams,
     Importedhost,
     ImportedHostIndex,
     ImportedhostsIndexParams,
     ImportedhostsIndexRoot,
-    MaxUploadLimit
-} from '../importedhosts.interface';
-import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
-import { ImportedhostsService } from '../importedhosts.service';
-import { FormsModule } from '@angular/forms';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { PaginatorModule } from 'primeng/paginator';
-import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
-import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
-import { ExternalSystemEntity } from '../../externalsystems/external-systems.interface';
-import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { ExternalSystemsService } from '../../externalsystems/external-systems.service';
-import { Importer } from '../../importers/importers.interface';
-import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../../../components/actions-button-element/actions-button-element.component';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
-import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { KeyValuePipe, NgClass } from '@angular/common';
-import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
-import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ImportedHostFlagsEnum } from '../imported-hosts.enum';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { ImportersService } from '../../importers/importers.service';
-import { ImportDataComponent } from '../../../components/import-data/import-data.component';
-import { ImportCsvDataComponent } from '../../../components/import-csv-data/import-csv-data.component';
-import { IconDirective } from '@coreui/icons-angular';
-import { cibProxmox } from '@coreui/icons';
+    MaxUploadLimit,
+} from "../importedhosts.interface";
+import { SelectionServiceService } from "../../../../../layouts/coreui/select-all/selection-service.service";
+import { ImportedhostsService } from "../importedhosts.service";
+import { FormsModule } from "@angular/forms";
+import { MatSort, MatSortHeader, Sort } from "@angular/material/sort";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { PaginatorChangeEvent } from "../../../../../layouts/coreui/paginator/paginator.interface";
+import { DELETE_SERVICE_TOKEN } from "../../../../../tokens/delete-injection.token";
+import { ExternalSystemEntity } from "../../externalsystems/external-systems.interface";
+import { NotyService } from "../../../../../layouts/coreui/noty.service";
+import { ExternalSystemsService } from "../../externalsystems/external-systems.service";
+import { Importer } from "../../importers/importers.interface";
+import { ActionsButtonComponent } from "../../../../../components/actions-button/actions-button.component";
+import { ActionsButtonElementComponent } from "../../../../../components/actions-button-element/actions-button-element.component";
+import { DebounceDirective } from "../../../../../directives/debounce.directive";
+import { DeleteAllModalComponent } from "../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { ItemSelectComponent } from "../../../../../layouts/coreui/select-all/item-select/item-select.component";
+import { KeyValuePipe, NgClass } from "@angular/common";
+import { NoRecordsComponent } from "../../../../../layouts/coreui/no-records/no-records.component";
+import { PaginateOrScrollComponent } from "../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component";
+import { PermissionDirective } from "../../../../../permissions/permission.directive";
+import { SelectAllComponent } from "../../../../../layouts/coreui/select-all/select-all.component";
+import { TableLoaderComponent } from "../../../../../layouts/primeng/loading/table-loader/table-loader.component";
+import { TranslocoDirective, TranslocoPipe } from "@jsverse/transloco";
+import { TrueFalseDirective } from "../../../../../directives/true-false.directive";
+import { XsButtonDirective } from "../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { ImportedHostFlagsEnum } from "../imported-hosts.enum";
+import { MultiSelectComponent } from "../../../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import { ImportersService } from "../../importers/importers.service";
+import { ImportDataComponent } from "../../../components/import-data/import-data.component";
+import { ImportCsvDataComponent } from "../../../components/import-csv-data/import-csv-data.component";
+import { IconDirective } from "@coreui/icons-angular";
+import { cibProxmox } from "@coreui/icons";
 
 @Component({
-    selector: 'oitc-imported-hosts-index',
+    selector: "oitc-imported-hosts-index",
     imports: [
         FormsModule,
         PaginatorModule,
@@ -127,19 +123,19 @@ import { cibProxmox } from '@coreui/icons';
         ImportDataComponent,
         ImportCsvDataComponent,
         KeyValuePipe,
-        IconDirective
+        IconDirective,
     ],
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostsService} // Inject the ImportedhostsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostsService }, // Inject the ImportedhostsService into the DeleteAllModalComponent
     ],
-    templateUrl: './imported-hosts-index.component.html',
-    styleUrl: './imported-hosts-index.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./imported-hosts-index.component.html",
+    styleUrl: "./imported-hosts-index.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    public params: ImportedhostsIndexParams = getDefaultImportedHostsIndexParams()
+    public params: ImportedhostsIndexParams = getDefaultImportedHostsIndexParams();
 
     public importedhosts: Importedhost[] = [];
     public importers: Importer[] = [];
@@ -171,19 +167,20 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     public marked_hosts_with_changes = 0;
     public marked_for_re_enable = 0;
 
-    public coreuiIcons = {cibProxmox};
+    public coreuiIcons = { cibProxmox };
 
-    constructor() {
-    }
+    constructor() {}
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
-            this.load();
-            this.loadImporters();
-        }));
+        this.subscriptions.add(
+            this.route.queryParams.subscribe((params) => {
+                // Here, params is an object containing the current query parameters.
+                // You can do something with these parameters here.
+                //console.log(params);
+                this.load();
+                this.loadImporters();
+            }),
+        );
     }
 
     public ngOnDestroy() {
@@ -192,46 +189,45 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     public load() {
         this.SelectionServiceService.deselectAll();
-        let imported: string | boolean = '';
-        let ready_for_import: string | boolean = '';
-        let disabled: string | boolean = '';
-        let flags: number | string = '';
+        let imported: string | boolean = "";
+        let ready_for_import: string | boolean = "";
+        let disabled: string | boolean = "";
+        let flags: number | string = "";
 
         // ALL "Already synchronized" filter are selected or deselected
         if (this.imported === this.not_imported && this.not_imported === this.disabled) {
             // "In monitoring (active)" and "NEW" checkboxes are selected
             // Do not filter by imported status
-            imported = '';
-            disabled = '';
+            imported = "";
+            disabled = "";
         } else if (!(this.disabled | this.not_imported) && this.imported) {
             // Only "In monitoring (active)" checkbox is selected
             imported = true;
             disabled = false;
-        } else if ((this.imported !== this.not_imported) && !this.disabled) {
+        } else if (this.imported !== this.not_imported && !this.disabled) {
             // "In monitoring (active)" or "NEW" checkbox is selected
             // Do not filter by disabled status
             imported = this.imported === 1;
-            disabled = '';
-        } else if ((this.imported & this.disabled) && !this.not_imported) {
+            disabled = "";
+        } else if (this.imported & this.disabled && !this.not_imported) {
             // "In monitoring (active)" and " In monitoring (disabled) " checkbox is selected - "NEW" checkbox is not selected
             imported = true;
-            disabled = '';
+            disabled = "";
         } else if (!(this.imported | this.not_imported) && this.imported) {
             // Only "In monitoring (active) " checkbox is selected
             imported = true;
             disabled = true;
-
         } else if (!(this.imported ^ this.not_imported) && this.disabled) {
             // Only "In monitoring (disabled) " checkbox is selected
             imported = true;
             disabled = true;
-        } else if ((this.disabled & this.not_imported) && !this.imported) {
+        } else if (this.disabled & this.not_imported && !this.imported) {
             // "In monitoring (disabled)" and "NEW" checkbox is selected - "In monitoring (active)" checkbox is not selected
-            imported = '';
+            imported = "";
             disabled = true;
-        } else if ((this.imported & this.not_imported) && !this.disabled) {
+        } else if (this.imported & this.not_imported && !this.disabled) {
             // "In monitoring (active)" and "NEW" checkbox is selected - "In monitoring (disabled)" checkbox is not selected
-            imported = '';
+            imported = "";
             disabled = false;
         }
 
@@ -239,23 +235,22 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
             ready_for_import = this.ready_for_import === 1;
         }
 
-        if (this.marked_hosts_with_changes ^ this.marked_for_disabled
-            ^ this.marked_for_re_enable) {
+        if (this.marked_hosts_with_changes ^ this.marked_for_disabled ^ this.marked_for_re_enable) {
             flags = this.marked_hosts_with_changes ^ this.marked_for_disabled ^ this.marked_for_re_enable;
         }
 
-        this.params['filter[imported]'] = imported;
-        this.params['filter[ready_for_import]'] = ready_for_import;
-        this.params['filter[disabled]'] = disabled;
-        this.params['filter[ImportedHosts.flags]'] = flags;
+        this.params["filter[imported]"] = imported;
+        this.params["filter[ready_for_import]"] = ready_for_import;
+        this.params["filter[disabled]"] = disabled;
+        this.params["filter[ImportedHosts.flags]"] = flags;
 
-        this.subscriptions.add(this.ImportedhostsService.getIndex(this.params)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ImportedhostsService.getIndex(this.params).subscribe((result) => {
                 this.allImportedHosts = result;
                 this.importedhosts = result.importedhosts;
                 this.maxUploadLimit = result.maxUploadLimit;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
@@ -303,16 +298,18 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
         if (importedhost) {
             // User just want to delete a single calendar
-            items = [{
-                id: importedhost.id,
-                displayName: importedhost.name
-            }];
+            items = [
+                {
+                    id: importedhost.id,
+                    displayName: importedhost.name,
+                },
+            ];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: item.name
+                    displayName: item.name,
                 };
             });
         }
@@ -324,7 +321,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
         // open modal
         this.modalService.toggle({
             show: true,
-            id: 'deleteAllModal',
+            id: "deleteAllModal",
         });
     }
 
@@ -337,8 +334,8 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     public synchronizeWithMonitoring() {
         this.showSynchronizingSpinner = true;
-        this.subscriptions.add(this.ImportedhostsService.synchronizeWithMonitoring()
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ImportedhostsService.synchronizeWithMonitoring().subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     this.notyService.genericSuccess(result.message);
@@ -348,7 +345,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
                 // Error
                 this.notyService.genericError(result.message);
                 this.showSynchronizingSpinner = false;
-            })
+            }),
         );
     }
 
@@ -358,7 +355,6 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     public onImportIsCompleted($event: boolean) {
         this.load();
-
     }
 
     public loadImporter(importer: Importer) {
@@ -374,12 +370,12 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
         this.isLoadingImporters = true;
         this.cdr.markForCheck();
 
-        this.subscriptions.add(this.ImportedhostsService.getImporters()
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ImportedhostsService.getImporters().subscribe((result) => {
                 this.importers = result.importers;
                 this.isLoadingImporters = false;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 

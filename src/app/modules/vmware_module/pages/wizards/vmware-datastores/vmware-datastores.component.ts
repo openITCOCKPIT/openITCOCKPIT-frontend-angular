@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, ViewChildren } from '@angular/core';
-import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { VmwareDatastoresWizardGet, VmwareDatastoresWizardPost } from './vmware-datastores-wizard.interface';
-import { VmwareDatastoresWizardService } from './vmware-datastores-wizard.service';
-import { PaginatorModule } from 'primeng/paginator';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, ViewChildren } from "@angular/core";
+import { WizardsAbstractComponent } from "../../../../../pages/wizards/wizards-abstract/wizards-abstract.component";
+import { VmwareDatastoresWizardGet, VmwareDatastoresWizardPost } from "./vmware-datastores-wizard.interface";
+import { VmwareDatastoresWizardService } from "./vmware-datastores-wizard.service";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { FormsModule } from "@angular/forms";
 import {
     AccordionButtonDirective,
     AccordionComponent,
@@ -22,24 +22,24 @@ import {
     InputGroupComponent,
     InputGroupTextDirective,
     RowComponent,
-    TemplateIdDirective
-} from '@coreui/angular';
-import { RouterLink } from '@angular/router';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { NgClass } from '@angular/common';
-import { NgSelectComponent } from '@ng-select/ng-select';
-import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ServiceForWizard, ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
+    TemplateIdDirective,
+} from "@coreui/angular";
+import { RouterLink } from "@angular/router";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { TranslocoDirective, TranslocoPipe } from "@jsverse/transloco";
+import { BackButtonDirective } from "../../../../../directives/back-button.directive";
+import { RequiredIconComponent } from "../../../../../components/required-icon/required-icon.component";
+import { FormErrorDirective } from "../../../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../../../layouts/coreui/form-feedback/form-feedback.component";
+import { GenericResponseWrapper, GenericValidationError } from "../../../../../generic-responses";
+import { NgClass } from "@angular/common";
+import { NgSelectComponent } from "@ng-select/ng-select";
+import { OitcAlertComponent } from "../../../../../components/alert/alert.component";
+import { XsButtonDirective } from "../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { ServiceForWizard, ServicetemplateForWizard } from "../../../../../pages/wizards/wizards.interface";
 
 @Component({
-    selector: 'oitc-vmware-esx',
+    selector: "oitc-vmware-esx",
     imports: [
         PaginatorModule,
         FormsModule,
@@ -72,28 +72,28 @@ import { ServiceForWizard, ServicetemplateForWizard } from '../../../../../pages
         OitcAlertComponent,
         RowComponent,
         XsButtonDirective,
-        NgClass
+        NgClass,
     ],
-    templateUrl: './vmware-datastores.component.html',
-    styleUrl: './vmware-datastores.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./vmware-datastores.component.html",
+    styleUrl: "./vmware-datastores.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VmwareDatastoresComponent extends WizardsAbstractComponent {
-    @ViewChildren('accordionItem') accordionItems: AccordionItemComponent[] = [];
+    @ViewChildren("accordionItem") accordionItems: AccordionItemComponent[] = [];
     protected override WizardService: VmwareDatastoresWizardService = inject(VmwareDatastoresWizardService);
     public checked: boolean = false;
     public accordionClosed: boolean = true;
 
     protected override post: VmwareDatastoresWizardPost = {
-// Default fields from the base wizard
+        // Default fields from the base wizard
         host_id: 0,
         services: [],
         dataStoreServices: [],
-// Fields for the wizard
-        vmwareuser: '',
-        vmwarepass: '',
-        vcenter: '',
-        typeId: 'vmware-datastores'
+        // Fields for the wizard
+        vmwareuser: "",
+        vmwarepass: "",
+        vcenter: "",
+        typeId: "vmware-datastores",
     } as VmwareDatastoresWizardPost;
 
     protected searchedTags: string[] = [];
@@ -113,18 +113,19 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
 
         // Remove all datastore services from request where createService is false.
         request.dataStoreServices = request.dataStoreServices.filter(
-            (dataStoreService: ServiceForWizard) => dataStoreService.createService && this.hasName(dataStoreService.name)
+            (dataStoreService: ServiceForWizard) =>
+                dataStoreService.createService && this.hasName(dataStoreService.name),
         );
 
-        this.subscriptions.add(this.WizardService.submit(request)
-            .subscribe((result: GenericResponseWrapper) => {
+        this.subscriptions.add(
+            this.WizardService.submit(request).subscribe((result: GenericResponseWrapper) => {
                 this.errors = {} as GenericValidationError;
                 if (result.success) {
-                    const title: string = this.TranslocoService.translate('Success');
-                    const msg: string = this.TranslocoService.translate('Data saved successfully');
+                    const title: string = this.TranslocoService.translate("Success");
+                    const msg: string = this.TranslocoService.translate("Data saved successfully");
 
                     this.notyService.genericSuccess(msg, title);
-                    this.router.navigate(['/services/notMonitored']);
+                    this.router.navigate(["/services/notMonitored"]);
                     this.cdr.markForCheck();
                     return;
                 }
@@ -134,10 +135,9 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
                 const errorResponse: GenericValidationError = result.data as GenericValidationError;
                 if (result) {
                     this.errors = errorResponse;
-
                 }
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
@@ -164,14 +164,14 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
 
     protected detectColor = function (label: string): string {
         if (label.match(/warning/gi)) {
-            return 'warning';
+            return "warning";
         }
 
         if (label.match(/critical/gi)) {
-            return 'critical';
+            return "critical";
         }
 
-        return '';
+        return "";
     };
 
     protected hasName = (name: string): boolean => {
@@ -181,7 +181,7 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
         return this.searchedTags.some((tag) => {
             return name.toLowerCase().includes(tag.toLowerCase());
         });
-    }
+    };
 
     protected runDatastoreDiscovery(): void {
         this.post.dataStoreServices = [];
@@ -194,18 +194,19 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
             // Error
             if (data && data.services && data.services.length && data.services[0].value && data.services[2]) {
                 for (let key in data.services[2].value) {
-                    let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.datastoreServicetemplate.servicetemplatecommandargumentvalues));
+                    let servicetemplatecommandargumentvalues = JSON.parse(
+                        JSON.stringify(this.datastoreServicetemplate.servicetemplatecommandargumentvalues),
+                    );
                     servicetemplatecommandargumentvalues[3].value = data.services[2].value[key].name;
                     let name = "Datastore " + String(data.services[2].value[key].name);
-                    this.post.dataStoreServices.push(
-                        {
-                            createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, name),
-                            description: '',
-                            host_id: this.post.host_id,
-                            name: name,
-                            servicecommandargumentvalues: servicetemplatecommandargumentvalues,
-                            servicetemplate_id: this.datastoreServicetemplate.id
-                        });
+                    this.post.dataStoreServices.push({
+                        createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, name),
+                        description: "",
+                        host_id: this.post.host_id,
+                        name: name,
+                        servicecommandargumentvalues: servicetemplatecommandargumentvalues,
+                        servicetemplate_id: this.datastoreServicetemplate.id,
+                    });
                 }
                 this.endDiscovery();
                 this.cdr.markForCheck();
@@ -216,7 +217,11 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
             const errorResponse: GenericValidationError = data.data as GenericValidationError;
             if (data.data) {
                 this.errors = errorResponse;
-                if (this.errors.hasOwnProperty('vcenter') || this.errors.hasOwnProperty('vmwareuser') || this.errors.hasOwnProperty('vmwarepass')) {
+                if (
+                    this.errors.hasOwnProperty("vcenter") ||
+                    this.errors.hasOwnProperty("vmwareuser") ||
+                    this.errors.hasOwnProperty("vmwarepass")
+                ) {
                     this.notyService.scrollContentDivToTop();
                 }
             }
@@ -224,5 +229,4 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
             this.cdr.markForCheck();
         });
     }
-
 }

@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { BackButtonDirective } from "../../../directives/back-button.directive";
 import {
     CardBodyComponent,
     CardComponent,
@@ -13,39 +13,36 @@ import {
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent
-} from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+    NavItemComponent,
+} from "@coreui/angular";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 
+import { FormsModule } from "@angular/forms";
+import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import { AsyncPipe, NgClass } from "@angular/common";
 
-import { FormsModule } from '@angular/forms';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { PermissionDirective } from "../../../permissions/permission.directive";
 
-import { PaginatorModule } from 'primeng/paginator';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { Subscription } from 'rxjs';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { HostsService } from '../hosts.service';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { HostEditDetailsPost } from '../hosts.interface';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
-import { PermissionsService } from '../../../permissions/permissions.service';
-import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
-import {
-    CheckAttemptsInputComponent
-} from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
-import { HistoryService } from '../../../history.service';
+import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
+import { TranslocoDirective, TranslocoPipe } from "@jsverse/transloco";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { FormLoaderComponent } from "../../../layouts/primeng/loading/form-loader/form-loader.component";
+import { Subscription } from "rxjs";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { HostsService } from "../hosts.service";
+import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
+import { HostEditDetailsPost } from "../hosts.interface";
+import { NgSelectModule } from "@ng-select/ng-select";
+import { PriorityComponent } from "../../../layouts/coreui/priority/priority.component";
+import { PermissionsService } from "../../../permissions/permissions.service";
+import { IntervalInputComponent } from "../../../layouts/coreui/interval-input/interval-input.component";
+import { CheckAttemptsInputComponent } from "../../../layouts/coreui/check-attempts-input/check-attempts-input.component";
+import { HistoryService } from "../../../history.service";
 
 @Component({
-    selector: 'oitc-hosts-edit-details',
+    selector: "oitc-hosts-edit-details",
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -77,14 +74,13 @@ import { HistoryService } from '../../../history.service';
         PriorityComponent,
         IntervalInputComponent,
         CheckAttemptsInputComponent,
-        AsyncPipe
+        AsyncPipe,
     ],
-    templateUrl: './hosts-edit-details.component.html',
-    styleUrl: './hosts-edit-details.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./hosts-edit-details.component.html",
+    styleUrl: "./hosts-edit-details.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HostsEditDetailsComponent implements OnInit, OnDestroy {
-
     public hostIds: number[] = [];
     public contacts: SelectKeyValue[] = [];
     public contactgroups: SelectKeyValue[] = [];
@@ -96,7 +92,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
     public post: HostEditDetailsPost = {
         Host: {
             hosts_to_containers_sharing: {
-                _ids: []
+                _ids: [],
             },
             description: null,
             host_url: null,
@@ -110,11 +106,11 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
             priority: 0,
             satellite_id: null,
             contacts: {
-                _ids: []
+                _ids: [],
             },
             contactgroups: {
-                _ids: []
-            }
+                _ids: [],
+            },
         },
         keepSharedContainers: false,
         keepContacts: false,
@@ -131,7 +127,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
         editContactgroups: false,
         editHostUrl: false,
         editNotes: false,
-        editSatellites: false
+        editSatellites: false,
     };
 
     public readonly PermissionsService = inject(PermissionsService);
@@ -146,23 +142,25 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.isLoading = true;
-        const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
+        const ids = String(this.route.snapshot.paramMap.get("ids")).split(",").map(Number);
         if (!ids) {
             // No ids given
-            this.router.navigate(['/', 'hosts', 'index']);
+            this.router.navigate(["/", "hosts", "index"]);
         }
 
         if (ids) {
-            this.subscriptions.add(this.HostsService.getEditDetails(ids).subscribe(response => {
-                this.cdr.markForCheck();
-                this.hostIds = ids;
-                this.contacts = response.contacts;
-                this.contactgroups = response.contactgroups;
-                this.sharingContainers = response.sharingContainers;
-                this.satellites = response.satellites;
+            this.subscriptions.add(
+                this.HostsService.getEditDetails(ids).subscribe((response) => {
+                    this.cdr.markForCheck();
+                    this.hostIds = ids;
+                    this.contacts = response.contacts;
+                    this.contactgroups = response.contactgroups;
+                    this.sharingContainers = response.sharingContainers;
+                    this.satellites = response.satellites;
 
-                this.isLoading = false;
-            }));
+                    this.isLoading = false;
+                }),
+            );
         }
     }
 
@@ -295,16 +293,17 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
 
     public submit() {
         if (this.post.editTags) {
-            this.post.Host.tags = this.tagsForSelect.join(',');
+            this.post.Host.tags = this.tagsForSelect.join(",");
         }
 
-        this.subscriptions.add(this.HostsService.saveEditDetails(this.post, this.hostIds)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostsService.saveEditDetails(this.post, this.hostIds).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.notyService.genericSuccess();
                 this.notyService.scrollContentDivToTop();
-                this.HistoryService.navigateWithFallback(['/hosts/index']);
-            }));
+                this.HistoryService.navigateWithFallback(["/hosts/index"]);
+            }),
+        );
     }
 
     protected readonly Number = Number;

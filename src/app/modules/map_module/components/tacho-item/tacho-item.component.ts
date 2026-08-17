@@ -9,35 +9,35 @@ import {
     OnDestroy,
     OnInit,
     Renderer2,
-    ViewChild
-} from '@angular/core';
-import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
-import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { ContextMenuModule } from 'primeng/contextmenu';
-import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
-import { MapItemType } from '../map-item-base/map-item-base.enum';
-import { interval, Subscription } from 'rxjs';
-import { NgClass } from '@angular/common';
-import { RadialGauge } from 'canvas-gauges';
-import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
+    ViewChild,
+} from "@angular/core";
+import { CdkDrag, CdkDragHandle } from "@angular/cdk/drag-drop";
+import { MapCanvasComponent } from "../map-canvas/map-canvas.component";
+import { ContextMenuModule } from "@openng/optimus-ui/contextmenu";
+import { MapItemBaseComponent } from "../map-item-base/map-item-base.component";
+import { Mapgadget } from "../../pages/mapeditors/mapeditors.interface";
+import { MapItemType } from "../map-item-base/map-item-base.enum";
+import { interval, Subscription } from "rxjs";
+import { NgClass } from "@angular/common";
+import { RadialGauge } from "canvas-gauges";
+import { ScaleTypes } from "../../../../components/popover-graph/scale-types";
 import {
     HostForMapItem,
     MapItemRoot,
     MapItemRootParams,
     Perfdata,
     ServiceForMapItem,
-    Setup
-} from '../map-item-base/map-item-base.interface';
-import { AngularDraggableModule } from 'angular2-draggable';
+    Setup,
+} from "../map-item-base/map-item-base.interface";
+import { AngularDraggableModule } from "angular2-draggable";
 
 @Component({
-    selector: 'oitc-tacho-item',
+    selector: "oitc-tacho-item",
     standalone: true,
     imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgClass, AngularDraggableModule],
-    templateUrl: './tacho-item.component.html',
-    styleUrl: './tacho-item.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./tacho-item.component.html",
+    styleUrl: "./tacho-item.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
@@ -59,8 +59,8 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         },
         metric: {
             value: 0,
-            unit: 'X',
-            name: 'No data available',
+            unit: "X",
+            name: "No data available",
         },
         warn: {
             low: null,
@@ -69,7 +69,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         crit: {
             low: null,
             high: null,
-        }
+        },
     };
 
     protected init: boolean = true;
@@ -79,12 +79,14 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     protected Host!: HostForMapItem;
     protected Service!: ServiceForMapItem;
     private responsePerfdata!: Perfdata;
-    private color: string = '';
+    private color: string = "";
     private setup!: Setup;
     protected allowView: boolean = false;
 
-
-    constructor(parent: MapCanvasComponent, private renderer: Renderer2) {
+    constructor(
+        parent: MapCanvasComponent,
+        private renderer: Renderer2,
+    ) {
         super(parent);
         effect(() => {
             this.onObjectIdChange();
@@ -99,7 +101,6 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     }
 
     public ngOnInit(): void {
-
         this.item()!.size_x = parseInt(this.item()!.size_x.toString(), 10);
         this.item()!.size_y = parseInt(this.item()!.size_y.toString(), 10);
 
@@ -116,17 +117,16 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
     }
 
     private load() {
-
         const params: MapItemRootParams = {
-            'angular': true,
-            'disableGlobalLoader': true,
-            'objectId': this.item()!.object_id as number,
-            'mapId': this.item()!.map_id as number,
-            'type': this.item()!.type as string
+            angular: true,
+            disableGlobalLoader: true,
+            objectId: this.item()!.object_id as number,
+            mapId: this.item()!.map_id as number,
+            type: this.item()!.type as string,
         };
 
-        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
-            .subscribe({
+        this.subscriptions.add(
+            this.MapItemBaseService.getMapItem(params).subscribe({
                 next: (result: MapItemRoot) => {
                     this.color = result.data.color!;
                     this.Host = result.data.Host;
@@ -144,55 +144,56 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 error: (err) => {
                     //error handling here
                     this.cdr.markForCheck();
-                }
-            }));
-    };
+                },
+            }),
+        );
+    }
 
     private getThresholdAreas(setup: Setup) {
         let thresholdAreas: any[] = [];
         switch (setup.scale.type) {
             case ScaleTypes.W_O:
                 thresholdAreas = [
-                    {from: setup.crit.low, to: setup.warn.low, color: '#DF8F1D'},
-                    {from: setup.warn.low, to: setup.scale.max, color: '#449D44'}
+                    { from: setup.crit.low, to: setup.warn.low, color: "#DF8F1D" },
+                    { from: setup.warn.low, to: setup.scale.max, color: "#449D44" },
                 ];
                 break;
             case ScaleTypes.C_W_O:
                 thresholdAreas = [
-                    {from: setup.scale.min, to: setup.crit.low, color: '#C9302C'},
-                    {from: setup.crit.low, to: setup.warn.low, color: '#DF8F1D'},
-                    {from: setup.warn.low, to: setup.scale.max, color: '#449D44'}
+                    { from: setup.scale.min, to: setup.crit.low, color: "#C9302C" },
+                    { from: setup.crit.low, to: setup.warn.low, color: "#DF8F1D" },
+                    { from: setup.warn.low, to: setup.scale.max, color: "#449D44" },
                 ];
                 break;
             case ScaleTypes.O_W:
                 thresholdAreas = [
-                    {from: setup.scale.min, to: setup.warn.low, color: '#449D44'},
-                    {from: setup.warn.low, to: setup.scale.max, color: '#DF8F1D'}
+                    { from: setup.scale.min, to: setup.warn.low, color: "#449D44" },
+                    { from: setup.warn.low, to: setup.scale.max, color: "#DF8F1D" },
                 ];
                 break;
             case ScaleTypes.O_W_C:
                 thresholdAreas = [
-                    {from: setup.scale.min, to: setup.warn.low, color: '#449D44'},
-                    {from: setup.warn.low, to: setup.crit.low, color: '#DF8F1D'},
-                    {from: setup.crit.low, to: setup.scale.max, color: '#C9302C'}
+                    { from: setup.scale.min, to: setup.warn.low, color: "#449D44" },
+                    { from: setup.warn.low, to: setup.crit.low, color: "#DF8F1D" },
+                    { from: setup.crit.low, to: setup.scale.max, color: "#C9302C" },
                 ];
                 break;
             case ScaleTypes.C_W_O_W_C:
                 thresholdAreas = [
-                    {from: setup.scale.min, to: setup.crit.low, color: '#C9302C'},
-                    {from: setup.crit.low, to: setup.warn.low, color: '#DF8F1D'},
-                    {from: setup.warn.low, to: setup.warn.high, color: '#449D44'},
-                    {from: setup.warn.high, to: setup.crit.high, color: '#DF8F1D'},
-                    {from: setup.crit.high, to: setup.scale.max, color: '#C9302C'}
+                    { from: setup.scale.min, to: setup.crit.low, color: "#C9302C" },
+                    { from: setup.crit.low, to: setup.warn.low, color: "#DF8F1D" },
+                    { from: setup.warn.low, to: setup.warn.high, color: "#449D44" },
+                    { from: setup.warn.high, to: setup.crit.high, color: "#DF8F1D" },
+                    { from: setup.crit.high, to: setup.scale.max, color: "#C9302C" },
                 ];
                 break;
             case ScaleTypes.O_W_C_W_O:
                 thresholdAreas = [
-                    {from: setup.scale.min, to: setup.crit.low, color: '#449D44'},
-                    {from: setup.crit.low, to: setup.warn.low, color: '#DF8F1D'},
-                    {from: setup.warn.low, to: setup.warn.high, color: '#C9302C'},
-                    {from: setup.warn.high, to: setup.crit.high, color: '#DF8F1D'},
-                    {from: setup.crit.high, to: setup.scale.max, color: '#449D44'}
+                    { from: setup.scale.min, to: setup.crit.low, color: "#449D44" },
+                    { from: setup.crit.low, to: setup.warn.low, color: "#DF8F1D" },
+                    { from: setup.warn.low, to: setup.warn.high, color: "#C9302C" },
+                    { from: setup.warn.high, to: setup.crit.high, color: "#DF8F1D" },
+                    { from: setup.crit.high, to: setup.scale.max, color: "#449D44" },
                 ];
                 break;
             case ScaleTypes.O:
@@ -209,19 +210,19 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
         if (label.length > 20) {
             label = label.substring(0, 20);
-            label += '...';
+            label += "...";
         }
 
         if (this.item()!.show_label === true) {
             if (units === null) {
                 units = label;
             } else {
-                units = label + ' in ' + units;
+                units = label + " in " + units;
             }
-            label = this.Host.hostname + '/' + this.Service.servicename;
+            label = this.Host.hostname + "/" + this.Service.servicename;
             if (label.length > 20) {
                 label = label.substring(0, 20);
-                label += '...';
+                label += "...";
             }
         }
 
@@ -237,8 +238,8 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         let intergetDigits = currentValueAsString.length;
         let decimalDigits = 0;
 
-        if (currentValueAsString.indexOf('.') > 0) {
-            let splited = currentValueAsString.split('.');
+        if (currentValueAsString.indexOf(".") > 0) {
+            let splited = currentValueAsString.split(".");
             intergetDigits = splited[0].length;
             decimalDigits = splited[1].length;
             if (decimalDigits > maxDecimalDigits) {
@@ -247,12 +248,12 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         }
 
         let showDecimalDigitsGauge = 0;
-        if (decimalDigits > 0 || (setup.scale.max - setup.scale.min < 10)) {
+        if (decimalDigits > 0 || setup.scale.max - setup.scale.min < 10) {
             showDecimalDigitsGauge = 1;
         }
 
         let gauge = new RadialGauge({
-            renderTo: 'map-tacho-' + this.item()!.id,
+            renderTo: "map-tacho-" + this.item()!.id,
             height: this.height,
             width: this.width,
             value: setup.metric.value,
@@ -266,15 +267,15 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
             majorTicksDec: showDecimalDigitsGauge,
             highlights: thresholds,
             animationDuration: 700,
-            animationRule: 'elastic',
-            majorTicks: this.getMajorTicks(setup.scale.min, setup.scale.max, 5)
+            animationRule: "elastic",
+            majorTicks: this.getMajorTicks(setup.scale.min, setup.scale.max, 5),
         });
 
         gauge.draw();
 
         //Update value
         //gauge.value = 1337;
-    };
+    }
 
     private getMajorTicks(perfdataMin: number, perfdataMax: number, numberOfTicks: number) {
         numberOfTicks = Math.abs(Math.ceil(numberOfTicks));
@@ -289,12 +290,11 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
         }
 
         return tickArr;
-    };
+    }
 
     private processPerfdata() {
         // default data if no setup is passed whatsoever.
         this.setup = this.defaultSetup;
-
 
         if (this.responsePerfdata !== null) {
             if (this.item()!.metric !== null && this.responsePerfdata.hasOwnProperty(this.item()!.metric)) {
@@ -307,7 +307,7 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 }
             }
         }
-    };
+    }
 
     private initRefreshTimer() {
         if (this.refreshInterval() > 0 && !this.intervalStartet) {
@@ -316,14 +316,14 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 this.load();
             });
         }
-    };
+    }
 
     private stop() {
         if (this.intervalStartet) {
             this.statusUpdateInterval.unsubscribe();
             this.cdr.markForCheck();
         }
-    };
+    }
 
     private onSizeXShowLabelChange() {
         if (this.init) {
@@ -355,5 +355,4 @@ export class TachoItemComponent extends MapItemBaseComponent<Mapgadget> implemen
 
         this.load();
     }
-
 }

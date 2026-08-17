@@ -8,30 +8,32 @@ import {
     InputSignal,
     OnDestroy,
     OnInit,
-    ViewChild
-} from '@angular/core';
-import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
-import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { ContextMenuModule } from 'primeng/contextmenu';
-import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Mapbackgrounditem } from '../../pages/mapeditors/mapeditors.interface';
-import { MapItemType } from '../map-item-base/map-item-base.enum';
-import { Subscription } from 'rxjs';
-import { AngularDraggableModule } from 'angular2-draggable';
+    ViewChild,
+} from "@angular/core";
+import { CdkDrag, CdkDragHandle } from "@angular/cdk/drag-drop";
+import { MapCanvasComponent } from "../map-canvas/map-canvas.component";
+import { ContextMenuModule } from "@openng/optimus-ui/contextmenu";
+import { MapItemBaseComponent } from "../map-item-base/map-item-base.component";
+import { Mapbackgrounditem } from "../../pages/mapeditors/mapeditors.interface";
+import { MapItemType } from "../map-item-base/map-item-base.enum";
+import { Subscription } from "rxjs";
+import { AngularDraggableModule } from "angular2-draggable";
 
 @Component({
-    selector: 'oitc-background-item',
+    selector: "oitc-background-item",
     standalone: true,
     imports: [CdkDrag, ContextMenuModule, CdkDragHandle, AngularDraggableModule],
-    templateUrl: './background-item.component.html',
-    styleUrl: './background-item.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./background-item.component.html",
+    styleUrl: "./background-item.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgrounditem> implements OnInit, OnDestroy, AfterViewInit {
-
+export class BackgroundItemComponent
+    extends MapItemBaseComponent<Mapbackgrounditem>
+    implements OnInit, OnDestroy, AfterViewInit
+{
     public override item: InputSignal<Mapbackgrounditem | undefined> = input<Mapbackgrounditem>();
     public aspectRatioEnabled: InputSignal<boolean> = input<boolean>(false);
-    @ViewChild('backgroundImage', {static: false}) backgroundImageRef!: ElementRef<HTMLImageElement>;
+    @ViewChild("backgroundImage", { static: false }) backgroundImageRef!: ElementRef<HTMLImageElement>;
 
     private subscriptions: Subscription = new Subscription();
 
@@ -43,7 +45,10 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
     protected width: number | undefined | null;
     protected height: number | undefined | null;
 
-    protected invalidBackgroundMessage: string = this.TranslocoService.translate('{0} Map background image is not available!!!', {0: '⚠'});
+    protected invalidBackgroundMessage: string = this.TranslocoService.translate(
+        "{0} Map background image is not available!!!",
+        { 0: "⚠" },
+    );
 
     constructor(parent: MapCanvasComponent) {
         super(parent);
@@ -52,9 +57,7 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
         });
     }
 
-
     public ngOnInit(): void {
-
         this.init = false;
         //this.updateBackgroundSizeAndPosition();
     }
@@ -62,7 +65,8 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
     public override ngAfterViewInit(): void {
         super.ngAfterViewInit();
 
-        let width, height = 0;
+        let width,
+            height = 0;
         const img = this.backgroundImageRef.nativeElement;
         if (img.complete) {
             // Image already loaded
@@ -85,7 +89,6 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
                 // Use image width
                 this.height = height;
             }
-
         } else {
             img.onload = () => {
                 width = img.naturalWidth;
@@ -109,7 +112,6 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
                 }
             };
         }
-
 
         /*
         this.backgroundImageRef.nativeElement.onload = () => {
@@ -152,5 +154,4 @@ export class BackgroundItemComponent extends MapItemBaseComponent<Mapbackgroundi
 
         return height;
     }
-
 }

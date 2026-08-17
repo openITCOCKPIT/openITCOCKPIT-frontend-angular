@@ -1,12 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import {
     AgentconnectorSatelliteTaskStatus,
     AgentconnectorWizardStepsEnum,
-    AgentHttpClientErrors
-} from '../agentconnector.enums';
-import {
-    AgentconnectorWizardProgressbarComponent
-} from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
+    AgentHttpClientErrors,
+} from "../agentconnector.enums";
+import { AgentconnectorWizardProgressbarComponent } from "../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component";
 
 import {
     CardBodyComponent,
@@ -14,28 +12,28 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    RowComponent
-} from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+    RowComponent,
+} from "@coreui/angular";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { AgentConfig } from '../agentconfig.interface';
-import { HostEntity } from '../../hosts/hosts.interface';
-import { Subscription } from 'rxjs';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AgentconnectorService } from '../agentconnector.service';
+import { PermissionDirective } from "../../../permissions/permission.directive";
+import { TranslocoDirective, TranslocoService } from "@jsverse/transloco";
+import { AgentConfig } from "../agentconfig.interface";
+import { HostEntity } from "../../hosts/hosts.interface";
+import { Subscription } from "rxjs";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { AgentconnectorService } from "../agentconnector.service";
 import {
     AgentconnectorAutoTlsConnectionTest,
     AgentconnectorAutoTlsSatelliteTaskResponse,
-    AgentModes
-} from '../agentconnector.interface';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { HttpErrorResponse } from '@angular/common/http';
+    AgentModes,
+} from "../agentconnector.interface";
+import { ProgressBarModule } from "@openng/optimus-ui/progressbar";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
-    selector: 'oitc-agentconnector-auto-tls',
+    selector: "oitc-agentconnector-auto-tls",
     imports: [
         AgentconnectorWizardProgressbarComponent,
         CardBodyComponent,
@@ -48,14 +46,13 @@ import { HttpErrorResponse } from '@angular/common/http';
         RouterLink,
         ColComponent,
         RowComponent,
-        ProgressBarModule
+        ProgressBarModule,
     ],
-    templateUrl: './agentconnector-auto-tls.component.html',
-    styleUrl: './agentconnector-auto-tls.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./agentconnector-auto-tls.component.html",
+    styleUrl: "./agentconnector-auto-tls.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AgentconnectorAutoTlsComponent implements OnInit, OnDestroy {
-
     // Wizard step 4 (Pull Mode only)
 
     public hostId: number = 0;
@@ -68,7 +65,7 @@ export class AgentconnectorAutoTlsComponent implements OnInit, OnDestroy {
     public satellite_task_id: null | number = null;
     public runningCheck: boolean = true;
     public hasSatelliteError: boolean = false;
-    public satelliteErrorMsg: string = '';
+    public satelliteErrorMsg: string = "";
 
     private satelliteInterval: any = null;
 
@@ -84,17 +81,19 @@ export class AgentconnectorAutoTlsComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
-            const hostId = Number(this.route.snapshot.paramMap.get('hostId'));
-            if (hostId > 0) {
-                this.hostId = hostId;
-            }
+        this.subscriptions.add(
+            this.route.queryParams.subscribe((params) => {
+                // Here, params is an object containing the current query parameters.
+                // You can do something with these parameters here.
+                //console.log(params);
+                const hostId = Number(this.route.snapshot.paramMap.get("hostId"));
+                if (hostId > 0) {
+                    this.hostId = hostId;
+                }
 
-            this.loadAutoTls();
-        }));
+                this.loadAutoTls();
+            }),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -105,23 +104,25 @@ export class AgentconnectorAutoTlsComponent implements OnInit, OnDestroy {
         this.runningCheck = true;
         this.cdr.markForCheck();
 
-        this.subscriptions.add(this.AgentconnectorService.loadAutoTls(this.hostId, reExchangeAutoTLS).subscribe((data) => {
-            this.cdr.markForCheck();
+        this.subscriptions.add(
+            this.AgentconnectorService.loadAutoTls(this.hostId, reExchangeAutoTLS).subscribe((data) => {
+                this.cdr.markForCheck();
 
-            if (data.satellite_task_id) {
-                // Request is running on a Satellite - Wait for response data...
-                this.isSatellite = true;
-                this.satellite_task_id = data.satellite_task_id;
-                this.startSatelliteCheckInterval();
-            } else {
-                // Request was handled by the Master System
-                this.runningCheck = false;
-                this.config = data.config;
-                this.host = data.host;
-                this.connection_test = data.connection_test;
-                this.disableNextButton = data.connection_test.status !== 'success';
-            }
-        }));
+                if (data.satellite_task_id) {
+                    // Request is running on a Satellite - Wait for response data...
+                    this.isSatellite = true;
+                    this.satellite_task_id = data.satellite_task_id;
+                    this.startSatelliteCheckInterval();
+                } else {
+                    // Request was handled by the Master System
+                    this.runningCheck = false;
+                    this.config = data.config;
+                    this.host = data.host;
+                    this.connection_test = data.connection_test;
+                    this.disableNextButton = data.connection_test.status !== "success";
+                }
+            }),
+        );
     }
 
     public reExchangeAutoTLS() {
@@ -149,7 +150,6 @@ export class AgentconnectorAutoTlsComponent implements OnInit, OnDestroy {
 
     private checkForSatelliteResponse() {
         if (this.satellite_task_id) {
-
             const sub = this.AgentconnectorService.loadSatelliteResponse(this.satellite_task_id).subscribe({
                 next: (response: AgentconnectorAutoTlsSatelliteTaskResponse) => {
                     // 200 ok
@@ -157,18 +157,23 @@ export class AgentconnectorAutoTlsComponent implements OnInit, OnDestroy {
 
                     if (typeof response.task.status === "undefined") {
                         this.cancelSatRequest();
-                        const msg = this.TranslocoService.translate('Unexpected answer from Server');
+                        const msg = this.TranslocoService.translate("Unexpected answer from Server");
                         this.notyService.genericError(msg);
                         return;
                     }
 
-                    if (response.task.status === AgentconnectorSatelliteTaskStatus.SatelliteTaskFinishedSuccessfully || response.task.status === AgentconnectorSatelliteTaskStatus.SatelliteTaskFinishedError) {
+                    if (
+                        response.task.status === AgentconnectorSatelliteTaskStatus.SatelliteTaskFinishedSuccessfully ||
+                        response.task.status === AgentconnectorSatelliteTaskStatus.SatelliteTaskFinishedError
+                    ) {
                         // We got a result from the Satellite Server
                         this.cancelSatRequest();
 
                         if (response.task.status === AgentconnectorSatelliteTaskStatus.SatelliteTaskFinishedError) {
                             try {
-                                this.connection_test = JSON.parse(String(response.task.result)) as AgentconnectorAutoTlsConnectionTest;
+                                this.connection_test = JSON.parse(
+                                    String(response.task.result),
+                                ) as AgentconnectorAutoTlsConnectionTest;
                             } catch (e) {
                                 // Error is no json
                                 this.hasSatelliteError = true;
@@ -179,31 +184,31 @@ export class AgentconnectorAutoTlsComponent implements OnInit, OnDestroy {
                             return;
                         }
 
-                        if (response.task.status === AgentconnectorSatelliteTaskStatus.SatelliteTaskFinishedSuccessfully) {
+                        if (
+                            response.task.status === AgentconnectorSatelliteTaskStatus.SatelliteTaskFinishedSuccessfully
+                        ) {
                             this.runningCheck = false;
-
 
                             const responseJson = JSON.parse(String(response.task.result));
                             this.connection_test = responseJson as AgentconnectorAutoTlsConnectionTest;
 
-                            this.disableNextButton = this.connection_test.status !== 'success';
+                            this.disableNextButton = this.connection_test.status !== "success";
                         }
                     }
 
                     if (response.task.status === AgentconnectorSatelliteTaskStatus.SatelliteTaskFinishedError) {
                         this.runningCheck = false;
                     }
-
                 },
                 error: (error: HttpErrorResponse) => {
                     this.cdr.markForCheck();
                     this.cancelSatRequest();
 
                     if (error.status === 404) {
-                        const msg = this.TranslocoService.translate('Task not found in database!');
+                        const msg = this.TranslocoService.translate("Task not found in database!");
                         this.notyService.genericError(msg);
                     }
-                }
+                },
             });
 
             this.subscriptions.add(sub);
@@ -211,11 +216,13 @@ export class AgentconnectorAutoTlsComponent implements OnInit, OnDestroy {
     }
 
     public onBackButtonClick() {
-        this.router.navigate(['/agentconnector/install', this.hostId]);
+        this.router.navigate(["/agentconnector/install", this.hostId]);
     }
 
     public onNextButtonClick() {
-        this.router.navigate(['/agentconnector/create_services', this.hostId], {queryParams: {testConnection: false}});
+        this.router.navigate(["/agentconnector/create_services", this.hostId], {
+            queryParams: { testConnection: false },
+        });
     }
 
     protected readonly AgentHttpClientErrors = AgentHttpClientErrors;

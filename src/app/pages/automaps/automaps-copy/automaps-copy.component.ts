@@ -1,16 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { GenericValidationError } from '../../../generic-responses';
-import { Subscription } from 'rxjs';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AutomapsService } from '../automaps.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AutomapCopyPost } from '../automaps.interface';
-import { HistoryService } from '../../../history.service';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective } from '@jsverse/transloco';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { GenericValidationError } from "../../../generic-responses";
+import { Subscription } from "rxjs";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { AutomapsService } from "../automaps.service";
+import { HttpErrorResponse } from "@angular/common/http";
+import { AutomapCopyPost } from "../automaps.interface";
+import { HistoryService } from "../../../history.service";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { PermissionDirective } from "../../../permissions/permission.directive";
+import { TranslocoDirective } from "@jsverse/transloco";
+import { BackButtonDirective } from "../../../directives/back-button.directive";
 import {
     CardBodyComponent,
     CardComponent,
@@ -19,19 +19,19 @@ import {
     CardTitleDirective,
     FormControlDirective,
     FormLabelDirective,
-    NavComponent
-} from '@coreui/angular';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
+    NavComponent,
+} from "@coreui/angular";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { FormLoaderComponent } from "../../../layouts/primeng/loading/form-loader/form-loader.component";
 
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { PaginatorModule } from 'primeng/paginator';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { FormsModule } from '@angular/forms';
+import { FormErrorDirective } from "../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../layouts/coreui/form-feedback/form-feedback.component";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
+import { FormsModule } from "@angular/forms";
 
 @Component({
-    selector: 'oitc-automaps-copy',
+    selector: "oitc-automaps-copy",
     imports: [
         FaIconComponent,
         PermissionDirective,
@@ -52,18 +52,17 @@ import { FormsModule } from '@angular/forms';
         PaginatorModule,
         RequiredIconComponent,
         CardFooterComponent,
-        FormsModule
+        FormsModule,
     ],
-    templateUrl: './automaps-copy.component.html',
-    styleUrl: './automaps-copy.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./automaps-copy.component.html",
+    styleUrl: "./automaps-copy.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutomapsCopyComponent implements OnInit, OnDestroy {
-
     public automaps: AutomapCopyPost[] = [];
     public errors: GenericValidationError | null = null;
 
-    private subscriptions: Subscription = new Subscription()
+    private subscriptions: Subscription = new Subscription();
     private AutomapsService = inject(AutomapsService);
     private readonly notyService = inject(NotyService);
     private router = inject(Router);
@@ -72,38 +71,40 @@ export class AutomapsCopyComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
-        const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
+        const ids = String(this.route.snapshot.paramMap.get("ids")).split(",").map(Number);
         if (!ids) {
             // No ids given
-            this.router.navigate(['/', 'automaps', 'index']);
+            this.router.navigate(["/", "automaps", "index"]);
         }
 
         if (ids) {
-            this.subscriptions.add(this.AutomapsService.getAutomapsCopy(ids).subscribe(automaps => {
-                for (let automap of automaps) {
-                    this.automaps.push(<AutomapCopyPost>{
-                        Source: {
-                            id: automap.id,
-                            name: automap.name,
-                        },
+            this.subscriptions.add(
+                this.AutomapsService.getAutomapsCopy(ids).subscribe((automaps) => {
+                    for (let automap of automaps) {
+                        this.automaps.push(<AutomapCopyPost>{
+                            Source: {
+                                id: automap.id,
+                                name: automap.name,
+                            },
 
-                        Automap: {
-                            name: automap.name,
-                            description: automap.description,
-                            host_regex: automap.host_regex,
-                            hostgroup_regex: automap.hostgroup_regex,
-                            service_regex: automap.service_regex
-                        },
-                        Error: null
-                    })
-                }
-                this.cdr.markForCheck();
-            }));
+                            Automap: {
+                                name: automap.name,
+                                description: automap.description,
+                                host_regex: automap.host_regex,
+                                hostgroup_regex: automap.hostgroup_regex,
+                                service_regex: automap.service_regex,
+                            },
+                            Error: null,
+                        });
+                    }
+                    this.cdr.markForCheck();
+                }),
+            );
         }
     }
 
     public ngOnDestroy() {
-        this.subscriptions.unsubscribe()
+        this.subscriptions.unsubscribe();
     }
 
     public copy() {
@@ -112,7 +113,7 @@ export class AutomapsCopyComponent implements OnInit, OnDestroy {
                 //console.log(value); // Serve result with the new copied commands
                 // 200 ok
                 this.notyService.genericSuccess();
-                this.HistoryService.navigateWithFallback(['/', 'automaps', 'index']);
+                this.HistoryService.navigateWithFallback(["/", "automaps", "index"]);
             },
             error: (error: HttpErrorResponse) => {
                 // We run into a validation error.
@@ -124,7 +125,7 @@ export class AutomapsCopyComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
                 this.notyService.genericError();
                 this.automaps = error.error.result as AutomapCopyPost[];
-            }
+            },
         });
 
         this.subscriptions.add(sub);

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from "@angular/core";
 import {
     AlertComponent,
     CardBodyComponent,
@@ -15,55 +15,52 @@ import {
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
-    NavItemComponent
-} from '@coreui/angular';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
-import {
-    CheckAttemptsInputComponent
-} from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormsModule } from '@angular/forms';
-import { HumanTimeComponent } from '../../../layouts/coreui/interval-input/human-time/human-time.component';
-import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
-import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
-import { MacrosComponent } from '../../../components/macros/macros.component';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, NgClass } from '@angular/common';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { PaginatorModule } from 'primeng/paginator';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+    NavItemComponent,
+} from "@coreui/angular";
+import { BackButtonDirective } from "../../../directives/back-button.directive";
+import { CheckAttemptsInputComponent } from "../../../layouts/coreui/check-attempts-input/check-attempts-input.component";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { FormErrorDirective } from "../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../layouts/coreui/form-feedback/form-feedback.component";
+import { FormsModule } from "@angular/forms";
+import { HumanTimeComponent } from "../../../layouts/coreui/interval-input/human-time/human-time.component";
+import { IntervalInputComponent } from "../../../layouts/coreui/interval-input/interval-input.component";
+import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
+import { MacrosComponent } from "../../../components/macros/macros.component";
+import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import { AsyncPipe, NgClass } from "@angular/common";
+import { NgSelectModule } from "@ng-select/ng-select";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { PermissionDirective } from "../../../permissions/permission.directive";
+import { PriorityComponent } from "../../../layouts/coreui/priority/priority.component";
+import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
+import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from "@jsverse/transloco";
+import { TrueFalseDirective } from "../../../directives/true-false.directive";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import {
     ServiceInheritedContactsAndContactgroups,
     ServiceInheritedContactsAndContactgroupsWithId,
-    ServicePost
-} from '../../services/services.interface';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { Subscription } from 'rxjs';
-import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
-import { ServicesService } from '../services.service';
-import { PermissionsService } from '../../../permissions/permissions.service';
-import { HostsService } from '../../hosts/hosts.service';
-import { HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
-import { ServicetemplatePost } from '../../servicetemplates/servicetemplates.interface';
-import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
-import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/template-diff-btn.component';
-import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
-import { HistoryService } from '../../../history.service';
-
+    ServicePost,
+} from "../../services/services.interface";
+import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
+import { GenericIdResponse, GenericValidationError } from "../../../generic-responses";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { Subscription } from "rxjs";
+import { ObjectTypesEnum } from "../../changelogs/object-types.enum";
+import { ServicesService } from "../services.service";
+import { PermissionsService } from "../../../permissions/permissions.service";
+import { HostsService } from "../../hosts/hosts.service";
+import { HostsLoadHostsByStringParams } from "../../hosts/hosts.interface";
+import { ServicetemplatePost } from "../../servicetemplates/servicetemplates.interface";
+import { TemplateDiffComponent } from "../../../components/template-diff/template-diff.component";
+import { TemplateDiffBtnComponent } from "../../../components/template-diff-btn/template-diff-btn.component";
+import { UiBlockerComponent } from "../../../components/ui-blocker/ui-blocker.component";
+import { HistoryService } from "../../../history.service";
 
 @Component({
-    selector: 'oitc-services-add',
+    selector: "oitc-services-add",
     imports: [
         AlertComponent,
         BackButtonDirective,
@@ -107,11 +104,11 @@ import { HistoryService } from '../../../history.service';
         TemplateDiffBtnComponent,
         UiBlockerComponent,
         TranslocoPipe,
-        AsyncPipe
+        AsyncPipe,
     ],
-    templateUrl: './services-add.component.html',
-    styleUrl: './services-add.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./services-add.component.html",
+    styleUrl: "./services-add.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServicesAddComponent {
     public hosts: SelectKeyValue[] | undefined;
@@ -120,10 +117,14 @@ export class ServicesAddComponent {
     public tagsForSelect: string[] = [];
     public post: ServicePost = {} as ServicePost;
 
-    public inheritedContactsAndContactgroups: ServiceInheritedContactsAndContactgroups = {} as ServiceInheritedContactsAndContactgroups;
-    public servicetemplateContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId = {} as ServiceInheritedContactsAndContactgroupsWithId;
-    public hostContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId = {} as ServiceInheritedContactsAndContactgroupsWithId;
-    public hosttemplateContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId = {} as ServiceInheritedContactsAndContactgroupsWithId;
+    public inheritedContactsAndContactgroups: ServiceInheritedContactsAndContactgroups =
+        {} as ServiceInheritedContactsAndContactgroups;
+    public servicetemplateContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId =
+        {} as ServiceInheritedContactsAndContactgroupsWithId;
+    public hostContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId =
+        {} as ServiceInheritedContactsAndContactgroupsWithId;
+    public hosttemplateContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId =
+        {} as ServiceInheritedContactsAndContactgroupsWithId;
 
     public data = {
         isServicenameInUse: false,
@@ -133,7 +134,7 @@ export class ServicesAddComponent {
         areContactsInheritedFromServicetemplate: false,
     };
 
-    public servicenameCheckedForDuplicates: string = '';
+    public servicenameCheckedForDuplicates: string = "";
 
     public servicetemplates: SelectKeyValue[] = [];
     public servicegroups: SelectKeyValue[] = [];
@@ -141,7 +142,7 @@ export class ServicesAddComponent {
     public checkperiods: SelectKeyValue[] = [];
     public contacts: SelectKeyValue[] = [];
     public contactgroups: SelectKeyValue[] = [];
-    public existingServices: object = {}
+    public existingServices: object = {};
     public isSlaHost: boolean = false;
 
     public errors: GenericValidationError | null = null;
@@ -162,12 +163,11 @@ export class ServicesAddComponent {
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {
-    }
+    constructor(private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
-        this.route.queryParams.subscribe(params => {
-            let hostId = params['hostId'];
+        this.route.queryParams.subscribe((params) => {
+            let hostId = params["hostId"];
             if (hostId === undefined) {
                 hostId = 0;
             }
@@ -176,7 +176,7 @@ export class ServicesAddComponent {
             this.post = this.getDefaultPost(this.hostId);
 
             //Fire on page load
-            this.loadHosts('');
+            this.loadHosts("");
             this.loadCommands();
 
             if (this.hostId > 0) {
@@ -184,7 +184,6 @@ export class ServicesAddComponent {
             }
             this.cdr.markForCheck();
         });
-
     }
 
     public ngOnDestroy(): void {
@@ -197,8 +196,8 @@ export class ServicesAddComponent {
         return {
             host_id: hostId,
             servicetemplate_id: 0,
-            name: '',
-            description: '',
+            name: "",
+            description: "",
             command_id: 0,
             eventhandler_command_id: 0,
             check_interval: 60,
@@ -227,28 +226,28 @@ export class ServicesAddComponent {
             retain_status_information: 0,
             retain_nonstatus_information: 0,
             notifications_enabled: 1,
-            notes: '',
+            notes: "",
             priority: 1,
             check_period_id: 0,
             notify_period_id: 0,
-            tags: '',
+            tags: "",
             container_id: 0,
-            service_url: '',
+            service_url: "",
             is_volatile: 0,
             freshness_checks_enabled: 0,
             contacts: {
-                _ids: []
+                _ids: [],
             },
             contactgroups: {
-                _ids: []
+                _ids: [],
             },
             servicegroups: {
-                _ids: []
+                _ids: [],
             },
             customvariables: [],
             servicecommandargumentvalues: [],
             serviceeventcommandargumentvalues: [],
-            sla_relevant: 1
+            sla_relevant: 1,
         };
     }
 
@@ -260,26 +259,26 @@ export class ServicesAddComponent {
 
         let params: HostsLoadHostsByStringParams = {
             angular: true,
-            'filter[Hosts.name]': searchString,
-            'selected[]': selected,
-            includeDisabled: false
-        }
+            "filter[Hosts.name]": searchString,
+            "selected[]": selected,
+            includeDisabled: false,
+        };
 
-        this.subscriptions.add(this.HostsService.loadHostsByString(params, true)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostsService.loadHostsByString(params, true).subscribe((result) => {
                 this.hosts = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
-    }
+    };
 
     public loadCommands() {
-        this.subscriptions.add(this.ServicesService.loadCommands()
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicesService.loadCommands().subscribe((result) => {
                 this.commands = result.commands;
                 this.eventhandlerCommands = result.eventhandlerCommands;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
@@ -290,8 +289,8 @@ export class ServicesAddComponent {
             return;
         }
 
-        this.subscriptions.add(this.ServicesService.loadElements(hostId)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicesService.loadElements(hostId).subscribe((result) => {
                 this.servicetemplates = result.servicetemplates;
                 this.servicegroups = result.servicegroups;
                 this.timeperiods = result.timeperiods;
@@ -301,9 +300,8 @@ export class ServicesAddComponent {
                 this.existingServices = result.existingServices;
                 this.isSlaHost = result.isSlaHost;
                 this.cdr.markForCheck();
-            })
+            }),
         );
-
     }
 
     private loadCommandArguments() {
@@ -313,13 +311,12 @@ export class ServicesAddComponent {
             return;
         }
 
-        this.subscriptions.add(this.ServicesService.loadCommandArguments(commandId)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicesService.loadCommandArguments(commandId).subscribe((result) => {
                 this.post.servicecommandargumentvalues = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
-
     }
 
     private loadEventHandlerCommandArguments() {
@@ -332,13 +329,12 @@ export class ServicesAddComponent {
             return;
         }
 
-        this.subscriptions.add(this.ServicesService.loadEventHandlerCommandArguments(eventHandlerCommandId)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicesService.loadEventHandlerCommandArguments(eventHandlerCommandId).subscribe((result) => {
                 this.post.serviceeventcommandargumentvalues = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
-
     }
 
     public onHostChange() {
@@ -351,8 +347,8 @@ export class ServicesAddComponent {
             return;
         }
 
-        this.subscriptions.add(this.ServicesService.loadServicetemplate(servicetemplateId, this.post.host_id)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicesService.loadServicetemplate(servicetemplateId, this.post.host_id).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.servicetemplate = result.servicetemplate.Servicetemplate;
                 this.setValuesFromServicetemplate();
@@ -372,7 +368,7 @@ export class ServicesAddComponent {
                 this.post.contactgroups._ids = result.contactsAndContactgroups.contactgroups._ids;
 
                 this.checkForDuplicateServicename();
-            })
+            }),
         );
     }
 
@@ -397,7 +393,8 @@ export class ServicesAddComponent {
         if (
             this.data.areContactsInheritedFromHosttemplate === false &&
             this.data.areContactsInheritedFromHost === false &&
-            this.data.areContactsInheritedFromServicetemplate === false) {
+            this.data.areContactsInheritedFromServicetemplate === false
+        ) {
             return;
         }
 
@@ -418,52 +415,51 @@ export class ServicesAddComponent {
         this.cdr.markForCheck();
 
         const fields = [
-            'name',
-            'description',
-            'servicetemplate_id',
-            'command_id',
-            'eventhandler_command_id',
-            'check_interval',
-            'retry_interval',
-            'max_check_attempts',
-            'first_notification_delay',
-            'notification_interval',
-            'notify_on_recovery',
-            'notify_on_warning',
-            'notify_on_critical',
-            'notify_on_unknown',
-            'notify_on_flapping',
-            'notify_on_downtime',
-            'flap_detection_enabled',
-            'flap_detection_on_ok',
-            'flap_detection_on_warning',
-            'flap_detection_on_critical',
-            'flap_detection_on_unknown',
-            'low_flap_threshold',
-            'high_flap_threshold',
-            'process_performance_data',
-            'freshness_checks_enabled',
-            'freshness_threshold',
-            'passive_checks_enabled',
-            'event_handler_enabled',
-            'active_checks_enabled',
-            'retain_status_information',
-            'retain_nonstatus_information',
-            'notifications_enabled',
-            'notes',
-            'priority',
-            'check_period_id',
-            'notify_period_id',
-            'tags',
-            'service_url',
-            'is_volatile',
-            'sla_relevant'
+            "name",
+            "description",
+            "servicetemplate_id",
+            "command_id",
+            "eventhandler_command_id",
+            "check_interval",
+            "retry_interval",
+            "max_check_attempts",
+            "first_notification_delay",
+            "notification_interval",
+            "notify_on_recovery",
+            "notify_on_warning",
+            "notify_on_critical",
+            "notify_on_unknown",
+            "notify_on_flapping",
+            "notify_on_downtime",
+            "flap_detection_enabled",
+            "flap_detection_on_ok",
+            "flap_detection_on_warning",
+            "flap_detection_on_critical",
+            "flap_detection_on_unknown",
+            "low_flap_threshold",
+            "high_flap_threshold",
+            "process_performance_data",
+            "freshness_checks_enabled",
+            "freshness_threshold",
+            "passive_checks_enabled",
+            "event_handler_enabled",
+            "active_checks_enabled",
+            "retain_status_information",
+            "retain_nonstatus_information",
+            "notifications_enabled",
+            "notes",
+            "priority",
+            "check_period_id",
+            "notify_period_id",
+            "tags",
+            "service_url",
+            "is_volatile",
+            "sla_relevant",
         ];
 
         for (let index in fields) {
             let field = fields[index];
             if (this.servicetemplate.hasOwnProperty(field)) {
-
                 // Basically, we are doing the following:
                 //this.post[field] = this.servicetemplate[field];
 
@@ -471,9 +467,7 @@ export class ServicesAddComponent {
             }
         }
 
-        var hasManyAssociations = [
-            'servicegroups', 'contacts', 'contactgroups'
-        ];
+        var hasManyAssociations = ["servicegroups", "contacts", "contactgroups"];
         for (let index in hasManyAssociations) {
             let field = hasManyAssociations[index];
             if (this.servicetemplate.hasOwnProperty(field)) {
@@ -485,10 +479,10 @@ export class ServicesAddComponent {
         this.post.customvariables = [];
         for (let index in this.servicetemplate.customvariables) {
             this.post.customvariables.push({
-                objecttype_id: ObjectTypesEnum['SERVICETEMPLATE'], //OBJECT_SERVICETEMPLATE because value from service template
+                objecttype_id: ObjectTypesEnum["SERVICETEMPLATE"], //OBJECT_SERVICETEMPLATE because value from service template
                 name: this.servicetemplate.customvariables[index].name,
                 value: this.servicetemplate.customvariables[index].value,
-                password: this.servicetemplate.customvariables[index].password
+                password: this.servicetemplate.customvariables[index].password,
             });
         }
 
@@ -497,33 +491,33 @@ export class ServicesAddComponent {
             this.post.servicecommandargumentvalues.push({
                 commandargument_id: this.servicetemplate.servicetemplatecommandargumentvalues[index].commandargument_id,
                 value: this.servicetemplate.servicetemplatecommandargumentvalues[index].value,
-                commandargument: this.servicetemplate.servicetemplatecommandargumentvalues[index].commandargument
+                commandargument: this.servicetemplate.servicetemplatecommandargumentvalues[index].commandargument,
             });
         }
 
         this.post.serviceeventcommandargumentvalues = [];
         for (let index in this.servicetemplate.servicetemplateeventcommandargumentvalues) {
             this.post.servicecommandargumentvalues.push({
-                commandargument_id: this.servicetemplate.servicetemplateeventcommandargumentvalues[index].commandargument_id,
+                commandargument_id:
+                    this.servicetemplate.servicetemplateeventcommandargumentvalues[index].commandargument_id,
                 value: this.servicetemplate.servicetemplateeventcommandargumentvalues[index].value,
-                commandargument: this.servicetemplate.servicetemplateeventcommandargumentvalues[index].commandargument
+                commandargument: this.servicetemplate.servicetemplateeventcommandargumentvalues[index].commandargument,
             });
         }
 
         // "".split() returns [''] instead of [] like in php
-        this.tagsForSelect = (this.post.tags !== '') ? this.post.tags.split(',') : [];
+        this.tagsForSelect = this.post.tags !== "" ? this.post.tags.split(",") : [];
     }
-
 
     /*******************
      * MACRO functions *
      *******************/
     public addMacro() {
         this.post.customvariables.push({
-            name: '',
+            name: "",
             objecttype_id: ObjectTypesEnum["SERVICE"],
             password: 0,
-            value: '',
+            value: "",
         });
         this.cdr.markForCheck();
     }
@@ -531,25 +525,24 @@ export class ServicesAddComponent {
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
         this.cdr.markForCheck();
-    }
+    };
 
     public submit() {
-        this.post.tags = this.tagsForSelect.join(',');
+        this.post.tags = this.tagsForSelect.join(",");
 
-
-        this.subscriptions.add(this.ServicesService.add(this.post)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicesService.add(this.post).subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('Service');
-                    const msg = this.TranslocoService.translate('created successfully');
-                    const url = ['services', 'edit', response.id];
+                    const title = this.TranslocoService.translate("Service");
+                    const msg = this.TranslocoService.translate("created successfully");
+                    const url = ["services", "edit", response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/services/index']);
+                        this.HistoryService.navigateWithFallback(["/services/index"]);
                         return;
                     }
                     this.post = this.getDefaultPost(this.hostId);
@@ -567,13 +560,13 @@ export class ServicesAddComponent {
                     this.errors = errorResponse;
 
                     this.hasMacroErrors = false;
-                    if (this.errors.hasOwnProperty('customvariables')) {
-                        if (typeof (this.errors['customvariables']['custom']) === "string") {
+                    if (this.errors.hasOwnProperty("customvariables")) {
+                        if (typeof this.errors["customvariables"]["custom"] === "string") {
                             this.hasMacroErrors = true;
                         }
                     }
                 }
-            }))
-
+            }),
+        );
     }
 }

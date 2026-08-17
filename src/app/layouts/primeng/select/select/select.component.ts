@@ -11,39 +11,35 @@ import {
     OnInit,
     Output,
     TemplateRef,
-    ViewChild
-} from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
-import { MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primeng/multiselect';
-import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
-import { TranslocoService } from '@jsverse/transloco';
-import { debounceTime } from 'rxjs/operators';
+    ViewChild,
+} from "@angular/core";
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { distinctUntilChanged, Subject, Subscription } from "rxjs";
+import { MultiSelectChangeEvent, MultiSelectFilterEvent } from "@openng/optimus-ui/multiselect";
+import { HighlightSearchPipe } from "../../../../pipes/highlight-search.pipe";
+import { TranslocoService } from "@jsverse/transloco";
+import { debounceTime } from "rxjs/operators";
 
-import { Select } from 'primeng/select';
+import { Select } from "@openng/optimus-ui/select";
 
 @Component({
-    selector: 'oitc-select',
-    imports: [
-        FormsModule,
-        HighlightSearchPipe,
-        Select
-    ],
+    selector: "oitc-select",
+    imports: [FormsModule, HighlightSearchPipe, Select],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => SelectComponent),
-            multi: true
-        }
+            multi: true,
+        },
     ],
-    templateUrl: './select.component.html',
-    styleUrl: './select.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./select.component.html",
+    styleUrl: "./select.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
     private init: boolean = false;
 
-    @ViewChild('selectOptgroup') selectOptgroup: Select | undefined;
+    @ViewChild("selectOptgroup") selectOptgroup: Select | undefined;
 
     @Input() id: string | undefined;
     @Input() name: string | undefined;
@@ -79,7 +75,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
      * String of CSS classes to apply to the select box
      * @group Props
      */
-    @Input() class: string = 'w-auto d-flex';
+    @Input() class: string = "w-auto d-flex";
 
     /**
      * Name of the label field of an option.
@@ -92,11 +88,11 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
      * This can be a string or path like 'key.subkey'
      * @group Props
      */
-    @Input() optionLabel: string = 'key';
+    @Input() optionLabel: string = "key";
     @Input() optionDisabled: string | undefined;
     @Input() disabled: boolean = false;
-    @Input() labelSuffix: string = '';
-    @Input() labelPrefix: string = '';
+    @Input() labelSuffix: string = "";
+    @Input() labelPrefix: string = "";
     @Input() placeholder: string | undefined;
     @Input() showClear: boolean = false;
 
@@ -121,7 +117,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
      *
      * @group Props
      */
-    @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = 'body';
+    @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = "body";
 
     /**
      * If the selected value (current value of ngModel) does not exist in the options, the value will be reset to 0
@@ -136,35 +132,35 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
     @Output() onFilter: EventEmitter<MultiSelectFilterEvent> = new EventEmitter<MultiSelectFilterEvent>();
     private readonly TranslocoService = inject(TranslocoService);
 
-    public searchText: string = '';
+    public searchText: string = "";
 
     private Subscriptions: Subscription = new Subscription();
 
     public constructor(private cdr: ChangeDetectorRef) {
         if (this.placeholder == undefined) {
-            this.placeholder = this.TranslocoService.translate('Please choose');
+            this.placeholder = this.TranslocoService.translate("Please choose");
         }
     }
 
     public ngOnInit(): void {
         if (this.debounce) {
             this.Subscriptions.add(
-                this.onChangeSubject.pipe(
-                    debounceTime(this.debounceTime),
-                    distinctUntilChanged()
-                ).subscribe(value => {
-                    this.onChange.emit(value);
-                }));
+                this.onChangeSubject
+                    .pipe(debounceTime(this.debounceTime), distinctUntilChanged())
+                    .subscribe((value) => {
+                        this.onChange.emit(value);
+                    }),
+            );
         }
 
         if (this.searchCallback) {
             this.Subscriptions.add(
-                this.searchCallbackSubject.pipe(
-                    debounceTime(this.debounceTime),
-                    distinctUntilChanged()
-                ).subscribe(value => {
-                    this.searchCallback!(this.searchText);
-                }));
+                this.searchCallbackSubject
+                    .pipe(debounceTime(this.debounceTime), distinctUntilChanged())
+                    .subscribe((value) => {
+                        this.searchCallback!(this.searchText);
+                    }),
+            );
         }
 
         this.init = true;
@@ -230,7 +226,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
         if (this.ngModel && this._options && !this.disableCheckThatEnsuresSelectedValueExistsInOptions) {
             // Check if the selected values are still in the options
             let valueStillInOptions = false;
-            let key = this.optionValue || 'key';
+            let key = this.optionValue || "key";
             this._options.filter((option) => {
                 if (option[key] === this.ngModel) {
                     valueStillInOptions = true;
@@ -260,7 +256,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
             if (this.labelPrefix && !element.value.startsWith(this.labelPrefix)) {
                 element.value = this.labelPrefix + element.value;
             }
-        })
+        });
     }
 
     /**
@@ -292,15 +288,18 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
         // We try to fix this, when left = 0, we set it to the same position as the select box is.
         if (this.selectOptgroup) {
             // PrimeNG 20
-            if (event.element.parentElement.style.left === '0px' && this.selectOptgroup.appendTo.length !== 0) {
+            if (event.element.parentElement.style.left === "0px" && this.selectOptgroup.appendTo.length !== 0) {
                 const selectBoxPosition = this.selectOptgroup.el.nativeElement.getBoundingClientRect();
-                event.element.parentElement.style.left = selectBoxPosition.x + 'px';
+                event.element.parentElement.style.left = selectBoxPosition.x + "px";
             }
 
             // PrimeNG 21
-            if ((event.element.parentElement.style.left === '0px' || event.element.parentElement.style.left === '') && this.selectOptgroup.appendTo().length !== 0) {
+            if (
+                (event.element.parentElement.style.left === "0px" || event.element.parentElement.style.left === "") &&
+                this.selectOptgroup.appendTo().length !== 0
+            ) {
                 const selectBoxPosition = this.selectOptgroup.el.nativeElement.getBoundingClientRect();
-                event.element.parentElement.style.left = selectBoxPosition.x + 'px';
+                event.element.parentElement.style.left = selectBoxPosition.x + "px";
             }
         }
     }

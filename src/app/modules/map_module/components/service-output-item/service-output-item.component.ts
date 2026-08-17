@@ -1,31 +1,30 @@
-import { ChangeDetectionStrategy, Component, effect, input, InputSignal, OnDestroy, OnInit } from '@angular/core';
-import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
-import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { ContextMenuModule } from 'primeng/contextmenu';
-import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
-import { MapItemType } from '../map-item-base/map-item-base.enum';
-import { interval, Subscription } from 'rxjs';
-import { NgClass, NgStyle } from '@angular/common';
-import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
+import { ChangeDetectionStrategy, Component, effect, input, InputSignal, OnDestroy, OnInit } from "@angular/core";
+import { CdkDrag, CdkDragHandle } from "@angular/cdk/drag-drop";
+import { MapCanvasComponent } from "../map-canvas/map-canvas.component";
+import { ContextMenuModule } from "@openng/optimus-ui/contextmenu";
+import { MapItemBaseComponent } from "../map-item-base/map-item-base.component";
+import { Mapgadget } from "../../pages/mapeditors/mapeditors.interface";
+import { MapItemType } from "../map-item-base/map-item-base.enum";
+import { interval, Subscription } from "rxjs";
+import { NgClass, NgStyle } from "@angular/common";
+import { TrustAsHtmlPipe } from "../../../../pipes/trust-as-html.pipe";
 import {
     HostForMapItem,
     MapItemRoot,
     MapItemRootParams,
-    ServiceForMapItem
-} from '../map-item-base/map-item-base.interface';
-import { AngularDraggableModule } from 'angular2-draggable';
+    ServiceForMapItem,
+} from "../map-item-base/map-item-base.interface";
+import { AngularDraggableModule } from "angular2-draggable";
 
 @Component({
-    selector: 'oitc-service-output-item',
+    selector: "oitc-service-output-item",
     standalone: true,
     imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgStyle, NgClass, TrustAsHtmlPipe, AngularDraggableModule],
-    templateUrl: './service-output-item.component.html',
-    styleUrl: './service-output-item.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./service-output-item.component.html",
+    styleUrl: "./service-output-item.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
-
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
 
@@ -61,10 +60,8 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
     }
 
     public ngOnInit(): void {
-
         this.item()!.size_x = parseInt(this.item()!.size_x.toString(), 10);
         this.item()!.size_y = parseInt(this.item()!.size_y.toString(), 10);
-
 
         if (this.item()!.size_x > 0) {
             this.width = this.item()!.size_x;
@@ -77,18 +74,17 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
     }
 
     private load() {
-
         const params: MapItemRootParams = {
-            'angular': true,
-            'disableGlobalLoader': true,
-            'objectId': this.item()!.object_id as number,
-            'mapId': this.item()!.map_id as number,
-            'type': this.item()!.type as string,
-            'includeServiceOutput': true
+            angular: true,
+            disableGlobalLoader: true,
+            objectId: this.item()!.object_id as number,
+            mapId: this.item()!.map_id as number,
+            type: this.item()!.type as string,
+            includeServiceOutput: true,
         };
 
-        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
-            .subscribe((result: MapItemRoot) => {
+        this.subscriptions.add(
+            this.MapItemBaseService.getMapItem(params).subscribe((result: MapItemRoot) => {
                 this.current_state = result.data.Servicestatus.currentState;
                 this.is_flapping = result.data.Servicestatus.isFlapping;
 
@@ -106,19 +102,18 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
 
                 this.init = false;
                 this.cdr.markForCheck();
-            }));
-    };
+            }),
+        );
+    }
 
     private renderOutput() {
-
-        if (this.item()!.output_type !== 'service_output') {
+        if (this.item()!.output_type !== "service_output") {
             if (this.longOutputHtml !== null) {
                 this.output = this.longOutputHtml;
                 this.cdr.markForCheck();
             }
         }
-
-    };
+    }
 
     private initRefreshTimer() {
         if (this.refreshInterval() > 0 && !this.intervalStartet) {
@@ -127,14 +122,14 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
                 this.load();
             });
         }
-    };
+    }
 
     private stop() {
         if (this.intervalStartet) {
             this.statusUpdateInterval.unsubscribe();
             this.cdr.markForCheck();
         }
-    };
+    }
 
     private onSizeXShowLabelOutputTypeChange() {
         if (this.init) {
@@ -155,5 +150,4 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
 
         this.load();
     }
-
 }

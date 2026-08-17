@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { RouterLink } from "@angular/router";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -14,32 +14,32 @@ import {
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent
-} from '@coreui/angular';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
+    NavItemComponent,
+} from "@coreui/angular";
+import { BackButtonDirective } from "../../../../../directives/back-button.directive";
+import { PermissionDirective } from "../../../../../permissions/permission.directive";
 
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { PaginatorModule } from 'primeng/paginator';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
+import { XsButtonDirective } from "../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { TranslocoDirective, TranslocoService } from "@jsverse/transloco";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { FormErrorDirective } from "../../../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../../../layouts/coreui/form-feedback/form-feedback.component";
 
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { MkagentPost } from '../mkagents.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
-import { Subscription } from 'rxjs';
-import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { MkagentsService } from '../mkagents.service';
-import { HistoryService } from '../../../../../history.service';
-import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { RequiredIconComponent } from "../../../../../components/required-icon/required-icon.component";
+import { SelectComponent } from "../../../../../layouts/primeng/select/select/select.component";
+import { MkagentPost } from "../mkagents.interface";
+import { GenericIdResponse, GenericValidationError } from "../../../../../generic-responses";
+import { Subscription } from "rxjs";
+import { NotyService } from "../../../../../layouts/coreui/noty.service";
+import { MkagentsService } from "../mkagents.service";
+import { HistoryService } from "../../../../../history.service";
+import { SelectKeyValue } from "../../../../../layouts/primeng/select.interface";
 
-import { ROOT_CONTAINER } from '../../../../../pages/changelogs/object-types.enum';
-import { FormsModule } from '@angular/forms';
+import { ROOT_CONTAINER } from "../../../../../pages/changelogs/object-types.enum";
+import { FormsModule } from "@angular/forms";
 
 @Component({
-    selector: 'oitc-mkagents-add',
+    selector: "oitc-mkagents-add",
     imports: [
         RouterLink,
         FaIconComponent,
@@ -65,14 +65,13 @@ import { FormsModule } from '@angular/forms';
         AlertComponent,
         AlertHeadingDirective,
         FormDirective,
-        FormsModule
+        FormsModule,
     ],
-    templateUrl: './mkagents-add.component.html',
-    styleUrl: './mkagents-add.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./mkagents-add.component.html",
+    styleUrl: "./mkagents-add.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MkagentsAddComponent implements OnInit, OnDestroy {
-
     public createAnother: boolean = false;
     public post: MkagentPost = this.getDefaultPost();
     public errors: GenericValidationError | null = null;
@@ -90,8 +89,8 @@ export class MkagentsAddComponent implements OnInit, OnDestroy {
             container_id: 0,
             name: "",
             description: "",
-            command_line: ""
-        }
+            command_line: "",
+        };
     }
 
     public ngOnInit(): void {
@@ -104,27 +103,27 @@ export class MkagentsAddComponent implements OnInit, OnDestroy {
 
     public loadContainers() {
         this.subscriptions.add(
-            this.MkagentsService.loadContainers().subscribe(containers => {
+            this.MkagentsService.loadContainers().subscribe((containers) => {
                 this.containers = containers;
                 this.cdr.detectChanges();
-            })
+            }),
         );
     }
 
     public submit() {
-        this.subscriptions.add(this.MkagentsService.add(this.post)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.MkagentsService.add(this.post).subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('Checkmk agent');
-                    const msg = this.TranslocoService.translate('created successfully');
-                    const url = ['checkmk_module', 'mkagents', 'edit', response.id];
+                    const title = this.TranslocoService.translate("Checkmk agent");
+                    const msg = this.TranslocoService.translate("created successfully");
+                    const url = ["checkmk_module", "mkagents", "edit", response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/checkmk_module/mkagents/index']);
+                        this.HistoryService.navigateWithFallback(["/checkmk_module/mkagents/index"]);
                         return;
                     }
                     this.post = this.getDefaultPost();
@@ -139,7 +138,8 @@ export class MkagentsAddComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
-            }));
+            }),
+        );
     }
 
     protected readonly ROOT_CONTAINER = ROOT_CONTAINER;

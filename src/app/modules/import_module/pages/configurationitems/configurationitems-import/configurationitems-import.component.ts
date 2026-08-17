@@ -5,8 +5,8 @@ import {
     Component,
     DOCUMENT,
     inject,
-    OnDestroy
-} from '@angular/core';
+    OnDestroy,
+} from "@angular/core";
 import {
     AlertComponent,
     CalloutComponent,
@@ -19,24 +19,23 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
-} from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+    TableDirective,
+} from "@coreui/angular";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from "@angular/forms";
 
-import { AsyncPipe, KeyValuePipe, NgClass } from '@angular/common';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { AsyncPipe, KeyValuePipe, NgClass } from "@angular/common";
+import { PermissionDirective } from "../../../../../permissions/permission.directive";
+import { TranslocoDirective, TranslocoService } from "@jsverse/transloco";
 
-
-import { RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { ProfileMaxUploadLimit } from '../../../../../pages/profile/profile.interface';
-import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { ConfigurationitemsService } from '../configurationitems.service';
-import Dropzone from 'dropzone';
-import { AuthService } from '../../../../../auth/auth.service';
+import { RouterLink } from "@angular/router";
+import { Subscription } from "rxjs";
+import { ProfileMaxUploadLimit } from "../../../../../pages/profile/profile.interface";
+import { NotyService } from "../../../../../layouts/coreui/noty.service";
+import { ConfigurationitemsService } from "../configurationitems.service";
+import Dropzone from "dropzone";
+import { AuthService } from "../../../../../auth/auth.service";
 import {
     ConfigurationitemsImportFileInformation,
     ConfigurationitemsImportRelevantChanges,
@@ -46,16 +45,16 @@ import {
     RelevantChangesAsArray,
     RelevantChangesAsObject,
     RelevantObjectChanges,
-} from '../configurationitems.interface';
-import { SystemnameService } from '../../../../../services/systemname.service';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { ConfigurationItemsExportImport } from '../configurationitems.enum';
-import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
+} from "../configurationitems.interface";
+import { SystemnameService } from "../../../../../services/systemname.service";
+import { ProgressBarModule } from "@openng/optimus-ui/progressbar";
+import { ConfigurationItemsExportImport } from "../configurationitems.enum";
+import { LabelLinkComponent } from "../../../../../layouts/coreui/label-link/label-link.component";
 
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
-    selector: 'oitc-configurationitems-import',
+    selector: "oitc-configurationitems-import",
     imports: [
         CardBodyComponent,
         CardComponent,
@@ -78,18 +77,17 @@ import { HttpErrorResponse } from '@angular/common/http';
         CalloutComponent,
         LabelLinkComponent,
         AlertComponent,
-        KeyValuePipe
+        KeyValuePipe,
     ],
-    templateUrl: './configurationitems-import.component.html',
-    styleUrl: './configurationitems-import.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./configurationitems-import.component.html",
+    styleUrl: "./configurationitems-import.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewInit {
-
     public maxUploadLimit?: ProfileMaxUploadLimit;
 
     public hasError: boolean = false;
-    public errorMessage: string = '';
+    public errorMessage: string = "";
 
     public importRunning: boolean = false;
     public hasImportError: boolean = false;
@@ -97,7 +95,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
 
     public fileInformation?: ConfigurationitemsImportFileInformation;
     public uploadSuccessful: boolean = false;
-    public filenameOnServer?: string
+    public filenameOnServer?: string;
     public importSuccessful = false;
 
     // Holds a list of changes that might break the current monitoring
@@ -124,21 +122,22 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
     }
 
     public loadMaxUploadLimit(): void {
-        this.subscriptions.add(this.ConfigurationitemsService.loadMaxUploadLimit().subscribe(response => {
-            this.maxUploadLimit = response;
+        this.subscriptions.add(
+            this.ConfigurationitemsService.loadMaxUploadLimit().subscribe((response) => {
+                this.maxUploadLimit = response;
 
-            this.createDropzone();
-
-        }));
+                this.createDropzone();
+            }),
+        );
     }
 
     private createDropzone() {
-        let elm = this.document.getElementById('jsonImportDropzone');
+        let elm = this.document.getElementById("jsonImportDropzone");
         if (elm && !this.dropzoneCreated) {
             const dropzone = new Dropzone(elm, {
                 method: "post",
                 maxFilesize: this.maxUploadLimit?.value, //MB
-                acceptedFiles: '.json', //mimetypes
+                acceptedFiles: ".json", //mimetypes
                 //acceptedFiles: 'image/gif,image/jpeg,image/png', //mimetypes
                 paramName: "file",
                 uploadMultiple: false,
@@ -147,7 +146,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                 maxFiles: 1,
                 addRemoveLinks: true,
                 headers: {
-                    'X-CSRF-TOKEN': this.authService.csrfToken || ''
+                    "X-CSRF-TOKEN": this.authService.csrfToken || "",
                 },
                 url: "/import_module/configurationitems/import.json?angular=true",
                 removedfile: (file: Dropzone.DropzoneFile) => {
@@ -170,19 +169,19 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                         const serverResponse = JSON.parse(response.response) as ConfigurationitemsImportRoot;
                         if (serverResponse.success) {
                             // Update the preview element to show check mark icon
-                            this.updatePreviewElement(file, 'success');
+                            this.updatePreviewElement(file, "success");
 
                             this.hasRelevantChanges = Object.keys(serverResponse.relevantChanges).length > 0;
-                            this.relevantChanges = this.formatRelevantChangesForTemplate(serverResponse.relevantChanges);
+                            this.relevantChanges = this.formatRelevantChangesForTemplate(
+                                serverResponse.relevantChanges,
+                            );
 
                             this.hasError = false;
                             this.fileInformation = serverResponse.fileInformation;
                             this.filenameOnServer = serverResponse.filename;
-                            this.uploadSuccessful = true
+                            this.uploadSuccessful = true;
 
-                            this.notyService.genericSuccess(
-                                serverResponse.message
-                            );
+                            this.notyService.genericSuccess(serverResponse.message);
                             return;
                         }
 
@@ -192,34 +191,33 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                     }
 
                     // Update the preview element to show the error message and the X icon
-                    this.updatePreviewElement(file, 'error', errorMessage);
+                    this.updatePreviewElement(file, "error", errorMessage);
                     this.notyService.genericError(errorMessage);
-
                 },
                 error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
                     this.cdr.markForCheck();
                     this.importSuccessful = false;
 
-                    let message = '';
-                    if (typeof error === 'string') {
+                    let message = "";
+                    if (typeof error === "string") {
                         message = error;
                     } else {
                         // Error is an object
                         // "error" contains now the server response
                         // This happens if you upload a wrong file type like ".exe" or ".pdf"
                         message = "Unknown server error";
-                        if (error.hasOwnProperty('error')) {
+                        if (error.hasOwnProperty("error")) {
                             message = error.error;
                         }
                     }
 
                     // Update the preview element to show the error message and the X icon
-                    this.updatePreviewElement(file, 'error', message);
+                    this.updatePreviewElement(file, "error", message);
 
                     this.hasError = true;
                     this.errorMessage = message;
 
-                    if (typeof xhr === 'undefined') {
+                    if (typeof xhr === "undefined") {
                         // User tried to upload illegal file types such as .pdf or so
                         this.notyService.genericError(message);
                     } else {
@@ -227,7 +225,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                         let response = message as unknown as Error;
                         this.notyService.genericError(response.message);
                     }
-                }
+                },
             });
             this.dropzoneCreated = true;
             this.cdr.markForCheck();
@@ -266,16 +264,19 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
         //    });
         //    this.subscriptions.add(sub);
         //}
-
     }
 
-    private updatePreviewElement(file: Dropzone.DropzoneFile, state: 'success' | 'error', tooltipMessage: string | undefined = undefined) {
+    private updatePreviewElement(
+        file: Dropzone.DropzoneFile,
+        state: "success" | "error",
+        tooltipMessage: string | undefined = undefined,
+    ) {
         const previewElement = file.previewElement;
 
-        previewElement.classList.remove('dz-processing');
+        previewElement.classList.remove("dz-processing");
         previewElement.classList.add(`dz-${state}`); // dz-error or dz-success
 
-        const errorMessageElement = previewElement.children.item(3);  // .dz-error-message
+        const errorMessageElement = previewElement.children.item(3); // .dz-error-message
         if (errorMessageElement && tooltipMessage) {
             errorMessageElement.children[0].innerHTML = tooltipMessage; // .dz-error-message span
         }
@@ -291,7 +292,9 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
      * @param relevantChanges
      * @private
      */
-    private formatRelevantChangesForTemplate(relevantChanges: ConfigurationitemsImportRelevantChanges): RelevantChangesAsArray[] {
+    private formatRelevantChangesForTemplate(
+        relevantChanges: ConfigurationitemsImportRelevantChanges,
+    ): RelevantChangesAsArray[] {
         let relevantChangesForTemplateHash: RelevantChangesAsObject = {}; // For grouping by object type
         const relevantChangesForTemplateArray: RelevantChangesAsArray[] = []; // For ngFor in the template
 
@@ -306,12 +309,11 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
 
             if (objects) {
                 objects.forEach((object) => {
-
                     const objectChanges: RelevantObjectChanges = {
                         id: object.id,
                         name: object.name,
-                        modelChanges: []
-                    }
+                        modelChanges: [],
+                    };
 
                     for (let modelName in object.changes) {
                         // modelName = "Command" or "Command arguments"
@@ -320,27 +322,27 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                         let modelChange: ModelChange = {
                             modelName: modelName,
                             current: [],
-                            new: []
-                        }
+                            new: [],
+                        };
 
                         for (let key in serverModelChange.current) {
                             // @ts-ignore
                             const value = serverModelChange.current[key];
 
-                            if (typeof value === 'object') {
+                            if (typeof value === "object") {
                                 // "value" is an object{} or an array[] (arrays are typeof object in JS)
                                 // see attached configurationitems_import_diff.png
                                 // key = 0
                                 // value = { name: ARG1, value: 100 }
-                                const changes: { key: string, value: any }[] = [];
+                                const changes: { key: string; value: any }[] = [];
                                 for (let subKey in value) {
-                                    changes.push({key: subKey, value: value[subKey]});
+                                    changes.push({ key: subKey, value: value[subKey] });
                                 }
                                 modelChange.current.push(changes);
                             } else {
                                 // key = "command_line"
                                 // value = "/bin/true"
-                                modelChange.current.push([{key: key, value: value}]);
+                                modelChange.current.push([{ key: key, value: value }]);
                             }
                         }
 
@@ -348,20 +350,20 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                             // @ts-ignore
                             const value = serverModelChange.new[key];
 
-                            if (typeof value === 'object') {
+                            if (typeof value === "object") {
                                 // "value" is an object{} or an array[] (arrays are typeof object in JS)
                                 // see attached configurationitems_import_diff.png
                                 // key = 0
                                 // value = { name: ARG1, value: 200 }
-                                const changes: { key: string, value: any }[] = [];
+                                const changes: { key: string; value: any }[] = [];
                                 for (let subKey in value) {
-                                    changes.push({key: subKey, value: value[subKey]});
+                                    changes.push({ key: subKey, value: value[subKey] });
                                 }
                                 modelChange.new.push(changes);
                             } else {
                                 // key = "command_line"
                                 // value = "/bin/false"
-                                modelChange.new.push([{key: key, value: value}]);
+                                modelChange.new.push([{ key: key, value: value }]);
                             }
                         }
 
@@ -373,14 +375,13 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                     }
                 });
             }
-
         }
 
         for (const objectType in relevantChangesForTemplateHash) {
             relevantChangesForTemplateArray.push({
                 objectType: objectType as ConfigurationItemsExportImport,
                 // @ts-ignore
-                relevantObjects: relevantChangesForTemplateHash[objectType]
+                relevantObjects: relevantChangesForTemplateHash[objectType],
             });
         }
 
@@ -409,7 +410,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                     console.log(this.importResponse);
 
                     this.cdr.markForCheck();
-                }
+                },
             });
             this.subscriptions.add(sub);
         }

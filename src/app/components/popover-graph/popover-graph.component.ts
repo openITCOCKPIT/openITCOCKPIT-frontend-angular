@@ -5,53 +5,45 @@ import {
     inject,
     Input,
     OnDestroy,
-    ViewChild
-} from '@angular/core';
-import { TranslocoDirective } from '@jsverse/transloco';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+    ViewChild,
+} from "@angular/core";
+import { TranslocoDirective } from "@jsverse/transloco";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 
-import { PopoverGraphService } from './popover-graph.service';
-import { Subscription } from 'rxjs';
-import { PerformanceData } from './popover-graph.interface';
-import { NgClass } from '@angular/common';
-import { PopoverConfigBuilder } from './popover-config-builder';
-import * as _uPlot from 'uplot';
-import { debounce } from '../debounce.decorator';
-import { ChartLoaderComponent } from './chart-loader/chart-loader.component';
-import { TimezoneObject } from '../../pages/services/timezone.interface';
-import { Popover, PopoverModule } from 'primeng/popover';
+import { PopoverGraphService } from "./popover-graph.service";
+import { Subscription } from "rxjs";
+import { PerformanceData } from "./popover-graph.interface";
+import { NgClass } from "@angular/common";
+import { PopoverConfigBuilder } from "./popover-config-builder";
+import * as _uPlot from "uplot";
+import { debounce } from "../debounce.decorator";
+import { ChartLoaderComponent } from "./chart-loader/chart-loader.component";
+import { TimezoneObject } from "../../pages/services/timezone.interface";
+import { Popover, PopoverModule } from "@openng/optimus-ui/popover";
 
 const uPlot: any = (_uPlot as any)?.default;
 
 type PerfParams = {
-    angular: true,
-    disableGlobalLoader: true,
-    host_uuid: string,
-    service_uuid: string,
-    start: number,
-    end: number,
-    jsTimestamp: number
-}
-
+    angular: true;
+    disableGlobalLoader: true;
+    host_uuid: string;
+    service_uuid: string;
+    start: number;
+    end: number;
+    jsTimestamp: number;
+};
 
 @Component({
-    selector: 'oitc-popover-graph',
-    imports: [
-        TranslocoDirective,
-        FaIconComponent,
-        NgClass,
-        ChartLoaderComponent,
-        Popover,
-        PopoverModule
-    ],
-    templateUrl: './popover-graph.component.html',
-    styleUrl: './popover-graph.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    selector: "oitc-popover-graph",
+    imports: [TranslocoDirective, FaIconComponent, NgClass, ChartLoaderComponent, Popover, PopoverModule],
+    templateUrl: "./popover-graph.component.html",
+    styleUrl: "./popover-graph.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PopoverGraphComponent implements OnDestroy {
     private visible: boolean = false;
-    public _hostUuid: string = '';
-    public _serviceUuid: string = '';
+    public _hostUuid: string = "";
+    public _serviceUuid: string = "";
     public perfData: PerformanceData[] = [];
     public isLoading: boolean = false;
 
@@ -68,18 +60,17 @@ export class PopoverGraphComponent implements OnDestroy {
         service_uuid: this._serviceUuid,
         start: 0,
         end: 0,
-        jsTimestamp: 0
+        jsTimestamp: 0,
     };
 
     private timer: ReturnType<typeof setTimeout> | null = null;
     private startTimestamp: number = new Date().getTime();
 
-    @ViewChild('graphOverlayPanel') graphOverlayPanel!: Popover;
+    @ViewChild("graphOverlayPanel") graphOverlayPanel!: Popover;
 
     private cdr = inject(ChangeDetectorRef);
 
-    public constructor(private window: Window) {
-    }
+    public constructor(private window: Window) {}
 
     get service() {
         return this._serviceUuid;
@@ -102,7 +93,7 @@ export class PopoverGraphComponent implements OnDestroy {
     public _timezone!: TimezoneObject;
 
     public get timezone() {
-        return this._timezone
+        return this._timezone;
     }
 
     @Input()
@@ -128,7 +119,7 @@ export class PopoverGraphComponent implements OnDestroy {
         let diffFromStartToNow: number = compareTimestamp - this.startTimestamp;
 
         let graphEnd = Math.floor((serverTime.getTime() + diffFromStartToNow) / 1000);
-        let graphStart = graphEnd - (3600 * 4);
+        let graphStart = graphEnd - 3600 * 4;
         this.perfParams.host_uuid = this._hostUuid;
         this.perfParams.service_uuid = this._serviceUuid;
         this.perfParams.start = graphStart;
@@ -139,8 +130,8 @@ export class PopoverGraphComponent implements OnDestroy {
 
     private loadPerfData() {
         this.isLoading = true;
-        this.subscriptions.add(this.PopoverGraphService.getPerfdata(this.perfParams)
-            .subscribe((perfdata) => {
+        this.subscriptions.add(
+            this.PopoverGraphService.getPerfdata(this.perfParams).subscribe((perfdata) => {
                 this.cdr.markForCheck();
                 if (perfdata.performance_data && perfdata.performance_data.length > 4) {
                     this.perfData = perfdata.performance_data.slice(0, 4);
@@ -157,10 +148,8 @@ export class PopoverGraphComponent implements OnDestroy {
                         this.graphOverlayPanel.align();
                         this.cdr.markForCheck();
                     }, 150);
-
-
                 }, 150);
-            })
+            }),
         );
     }
 
@@ -182,12 +171,12 @@ export class PopoverGraphComponent implements OnDestroy {
             let title = this.perfData[i].datasource.name;
             if (title.length > 80) {
                 title = title.substring(0, 80);
-                title += '...';
+                title += "...";
             }
 
-            let elm = <HTMLElement>document.getElementById('serviceGraphUPlot-' + this.service + '-' + i);
+            let elm = <HTMLElement>document.getElementById("serviceGraphUPlot-" + this.service + "-" + i);
             if (!elm) {
-                console.log('Could not find element for graph');
+                console.log("Could not find element for graph");
                 return;
             }
 
@@ -202,7 +191,6 @@ export class PopoverGraphComponent implements OnDestroy {
 
             GraphDefaults.timezone = this.timezone.user_timezone;
 
-
             // X-Axis min / max
             GraphDefaults.start = this.perfParams.start;
             GraphDefaults.end = this.perfParams.end;
@@ -212,10 +200,10 @@ export class PopoverGraphComponent implements OnDestroy {
             GraphDefaults.fillColor = colors.fill;
             GraphDefaults.YAxisLabelLength = 100;
 
-            GraphDefaults.height = this.chartHeight;// - 25;  // 27px for label
+            GraphDefaults.height = this.chartHeight; // - 25;  // 27px for label
             GraphDefaults.width = elm.offsetWidth;
             //GraphDefaults.label = this.perfData[i].datasource.name;
-            GraphDefaults.label = '';
+            GraphDefaults.label = "";
             GraphDefaults.min = null;
             GraphDefaults.max = null;
             if (this.perfData[i].datasource.unit) {
@@ -253,14 +241,13 @@ export class PopoverGraphComponent implements OnDestroy {
             options.unit = this.perfData[i].datasource.unit;
             options.legend.show = false;
 
-
             this.cdr.markForCheck();
 
-            if (document.getElementById('serviceGraphUPlot-' + this._serviceUuid + '-' + i)) {
+            if (document.getElementById("serviceGraphUPlot-" + this._serviceUuid + "-" + i)) {
                 try {
-                    let elm = <HTMLElement>document.getElementById('serviceGraphUPlot-' + this.service + '-' + i);
+                    let elm = <HTMLElement>document.getElementById("serviceGraphUPlot-" + this.service + "-" + i);
 
-                    elm.innerHTML = '';
+                    elm.innerHTML = "";
                     let plot = new uPlot(options, data, elm);
                 } catch (e) {
                     console.error(e);
@@ -268,7 +255,6 @@ export class PopoverGraphComponent implements OnDestroy {
             }
         }
     }
-
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
@@ -288,5 +274,4 @@ export class PopoverGraphComponent implements OnDestroy {
             this.visible = false;
         }
     }
-
 }

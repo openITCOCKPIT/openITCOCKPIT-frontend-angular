@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { IndexPage } from '../../../pages.interface';
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { Subscription } from 'rxjs';
-import { NotyService } from '../../../layouts/coreui/noty.service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { IndexPage } from "../../../pages.interface";
+import { PaginatorChangeEvent } from "../../../layouts/coreui/paginator/paginator.interface";
+import { MatSort, MatSortHeader, Sort } from "@angular/material/sort";
+import { DeleteAllItem } from "../../../layouts/coreui/delete-all-modal/delete-all.interface";
+import { Subscription } from "rxjs";
+import { NotyService } from "../../../layouts/coreui/noty.service";
 import {
     CardBodyComponent,
     CardComponent,
@@ -22,44 +22,40 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
-} from '@coreui/angular';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AgentchecksService } from '../agentchecks.service';
-import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+    TableDirective,
+} from "@coreui/angular";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { AgentchecksService } from "../agentchecks.service";
+import { SelectionServiceService } from "../../../layouts/coreui/select-all/selection-service.service";
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from "@jsverse/transloco";
 import {
     AgentchecksIndexParams,
     AgentchecksIndexRoot,
     AllAgentcheck,
-    getDefaultAgentchecksIndexParams
-} from '../agentchecks.interface';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { DebounceDirective } from '../../../directives/debounce.directive';
-import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
-import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
+    getDefaultAgentchecksIndexParams,
+} from "../agentchecks.interface";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { PermissionDirective } from "../../../permissions/permission.directive";
+import { DebounceDirective } from "../../../directives/debounce.directive";
+import { FormsModule } from "@angular/forms";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { ActionsButtonComponent } from "../../../components/actions-button/actions-button.component";
+import { ActionsButtonElementComponent } from "../../../components/actions-button-element/actions-button-element.component";
+import { DeleteAllModalComponent } from "../../../layouts/coreui/delete-all-modal/delete-all-modal.component";
+import { ItemSelectComponent } from "../../../layouts/coreui/select-all/item-select/item-select.component";
 
-import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
-import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
-import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
-import { ServicetemplateTypesEnum } from '../../servicetemplates/servicetemplate-types.enum';
+import { NoRecordsComponent } from "../../../layouts/coreui/no-records/no-records.component";
+import { PaginateOrScrollComponent } from "../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component";
+import { SelectAllComponent } from "../../../layouts/coreui/select-all/select-all.component";
+import { TableLoaderComponent } from "../../../layouts/primeng/loading/table-loader/table-loader.component";
+import { ContainerTypesEnum } from "../../changelogs/object-types.enum";
+import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
+import { DELETE_SERVICE_TOKEN } from "../../../tokens/delete-injection.token";
+import { ServicetemplateTypesEnum } from "../../servicetemplates/servicetemplate-types.enum";
 
 @Component({
-    selector: 'oitc-agentchecks-index',
+    selector: "oitc-agentchecks-index",
     imports: [
         FaIconComponent,
         PermissionDirective,
@@ -96,17 +92,16 @@ import { ServicetemplateTypesEnum } from '../../servicetemplates/servicetemplate
         SelectAllComponent,
         TableDirective,
         TableLoaderComponent,
-        LabelLinkComponent
+        LabelLinkComponent,
     ],
-    templateUrl: './agentchecks-index.component.html',
-    styleUrl: './agentchecks-index.component.css',
+    templateUrl: "./agentchecks-index.component.html",
+    styleUrl: "./agentchecks-index.component.css",
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: AgentchecksService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: AgentchecksService }, // Inject the ServicesService into the DeleteAllModalComponent
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AgentchecksIndexComponent implements OnInit, OnDestroy, IndexPage {
-
     public params: AgentchecksIndexParams = getDefaultAgentchecksIndexParams();
     public agentchecks?: AgentchecksIndexRoot;
     public hideFilter: boolean = true;
@@ -123,13 +118,15 @@ export class AgentchecksIndexComponent implements OnInit, OnDestroy, IndexPage {
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
+        this.subscriptions.add(
+            this.route.queryParams.subscribe((params) => {
+                // Here, params is an object containing the current query parameters.
+                // You can do something with these parameters here.
+                //console.log(params);
 
-            this.loadAgentchecks();
-        }));
+                this.loadAgentchecks();
+            }),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -142,7 +139,7 @@ export class AgentchecksIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.AgentchecksService.getIndex(this.params).subscribe((agentchecks) => {
                 this.agentchecks = agentchecks;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
@@ -186,23 +183,24 @@ export class AgentchecksIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         if (agentcheck) {
             // User just want to delete a single command
-            items = [{
-                id: Number(agentcheck.id),
-                displayName: String(agentcheck.name)
-            }];
+            items = [
+                {
+                    id: Number(agentcheck.id),
+                    displayName: String(agentcheck.name),
+                },
+            ];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.id,
-                    displayName: item.name
+                    displayName: item.name,
                 };
             });
         }
 
-
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
@@ -212,10 +210,9 @@ export class AgentchecksIndexComponent implements OnInit, OnDestroy, IndexPage {
         // open modal
         this.modalService.toggle({
             show: true,
-            id: 'deleteAllModal',
+            id: "deleteAllModal",
         });
     }
-
 
     protected readonly ContainerTypesEnum = ContainerTypesEnum;
     protected readonly ServicetemplateTypesEnum = ServicetemplateTypesEnum;
