@@ -1103,14 +1103,20 @@
                                     </div>
                                 </article>
                             }
-                            @if (iconType == 'statuspage') {
+                            @if (iconType == 'statuspage' || iconType == 'statuspagegroup') {
                                 <article>
                                     <div class="bg-color-white pt-2 pl-2 pb-2">
                                         <header>
                                             <h2 class="bold txt-color-blueDark">
-                                                <fa-icon [icon]="['fas', 'circle-info']" size="lg"
-                                                         class="txt-color-blueDark"></fa-icon>
-                                                {{ t('Status page') }}
+                                                @if (iconType == 'statuspage') {
+                                                    <fa-icon [icon]="['fas', 'circle-info']" size="lg"
+                                                             class="txt-color-blueDark"></fa-icon>
+                                                    {{ t('Status page') }}
+                                                } @else if (iconType == 'statuspagegroup') {
+                                                    <fa-icon [icon]="['fas', 'layer-group']" size="lg"
+                                                             class="txt-color-blueDark"></fa-icon>
+                                                    {{ t('Status page group') }}
+                                                }
                                             </h2>
                                             <c-col lg="12" class="p-0">
                                                 <c-progress thin>
@@ -1121,27 +1127,52 @@
                                         <div class="txt-color-blueDark font-xs pt-2 pb-2">
                                             <c-row>
                                                 <c-col lg="3">
-                                                    {{ t('Status page') }}
+                                                    @if (iconType == 'statuspage') {
+                                                        {{ t('Status page') }}
+                                                    } @else if (iconType == 'statuspagegroup') {
+                                                        {{ t('Status page group') }}
+                                                    }
                                                 </c-col>
                                                 <c-col lg="8" class="p-0">
-                                                    <span *oitcPermission="['statuspages', 'view']">
-                                                        <a [routerLink]="['/', 'statuspages', 'view', summaryState.Statuspage.object_id]">
+                                                    @if (iconType == 'statuspage') {
+                                                        <span *oitcPermission="['statuspages', 'view']">
+                                                            <a [routerLink]="['/', 'statuspages', 'view', summaryState.Statuspage.object_id]">
+                                                                {{ summaryState.Statuspage.name }}
+                                                            </a>
+                                                        </span>
+                                                        <span
+                                                                *oitcPermission="['statuspages', 'view']; negate: true">
                                                             {{ summaryState.Statuspage.name }}
-                                                        </a>
-                                                    </span>
-                                                    <span
-                                                            *oitcPermission="['statuspages', 'view']; negate: true">
-                                                        {{ summaryState.Statuspage.name }}
-                                                    </span>
+                                                        </span>
+                                                    } @else if (iconType == 'statuspagegroup') {
+                                                        <span *oitcPermission="['statuspagegroups', 'view']">
+                                                            <a [routerLink]="['/', 'statuspagegroups', 'view', summaryState.Statuspagegroup.object_id]">
+                                                                {{ summaryState.Statuspagegroup.name }}
+                                                            </a>
+                                                        </span>
+                                                        <span
+                                                                *oitcPermission="['statuspagegroups', 'view']; negate: true">
+                                                            {{ summaryState.Statuspagegroup.name }}
+                                                        </span>
+                                                    }
                                                 </c-col>
                                             </c-row>
                                             <c-row>
-                                                <c-col lg="3">
-                                                    {{ t('Status page description') }}
-                                                </c-col>
-                                                <c-col lg="8" class="p-0">
-                                                    {{ summaryState.Statuspage.description }}
-                                                </c-col>
+                                                @if (iconType == 'statuspage') {
+                                                    <c-col lg="3">
+                                                        {{ t('Status page description') }}
+                                                    </c-col>
+                                                    <c-col lg="8" class="p-0">
+                                                        {{ summaryState.Statuspage.description }}
+                                                    </c-col>
+                                                } @else if (iconType == 'statuspagegroup') {
+                                                    <c-col lg="3">
+                                                        {{ t('Description') }}
+                                                    </c-col>
+                                                    <c-col lg="8" class="p-0">
+                                                        {{ summaryState.Statuspagegroup.description }}
+                                                    </c-col>
+                                                }
                                             </c-row>
                                             <c-row class="pt-2">
                                                 <c-col lg="3">

@@ -22,7 +22,7 @@ import {
     PerformanceDataMetricsRoot,
     SaveBackgroundPost,
     ServicesByStringParams,
-    ServicesByStringRoot,
+    ServicesByStringRoot, StatuspagegroupsByStringParams, StatuspagegroupsByStringRoot,
     StatuspagesByStringParams,
     StatuspagesByStringRoot
 } from './mapeditors.interface';
@@ -461,6 +461,17 @@ export class MapeditorsService {
     public loadStatuspagesByString(params: StatuspagesByStringParams): Observable<StatuspagesByStringRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<any>(`${proxyPath}/map_module/mapeditors/loadStatuspagesByString.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadStatuspagegroupsByString(params: StatuspagegroupsByStringParams): Observable<StatuspagegroupsByStringRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/map_module/mapeditors/loadStatuspagegroupsByString.json`, {
             params: params as {}
         }).pipe(
             map(data => {

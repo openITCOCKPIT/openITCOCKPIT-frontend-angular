@@ -67,6 +67,7 @@ import {
     MapsByStringParams,
     MaxUploadLimit,
     ServicesByStringParams,
+    StatuspagegroupsByStringParams,
     StatuspagesByStringParams,
     VisibleLayers
 } from '../mapeditors.interface';
@@ -416,6 +417,18 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 selectLineObjectTypes.push({
                     key: 'statuspage',
                     value: this.TranslocoService.translate('Status page')
+                });
+            }
+        }));
+        this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['statuspagegroups', 'index']).subscribe(hasPermission => {
+            if (hasPermission) {
+                selectItemObjectTypes.push({
+                    key: 'statuspagegroup',
+                    value: this.TranslocoService.translate('Status page group')
+                });
+                selectLineObjectTypes.push({
+                    key: 'statuspagegroup',
+                    value: this.TranslocoService.translate('Status page group')
                 });
             }
         }));
@@ -2468,6 +2481,24 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     };
 
+    private loadStatuspagegroups(searchString: string, selected: number[]) {
+        if (typeof selected === "undefined") {
+            selected = [];
+        }
+
+        const params: StatuspagegroupsByStringParams = {
+            'angular': true,
+            'filter[Statuspagegroups.name]': searchString,
+            'selected[]': selected
+        }
+
+        this.subscriptions.add(this.MapeditorsService.loadStatuspagegroupsByString(params)
+            .subscribe((result) => {
+                this.itemObjects = result.statuspagegroups;
+                this.cdr.markForCheck();
+            }));
+    };
+
     private createDropzones() {
         let backgroundDropzone = this.document.getElementById('backgroundDropzone');
         if (backgroundDropzone) {
@@ -2755,6 +2786,10 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
             if (this.currentItem.type === 'statuspage') {
                 this.loadStatuspages('', objectId);
+            }
+
+            if (this.currentItem.type === 'statuspagegroup') {
+                this.loadStatuspagegroups('', objectId);
             }
         }
 
