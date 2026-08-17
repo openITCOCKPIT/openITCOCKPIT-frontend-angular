@@ -43,7 +43,6 @@ export function getDefaultHostgroupsIndexFilter(): HostgroupsIndexFilter {
 
 /** EXTENDED VIEW PARAMS **/
 export interface HostgroupsExtendedParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true
     scroll: boolean
     page: number
@@ -69,7 +68,6 @@ export function getDefaultHostgroupsExtendedParams(): HostgroupsExtendedParams {
 
 /** EXTENDED VIEW SERVICE LIST PARAMS **/
 export interface HostgroupsExtendedServiceListParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     page: number,
@@ -190,13 +188,6 @@ export interface Hostgroup {
     hosttemplates: {
         _ids: number[]
     }
-}
-
-
-// LOAD CONTAINERS GET
-export interface LoadContainersRoot {
-    containers: SelectKeyValue[]
-    _csrfToken: string
 }
 
 // LOAD HOSTS REQUEST

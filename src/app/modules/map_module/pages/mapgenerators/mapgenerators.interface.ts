@@ -45,7 +45,6 @@ export interface MapgeneratorContainerJoinData {
 }
 
 export interface MapgeneratorsIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,

@@ -270,7 +270,12 @@ export class UsersEditComponent implements OnInit, OnDestroy {
                             this.selectedUserContainerRolesLdapReadOnly = _.uniq(this.selectedUserContainerRolesLdapReadOnly);
 
                             // Store permissions for the read / write radio buttons
-                            this.userContainerRoleContainerPermissionsLdap = result.userContainerRoleContainerPermissionsLdapArray || [];
+                            this.userContainerRoleContainerPermissionsLdap = [];
+                            // Ensure we do not expose contains the user can not see
+                            result.userContainerRoleContainerPermissionsLdapArray?.forEach((item => {
+                                item.path = this.getContainerName(item._joinData.container_id);
+                                this.userContainerRoleContainerPermissionsLdap.push(item);
+                            }));
 
                             this.cdr.markForCheck();
                         }
@@ -376,7 +381,11 @@ export class UsersEditComponent implements OnInit, OnDestroy {
             }
 
             this.subscriptions.add(this.UsersService.loadContainerPermissions(this.post.usercontainerroles._ids).subscribe((result) => {
-                this.userContainerRoleContainerPermissions = result;
+                this.userContainerRoleContainerPermissions = [];
+                result.forEach((item) => {
+                    item.path = this.getContainerName(item._joinData.container_id);
+                    this.userContainerRoleContainerPermissions.push(item);
+                });
                 this.selectedUserContainerRolesContainerIds = result.map((item) => item.id);
                 this.cdr.markForCheck();
             }));
