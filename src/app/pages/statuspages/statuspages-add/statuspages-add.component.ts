@@ -205,7 +205,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
         if (this.post.container_id === null) {
             return;
         }
-        //console.log('searchString', searchString);
+
         this.subscriptions.add(this.StatuspagesService.loadServices(this.post.container_id, searchString, this.post.selected_services._ids)
             .subscribe((result) => {
                 let servicesObjects: SelectKeyValueExtended[] = [];
@@ -308,8 +308,6 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
         if (!this.post.public || this.post.public_identifier === '') {
             this.post.public_identifier = null;
         }
-
-        console.log(this.post);
 
         this.subscriptions.add(this.StatuspagesService.addStatuspage(this.post)
             .subscribe((result) => {
