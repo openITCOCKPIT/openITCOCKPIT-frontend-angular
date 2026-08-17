@@ -411,7 +411,8 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
 
     }
 
-    private normalizeGroupTags(items: any[]): any[] {
+    private normalizeGroupTags(items: SelectKeyValueExtended[]): SelectKeyValueExtended[] {
+        //ensure that the group tags stored in database as comma separated string or - if no tags - explicit as null
         return items.map(item => {
             const tags = item._joinData?.group_tags;
             const hasTags = Array.isArray(tags) && tags.length > 0;
