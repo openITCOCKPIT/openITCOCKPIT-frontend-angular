@@ -489,6 +489,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
             this.renderer.setAttribute(stopElement, 'stop-color', stop.color);
             this.renderer.appendChild(linearGradient, stopElement);
         });
+
         this.renderer.appendChild(defs, linearGradient);
     }
 
