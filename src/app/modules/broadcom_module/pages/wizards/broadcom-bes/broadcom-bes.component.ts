@@ -1,34 +1,32 @@
-import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
-import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
-import { BroadcomBESWizardService } from './broadcom-bes-wizard.service';
-import { BroadcomBESWizardPost } from './broadcom-bes-wizard.interface';
-import { FormsModule } from '@angular/forms';
-import {
-    WizardsDynamicfieldsComponent
-} from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { RouterLink } from '@angular/router';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { ChangeDetectionStrategy, Component, inject, ViewChild } from "@angular/core";
+import { WizardsAbstractComponent } from "../../../../../pages/wizards/wizards-abstract/wizards-abstract.component";
+import { SelectKeyValueString } from "../../../../../layouts/primeng/select.interface";
+import { BroadcomBESWizardService } from "./broadcom-bes-wizard.service";
+import { BroadcomBESWizardPost } from "./broadcom-bes-wizard.interface";
+import { FormsModule } from "@angular/forms";
+import { WizardsDynamicfieldsComponent } from "../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component";
+import { ProgressBarModule } from "@openng/optimus-ui/progressbar";
+import { RouterLink } from "@angular/router";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import {
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleDirective,
     FormControlDirective,
-    FormLabelDirective
-} from '@coreui/angular';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
+    FormLabelDirective,
+} from "@coreui/angular";
+import { TranslocoDirective, TranslocoPipe } from "@jsverse/transloco";
+import { RequiredIconComponent } from "../../../../../components/required-icon/required-icon.component";
+import { SelectComponent } from "../../../../../layouts/primeng/select/select/select.component";
 
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { WizardGet } from '../../../../../pages/wizards/wizards.interface';
+import { BackButtonDirective } from "../../../../../directives/back-button.directive";
+import { FormFeedbackComponent } from "../../../../../layouts/coreui/form-feedback/form-feedback.component";
+import { FormErrorDirective } from "../../../../../layouts/coreui/form-error.directive";
+import { WizardGet } from "../../../../../pages/wizards/wizards.interface";
 
 @Component({
-    selector: 'oitc-broadcom-bes',
+    selector: "oitc-broadcom-bes",
     imports: [
         RouterLink,
         FaIconComponent,
@@ -47,11 +45,11 @@ import { WizardGet } from '../../../../../pages/wizards/wizards.interface';
         BackButtonDirective,
         FormFeedbackComponent,
         FormErrorDirective,
-        FormsModule
+        FormsModule,
     ],
-    templateUrl: './broadcom-bes.component.html',
-    styleUrl: './broadcom-bes.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./broadcom-bes.component.html",
+    styleUrl: "./broadcom-bes.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BroadcomBESComponent extends WizardsAbstractComponent {
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
@@ -59,41 +57,40 @@ export class BroadcomBESComponent extends WizardsAbstractComponent {
     public checked: boolean = false;
 
     protected override post: BroadcomBESWizardPost = {
-// Default fields from the base wizard
+        // Default fields from the base wizard
         host_id: 0,
         services: [],
-// Fields for the wizard
-        authPassword: '',
-        authProtocol: 'md5',
-        privacyPassword: '',
-        privacyProtocol: 'des',
-        securityLevel: '1',
-        securityName: '',
-        snmpCommunity: '',
-        snmpVersion: '2'
+        // Fields for the wizard
+        authPassword: "",
+        authProtocol: "md5",
+        privacyPassword: "",
+        privacyProtocol: "des",
+        securityLevel: "1",
+        securityName: "",
+        snmpCommunity: "",
+        snmpVersion: "2",
     } as BroadcomBESWizardPost;
     protected snmpVersions: SelectKeyValueString[] = [
-        {value: '1', key: 'SNMP V 1'},
-        {value: '2', key: 'SNMP V 2c'},
-        {value: '3', key: 'SNMP V 3'},
-    ]
-
+        { value: "1", key: "SNMP V 1" },
+        { value: "2", key: "SNMP V 2c" },
+        { value: "3", key: "SNMP V 3" },
+    ];
 
     protected securityLevels: SelectKeyValueString[] = [
-        {key: 'authPriv', value: '1'},
-        {key: 'authNoPriv', value: '2'},
-        {key: 'noAuthNoPriv', value: '3'},
+        { key: "authPriv", value: "1" },
+        { key: "authNoPriv", value: "2" },
+        { key: "noAuthNoPriv", value: "3" },
     ];
     protected authProtocols: SelectKeyValueString[] = [
-        {key: 'MD5', value: 'md5'},
-        {key: 'SHA', value: 'sha'},
+        { key: "MD5", value: "md5" },
+        { key: "SHA", value: "sha" },
     ];
     protected privacyProtocols: SelectKeyValueString[] = [
-        {key: 'DES', value: 'des'},
-        {key: 'AES', value: 'aes'},
-        {key: 'AES128', value: 'aes128'},
-        {key: '3DES', value: '3des'},
-        {key: '3DESDE', value: '3desde'},
+        { key: "DES", value: "des" },
+        { key: "AES", value: "aes" },
+        { key: "AES128", value: "aes128" },
+        { key: "3DES", value: "3des" },
+        { key: "3DESDE", value: "3desde" },
     ];
 
     protected override wizardLoad(result: WizardGet): void {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import {
     AlertComponent,
     CardBodyComponent,
@@ -11,30 +11,29 @@ import {
     FormLabelDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent
-} from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { RouterLink } from '@angular/router';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { FormsModule } from '@angular/forms';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { DateTime } from 'luxon';
-import { GenericValidationError } from '../../../generic-responses';
-import { Subscription } from 'rxjs';
-import { BackupsService } from '../backups.service';
-import { StartBackupResponse } from '../backups.interface';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { NgClass } from '@angular/common';
-import { OitcAlertComponent } from '../../../components/alert/alert.component';
-import { ProgressBar } from 'primeng/progressbar';
-
+    RowComponent,
+} from "@coreui/angular";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { PermissionDirective } from "../../../permissions/permission.directive";
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from "@jsverse/transloco";
+import { RouterLink } from "@angular/router";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { FormsModule } from "@angular/forms";
+import { FormErrorDirective } from "../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../layouts/coreui/form-feedback/form-feedback.component";
+import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
+import { DateTime } from "luxon";
+import { GenericValidationError } from "../../../generic-responses";
+import { Subscription } from "rxjs";
+import { BackupsService } from "../backups.service";
+import { StartBackupResponse } from "../backups.interface";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { NgClass } from "@angular/common";
+import { OitcAlertComponent } from "../../../components/alert/alert.component";
+import { ProgressBar } from "@openng/optimus-ui/progressbar";
 
 @Component({
-    selector: 'oitc-backups-index',
+    selector: "oitc-backups-index",
     imports: [
         CardComponent,
         CardHeaderComponent,
@@ -60,16 +59,15 @@ import { ProgressBar } from 'primeng/progressbar';
         CardFooterComponent,
         OitcAlertComponent,
         NgClass,
-        ProgressBar
+        ProgressBar,
     ],
-    templateUrl: './backups-index.component.html',
-    styleUrl: './backups-index.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./backups-index.component.html",
+    styleUrl: "./backups-index.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BackupsIndexComponent implements OnInit, OnDestroy {
-
-    public filename: string = 'mysql_oitc_bkp'
-    public filenameDataExample: string = '';
+    public filename: string = "mysql_oitc_bkp";
+    public filenameDataExample: string = "";
     public backupIsRunning: boolean = false;
 
     public errors: GenericValidationError | null = null;
@@ -85,7 +83,7 @@ export class BackupsIndexComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         let date = DateTime.now();
-        this.filenameDataExample = date.toFormat('_yyyy-MM-dd_HHmmss');
+        this.filenameDataExample = date.toFormat("_yyyy-MM-dd_HHmmss");
     }
 
     public ngOnDestroy(): void {
@@ -97,11 +95,10 @@ export class BackupsIndexComponent implements OnInit, OnDestroy {
     }
 
     public startBackup(): void {
-        this.subscriptions.add(this.BackupsService.createBackup(this.filename)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.BackupsService.createBackup(this.filename).subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
-
                     const response = result.data as StartBackupResponse;
                     this.backupIsRunning = response.backup.backupRunning;
 
@@ -118,8 +115,8 @@ export class BackupsIndexComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
-            }));
-
+            }),
+        );
     }
 
     private startCheckInterval(): void {
@@ -129,7 +126,7 @@ export class BackupsIndexComponent implements OnInit, OnDestroy {
         }
 
         this.checkIntervalId = setInterval(() => {
-            this.BackupsService.checkBackupFinished().subscribe(data => {
+            this.BackupsService.checkBackupFinished().subscribe((data) => {
                 this.cdr.markForCheck();
 
                 if (data.backupFinished.finished) {
@@ -145,12 +142,11 @@ export class BackupsIndexComponent implements OnInit, OnDestroy {
                     if (data.backupFinished.error) {
                         this.notyService.genericError();
                     } else {
-                        const msg = this.TranslocoService.translate('Backup created successfully');
+                        const msg = this.TranslocoService.translate("Backup created successfully");
                         this.notyService.genericSuccess(msg);
                     }
                 }
             });
         }, 1000);
     }
-
 }

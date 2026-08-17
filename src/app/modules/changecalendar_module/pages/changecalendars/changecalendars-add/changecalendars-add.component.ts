@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { ChangecalendarsService } from '../changecalendars.service';
-import { ContainersService } from '../../../../../pages/containers/containers.service';
-import { HistoryService } from '../../../../../history.service';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
-import { AddChangeCalendar } from '../changecalendars.interface';
-import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
+import { NotyService } from "../../../../../layouts/coreui/noty.service";
+import { ChangecalendarsService } from "../changecalendars.service";
+import { ContainersService } from "../../../../../pages/containers/containers.service";
+import { HistoryService } from "../../../../../history.service";
+import { TranslocoDirective, TranslocoService } from "@jsverse/transloco";
+import { SelectKeyValue } from "../../../../../layouts/primeng/select.interface";
+import { GenericResponseWrapper, GenericValidationError } from "../../../../../generic-responses";
+import { AddChangeCalendar } from "../changecalendars.interface";
+import { ContainersLoadContainersByStringParams } from "../../../../../pages/containers/containers.interface";
+import { BackButtonDirective } from "../../../../../directives/back-button.directive";
 import {
     CardBodyComponent,
     CardComponent,
@@ -22,21 +22,21 @@ import {
     FormLabelDirective,
     NavComponent,
     NavItemComponent,
-} from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+} from "@coreui/angular";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { FormErrorDirective } from "../../../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../../../layouts/coreui/form-feedback/form-feedback.component";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { RouterLink } from '@angular/router';
-import { ColorPicker } from 'primeng/colorpicker';
+import { PermissionDirective } from "../../../../../permissions/permission.directive";
+import { RequiredIconComponent } from "../../../../../components/required-icon/required-icon.component";
+import { SelectComponent } from "../../../../../layouts/primeng/select/select/select.component";
+import { XsButtonDirective } from "../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { RouterLink } from "@angular/router";
+import { ColorPicker } from "@openng/optimus-ui/colorpicker";
 
 @Component({
-    selector: 'oitc-changecalendars-add',
+    selector: "oitc-changecalendars-add",
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -61,11 +61,11 @@ import { ColorPicker } from 'primeng/colorpicker';
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        ColorPicker
+        ColorPicker,
     ],
-    templateUrl: './changecalendars-add.component.html',
-    styleUrl: './changecalendars-add.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./changecalendars-add.component.html",
+    styleUrl: "./changecalendars-add.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangecalendarsAddComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
@@ -82,20 +82,25 @@ export class ChangecalendarsAddComponent implements OnInit, OnDestroy {
     protected errors: GenericValidationError = {} as GenericValidationError;
 
     public addChangeCalendar(): void {
-        this.subscriptions.add(this.ChangecalendarsService.addChangeCalendar(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
+        this.subscriptions.add(
+            this.ChangecalendarsService.addChangeCalendar(this.post).subscribe((result: GenericResponseWrapper) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     this.cdr.markForCheck();
 
-                    const title: string = this.TranslocoService.translate('Changecalendar');
-                    const msg: string = this.TranslocoService.translate('added successfully');
-                    const url: (string | number)[] = ['changecalendar_module', 'changecalendars', 'edit', result.data.id];
+                    const title: string = this.TranslocoService.translate("Changecalendar");
+                    const msg: string = this.TranslocoService.translate("added successfully");
+                    const url: (string | number)[] = [
+                        "changecalendar_module",
+                        "changecalendars",
+                        "edit",
+                        result.data.id,
+                    ];
 
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/changecalendar_module/changecalendars/index']);
+                        this.HistoryService.navigateWithFallback(["/changecalendar_module/changecalendars/index"]);
                         return;
                     }
                     this.post = this.getDefaultPost();
@@ -112,7 +117,7 @@ export class ChangecalendarsAddComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
-            })
+            }),
         );
     }
 
@@ -126,21 +131,24 @@ export class ChangecalendarsAddComponent implements OnInit, OnDestroy {
     }
 
     public loadContainers = (): void => {
-        this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
-            .subscribe((result: SelectKeyValue[]) => {
-                this.containers = result;
-                this.cdr.markForCheck();
-            }));
-    }
+        this.subscriptions.add(
+            this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams).subscribe(
+                (result: SelectKeyValue[]) => {
+                    this.containers = result;
+                    this.cdr.markForCheck();
+                },
+            ),
+        );
+    };
 
     private getDefaultPost(): AddChangeCalendar {
         return {
             Changecalendar: {
-                colour: '',
+                colour: "",
                 container_id: 0,
-                description: '',
-                name: '',
-            }
+                description: "",
+                name: "",
+            },
         };
     }
 }

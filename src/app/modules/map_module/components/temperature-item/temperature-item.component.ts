@@ -7,35 +7,35 @@ import {
     input,
     InputSignal,
     OnDestroy,
-    OnInit
-} from '@angular/core';
-import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
-import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { ContextMenuModule } from 'primeng/contextmenu';
-import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
-import { MapItemType } from '../map-item-base/map-item-base.enum';
-import { interval, Subscription } from 'rxjs';
-import { NgClass } from '@angular/common';
-import { LinearGauge } from 'canvas-gauges';
-import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
+    OnInit,
+} from "@angular/core";
+import { CdkDrag, CdkDragHandle } from "@angular/cdk/drag-drop";
+import { MapCanvasComponent } from "../map-canvas/map-canvas.component";
+import { ContextMenuModule } from "@openng/optimus-ui/contextmenu";
+import { MapItemBaseComponent } from "../map-item-base/map-item-base.component";
+import { Mapgadget } from "../../pages/mapeditors/mapeditors.interface";
+import { MapItemType } from "../map-item-base/map-item-base.enum";
+import { interval, Subscription } from "rxjs";
+import { NgClass } from "@angular/common";
+import { LinearGauge } from "canvas-gauges";
+import { ScaleTypes } from "../../../../components/popover-graph/scale-types";
 import {
     HostForMapItem,
     MapItemRoot,
     MapItemRootParams,
     Perfdata,
     ServiceForMapItem,
-    Setup
-} from '../map-item-base/map-item-base.interface';
-import { AngularDraggableModule } from 'angular2-draggable';
+    Setup,
+} from "../map-item-base/map-item-base.interface";
+import { AngularDraggableModule } from "angular2-draggable";
 
 @Component({
-    selector: 'oitc-temperature-item',
+    selector: "oitc-temperature-item",
     standalone: true,
     imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgClass, AngularDraggableModule],
-    templateUrl: './temperature-item.component.html',
-    styleUrl: './temperature-item.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./temperature-item.component.html",
+    styleUrl: "./temperature-item.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
@@ -48,7 +48,6 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
     protected override type = MapItemType.GADGET;
     protected allowView: boolean = false;
 
-
     // default data if no setup is passed whatsoever.
     private defaultSetup: Setup = {
         scale: {
@@ -58,8 +57,8 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
         },
         metric: {
             value: 0,
-            unit: 'X',
-            name: 'No data available',
+            unit: "X",
+            name: "No data available",
         },
         warn: {
             low: null,
@@ -68,7 +67,7 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
         crit: {
             low: null,
             high: null,
-        }
+        },
     };
 
     protected init: boolean = true;
@@ -78,7 +77,7 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
     protected Host!: HostForMapItem;
     protected Service!: ServiceForMapItem;
     private responsePerfdata!: Perfdata;
-    private color: string = '';
+    private color: string = "";
     private setup!: Setup;
 
     constructor(parent: MapCanvasComponent) {
@@ -96,7 +95,6 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
     }
 
     public ngOnInit(): void {
-
         this.item()!.size_x = parseInt(this.item()!.size_x.toString(), 10);
         this.item()!.size_y = parseInt(this.item()!.size_y.toString(), 10);
 
@@ -111,17 +109,16 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
     }
 
     private load() {
-
         const params: MapItemRootParams = {
-            'angular': true,
-            'disableGlobalLoader': true,
-            'objectId': this.item()!.object_id as number,
-            'mapId': this.item()!.map_id as number,
-            'type': this.item()!.type as string
+            angular: true,
+            disableGlobalLoader: true,
+            objectId: this.item()!.object_id as number,
+            mapId: this.item()!.map_id as number,
+            type: this.item()!.type as string,
         };
 
-        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
-            .subscribe({
+        this.subscriptions.add(
+            this.MapItemBaseService.getMapItem(params).subscribe({
                 next: (result: MapItemRoot) => {
                     this.color = result.data.color!;
                     this.Host = result.data.Host;
@@ -140,55 +137,56 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
                 error: (err) => {
                     //error handling here
                     this.cdr.markForCheck();
-                }
-            }));
-    };
+                },
+            }),
+        );
+    }
 
     private getThresholdAreas(setup: Setup) {
         let thresholdAreas: any[] = [];
         switch (setup.scale.type) {
             case ScaleTypes.W_O:
                 thresholdAreas = [
-                    {from: setup.crit.low, to: setup.warn.low, color: '#DF8F1D'},
-                    {from: setup.warn.low, to: setup.scale.max, color: '#449D44'}
+                    { from: setup.crit.low, to: setup.warn.low, color: "#DF8F1D" },
+                    { from: setup.warn.low, to: setup.scale.max, color: "#449D44" },
                 ];
                 break;
             case ScaleTypes.C_W_O:
                 thresholdAreas = [
-                    {from: setup.scale.min, to: setup.crit.low, color: '#C9302C'},
-                    {from: setup.crit.low, to: setup.warn.low, color: '#DF8F1D'},
-                    {from: setup.warn.low, to: setup.scale.max, color: '#449D44'}
+                    { from: setup.scale.min, to: setup.crit.low, color: "#C9302C" },
+                    { from: setup.crit.low, to: setup.warn.low, color: "#DF8F1D" },
+                    { from: setup.warn.low, to: setup.scale.max, color: "#449D44" },
                 ];
                 break;
             case ScaleTypes.O_W:
                 thresholdAreas = [
-                    {from: setup.scale.min, to: setup.warn.low, color: '#449D44'},
-                    {from: setup.warn.low, to: setup.scale.max, color: '#DF8F1D'}
+                    { from: setup.scale.min, to: setup.warn.low, color: "#449D44" },
+                    { from: setup.warn.low, to: setup.scale.max, color: "#DF8F1D" },
                 ];
                 break;
             case ScaleTypes.O_W_C:
                 thresholdAreas = [
-                    {from: setup.scale.min, to: setup.warn.low, color: '#449D44'},
-                    {from: setup.warn.low, to: setup.crit.low, color: '#DF8F1D'},
-                    {from: setup.crit.low, to: setup.scale.max, color: '#C9302C'}
+                    { from: setup.scale.min, to: setup.warn.low, color: "#449D44" },
+                    { from: setup.warn.low, to: setup.crit.low, color: "#DF8F1D" },
+                    { from: setup.crit.low, to: setup.scale.max, color: "#C9302C" },
                 ];
                 break;
             case ScaleTypes.C_W_O_W_C:
                 thresholdAreas = [
-                    {from: setup.scale.min, to: setup.crit.low, color: '#C9302C'},
-                    {from: setup.crit.low, to: setup.warn.low, color: '#DF8F1D'},
-                    {from: setup.warn.low, to: setup.warn.high, color: '#449D44'},
-                    {from: setup.warn.high, to: setup.crit.high, color: '#DF8F1D'},
-                    {from: setup.crit.high, to: setup.scale.max, color: '#C9302C'}
+                    { from: setup.scale.min, to: setup.crit.low, color: "#C9302C" },
+                    { from: setup.crit.low, to: setup.warn.low, color: "#DF8F1D" },
+                    { from: setup.warn.low, to: setup.warn.high, color: "#449D44" },
+                    { from: setup.warn.high, to: setup.crit.high, color: "#DF8F1D" },
+                    { from: setup.crit.high, to: setup.scale.max, color: "#C9302C" },
                 ];
                 break;
             case ScaleTypes.O_W_C_W_O:
                 thresholdAreas = [
-                    {from: setup.scale.min, to: setup.crit.low, color: '#449D44'},
-                    {from: setup.crit.low, to: setup.warn.low, color: '#DF8F1D'},
-                    {from: setup.warn.low, to: setup.warn.high, color: '#C9302C'},
-                    {from: setup.warn.high, to: setup.crit.high, color: '#DF8F1D'},
-                    {from: setup.crit.high, to: setup.scale.max, color: '#449D44'}
+                    { from: setup.scale.min, to: setup.crit.low, color: "#449D44" },
+                    { from: setup.crit.low, to: setup.warn.low, color: "#DF8F1D" },
+                    { from: setup.warn.low, to: setup.warn.high, color: "#C9302C" },
+                    { from: setup.warn.high, to: setup.crit.high, color: "#DF8F1D" },
+                    { from: setup.crit.high, to: setup.scale.max, color: "#449D44" },
                 ];
                 break;
             case ScaleTypes.O:
@@ -201,15 +199,15 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
     private renderGauge() {
         let setup = this.setup;
         let label = setup.metric.name,
-            units = '';
+            units = "";
 
         if (this.item()!.show_label === true) {
-            if (typeof (setup.metric.unit) !== "string" || setup.metric.unit.length === 0) {
+            if (typeof setup.metric.unit !== "string" || setup.metric.unit.length === 0) {
                 units = label;
             } else {
-                units = label + ' in ' + setup.metric.unit;
+                units = label + " in " + setup.metric.unit;
             }
-            label = this.Host.hostname + '/' + this.Service.servicename;
+            label = this.Host.hostname + "/" + this.Service.servicename;
 
             // ITC-3153: Strip hostname of too long
             if (label.length > 20) {
@@ -220,7 +218,7 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
         // shorten label if required.
         if (label.length > 20) {
             label = label.substring(0, 20);
-            label += '...';
+            label += "...";
         }
 
         if (isNaN(setup.scale.min) || isNaN(setup.scale.max) || setup.scale.min === null || setup.scale.max === null) {
@@ -233,8 +231,8 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
         let intergetDigits = currentValueAsString.length;
         let decimalDigits = 0;
 
-        if (currentValueAsString.indexOf('.') > 0) {
-            let splited = currentValueAsString.split('.');
+        if (currentValueAsString.indexOf(".") > 0) {
+            let splited = currentValueAsString.split(".");
             intergetDigits = splited[0].length;
             decimalDigits = splited[1].length;
             if (decimalDigits > maxDecimalDigits) {
@@ -243,7 +241,7 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
         }
 
         let showDecimalDigitsGauge = 0;
-        if (decimalDigits > 0 || (setup.scale.max - setup.scale.min < 10)) {
+        if (decimalDigits > 0 || setup.scale.max - setup.scale.min < 10) {
             showDecimalDigitsGauge = 1;
         }
 
@@ -256,9 +254,8 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
         // Now create the threshold areas based on the new max.
         let thresholds = this.getThresholdAreas(setup);
 
-
         let settings = {
-            renderTo: 'map-temperature-' + this.item()!.id,
+            renderTo: "map-temperature-" + this.item()!.id,
             height: this.height,
             width: this.width,
             value: setup.metric.value,
@@ -272,10 +269,9 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
             majorTicksDec: showDecimalDigitsGauge,
             highlights: thresholds,
             animationDuration: 700,
-            animationRule: 'elastic',
-            majorTicks: majorTicks
+            animationRule: "elastic",
+            majorTicks: majorTicks,
         };
-
 
         let gauge = new LinearGauge(settings);
 
@@ -301,7 +297,7 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
         }
 
         return tickArr;
-    };
+    }
 
     private processPerfdata() {
         this.setup = this.defaultSetup;
@@ -317,7 +313,7 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
                 }
             }
         }
-    };
+    }
 
     private initRefreshTimer() {
         if (this.refreshInterval() > 0 && !this.intervalStartet) {
@@ -326,14 +322,14 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
                 this.load();
             });
         }
-    };
+    }
 
     private stop() {
         if (this.intervalStartet) {
             this.statusUpdateInterval.unsubscribe();
             this.cdr.markForCheck();
         }
-    };
+    }
 
     private onSizeXShowLabelChange() {
         if (this.init) {
@@ -365,5 +361,4 @@ export class TemperatureItemComponent extends MapItemBaseComponent<Mapgadget> im
 
         this.load();
     }
-
 }

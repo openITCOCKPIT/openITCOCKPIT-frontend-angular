@@ -1,6 +1,6 @@
-import { TemplateRef } from '@angular/core';
-import { ScrollerOptions } from 'primeng/api';
-import { MultiSelect, MultiSelectItem } from './multiselect';
+import { TemplateRef } from "@angular/core";
+import { ScrollerOptions } from "@openng/optimus-ui/api";
+import { MultiSelect, MultiSelectItem } from "./multiselect";
 
 /**
  * Callbacks to invoke on filter or reset.
@@ -81,8 +81,7 @@ export interface MultiSelectFocusEvent {
  * @extends {MultiSelectFocusEvent}
  * @group Events
  */
-export interface MultiSelectBlurEvent extends MultiSelectFocusEvent {
-}
+export interface MultiSelectBlurEvent extends MultiSelectFocusEvent {}
 
 /**
  * Custom lazy load event.

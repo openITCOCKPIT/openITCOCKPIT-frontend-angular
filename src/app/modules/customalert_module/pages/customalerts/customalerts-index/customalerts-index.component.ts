@@ -6,12 +6,12 @@ import {
     OnDestroy,
     OnInit,
     Pipe,
-    PipeTransform
-} from '@angular/core';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { RouterLink } from '@angular/router';
+    PipeTransform,
+} from "@angular/core";
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from "@jsverse/transloco";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { PermissionDirective } from "../../../../../permissions/permission.directive";
+import { RouterLink } from "@angular/router";
 import {
     CardBodyComponent,
     CardComponent,
@@ -32,14 +32,14 @@ import {
     NavItemComponent,
     RowComponent,
     TableDirective,
-    TextColorDirective
-} from '@coreui/angular';
-import { IndexPage } from '../../../../../pages.interface';
-import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { Subscription } from 'rxjs';
-import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
-import { CustomAlertsService } from '../customalerts.service';
+    TextColorDirective,
+} from "@coreui/angular";
+import { IndexPage } from "../../../../../pages.interface";
+import { PaginatorChangeEvent } from "../../../../../layouts/coreui/paginator/paginator.interface";
+import { MatSort, MatSortHeader, Sort } from "@angular/material/sort";
+import { Subscription } from "rxjs";
+import { SelectionServiceService } from "../../../../../layouts/coreui/select-all/selection-service.service";
+import { CustomAlertsService } from "../customalerts.service";
 import {
     Customalert,
     CustomAlertsIndex,
@@ -49,45 +49,37 @@ import {
     CustomAlertsState,
     getDefaultCustomAlertsIndexCustomAlertsStateFilter,
     getDefaultCustomAlertsIndexFilter,
-    getDefaultCustomAlertsIndexParams
-} from '../customalerts.interface';
-import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../../../components/actions-button-element/actions-button-element.component';
-import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
-import { KeyValuePipe, NgClass } from '@angular/common';
-import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
-import { FilterBookmarkComponent } from '../../../../../components/filter-bookmark/filter-bookmark.component';
-import { DebounceDirective } from '../../../../../directives/debounce.directive';
-import { FormsModule } from '@angular/forms';
+    getDefaultCustomAlertsIndexParams,
+} from "../customalerts.interface";
+import { ActionsButtonComponent } from "../../../../../components/actions-button/actions-button.component";
+import { ActionsButtonElementComponent } from "../../../../../components/actions-button-element/actions-button-element.component";
+import { ItemSelectComponent } from "../../../../../layouts/coreui/select-all/item-select/item-select.component";
+import { KeyValuePipe, NgClass } from "@angular/common";
+import { TableLoaderComponent } from "../../../../../layouts/primeng/loading/table-loader/table-loader.component";
+import { NoRecordsComponent } from "../../../../../layouts/coreui/no-records/no-records.component";
+import { PaginateOrScrollComponent } from "../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component";
+import { SelectAllComponent } from "../../../../../layouts/coreui/select-all/select-all.component";
+import { FilterBookmarkComponent } from "../../../../../components/filter-bookmark/filter-bookmark.component";
+import { DebounceDirective } from "../../../../../directives/debounce.directive";
+import { FormsModule } from "@angular/forms";
 
-import { PaginatorModule } from 'primeng/paginator';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { XsButtonDirective } from "../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { MultiSelectComponent } from "../../../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import { SelectKeyValue } from "../../../../../layouts/primeng/select.interface";
 
-import {
-    CustomalertsAnnotateModalComponent
-} from '../../../components/customalerts-annotate-modal/customalerts-annotate-modal.component';
-import {
-    CustomalertsCloseModalComponent
-} from '../../../components/customalerts-close-modal/customalerts-close-modal.component';
-import { NotyService } from '../../../../../layouts/coreui/noty.service';
+import { CustomalertsAnnotateModalComponent } from "../../../components/customalerts-annotate-modal/customalerts-annotate-modal.component";
+import { CustomalertsCloseModalComponent } from "../../../components/customalerts-close-modal/customalerts-close-modal.component";
+import { NotyService } from "../../../../../layouts/coreui/noty.service";
 
-import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
+import { BadgeOutlineComponent } from "../../../../../layouts/coreui/badge-outline/badge-outline.component";
 
-import { IntervalPickerComponent } from '../../../../../components/interval-picker/interval-picker.component';
-import _ from 'lodash';
-import { LoadContainersRoot } from '../../../../../pages/containers/containers.interface';
+import { IntervalPickerComponent } from "../../../../../components/interval-picker/interval-picker.component";
+import _ from "lodash";
+import { LoadContainersRoot } from "../../../../../pages/containers/containers.interface";
 
 @Component({
-    selector: 'oitc-customalerts-index',
+    selector: "oitc-customalerts-index",
     imports: [
         TranslocoDirective,
         FaIconComponent,
@@ -132,11 +124,11 @@ import { LoadContainersRoot } from '../../../../../pages/containers/containers.i
         BadgeOutlineComponent,
         NgClass,
         CardFooterComponent,
-        IntervalPickerComponent
+        IntervalPickerComponent,
     ],
-    templateUrl: './customalerts-index.component.html',
-    styleUrl: './customalerts-index.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./customalerts-index.component.html",
+    styleUrl: "./customalerts-index.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage {
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
@@ -152,13 +144,14 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     protected filter: CustomAlertsIndexFilter = getDefaultCustomAlertsIndexFilter();
     protected containers: SelectKeyValue[] = [];
     protected params: CustomAlertsIndexParams = getDefaultCustomAlertsIndexParams();
-    protected stateFilter: CustomAlertsIndexCustomAlertsStateFilter = getDefaultCustomAlertsIndexCustomAlertsStateFilter()
+    protected stateFilter: CustomAlertsIndexCustomAlertsStateFilter =
+        getDefaultCustomAlertsIndexCustomAlertsStateFilter();
     protected result?: CustomAlertsIndex;
     protected hideFilter: boolean = true;
     protected selectedItems: Customalert[] = [];
     protected groupViewByHost: boolean = false;
     protected groupedList: { [key: number]: Customalert[] } = {};
-    protected selectedAutoRefresh: SelectKeyValue = {key: 0, value: 'Disabled'};
+    protected selectedAutoRefresh: SelectKeyValue = { key: 0, value: "Disabled" };
 
     public ngOnInit(): void {
         this.loadContainers();
@@ -184,7 +177,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
         let items: Customalert[] = this.getSelectedItems(customAlert);
 
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
@@ -194,7 +187,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
         // open modal
         this.modalService.toggle({
             show: true,
-            id: 'customalertsCloseModal',
+            id: "customalertsCloseModal",
         });
         this.cdr.markForCheck();
     }
@@ -203,7 +196,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
         let items: Customalert[] = this.getSelectedItems(customAlert);
 
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
@@ -213,10 +206,10 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
         // open modal
         this.modalService.toggle({
             show: true,
-            id: 'customalertsAnnotateModal',
+            id: "customalertsAnnotateModal",
         });
         this.cdr.markForCheck();
-    }
+    };
 
     public onRefreshChange = (value?: SelectKeyValue): void => {
         if (value) {
@@ -228,8 +221,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
         if (this.selectedAutoRefresh.key > 0) {
             this.startRefreshInterval(this.selectedAutoRefresh.key);
         }
-
-    }
+    };
 
     private stopRefreshInterval() {
         if (this.refreshInterval) {
@@ -246,7 +238,7 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     }
 
     public onSelectedBookmark(filterstring: string) {
-        if (filterstring === '') {
+        if (filterstring === "") {
             this.resetFilter();
         }
 
@@ -255,15 +247,16 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
             //conditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
             let filter: CustomAlertsIndexFilter = getDefaultCustomAlertsIndexFilter();
-            filter.Customalerts.message = bookmarkfilter.Customalerts?.message || '';
+            filter.Customalerts.message = bookmarkfilter.Customalerts?.message || "";
             filter.Customalerts.state = bookmarkfilter.Customalerts?.state || [true, true, false, false];
 
-            filter.Hosts.container_id = bookmarkfilter.Hosts?.container_id.filter((containerId: number) => {
-                return _.find(this.containers, {key: containerId});
-            }) || [];
+            filter.Hosts.container_id =
+                bookmarkfilter.Hosts?.container_id.filter((containerId: number) => {
+                    return _.find(this.containers, { key: containerId });
+                }) || [];
 
-            filter.Hosts.name = bookmarkfilter.Hosts?.name || '';
-            filter.servicename = bookmarkfilter.servicename || '';
+            filter.Hosts.name = bookmarkfilter.Hosts?.name || "";
+            filter.servicename = bookmarkfilter.servicename || "";
             filter.recursive = bookmarkfilter.recursive || false;
             this.setFilterAndLoad(filter);
         }
@@ -273,18 +266,17 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
     private setFilterAndLoad(filter: CustomAlertsIndexFilter) {
         this.filter = filter;
 
-
         this.cdr.markForCheck();
         this.onFilterChange(true);
     }
 
-
     private loadContainers(): void {
-        this.subscriptions.add(this.CustomAlertsService.loadContainers()
-            .subscribe((result: LoadContainersRoot) => {
+        this.subscriptions.add(
+            this.CustomAlertsService.loadContainers().subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
                 this.cdr.markForCheck();
-            }))
+            }),
+        );
     }
 
     // Show or hide the filter
@@ -330,13 +322,12 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
 
     protected refresh(): void {
         this.SelectionServiceService.deselectAll();
-        this.subscriptions.add(this.CustomAlertsService.getIndex(this.params, this.filter)
-            .subscribe((result: CustomAlertsIndex) => {
+        this.subscriptions.add(
+            this.CustomAlertsService.getIndex(this.params, this.filter).subscribe((result: CustomAlertsIndex) => {
                 this.result = result;
 
                 this.groupedList = {};
                 // Iterate all custom alerts from this.result and group it by the element.service.host.id key
-
 
                 this.groupedList = {};
                 this.hostIdsInOrder = [];
@@ -347,13 +338,14 @@ export class CustomalertsIndexComponent implements OnInit, OnDestroy, IndexPage 
                         // Push the host_ids into an array to restore the order from the server
                         this.hostIdsInOrder.push(customAlert.service.host_id);
 
-                        this.groupedList[customAlert.service.host_id] = []
+                        this.groupedList[customAlert.service.host_id] = [];
                     }
                     this.groupedList[customAlert.service.host_id].push(customAlert);
                 }
 
                 this.cdr.markForCheck();
-            }));
+            }),
+        );
     }
 
     protected readonly CustomAlertsState = CustomAlertsState;
@@ -364,12 +356,10 @@ const keepOrder = (a: any, b: any) => a;
 // This pipe uses the angular keyvalue pipe. but doesn't change order.
 @Pipe({
     standalone: true,
-    name: 'sortKeyValue'
+    name: "sortKeyValue",
 })
 export class SortKeyValuePipe extends KeyValuePipe implements PipeTransform {
-
     override transform(value: any, ...args: any[]): any {
         return super.transform(value, keepOrder);
     }
-
 }

@@ -37,7 +37,7 @@
   $dark: oitc.$dark,
   $yellows: oitc.$warnings,
   $primary-text-emphasis: oitc.$primary-text-emphasis,
-  $secondary-text-emphasis:  oitc.$secondary-text-emphasis,
+  $secondary-text-emphasis: oitc.$secondary-text-emphasis,
   $success-text-emphasis: oitc.$success-text-emphasis,
   $info-text-emphasis: oitc.$info-text-emphasis,
   $warning-text-emphasis: oitc.$warning-text-emphasis,
@@ -72,7 +72,7 @@
   $info-border-subtle: oitc.$info-border-subtle,
   $warning-border-subtle: oitc.$warning-border-subtle,
   $danger-border-subtle: oitc.$danger-border-subtle,
-  $light-border-subtle:  oitc.$light-border-subtle,
+  $light-border-subtle: oitc.$light-border-subtle,
   $dark-border-subtle: oitc.$dark-border-subtle,
   $primary-border-subtle-dark: oitc.$primary-border-subtle-dark,
   $secondary-border-subtle-dark: oitc.$secondary-border-subtle-dark,
@@ -86,7 +86,7 @@
   $body-color: oitc.$body-color,
   $body-bg: oitc.$body-bg,
   $table-striped-bg-factor: oitc.$table-striped-bg-factor,
-  $min-contrast-ratio: oitc.$min-contrast-ratio,
+  $min-contrast-ratio: oitc.$min-contrast-ratio
 );
 
 @forward "ng-select-dark";

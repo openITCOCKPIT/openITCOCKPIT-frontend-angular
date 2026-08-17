@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from "@angular/core";
+import { Subscription } from "rxjs";
 
-import { NgStyle } from '@angular/common';
+import { NgStyle } from "@angular/common";
 
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { SkeletonModule } from 'primeng/skeleton';
-import { SlaHostgroupHostsStatusOverviewService } from './sla-hostgroup-hosts-status-overview.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { TranslocoDirective, TranslocoPipe } from "@jsverse/transloco";
+import { SkeletonModule } from "@openng/optimus-ui/skeleton";
+import { SlaHostgroupHostsStatusOverviewService } from "./sla-hostgroup-hosts-status-overview.service";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import {
     getDefaultSlaHostgroupHostsStatusOverviewParams,
     HeatmapData,
@@ -14,9 +14,9 @@ import {
     HostsNotInSla,
     SlaHostgroupHostsStatusOverviewParams,
     SlaHostgroupHostsStatusOverviewRoot,
-    SlaStatusOverview
-} from './sla-hostgroup-hosts-status-overview.interface';
-import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+    SlaStatusOverview,
+} from "./sla-hostgroup-hosts-status-overview.interface";
+import { SelectKeyValue } from "../../../../layouts/primeng/select.interface";
 import {
     CardBodyComponent,
     CardComponent,
@@ -34,20 +34,20 @@ import {
     InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent
-} from '@coreui/angular';
-import { DebounceDirective } from '../../../../directives/debounce.directive';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { NoRecordsComponent } from '../../../../layouts/coreui/no-records/no-records.component';
-import { PermissionDirective } from '../../../../permissions/permission.directive';
-import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { HttpParams } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { LoadContainersRoot } from '../../../../pages/containers/containers.interface';
+    RowComponent,
+} from "@coreui/angular";
+import { DebounceDirective } from "../../../../directives/debounce.directive";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { NoRecordsComponent } from "../../../../layouts/coreui/no-records/no-records.component";
+import { PermissionDirective } from "../../../../permissions/permission.directive";
+import { XsButtonDirective } from "../../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { MultiSelectComponent } from "../../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import { HttpParams } from "@angular/common/http";
+import { FormsModule } from "@angular/forms";
+import { LoadContainersRoot } from "../../../../pages/containers/containers.interface";
 
 @Component({
-    selector: 'oitc-sla-hostgroup-hosts-status-overview',
+    selector: "oitc-sla-hostgroup-hosts-status-overview",
     imports: [
         TranslocoDirective,
         SkeletonModule,
@@ -77,14 +77,13 @@ import { LoadContainersRoot } from '../../../../pages/containers/containers.inte
         DropdownToggleDirective,
         FormDirective,
         FormControlDirective,
-        FormsModule
+        FormsModule,
     ],
-    templateUrl: './sla-hostgroup-hosts-status-overview.component.html',
-    styleUrl: './sla-hostgroup-hosts-status-overview.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./sla-hostgroup-hosts-status-overview.component.html",
+    styleUrl: "./sla-hostgroup-hosts-status-overview.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SlaHostgroupHostsStatusOverviewComponent implements OnDestroy {
-
     public hostgroupId = input<number>(0);
 
     private subscriptions: Subscription = new Subscription();
@@ -94,22 +93,22 @@ export class SlaHostgroupHostsStatusOverviewComponent implements OnDestroy {
 
     public params: SlaHostgroupHostsStatusOverviewParams = getDefaultSlaHostgroupHostsStatusOverviewParams();
     protected containers: SelectKeyValue[] = [];
-    public hostsNotAvailable: HostsNotAvailable = {count: 0, ids: []}
-    public hostsNotInSla: HostsNotInSla = {count: 0, ids: []}
-    public slaStatusOverview: SlaStatusOverview[] = []
+    public hostsNotAvailable: HostsNotAvailable = { count: 0, ids: [] };
+    public hostsNotInSla: HostsNotInSla = { count: 0, ids: [] };
+    public slaStatusOverview: SlaStatusOverview[] = [];
     public heatmapData: HeatmapData = {
         rows: 0,
         columns: 0,
-        legendLabelFailed: '',
-        legendLabelPassed: '',
-        legendCsvHeader: ''
-    }
+        legendLabelFailed: "",
+        legendLabelPassed: "",
+        legendCsvHeader: "",
+    };
     public hideFilter: boolean = true;
     public isLoading: boolean = true;
 
     public determined_availability = {
         from: null,
-        to: null
+        to: null,
     };
 
     constructor() {
@@ -134,22 +133,25 @@ export class SlaHostgroupHostsStatusOverviewComponent implements OnDestroy {
         this.loadSlaHostgroupHostsStatus();
     }
 
-
     // Callback when a filter has changed
     public onFilterChange(event: Event | null) {
         this.loadSlaHostgroupHostsStatus();
     }
 
     public loadSlaHostgroupHostsStatus() {
-
         this.isLoading = true;
 
         if (this.hostgroupId() > 0) {
+            this.params["filter[determined_availability][]"] = [
+                this.determined_availability.from ?? 0,
+                this.determined_availability.to ?? 100,
+            ];
 
-            this.params['filter[determined_availability][]'] = [this.determined_availability.from ?? 0, this.determined_availability.to ?? 100];
-
-            this.subscriptions.add(this.SlaHostgroupHostsStatusOverviewService.loadSlaHostgroupHostsStatusOverview(this.hostgroupId(), this.params)
-                .subscribe((result: SlaHostgroupHostsStatusOverviewRoot) => {
+            this.subscriptions.add(
+                this.SlaHostgroupHostsStatusOverviewService.loadSlaHostgroupHostsStatusOverview(
+                    this.hostgroupId(),
+                    this.params,
+                ).subscribe((result: SlaHostgroupHostsStatusOverviewRoot) => {
                     this.isLoading = false;
                     this.slaStatusOverview = result.slaStatusOverview;
                     this.hostsNotAvailable = result.hostsNotAvailable;
@@ -157,55 +159,66 @@ export class SlaHostgroupHostsStatusOverviewComponent implements OnDestroy {
                     this.heatmapData = result.heatmapData;
                     this.loadContainers();
                     this.cdr.markForCheck();
-                }));
+                }),
+            );
         }
     }
 
     public loadContainers() {
-        this.subscriptions.add(this.SlaHostgroupHostsStatusOverviewService.loadContainers()
-            .subscribe((result: LoadContainersRoot) => {
+        this.subscriptions.add(
+            this.SlaHostgroupHostsStatusOverviewService.loadContainers().subscribe((result: LoadContainersRoot) => {
                 this.containers = result.containers;
                 this.cdr.markForCheck();
-            }))
+            }),
+        );
     }
 
     public linkFor(type: string) {
-        let baseUrl: string = '/sla_module/slas/slaHostgroupHostsStatusToPdf.pdf?';
-        if (type === 'csv') {
-            baseUrl = '/sla_module/slas/slaHostgroupHostsStatusToCsv?';
+        let baseUrl: string = "/sla_module/slas/slaHostgroupHostsStatusToPdf.pdf?";
+        if (type === "csv") {
+            baseUrl = "/sla_module/slas/slaHostgroupHostsStatusToCsv?";
         }
 
         let urlParams = {
-            'angular': true,
-            'hostgroupId': this.hostgroupId(),
-            'filter[Hosts.name]': this.params['filter[Hosts.name]'],
-            'filter[Hosts.container_id][]': this.params['filter[Hosts.container_id][]'],
-            'filter[determined_availability][]': [this.determined_availability.from ?? 0, this.determined_availability.to ?? 100]
+            angular: true,
+            hostgroupId: this.hostgroupId(),
+            "filter[Hosts.name]": this.params["filter[Hosts.name]"],
+            "filter[Hosts.container_id][]": this.params["filter[Hosts.container_id][]"],
+            "filter[determined_availability][]": [
+                this.determined_availability.from ?? 0,
+                this.determined_availability.to ?? 100,
+            ],
         };
 
         let stringParams: HttpParams = new HttpParams();
 
         stringParams = stringParams.appendAll(urlParams);
         return baseUrl + stringParams.toString();
-
     }
 
     public getBackgroundColorGradient(availabilityDifference: number) {
         let rgbDanger = {
-            red: 173, green: 45, blue: 2
+            red: 173,
+            green: 45,
+            blue: 2,
         };
         let rgbWarning = {
-            red: 255, green: 91, blue: 0
+            red: 255,
+            green: 91,
+            blue: 0,
         };
 
         let rgbSuccessLight = {
-            red: 153, green: 204, blue: 51
+            red: 153,
+            green: 204,
+            blue: 51,
         };
 
         let rgbSuccessDark = {
-            red: 51, green: 153, blue: 0
+            red: 51,
+            green: 153,
+            blue: 0,
         };
-
 
         let color1 = rgbDanger;
         let color2 = rgbWarning;
@@ -223,13 +236,11 @@ export class SlaHostgroupHostsStatusOverviewComponent implements OnDestroy {
         let diffBlue = color2.blue - color1.blue;
 
         let gradient = {
-            red: parseInt(Math.floor(color1.red + (diffRed * fade)).toString(), 10),
-            green: parseInt(Math.floor(color1.green + (diffGreen * fade)).toString(), 10),
-            blue: parseInt(Math.floor(color1.blue + (diffBlue * fade)).toString(), 10)
+            red: parseInt(Math.floor(color1.red + diffRed * fade).toString(), 10),
+            green: parseInt(Math.floor(color1.green + diffGreen * fade).toString(), 10),
+            blue: parseInt(Math.floor(color1.blue + diffBlue * fade).toString(), 10),
         };
 
-        return 'rgb(' + gradient.red + ',' + gradient.green + ',' + gradient.blue + ')';
-
+        return "rgb(" + gradient.red + "," + gradient.green + "," + gradient.blue + ")";
     }
-
 }

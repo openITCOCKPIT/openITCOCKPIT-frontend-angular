@@ -23,20 +23,20 @@
  *     confirmation.
  */
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionsService } from '../../../permissions/permissions.service';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { IndexPage } from '../../../pages.interface';
-import { StatuspagesService } from '../statuspages.service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from "@jsverse/transloco";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { PermissionsService } from "../../../permissions/permissions.service";
+import { PermissionDirective } from "../../../permissions/permission.directive";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { IndexPage } from "../../../pages.interface";
+import { StatuspagesService } from "../statuspages.service";
 import {
     getDefaultStatuspagesIndexParams,
     StatuspageObject,
     StatuspagesIndexRoot,
     StatuspagesParams,
-} from '../statuspages.interface';
+} from "../statuspages.interface";
 import {
     CardBodyComponent,
     CardComponent,
@@ -56,39 +56,34 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
-} from '@coreui/angular';
-import { AsyncPipe } from '@angular/common';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { Subscription } from 'rxjs';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
-import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
-import { DebounceDirective } from '../../../directives/debounce.directive';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
+    TableDirective,
+} from "@coreui/angular";
+import { AsyncPipe } from "@angular/common";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { PaginatorChangeEvent } from "../../../layouts/coreui/paginator/paginator.interface";
+import { MatSort, MatSortHeader, Sort } from "@angular/material/sort";
+import { Subscription } from "rxjs";
+import { TableLoaderComponent } from "../../../layouts/primeng/loading/table-loader/table-loader.component";
+import { ItemSelectComponent } from "../../../layouts/coreui/select-all/item-select/item-select.component";
+import { BadgeOutlineComponent } from "../../../layouts/coreui/badge-outline/badge-outline.component";
+import { ActionsButtonComponent } from "../../../components/actions-button/actions-button.component";
+import { ActionsButtonElementComponent } from "../../../components/actions-button-element/actions-button-element.component";
+import { NoRecordsComponent } from "../../../layouts/coreui/no-records/no-records.component";
+import { SelectAllComponent } from "../../../layouts/coreui/select-all/select-all.component";
+import { PaginateOrScrollComponent } from "../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component";
+import { FormsModule } from "@angular/forms";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { DebounceDirective } from "../../../directives/debounce.directive";
+import { TrueFalseDirective } from "../../../directives/true-false.directive";
+import { DeleteAllItem } from "../../../layouts/coreui/delete-all-modal/delete-all.interface";
+import { SelectionServiceService } from "../../../layouts/coreui/select-all/selection-service.service";
+import { DeleteAllModalComponent } from "../../../layouts/coreui/delete-all-modal/delete-all-modal.component";
 
-import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-
+import { DELETE_SERVICE_TOKEN } from "../../../tokens/delete-injection.token";
+import { NotyService } from "../../../layouts/coreui/noty.service";
 
 @Component({
-    selector: 'oitc-statuspages-index',
+    selector: "oitc-statuspages-index",
     imports: [
         TranslocoDirective,
         FaIconComponent,
@@ -129,14 +124,12 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
-        DeleteAllModalComponent
+        DeleteAllModalComponent,
     ],
-    templateUrl: './statuspages-index.component.html',
-    styleUrl: './statuspages-index.component.css',
-    providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: StatuspagesService}
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./statuspages-index.component.html",
+    styleUrl: "./statuspages-index.component.css",
+    providers: [{ provide: DELETE_SERVICE_TOKEN, useClass: StatuspagesService }],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
     public hideFilter: boolean = true;
@@ -150,7 +143,7 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly router = inject(Router);
     private StatuspagesService: StatuspagesService = inject(StatuspagesService);
     private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
     public readonly PermissionsService = inject(PermissionsService);
     private readonly modalService = inject(ModalService);
@@ -171,20 +164,21 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
         if (this.is_public !== this.not_public) {
             public_state = this.is_public === true;
         }
-        this.params['filter[Statuspages.public]'] = public_state;
+        this.params["filter[Statuspages.public]"] = public_state;
 
-        this.subscriptions.add(this.StatuspagesService.getStatuspagesIndex(this.params).subscribe(data => {
-            this.statuspages = data;
-            this.cdr.markForCheck();
-        }));
+        this.subscriptions.add(
+            this.StatuspagesService.getStatuspagesIndex(this.params).subscribe((data) => {
+                this.statuspages = data;
+                this.cdr.markForCheck();
+            }),
+        );
     }
 
     public toggleFilter(): void {
         this.hideFilter = !this.hideFilter;
     }
 
-    public resetFilter(): void {
-    }
+    public resetFilter(): void {}
 
     public onFilterChange(event: Event): void {
         this.params.page = 1;
@@ -195,7 +189,6 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.params.page = change.page;
         this.params.scroll = change.scroll;
         this.load();
-
     }
 
     public onSortChange(sort: Sort): void {
@@ -211,23 +204,24 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         if (statuspage) {
             // User just want to delete a single command
-            items = [{
-                id: statuspage.id,
-                displayName: statuspage.name
-            }];
+            items = [
+                {
+                    id: statuspage.id,
+                    displayName: statuspage.name,
+                },
+            ];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-
                 return {
                     id: item.id,
-                    displayName: item.name
+                    displayName: item.name,
                 };
             });
         }
 
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
@@ -238,7 +232,7 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
         // open modal
         this.modalService.toggle({
             show: true,
-            id: 'deleteAllModal',
+            id: "deleteAllModal",
         });
     }
 
@@ -247,5 +241,4 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.load();
         }
     }
-
 }

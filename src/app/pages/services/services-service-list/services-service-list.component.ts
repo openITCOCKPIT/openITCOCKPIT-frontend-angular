@@ -1,10 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { Subscription } from "rxjs";
+import { ActionsButtonComponent } from "../../../components/actions-button/actions-button.component";
+import { ActionsButtonElementComponent } from "../../../components/actions-button-element/actions-button-element.component";
 import {
     CardBodyComponent,
     CardComponent,
@@ -25,92 +23,76 @@ import {
     NavItemComponent,
     RowComponent,
     TableDirective,
-    TooltipDirective
-} from '@coreui/angular';
-import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
+    TooltipDirective,
+} from "@coreui/angular";
+import { CopyToClipboardComponent } from "../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component";
+import { CoreuiComponent } from "../../../layouts/coreui/coreui.component";
 
-import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { FormsModule } from '@angular/forms';
+import { DeleteAllModalComponent } from "../../../layouts/coreui/delete-all-modal/delete-all-modal.component";
+import { DisableModalComponent } from "../../../layouts/coreui/disable-modal/disable-modal.component";
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from "@fortawesome/angular-fontawesome";
+import { FormsModule } from "@angular/forms";
 
-import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { AsyncPipe, NgClass } from '@angular/common';
-import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { PaginatorModule } from 'primeng/paginator';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import {
-    QueryHandlerCheckerComponent
-} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+import { ItemSelectComponent } from "../../../layouts/coreui/select-all/item-select/item-select.component";
+import { MatSort, MatSortHeader, Sort } from "@angular/material/sort";
+import { AsyncPipe, NgClass } from "@angular/common";
+import { NoRecordsComponent } from "../../../layouts/coreui/no-records/no-records.component";
+import { PaginateOrScrollComponent } from "../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { PermissionDirective } from "../../../permissions/permission.directive";
+import { QueryHandlerCheckerComponent } from "../../../layouts/coreui/query-handler-checker/query-handler-checker.component";
 
-import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import { ServicestatusSimpleIconComponent } from '../servicestatus-simple-icon/servicestatus-simple-icon.component';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { SelectAllComponent } from "../../../layouts/coreui/select-all/select-all.component";
+import { ServicestatusSimpleIconComponent } from "../servicestatus-simple-icon/servicestatus-simple-icon.component";
+import { TableLoaderComponent } from "../../../layouts/primeng/loading/table-loader/table-loader.component";
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from "@jsverse/transloco";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
 
-
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { HostEntityWithContainers, HostsLoadHostsByStringParams } from '../../hosts/hosts.interface';
-import { HostsService } from '../../hosts/hosts.service';
-import { ServicesService } from '../services.service';
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
+import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
+import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
+import { HostEntityWithContainers, HostsLoadHostsByStringParams } from "../../hosts/hosts.interface";
+import { HostsService } from "../../hosts/hosts.service";
+import { ServicesService } from "../services.service";
+import { PaginatorChangeEvent } from "../../../layouts/coreui/paginator/paginator.interface";
+import { SelectionServiceService } from "../../../layouts/coreui/select-all/selection-service.service";
 import {
     ServiceObject,
     ServicesDeletedServicesRoot,
     ServicesDisabledRoot,
     ServicesIndexRoot,
-    ServicesNotMonitoredRoot
-} from '../services.interface';
-import { PermissionsService } from '../../../permissions/permissions.service';
-import {
-    ServicestatusIconComponent
-} from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
-import {
-    AcknowledgementIconComponent
-} from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
-import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
-import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
-import { TimezoneConfiguration as TimezoneObject, TimezoneService } from '../../../services/timezone.service';
-import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
+    ServicesNotMonitoredRoot,
+} from "../services.interface";
+import { PermissionsService } from "../../../permissions/permissions.service";
+import { ServicestatusIconComponent } from "../../../components/services/servicestatus-icon/servicestatus-icon.component";
+import { AcknowledgementIconComponent } from "../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component";
+import { DowntimeIconComponent } from "../../downtimes/downtime-icon/downtime-icon.component";
+import { PopoverGraphComponent } from "../../../components/popover-graph/popover-graph.component";
+import { TimezoneConfiguration as TimezoneObject, TimezoneService } from "../../../services/timezone.service";
+import { DisableItem } from "../../../layouts/coreui/disable-modal/disable.interface";
 import {
     ExternalCommandsService,
     ServiceAcknowledgeItem,
     ServiceDowntimeItem,
     ServiceNotifcationItem,
-    ServiceResetItem
-} from '../../../services/external-commands.service';
-import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
-import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
-import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
+    ServiceResetItem,
+} from "../../../services/external-commands.service";
+import { ExternalCommandsEnum } from "../../../enums/external-commands.enum";
+import { DeleteAllItem } from "../../../layouts/coreui/delete-all-modal/delete-all.interface";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { DISABLE_SERVICE_TOKEN } from "../../../tokens/disable-injection.token";
+import { DELETE_SERVICE_TOKEN } from "../../../tokens/delete-injection.token";
 
-import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
+import { AcknowledgementTypes } from "../../acknowledgements/acknowledgement-types.enum";
 
-
-import {
-    ServiceAcknowledgeModalComponent
-} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
-import {
-    ServiceMaintenanceModalComponent
-} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
-import { EnableItem } from '../../../layouts/coreui/enable-modal/enable.interface';
-import { ENABLE_SERVICE_TOKEN } from '../../../tokens/enable-injection.token';
-import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enable-modal.component';
-import {
-    ServiceAddToServicegroupModalComponent
-} from '../../../components/services/service-add-to-servicegroup-modal/service-add-to-servicegroup-modal.component';
+import { ServiceAcknowledgeModalComponent } from "../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component";
+import { ServiceMaintenanceModalComponent } from "../../../components/services/service-maintenance-modal/service-maintenance-modal.component";
+import { EnableItem } from "../../../layouts/coreui/enable-modal/enable.interface";
+import { ENABLE_SERVICE_TOKEN } from "../../../tokens/enable-injection.token";
+import { EnableModalComponent } from "../../../layouts/coreui/enable-modal/enable-modal.component";
+import { ServiceAddToServicegroupModalComponent } from "../../../components/services/service-add-to-servicegroup-modal/service-add-to-servicegroup-modal.component";
 
 @Component({
-    selector: 'oitc-services-service-list',
+    selector: "oitc-services-service-list",
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -165,36 +147,34 @@ import {
         ServiceMaintenanceModalComponent,
         EnableModalComponent,
         ServiceAddToServicegroupModalComponent,
-        AsyncPipe
+        AsyncPipe,
     ],
-    templateUrl: './services-service-list.component.html',
-    styleUrl: './services-service-list.component.css',
+    templateUrl: "./services-service-list.component.html",
+    styleUrl: "./services-service-list.component.css",
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService},
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService},
-        {provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService},
+        { provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService },
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService },
+        { provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService },
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServicesServiceListComponent implements OnInit, OnDestroy {
-
-    public activeTab: string = 'active';
+    public activeTab: string = "active";
 
     public hosts: SelectKeyValue[] = [];
     public host?: HostEntityWithContainers;
     public hostId: number = 0;
 
-
     public timezone!: TimezoneObject;
     public selectedItems: any[] = [];
-    public userFullname: string = '';
+    public userFullname: string = "";
 
     public params: any = {
-        'angular': true,
-        'sort': 'Servicestatus.current_state',
-        'scroll': true,
-        'page': 1,
-        'direction': 'desc'
+        angular: true,
+        sort: "Servicestatus.current_state",
+        scroll: true,
+        page: 1,
+        direction: "desc",
     };
 
     public services?: ServicesIndexRoot;
@@ -215,21 +195,19 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
     private readonly ExternalCommandsService = inject(ExternalCommandsService);
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {
-    }
+    constructor(private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
-        this.route.queryParams.subscribe(params => {
-            this.hostId = Number(this.route.snapshot.paramMap.get('id'));
+        this.route.queryParams.subscribe((params) => {
+            this.hostId = Number(this.route.snapshot.paramMap.get("id"));
 
             this.getUserTimezone();
 
-            this.loadHosts('');
+            this.loadHosts("");
             this.loadHost();
             this.load();
             this.cdr.markForCheck();
         });
-
     }
 
     public ngOnDestroy(): void {
@@ -237,10 +215,12 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
     }
 
     private getUserTimezone() {
-        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
-            this.timezone = data;
-            this.cdr.markForCheck();
-        }));
+        this.subscriptions.add(
+            this.TimezoneService.getTimezoneConfiguration().subscribe((data) => {
+                this.timezone = data;
+                this.cdr.markForCheck();
+            }),
+        );
     }
 
     // Load all Hosts for the select box
@@ -252,18 +232,18 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
         let params: HostsLoadHostsByStringParams = {
             angular: true,
-            'filter[Hosts.name]': searchString,
-            'selected[]': selected,
-            includeDisabled: false
-        }
+            "filter[Hosts.name]": searchString,
+            "selected[]": selected,
+            includeDisabled: false,
+        };
 
-        this.subscriptions.add(this.HostsService.loadHostsByString(params, false)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostsService.loadHostsByString(params, false).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.hosts = result;
-            })
+            }),
         );
-    }
+    };
 
     // Load detail information about a single host
     public loadHost() {
@@ -271,48 +251,47 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.HostsService.loadHostById(this.hostId)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostsService.loadHostById(this.hostId).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.host = result;
-            })
+            }),
         );
-
     }
 
     public load() {
         switch (this.activeTab) {
-            case 'active':
+            case "active":
                 this.loadActiveServices();
                 break;
 
-            case 'notMonitored':
+            case "notMonitored":
                 this.loadNotMonitoredServices();
                 break;
 
-            case 'disabled':
+            case "disabled":
                 this.loadDisabledServices();
                 break;
 
-            case 'deleted':
+            case "deleted":
                 this.loadDeletedServices();
                 break;
         }
-    };
+    }
 
     private loadActiveServices() {
         if (!this.hostId) {
             return;
         }
 
-        this.params['filter[Hosts.id]'] = this.hostId;
+        this.params["filter[Hosts.id]"] = this.hostId;
 
-        this.subscriptions.add(this.ServicesService.getServicesIndexViaGet(this.params)
-            .subscribe((services) => {
+        this.subscriptions.add(
+            this.ServicesService.getServicesIndexViaGet(this.params).subscribe((services) => {
                 this.cdr.markForCheck();
                 this.services = services;
                 this.userFullname = services.username;
-            })
+            }),
         );
     }
 
@@ -321,13 +300,13 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.params['filter[Hosts.id]'] = this.hostId;
+        this.params["filter[Hosts.id]"] = this.hostId;
 
-        this.subscriptions.add(this.ServicesService.getNotMonitored(this.params)
-            .subscribe((services) => {
+        this.subscriptions.add(
+            this.ServicesService.getNotMonitored(this.params).subscribe((services) => {
                 this.cdr.markForCheck();
                 this.notMonitoredServices = services;
-            })
+            }),
         );
     }
 
@@ -336,13 +315,13 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.params['filter[Hosts.id]'] = this.hostId;
+        this.params["filter[Hosts.id]"] = this.hostId;
 
-        this.subscriptions.add(this.ServicesService.getDisabled(this.params)
-            .subscribe((services) => {
+        this.subscriptions.add(
+            this.ServicesService.getDisabled(this.params).subscribe((services) => {
                 this.cdr.markForCheck();
                 this.disabledServices = services;
-            })
+            }),
         );
     }
 
@@ -351,13 +330,13 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.params['filter[DeletedServices.host_id]'] = this.hostId;
+        this.params["filter[DeletedServices.host_id]"] = this.hostId;
 
-        this.subscriptions.add(this.ServicesService.getServicesDeleted(this.params)
-            .subscribe((services) => {
+        this.subscriptions.add(
+            this.ServicesService.getServicesDeleted(this.params).subscribe((services) => {
                 this.cdr.markForCheck();
                 this.deletedServices = services;
-            })
+            }),
         );
     }
 
@@ -378,13 +357,13 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
             this.deletedServices = undefined;
 
             this.SelectionServiceService.deselectAll();
-            this.params.sort = 'servicename';
-            this.params.direction = 'asc';
+            this.params.sort = "servicename";
+            this.params.direction = "asc";
             this.params.page = 1;
             this.params.scroll = true;
 
-            if (this.activeTab === 'deleted') {
-                this.params.sort = 'DeletedServices.name';
+            if (this.activeTab === "deleted") {
+                this.params.sort = "DeletedServices.name";
             }
 
             this.load();
@@ -421,24 +400,25 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
                 command: ExternalCommandsEnum.rescheduleService,
                 hostUuid: item.Host.uuid,
                 serviceUuid: item.Service.uuid,
-                satelliteId: item.Host.satelliteId
+                satelliteId: item.Host.satelliteId,
             };
-
         });
         if (commands.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
-        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
-            if (result.message) {
-                const title = this.TranslocoService.translate('Reschedule');
-                const url = ['services', 'index'];
-                this.notyService.genericSuccess(result.message, title, url);
-            } else {
-                this.notyService.genericError();
-            }
-        }));
+        this.subscriptions.add(
+            this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
+                if (result.message) {
+                    const title = this.TranslocoService.translate("Reschedule");
+                    const url = ["services", "index"];
+                    this.notyService.genericSuccess(result.message, title, url);
+                } else {
+                    this.notyService.genericError();
+                }
+            }),
+        );
     }
 
     public disableNotifications() {
@@ -447,29 +427,30 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
             return {
                 command: ExternalCommandsEnum.submitDisableServiceNotifications,
                 hostUuid: item.Host.uuid,
-                serviceUuid: item.Service.uuid
+                serviceUuid: item.Service.uuid,
             };
-
         });
         if (commands.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
-            return
+            return;
         }
-        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
-            if (result.message) {
-                const title = this.TranslocoService.translate('Disable Notifications');
+        this.subscriptions.add(
+            this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
+                if (result.message) {
+                    const title = this.TranslocoService.translate("Disable Notifications");
 
-                this.notyService.genericSuccess(result.message, title, []);
-                // this.notyService.scrollContentDivToTop();
-                // this.SelectionServiceService.deselectAll()
-            } else {
-                this.notyService.genericError();
-            }
-            setTimeout(() => {
-                this.load()
-            }, 5000);
-        }));
+                    this.notyService.genericSuccess(result.message, title, []);
+                    // this.notyService.scrollContentDivToTop();
+                    // this.SelectionServiceService.deselectAll()
+                } else {
+                    this.notyService.genericError();
+                }
+                setTimeout(() => {
+                    this.load();
+                }, 5000);
+            }),
+        );
     }
 
     public enableNotifications() {
@@ -477,30 +458,31 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
             return {
                 command: ExternalCommandsEnum.submitEnableServiceNotifications,
                 hostUuid: item.Host.uuid,
-                serviceUuid: item.Service.uuid
+                serviceUuid: item.Service.uuid,
             };
-
         });
         if (commands.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
-        this.subscriptions.add(this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
-            if (result.message) {
-                const title = this.TranslocoService.translate('enable Notifications');
+        this.subscriptions.add(
+            this.ExternalCommandsService.setExternalCommands(commands).subscribe((result) => {
+                if (result.message) {
+                    const title = this.TranslocoService.translate("enable Notifications");
 
-                this.notyService.genericSuccess(result.message, title, []);
-                //this.notyService.scrollContentDivToTop();
-                // this.SelectionServiceService.deselectAll()
-            } else {
-                this.notyService.genericError();
-            }
+                    this.notyService.genericSuccess(result.message, title, []);
+                    //this.notyService.scrollContentDivToTop();
+                    // this.SelectionServiceService.deselectAll()
+                } else {
+                    this.notyService.genericError();
+                }
 
-            setTimeout(() => {
-                this.load()
-            }, 5000);
-        }));
+                setTimeout(() => {
+                    this.load();
+                }, 5000);
+            }),
+        );
     }
 
     public toggleDowntimeModal() {
@@ -513,19 +495,19 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
                 start: 0,
                 end: 0,
                 author: this.userFullname,
-                comment: '',
+                comment: "",
             };
         });
 
         this.selectedItems = items;
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
         this.modalService.toggle({
             show: true,
-            id: 'serviceMaintenanceModal',
+            id: "serviceMaintenanceModal",
         });
     }
 
@@ -534,20 +516,22 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
         if (service) {
             // User just want to delete a single command
-            items = [{
-                id: service.id,
-                displayName: service.hostname + '/' + service.servicename
-            }];
+            items = [
+                {
+                    id: service.id,
+                    displayName: service.hostname + "/" + service.servicename,
+                },
+            ];
         } else {
             items = this.SelectionServiceService.getSelectedItems().map((item): DisableItem => {
                 return {
                     id: item.Service.id,
-                    displayName: item.Service.hostname + '/' + item.Service.servicename
+                    displayName: item.Service.hostname + "/" + item.Service.servicename,
                 };
             });
         }
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
@@ -555,7 +539,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
         this.modalService.toggle({
             show: true,
-            id: 'disableModal',
+            id: "disableModal",
         });
     }
 
@@ -564,20 +548,22 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
         if (service) {
             // User just want to delete a single command
-            items = [{
-                id: Number(service.id),
-                displayName: String(service.hostname) + '/' + String(service.servicename)
-            }];
+            items = [
+                {
+                    id: Number(service.id),
+                    displayName: String(service.hostname) + "/" + String(service.servicename),
+                },
+            ];
         } else {
             items = this.SelectionServiceService.getSelectedItems().map((item): DisableItem => {
                 return {
                     id: item.Service.id,
-                    displayName: item.Service.hostname + '/' + item.Service.servicename
+                    displayName: item.Service.hostname + "/" + item.Service.servicename,
                 };
             });
         }
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
@@ -585,7 +571,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
         this.modalService.toggle({
             show: true,
-            id: 'enableModal',
+            id: "enableModal",
         });
     }
 
@@ -599,18 +585,18 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
                 sticky: 0,
                 notify: false,
                 author: this.userFullname,
-                comment: '',
+                comment: "",
             };
         });
         this.selectedItems = items;
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
         this.modalService.toggle({
             show: true,
-            id: 'serviceAcknowledgeModal',
+            id: "serviceAcknowledgeModal",
         });
     }
 
@@ -619,17 +605,18 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
 
         if (service) {
             // User just want to delete a single command
-            items = [{
-                id: Number(service.id),
-                displayName: String(service.hostname) + '/' + String(service.servicename)
-            }];
+            items = [
+                {
+                    id: Number(service.id),
+                    displayName: String(service.hostname) + "/" + String(service.servicename),
+                },
+            ];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-
                 return {
                     id: item.Service.id,
-                    displayName: item.Service.hostname + '/' + item.Service.servicename
+                    displayName: item.Service.hostname + "/" + item.Service.servicename,
                 };
             });
         }
@@ -640,14 +627,16 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
         // open modal
         this.modalService.toggle({
             show: true,
-            id: 'deleteAllModal',
+            id: "deleteAllModal",
         });
     }
 
     public navigateCopy() {
-        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Service.id).join(',');
+        let ids = this.SelectionServiceService.getSelectedItems()
+            .map((item) => item.Service.id)
+            .join(",");
         if (ids) {
-            this.router.navigate(['/', 'services', 'copy', ids]);
+            this.router.navigate(["/", "services", "copy", ids]);
         }
     }
 
@@ -661,30 +650,31 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
         let items: SelectKeyValue[] = [];
 
         if (service) {
-            items = [{
-                key: Number(service.id),
-                value: String(service.hostname + "/" + service.servicename)
-            }];
+            items = [
+                {
+                    key: Number(service.id),
+                    value: String(service.hostname + "/" + service.servicename),
+                },
+            ];
         } else {
             items = this.SelectionServiceService.getSelectedItems().map((item): SelectKeyValue => {
                 return {
                     key: item.Service.id,
-                    value: item.Service.hostname + "/" + item.Service.servicename
+                    value: item.Service.hostname + "/" + item.Service.servicename,
                 };
             });
         }
         this.selectedItems = items;
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
         this.modalService.toggle({
             show: true,
-            id: 'serviceAddToServicegroupModal',
+            id: "serviceAddToServicegroupModal",
         });
     }
-
 
     protected readonly AcknowledgementTypes = AcknowledgementTypes;
 }

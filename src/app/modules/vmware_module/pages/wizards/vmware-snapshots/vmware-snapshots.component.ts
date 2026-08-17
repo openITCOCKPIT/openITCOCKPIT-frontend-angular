@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
-import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { VmwareSnapshotsWizardGet, VmwareSnapshotsWizardPost } from './vmware-snapshots-wizard.interface';
-import { VmwareSnapshotsWizardService } from './vmware-snapshots-wizard.service';
-import { PaginatorModule } from 'primeng/paginator';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, ViewChild } from "@angular/core";
+import { WizardsAbstractComponent } from "../../../../../pages/wizards/wizards-abstract/wizards-abstract.component";
+import { VmwareSnapshotsWizardGet, VmwareSnapshotsWizardPost } from "./vmware-snapshots-wizard.interface";
+import { VmwareSnapshotsWizardService } from "./vmware-snapshots-wizard.service";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { FormsModule } from "@angular/forms";
 import {
     AccordionButtonDirective,
     AccordionComponent,
@@ -26,23 +26,21 @@ import {
     ModalTitleDirective,
     ModalToggleDirective,
     RowComponent,
-    TemplateIdDirective
-} from '@coreui/angular';
-import { RouterLink } from '@angular/router';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import {
-    WizardsDynamicfieldsComponent
-} from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
-import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
+    TemplateIdDirective,
+} from "@coreui/angular";
+import { RouterLink } from "@angular/router";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { TranslocoDirective, TranslocoPipe } from "@jsverse/transloco";
+import { BackButtonDirective } from "../../../../../directives/back-button.directive";
+import { RequiredIconComponent } from "../../../../../components/required-icon/required-icon.component";
+import { FormErrorDirective } from "../../../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../../../layouts/coreui/form-feedback/form-feedback.component";
+import { WizardsDynamicfieldsComponent } from "../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component";
+import { XsButtonDirective } from "../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { ServicetemplateForWizard } from "../../../../../pages/wizards/wizards.interface";
 
 @Component({
-    selector: 'oitc-vmware-snapshots',
+    selector: "oitc-vmware-snapshots",
     imports: [
         PaginatorModule,
         FormsModule,
@@ -76,11 +74,11 @@ import { ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.i
         ModalHeaderComponent,
         ModalTitleDirective,
         RowComponent,
-        ModalToggleDirective
+        ModalToggleDirective,
     ],
-    templateUrl: './vmware-snapshots.component.html',
-    styleUrl: './vmware-snapshots.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./vmware-snapshots.component.html",
+    styleUrl: "./vmware-snapshots.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VmwareSnapshotsComponent extends WizardsAbstractComponent {
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
@@ -89,21 +87,21 @@ export class VmwareSnapshotsComponent extends WizardsAbstractComponent {
     private readonly modalService = inject(ModalService);
 
     protected override post: VmwareSnapshotsWizardPost = {
-// Default fields from the base wizard
+        // Default fields from the base wizard
         host_id: 0,
         services: [],
-// Fields for the wizard
-        vmwareuser: '',
-        vmwarepass: '',
-        vcenter: '',
-        typeId: 'vmware-snapshots'
+        // Fields for the wizard
+        vmwareuser: "",
+        vmwarepass: "",
+        vcenter: "",
+        typeId: "vmware-snapshots",
     } as VmwareSnapshotsWizardPost;
 
     protected snapshotServicetemplate: ServicetemplateForWizard = {} as ServicetemplateForWizard;
 
-    static readonly SNAPSHOT_REGEX = '.*';
+    static readonly SNAPSHOT_REGEX = ".*";
 
-    protected serviceName = '';
+    protected serviceName = "";
     protected serviceRegex = VmwareSnapshotsComponent.SNAPSHOT_REGEX;
     protected serviceAlreadyExists = false;
 
@@ -116,59 +114,60 @@ export class VmwareSnapshotsComponent extends WizardsAbstractComponent {
     }
 
     protected addNewSnapshotServiceToList(): void {
-
         if (this.serviceName) {
-            let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.snapshotServicetemplate.servicetemplatecommandargumentvalues));
+            let servicetemplatecommandargumentvalues = JSON.parse(
+                JSON.stringify(this.snapshotServicetemplate.servicetemplatecommandargumentvalues),
+            );
             servicetemplatecommandargumentvalues[3].value = this.serviceRegex;
-            this.post.services.push(
-                {
-                    createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, this.serviceName),
-                    description: '',
-                    host_id: this.post.host_id,
-                    name: this.serviceName,
-                    servicecommandargumentvalues: servicetemplatecommandargumentvalues,
-                    servicetemplate_id: this.snapshotServicetemplate.id
-                });
-            this.serviceName = '';
+            this.post.services.push({
+                createService: !this.isServiceAlreadyPresent(
+                    this.WizardGet.servicesNamesForExistCheck,
+                    this.serviceName,
+                ),
+                description: "",
+                host_id: this.post.host_id,
+                name: this.serviceName,
+                servicecommandargumentvalues: servicetemplatecommandargumentvalues,
+                servicetemplate_id: this.snapshotServicetemplate.id,
+            });
+            this.serviceName = "";
             this.serviceRegex = VmwareSnapshotsComponent.SNAPSHOT_REGEX;
             this.childComponentLocal.cdr.markForCheck();
             this.cdr.markForCheck();
             this.modalService.toggle({
                 show: false,
-                id: 'addSnapshotServiceModal',
+                id: "addSnapshotServiceModal",
             });
             return;
         }
 
         this.notyService.genericError();
-        this.errors['serviceName'] = {
-            '_empty': this.TranslocoService.translate('This field cannot be left empty')
+        this.errors["serviceName"] = {
+            _empty: this.TranslocoService.translate("This field cannot be left empty"),
         };
         this.cdr.markForCheck();
-
     }
 
     public openAddSnapshotServiceModal() {
-
-        if (this.errors['serviceName']) {
-            delete this.errors['serviceName'];
+        if (this.errors["serviceName"]) {
+            delete this.errors["serviceName"];
         }
 
         this.modalService.toggle({
             show: true,
-            id: 'addSnapshotServiceModal',
+            id: "addSnapshotServiceModal",
         });
-    };
+    }
 
     // callback when service name input has changed
 
     public onServiceNameChange(newServiceValue: string) {
-
         this.serviceAlreadyExists = false;
-        if (newServiceValue !== "" && this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, newServiceValue)) {
+        if (
+            newServiceValue !== "" &&
+            this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, newServiceValue)
+        ) {
             this.serviceAlreadyExists = true;
         }
-
     }
-
 }

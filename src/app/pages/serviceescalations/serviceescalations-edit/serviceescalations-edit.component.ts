@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { CoreuiComponent } from "../../../layouts/coreui/coreui.component";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { PermissionDirective } from "../../../permissions/permission.directive";
 
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
+import { TranslocoDirective, TranslocoService } from "@jsverse/transloco";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { BackButtonDirective } from "../../../directives/back-button.directive";
 import {
     CardBodyComponent,
     CardComponent,
@@ -20,44 +20,42 @@ import {
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
-    NavItemComponent
-} from '@coreui/angular';
-import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+    NavItemComponent,
+} from "@coreui/angular";
+import { FormsModule } from "@angular/forms";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
 import {
     ServiceescalationContainerResult,
     ServiceescalationGet,
-    ServiceescalationPost
-} from '../serviceescalations.interface';
-import { ServiceescalationsService } from '../serviceescalations.service';
+    ServiceescalationPost,
+} from "../serviceescalations.interface";
+import { ServiceescalationsService } from "../serviceescalations.service";
 import {
     SelectItemOptionGroup,
     SelectKeyValue,
-    SelectKeyValueWithDisabled
-} from '../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { Subscription } from 'rxjs';
-import { PermissionsService } from '../../../permissions/permissions.service';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
+    SelectKeyValueWithDisabled,
+} from "../../../layouts/primeng/select.interface";
+import { GenericIdResponse, GenericValidationError } from "../../../generic-responses";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { Subscription } from "rxjs";
+import { PermissionsService } from "../../../permissions/permissions.service";
+import { FormErrorDirective } from "../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../layouts/coreui/form-feedback/form-feedback.component";
 
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
-import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import {
-    MultiSelectOptgroupComponent
-} from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
-import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { HistoryService } from '../../../history.service';
-import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
+import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
+import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import { IntervalInputComponent } from "../../../layouts/coreui/interval-input/interval-input.component";
+import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-link.component";
+import { TrueFalseDirective } from "../../../directives/true-false.directive";
+import { MultiSelectOptgroupComponent } from "../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component";
+import { FormLoaderComponent } from "../../../layouts/primeng/loading/form-loader/form-loader.component";
+import { HistoryService } from "../../../history.service";
+import { ObjectUuidComponent } from "../../../layouts/coreui/object-uuid/object-uuid.component";
 
 @Component({
-    selector: 'oitc-serviceescalations-edit',
+    selector: "oitc-serviceescalations-edit",
     imports: [
         FaIconComponent,
         PermissionDirective,
@@ -91,13 +89,12 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         CardFooterComponent,
         MultiSelectOptgroupComponent,
         FormLoaderComponent,
-        ObjectUuidComponent
+        ObjectUuidComponent,
     ],
-    templateUrl: './serviceescalations-edit.component.html',
-    styleUrl: './serviceescalations-edit.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./serviceescalations-edit.component.html",
+    styleUrl: "./serviceescalations-edit.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
     public containers: ServiceescalationContainerResult | undefined;
     public post!: ServiceescalationPost;
@@ -122,15 +119,15 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
-
-    constructor(private route: ActivatedRoute, private cdr: ChangeDetectorRef) {
-    }
-
+    constructor(
+        private route: ActivatedRoute,
+        private cdr: ChangeDetectorRef,
+    ) {}
 
     public ngOnInit(): void {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.ServiceescalationsService.getEdit(id)
-            .subscribe((result) => {
+        const id = Number(this.route.snapshot.paramMap.get("id"));
+        this.subscriptions.add(
+            this.ServiceescalationsService.getEdit(id).subscribe((result) => {
                 this.cdr.markForCheck();
 
                 this.get = result.serviceescalation;
@@ -147,45 +144,42 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
                     escalate_on_critical: this.get.escalate_on_critical,
                     escalate_on_unknown: this.get.escalate_on_unknown,
                     services: {
-                        _ids: this.get.services.filter(obj => obj._joinData.excluded === 0).map(obj => obj.id)
+                        _ids: this.get.services.filter((obj) => obj._joinData.excluded === 0).map((obj) => obj.id),
                     },
                     services_excluded: {
-                        _ids: this.get.services.filter(obj => obj._joinData.excluded === 1).map(obj => obj.id)
+                        _ids: this.get.services.filter((obj) => obj._joinData.excluded === 1).map((obj) => obj.id),
                     },
                     servicegroups: {
-                        _ids: this.get.servicegroups.filter(obj => obj._joinData.excluded === 0).map(obj => obj.id)
+                        _ids: this.get.servicegroups.filter((obj) => obj._joinData.excluded === 0).map((obj) => obj.id),
                     },
                     servicegroups_excluded: {
-                        _ids: this.get.servicegroups.filter(obj => obj._joinData.excluded === 1).map(obj => obj.id)
+                        _ids: this.get.servicegroups.filter((obj) => obj._joinData.excluded === 1).map((obj) => obj.id),
                     },
                     contacts: {
-                        _ids: this.get.contacts.map(obj => obj.id)
+                        _ids: this.get.contacts.map((obj) => obj.id),
                     },
                     contactgroups: {
-                        _ids: this.get.contactgroups.map(obj => obj.id)
-                    }
+                        _ids: this.get.contactgroups.map((obj) => obj.id),
+                    },
                 };
 
                 this.loadContainers();
-                this.loadServices('');
-                this.loadExcludedServices('');
+                this.loadServices("");
+                this.loadExcludedServices("");
                 this.loadElements();
-                this.loadExcludedServicegroups('');
-
-            })
+                this.loadExcludedServicegroups("");
+            }),
         );
     }
 
-    public ngOnDestroy(): void {
-    }
-
+    public ngOnDestroy(): void {}
 
     public loadContainers() {
-        this.subscriptions.add(this.ServiceescalationsService.loadContainers()
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadContainers().subscribe((result) => {
                 this.containers = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
@@ -196,13 +190,13 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.ServiceescalationsService.loadElements(containerId)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadElements(containerId).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.servicegroups = result.servicegroups;
-                this.servicegroups = this.servicegroups.map(obj => ({
+                this.servicegroups = this.servicegroups.map((obj) => ({
                     ...obj,
-                    disabled: this.post.servicegroups_excluded._ids.includes(obj.key)
+                    disabled: this.post.servicegroups_excluded._ids.includes(obj.key),
                 }));
 
                 this.processChosenExcludedServicegroups();
@@ -210,7 +204,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
                 this.timeperiods = result.timeperiods;
                 this.contacts = result.contacts;
                 this.contactgroups = result.contactgroups;
-            })
+            }),
         );
     }
 
@@ -220,25 +214,26 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.ServiceescalationsService.loadServices(containerId, searchString, this.post.services._ids)
-            .subscribe((result) => {
-                this.cdr.markForCheck();
-                this.services = result.services;
-                this.services.map(obj => {
-                    obj.items.map(service => {
-                        if (service.disabled === true) {
-                            this.disabled_services.push(service.value);
-                        }
-                    })
-                });
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadServices(containerId, searchString, this.post.services._ids).subscribe(
+                (result) => {
+                    this.cdr.markForCheck();
+                    this.services = result.services;
+                    this.services.map((obj) => {
+                        obj.items.map((service) => {
+                            if (service.disabled === true) {
+                                this.disabled_services.push(service.value);
+                            }
+                        });
+                    });
 
-                this.processChosenServices();
-            })
+                    this.processChosenServices();
+                },
+            ),
         );
-    }
+    };
 
     public loadExcludedServices = (searchString: string) => {
-
         const containerId = this.post.container_id;
         if (!containerId) {
             return;
@@ -247,23 +242,27 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             this.post.services_excluded._ids = [];
             return;
         }
-        this.subscriptions.add(this.ServiceescalationsService.loadExcludedServices(containerId, searchString, this.post.services_excluded._ids, this.post.servicegroups._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadExcludedServices(
+                containerId,
+                searchString,
+                this.post.services_excluded._ids,
+                this.post.servicegroups._ids,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.services_excluded = result.excludedServices;
-                this.services_excluded.map(obj => {
+                this.services_excluded.map((obj) => {
                     //currentServicesExcludedIds.push(obj.key);
-                    obj.items.map(service => {
+                    obj.items.map((service) => {
                         if (service.disabled === true) {
                             this.disabled_excluded_services.push(service.value);
                         }
-                    })
-
+                    });
                 });
                 this.processChosenExcludedServices();
-            }));
-
-    }
+            }),
+        );
+    };
 
     public loadExcludedServicegroups(searchString: string) {
         const containerId = this.post.container_id;
@@ -275,22 +274,28 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             this.post.servicegroups_excluded._ids = [];
             return;
         }
-        this.subscriptions.add(this.ServiceescalationsService.loadExcludedServicegroups(containerId, searchString, this.post.services._ids, this.post.servicegroups_excluded._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadExcludedServicegroups(
+                containerId,
+                searchString,
+                this.post.services._ids,
+                this.post.servicegroups_excluded._ids,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.servicegroups_excluded = result.excludedServicegroups;
-                this.servicegroups_excluded = this.servicegroups_excluded.map(obj => {
+                this.servicegroups_excluded = this.servicegroups_excluded.map((obj) => {
                     return {
                         ...obj,
-                        disabled: this.post.servicegroups._ids.includes(obj.key)
-                    }
+                        disabled: this.post.servicegroups._ids.includes(obj.key),
+                    };
                 });
-            }));
+            }),
+        );
     }
 
     public onContainerChange() {
         this.loadElements();
-        this.loadServices('');
+        this.loadServices("");
     }
 
     public processChosenServices() {
@@ -298,12 +303,13 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.services) {
-            for (let itemKey in this.services[key]['items']) {
-                if (this.disabled_services.includes(this.services[key]['items'][itemKey].value)) {
+            for (let itemKey in this.services[key]["items"]) {
+                if (this.disabled_services.includes(this.services[key]["items"][itemKey].value)) {
                     continue;
                 }
-                this.services[key]['items'][itemKey].disabled = this.post.services_excluded._ids.includes(this.services[key]['items'][itemKey].value);
-
+                this.services[key]["items"][itemKey].disabled = this.post.services_excluded._ids.includes(
+                    this.services[key]["items"][itemKey].value,
+                );
             }
         }
         this.cdr.detectChanges();
@@ -315,11 +321,13 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.services_excluded) {
-            for (let itemKey in this.services_excluded[key]['items']) {
-                if (this.disabled_excluded_services.includes(this.services_excluded[key]['items'][itemKey].value)) {
+            for (let itemKey in this.services_excluded[key]["items"]) {
+                if (this.disabled_excluded_services.includes(this.services_excluded[key]["items"][itemKey].value)) {
                     continue;
                 }
-                this.services_excluded[key]['items'][itemKey].disabled = this.post.services._ids.includes(this.services_excluded[key]['items'][itemKey].value);
+                this.services_excluded[key]["items"][itemKey].disabled = this.post.services._ids.includes(
+                    this.services_excluded[key]["items"][itemKey].value,
+                );
             }
         }
     }
@@ -330,7 +338,9 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.servicegroups) {
-            this.servicegroups[key].disabled = this.post.servicegroups_excluded._ids.includes(this.servicegroups[key].key);
+            this.servicegroups[key].disabled = this.post.servicegroups_excluded._ids.includes(
+                this.servicegroups[key].key,
+            );
         }
     }
 
@@ -340,25 +350,25 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.servicegroups_excluded) {
-            this.servicegroups_excluded[key].disabled = this.post.servicegroups._ids.includes(this.servicegroups_excluded[key].key);
+            this.servicegroups_excluded[key].disabled = this.post.servicegroups._ids.includes(
+                this.servicegroups_excluded[key].key,
+            );
         }
     }
 
-
     public submit() {
-        this.subscriptions.add(this.ServiceescalationsService.edit(this.post)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.edit(this.post).subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('Service escalation');
-                    const msg = this.TranslocoService.translate('updated successfully');
-                    const url = ['serviceescalations', 'edit', response.id];
+                    const title = this.TranslocoService.translate("Service escalation");
+                    const msg = this.TranslocoService.translate("updated successfully");
+                    const url = ["serviceescalations", "edit", response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
-
-                    this.HistoryService.navigateWithFallback(['/serviceescalations/index']);
+                    this.HistoryService.navigateWithFallback(["/serviceescalations/index"]);
                     this.notyService.scrollContentDivToTop();
                     return;
                 }
@@ -369,7 +379,7 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
-            }));
-
+            }),
+        );
     }
 }

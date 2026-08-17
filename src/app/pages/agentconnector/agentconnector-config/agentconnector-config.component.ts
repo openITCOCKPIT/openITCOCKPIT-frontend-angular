@@ -1,14 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { AgentconnectorAgentConfigSatellite, AgentModes } from '../agentconnector.interface';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { AgentconnectorAgentConfigSatellite, AgentModes } from "../agentconnector.interface";
 import {
     AgentconnectorConnectionTypes,
     AgentconnectorOperatingSystems,
     AgentconnectorWebserverTypes,
-    AgentconnectorWizardStepsEnum
-} from '../agentconnector.enums';
-import {
-    AgentconnectorWizardProgressbarComponent
-} from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
+    AgentconnectorWizardStepsEnum,
+} from "../agentconnector.enums";
+import { AgentconnectorWizardProgressbarComponent } from "../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component";
 import {
     CardBodyComponent,
     CardComponent,
@@ -21,32 +19,31 @@ import {
     FormControlDirective,
     FormLabelDirective,
     FormSelectDirective,
-    RowComponent
-} from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { AgentconnectorService } from '../agentconnector.service';
-import { AgentConfig } from '../agentconfig.interface';
-import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
-import { NgClass } from '@angular/common';
-import { HostEntity } from '../../hosts/hosts.interface';
+    RowComponent,
+} from "@coreui/angular";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { PermissionDirective } from "../../../permissions/permission.directive";
+import { TranslocoDirective, TranslocoPipe } from "@jsverse/transloco";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { Subscription } from "rxjs";
+import { AgentconnectorService } from "../agentconnector.service";
+import { AgentConfig } from "../agentconfig.interface";
+import { BlockLoaderComponent } from "../../../layouts/primeng/loading/block-loader/block-loader.component";
+import { NgClass } from "@angular/common";
+import { HostEntity } from "../../hosts/hosts.interface";
 
-import { PaginatorModule } from 'primeng/paginator';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
+import { FormErrorDirective } from "../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../layouts/coreui/form-feedback/form-feedback.component";
+import { GenericIdResponse, GenericValidationError } from "../../../generic-responses";
 
-
-import { ApikeyDocModalComponent } from '../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { FormsModule } from '@angular/forms';
+import { ApikeyDocModalComponent } from "../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { FormsModule } from "@angular/forms";
 
 @Component({
-    selector: 'oitc-agentconnector-config',
+    selector: "oitc-agentconnector-config",
     imports: [
         AgentconnectorWizardProgressbarComponent,
         CardBodyComponent,
@@ -73,14 +70,13 @@ import { FormsModule } from '@angular/forms';
         ApikeyDocModalComponent,
         RowComponent,
         ColComponent,
-        FormsModule
+        FormsModule,
     ],
-    templateUrl: './agentconnector-config.component.html',
-    styleUrl: './agentconnector-config.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./agentconnector-config.component.html",
+    styleUrl: "./agentconnector-config.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
-
     // Wizard step 2
 
     public hostId: number = 0;
@@ -107,34 +103,36 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
     protected readonly AgentconnectorWizardStepsEnum = AgentconnectorWizardStepsEnum;
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
-            const hostId = Number(this.route.snapshot.paramMap.get('hostId'));
-            if (hostId > 0) {
-                this.hostId = hostId;
-            }
+        this.subscriptions.add(
+            this.route.queryParams.subscribe((params) => {
+                // Here, params is an object containing the current query parameters.
+                // You can do something with these parameters here.
+                //console.log(params);
+                const hostId = Number(this.route.snapshot.paramMap.get("hostId"));
+                if (hostId > 0) {
+                    this.hostId = hostId;
+                }
 
-            // Query String Parameters
-            const pushAgentId = Number(params['pushAgentId']) || 0;
-            if (pushAgentId > 0) {
-                this.pushAgentId = pushAgentId;
-            }
+                // Query String Parameters
+                const pushAgentId = Number(params["pushAgentId"]) || 0;
+                if (pushAgentId > 0) {
+                    this.pushAgentId = pushAgentId;
+                }
 
-            const mode = params['mode'] || undefined;
-            if (mode == AgentModes.Push || mode == AgentModes.Pull) {
-                this.urlMode = mode;
-            }
+                const mode = params["mode"] || undefined;
+                if (mode == AgentModes.Push || mode == AgentModes.Pull) {
+                    this.urlMode = mode;
+                }
 
-            const selectedOs = params['selectedOs'] || undefined;
-            if (selectedOs) {
-                this.preselectedOs = selectedOs as AgentconnectorOperatingSystems;
-            }
+                const selectedOs = params["selectedOs"] || undefined;
+                if (selectedOs) {
+                    this.preselectedOs = selectedOs as AgentconnectorOperatingSystems;
+                }
 
-            // Load current agent config if any exists
-            this.loadAgentConfig();
-        }));
+                // Load current agent config if any exists
+                this.loadAgentConfig();
+            }),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -142,47 +140,52 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
     }
 
     public loadAgentConfig() {
-        this.subscriptions.add(this.AgentconnectorService.loadAgentConfig(this.hostId).subscribe(data => {
-            this.host = data.host;
-            this.config = data.config;
-            this.satellite = undefined;
-            if (data.satellite) {
-                // object (null for hosts on the master system)
-                this.satellite = data.satellite;
-            }
-            this.isNewConfig = data.isNewConfig;
+        this.subscriptions.add(
+            this.AgentconnectorService.loadAgentConfig(this.hostId).subscribe((data) => {
+                this.host = data.host;
+                this.config = data.config;
+                this.satellite = undefined;
+                if (data.satellite) {
+                    // object (null for hosts on the master system)
+                    this.satellite = data.satellite;
+                }
+                this.isNewConfig = data.isNewConfig;
 
-            if (this.config.bool.use_autossl === false && this.config.bool.use_https === true) {
-                this.connectionType = AgentconnectorConnectionTypes.Https;
-            }
-            if (this.config.bool.use_autossl === false && this.config.bool.use_https === false) {
-                this.connectionType = AgentconnectorConnectionTypes.Http;
-            }
+                if (this.config.bool.use_autossl === false && this.config.bool.use_https === true) {
+                    this.connectionType = AgentconnectorConnectionTypes.Https;
+                }
+                if (this.config.bool.use_autossl === false && this.config.bool.use_https === false) {
+                    this.connectionType = AgentconnectorConnectionTypes.Http;
+                }
 
-            this.webserverType = AgentconnectorWebserverTypes.Https;
-            if (this.config.bool.push_webserver_use_https === false) {
-                this.webserverType = AgentconnectorWebserverTypes.Http;
-            }
+                this.webserverType = AgentconnectorWebserverTypes.Https;
+                if (this.config.bool.push_webserver_use_https === false) {
+                    this.webserverType = AgentconnectorWebserverTypes.Http;
+                }
 
+                if (this.urlMode) {
+                    // The current Agnular route has a "mode"
+                    // User came from the first wizard page
 
-            if (this.urlMode) {
-                // The current Agnular route has a "mode"
-                // User came from the first wizard page
+                    this.config.bool.enable_push_mode = this.urlMode == AgentModes.Push;
+                }
 
-                this.config.bool.enable_push_mode = this.urlMode == AgentModes.Push;
-            }
+                if (this.isNewConfig) {
+                    this.config.string.operating_system = this.preselectedOs;
+                }
 
-            if (this.isNewConfig) {
-                this.config.string.operating_system = this.preselectedOs;
-            }
+                if (
+                    this.config.bool.enable_push_mode === true &&
+                    this.config.string.push_oitc_server_url === "" &&
+                    this.satellite
+                ) {
+                    //Set Satellite Address as default push target address
+                    this.config.string.push_oitc_server_url = "https://" + this.satellite.address;
+                }
 
-            if (this.config.bool.enable_push_mode === true && this.config.string.push_oitc_server_url === '' && this.satellite) {
-                //Set Satellite Address as default push target address
-                this.config.string.push_oitc_server_url = 'https://' + this.satellite.address;
-            }
-
-            this.cdr.markForCheck();
-        }));
+                this.cdr.markForCheck();
+            }),
+        );
     }
 
     public changeOs(os: AgentconnectorOperatingSystems) {
@@ -201,8 +204,8 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
                 this.config.bool.use_autossl = false;
                 this.config.bool.use_https = false;
                 this.config.bool.use_https_verify = false;
-                this.config.string.ssl_certfile = '';
-                this.config.string.ssl_keyfile = '';
+                this.config.string.ssl_certfile = "";
+                this.config.string.ssl_keyfile = "";
             }
 
             if (this.connectionType === AgentconnectorConnectionTypes.Https) {
@@ -216,8 +219,8 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
                 this.config.bool.use_autossl = true;
                 this.config.bool.use_https = false;
                 this.config.bool.use_https_verify = false;
-                this.config.string.ssl_certfile = '';
-                this.config.string.ssl_keyfile = '';
+                this.config.string.ssl_certfile = "";
+                this.config.string.ssl_keyfile = "";
             }
         } else {
             // Agent in PUSH Mode
@@ -229,7 +232,6 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
             if (this.webserverType === AgentconnectorWebserverTypes.Http) {
                 this.config.bool.push_webserver_use_https = false;
             }
-
         }
     }
 
@@ -241,8 +243,8 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
             pushAgentId = this.pushAgentId;
         }
 
-        this.subscriptions.add(this.AgentconnectorService.saveAgentConfig(this.config, this.hostId, pushAgentId)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.AgentconnectorService.saveAgentConfig(this.config, this.hostId, pushAgentId).subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
@@ -252,7 +254,7 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
                     this.errors = null;
 
                     if (response.id) {
-                        this.router.navigate(['/agentconnector/install', this.hostId]);
+                        this.router.navigate(["/agentconnector/install", this.hostId]);
                     }
 
                     return;
@@ -264,11 +266,12 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
-            }));
+            }),
+        );
     }
 
     public onBackButtonClick() {
-        this.router.navigate(['/agentconnector/wizard'], {queryParams: {hostId: this.hostId}});
+        this.router.navigate(["/agentconnector/wizard"], { queryParams: { hostId: this.hostId } });
     }
 
     public onNextButtonClick() {

@@ -6,37 +6,36 @@ import {
     input,
     InputSignal,
     OnDestroy,
-    OnInit
-} from '@angular/core';
-import { CdkDrag } from '@angular/cdk/drag-drop';
-import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { NgClass } from '@angular/common';
-import { ContextMenuModule } from 'primeng/contextmenu';
-import { MenuItem } from 'primeng/api';
-import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
-import { interval, Subscription } from 'rxjs';
-import { Mapitem } from '../../pages/mapeditors/mapeditors.interface';
-import { ContextActionType, LabelPosition, MapItemType } from '../map-item-base/map-item-base.enum';
-import { MapItemReloadService } from '../../../../services/map-item-reload.service';
-import { BlinkService } from '../../../../services/blink.service';
-import { UUID } from '../../../../classes/UUID';
+    OnInit,
+} from "@angular/core";
+import { CdkDrag } from "@angular/cdk/drag-drop";
+import { MapCanvasComponent } from "../map-canvas/map-canvas.component";
+import { NgClass } from "@angular/common";
+import { ContextMenuModule } from "@openng/optimus-ui/contextmenu";
+import { MenuItem } from "@openng/optimus-ui/api";
+import { MapItemBaseComponent } from "../map-item-base/map-item-base.component";
+import { interval, Subscription } from "rxjs";
+import { Mapitem } from "../../pages/mapeditors/mapeditors.interface";
+import { ContextActionType, LabelPosition, MapItemType } from "../map-item-base/map-item-base.enum";
+import { MapItemReloadService } from "../../../../services/map-item-reload.service";
+import { BlinkService } from "../../../../services/blink.service";
+import { UUID } from "../../../../classes/UUID";
 import {
     DataForMapItem,
     MapItemRoot,
     MapItemRootForMapItem,
-    MapItemRootParams
-} from '../map-item-base/map-item-base.interface';
+    MapItemRootParams,
+} from "../map-item-base/map-item-base.interface";
 
 @Component({
-    selector: 'oitc-map-item',
+    selector: "oitc-map-item",
     standalone: true,
     imports: [CdkDrag, ContextMenuModule, NgClass],
-    templateUrl: './map-item.component.html',
-    styleUrl: './map-item.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./map-item.component.html",
+    styleUrl: "./map-item.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements OnInit, OnDestroy {
-
     public override item: InputSignal<Mapitem | undefined> = input<Mapitem>();
     public refreshInterval = input<number>();
 
@@ -78,7 +77,6 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         if (!this.isItemDeleted(this.type)) {
             this.load();
         }
-
     }
 
     public updateCallback = (result: MapItemRootForMapItem) => {
@@ -95,7 +93,11 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         if (this.allowView) {
             if (this.refreshInterval()! > 0 && this.uuidForServices) {
                 this.MapItemReloadService.setRefreshInterval(this.refreshInterval() as number);
-                this.MapItemReloadService.registerNewItem(this.uuidForServices, this.item() as Mapitem, this.updateCallback);
+                this.MapItemReloadService.registerNewItem(
+                    this.uuidForServices,
+                    this.item() as Mapitem,
+                    this.updateCallback,
+                );
             }
         }
 
@@ -103,7 +105,10 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
 
         this.currentIcon = this.icon;
 
-        if ((result.data.data.isAcknowledged === true || result.data.data.isInDowntime === true) && this.uuidForServices) {
+        if (
+            (result.data.data.isAcknowledged === true || result.data.data.isInDowntime === true) &&
+            this.uuidForServices
+        ) {
             this.BlinkService.registerNewObject(this.uuidForServices, this.blinkServiceCallback);
         } else {
             if (this.uuidForServices) {
@@ -119,43 +124,44 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         }
 
         const params: MapItemRootParams = {
-            'angular': true,
-            'disableGlobalLoader': true,
-            'objectId': this.item()!.object_id as number,
-            'mapId': this.item()!.map_id as number,
-            'type': this.item()!.type as string
+            angular: true,
+            disableGlobalLoader: true,
+            objectId: this.item()!.object_id as number,
+            mapId: this.item()!.map_id as number,
+            type: this.item()!.type as string,
         };
 
-        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
-            .subscribe((result: MapItemRoot) => {
-                this.updateCallback({data: result});
-            }));
-    };
+        this.subscriptions.add(
+            this.MapItemBaseService.getMapItem(params).subscribe((result: MapItemRoot) => {
+                this.updateCallback({ data: result });
+            }),
+        );
+    }
 
     private getLabel = (data: DataForMapItem) => {
-        this.label = '';
+        this.label = "";
         switch (this.item()!.type) {
-            case 'host':
+            case "host":
                 this.label = data.Host.hostname;
                 this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
-            case 'service':
-                this.label = data.Host.hostname + '/' + data.Service.servicename;
+            case "service":
+                this.label = data.Host.hostname + "/" + data.Service.servicename;
                 this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
-            case 'hostgroup':
+            case "hostgroup":
                 this.label = data.Hostgroup!.name;
                 this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
-            case 'servicegroup':
+            case "servicegroup":
                 this.label = data.Servicegroup!.name;
                 this.label = this.shortenLabel(this.label, 50, true);
                 break;
 
-            case 'map':
+            case "map":
                 this.label = data.Map!.name;
                 this.label = this.shortenLabel(this.label, 50, true);
                 break;
@@ -172,14 +178,14 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
             }
             this.cdr.markForCheck();
         });
-    };
+    }
 
     private stopBlink() {
         if (this.blinkSubscription) {
             this.blinkSubscription.unsubscribe();
             this.cdr.markForCheck();
         }
-    };
+    }
 
     private blinkServiceCallback() {
         if (this.currentIcon === this.icon) {
@@ -188,14 +194,14 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
             this.currentIcon = this.icon;
         }
         this.cdr.markForCheck();
-    };
+    }
 
     private stop() {
         if (this.uuidForServices) {
             this.BlinkService.unregisterObject(this.uuidForServices);
             this.MapItemReloadService.unregisterItem(this.uuidForServices);
         }
-    };
+    }
 
     private onItemObjectIdChange() {
         if (this.init || this.item()!.object_id === null) {
@@ -204,17 +210,17 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         }
 
         this.load();
-    };
+    }
 
     protected override getExtraContextMenuItems(): MenuItem[] {
         return [
             {
-                label: this.TranslocoService.translate('Label position'),
-                icon: 'fa fa-font',
+                label: this.TranslocoService.translate("Label position"),
+                icon: "fa fa-font",
                 items: [
                     {
-                        label: this.TranslocoService.translate('Top'),
-                        icon: 'fa fa-up-long',
+                        label: this.TranslocoService.translate("Top"),
+                        icon: "fa fa-up-long",
                         command: () => {
                             this.contextActionEvent.emit({
                                 type: ContextActionType.LABEL_POSITION,
@@ -223,16 +229,16 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
-                                    label_possition: LabelPosition.TOP
+                                    label_possition: LabelPosition.TOP,
                                 } as Mapitem,
-                                itemType: this.type
+                                itemType: this.type,
                             });
                             this.cdr.markForCheck();
-                        }
+                        },
                     },
                     {
-                        label: this.TranslocoService.translate('Right'),
-                        icon: 'fa fa-right-long',
+                        label: this.TranslocoService.translate("Right"),
+                        icon: "fa fa-right-long",
                         command: () => {
                             this.contextActionEvent.emit({
                                 type: ContextActionType.LABEL_POSITION,
@@ -242,16 +248,16 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                                     y: this.y,
                                     map_id: this.mapId,
                                     label_possition: LabelPosition.RIGHT,
-                                    allowView: this.allowView
+                                    allowView: this.allowView,
                                 } as Mapitem,
-                                itemType: this.type
+                                itemType: this.type,
                             });
                             this.cdr.markForCheck();
-                        }
+                        },
                     },
                     {
-                        label: this.TranslocoService.translate('Bottom'),
-                        icon: 'fa fa-down-long',
+                        label: this.TranslocoService.translate("Bottom"),
+                        icon: "fa fa-down-long",
                         command: () => {
                             this.contextActionEvent.emit({
                                 type: ContextActionType.LABEL_POSITION,
@@ -261,16 +267,16 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                                     y: this.y,
                                     map_id: this.mapId,
                                     label_possition: LabelPosition.BOTTOM,
-                                    allowView: this.allowView
+                                    allowView: this.allowView,
                                 } as Mapitem,
-                                itemType: this.type
+                                itemType: this.type,
                             });
                             this.cdr.markForCheck();
-                        }
+                        },
                     },
                     {
-                        label: this.TranslocoService.translate('Left'),
-                        icon: 'fa fa-left-long',
+                        label: this.TranslocoService.translate("Left"),
+                        icon: "fa fa-left-long",
                         command: () => {
                             this.contextActionEvent.emit({
                                 type: ContextActionType.LABEL_POSITION,
@@ -280,16 +286,15 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                                     y: this.y,
                                     map_id: this.mapId,
                                     label_possition: LabelPosition.LEFT,
-                                    allowView: this.allowView
+                                    allowView: this.allowView,
                                 } as Mapitem,
-                                itemType: this.type
+                                itemType: this.type,
                             });
                             this.cdr.markForCheck();
-                        }
-                    }
-                ]
-            }
-        ]
+                        },
+                    },
+                ],
+            },
+        ];
     }
-
 }

@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { HistoryService } from '../../../history.service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { BackButtonDirective } from "../../../directives/back-button.directive";
+import { HistoryService } from "../../../history.service";
 import {
     AlertComponent,
     CardBodyComponent,
@@ -11,29 +11,28 @@ import {
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent
-} from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
-import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { HostgroupsService } from '../hostgroups.service';
-import { HostgroupAppend, HostgroupsLoadHostgroupsByStringParams } from '../hostgroups.interface';
-import { Subscription } from 'rxjs';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
-import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
-
+    NavItemComponent,
+} from "@coreui/angular";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { FormsModule } from "@angular/forms";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { PermissionDirective } from "../../../permissions/permission.directive";
+import { RequiredIconComponent } from "../../../components/required-icon/required-icon.component";
+import { SelectComponent } from "../../../layouts/primeng/select/select/select.component";
+import { TranslocoDirective, TranslocoService } from "@jsverse/transloco";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { HostgroupsService } from "../hostgroups.service";
+import { HostgroupAppend, HostgroupsLoadHostgroupsByStringParams } from "../hostgroups.interface";
+import { Subscription } from "rxjs";
+import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { GenericIdResponse, GenericValidationError } from "../../../generic-responses";
+import { FormErrorDirective } from "../../../layouts/coreui/form-error.directive";
+import { FormFeedbackComponent } from "../../../layouts/coreui/form-feedback/form-feedback.component";
 
 @Component({
-    selector: 'oitc-hostgroups-append',
+    selector: "oitc-hostgroups-append",
     imports: [
         BackButtonDirective,
         CardBodyComponent,
@@ -56,11 +55,11 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
         XsButtonDirective,
         AlertComponent,
         RouterLink,
-        FormFeedbackComponent
+        FormFeedbackComponent,
     ],
-    templateUrl: './hostgroups-append.component.html',
-    styleUrl: './hostgroups-append.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./hostgroups-append.component.html",
+    styleUrl: "./hostgroups-append.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HostgroupsAppendComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
@@ -72,17 +71,17 @@ export class HostgroupsAppendComponent implements OnInit, OnDestroy {
     protected post: HostgroupAppend = {
         Hostgroup: {
             hosts: {
-                _ids: []
+                _ids: [],
             },
-            id: 0
-        }
+            id: 0,
+        },
     };
     protected hostgroups: SelectKeyValue[] = [];
     public errors: GenericValidationError | null = null;
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
-        this.loadHostgroups('');
+        this.loadHostgroups("");
         this.cdr.markForCheck();
     }
 
@@ -91,34 +90,36 @@ export class HostgroupsAppendComponent implements OnInit, OnDestroy {
     }
 
     protected loadHostgroups = (search: string) => {
-        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({
-            'filter[Containers.name]': search
-        } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
-            this.hostgroups = data;
-            this.cdr.markForCheck();
-        }));
-    }
+        this.subscriptions.add(
+            this.HostgroupsService.loadHostgroupsByString({
+                "filter[Containers.name]": search,
+            } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+                this.hostgroups = data;
+                this.cdr.markForCheck();
+            }),
+        );
+    };
 
     protected submit(): void {
-        const hostIds = this.route.snapshot.paramMap.get('hostids');
+        const hostIds = this.route.snapshot.paramMap.get("hostids");
         if (hostIds) {
-            this.post.Hostgroup.hosts._ids = hostIds.split(',').map(Number);
+            this.post.Hostgroup.hosts._ids = hostIds.split(",").map(Number);
         }
 
-        this.subscriptions.add(this.HostgroupsService.appendHosts(this.post)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostgroupsService.appendHosts(this.post).subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
 
-                    const title = this.TranslocoService.translate('Append hosts to host group');
-                    const msg = this.TranslocoService.translate(' successfully');
-                    const url = ['hostgroups', 'edit', response.id];
+                    const title = this.TranslocoService.translate("Append hosts to host group");
+                    const msg = this.TranslocoService.translate(" successfully");
+                    const url = ["hostgroups", "edit", response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
                     this.notyService.scrollContentDivToTop();
-                    this.HistoryService.navigateWithFallback(['/hosts/index']);
+                    this.HistoryService.navigateWithFallback(["/hosts/index"]);
                     return;
                 }
 
@@ -128,7 +129,7 @@ export class HostgroupsAppendComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
-            })
+            }),
         );
     }
 }

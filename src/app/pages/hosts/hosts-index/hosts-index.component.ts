@@ -1,9 +1,6 @@
-
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ActionsButtonComponent } from "../../../components/actions-button/actions-button.component";
+import { ActionsButtonElementComponent } from "../../../components/actions-button-element/actions-button-element.component";
 import {
     CardBodyComponent,
     CardComponent,
@@ -29,29 +26,27 @@ import {
     NavItemComponent,
     RowComponent,
     TableDirective,
-    TooltipDirective
-} from '@coreui/angular';
-import { DebounceDirective } from '../../../directives/debounce.directive';
-import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from '@fortawesome/angular-fontawesome';
-import { FormsModule } from '@angular/forms';
-import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, NgClass } from '@angular/common';
-import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { PaginatorModule } from 'primeng/paginator';
-import { PermissionDirective } from '../../../permissions/permission.directive';
-import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { Subscription } from 'rxjs';
-import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
+    TooltipDirective,
+} from "@coreui/angular";
+import { DebounceDirective } from "../../../directives/debounce.directive";
+import { DeleteAllModalComponent } from "../../../layouts/coreui/delete-all-modal/delete-all-modal.component";
+import { FaIconComponent, FaStackComponent, FaStackItemSizeDirective } from "@fortawesome/angular-fontawesome";
+import { FormsModule } from "@angular/forms";
+import { ItemSelectComponent } from "../../../layouts/coreui/select-all/item-select/item-select.component";
+import { MatSort, MatSortHeader, Sort } from "@angular/material/sort";
+import { MultiSelectComponent } from "../../../layouts/primeng/multi-select/multi-select/multi-select.component";
+import { AsyncPipe, NgClass } from "@angular/common";
+import { NoRecordsComponent } from "../../../layouts/coreui/no-records/no-records.component";
+import { PaginateOrScrollComponent } from "../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component";
+import { PaginatorModule } from "@openng/optimus-ui/paginator";
+import { PermissionDirective } from "../../../permissions/permission.directive";
+import { SelectAllComponent } from "../../../layouts/coreui/select-all/select-all.component";
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from "@jsverse/transloco";
+import { XsButtonDirective } from "../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { DeleteAllItem } from "../../../layouts/coreui/delete-all-modal/delete-all.interface";
+import { Subscription } from "rxjs";
+import { PaginatorChangeEvent } from "../../../layouts/coreui/paginator/paginator.interface";
 import {
     getDefaultHostsIndexFilter,
     getDefaultHostsIndexParams,
@@ -60,77 +55,55 @@ import {
     HostsCurrentStateFilter,
     HostsIndexFilter,
     HostsIndexParams,
-    HostsIndexRoot
-} from '../hosts.interface';
-import { HostsService } from '../hosts.service';
-import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
-import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
-import {
-    QueryHandlerCheckerComponent
-} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
-import { HoststatusIconComponent } from '../hoststatus-icon/hoststatus-icon.component';
-import { PermissionsService } from '../../../permissions/permissions.service';
-import {
-    AcknowledgementIconComponent
-} from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
-import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
-import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
-import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
+    HostsIndexRoot,
+} from "../hosts.interface";
+import { HostsService } from "../hosts.service";
+import { SelectionServiceService } from "../../../layouts/coreui/select-all/selection-service.service";
+import { DELETE_SERVICE_TOKEN } from "../../../tokens/delete-injection.token";
+import { QueryHandlerCheckerComponent } from "../../../layouts/coreui/query-handler-checker/query-handler-checker.component";
+import { HoststatusIconComponent } from "../hoststatus-icon/hoststatus-icon.component";
+import { PermissionsService } from "../../../permissions/permissions.service";
+import { AcknowledgementIconComponent } from "../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component";
+import { DowntimeIconComponent } from "../../downtimes/downtime-icon/downtime-icon.component";
+import { CopyToClipboardComponent } from "../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component";
+import { TrustAsHtmlPipe } from "../../../pipes/trust-as-html.pipe";
 
-import { NgSelectModule } from '@ng-select/ng-select';
-import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import {
-    RegexHelperTooltipComponent
-} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
-import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { HttpParams } from '@angular/common/http';
-import {
-    ServiceResetChecktimeModalComponent
-} from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
+import { NgSelectModule } from "@ng-select/ng-select";
+import { TrueFalseDirective } from "../../../directives/true-false.directive";
+import { SelectKeyValue } from "../../../layouts/primeng/select.interface";
+import { RegexHelperTooltipComponent } from "../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component";
+import { TableLoaderComponent } from "../../../layouts/primeng/loading/table-loader/table-loader.component";
+import { HttpParams } from "@angular/common/http";
+import { ServiceResetChecktimeModalComponent } from "../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component";
 import {
     HostAcknowledgeItem,
     HostDisableNotificationsItem,
     HostDowntimeItem,
-    HostEnableNotificationsItem
-} from '../../../services/external-commands.service';
-import {
-    HostsMaintenanceModalComponent
-} from '../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
-import { NotyService } from '../../../layouts/coreui/noty.service';
-import {
-    HostsEnableNotificationsModalComponent
-} from '../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component';
-import {
-    HostsDisableNotificationsModalComponent
-} from '../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component';
-import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
-import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
-import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
+    HostEnableNotificationsItem,
+} from "../../../services/external-commands.service";
+import { HostsMaintenanceModalComponent } from "../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component";
+import { NotyService } from "../../../layouts/coreui/noty.service";
+import { HostsEnableNotificationsModalComponent } from "../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component";
+import { HostsDisableNotificationsModalComponent } from "../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component";
+import { DisableItem } from "../../../layouts/coreui/disable-modal/disable.interface";
+import { DISABLE_SERVICE_TOKEN } from "../../../tokens/disable-injection.token";
+import { DisableModalComponent } from "../../../layouts/coreui/disable-modal/disable-modal.component";
 
-import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
+import { ExternalCommandsEnum } from "../../../enums/external-commands.enum";
 
-import {
-    HostAcknowledgeModalComponent
-} from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
-import {
-    HostsAddToHostgroupComponent
-} from '../../../components/hosts/hosts-add-to-hostgroup/hosts-add-to-hostgroup.component';
-import { HostBrowserTabs } from '../hosts.enum';
-import { FilterBookmarkComponent } from '../../../components/filter-bookmark/filter-bookmark.component';
-import { LocalStorageService } from '../../../services/local-storage.service';
-import {
-    ColumnsConfigExportModalComponent
-} from '../../../layouts/coreui/columns-config-export-modal/columns-config-export-modal.component';
-import {
-    ColumnsConfigImportModalComponent
-} from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
-import { IndexPage } from '../../../pages.interface';
-import { HostgroupsService } from '../../hostgroups/hostgroups.service';
-import { HostgroupsLoadHostgroupsByStringParams } from '../../hostgroups/hostgroups.interface';
+import { HostAcknowledgeModalComponent } from "../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component";
+import { HostsAddToHostgroupComponent } from "../../../components/hosts/hosts-add-to-hostgroup/hosts-add-to-hostgroup.component";
+import { HostBrowserTabs } from "../hosts.enum";
+import { FilterBookmarkComponent } from "../../../components/filter-bookmark/filter-bookmark.component";
+import { LocalStorageService } from "../../../services/local-storage.service";
+import { ColumnsConfigExportModalComponent } from "../../../layouts/coreui/columns-config-export-modal/columns-config-export-modal.component";
+import { ColumnsConfigImportModalComponent } from "../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component";
+import { IndexPage } from "../../../pages.interface";
+import { HostgroupsService } from "../../hostgroups/hostgroups.service";
+import { HostgroupsLoadHostgroupsByStringParams } from "../../hostgroups/hostgroups.interface";
 
 @Component({
-    selector: 'oitc-hosts-index',
+    selector: "oitc-hosts-index",
     imports: [
         ActionsButtonComponent,
         ActionsButtonElementComponent,
@@ -198,15 +171,15 @@ import { HostgroupsLoadHostgroupsByStringParams } from '../../hostgroups/hostgro
         FilterBookmarkComponent,
         ColumnsConfigExportModalComponent,
         ColumnsConfigImportModalComponent,
-        AsyncPipe
+        AsyncPipe,
     ],
-    templateUrl: './hosts-index.component.html',
-    styleUrl: './hosts-index.component.css',
+    templateUrl: "./hosts-index.component.html",
+    styleUrl: "./hosts-index.component.css",
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DISABLE_SERVICE_TOKEN, useClass: HostsService },
+        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService }, // Inject the ServicesService into the DeleteAllModalComponent
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     // Filter vars
@@ -215,30 +188,30 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public currentStateFilter: HostsCurrentStateFilter = {
         up: false,
         down: false,
-        unreachable: false
+        unreachable: false,
     };
     public state_typesFilter = {
         soft: false,
-        hard: false
+        hard: false,
     };
     public acknowledgementsFilter = {
         acknowledged: false,
-        not_acknowledged: false
+        not_acknowledged: false,
     };
     public downtimeFilter = {
         in_downtime: false,
-        not_in_downtime: false
+        not_in_downtime: false,
     };
     public notificationsFilter = {
         enabled: false,
-        not_enabled: false
+        not_enabled: false,
     };
     public priorityFilter: { [key: string]: boolean } = {
-        '1': false,
-        '2': false,
-        '3': false,
-        '4': false,
-        '5': false
+        "1": false,
+        "2": false,
+        "3": false,
+        "4": false,
+        "5": false,
     };
 
     // Filter end
@@ -251,7 +224,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public hostTypes: any[] = [];
     public selectedItems: any[] = [];
 
-    public userFullname: string = '';
+    public userFullname: string = "";
 
     private readonly HostsService = inject(HostsService);
     private readonly HostgroupsService = inject(HostgroupsService);
@@ -259,129 +232,147 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public readonly PermissionsService = inject(PermissionsService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
     private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
     private readonly modalService = inject(ModalService);
     private readonly LocalStorageService = inject(LocalStorageService);
-    public fields: boolean[] = [true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, false, false]; //default fields to show
+    public fields: boolean[] = [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false,
+    ]; //default fields to show
     //fields for column configuration
     public fieldNames: string[] = [
-        'Hoststatus',
-        'is acknowledged',
-        'is in downtime',
-        'Notifications enabled',
-        'Shared',
-        'Passively transferred host',
-        'Priority',
-        'Host name',
-        'Host description',
-        'IP address',
-        'Last state change',
-        'Last check',
-        'Host output',
-        'Instance',
-        'Service Summary ',
-        'Host notes',
-        'Host type'
+        "Hoststatus",
+        "is acknowledged",
+        "is in downtime",
+        "Notifications enabled",
+        "Shared",
+        "Passively transferred host",
+        "Priority",
+        "Host name",
+        "Host description",
+        "IP address",
+        "Last state change",
+        "Last check",
+        "Host output",
+        "Instance",
+        "Service Summary ",
+        "Host notes",
+        "Host type",
     ];
-    public columnsTableKey: string = 'HostsIndexColumns';
+    public columnsTableKey: string = "HostsIndexColumns";
     public showColumnConfig: boolean = false;
-    public configString: string = ''
+    public configString: string = "";
 
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit() {
         this.hostTypes = this.HostsService.getHostTypes();
         this.loadColumns();
-        this.route.queryParams.subscribe(params => {
-            let hostId = params['host_id'] || params['id'];
+        this.route.queryParams.subscribe((params) => {
+            let hostId = params["host_id"] || params["id"];
             if (hostId) {
-                this.filter['Hosts.id'] = [].concat(hostId); // make sure we always get an array
+                this.filter["Hosts.id"] = [].concat(hostId); // make sure we always get an array
             }
 
-            let containerId = params['BrowserContainerId'] || undefined
+            let containerId = params["BrowserContainerId"] || undefined;
             if (containerId) {
                 this.params.BrowserContainerId = parseInt(containerId, 10);
             }
 
-            let hostname = params['hostname'] || undefined;
+            let hostname = params["hostname"] || undefined;
             if (hostname) {
-                this.filter['Hosts.name'] = hostname;
+                this.filter["Hosts.name"] = hostname;
             }
 
-            let name_regex = params['name_regex'];
-            if (name_regex === 'true') {
-                this.filter['Hosts.name_regex'] = true;
+            let name_regex = params["name_regex"];
+            if (name_regex === "true") {
+                this.filter["Hosts.name_regex"] = true;
             }
 
-            let address = params['address'] || undefined;
+            let address = params["address"] || undefined;
             if (address) {
-                this.filter['Hosts.address'] = address;
+                this.filter["Hosts.address"] = address;
             }
 
-            let address_regex = params['address_regex'];
-            if (address_regex === 'true') {
-                this.filter['Hosts.address_regex'] = true;
+            let address_regex = params["address_regex"];
+            if (address_regex === "true") {
+                this.filter["Hosts.address_regex"] = true;
             }
 
-            let acknowledged = params['acknowledged'];
-            if (acknowledged === 'true') {
+            let acknowledged = params["acknowledged"];
+            if (acknowledged === "true") {
                 this.acknowledgementsFilter.acknowledged = true;
             }
 
-            let not_acknowledged = params['not_acknowledged'];
-            if (not_acknowledged === 'true') {
+            let not_acknowledged = params["not_acknowledged"];
+            if (not_acknowledged === "true") {
                 this.acknowledgementsFilter.not_acknowledged = true;
             }
 
-            let in_downtime = params['in_downtime'];
-            if (in_downtime === 'true') {
+            let in_downtime = params["in_downtime"];
+            if (in_downtime === "true") {
                 this.downtimeFilter.in_downtime = true;
             }
 
-            let not_in_downtime = params['not_in_downtime'];
-            if (not_in_downtime === 'true') {
+            let not_in_downtime = params["not_in_downtime"];
+            if (not_in_downtime === "true") {
                 this.downtimeFilter.not_in_downtime = true;
             }
 
-            let passive = params['passive'];
-            if (passive === 'true') {
-                this.filter['Hoststatus.active_checks_enabled'] = 'false';
+            let passive = params["passive"];
+            if (passive === "true") {
+                this.filter["Hoststatus.active_checks_enabled"] = "false";
             }
 
-            let unhandled = params['unhandled'];
-            if (unhandled === 'true') {
+            let unhandled = params["unhandled"];
+            if (unhandled === "true") {
                 this.acknowledgementsFilter.not_acknowledged = true;
                 this.downtimeFilter.not_in_downtime = true;
             }
 
-            let keywords = params['keywords'] || undefined;
+            let keywords = params["keywords"] || undefined;
             if (keywords) {
-                this.filter['Hosts.keywords'] = [keywords];
+                this.filter["Hosts.keywords"] = [keywords];
             }
 
-            let not_keywords = params['not_keywords'] || undefined;
+            let not_keywords = params["not_keywords"] || undefined;
             if (not_keywords) {
-                this.filter['Hosts.not_keywords'] = [not_keywords];
+                this.filter["Hosts.not_keywords"] = [not_keywords];
             }
 
-            let direction = params['direction'];
-            if (direction && direction === 'asc' || direction === 'desc') {
+            let direction = params["direction"];
+            if ((direction && direction === "asc") || direction === "desc") {
                 this.params.direction = direction;
             }
 
-            let sort = params['sort'];
+            let sort = params["sort"];
             if (sort) {
                 this.params.sort = sort;
             }
 
-            let hoststate = params['hoststate'] || undefined;
+            let hoststate = params["hoststate"] || undefined;
             if (hoststate) {
                 //first reset all states
                 this.currentStateFilter.up = false;
                 this.currentStateFilter.down = false;
-                this.currentStateFilter.unreachable = false
+                this.currentStateFilter.unreachable = false;
                 hoststate = [].concat(hoststate); // make sure we always get an array
                 hoststate.forEach((state: any) => {
                     switch (parseInt(state, 10)) {
@@ -403,26 +394,26 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.loadHosts();
         });
 
-
-        this.subscriptions.add(this.HostsService.getSatellites()
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostsService.getSatellites().subscribe((result) => {
                 this.satellites = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
-        this.loadHostgroups('');
-
+        this.loadHostgroups("");
     }
 
     protected loadHostgroups = (search: string) => {
-        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByString({
-            'filter[Containers.name]': search,
-            'selected[]': this.filter['Hostgroups.id']
-        } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
-            this.hostgroups = data;
-            this.cdr.markForCheck();
-        }));
-    }
+        this.subscriptions.add(
+            this.HostgroupsService.loadHostgroupsByString({
+                "filter[Containers.name]": search,
+                "selected[]": this.filter["Hostgroups.id"],
+            } as HostgroupsLoadHostgroupsByStringParams).subscribe((data: SelectKeyValue[]) => {
+                this.hostgroups = data;
+                this.cdr.markForCheck();
+            }),
+        );
+    };
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
@@ -431,9 +422,9 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public loadHosts() {
         this.SelectionServiceService.deselectAll();
 
-        let hasBeenAcknowledged = '';
-        let inDowntime = '';
-        let notificationsEnabled = '';
+        let hasBeenAcknowledged = "";
+        let inDowntime = "";
+        let notificationsEnabled = "";
         if (this.acknowledgementsFilter.acknowledged !== this.acknowledgementsFilter.not_acknowledged) {
             hasBeenAcknowledged = String(this.acknowledgementsFilter.acknowledged === true);
         }
@@ -449,30 +440,30 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
                 priorityFilter.push(key);
             }
         }
-        let state_type: string = '';
+        let state_type: string = "";
         if (this.state_typesFilter.soft !== this.state_typesFilter.hard) {
-            state_type = '0';
+            state_type = "0";
             if (this.state_typesFilter.hard) {
-                state_type = '1';
+                state_type = "1";
             }
         }
 
-        if (this.route.snapshot.queryParams.hasOwnProperty('filter.Hosts.id')) {
-            this.filter['Hosts.id'] = this.route.snapshot.queryParams['filter.Hosts.id'];
+        if (this.route.snapshot.queryParams.hasOwnProperty("filter.Hosts.id")) {
+            this.filter["Hosts.id"] = this.route.snapshot.queryParams["filter.Hosts.id"];
         }
-        this.filter['Hoststatus.problem_has_been_acknowledged'] = hasBeenAcknowledged;
-        this.filter['Hoststatus.scheduled_downtime_depth'] = inDowntime;
-        this.filter['Hoststatus.notifications_enabled'] = notificationsEnabled;
-        this.filter['hostpriority'] = priorityFilter;
-        this.filter['Hoststatus.is_hardstate'] = state_type;
-        this.filter['Hoststatus.current_state'] = getHostCurrentStateForApi(this.currentStateFilter);
+        this.filter["Hoststatus.problem_has_been_acknowledged"] = hasBeenAcknowledged;
+        this.filter["Hoststatus.scheduled_downtime_depth"] = inDowntime;
+        this.filter["Hoststatus.notifications_enabled"] = notificationsEnabled;
+        this.filter["hostpriority"] = priorityFilter;
+        this.filter["Hoststatus.is_hardstate"] = state_type;
+        this.filter["Hoststatus.current_state"] = getHostCurrentStateForApi(this.currentStateFilter);
 
-        this.subscriptions.add(this.HostsService.getIndex(this.params, this.filter)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostsService.getIndex(this.params, this.filter).subscribe((result) => {
                 this.hosts = result;
                 this.userFullname = result.username;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
@@ -489,15 +480,15 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.currentStateFilter = {
             up: false,
             down: true,
-            unreachable: true
+            unreachable: true,
         };
         this.acknowledgementsFilter = {
             acknowledged: false,
-            not_acknowledged: true
+            not_acknowledged: true,
         };
         this.downtimeFilter = {
             in_downtime: false,
-            not_in_downtime: true
+            not_in_downtime: true,
         };
     }
 
@@ -535,30 +526,30 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.currentStateFilter = {
             up: false,
             down: false,
-            unreachable: false
+            unreachable: false,
         };
         this.state_typesFilter = {
             soft: false,
-            hard: false
+            hard: false,
         };
         this.acknowledgementsFilter = {
             acknowledged: false,
-            not_acknowledged: false
+            not_acknowledged: false,
         };
         this.downtimeFilter = {
             in_downtime: false,
-            not_in_downtime: false
+            not_in_downtime: false,
         };
         this.notificationsFilter = {
             enabled: false,
-            not_enabled: false
+            not_enabled: false,
         };
         this.priorityFilter = {
-            '1': false,
-            '2': false,
-            '3': false,
-            '4': false,
-            '5': false
+            "1": false,
+            "2": false,
+            "3": false,
+            "4": false,
+            "5": false,
         };
         this.loadHosts();
     }
@@ -569,23 +560,24 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         if (host) {
             // User just want to delete a single command
-            items = [{
-                id: Number(host.id),
-                displayName: String(host.hostname)
-            }];
+            items = [
+                {
+                    id: Number(host.id),
+                    displayName: String(host.hostname),
+                },
+            ];
         } else {
             // User clicked on delete selected button
             items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
                 return {
                     id: item.Host.id,
-                    displayName: item.Host.hostname
+                    displayName: item.Host.hostname,
                 };
             });
         }
 
-
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
@@ -595,7 +587,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
         // open modal
         this.modalService.toggle({
             show: true,
-            id: 'deleteAllModal',
+            id: "deleteAllModal",
         });
     }
 
@@ -607,32 +599,36 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public navigateCopy() {
-        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Host.id).join(',');
+        let ids = this.SelectionServiceService.getSelectedItems()
+            .map((item) => item.Host.id)
+            .join(",");
         if (ids) {
-            this.router.navigate(['/', 'hosts', 'copy', ids]);
+            this.router.navigate(["/", "hosts", "copy", ids]);
         } else {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
     }
 
     public linkForEditDetails() {
-        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Host.id).join(',');
+        let ids = this.SelectionServiceService.getSelectedItems()
+            .map((item) => item.Host.id)
+            .join(",");
         if (ids) {
-            this.router.navigate(['/', 'hosts', 'edit_details', ids]);
+            this.router.navigate(["/", "hosts", "edit_details", ids]);
         }
     }
 
-    public linkFor(format: 'pdf' | 'csv') {
-        let baseUrl = '/hosts/listToPdf.pdf?';
-        if (format === 'csv') {
-            baseUrl = '/hosts/listToCsv?';
+    public linkFor(format: "pdf" | "csv") {
+        let baseUrl = "/hosts/listToPdf.pdf?";
+        if (format === "csv") {
+            baseUrl = "/hosts/listToCsv?";
         }
 
-        let hasBeenAcknowledged = '';
-        let inDowntime = '';
-        let notificationsEnabled = '';
+        let hasBeenAcknowledged = "";
+        let inDowntime = "";
+        let notificationsEnabled = "";
         if (this.acknowledgementsFilter.acknowledged !== this.acknowledgementsFilter.not_acknowledged) {
             hasBeenAcknowledged = String(this.acknowledgementsFilter.acknowledged === true);
         }
@@ -648,35 +644,35 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
                 priorityFilter.push(key);
             }
         }
-        let state_type: string = '';
+        let state_type: string = "";
         if (this.state_typesFilter.soft !== this.state_typesFilter.hard) {
-            state_type = '0';
+            state_type = "0";
             if (this.state_typesFilter.hard) {
-                state_type = '1';
+                state_type = "1";
             }
         }
 
         let urlParams = {
-            'angular': true,
-            'sort': this.params.sort,
-            'page': this.params.page,
-            'direction': this.params.direction,
-            'filter[Hosts.name]': this.filter['Hosts.name'],
-            'filter[Hosts.name_regex]': this.filter['Hosts.name_regex'],
-            'filter[Hosts.description]': this.filter.hostdescription,
-            'filter[Hoststatus.output]': this.filter['Hoststatus.output'],
-            'filter[Hoststatus.current_state][]': getHostCurrentStateForApi(this.currentStateFilter),
-            'filter[Hosts.keywords][]': this.filter['Hosts.keywords'],
-            'filter[Hosts.not_keywords][]': this.filter['Hosts.not_keywords'],
-            'filter[Hoststatus.problem_has_been_acknowledged]': hasBeenAcknowledged,
-            'filter[Hoststatus.scheduled_downtime_depth]': inDowntime,
-            'filter[Hoststatus.is_hardstate]': state_type,
-            'filter[Hosts.address]': this.filter['Hosts.address'],
-            'filter[Hosts.address_regex]': this.filter['Hosts.address_regex'],
-            'filter[Hosts.satellite_id][]': this.filter['Hosts.satellite_id'],
-            'filter[Hosts.host_type][]': this.filter['Hosts.host_type'],
-            'filter[hostpriority][]': priorityFilter,
-            'filter[Hostgroups.id][]': this.filter['Hostgroups.id'],
+            angular: true,
+            sort: this.params.sort,
+            page: this.params.page,
+            direction: this.params.direction,
+            "filter[Hosts.name]": this.filter["Hosts.name"],
+            "filter[Hosts.name_regex]": this.filter["Hosts.name_regex"],
+            "filter[Hosts.description]": this.filter.hostdescription,
+            "filter[Hoststatus.output]": this.filter["Hoststatus.output"],
+            "filter[Hoststatus.current_state][]": getHostCurrentStateForApi(this.currentStateFilter),
+            "filter[Hosts.keywords][]": this.filter["Hosts.keywords"],
+            "filter[Hosts.not_keywords][]": this.filter["Hosts.not_keywords"],
+            "filter[Hoststatus.problem_has_been_acknowledged]": hasBeenAcknowledged,
+            "filter[Hoststatus.scheduled_downtime_depth]": inDowntime,
+            "filter[Hoststatus.is_hardstate]": state_type,
+            "filter[Hosts.address]": this.filter["Hosts.address"],
+            "filter[Hosts.address_regex]": this.filter["Hosts.address_regex"],
+            "filter[Hosts.satellite_id][]": this.filter["Hosts.satellite_id"],
+            "filter[Hosts.host_type][]": this.filter["Hosts.host_type"],
+            "filter[hostpriority][]": priorityFilter,
+            "filter[Hostgroups.id][]": this.filter["Hostgroups.id"],
         };
 
         let stringParams: HttpParams = new HttpParams();
@@ -689,20 +685,22 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         if (host) {
             // User just want to delete a single command
-            items = [{
-                id: Number(host.id),
-                displayName: String(host.name)
-            }];
+            items = [
+                {
+                    id: Number(host.id),
+                    displayName: String(host.name),
+                },
+            ];
         } else {
             items = this.SelectionServiceService.getSelectedItems().map((item): DisableItem => {
                 return {
                     id: item.Host.id,
-                    displayName: item.Host.name
+                    displayName: item.Host.name,
                 };
             });
         }
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
@@ -710,7 +708,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
 
         this.modalService.toggle({
             show: true,
-            id: 'disableModal',
+            id: "disableModal",
         });
     }
 
@@ -719,7 +717,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
         let selectedHostIds: number[] = this.SelectionServiceService.getSelectedItems().map((item) => item.Host.id);
 
         this.hosts?.all_hosts.forEach((item) => {
-            if (typeof (item.Host.id) === "undefined" || typeof (item.Host.uuid) === "undefined") {
+            if (typeof item.Host.id === "undefined" || typeof item.Host.uuid === "undefined") {
                 return;
             }
             if (!selectedHostIds.includes(item.Host.id)) {
@@ -729,19 +727,19 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.selectedItems.push({
                 command: ExternalCommandsEnum.rescheduleHost,
                 hostUuid: item.Host.uuid,
-                type: 'hostOnly',
-                satelliteId: 0
+                type: "hostOnly",
+                satelliteId: 0,
             });
         });
 
         if (this.selectedItems.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
         this.modalService.toggle({
             show: true,
-            id: 'serviceResetChecktimeModal'
+            id: "serviceResetChecktimeModal",
         });
     }
 
@@ -751,7 +749,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
         let selectedHostIds: number[] = this.SelectionServiceService.getSelectedItems().map((item) => item.Host.id);
 
         this.hosts?.all_hosts.forEach((item) => {
-            if (typeof (item.Host.id) === "undefined" || typeof (item.Host.uuid) === "undefined") {
+            if (typeof item.Host.id === "undefined" || typeof item.Host.uuid === "undefined") {
                 return;
             }
             if (!selectedHostIds.includes(item.Host.id)) {
@@ -761,11 +759,11 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             items.push({
                 command: ExternalCommandsEnum.submitDisableHostNotifications,
                 hostUuid: item.Host.uuid,
-                type: 'hostOnly',
+                type: "hostOnly",
             });
         });
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
@@ -773,7 +771,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.selectedItems = items;
         this.modalService.toggle({
             show: true,
-            id: 'hostDisableNotificationsModal',
+            id: "hostDisableNotificationsModal",
         });
     }
 
@@ -783,7 +781,7 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
         let selectedHostIds: number[] = this.SelectionServiceService.getSelectedItems().map((item) => item.Host.id);
 
         this.hosts?.all_hosts.forEach((item) => {
-            if (typeof (item.Host.id) === "undefined" || typeof (item.Host.uuid) === "undefined") {
+            if (typeof item.Host.id === "undefined" || typeof item.Host.uuid === "undefined") {
                 return;
             }
             if (!selectedHostIds.includes(item.Host.id)) {
@@ -793,22 +791,21 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             items.push({
                 command: ExternalCommandsEnum.submitEnableHostNotifications,
                 hostUuid: item.Host.uuid,
-                type: 'hostOnly',
+                type: "hostOnly",
             });
         });
 
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
         this.selectedItems = items;
         this.modalService.toggle({
             show: true,
-            id: 'hostEnableNotificationsModal',
+            id: "hostEnableNotificationsModal",
         });
     }
-
 
     public toggleDowntimeModal() {
         let items: HostDowntimeItem[] = [];
@@ -819,20 +816,20 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
                 start: 0,
                 end: 0,
                 author: this.userFullname,
-                comment: '',
-                downtimetype: ''
+                comment: "",
+                downtimetype: "",
             };
         });
 
         this.selectedItems = items;
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
         this.modalService.toggle({
             show: true,
-            id: 'hostMaintenanceModal',
+            id: "hostMaintenanceModal",
         });
     }
 
@@ -844,25 +841,25 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
                 hostUuid: item.Host.uuid,
                 hostAckType: item.type,
                 author: this.userFullname,
-                comment: '',
+                comment: "",
                 notify: true,
-                sticky: 0
+                sticky: 0,
             };
         });
         this.selectedItems = items;
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
         this.modalService.toggle({
             show: true,
-            id: 'hostAcknowledgeModal',
+            id: "hostAcknowledgeModal",
         });
     }
 
     public onSelectedBookmark(filterstring: string) {
-        if (filterstring === '') {
+        if (filterstring === "") {
             this.resetFilter();
         }
 
@@ -873,84 +870,82 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.currentStateFilter = {
                 up: false,
                 down: false,
-                unreachable: false
+                unreachable: false,
             };
             this.state_typesFilter = {
                 soft: false,
-                hard: false
+                hard: false,
             };
             this.acknowledgementsFilter = {
                 acknowledged: false,
-                not_acknowledged: false
+                not_acknowledged: false,
             };
             this.downtimeFilter = {
                 in_downtime: false,
-                not_in_downtime: false
+                not_in_downtime: false,
             };
             this.notificationsFilter = {
                 enabled: false,
-                not_enabled: false
+                not_enabled: false,
             };
             this.priorityFilter = {
-                '1': false,
-                '2': false,
-                '3': false,
-                '4': false,
-                '5': false
+                "1": false,
+                "2": false,
+                "3": false,
+                "4": false,
+                "5": false,
             };
             //endReset
 
             //cnditions to apply old bookmarks
             const bookmarkfilter = JSON.parse(filterstring);
-            this.filter['Hosts.id'] = bookmarkfilter['Hosts.id'] || [];
-            this.filter['Hosts.name'] = bookmarkfilter['Hosts.name'] || '';
-            this.filter['Hosts.name_regex'] = bookmarkfilter['Hosts.name_regex'] || false;
-            this.filter['Hosts.address'] = bookmarkfilter['Hosts.address'] || '';
-            this.filter['Hosts.address_regex'] = bookmarkfilter['Hosts.address_regex'] || false;
-            this.filter['hostdescription'] = bookmarkfilter['hostdescription'] || '';
-            this.filter['Hosts.host_type'] = bookmarkfilter['Hosts.host_type'] || [];
-            this.filter['Hosts.keywords'] = bookmarkfilter['Hosts.keywords'] || [];
-            this.filter['Hosts.not_keywords'] = bookmarkfilter['Hosts.not_keywords'] || [];
-            this.filter['Hoststatus.output'] = bookmarkfilter['Hoststatus.output'] || '';
-            this.convert2currentStateFilter(bookmarkfilter['Hoststatus.current_state'] || [], 'currentStateFilter');
-            if (bookmarkfilter['Hoststatus.problem_has_been_acknowledged'] === 'true') {
+            this.filter["Hosts.id"] = bookmarkfilter["Hosts.id"] || [];
+            this.filter["Hosts.name"] = bookmarkfilter["Hosts.name"] || "";
+            this.filter["Hosts.name_regex"] = bookmarkfilter["Hosts.name_regex"] || false;
+            this.filter["Hosts.address"] = bookmarkfilter["Hosts.address"] || "";
+            this.filter["Hosts.address_regex"] = bookmarkfilter["Hosts.address_regex"] || false;
+            this.filter["hostdescription"] = bookmarkfilter["hostdescription"] || "";
+            this.filter["Hosts.host_type"] = bookmarkfilter["Hosts.host_type"] || [];
+            this.filter["Hosts.keywords"] = bookmarkfilter["Hosts.keywords"] || [];
+            this.filter["Hosts.not_keywords"] = bookmarkfilter["Hosts.not_keywords"] || [];
+            this.filter["Hoststatus.output"] = bookmarkfilter["Hoststatus.output"] || "";
+            this.convert2currentStateFilter(bookmarkfilter["Hoststatus.current_state"] || [], "currentStateFilter");
+            if (bookmarkfilter["Hoststatus.problem_has_been_acknowledged"] === "true") {
                 this.acknowledgementsFilter.acknowledged = true;
             }
-            if (bookmarkfilter['Hoststatus.problem_has_been_acknowledged'] === 'false') {
+            if (bookmarkfilter["Hoststatus.problem_has_been_acknowledged"] === "false") {
                 this.acknowledgementsFilter.not_acknowledged = true;
             }
-            if (bookmarkfilter['Hoststatus.scheduled_downtime_depth'] === 'true') {
+            if (bookmarkfilter["Hoststatus.scheduled_downtime_depth"] === "true") {
                 this.downtimeFilter.in_downtime = true;
             }
-            if (bookmarkfilter['Hoststatus.scheduled_downtime_depth'] === 'false') {
+            if (bookmarkfilter["Hoststatus.scheduled_downtime_depth"] === "false") {
                 this.downtimeFilter.not_in_downtime = true;
             }
-            if (bookmarkfilter['Hoststatus.notifications_enabled'] === 'true') {
+            if (bookmarkfilter["Hoststatus.notifications_enabled"] === "true") {
                 this.notificationsFilter.enabled = true;
             }
-            if (bookmarkfilter['Hoststatus.notifications_enabled'] === 'false') {
+            if (bookmarkfilter["Hoststatus.notifications_enabled"] === "false") {
                 this.notificationsFilter.not_enabled = true;
             }
             //Hoststatus.is_hardstate
-            if (bookmarkfilter['Hoststatus.is_hardstate'] === '0') {
+            if (bookmarkfilter["Hoststatus.is_hardstate"] === "0") {
                 this.state_typesFilter.soft = true;
             }
-            if (bookmarkfilter['Hoststatus.is_hardstate'] === '1') {
+            if (bookmarkfilter["Hoststatus.is_hardstate"] === "1") {
                 this.state_typesFilter.hard = true;
             }
-            if (bookmarkfilter['Hostgroups.id'] ) {
-                this.filter['Hostgroups.id'] = bookmarkfilter['Hostgroups.id'];
+            if (bookmarkfilter["Hostgroups.id"]) {
+                this.filter["Hostgroups.id"] = bookmarkfilter["Hostgroups.id"];
             }
-            this.convert2currentStateFilter(bookmarkfilter['hostpriority'] || [], 'priorityFilter');
-            this.filter['Hosts.satellite_id'] = bookmarkfilter['Hosts.satellite_id'] || [];
-            this.filter['Hostgroups.id'] = bookmarkfilter['Hostgroups.id'] || [];
+            this.convert2currentStateFilter(bookmarkfilter["hostpriority"] || [], "priorityFilter");
+            this.filter["Hosts.satellite_id"] = bookmarkfilter["Hosts.satellite_id"] || [];
+            this.filter["Hostgroups.id"] = bookmarkfilter["Hostgroups.id"] || [];
             this.loadHosts();
-
         }
     }
 
     protected convert2currentStateFilter(state_array: string[], filter: string): void {
-
         state_array.forEach((state) => {
             // @ts-ignore
             this[filter][state] = true;
@@ -961,27 +956,29 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
         let items: SelectKeyValue[] = [];
 
         if (host) {
-            items = [{
-                key: Number(host.id),
-                value: String(host.hostname)
-            }];
+            items = [
+                {
+                    key: Number(host.id),
+                    value: String(host.hostname),
+                },
+            ];
         } else {
             items = this.SelectionServiceService.getSelectedItems().map((item): SelectKeyValue => {
                 return {
                     key: item.Host.id,
-                    value: item.Host.name
+                    value: item.Host.name,
                 };
             });
         }
         this.selectedItems = items;
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message = this.TranslocoService.translate("No items selected!");
             this.notyService.genericError(message);
             return;
         }
         this.modalService.toggle({
             show: true,
-            id: 'hostAddToHostgroupModal',
+            id: "hostAddToHostgroupModal",
         });
     }
 
@@ -992,17 +989,17 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public toggleColumnsConfigExport() {
         const exportConfigObject = {
             key: this.columnsTableKey,
-            value: this.fields
+            value: this.fields,
         };
         this.configString = JSON.stringify(exportConfigObject);
         this.modalService.toggle({
             show: true,
-            id: 'columnsConfigExportModal',
+            id: "columnsConfigExportModal",
         });
     }
 
     public loadColumns() {
-        if (this.LocalStorageService.hasItem(this.columnsTableKey, 'true')) {
+        if (this.LocalStorageService.hasItem(this.columnsTableKey, "true")) {
             this.fields = JSON.parse(String(this.LocalStorageService.getItem(this.columnsTableKey)));
         }
     }
@@ -1010,14 +1007,32 @@ export class HostsIndexComponent implements OnInit, OnDestroy, IndexPage {
     public toggleColumnsConfigImport() {
         this.modalService.toggle({
             show: true,
-            id: 'columnsConfigImportModal',
+            id: "columnsConfigImportModal",
         });
     }
 
     public getDefaultColumns() {
-        this.fields = [true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, false, false];
-        this.LocalStorageService.removeItem(this.columnsTableKey)
-    };
+        this.fields = [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false,
+            false,
+        ];
+        this.LocalStorageService.removeItem(this.columnsTableKey);
+    }
 
     public saveColumnsConfig() {
         this.LocalStorageService.removeItem(this.columnsTableKey);

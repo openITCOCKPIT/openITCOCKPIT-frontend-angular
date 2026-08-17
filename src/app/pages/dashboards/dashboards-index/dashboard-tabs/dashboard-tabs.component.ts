@@ -6,8 +6,8 @@ import {
     inject,
     input,
     OnDestroy,
-    output
-} from '@angular/core';
+    output,
+} from "@angular/core";
 import {
     ButtonCloseDirective,
     DropdownComponent,
@@ -27,25 +27,25 @@ import {
     ModalTitleDirective,
     ModalToggleDirective,
     NavComponent,
-    NavItemComponent
-} from '@coreui/angular';
-import { DashboardTab } from '../../dashboards.interface';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { AsyncPipe, NgClass } from '@angular/common';
-import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { Skeleton } from 'primeng/skeleton';
-import { Subscription } from 'rxjs';
-import { NotyService } from '../../../../layouts/coreui/noty.service';
-import { DashboardsService } from '../../dashboards.service';
-import { PermissionsService } from '../../../../permissions/permissions.service';
-import { FormsModule } from '@angular/forms';
-import { RequiredIconComponent } from '../../../../components/required-icon/required-icon.component';
-import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { DashboardAllocateModalService } from '../dashboard-allocate-modal/dashboard-allocate-modal.service';
+    NavItemComponent,
+} from "@coreui/angular";
+import { DashboardTab } from "../../dashboards.interface";
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from "@jsverse/transloco";
+import { AsyncPipe, NgClass } from "@angular/common";
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from "@angular/cdk/drag-drop";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { Skeleton } from "@openng/optimus-ui/skeleton";
+import { Subscription } from "rxjs";
+import { NotyService } from "../../../../layouts/coreui/noty.service";
+import { DashboardsService } from "../../dashboards.service";
+import { PermissionsService } from "../../../../permissions/permissions.service";
+import { FormsModule } from "@angular/forms";
+import { RequiredIconComponent } from "../../../../components/required-icon/required-icon.component";
+import { XsButtonDirective } from "../../../../layouts/coreui/xsbutton-directive/xsbutton.directive";
+import { DashboardAllocateModalService } from "../dashboard-allocate-modal/dashboard-allocate-modal.service";
 
 @Component({
-    selector: 'oitc-dashboard-tabs',
+    selector: "oitc-dashboard-tabs",
     imports: [
         NavComponent,
         NavItemComponent,
@@ -75,14 +75,13 @@ import { DashboardAllocateModalService } from '../dashboard-allocate-modal/dashb
         RequiredIconComponent,
         TranslocoPipe,
         XsButtonDirective,
-        ModalToggleDirective
+        ModalToggleDirective,
     ],
-    templateUrl: './dashboard-tabs.component.html',
-    styleUrl: './dashboard-tabs.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./dashboard-tabs.component.html",
+    styleUrl: "./dashboard-tabs.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardTabsComponent implements OnDestroy {
-
     public tabs = input<DashboardTab[]>([]);
     public currentTabId = input<number>(0);
     public dashboardIsLocked = input<boolean>(false);
@@ -94,7 +93,7 @@ export class DashboardTabsComponent implements OnDestroy {
 
     public localTabs: DashboardTab[] = [];
 
-    public newTabNameModal: string = ''; // For the modal
+    public newTabNameModal: string = ""; // For the modal
     public tabIdModal: number = 0; // For the modal
 
     private cdr = inject(ChangeDetectorRef);
@@ -131,63 +130,69 @@ export class DashboardTabsComponent implements OnDestroy {
     }
 
     public startSharing(tabId: number): void {
-        this.subscriptions.add(this.DashboardsService.startSharing(tabId).subscribe((response) => {
-            if (response.success) {
-                this.notyService.genericInfo(
-                    this.TranslocoService.translate('Your dashboard is now shared. Other users of the system can use your shared dashboard tab as an template.')
-                );
+        this.subscriptions.add(
+            this.DashboardsService.startSharing(tabId).subscribe((response) => {
+                if (response.success) {
+                    this.notyService.genericInfo(
+                        this.TranslocoService.translate(
+                            "Your dashboard is now shared. Other users of the system can use your shared dashboard tab as an template.",
+                        ),
+                    );
 
-                // Update local tabs
-                let tab = this.localTabs.find(tab => tab.id === tabId);
-                if (tab) {
-                    tab.shared = true;
+                    // Update local tabs
+                    let tab = this.localTabs.find((tab) => tab.id === tabId);
+                    if (tab) {
+                        tab.shared = true;
+                    }
+                    this.cdr.markForCheck();
+                } else {
+                    this.notyService.genericError();
                 }
-                this.cdr.markForCheck();
-            } else {
-                this.notyService.genericError();
-            }
-        }));
+            }),
+        );
     }
 
     public stopSharing(tabId: number): void {
-        this.subscriptions.add(this.DashboardsService.stopSharing(tabId).subscribe((response) => {
-            if (response.success) {
-                this.notyService.genericSuccess(
-                    this.TranslocoService.translate('Sharing disabled successfully.')
-                );
+        this.subscriptions.add(
+            this.DashboardsService.stopSharing(tabId).subscribe((response) => {
+                if (response.success) {
+                    this.notyService.genericSuccess(this.TranslocoService.translate("Sharing disabled successfully."));
 
-                // Update local tabs
-                let tab = this.localTabs.find(tab => tab.id === tabId);
-                if (tab) {
-                    tab.shared = false;
+                    // Update local tabs
+                    let tab = this.localTabs.find((tab) => tab.id === tabId);
+                    if (tab) {
+                        tab.shared = false;
+                    }
+                    this.cdr.markForCheck();
+                } else {
+                    this.notyService.genericError();
                 }
-                this.cdr.markForCheck();
-            } else {
-                this.notyService.genericError();
-            }
-        }));
+            }),
+        );
     }
 
     public drop(event: CdkDragDrop<string[]>) {
         moveItemInArray(this.localTabs, event.previousIndex, event.currentIndex);
 
         // Make sure pinned tabs are always first
-        let pinnedTabs = this.localTabs.filter(tab => tab.pinned);
-        let unpinnedTabs = this.localTabs.filter(tab => !tab.pinned);
+        let pinnedTabs = this.localTabs.filter((tab) => tab.pinned);
+        let unpinnedTabs = this.localTabs.filter((tab) => !tab.pinned);
 
         this.localTabs = pinnedTabs.concat(unpinnedTabs);
         this.saveTabOrder();
     }
 
     private saveTabOrder() {
-        const order: number[] = this.localTabs.map(tab => tab.id);
-        this.subscriptions.add(this.DashboardsService.saveTabOrder(order).subscribe((response) => {
-            if (response.success) {
-                this.notyService.genericSuccess();
-            } else {
-                this.notyService.genericError();
-            }
-        }));
+        const order: number[] = this.localTabs.map((tab) => tab.id);
+        this.subscriptions.add(
+            this.DashboardsService.saveTabOrder(order).subscribe((response) => {
+                if (response.success) {
+                    this.notyService.genericSuccess();
+                } else {
+                    this.notyService.genericError();
+                }
+            }),
+        );
     }
 
     public toggleRenameTabModal(tabId: number) {
@@ -196,14 +201,14 @@ export class DashboardTabsComponent implements OnDestroy {
         }
 
         this.tabIdModal = tabId;
-        const tab = this.localTabs.find(tab => tab.id === tabId);
+        const tab = this.localTabs.find((tab) => tab.id === tabId);
         if (tab) {
             this.newTabNameModal = tab.name;
 
             // Show modal
             this.modalService.toggle({
                 show: true,
-                id: 'dashboardRenameTabModal',
+                id: "dashboardRenameTabModal",
             });
         }
     }
@@ -213,25 +218,26 @@ export class DashboardTabsComponent implements OnDestroy {
             return;
         }
 
-        const tab = this.localTabs.find(tab => tab.id === this.tabIdModal);
+        const tab = this.localTabs.find((tab) => tab.id === this.tabIdModal);
         if (tab) {
-            this.subscriptions.add(this.DashboardsService.renameDashboardTab(tab.id, this.newTabNameModal).subscribe((response) => {
+            this.subscriptions.add(
+                this.DashboardsService.renameDashboardTab(tab.id, this.newTabNameModal).subscribe((response) => {
+                    if (response.success) {
+                        this.notyService.genericSuccess();
 
-                if (response.success) {
-                    this.notyService.genericSuccess();
+                        // Update local name
+                        tab.name = this.newTabNameModal;
 
-                    // Update local name
-                    tab.name = this.newTabNameModal;
-
-                    // Close modal
-                    this.modalService.toggle({
-                        show: false,
-                        id: 'dashboardRenameTabModal',
-                    });
-                } else {
-                    this.notyService.genericError();
-                }
-            }));
+                        // Close modal
+                        this.modalService.toggle({
+                            show: false,
+                            id: "dashboardRenameTabModal",
+                        });
+                    } else {
+                        this.notyService.genericError();
+                    }
+                }),
+            );
         }
     }
 
@@ -239,5 +245,4 @@ export class DashboardTabsComponent implements OnDestroy {
         // Pass the data to the modal
         this.DashboardAllocateModalService.toggleAllocateModal(tab);
     }
-
 }

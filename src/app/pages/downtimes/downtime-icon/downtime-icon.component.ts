@@ -1,16 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ColComponent, PopoverDirective, RowComponent, TooltipDirective } from '@coreui/angular';
-import { SkeletonModule } from 'primeng/skeleton';
-import { AsyncPipe } from '@angular/common';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { Subscription } from 'rxjs';
-import { DowntimeObject } from '../downtimes.interface';
-import { PermissionsService } from '../../../permissions/permissions.service';
-import { DowntimesService } from '../downtimes.service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from "@angular/core";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { ColComponent, PopoverDirective, RowComponent, TooltipDirective } from "@coreui/angular";
+import { SkeletonModule } from "@openng/optimus-ui/skeleton";
+import { AsyncPipe } from "@angular/common";
+import { TranslocoDirective, TranslocoPipe } from "@jsverse/transloco";
+import { Subscription } from "rxjs";
+import { DowntimeObject } from "../downtimes.interface";
+import { PermissionsService } from "../../../permissions/permissions.service";
+import { DowntimesService } from "../downtimes.service";
 
 @Component({
-    selector: 'oitc-downtime-icon',
+    selector: "oitc-downtime-icon",
     imports: [
         FaIconComponent,
         PopoverDirective,
@@ -20,14 +20,14 @@ import { DowntimesService } from '../downtimes.service';
         TooltipDirective,
         TranslocoPipe,
         TranslocoDirective,
-        AsyncPipe
+        AsyncPipe,
     ],
-    templateUrl: './downtime-icon.component.html',
-    styleUrl: './downtime-icon.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./downtime-icon.component.html",
+    styleUrl: "./downtime-icon.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DowntimeIconComponent implements OnInit, OnDestroy {
-    @Input() public type: 'hosts' | 'services' = 'hosts';
+    @Input() public type: "hosts" | "services" = "hosts";
     @Input() public objectId: number | undefined = 0;
 
     public downtime?: DowntimeObject;
@@ -48,20 +48,20 @@ export class DowntimeIconComponent implements OnInit, OnDestroy {
             this.timeout = setTimeout(() => {
                 if (this.objectId) {
                     this.subscriptions.add(
-                        this.DowntimesService.getDowntimeTooltipDetails(this.objectId, this.type)
-                            .subscribe(downtime => {
+                        this.DowntimesService.getDowntimeTooltipDetails(this.objectId, this.type).subscribe(
+                            (downtime) => {
                                 this.downtime = downtime;
                                 this.isLoading = false;
                                 this.cdr.markForCheck();
-                            }));
+                            },
+                        ),
+                    );
                 }
             }, 150);
         }
     }
 
-    public ngOnInit(): void {
-
-    }
+    public ngOnInit(): void {}
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
