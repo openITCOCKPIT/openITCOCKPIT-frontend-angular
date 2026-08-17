@@ -87,8 +87,8 @@ export class TachometerWidgetComponent extends BaseWidgetComponent implements Af
 
     public ngAfterViewInit(): void {
         this.calcTachometerHeight();
-
         if (this.widget) {
+
             this.service_id = null;
             this.metric = '';
             this.TachometerWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {

@@ -1,0 +1,25 @@
+::ng-deep .fluid-top-surface {
+    transition: cy 0.4s ease-in-out;
+    animation: fluidWave 2s ease-in-out infinite alternate !important;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+::ng-deep .fluid-top-surface-2 {
+    transition: cy 0.5s ease-in-out;
+    animation: fluidWave 1s ease-in-out infinite alternate !important;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+@keyframes fluidWave {
+    0% {
+        transform: translateY(0px) scaleY(1);
+    }
+    50% {
+        transform: translateY(-2.5px) scaleY(1.03);
+    }
+    100% {
+        transform: translateY(2.5px) scaleY(0.87);
+    }
+}

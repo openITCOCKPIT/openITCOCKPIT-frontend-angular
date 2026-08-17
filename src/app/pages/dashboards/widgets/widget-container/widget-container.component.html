@@ -235,6 +235,14 @@
             </oitc-evencorrelations-summary-widget>
         }
 
+
+        @case (WidgetTypes.CylinderWidget) {
+            <oitc-cylinder-widget
+                [widgetInput]="widget"
+                [isReadonly]="isReadonly()">
+            </oitc-cylinder-widget>
+        }
+
         <!-- Fallback Widget -->
         @default {
             <oitc-alert
