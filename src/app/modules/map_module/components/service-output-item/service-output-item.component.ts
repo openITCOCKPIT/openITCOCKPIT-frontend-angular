@@ -1,13 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-    effect,
-    input,
-    InputSignal,
-    OnDestroy,
-    OnInit,
-    ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, InputSignal, OnDestroy, OnInit } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
@@ -15,7 +6,6 @@ import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
-import { ResizableDirective } from '../../../../directives/resizable.directive';
 import { NgClass, NgStyle } from '@angular/common';
 import { TrustAsHtmlPipe } from '../../../../pipes/trust-as-html.pipe';
 import {
@@ -24,17 +14,17 @@ import {
     MapItemRootParams,
     ServiceForMapItem
 } from '../map-item-base/map-item-base.interface';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 @Component({
     selector: 'oitc-service-output-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, ResizableDirective, NgStyle, NgClass, TrustAsHtmlPipe],
+    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgStyle, NgClass, TrustAsHtmlPipe, AngularDraggableModule],
     templateUrl: './service-output-item.component.html',
     styleUrl: './service-output-item.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
-    @ViewChild(ResizableDirective) resizableDirective!: ResizableDirective;
 
     public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
     public refreshInterval = input<number>(0);
@@ -115,9 +105,6 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
                 this.initRefreshTimer();
 
                 this.init = false;
-                if (this.resizableDirective) {
-                    this.resizableDirective.setLastWidthHeight(this.item()!.size_x, this.item()!.size_y);
-                }
                 this.cdr.markForCheck();
             }));
     };

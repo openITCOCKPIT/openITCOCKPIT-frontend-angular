@@ -49,14 +49,14 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
-                        name="container"
-                        id="container"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.container_id"
-                        [options]="containers"
-                        (onChange)="onContainerChange()"
-                        oitcFormError [errors]="errors" errorField="container_id">
+                            name="container"
+                            id="container"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.container_id"
+                            [options]="containers"
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
                     @if (!post.container_id) {
                         <div class="text-warning-glow pt-1">
@@ -150,6 +150,20 @@
                     <!-- @formatter:on -->
                                 }
                             </ul>
+                        </div>
+                    </div>
+                    <div class="my-2">
+                        <label cLabel for="publicRefresh">
+                            {{ t('Public Refresh') }}
+
+                        </label>
+                        <input cFormControl id="publicRefresh"
+                               name="publicRefresh"
+                               oitcFormError [errors]="errors" errorField="public_refresh"
+                               [(ngModel)]="post.public_refresh">
+                        <oitc-form-feedback [errors]="errors" errorField="public_refresh"></oitc-form-feedback>
+                        <div class="help-block">
+                            {{ t('Public status pages update interval in seconds') }}
                         </div>
                     </div>
                 }
@@ -257,28 +271,31 @@
                         {{ t('Host groups') }}
                     </label>
                     <oitc-multi-select
-                        name="post.hostgroups._ids"
-                        id="post.hostgroups._ids"
-                        [(ngModel)]="post.selected_hostgroups._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [searchCallback]="loadHostgroups"
-                        [options]="hostgroups">
+                            name="post.hostgroups._ids"
+                            id="post.hostgroups._ids"
+                            [(ngModel)]="post.selected_hostgroups._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadHostgroups"
+                            [options]="hostgroups">
                     </oitc-multi-select>
                     @if (post.selected_hostgroups._ids.length > 0) {
                         <div class="form-group">
                             <c-row class="pt-2 pb-2">
-                                <c-col lg="4" md="4" xs="4" class="bold">
+                                <c-col lg="4" md="4" xs="12" class="bold">
                                     {{ t('Hostgroup name') }}
                                 </c-col>
-                                <c-col lg="8" md="8" xs="8" class="bold">
+                                <c-col lg="4" md="4" xs="6" class="bold">
                                     {{ t('Display name') }}
+                                </c-col>
+                                <c-col lg="4" md="4" xs="6" class="bold">
+                                    {{ t('Grouping identifiers') }}
                                 </c-col>
                             </c-row>
                             @for (hostgroup of hostgroups; track $index) {
                                 @if (post.selected_hostgroups._ids.indexOf(hostgroup.id) !== -1) {
                                     <c-row class="mb-2">
-                                        <c-col lg="4" md="4" xs="4" class="statuspage-item-box">
+                                        <c-col lg="4" md="4" xs="12" class="statuspage-item-box">
                                             @if (this.PermissionsService.hasPermissionObservable(['hostgroups', 'extended'])|async) {
                                                 <a [routerLink]="['/', 'hostgroups', 'extended', hostgroup.key]">
                                                     {{ hostgroup.value }}
@@ -287,19 +304,32 @@
                                                 {{ hostgroup.value }}
                                             }
                                         </c-col>
-                                        <c-col lg="8" md="8" xs="8">
+                                        <c-col lg="4" md="4" xs="6">
                                             <c-input-group>
                                                 <span cInputGroupText id="basic-addon1">
                                                     <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                                 </span>
                                                 <input
-                                                    cFormControl
-                                                    [attr.id]="'hostgroup_alias'+$index"
-                                                    [name]="'hostgroup_alias'+$index"
-                                                    [(ngModel)]="hostgroups[$index]._joinData.display_alias"
-                                                    placeholder="Set alias for hosthostgroup"
+                                                        cFormControl
+                                                        [attr.id]="'hostgroup_alias'+$index"
+                                                        [name]="'hostgroup_alias'+$index"
+                                                        [(ngModel)]="hostgroups[$index]._joinData.display_alias"
+                                                        placeholder="Set alias for hosthostgroup"
                                                 />
                                             </c-input-group>
+                                        </c-col>
+                                        <c-col lg="4" md="4" xs="6">
+                                            <ng-select
+                                                    [attr.id]="'hostgroup_tags'+$index"
+                                                    [name]="'hostgroup_tags'+$index"
+                                                    [items]="[]"
+                                                    [(ngModel)]="hostgroups[$index]._joinData.group_tags"
+                                                    [addTag]="true"
+                                                    [multiple]="true"
+                                                    [selectOnTab]="true"
+                                                    [placeholder]="'Add tags' | transloco"
+                                                    [isOpen]="false">
+                                            </ng-select>
                                         </c-col>
                                     </c-row>
                                 }
@@ -313,27 +343,30 @@
                         {{ t('Service groups') }}
                     </label>
                     <oitc-multi-select
-                        name="post.servicegroups._ids"
-                        id="post.servicegroups._ids"
-                        [(ngModel)]="post.selected_servicegroups._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [searchCallback]="loadServicegroups"
-                        [options]="servicegroups">
+                            name="post.servicegroups._ids"
+                            id="post.servicegroups._ids"
+                            [(ngModel)]="post.selected_servicegroups._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadServicegroups"
+                            [options]="servicegroups">
                     </oitc-multi-select>
                     @if (post.selected_servicegroups._ids.length > 0) {
                         <c-row class="pt-2 pb-2">
-                            <c-col lg="4" md="4" xs="4" class="bold">
+                            <c-col lg="4" md="4" xs="12" class="bold">
                                 {{ t('Servicegroup name') }}
                             </c-col>
-                            <c-col lg="8" md="8" xs="8" class="bold">
+                            <c-col lg="4" md="4" xs="6" class="bold">
                                 {{ t('Display name') }}
+                            </c-col>
+                            <c-col lg="4" md="4" xs="6" class="bold">
+                                {{ t('Grouping identifiers') }}
                             </c-col>
                         </c-row>
                         @for (servicegroup of servicegroups; ; track $index) {
                             @if (post.selected_servicegroups._ids.indexOf(servicegroup.id) !== -1) {
                                 <c-row class="mb-2">
-                                    <c-col lg="4" md="4" xs="4" class="statuspage-item-box">
+                                    <c-col lg="4" md="4" xs="12" class="statuspage-item-box">
                                         @if (this.PermissionsService.hasPermissionObservable(['servicegroups', 'extended'])|async) {
                                             <a [routerLink]="['/', 'servicegroups', 'extended', servicegroup.key]">
                                                 {{ servicegroup.value }}
@@ -342,18 +375,31 @@
                                             {{ servicegroup.value }}
                                         }
                                     </c-col>
-                                    <c-col lg="8" md="8" xs="8" class="col-8">
+                                    <c-col lg="4" md="4" xs="6">
                                         <c-input-group>
                                             <span cInputGroupText>
                                                 <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                             </span>
                                             <input
-                                                cFormControl
-                                                [attr.id]="'servicegroup_alias'+$index"
-                                                [name]="'servicegroup_alias'+$index"
-                                                [(ngModel)]="servicegroups[$index]._joinData.display_alias"
-                                                placeholder="Set alias for servicegroup">
+                                                    cFormControl
+                                                    [attr.id]="'servicegroup_alias'+$index"
+                                                    [name]="'servicegroup_alias'+$index"
+                                                    [(ngModel)]="servicegroups[$index]._joinData.display_alias"
+                                                    placeholder="Set alias for servicegroup">
                                         </c-input-group>
+                                    </c-col>
+                                    <c-col lg="4" md="4" xs="6">
+                                        <ng-select
+                                                [attr.id]="'servicegroup_tags'+$index"
+                                                [name]="'servicegroup_tags'+$index"
+                                                [items]="[]"
+                                                [(ngModel)]="servicegroups[$index]._joinData.group_tags"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="'Add tags' | transloco"
+                                                [isOpen]="false">
+                                        </ng-select>
                                     </c-col>
                                 </c-row>
                             }
@@ -366,27 +412,30 @@
                         {{ t('Hosts') }}
                     </label>
                     <oitc-multi-select
-                        name="post.hosts._ids"
-                        id="post.hosts._ids"
-                        [(ngModel)]="post.selected_hosts._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [searchCallback]="loadHosts"
-                        [options]="hosts">
+                            name="post.hosts._ids"
+                            id="post.hosts._ids"
+                            [(ngModel)]="post.selected_hosts._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadHosts"
+                            [options]="hosts">
                     </oitc-multi-select>
                     @if (post.selected_hosts._ids.length > 0) {
                         <c-row class="pt-2 pb-2">
-                            <c-col lg="4" md="4" xs="4" class="bold">
+                            <c-col lg="4" md="4" xs="12" class="bold">
                                 {{ t('Host name') }}
                             </c-col>
-                            <c-col lg="8" md="8" xs="8" class="bold">
+                            <c-col lg="4" md="4" xs="6" class="bold">
                                 {{ t('Display name') }}
+                            </c-col>
+                            <c-col lg="4" md="4" xs="6" class="bold">
+                                {{ t('Grouping identifiers') }}
                             </c-col>
                         </c-row>
                         @for (host of hosts; ; track $index) {
                             @if (post.selected_hosts._ids.indexOf(host.id) !== -1) {
                                 <c-row class="mb-2">
-                                    <c-col lg="4" md="4" xs="4" class="statuspage-item-box">
+                                    <c-col lg="4" md="4" xs="12" class="statuspage-item-box">
                                         @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                             <a [routerLink]="['/', 'hosts', 'browser', host.key]">
                                                 {{ host.value }}
@@ -395,18 +444,31 @@
                                             {{ host.value }}
                                         }
                                     </c-col>
-                                    <c-col lg="8" md="8" xs="8">
+                                    <c-col lg="4" md="4" xs="6">
                                         <c-input-group>
                                             <span cInputGroupText>
                                                 <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                             </span>
                                             <input
-                                                cFormControl
-                                                [attr.id]="'host_alias'+$index"
-                                                [name]="'host_alias'+$index"
-                                                [(ngModel)]="hosts[$index]._joinData.display_alias"
-                                                placeholder="Set alias for host">
+                                                    cFormControl
+                                                    [attr.id]="'host_alias'+$index"
+                                                    [name]="'host_alias'+$index"
+                                                    [(ngModel)]="hosts[$index]._joinData.display_alias"
+                                                    placeholder="Set alias for host">
                                         </c-input-group>
+                                    </c-col>
+                                    <c-col lg="4" md="4" xs="6">
+                                        <ng-select
+                                                [attr.id]="'host_tags'+$index"
+                                                [name]="'host_tags'+$index"
+                                                [items]="[]"
+                                                [(ngModel)]="hosts[$index]._joinData.group_tags"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="'Add tags' | transloco"
+                                                [isOpen]="false">
+                                        </ng-select>
                                     </c-col>
                                 </c-row>
                             }
@@ -419,27 +481,30 @@
                         {{ t('Services') }}
                     </label>
                     <oitc-multi-select
-                        name="post.services._ids"
-                        id="post.services._ids"
-                        [(ngModel)]="post.selected_services._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [searchCallback]="loadServices"
-                        [options]="services">
+                            name="post.services._ids"
+                            id="post.services._ids"
+                            [(ngModel)]="post.selected_services._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadServices"
+                            [options]="services">
                     </oitc-multi-select>
                     @if (post.selected_services._ids.length > 0) {
                         <c-row class="pt-2 pb-2">
-                            <c-col lg="4" md="4" xs="4" class="bold">
+                            <c-col lg="4" md="4" xs="12" class="bold">
                                 {{ t('Service name') }}
                             </c-col>
-                            <c-col lg="8" md="8" xs="8" class="bold">
+                            <c-col lg="4" md="4" xs="6" class="bold">
                                 {{ t('Display name') }}
+                            </c-col>
+                            <c-col lg="4" md="4" xs="6" class="bold">
+                                {{ t('Grouping identifiers') }}
                             </c-col>
                         </c-row>
                         @for (service of services; track $index) {
                             @if (post.selected_services._ids.indexOf(service.id) !== -1) {
                                 <c-row class="mb-2">
-                                    <c-col lg="4" md="4" xs="4" class="statuspage-item-box">
+                                    <c-col lg="4" md="4" xs="12" class="statuspage-item-box">
                                         @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
                                             <a [routerLink]="['/', 'services', 'browser', service.key]">
                                                 {{ service.value }}
@@ -448,18 +513,31 @@
                                             {{ service.value }}
                                         }
                                     </c-col>
-                                    <c-col lg="8" md="8" xs="8">
+                                    <c-col lg="4" md="4" xs="6">
                                         <c-input-group>
                                             <span cInputGroupText>
                                                 <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                             </span>
                                             <input
-                                                cFormControl
-                                                [attr.id]="'service_alias'+$index"
-                                                [name]="'service_alias'+$index"
-                                                [(ngModel)]="services[$index]._joinData.display_alias"
-                                                placeholder="Set alias for service">
+                                                    cFormControl
+                                                    [attr.id]="'service_alias'+$index"
+                                                    [name]="'service_alias'+$index"
+                                                    [(ngModel)]="services[$index]._joinData.display_alias"
+                                                    placeholder="Set alias for service">
                                         </c-input-group>
+                                    </c-col>
+                                    <c-col lg="4" md="4" xs="6">
+                                        <ng-select
+                                                [attr.id]="'service_tags'+$index"
+                                                [name]="'service_tags'+$index"
+                                                [items]="[]"
+                                                [(ngModel)]="services[$index]._joinData.group_tags"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="'Add tags' | transloco"
+                                                [isOpen]="false">
+                                        </ng-select>
                                     </c-col>
                                 </c-row>
                             }

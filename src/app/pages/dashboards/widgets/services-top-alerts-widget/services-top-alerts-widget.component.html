@@ -4,8 +4,7 @@
             <c-col [xs]="12" [md]="1">
                 @if (!isReadonly()) {
                     <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
-                            (click)="flipped.set(!flipped())"
-                    >
+                            (click)="flipped.set(!flipped())">
                         @if (flipped()) {
                             <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                         } @else {
@@ -317,7 +316,7 @@
                             </c-col>
                         </c-row>
                         <c-row class="mb-2">
-                            <c-col [xs]="12" lg="2">
+                            <c-col>
                                 <fieldset>
                                     <legend class="fs-5">
                                         {{ t('Priority') }}

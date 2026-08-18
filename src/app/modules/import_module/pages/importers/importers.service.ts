@@ -14,7 +14,6 @@ import {
 } from './importers.interface';
 import { Hostdefault } from '../hostdefaults/hostdefaults.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { ExternalSystemsAsList } from '../externalsystems/external-systems.interface';
 import { ExternalMonitoringsAsList } from '../externalmonitorings/external-monitorings.interface';
 import {
     GenericIdResponse,
@@ -24,6 +23,7 @@ import {
 } from '../../../../generic-responses';
 import { ModalService } from '@coreui/angular';
 import { ImportDataResponse } from '../importedhosts/importedhosts.interface';
+import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -62,17 +62,12 @@ export class ImportersService {
         )
     }
 
-    public loadElements(containerId: number, dataSource: string): Observable<ImporterElements> {
+    public loadElements(containerId: number): Observable<ImporterElements> {
         const proxyPath = this.proxyPath;
         return forkJoin([
             this.http.get<LoadElementsByContainerIdResponse>(`${proxyPath}/import_module/importers/loadElementsByContainerId/` + containerId + `.json?angular=true`, {
                 params: {
                     empty: 'true'
-                }
-            }),
-            this.http.get<ExternalSystemsAsList>(`/import_module/external_systems/loadExternalSystemsByContainerId/` + containerId + `.json?angular=true`, {
-                params: {
-                    data_source: dataSource
                 }
             }),
             this.http.get<ExternalMonitoringsAsList>(`/import_module/external_monitorings/loadExternalMonitoringsByContainerId/` + containerId + `.json?angular=true`, {
@@ -81,12 +76,29 @@ export class ImportersService {
                 }
             })
         ]).pipe(
-            map(([hostdefaultsResponse, externalsystems, externalMonitorings]) => {
+            map(([hostdefaultsResponse, externalMonitorings]) => {
                 return {
                     hostdefaults: hostdefaultsResponse.hostdefaults,
-                    externalsystems: externalsystems,
                     externalMonitorings: externalMonitorings
                 }
+            })
+        );
+    }
+
+    public loadExternalSystems(containerId: number, dataSource: string | null): Observable<SelectKeyValue[]> {
+        let params = {};
+        if (dataSource) {
+            params = {
+                data_source: dataSource
+            };
+        }
+        return this.http.get<{
+            externalsystems: SelectKeyValue[]
+        }>(`/import_module/external_systems/loadExternalSystemsByContainerId/` + containerId + `.json?angular=true`, {
+            params
+        }).pipe(
+            map(data => {
+                return data.externalsystems;
             })
         );
     }
@@ -193,6 +205,34 @@ export class ImportersService {
                 id: 'importDataModal',
             });
         }
+    }
+
+
+    public loadDataFromProxmox(importer: Importer): Observable<{
+        success: boolean;
+        data: ImportDataResponse | GenericMessageResponse;
+    }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ImportDataResponse>(`${proxyPath}/import_module/imported_hosts/loadDataFromProxmox/${importer.id}.json`, {
+            params: {
+                angular: true
+            }
+        }).pipe(
+            map(data => {
+                // Return true on 200 Ok
+                return {
+                    success: true,
+                    data: data
+                };
+            }),
+            catchError((error: any) => {
+                let errorMessage: GenericMessageResponse = {message: error.error.response.error};
+                return of({
+                    success: false,
+                    data: errorMessage
+                });
+            })
+        );
     }
 
     public loadDataFromITop(importer: Importer): Observable<{

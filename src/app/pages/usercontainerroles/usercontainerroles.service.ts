@@ -2,11 +2,17 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
-import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import {
+    GenericActionErrorResponse,
+    GenericIdResponse,
+    GenericResponseWrapper,
+    GenericValidationError
+} from '../../generic-responses';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import {
     CopyUserContainerRoleDatum,
     CopyUserContainerRolesRequest,
+    UsercontainerrolesAppend,
     UsercontainerrolesGet,
     UsercontainerrolesIndex,
     UsercontainerrolesIndexParams,
@@ -36,8 +42,16 @@ export class UsercontainerrolesService {
         return this.http.post<UsergroupsCopyPostRoot>(`${this.proxyPath}/usercontainerroles/copy/.json?angular=true`, {data: post});
     }
 
-    public loadLdapGroups(searchString: string) {
-        return this.http.get<LoadLdapgroups>(`${this.proxyPath}/usercontainerroles/loadLdapgroupsForAngular.json?angular=true&filter[Ldapgroups.cn]=${searchString}`);
+    public loadLdapGroups(searchString: string, selected: number[] = []) {
+        const params = {
+            'angular': true,
+            'filter[Ldapgroups.cn]': searchString,
+            'selected[]': selected
+        };
+
+        return this.http.get<LoadLdapgroups>(`${this.proxyPath}/usercontainerroles/loadLdapgroupsForAngular.json`, {
+            params: params
+        });
     }
 
     /**********************
@@ -122,5 +136,30 @@ export class UsercontainerrolesService {
                 return data;
             })
         )
+    }
+
+    public appendLdapgroups(param: UsercontainerrolesAppend): Observable<GenericResponseWrapper> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.post<any>(`${proxyPath}/usercontainerroles/append/.json?angular=true`, param)
+            .pipe(
+                map(data => {
+                    // Return true on 200 Ok
+                    return {
+                        success: true,
+                        data: data as GenericIdResponse
+                    };
+                }),
+                catchError((error: any) => {
+                    const err = error.error.message as GenericActionErrorResponse;
+                    return of({
+                        success: false,
+                        data: {
+                            usercontainerrole_id: {
+                                err
+                            }
+                        }
+                    });
+                })
+            );
     }
 }

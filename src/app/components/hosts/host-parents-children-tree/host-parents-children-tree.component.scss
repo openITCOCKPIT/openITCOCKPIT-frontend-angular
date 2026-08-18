@@ -1,0 +1,198 @@
+// https://flow.foblex.com/docs/get-started
+
+@use "sass:color";
+@use "../../../../assets/coreui/variables" as oitc;
+
+:host {
+    --background-element-color: rgba(0, 0, 0, 0.1);
+    --selection-area-color: rgba(100, 108, 255, 0.14);
+    --disabled-color: #e2e2e2;
+    --node-background-color: #ffffff;
+    --node-border-radius: 2px;
+    --node-border-color: rgba(60, 60, 67, 0.36);
+    --node-selected-border-color: #3451b2;
+    --node-color: rgba(60, 60, 67, 0.78);
+    --node-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --connection-color: rgba(60, 60, 67, 0.78);
+    --snap-connection-color: rgba(60, 60, 67, 0.38);
+    --connection-gradient-1: #b8272c;
+    --connection-gradient-2: #30a46c;
+    --outlet-color: #3451b2;
+    --input-output-color: rgba(60, 60, 67, 0.78);
+}
+
+body.dark-theme :host {
+    --background-element-color: rgba(255, 255, 255, 0.1);
+    --selection-area-color: rgba(100, 108, 255, 0.16);
+    --disabled-color: #2c2c2e;
+    --node-background-color: #000000;
+    --node-border-radius: 2px;
+    --node-border-color: rgba(235, 235, 245, 0.38);
+    --node-selected-border-color: #a8b1ff;
+    --node-color: rgba(235, 235, 245, 0.6);
+    --node-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --connection-color: rgba(235, 235, 245, 0.6);
+    --snap-connection-color: rgba(235, 235, 245, 0.2);
+    --connection-gradient-1: #f66f81;
+    --connection-gradient-2: #298459;
+    --outlet-color: #a8b1ff;
+    --input-output-color: rgba(235, 235, 245, 0.6);
+}
+
+::ng-deep .f-flow {
+
+    //height: 100vh !important;
+    height: 100% !important;
+
+    /*.f-flow {
+        height: 100vh !important;
+    }*/
+
+    .f-connection {
+        .f-connection-drag-handle {
+            fill: transparent;
+        }
+
+        .f-connection-selection {
+            fill: none;
+        }
+
+        .f-connection-path {
+            stroke-width: 1px;
+            stroke: var(--connection-color);
+            fill: none;
+        }
+
+        .f-connection-text, .f-connection-center {
+            fill: var(--connection-color);
+            color: var(--connection-color);
+        }
+
+        &.f-snap-connection {
+            .f-connection-path {
+                stroke: var(--snap-connection-color);
+            }
+        }
+    }
+
+    .f-connections-container {
+        fill: var(--connection-color);
+    }
+
+
+    .f-node {
+        /*width: 150px;*/
+        color: var(--node-color);
+        /*text-align: center;*/
+        background: var(--node-background-color);
+        border-radius: var(--node-border-radius);
+        border: 0.2px solid var(--node-border-color);
+        /*cursor: move;*/
+    }
+
+}
+
+.host-node-container {
+    border: 2px solid var(--cui-light-border-subtle);
+    border-radius: var(--cui-border-radius);
+    box-shadow: rgba(oitc.$secondary, 0.3) 5px 0px 10px 0px;
+    //background: rgba(255, 255, 255, 0.1);
+    background: var(--cui-body-bg);
+    color: var(--cui-body-color);
+    width: 300px;
+    font-size: 10px;
+}
+
+.host-node-header {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: calc(var(--cui-border-radius) - 2px) calc(var(--cui-border-radius) - 2px) 0 0;
+    padding: 8px 12px;
+    gap: 8px;
+
+    &.host-node-disabled {
+        color: var(--cui-secondary-color) !important;
+    }
+
+    &.host-node-ok {
+        background-color: var(--cui-success-bg-subtle) !important;
+        border-bottom: 2px solid var(--cui-success);
+    }
+
+    &.host-node-warning {
+        background-color: var(--cui-warning-bg-subtle) !important;
+        border-bottom: 2px solid var(--cui-warning);
+    }
+
+    &.host-node-critical {
+        background-color: var(--cui-danger-bg-subtle) !important;
+        border-bottom: 2px solid var(--cui-danger);
+    }
+
+    &.host-node-unknown {
+        background-color: var(--cui-secondary-bg-subtle) !important;
+        border-bottom: 2px solid var(--cui-secondary);
+    }
+
+    &.host-node-not-monitored {
+        border-bottom: 2px solid var(--cui-primary);
+    }
+
+}
+
+.host-node-header-left {
+    display: flex;
+    gap: 8px;
+}
+
+.host-node-header-right {
+    color: var(--cui-secondary-color)
+}
+
+.host-node-header-headline {
+    width: 100px;
+    display: block;
+}
+
+.host-node-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.host-node-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-top: 1px solid var(--bracket-border-subtle);
+
+    &.is-last {
+        border-radius: 0 0 var(--cui-border-radius) var(--cui-border-radius);
+    }
+
+}
+
+.host-parent-children-tree-headline {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    text-align: center;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 300;
+}
+
+/* padding-top creates space for the host-parent-children-tree-headline, so fitToScreen also shows the headlines */
+.f-group-container {
+    padding-top: 50px;
+    position: relative;
+    border-radius: var(--cui-border-radius);
+    border: 1.5px dashed var(--cui-info-border-subtle);
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 12px;
+    background-color: var(--cui-info-bg-subtle);
+}

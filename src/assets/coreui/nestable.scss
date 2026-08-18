@@ -245,7 +245,8 @@
 
 .dd-handle:hover,
 .dd-handle:hover .dd-list .dd-handle,
-.dd-handle:hover + oitc-container-nest .dd-list .dd-handle {
+.dd-handle:hover + oitc-container-nest .dd-list .dd-handle,
+.dd-handle:hover + oitc-proxmox-snapshot-nest .dd-list .dd-handle {
     background: color.adjust(oitc.$primary, $alpha: -0.9) !important;
     border: 1px solid oitc.$primary;
 }

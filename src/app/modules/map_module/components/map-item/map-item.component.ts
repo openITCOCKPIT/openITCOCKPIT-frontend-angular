@@ -78,10 +78,7 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         if (!this.isItemDeleted(this.type)) {
             this.load();
         }
-        if (this.refreshInterval()! > 0 && this.uuidForServices) {
-            this.MapItemReloadService.setRefreshInterval(this.refreshInterval() as number);
-            this.MapItemReloadService.registerNewItem(this.uuidForServices, this.item() as Mapitem, this.updateCallback);
-        }
+
     }
 
     public updateCallback = (result: MapItemRootForMapItem) => {
@@ -94,6 +91,13 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         this.icon_property = result.data.data.icon_property!;
         this.allowView = result.data.allowView;
         this.init = false;
+
+        if (this.allowView) {
+            if (this.refreshInterval()! > 0 && this.uuidForServices) {
+                this.MapItemReloadService.setRefreshInterval(this.refreshInterval() as number);
+                this.MapItemReloadService.registerNewItem(this.uuidForServices, this.item() as Mapitem, this.updateCallback);
+            }
+        }
 
         this.getLabel(result.data.data);
 
@@ -237,7 +241,8 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
-                                    label_possition: LabelPosition.RIGHT
+                                    label_possition: LabelPosition.RIGHT,
+                                    allowView: this.allowView
                                 } as Mapitem,
                                 itemType: this.type
                             });
@@ -255,7 +260,8 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
-                                    label_possition: LabelPosition.BOTTOM
+                                    label_possition: LabelPosition.BOTTOM,
+                                    allowView: this.allowView
                                 } as Mapitem,
                                 itemType: this.type
                             });
@@ -273,7 +279,8 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                                     x: this.x,
                                     y: this.y,
                                     map_id: this.mapId,
-                                    label_possition: LabelPosition.LEFT
+                                    label_possition: LabelPosition.LEFT,
+                                    allowView: this.allowView
                                 } as Mapitem,
                                 itemType: this.type
                             });

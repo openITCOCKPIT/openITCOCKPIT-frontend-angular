@@ -24,7 +24,7 @@
  */
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -63,6 +63,7 @@ import { AsyncPipe } from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { intersection } from 'lodash';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 
 @Component({
@@ -96,7 +97,9 @@ import { intersection } from 'lodash';
         InputGroupComponent,
         AsyncPipe,
         ColComponent,
-        InputGroupTextDirective
+        InputGroupTextDirective,
+        NgSelectComponent,
+        TranslocoPipe
     ],
     templateUrl: './statuspages-add.component.html',
     styleUrl: './statuspages-add.component.css',
@@ -156,12 +159,13 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: ''}
+                        _joinData: {display_alias: '', group_tags: ''}
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
                     objectEntry._joinData.display_alias = "";
+                    objectEntry._joinData.group_tags = null;
                     hostgroupObjects.push(objectEntry);
                 });
                 this.hostgroups = hostgroupObjects;
@@ -182,12 +186,13 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: ''}
+                        _joinData: {display_alias: '', group_tags: ''}
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
                     objectEntry._joinData.display_alias = "";
+                    objectEntry._joinData.group_tags = "";
                     hostsObjects.push(objectEntry);
                 });
                 this.hosts = hostsObjects;
@@ -200,7 +205,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
         if (this.post.container_id === null) {
             return;
         }
-        console.log('searchString', searchString);
+
         this.subscriptions.add(this.StatuspagesService.loadServices(this.post.container_id, searchString, this.post.selected_services._ids)
             .subscribe((result) => {
                 let servicesObjects: SelectKeyValueExtended[] = [];
@@ -210,12 +215,13 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: ''}
+                        _joinData: {display_alias: '', group_tags: ''}
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value.servicename;
                     objectEntry._joinData.display_alias = "";
+                    objectEntry._joinData.group_tags = "";
                     servicesObjects.push(objectEntry);
                 });
                 this.services = servicesObjects;
@@ -237,12 +243,14 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: ''}
+                        _joinData: {display_alias: '', group_tags: ''}
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
                     objectEntry._joinData.display_alias = "";
+                    objectEntry._joinData.group_tags = "";
+
                     servicegroupsObjects.push(objectEntry);
                 });
                 this.servicegroups = servicegroupsObjects;
@@ -267,6 +275,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
             description: '',
             public_title: '',
             public_identifier: null,
+            public_refresh: 60,
             public: false,
             show_downtimes: false,
             show_downtime_comments: false,
@@ -294,6 +303,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
     public submit = () => {
         this.cleanUpForSubmit();
         this.filterForSubmit();
+
 
         if (!this.post.public || this.post.public_identifier === '') {
             this.post.public_identifier = null;
@@ -374,6 +384,11 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                 return;
             }
         });
+
+        this.post.hostgroups = this.normalizeGroupTags(this.post.hostgroups);
+        this.post.hosts = this.normalizeGroupTags(this.post.hosts);
+        this.post.servicegroups = this.normalizeGroupTags(this.post.servicegroups);
+        this.post.services = this.normalizeGroupTags(this.post.services);
     }
 
     private cleanUpForSubmit = () => {
@@ -393,6 +408,23 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
             this.services.map(service => service.key),
             this.post.selected_services._ids
         );
+
+    }
+
+    private normalizeGroupTags(items: SelectKeyValueExtended[]): SelectKeyValueExtended[] {
+        //ensure that the group tags stored in database as comma separated string or - if no tags - explicit as null
+        return items.map(item => {
+            const tags = item._joinData?.group_tags;
+            const hasTags = Array.isArray(tags) && tags.length > 0;
+
+            return {
+                ...item,
+                _joinData: {
+                    ...item._joinData,
+                    group_tags: hasTags ? tags.join(',') : null
+                }
+            };
+        });
     }
 
     public onPublicIdentifierInputChange(event: Event) {

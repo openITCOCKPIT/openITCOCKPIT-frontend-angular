@@ -51,6 +51,28 @@ via the [HTTP API](https://docs.openitcockpit.io/en/development/api/).
 
 If you want to contribute to the openITCOCKPIT frontend, you can follow the instructions below to set up a development environment.
 
+### IDE formatting setup (PhpStorm + VS Code)
+
+This project is used by developers working with both PhpStorm and VS Code.
+The PhpStorm behavior and code style were kept as-is, and the VS Code workspace settings were tuned to get as close as possible to that behavior.
+
+To keep pull requests reviewable and avoid huge style-only diffs, we use the following approach:
+
+- Use `.editorconfig` in the repository as shared baseline rules.
+- Keep PhpStorm code style unchanged.
+- Use workspace-level VS Code settings from `.vscode/settings.json`.
+- Format TypeScript/JavaScript on save, but only in modified regions (`editor.formatOnSaveMode = modificationsIfAvailable`).
+- Do not run automatic import reordering on save (to avoid large non-functional diffs).
+- Trim trailing whitespace automatically in TypeScript/JavaScript files.
+- Show a visual ruler at 120 characters.
+- If you add a new Angular component/directive/pipe in a template and see an "is not a known element" error, use Quick Fix (`Ctrl+.`) on the error to add the missing import.
+- After applying the Quick Fix, save the TypeScript file explicitly. Template edits do not auto-save the related TypeScript file.
+
+Important for mixed IDE teams:
+
+- Full-file formatting should only be done intentionally, ideally in a separate commit.
+- Functional changes and broad formatting changes should not be mixed in one commit.
+
 ### Prerequisites
 
 - Latest Node.js LTS ([Ubuntu / Debian download](https://github.com/nodesource/distributions))

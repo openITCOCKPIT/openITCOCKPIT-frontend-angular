@@ -65,4 +65,20 @@ export const mapModuleRoutes: Routes = [
         path: 'map_module/mapgenerators/generate/:id',
         loadComponent: () => import('./pages/mapgenerators/mapgenerators-generate/mapgenerators-generate.component').then(m => m.MapgeneratorsGenerateComponent)
     },
+    {
+        path: 'map_module/backgrounduploads/backgrounds',
+        loadComponent: () => import('./pages/backgrounduploads/backgrounduploads-backgrounds/backgrounduploads-backgrounds.component').then(m => m.BackgrounduploadsBackgroundsComponent)
+    },
+    {
+        path: 'map_module/backgrounduploads/icons',
+        loadComponent: () => import('./pages/backgrounduploads/backgrounduploads-icons/backgrounduploads-icons.component').then(m => m.BackgrounduploadsIconsComponent)
+    },
+    {
+        path: 'map_module/backgrounduploads/iconsets',
+        loadComponent: () => import('./pages/backgrounduploads/backgrounduploads-iconsets/backgrounduploads-iconsets.component').then(m => m.BackgrounduploadsIconsetsComponent)
+    },
+    {
+        path: 'map_module/backgrounduploads/editContainers/:id',
+        loadComponent: () => import('./pages/backgrounduploads/backgrounduploads-edit-containers/backgrounduploads-edit-containers.component').then(m => m.BackgrounduploadsEditContainersComponent)
+    }
 ];

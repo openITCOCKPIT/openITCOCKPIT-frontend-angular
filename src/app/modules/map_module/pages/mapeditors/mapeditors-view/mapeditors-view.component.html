@@ -47,15 +47,25 @@
                         {{ t('Back') }}
                     </button>
                 </c-nav-item>
-                @if (map) {
+                @if (map && map.Map.allowEdit) {
                     <c-nav-item class="px-1">
                         <button *oitcPermission="['mapmodule', 'mapeditors', 'edit']"
                                 [routerLink]="['/', 'map_module', 'mapeditors', 'edit', map.Map.id]" cButton
                                 class="ripple"
                                 color="default"
                                 size="xs">
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                            {{ t('Edit in Map editor') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button *oitcPermission="['mapmodule', 'maps', 'edit']"
+                                [routerLink]="['/', 'map_module', 'maps', 'edit', map.Map.id]" cButton
+                                class="ripple"
+                                color="default"
+                                size="xs">
                             <fa-icon [icon]="['fas', 'edit']"></fa-icon>
-                            {{ t('Edit') }}
+                            {{ t('Edit settings') }}
                         </button>
                     </c-nav-item>
                 }

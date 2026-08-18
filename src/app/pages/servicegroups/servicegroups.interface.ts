@@ -41,7 +41,6 @@ export function getDefaultServicegroupsIndexFilter(): ServicegroupsIndexFilter {
 
 /** EXTENDED VIEW PARAMS **/
 export interface ServicegroupsExtendedParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     page: number,
@@ -69,7 +68,6 @@ export function getDefaultServicegroupsExtendedParams(): ServicegroupsExtendedPa
 
 /** EXTENDED VIEW SERVICE LIST PARAMS **/
 export interface ServicegroupsExtendedServiceListParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     page: number,
@@ -188,13 +186,6 @@ export interface Servicegroup {
     servicetemplates: {
         _ids: number[]
     }
-}
-
-
-// LOAD CONTAINERS GET
-export interface LoadContainersRoot {
-    containers: SelectKeyValue[]
-    _csrfToken: string
 }
 
 // LOAD SERVICES REQUEST

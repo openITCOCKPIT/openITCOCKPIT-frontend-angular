@@ -1,0 +1,112 @@
+<ng-container *transloco="let t">
+    <c-dropdown>
+        <button cButton cDropdownToggle color="secondary">
+            {{ t('Actions') }}
+        </button>
+        <ul cDropdownMenu>
+            @if (virtType() === ProxmoxVirtType.Qemu) {
+                <li [hidden]="[ProxmoxStatus.Paused, ProxmoxStatus.Running, ProxmoxStatus.Suspended].includes(status())">
+                    <button cDropdownItem
+                            [title]="'Start VM' | transloco"
+                            (click)="runCommand(ProxmoxCommands.Start);">
+                        <fa-icon [icon]="['fas', 'play']"></fa-icon>
+                        {{ t('Start') }}
+                    </button>
+                </li>
+                <li [hidden]="[ProxmoxStatus.Stopped, ProxmoxStatus.Suspended].includes(status())">
+                    <button cDropdownItem
+                            [title]="'Pause the VM and keep the state in RAM' | transloco"
+                            (click)="getConfirmation(ProxmoxCommands.Pause)">
+                        <fa-icon [icon]="['fas', 'pause']"></fa-icon>
+                        {{ t('Pause') }}
+                    </button>
+                </li>
+                <li [hidden]="[ProxmoxStatus.Stopped, ProxmoxStatus.Suspended].includes(status())">
+                    <button cDropdownItem
+                            [title]="'Suspend to Disk' | transloco"
+                            (click)="getConfirmation(ProxmoxCommands.Suspend)">
+                        <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                        {{ t('Hibernate') }}
+                    </button>
+                </li>
+                <li [hidden]="![ProxmoxStatus.Paused, ProxmoxStatus.Suspended].includes(status())">
+                    <button cDropdownItem
+                            [title]="'Start VM' | transloco"
+                            (click)="runCommand(ProxmoxCommands.Resume);">
+                        <fa-icon [icon]="['fas', 'play']"></fa-icon>
+                        {{ t('Resume') }}
+                    </button>
+                </li>
+                <li [hidden]="[ProxmoxStatus.Stopped, ProxmoxStatus.Suspended].includes(status())">
+                    <button cDropdownItem
+                            [title]="'Shutdown the VM gracefully via ACPI-Signal' | transloco"
+                            (click)="getConfirmation(ProxmoxCommands.Shutdown)">
+                        <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                        {{ t('Shutdown') }}
+                    </button>
+                </li>
+                <li [hidden]="status() === ProxmoxStatus.Stopped">
+                    <button cDropdownItem
+                            [title]="'Force stop of the VM (pull the plug)' | transloco"
+                            (click)="getConfirmation(ProxmoxCommands.Stop)">
+                        <fa-icon [icon]="['fas', 'stop']"></fa-icon>
+                        {{ t('Stop') }}
+                    </button>
+                </li>
+                <li [hidden]="status() === ProxmoxStatus.Stopped">
+                    <button cDropdownItem
+                            [title]="'Gracefully shutdown the VM, apply hardware changes and start the VM.' | transloco"
+                            (click)="getConfirmation(ProxmoxCommands.Reboot)">
+                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                        {{ t('Reboot') }}
+                    </button>
+                </li>
+                <li [hidden]="status() === ProxmoxStatus.Stopped">
+                    <button cDropdownItem
+                            [title]="'Force reset of the VM.' | transloco"
+                            (click)="getConfirmation(ProxmoxCommands.Reset)">
+                        <fa-icon [icon]="['fas', 'bolt']"></fa-icon>
+                        {{ t('Reset') }}
+                    </button>
+                </li>
+            }
+
+            @if (virtType() === ProxmoxVirtType.Lxc) {
+                <li [hidden]="[ProxmoxStatus.Paused, ProxmoxStatus.Running, ProxmoxStatus.Suspended].includes(status())">
+                    <button cDropdownItem
+                            [title]="'Start Container' | transloco"
+                            (click)="runCommand(ProxmoxCommands.Start);">
+                        <fa-icon [icon]="['fas', 'play']"></fa-icon>
+                        {{ t('Start') }}
+                    </button>
+                </li>
+                <li [hidden]="[ProxmoxStatus.Stopped, ProxmoxStatus.Suspended].includes(status())">
+                    <button cDropdownItem
+                            [title]="'Shutdown the Container gracefully via ACPI-Signal' | transloco"
+                            (click)="getConfirmation(ProxmoxCommands.Shutdown)">
+                        <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                        {{ t('Shutdown') }}
+                    </button>
+                </li>
+                <li [hidden]="status() === ProxmoxStatus.Stopped">
+                    <button cDropdownItem
+                            [title]="'Force stop of the Container (pull the plug)' | transloco"
+                            (click)="getConfirmation(ProxmoxCommands.Stop)">
+                        <fa-icon [icon]="['fas', 'stop']"></fa-icon>
+                        {{ t('Stop') }}
+                    </button>
+                </li>
+                <li [hidden]="status() === ProxmoxStatus.Stopped">
+                    <button cDropdownItem
+                            [title]="'Gracefully shutdown the Container, apply hardware changes and start the Container.' | transloco"
+                            (click)="getConfirmation(ProxmoxCommands.Reboot)">
+                        <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
+                        {{ t('Reboot') }}
+                    </button>
+                </li>
+            }
+
+        </ul>
+    </c-dropdown>
+
+</ng-container>

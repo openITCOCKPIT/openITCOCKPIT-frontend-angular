@@ -73,7 +73,8 @@
 
             @if (response && !response.serverInformation.isContainer) {
                 <oitc-eol-alerts
-                    [codename]="response.serverInformation.LsbRelease"></oitc-eol-alerts>
+                    [codename]="response.serverInformation.LsbRelease"
+                    [phpversion]="response.serverInformation.php_version"></oitc-eol-alerts>
             }
 
             <c-row>

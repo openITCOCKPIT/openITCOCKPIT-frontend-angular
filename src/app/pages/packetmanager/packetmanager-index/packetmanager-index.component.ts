@@ -99,6 +99,7 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
                 changelog: [],
                 isDebianBased: false,
                 isRhelBased: false,
+                php_version: '',
                 isContainer: false,
                 LsbRelease: '',
                 systemname: '',
@@ -120,10 +121,12 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
                 this.data = result;
                 this.cdr.markForCheck();
 
-                const currentVersion = parseInt(result.OPENITCOCKPIT_VERSION.replace(/\D/g, ''), 10); //Remove all non numbers and parse to int
-                const newVersion = parseInt(result.result.data.changelog[0].Changelog.version.replace(/\D/g, ''), 10); //Remove all non numbers and parse to int
+                if (result && result.result.error === false) {
+                    const currentVersion = parseInt(result.OPENITCOCKPIT_VERSION.replace(/\D/g, ''), 10); //Remove all non numbers and parse to int
+                    const newVersion = parseInt(result.result.data.changelog[0].Changelog.version.replace(/\D/g, ''), 10); //Remove all non numbers and parse to int
 
-                this.newVersionAvailable = currentVersion < newVersion;
+                    this.newVersionAvailable = currentVersion < newVersion;
+                }
 
                 this.initializeModulesToCheckboxesInstall();
             })

@@ -6,7 +6,6 @@ import {
     AllocateToHostGroupGet,
     AllocateToHostgroupPost,
     AllocateToMatchingHostgroupResponse,
-    LoadContainersRoot,
     LoadHostgroupsByString,
     LoadHostsByStringResponse,
     LoadServicetemplategroupsByString,
@@ -30,6 +29,7 @@ import {
     GenericValidationError
 } from '../../generic-responses';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
+import { LoadContainersRoot } from '../containers/containers.interface';
 
 @Injectable({
     providedIn: 'root',

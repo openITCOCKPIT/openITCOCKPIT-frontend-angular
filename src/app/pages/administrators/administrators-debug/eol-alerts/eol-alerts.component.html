@@ -11,7 +11,7 @@
             <br/>
             {{
                 t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
-                    '0': 'support@itsm.it-novum.com'
+                    '0': 'oss-support@avendis.com'
                 })
             }}
         </c-alert>
@@ -28,7 +28,7 @@
             <br/>
             {{
                 t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
-                    '0': 'support@itsm.it-novum.com'
+                    '0': 'oss-support@avendis.com'
                 })
             }}
         </c-alert>
@@ -45,7 +45,7 @@
             <br/>
             {{
                 t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
-                    '0': 'support@itsm.it-novum.com'
+                    '0': 'oss-support@avendis.com'
                 })
             }}
         </c-alert>
@@ -63,9 +63,70 @@
             <br/>
             {{
                 t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
-                    '0': 'support@itsm.it-novum.com'
+                    '0': 'oss-support@avendis.com'
                 })
             }}
+        </c-alert>
+    }
+
+    @if (codename() === 'jammy') {
+        <c-alert>
+            <h4>
+                <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+                {{ t('Ubuntu Jammy 22.04 is end of life soon!') }}
+            </h4>
+            {{ t('Official end of life of Ubuntu Jammy scheduled for April 2027.') }}
+            {{ t('Therefore openITCOCKPIT 5.6.0 will be one of the last releases for Ubuntu Jammy. Please update to Ubuntu Noble to receive further updates.') }}
+            <br>
+            {{ t('See the docs for more information.') }}
+            <a href="https://docs.openitcockpit.io/en/update/ubuntu-jammy-to-noble/">https://docs.openitcockpit.io/en/update/ubuntu-jammy-to-noble/</a>
+            <br>
+            <br>
+            {{
+                t('Future openITCOCKPIT releases will require at least PHP version {0}', {
+                    '0': '8.2'
+                })
+            }}
+
+            <br/>
+            {{
+                t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
+                    '0': 'oss-support@avendis.com'
+                })
+            }}
+        </c-alert>
+    }
+
+    @if (codename() === 'bookworm') {
+        <c-alert>
+            <h4>
+                <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+                {{ t('Debian Bookworm 12 is end of life soon!') }}
+            </h4>
+            {{ t('Official end of life of Debian Bookworm scheduled for June 2026.') }}
+            {{ t('Therefore openITCOCKPIT 5.6.0 will be one of the last releases for Debian Bookworm. Please update to Debian Trixie to receive further updates.') }}
+            <br>
+            {{ t('See the docs for more information.') }}
+            <a href="https://docs.openitcockpit.io/en/update/debian-bookworm-to-trixie/">https://docs.openitcockpit.io/en/update/debian-bookworm-to-trixie/</a>
+
+            <br/>
+            <br/>
+            {{
+                t('Need help updating your system? Please don\'t hesitate to contact our enterprise support {0}.', {
+                    '0': 'oss-support@avendis.com'
+                })
+            }}
+        </c-alert>
+    }
+
+    @if (this.phpVersionInt > 0 && this.phpVersionInt <= 810) {
+        <c-alert color="warning">
+            <h4>
+                <fa-icon [icon]="['fas', 'warning']"></fa-icon>
+                {{ t('openITCOCKPIT will drop support for PHP 8.1') }}
+            </h4>
+            {{ t('The system is currently using PHP 8.1 (or older)') }}
+            {{ t('For security reasons, openITCOCKPIT will drop support for older PHP versions soon.') }}
         </c-alert>
     }
 

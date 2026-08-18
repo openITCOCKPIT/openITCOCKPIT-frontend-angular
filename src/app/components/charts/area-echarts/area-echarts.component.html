@@ -1,0 +1,6 @@
+<div class="px-2">
+    <div echarts class="w-100"
+         [style.min-height.vh]="minChartHeight()"
+         [options]="chartOption"
+         (chartInit)="onChartInit($event)"></div>
+</div>

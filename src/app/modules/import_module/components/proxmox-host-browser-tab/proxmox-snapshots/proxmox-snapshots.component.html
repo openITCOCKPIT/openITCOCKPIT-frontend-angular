@@ -1,0 +1,125 @@
+<ng-container *transloco="let t">
+    <c-row>
+        <c-col>
+            <div class="fs-6 fw-semibold text-uppercase">
+                {{ t('Snaphots') }}
+            </div>
+        </c-col>
+        @if (allowEdit()) {
+            <c-col class="text-end">
+                <button cButton size="xs" color="default" class="ripple"
+                        (click)="toggleCreateSnapshotModal()">
+                    {{ t('Take Snapshot') }}
+                </button>
+            </c-col>
+        }
+    </c-row>
+
+    <c-row>
+        <c-col [xs]="12">
+            <div class="dd">
+                <!-- Recursive component -->
+                @if (nestedSnapshots.length > 0) {
+                    <oitc-proxmox-snapshot-nest
+                        [nestedSnapshots]="nestedSnapshots"
+                        [containerTemplate]="containerTemplate">
+                    </oitc-proxmox-snapshot-nest>
+                }
+
+                <ng-template #containerTemplate let-snapshot let-index="index" let-collapsed="collapsed"
+                             let-component="component">
+                    <div class="dd-handle p-1">
+                        @if (snapshot.children.length > 0) {
+                            <button
+                                type="button" class="dd-collapse-button"
+                                (click)="component.toggleCollapsed(index)">
+                                @if (!collapsed[index]) {
+                                    <i class="fas fa-angle-down"></i>
+                                }
+                                @if (collapsed[index]) {
+                                    <i class="fas fa-angle-right"></i>
+                                }
+                            </button>
+                        }
+
+                        <!-- Icon -->
+                        @if (snapshot.isCurrent) {
+                            @if (snapshot.type === ProxmoxVirtType.Qemu) {
+                                <i class="fas fa-desktop text-primary"></i>
+                            } @else {
+                                <i class="fas fa-cube text-primary"></i>
+                            }
+                        } @else {
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        }
+                        <!-- End icon -->
+
+                        <!-- snapshot name and Links -->
+                        <span>
+                            <span [class.text-primary]="snapshot.running">
+                                @if (snapshot.isCurrent) {
+                                    {{ t('NOW') }}
+                                } @else {
+                                    {{ snapshot.name }}
+                                }
+                            </span>
+                        </span>
+                        <!-- End of Snapshot name and Links -->
+
+                        <!-- Buttons -->
+                        @if (allowEdit() && !snapshot.isCurrent && snapshot.name) {
+                            <!-- only show buttons for not "current" -->
+                            <button type="button"
+                                    class="btn btn-link text-body p-1 text-decoration-none ripple"
+                                    (click)="rollbackSnapshot(snapshot.name)">
+                                <i class="fa-solid fa-arrow-rotate-left text-secondary"></i>
+                                {{ t('Rollback') }}
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-link text-body text-decoration-none p-1 ripple"
+                                    (click)="deleteSnapshot(snapshot.name)">
+                                <span class="text-danger">
+                                    <i class="fas fa-trash"></i>
+                                    {{ t('Delete') }}
+                                </span>
+                            </button>
+                        }
+                        <!-- End Buttons -->
+
+                        @if (snapshot.snaptime_user) {
+                            <span class="badge border border-primary text-primary float-end">
+                                {{ snapshot.snaptime_user }}
+                            </span>
+                        }
+
+                        @if (snapshot.vmstate) {
+                            <span class="badge border border-primary text-primary me-1 float-end"
+                                  [cTooltip]="'Include RAM'|transloco">
+                                <i class="fa-solid fa-memory"></i>
+                            </span>
+                        }
+
+                        @if (snapshot.description) {
+                            <div class="help-block ps-3 my-0">
+                                {{ snapshot.description }}
+                            </div>
+                        }
+                    </div>
+                </ng-template>
+
+            </div>
+        </c-col>
+    </c-row>
+
+    @if (vmid() && nodeName()) {
+        <oitc-proxmox-create-snapshot-modal
+            [hostId]="hostId()"
+            [vmid]="vmid()"
+            [nodeName]="nodeName()"
+            [status]="status()"
+            [virtType]="virtType()"
+            (onFinish)="loadSnapshots()"></oitc-proxmox-create-snapshot-modal>
+    }
+
+</ng-container>
