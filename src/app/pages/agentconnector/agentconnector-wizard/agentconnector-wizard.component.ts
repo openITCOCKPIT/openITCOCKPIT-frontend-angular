@@ -1,5 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 
 import {
     CardBodyComponent,
@@ -10,31 +16,28 @@ import {
     CardTitleDirective,
     ColComponent,
     FormLabelDirective,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
-
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 
-
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-
 
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import {
-    AgentconnectorWizardProgressbarComponent
-} from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
+import { AgentconnectorWizardProgressbarComponent } from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
 import { AgentconnectorWizardStepsEnum } from '../agentconnector.enums';
-
 
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { AgentconnectorWizardLoadHostsByStringParams, AgentModes } from '../agentconnector.interface';
+import {
+    AgentconnectorWizardLoadHostsByStringParams,
+    AgentModes,
+} from '../agentconnector.interface';
 import { AgentconnectorService } from '../agentconnector.service';
 import { Subscription } from 'rxjs';
 
@@ -59,14 +62,13 @@ import { Subscription } from 'rxjs';
         FormLabelDirective,
         RequiredIconComponent,
         SelectComponent,
-        CardTextDirective
+        CardTextDirective,
     ],
     templateUrl: './agentconnector-wizard.component.html',
     styleUrl: './agentconnector-wizard.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AgentconnectorWizardComponent implements OnInit, OnDestroy {
-
     // Wizard step 1
 
     public hostId: number = 0;
@@ -79,31 +81,33 @@ export class AgentconnectorWizardComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
-    protected readonly AgentconnectorWizardStepsEnum = AgentconnectorWizardStepsEnum;
-
+    protected readonly AgentconnectorWizardStepsEnum =
+        AgentconnectorWizardStepsEnum;
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
+        this.subscriptions.add(
+            this.route.queryParams.subscribe((params) => {
+                // Here, params is an object containing the current query parameters.
+                // You can do something with these parameters here.
+                //console.log(params);
 
-            // Query String Parameters
-            const hostId = Number(params['hostId']) || 0;
-            if (hostId > 0) {
-                this.hostId = hostId;
-            }
+                // Query String Parameters
+                const hostId = Number(params['hostId']) || 0;
+                if (hostId > 0) {
+                    this.hostId = hostId;
+                }
 
-            const pushAgentId = Number(params['pushAgentId']) || 0;
-            if (pushAgentId > 0) {
-                this.pushAgentId = pushAgentId;
-            }
+                const pushAgentId = Number(params['pushAgentId']) || 0;
+                if (pushAgentId > 0) {
+                    this.pushAgentId = pushAgentId;
+                }
 
-            this.loadHosts('');
-            if (this.hostId > 0) {
-                this.onHostChange();
-            }
-        }));
+                this.loadHosts('');
+                if (this.hostId > 0) {
+                    this.onHostChange();
+                }
+            }),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -119,31 +123,36 @@ export class AgentconnectorWizardComponent implements OnInit, OnDestroy {
         let params: AgentconnectorWizardLoadHostsByStringParams = {
             angular: true,
             'selected[]': selected,
-            'filter[Hosts.name]': searchString
-        }
+            'filter[Hosts.name]': searchString,
+        };
 
         if (this.pushAgentId > 0) {
             params['pushAgentId'] = this.pushAgentId;
         }
 
-        this.subscriptions.add(this.AgentconnectorService.loadHostsByString(params)
-            .subscribe((result: SelectKeyValue[]) => {
-                this.hosts = result;
-                this.cdr.markForCheck();
-            }));
-    }
+        this.subscriptions.add(
+            this.AgentconnectorService.loadHostsByString(params).subscribe(
+                (result: SelectKeyValue[]) => {
+                    this.hosts = result;
+                    this.cdr.markForCheck();
+                },
+            ),
+        );
+    };
 
     public onHostChange() {
         this.isConfigured = false;
 
         if (this.hostId > 0) {
-            this.subscriptions.add(this.AgentconnectorService.loadIsConfigured(this.hostId)
-                .subscribe((result) => {
+            this.subscriptions.add(
+                this.AgentconnectorService.loadIsConfigured(
+                    this.hostId,
+                ).subscribe((result) => {
                     this.isConfigured = result;
                     this.cdr.markForCheck();
-                }));
+                }),
+            );
         }
-
     }
 
     protected readonly AgentModes = AgentModes;

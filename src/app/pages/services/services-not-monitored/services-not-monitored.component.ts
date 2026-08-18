@@ -1,9 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
 import {
     CardBodyComponent,
     CardComponent,
@@ -22,9 +27,8 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
 } from '@coreui/angular';
-
 
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
@@ -40,20 +44,19 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 
-import {
-    RegexHelperTooltipComponent
-} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { RegexHelperTooltipComponent } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 
-
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import {
+    TranslocoDirective,
+    TranslocoPipe,
+    TranslocoService,
+} from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ServicestatusSimpleIconComponent } from '../servicestatus-simple-icon/servicestatus-simple-icon.component';
@@ -67,14 +70,12 @@ import {
     getDefaultServicesNotMonitoredParams,
     ServiceObject,
     ServicesNotMonitoredParams,
-    ServicesNotMonitoredRoot
+    ServicesNotMonitoredRoot,
 } from '../services.interface';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
 
-import {
-    QueryHandlerCheckerComponent
-} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+import { QueryHandlerCheckerComponent } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { FormsModule } from '@angular/forms';
@@ -126,19 +127,20 @@ import { FormsModule } from '@angular/forms';
         FormDirective,
         QueryHandlerCheckerComponent,
         AsyncPipe,
-        FormsModule
+        FormsModule,
     ],
     templateUrl: './services-not-monitored.component.html',
     styleUrl: './services-not-monitored.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService}, // Inject the ServicesService into the DisableAllModalComponent
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService }, // Inject the ServicesService into the DisableAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService }, // Inject the ServicesService into the DeleteAllModalComponent
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
-// Filter vars
-    public params: ServicesNotMonitoredParams = getDefaultServicesNotMonitoredParams();
+    // Filter vars
+    public params: ServicesNotMonitoredParams =
+        getDefaultServicesNotMonitoredParams();
     // Filter end
 
     public services?: ServicesNotMonitoredRoot;
@@ -151,12 +153,14 @@ export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
     public readonly PermissionsService = inject(PermissionsService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private readonly TranslocoService: TranslocoService =
+        inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
-    private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private SelectionServiceService: SelectionServiceService = inject(
+        SelectionServiceService,
+    );
     private readonly modalService = inject(ModalService);
     private cdr = inject(ChangeDetectorRef);
-
 
     public ngOnInit() {
         this.loadServices();
@@ -169,11 +173,13 @@ export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
     public loadServices() {
         this.SelectionServiceService.deselectAll();
 
-        this.subscriptions.add(this.ServicesService.getNotMonitored(this.params)
-            .subscribe((result) => {
-                this.services = result;
-                this.cdr.markForCheck();
-            })
+        this.subscriptions.add(
+            this.ServicesService.getNotMonitored(this.params).subscribe(
+                (result) => {
+                    this.services = result;
+                    this.cdr.markForCheck();
+                },
+            ),
         );
     }
 
@@ -216,23 +222,33 @@ export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
 
         if (service) {
             // User just want to delete a single command
-            items = [{
-                id: Number(service.id),
-                displayName: String(service.hostname) + '/' + String(service.servicename)
-            }];
+            items = [
+                {
+                    id: Number(service.id),
+                    displayName:
+                        String(service.hostname) +
+                        '/' +
+                        String(service.servicename),
+                },
+            ];
         } else {
             // User clicked on delete selected button
-            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-                return {
-                    id: item.Service.id,
-                    displayName: String(item.Service.hostname) + '/' + String(item.Service.servicename)
-                };
-            });
+            items = this.SelectionServiceService.getSelectedItems().map(
+                (item): DeleteAllItem => {
+                    return {
+                        id: item.Service.id,
+                        displayName:
+                            String(item.Service.hostname) +
+                            '/' +
+                            String(item.Service.servicename),
+                    };
+                },
+            );
         }
 
-
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message =
+                this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
             return;
         }
@@ -254,11 +270,14 @@ export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
     }
 
     public navigateCopy() {
-        let ids = this.SelectionServiceService.getSelectedItems().map(item => item.Service.id).join(',');
+        let ids = this.SelectionServiceService.getSelectedItems()
+            .map((item) => item.Service.id)
+            .join(',');
         if (ids) {
             this.router.navigate(['/', 'services', 'copy', ids]);
         } else {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message =
+                this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
             return;
         }
@@ -269,20 +288,31 @@ export class ServicesNotMonitoredComponent implements OnInit, OnDestroy {
 
         if (service) {
             // User just want to delete a single command
-            items = [{
-                id: Number(service.id),
-                displayName: String(service.hostname) + '/' + String(service.servicename)
-            }];
+            items = [
+                {
+                    id: Number(service.id),
+                    displayName:
+                        String(service.hostname) +
+                        '/' +
+                        String(service.servicename),
+                },
+            ];
         } else {
-            items = this.SelectionServiceService.getSelectedItems().map((item): DisableItem => {
-                return {
-                    id: item.Service.id,
-                    displayName: item.Service.hostname + '/' + item.Service.servicename
-                };
-            });
+            items = this.SelectionServiceService.getSelectedItems().map(
+                (item): DisableItem => {
+                    return {
+                        id: item.Service.id,
+                        displayName:
+                            item.Service.hostname +
+                            '/' +
+                            item.Service.servicename,
+                    };
+                },
+            );
         }
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message =
+                this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
             return;
         }

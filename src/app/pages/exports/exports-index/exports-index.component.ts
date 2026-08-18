@@ -1,9 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import {
-    QueryHandlerCheckerComponent
-} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+import { QueryHandlerCheckerComponent } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
@@ -19,13 +24,13 @@ import {
     ContainerComponent,
     FormCheckInputDirective,
     RowComponent,
-    TableDirective
+    TableDirective,
 } from '@coreui/angular';
 import { NgForOf, NgIf } from '@angular/common';
 
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { ExportsService } from '../exports.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -33,13 +38,10 @@ import {
     ExportSatelliteSelectionPost,
     ExportTask,
     ExportValidationResult,
-    resetExportValidation
+    resetExportValidation,
 } from '../exports.interface';
-import {
-    SatelliteEntityWithSatelliteStatus
-} from '../../../modules/distribute_module/pages/satellites/satellites.interface';
+import { SatelliteEntityWithSatelliteStatus } from '../../../modules/distribute_module/pages/satellites/satellites.interface';
 import { GenericResponseWrapper } from '../../../generic-responses';
-
 
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
@@ -76,14 +78,13 @@ import { FormsModule } from '@angular/forms';
         SelectAllComponent,
         UiBlockerComponent,
         BadgeComponent,
-        FormsModule
+        FormsModule,
     ],
     templateUrl: './exports-index.component.html',
     styleUrl: './exports-index.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExportsIndexComponent implements OnInit, OnDestroy {
-
     public init = true; // avoid flashing of error messages while loading information
     public isExportRunning: boolean = false;
     public createBackup: boolean = true;
@@ -102,22 +103,26 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
     private broadcastIntervalId: any = null;
     private subscriptions: Subscription = new Subscription();
     private readonly ExportsService = inject(ExportsService);
-    private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly SelectionServiceService: SelectionServiceService = inject(
+        SelectionServiceService,
+    );
     private readonly notyService = inject(NotyService);
     private readonly TranslocoService = inject(TranslocoService);
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.ExportsService.getIndex().subscribe(data => {
-            this.isExportRunning = data.exportRunning;
-            this.gearmanReachable = data.gearmanReachable;
-            this.isGearmanWorkerRunning = data.isGearmanWorkerRunning;
+        this.subscriptions.add(
+            this.ExportsService.getIndex().subscribe((data) => {
+                this.isExportRunning = data.exportRunning;
+                this.gearmanReachable = data.gearmanReachable;
+                this.isGearmanWorkerRunning = data.isGearmanWorkerRunning;
 
-            this.cdr.markForCheck();
-            this.getExportStateOnPageLoad();
+                this.cdr.markForCheck();
+                this.getExportStateOnPageLoad();
 
-            this.init = false;
-        }));
+                this.init = false;
+            }),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -126,40 +131,51 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
     }
 
     public getExportStateOnPageLoad() {
-        this.subscriptions.add(this.ExportsService.getIndex().subscribe(data => {
-            this.cdr.markForCheck();
-            this.isExportRunning = data.exportRunning;
-            this.gearmanReachable = data.gearmanReachable;
-            this.isGearmanWorkerRunning = data.isGearmanWorkerRunning;
+        this.subscriptions.add(
+            this.ExportsService.getIndex().subscribe((data) => {
+                this.cdr.markForCheck();
+                this.isExportRunning = data.exportRunning;
+                this.gearmanReachable = data.gearmanReachable;
+                this.isGearmanWorkerRunning = data.isGearmanWorkerRunning;
 
-            this.useSingleInstanceSync = data.useSingleInstanceSync;
-            this.satellites = data.satellites;
+                this.useSingleInstanceSync = data.useSingleInstanceSync;
+                this.satellites = data.satellites;
 
-            if (this.isExportRunning) {
-                this.broadcastIntervalId = setInterval(() => {
-                    this.ExportsService.getBroadcastStatus().subscribe(data => {
-                        this.cdr.markForCheck();
-                        this.tasks = data.tasks; // Tasks to show in the log
-                        this.isExportRunning = !data.exportFinished;
+                if (this.isExportRunning) {
+                    this.broadcastIntervalId = setInterval(() => {
+                        this.ExportsService.getBroadcastStatus().subscribe(
+                            (data) => {
+                                this.cdr.markForCheck();
+                                this.tasks = data.tasks; // Tasks to show in the log
+                                this.isExportRunning = !data.exportFinished;
 
-                        if (data.exportFinished) {
-                            this.cancelBroadcastInterval();
-                            this.exportSuccessfully = data.exportSuccessfully;
+                                if (data.exportFinished) {
+                                    this.cancelBroadcastInterval();
+                                    this.exportSuccessfully =
+                                        data.exportSuccessfully;
 
-                            if (!data.exportSuccessfully) {
-                                // Config-verify will only be done by the user who has started the export
-                                this.notyService.genericError(this.TranslocoService.translate('Refresh of monitoring configuration failed.'));
-                                return;
-                            }
+                                    if (!data.exportSuccessfully) {
+                                        // Config-verify will only be done by the user who has started the export
+                                        this.notyService.genericError(
+                                            this.TranslocoService.translate(
+                                                'Refresh of monitoring configuration failed.',
+                                            ),
+                                        );
+                                        return;
+                                    }
 
-                            this.notyService.genericSuccess(data.successMessage);
-                        }
-                    });
-                }, 1000);
-            }
+                                    this.notyService.genericSuccess(
+                                        data.successMessage,
+                                    );
+                                }
+                            },
+                        );
+                    }, 1000);
+                }
 
-            this.init = false;
-        }));
+                this.init = false;
+            }),
+        );
     }
 
     public launchExport() {
@@ -169,69 +185,92 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
         this.cancelBroadcastInterval();
         this.notyService.scrollTop();
 
+        this.subscriptions.add(
+            this.ExportsService.launchExport({
+                empty: true,
+                create_backup: this.createBackup ? 1 : 0,
+                satellites: this.getSelectedSatellitesForPost(),
+            }).subscribe((result: GenericResponseWrapper) => {
+                this.cdr.markForCheck();
+                if (result.success) {
+                    this.notyService.genericInfo(
+                        this.TranslocoService.translate(
+                            'Refresh of monitoring configuration started successfully.',
+                        ),
+                    );
 
-        this.subscriptions.add(this.ExportsService.launchExport({
-            empty: true,
-            create_backup: this.createBackup ? 1 : 0,
-            satellites: this.getSelectedSatellitesForPost(),
-        }).subscribe((result: GenericResponseWrapper) => {
-            this.cdr.markForCheck();
-            if (result.success) {
+                    this.broadcastIntervalId = setInterval(() => {
+                        this.ExportsService.getBroadcastStatus().subscribe(
+                            (data) => {
+                                this.cdr.markForCheck();
+                                this.tasks = data.tasks; // Tasks to show in the log
+                                this.isExportRunning = !data.exportFinished;
 
-                this.notyService.genericInfo(this.TranslocoService.translate('Refresh of monitoring configuration started successfully.'));
+                                if (data.exportFinished) {
+                                    this.cancelBroadcastInterval();
+                                    this.exportSuccessfully =
+                                        data.exportSuccessfully;
 
-                this.broadcastIntervalId = setInterval(() => {
-                    this.ExportsService.getBroadcastStatus().subscribe(data => {
-                        this.cdr.markForCheck();
-                        this.tasks = data.tasks; // Tasks to show in the log
-                        this.isExportRunning = !data.exportFinished;
+                                    if (!data.exportSuccessfully) {
+                                        this.notyService.genericError(
+                                            this.TranslocoService.translate(
+                                                'Refresh of monitoring configuration failed.',
+                                            ),
+                                        );
 
-                        if (data.exportFinished) {
-                            this.cancelBroadcastInterval();
-                            this.exportSuccessfully = data.exportSuccessfully;
+                                        for (const task of data.tasks) {
+                                            if (
+                                                (task.task ===
+                                                    'export_verify_new_configuration' &&
+                                                    task.finished === 1 &&
+                                                    task.successfully === 0) ||
+                                                (task.task ===
+                                                    'export_verify_new_prometheus_configuration' &&
+                                                    task.finished === 1 &&
+                                                    task.successfully === 0)
+                                            ) {
+                                                // No monitoring configuration is not valid
+                                                this.verifyConfig();
+                                            }
+                                        }
 
-                            if (!data.exportSuccessfully) {
-                                this.notyService.genericError(this.TranslocoService.translate('Refresh of monitoring configuration failed.'));
-
-                                for (const task of data.tasks) {
-                                    if (
-                                        (task.task === 'export_verify_new_configuration' && task.finished === 1 && task.successfully === 0) ||
-                                        (task.task === 'export_verify_new_prometheus_configuration' && task.finished === 1 && task.successfully === 0)
-                                    ) {
-                                        // No monitoring configuration is not valid
-                                        this.verifyConfig();
+                                        return;
                                     }
+
+                                    this.notyService.genericSuccess(
+                                        data.successMessage,
+                                    );
                                 }
+                            },
+                        );
+                    }, 1000);
 
-                                return;
-                            }
+                    return;
+                }
 
-                            this.notyService.genericSuccess(data.successMessage);
-                        }
-                    });
-                }, 1000);
-
-                return;
-            }
-
-            // Error
-            this.notyService.genericError(result.data);
-        }));
+                // Error
+                this.notyService.genericError(result.data);
+            }),
+        );
     }
 
     public saveSatelliteSelection() {
         const post = this.getSelectedSatellitesForPost();
         if (post.length > 0) {
-            this.subscriptions.add(this.ExportsService.saveSatelliteSelection(post).subscribe((result) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    this.notyService.genericSuccess();
-                    return;
-                }
+            this.subscriptions.add(
+                this.ExportsService.saveSatelliteSelection(post).subscribe(
+                    (result) => {
+                        this.cdr.markForCheck();
+                        if (result.success) {
+                            this.notyService.genericSuccess();
+                            return;
+                        }
 
-                // Error
-                this.notyService.genericError();
-            }));
+                        // Error
+                        this.notyService.genericError();
+                    },
+                ),
+            );
         }
     }
 
@@ -246,10 +285,12 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
     private verifyConfig() {
         this.exportValidation = resetExportValidation();
 
-        this.subscriptions.add(this.ExportsService.verifyConfig().subscribe(data => {
-            this.exportValidation = data;
-            this.cdr.markForCheck();
-        }));
+        this.subscriptions.add(
+            this.ExportsService.verifyConfig().subscribe((data) => {
+                this.exportValidation = data;
+                this.cdr.markForCheck();
+            }),
+        );
     }
 
     private getSelectedSatellitesForPost(): ExportSatelliteSelectionPost[] {
@@ -257,7 +298,8 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
             return [];
         }
 
-        const selectedSatellites = this.SelectionServiceService.getSelectedItems();
+        const selectedSatellites =
+            this.SelectionServiceService.getSelectedItems();
         let result: ExportSatelliteSelectionPost[] = [];
 
         // Have all satellites been deselected?
@@ -265,36 +307,36 @@ export class ExportsIndexComponent implements OnInit, OnDestroy {
             for (let satellite of this.satellites) {
                 result.push({
                     id: satellite.id,
-                    sync_instance: 0
+                    sync_instance: 0,
                 });
             }
 
             return result;
         }
 
-
         // We have selected Satellite Systems
         // Mark all satellites as not selected first, then only pick the selected ones
         for (let satellite of this.satellites) {
             const id = satellite.id;
-            let selectedSatellite = selectedSatellites.find((item) => item.id === id);
+            let selectedSatellite = selectedSatellites.find(
+                (item) => item.id === id,
+            );
 
             if (selectedSatellite) {
                 // Sattelite is selected
                 result.push({
                     id: satellite.id,
-                    sync_instance: 1
+                    sync_instance: 1,
                 });
             } else {
                 // Satellite is not selected
                 result.push({
                     id: satellite.id,
-                    sync_instance: 0
+                    sync_instance: 0,
                 });
             }
         }
 
         return result;
     }
-
 }

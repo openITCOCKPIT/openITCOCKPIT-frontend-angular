@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+} from '@angular/core';
 import {
     AlertComponent,
     CardBodyComponent,
@@ -15,12 +20,10 @@ import {
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import {
-    CheckAttemptsInputComponent
-} from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
+import { CheckAttemptsInputComponent } from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -32,22 +35,29 @@ import { MacrosComponent } from '../../../components/macros/macros.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import {
+    TranslocoDirective,
+    TranslocoPipe,
+    TranslocoService,
+} from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
     ServiceInheritedContactsAndContactgroups,
     ServiceInheritedContactsAndContactgroupsWithId,
-    ServicePost
+    ServicePost,
 } from '../../services/services.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import {
+    GenericIdResponse,
+    GenericValidationError,
+} from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
@@ -60,7 +70,6 @@ import { TemplateDiffComponent } from '../../../components/template-diff/templat
 import { TemplateDiffBtnComponent } from '../../../components/template-diff-btn/template-diff-btn.component';
 import { UiBlockerComponent } from '../../../components/ui-blocker/ui-blocker.component';
 import { HistoryService } from '../../../history.service';
-
 
 @Component({
     selector: 'oitc-services-add',
@@ -107,11 +116,11 @@ import { HistoryService } from '../../../history.service';
         TemplateDiffBtnComponent,
         UiBlockerComponent,
         TranslocoPipe,
-        AsyncPipe
+        AsyncPipe,
     ],
     templateUrl: './services-add.component.html',
     styleUrl: './services-add.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServicesAddComponent {
     public hosts: SelectKeyValue[] | undefined;
@@ -120,10 +129,14 @@ export class ServicesAddComponent {
     public tagsForSelect: string[] = [];
     public post: ServicePost = {} as ServicePost;
 
-    public inheritedContactsAndContactgroups: ServiceInheritedContactsAndContactgroups = {} as ServiceInheritedContactsAndContactgroups;
-    public servicetemplateContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId = {} as ServiceInheritedContactsAndContactgroupsWithId;
-    public hostContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId = {} as ServiceInheritedContactsAndContactgroupsWithId;
-    public hosttemplateContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId = {} as ServiceInheritedContactsAndContactgroupsWithId;
+    public inheritedContactsAndContactgroups: ServiceInheritedContactsAndContactgroups =
+        {} as ServiceInheritedContactsAndContactgroups;
+    public servicetemplateContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId =
+        {} as ServiceInheritedContactsAndContactgroupsWithId;
+    public hostContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId =
+        {} as ServiceInheritedContactsAndContactgroupsWithId;
+    public hosttemplateContactsAndContactgroups: ServiceInheritedContactsAndContactgroupsWithId =
+        {} as ServiceInheritedContactsAndContactgroupsWithId;
 
     public data = {
         isServicenameInUse: false,
@@ -141,7 +154,7 @@ export class ServicesAddComponent {
     public checkperiods: SelectKeyValue[] = [];
     public contacts: SelectKeyValue[] = [];
     public contactgroups: SelectKeyValue[] = [];
-    public existingServices: object = {}
+    public existingServices: object = {};
     public isSlaHost: boolean = false;
 
     public errors: GenericValidationError | null = null;
@@ -162,11 +175,10 @@ export class ServicesAddComponent {
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {
-    }
+    constructor(private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
-        this.route.queryParams.subscribe(params => {
+        this.route.queryParams.subscribe((params) => {
             let hostId = params['hostId'];
             if (hostId === undefined) {
                 hostId = 0;
@@ -184,7 +196,6 @@ export class ServicesAddComponent {
             }
             this.cdr.markForCheck();
         });
-
     }
 
     public ngOnDestroy(): void {
@@ -237,18 +248,18 @@ export class ServicesAddComponent {
             is_volatile: 0,
             freshness_checks_enabled: 0,
             contacts: {
-                _ids: []
+                _ids: [],
             },
             contactgroups: {
-                _ids: []
+                _ids: [],
             },
             servicegroups: {
-                _ids: []
+                _ids: [],
             },
             customvariables: [],
             servicecommandargumentvalues: [],
             serviceeventcommandargumentvalues: [],
-            sla_relevant: 1
+            sla_relevant: 1,
         };
     }
 
@@ -262,24 +273,26 @@ export class ServicesAddComponent {
             angular: true,
             'filter[Hosts.name]': searchString,
             'selected[]': selected,
-            includeDisabled: false
-        }
+            includeDisabled: false,
+        };
 
-        this.subscriptions.add(this.HostsService.loadHostsByString(params, true)
-            .subscribe((result) => {
-                this.hosts = result;
-                this.cdr.markForCheck();
-            })
+        this.subscriptions.add(
+            this.HostsService.loadHostsByString(params, true).subscribe(
+                (result) => {
+                    this.hosts = result;
+                    this.cdr.markForCheck();
+                },
+            ),
         );
-    }
+    };
 
     public loadCommands() {
-        this.subscriptions.add(this.ServicesService.loadCommands()
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicesService.loadCommands().subscribe((result) => {
                 this.commands = result.commands;
                 this.eventhandlerCommands = result.eventhandlerCommands;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
@@ -290,8 +303,8 @@ export class ServicesAddComponent {
             return;
         }
 
-        this.subscriptions.add(this.ServicesService.loadElements(hostId)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicesService.loadElements(hostId).subscribe((result) => {
                 this.servicetemplates = result.servicetemplates;
                 this.servicegroups = result.servicegroups;
                 this.timeperiods = result.timeperiods;
@@ -301,9 +314,8 @@ export class ServicesAddComponent {
                 this.existingServices = result.existingServices;
                 this.isSlaHost = result.isSlaHost;
                 this.cdr.markForCheck();
-            })
+            }),
         );
-
     }
 
     private loadCommandArguments() {
@@ -313,13 +325,14 @@ export class ServicesAddComponent {
             return;
         }
 
-        this.subscriptions.add(this.ServicesService.loadCommandArguments(commandId)
-            .subscribe((result) => {
-                this.post.servicecommandargumentvalues = result;
-                this.cdr.markForCheck();
-            })
+        this.subscriptions.add(
+            this.ServicesService.loadCommandArguments(commandId).subscribe(
+                (result) => {
+                    this.post.servicecommandargumentvalues = result;
+                    this.cdr.markForCheck();
+                },
+            ),
         );
-
     }
 
     private loadEventHandlerCommandArguments() {
@@ -332,13 +345,14 @@ export class ServicesAddComponent {
             return;
         }
 
-        this.subscriptions.add(this.ServicesService.loadEventHandlerCommandArguments(eventHandlerCommandId)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicesService.loadEventHandlerCommandArguments(
+                eventHandlerCommandId,
+            ).subscribe((result) => {
                 this.post.serviceeventcommandargumentvalues = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
-
     }
 
     public onHostChange() {
@@ -351,34 +365,50 @@ export class ServicesAddComponent {
             return;
         }
 
-        this.subscriptions.add(this.ServicesService.loadServicetemplate(servicetemplateId, this.post.host_id)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicesService.loadServicetemplate(
+                servicetemplateId,
+                this.post.host_id,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.servicetemplate = result.servicetemplate.Servicetemplate;
                 this.setValuesFromServicetemplate();
 
                 //Services add. At this point all contacts must be inherited from somewhere because the service does not exist jet.
                 this.data.disableInheritance = false;
-                this.data.areContactsInheritedFromHosttemplate = result.areContactsInheritedFromHosttemplate;
-                this.data.areContactsInheritedFromHost = result.areContactsInheritedFromHost;
-                this.data.areContactsInheritedFromServicetemplate = result.areContactsInheritedFromServicetemplate;
+                this.data.areContactsInheritedFromHosttemplate =
+                    result.areContactsInheritedFromHosttemplate;
+                this.data.areContactsInheritedFromHost =
+                    result.areContactsInheritedFromHost;
+                this.data.areContactsInheritedFromServicetemplate =
+                    result.areContactsInheritedFromServicetemplate;
 
-                this.inheritedContactsAndContactgroups = result.contactsAndContactgroups;
-                this.servicetemplateContactsAndContactgroups = result.servicetemplateContactsAndContactgroups;
-                this.hostContactsAndContactgroups = result.hostContactsAndContactgroups;
-                this.hosttemplateContactsAndContactgroups = result.hosttemplateContactsAndContactgroups;
+                this.inheritedContactsAndContactgroups =
+                    result.contactsAndContactgroups;
+                this.servicetemplateContactsAndContactgroups =
+                    result.servicetemplateContactsAndContactgroups;
+                this.hostContactsAndContactgroups =
+                    result.hostContactsAndContactgroups;
+                this.hosttemplateContactsAndContactgroups =
+                    result.hosttemplateContactsAndContactgroups;
 
-                this.post.contacts._ids = result.contactsAndContactgroups.contacts._ids;
-                this.post.contactgroups._ids = result.contactsAndContactgroups.contactgroups._ids;
+                this.post.contacts._ids =
+                    result.contactsAndContactgroups.contacts._ids;
+                this.post.contactgroups._ids =
+                    result.contactsAndContactgroups.contactgroups._ids;
 
                 this.checkForDuplicateServicename();
-            })
+            }),
         );
     }
 
     public checkForDuplicateServicename() {
-        const existingServicesNames: string[] = Object.values(this.existingServices);
-        this.data.isServicenameInUse = existingServicesNames.includes(this.post.name);
+        const existingServicesNames: string[] = Object.values(
+            this.existingServices,
+        );
+        this.data.isServicenameInUse = existingServicesNames.includes(
+            this.post.name,
+        );
         // Ensure that the service name in the warning box will not change until the user changes the name again
         this.servicenameCheckedForDuplicates = this.post.name;
         this.cdr.markForCheck();
@@ -397,15 +427,18 @@ export class ServicesAddComponent {
         if (
             this.data.areContactsInheritedFromHosttemplate === false &&
             this.data.areContactsInheritedFromHost === false &&
-            this.data.areContactsInheritedFromServicetemplate === false) {
+            this.data.areContactsInheritedFromServicetemplate === false
+        ) {
             return;
         }
 
         if (!this.data.disableInheritance) {
             // Restore contacts from the template
             if (this.servicetemplate) {
-                this.post.contacts._ids = this.inheritedContactsAndContactgroups.contacts._ids;
-                this.post.contactgroups._ids = this.inheritedContactsAndContactgroups.contactgroups._ids;
+                this.post.contacts._ids =
+                    this.inheritedContactsAndContactgroups.contacts._ids;
+                this.post.contactgroups._ids =
+                    this.inheritedContactsAndContactgroups.contactgroups._ids;
             }
         }
     }
@@ -457,22 +490,25 @@ export class ServicesAddComponent {
             'tags',
             'service_url',
             'is_volatile',
-            'sla_relevant'
+            'sla_relevant',
         ];
 
         for (let index in fields) {
             let field = fields[index];
             if (this.servicetemplate.hasOwnProperty(field)) {
-
                 // Basically, we are doing the following:
                 //this.post[field] = this.servicetemplate[field];
 
-                (this.post as any)[field] = (this.servicetemplate as any)[field];
+                (this.post as any)[field] = (this.servicetemplate as any)[
+                    field
+                ];
             }
         }
 
         var hasManyAssociations = [
-            'servicegroups', 'contacts', 'contactgroups'
+            'servicegroups',
+            'contacts',
+            'contactgroups',
         ];
         for (let index in hasManyAssociations) {
             let field = hasManyAssociations[index];
@@ -488,32 +524,48 @@ export class ServicesAddComponent {
                 objecttype_id: ObjectTypesEnum['SERVICETEMPLATE'], //OBJECT_SERVICETEMPLATE because value from service template
                 name: this.servicetemplate.customvariables[index].name,
                 value: this.servicetemplate.customvariables[index].value,
-                password: this.servicetemplate.customvariables[index].password
+                password: this.servicetemplate.customvariables[index].password,
             });
         }
 
         this.post.servicecommandargumentvalues = [];
-        for (let index in this.servicetemplate.servicetemplatecommandargumentvalues) {
+        for (let index in this.servicetemplate
+            .servicetemplatecommandargumentvalues) {
             this.post.servicecommandargumentvalues.push({
-                commandargument_id: this.servicetemplate.servicetemplatecommandargumentvalues[index].commandargument_id,
-                value: this.servicetemplate.servicetemplatecommandargumentvalues[index].value,
-                commandargument: this.servicetemplate.servicetemplatecommandargumentvalues[index].commandargument
+                commandargument_id:
+                    this.servicetemplate.servicetemplatecommandargumentvalues[
+                        index
+                    ].commandargument_id,
+                value: this.servicetemplate
+                    .servicetemplatecommandargumentvalues[index].value,
+                commandargument:
+                    this.servicetemplate.servicetemplatecommandargumentvalues[
+                        index
+                    ].commandargument,
             });
         }
 
         this.post.serviceeventcommandargumentvalues = [];
-        for (let index in this.servicetemplate.servicetemplateeventcommandargumentvalues) {
+        for (let index in this.servicetemplate
+            .servicetemplateeventcommandargumentvalues) {
             this.post.servicecommandargumentvalues.push({
-                commandargument_id: this.servicetemplate.servicetemplateeventcommandargumentvalues[index].commandargument_id,
-                value: this.servicetemplate.servicetemplateeventcommandargumentvalues[index].value,
-                commandargument: this.servicetemplate.servicetemplateeventcommandargumentvalues[index].commandargument
+                commandargument_id:
+                    this.servicetemplate
+                        .servicetemplateeventcommandargumentvalues[index]
+                        .commandargument_id,
+                value: this.servicetemplate
+                    .servicetemplateeventcommandargumentvalues[index].value,
+                commandargument:
+                    this.servicetemplate
+                        .servicetemplateeventcommandargumentvalues[index]
+                        .commandargument,
             });
         }
 
         // "".split() returns [''] instead of [] like in php
-        this.tagsForSelect = (this.post.tags !== '') ? this.post.tags.split(',') : [];
+        this.tagsForSelect =
+            this.post.tags !== '' ? this.post.tags.split(',') : [];
     }
-
 
     /*******************
      * MACRO functions *
@@ -521,7 +573,7 @@ export class ServicesAddComponent {
     public addMacro() {
         this.post.customvariables.push({
             name: '',
-            objecttype_id: ObjectTypesEnum["SERVICE"],
+            objecttype_id: ObjectTypesEnum['SERVICE'],
             password: 0,
             value: '',
         });
@@ -531,25 +583,28 @@ export class ServicesAddComponent {
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
         this.cdr.markForCheck();
-    }
+    };
 
     public submit() {
         this.post.tags = this.tagsForSelect.join(',');
 
-
-        this.subscriptions.add(this.ServicesService.add(this.post)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicesService.add(this.post).subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
                     const title = this.TranslocoService.translate('Service');
-                    const msg = this.TranslocoService.translate('created successfully');
+                    const msg = this.TranslocoService.translate(
+                        'created successfully',
+                    );
                     const url = ['services', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/services/index']);
+                        this.HistoryService.navigateWithFallback([
+                            '/services/index',
+                        ]);
                         return;
                     }
                     this.post = this.getDefaultPost(this.hostId);
@@ -568,12 +623,15 @@ export class ServicesAddComponent {
 
                     this.hasMacroErrors = false;
                     if (this.errors.hasOwnProperty('customvariables')) {
-                        if (typeof (this.errors['customvariables']['custom']) === "string") {
+                        if (
+                            typeof this.errors['customvariables']['custom'] ===
+                            'string'
+                        ) {
                             this.hasMacroErrors = true;
                         }
                     }
                 }
-            }))
-
+            }),
+        );
     }
 }

@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import {
     AlertComponent,
     CardBodyComponent,
@@ -11,11 +18,15 @@ import {
     FormLabelDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import {
+    TranslocoDirective,
+    TranslocoPipe,
+    TranslocoService,
+} from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule } from '@angular/forms';
@@ -30,8 +41,7 @@ import { StartBackupResponse } from '../backups.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { NgClass } from '@angular/common';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
-import { ProgressBar } from 'primeng/progressbar';
-
+import { ProgressBar } from '@openng/optimus-ui/progressbar';
 
 @Component({
     selector: 'oitc-backups-index',
@@ -60,15 +70,14 @@ import { ProgressBar } from 'primeng/progressbar';
         CardFooterComponent,
         OitcAlertComponent,
         NgClass,
-        ProgressBar
+        ProgressBar,
     ],
     templateUrl: './backups-index.component.html',
     styleUrl: './backups-index.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BackupsIndexComponent implements OnInit, OnDestroy {
-
-    public filename: string = 'mysql_oitc_bkp'
+    public filename: string = 'mysql_oitc_bkp';
     public filenameDataExample: string = '';
     public backupIsRunning: boolean = false;
 
@@ -97,29 +106,30 @@ export class BackupsIndexComponent implements OnInit, OnDestroy {
     }
 
     public startBackup(): void {
-        this.subscriptions.add(this.BackupsService.createBackup(this.filename)
-            .subscribe((result) => {
-                this.cdr.markForCheck();
-                if (result.success) {
+        this.subscriptions.add(
+            this.BackupsService.createBackup(this.filename).subscribe(
+                (result) => {
+                    this.cdr.markForCheck();
+                    if (result.success) {
+                        const response = result.data as StartBackupResponse;
+                        this.backupIsRunning = response.backup.backupRunning;
 
-                    const response = result.data as StartBackupResponse;
-                    this.backupIsRunning = response.backup.backupRunning;
+                        this.errors = null;
 
-                    this.errors = null;
+                        // Backup job is running - wait for it to finish
+                        this.startCheckInterval();
+                        return;
+                    }
 
-                    // Backup job is running - wait for it to finish
-                    this.startCheckInterval();
-                    return;
-                }
-
-                // Error
-                const errorResponse = result.data as GenericValidationError;
-                this.notyService.genericError();
-                if (result) {
-                    this.errors = errorResponse;
-                }
-            }));
-
+                    // Error
+                    const errorResponse = result.data as GenericValidationError;
+                    this.notyService.genericError();
+                    if (result) {
+                        this.errors = errorResponse;
+                    }
+                },
+            ),
+        );
     }
 
     private startCheckInterval(): void {
@@ -129,7 +139,7 @@ export class BackupsIndexComponent implements OnInit, OnDestroy {
         }
 
         this.checkIntervalId = setInterval(() => {
-            this.BackupsService.checkBackupFinished().subscribe(data => {
+            this.BackupsService.checkBackupFinished().subscribe((data) => {
                 this.cdr.markForCheck();
 
                 if (data.backupFinished.finished) {
@@ -145,12 +155,13 @@ export class BackupsIndexComponent implements OnInit, OnDestroy {
                     if (data.backupFinished.error) {
                         this.notyService.genericError();
                     } else {
-                        const msg = this.TranslocoService.translate('Backup created successfully');
+                        const msg = this.TranslocoService.translate(
+                            'Backup created successfully',
+                        );
                         this.notyService.genericSuccess(msg);
                     }
                 }
             });
         }, 1000);
     }
-
 }

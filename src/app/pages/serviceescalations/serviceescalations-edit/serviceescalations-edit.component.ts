@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -20,23 +27,26 @@ import {
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
     ServiceescalationContainerResult,
     ServiceescalationGet,
-    ServiceescalationPost
+    ServiceescalationPost,
 } from '../serviceescalations.interface';
 import { ServiceescalationsService } from '../serviceescalations.service';
 import {
     SelectItemOptionGroup,
     SelectKeyValue,
-    SelectKeyValueWithDisabled
+    SelectKeyValueWithDisabled,
 } from '../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import {
+    GenericIdResponse,
+    GenericValidationError,
+} from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -49,9 +59,7 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import {
-    MultiSelectOptgroupComponent
-} from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { MultiSelectOptgroupComponent } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
@@ -91,13 +99,12 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         CardFooterComponent,
         MultiSelectOptgroupComponent,
         FormLoaderComponent,
-        ObjectUuidComponent
+        ObjectUuidComponent,
     ],
     templateUrl: './serviceescalations-edit.component.html',
     styleUrl: './serviceescalations-edit.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
     public containers: ServiceescalationContainerResult | undefined;
     public post!: ServiceescalationPost;
@@ -113,7 +120,9 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
     public contactgroups: SelectKeyValue[] = [];
     public errors: GenericValidationError | null = null;
 
-    private readonly ServiceescalationsService = inject(ServiceescalationsService);
+    private readonly ServiceescalationsService = inject(
+        ServiceescalationsService,
+    );
     public PermissionsService: PermissionsService = inject(PermissionsService);
     public TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -122,15 +131,15 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
-
-    constructor(private route: ActivatedRoute, private cdr: ChangeDetectorRef) {
-    }
-
+    constructor(
+        private route: ActivatedRoute,
+        private cdr: ChangeDetectorRef,
+    ) {}
 
     public ngOnInit(): void {
         const id = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.ServiceescalationsService.getEdit(id)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.getEdit(id).subscribe((result) => {
                 this.cdr.markForCheck();
 
                 this.get = result.serviceescalation;
@@ -147,23 +156,31 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
                     escalate_on_critical: this.get.escalate_on_critical,
                     escalate_on_unknown: this.get.escalate_on_unknown,
                     services: {
-                        _ids: this.get.services.filter(obj => obj._joinData.excluded === 0).map(obj => obj.id)
+                        _ids: this.get.services
+                            .filter((obj) => obj._joinData.excluded === 0)
+                            .map((obj) => obj.id),
                     },
                     services_excluded: {
-                        _ids: this.get.services.filter(obj => obj._joinData.excluded === 1).map(obj => obj.id)
+                        _ids: this.get.services
+                            .filter((obj) => obj._joinData.excluded === 1)
+                            .map((obj) => obj.id),
                     },
                     servicegroups: {
-                        _ids: this.get.servicegroups.filter(obj => obj._joinData.excluded === 0).map(obj => obj.id)
+                        _ids: this.get.servicegroups
+                            .filter((obj) => obj._joinData.excluded === 0)
+                            .map((obj) => obj.id),
                     },
                     servicegroups_excluded: {
-                        _ids: this.get.servicegroups.filter(obj => obj._joinData.excluded === 1).map(obj => obj.id)
+                        _ids: this.get.servicegroups
+                            .filter((obj) => obj._joinData.excluded === 1)
+                            .map((obj) => obj.id),
                     },
                     contacts: {
-                        _ids: this.get.contacts.map(obj => obj.id)
+                        _ids: this.get.contacts.map((obj) => obj.id),
                     },
                     contactgroups: {
-                        _ids: this.get.contactgroups.map(obj => obj.id)
-                    }
+                        _ids: this.get.contactgroups.map((obj) => obj.id),
+                    },
                 };
 
                 this.loadContainers();
@@ -171,21 +188,20 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
                 this.loadExcludedServices('');
                 this.loadElements();
                 this.loadExcludedServicegroups('');
-
-            })
+            }),
         );
     }
 
-    public ngOnDestroy(): void {
-    }
-
+    public ngOnDestroy(): void {}
 
     public loadContainers() {
-        this.subscriptions.add(this.ServiceescalationsService.loadContainers()
-            .subscribe((result) => {
-                this.containers = result;
-                this.cdr.markForCheck();
-            })
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadContainers().subscribe(
+                (result) => {
+                    this.containers = result;
+                    this.cdr.markForCheck();
+                },
+            ),
         );
     }
 
@@ -196,21 +212,26 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.ServiceescalationsService.loadElements(containerId)
-            .subscribe((result) => {
-                this.cdr.markForCheck();
-                this.servicegroups = result.servicegroups;
-                this.servicegroups = this.servicegroups.map(obj => ({
-                    ...obj,
-                    disabled: this.post.servicegroups_excluded._ids.includes(obj.key)
-                }));
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadElements(containerId).subscribe(
+                (result) => {
+                    this.cdr.markForCheck();
+                    this.servicegroups = result.servicegroups;
+                    this.servicegroups = this.servicegroups.map((obj) => ({
+                        ...obj,
+                        disabled:
+                            this.post.servicegroups_excluded._ids.includes(
+                                obj.key,
+                            ),
+                    }));
 
-                this.processChosenExcludedServicegroups();
+                    this.processChosenExcludedServicegroups();
 
-                this.timeperiods = result.timeperiods;
-                this.contacts = result.contacts;
-                this.contactgroups = result.contactgroups;
-            })
+                    this.timeperiods = result.timeperiods;
+                    this.contacts = result.contacts;
+                    this.contactgroups = result.contactgroups;
+                },
+            ),
         );
     }
 
@@ -220,25 +241,28 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.ServiceescalationsService.loadServices(containerId, searchString, this.post.services._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadServices(
+                containerId,
+                searchString,
+                this.post.services._ids,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.services = result.services;
-                this.services.map(obj => {
-                    obj.items.map(service => {
+                this.services.map((obj) => {
+                    obj.items.map((service) => {
                         if (service.disabled === true) {
                             this.disabled_services.push(service.value);
                         }
-                    })
+                    });
                 });
 
                 this.processChosenServices();
-            })
+            }),
         );
-    }
+    };
 
     public loadExcludedServices = (searchString: string) => {
-
         const containerId = this.post.container_id;
         if (!containerId) {
             return;
@@ -247,23 +271,27 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             this.post.services_excluded._ids = [];
             return;
         }
-        this.subscriptions.add(this.ServiceescalationsService.loadExcludedServices(containerId, searchString, this.post.services_excluded._ids, this.post.servicegroups._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadExcludedServices(
+                containerId,
+                searchString,
+                this.post.services_excluded._ids,
+                this.post.servicegroups._ids,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.services_excluded = result.excludedServices;
-                this.services_excluded.map(obj => {
+                this.services_excluded.map((obj) => {
                     //currentServicesExcludedIds.push(obj.key);
-                    obj.items.map(service => {
+                    obj.items.map((service) => {
                         if (service.disabled === true) {
                             this.disabled_excluded_services.push(service.value);
                         }
-                    })
-
+                    });
                 });
                 this.processChosenExcludedServices();
-            }));
-
-    }
+            }),
+        );
+    };
 
     public loadExcludedServicegroups(searchString: string) {
         const containerId = this.post.container_id;
@@ -275,17 +303,27 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             this.post.servicegroups_excluded._ids = [];
             return;
         }
-        this.subscriptions.add(this.ServiceescalationsService.loadExcludedServicegroups(containerId, searchString, this.post.services._ids, this.post.servicegroups_excluded._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServiceescalationsService.loadExcludedServicegroups(
+                containerId,
+                searchString,
+                this.post.services._ids,
+                this.post.servicegroups_excluded._ids,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.servicegroups_excluded = result.excludedServicegroups;
-                this.servicegroups_excluded = this.servicegroups_excluded.map(obj => {
-                    return {
-                        ...obj,
-                        disabled: this.post.servicegroups._ids.includes(obj.key)
-                    }
-                });
-            }));
+                this.servicegroups_excluded = this.servicegroups_excluded.map(
+                    (obj) => {
+                        return {
+                            ...obj,
+                            disabled: this.post.servicegroups._ids.includes(
+                                obj.key,
+                            ),
+                        };
+                    },
+                );
+            }),
+        );
     }
 
     public onContainerChange() {
@@ -299,11 +337,17 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
         }
         for (let key in this.services) {
             for (let itemKey in this.services[key]['items']) {
-                if (this.disabled_services.includes(this.services[key]['items'][itemKey].value)) {
+                if (
+                    this.disabled_services.includes(
+                        this.services[key]['items'][itemKey].value,
+                    )
+                ) {
                     continue;
                 }
-                this.services[key]['items'][itemKey].disabled = this.post.services_excluded._ids.includes(this.services[key]['items'][itemKey].value);
-
+                this.services[key]['items'][itemKey].disabled =
+                    this.post.services_excluded._ids.includes(
+                        this.services[key]['items'][itemKey].value,
+                    );
             }
         }
         this.cdr.detectChanges();
@@ -316,10 +360,17 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
         }
         for (let key in this.services_excluded) {
             for (let itemKey in this.services_excluded[key]['items']) {
-                if (this.disabled_excluded_services.includes(this.services_excluded[key]['items'][itemKey].value)) {
+                if (
+                    this.disabled_excluded_services.includes(
+                        this.services_excluded[key]['items'][itemKey].value,
+                    )
+                ) {
                     continue;
                 }
-                this.services_excluded[key]['items'][itemKey].disabled = this.post.services._ids.includes(this.services_excluded[key]['items'][itemKey].value);
+                this.services_excluded[key]['items'][itemKey].disabled =
+                    this.post.services._ids.includes(
+                        this.services_excluded[key]['items'][itemKey].value,
+                    );
             }
         }
     }
@@ -330,7 +381,10 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.servicegroups) {
-            this.servicegroups[key].disabled = this.post.servicegroups_excluded._ids.includes(this.servicegroups[key].key);
+            this.servicegroups[key].disabled =
+                this.post.servicegroups_excluded._ids.includes(
+                    this.servicegroups[key].key,
+                );
         }
     }
 
@@ -340,36 +394,46 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.servicegroups_excluded) {
-            this.servicegroups_excluded[key].disabled = this.post.servicegroups._ids.includes(this.servicegroups_excluded[key].key);
+            this.servicegroups_excluded[key].disabled =
+                this.post.servicegroups._ids.includes(
+                    this.servicegroups_excluded[key].key,
+                );
         }
     }
 
-
     public submit() {
-        this.subscriptions.add(this.ServiceescalationsService.edit(this.post)
-            .subscribe((result) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('Service escalation');
-                    const msg = this.TranslocoService.translate('updated successfully');
-                    const url = ['serviceescalations', 'edit', response.id];
+        this.subscriptions.add(
+            this.ServiceescalationsService.edit(this.post).subscribe(
+                (result) => {
+                    this.cdr.markForCheck();
+                    if (result.success) {
+                        const response = result.data as GenericIdResponse;
+                        const title =
+                            this.TranslocoService.translate(
+                                'Service escalation',
+                            );
+                        const msg = this.TranslocoService.translate(
+                            'updated successfully',
+                        );
+                        const url = ['serviceescalations', 'edit', response.id];
 
-                    this.notyService.genericSuccess(msg, title, url);
+                        this.notyService.genericSuccess(msg, title, url);
 
+                        this.HistoryService.navigateWithFallback([
+                            '/serviceescalations/index',
+                        ]);
+                        this.notyService.scrollContentDivToTop();
+                        return;
+                    }
 
-                    this.HistoryService.navigateWithFallback(['/serviceescalations/index']);
-                    this.notyService.scrollContentDivToTop();
-                    return;
-                }
-
-                // Error
-                const errorResponse = result.data as GenericValidationError;
-                this.notyService.genericError();
-                if (result) {
-                    this.errors = errorResponse;
-                }
-            }));
-
+                    // Error
+                    const errorResponse = result.data as GenericValidationError;
+                    this.notyService.genericError();
+                    if (result) {
+                        this.errors = errorResponse;
+                    }
+                },
+            ),
+        );
     }
 }

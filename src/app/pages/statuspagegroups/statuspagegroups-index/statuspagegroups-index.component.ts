@@ -23,8 +23,19 @@
  *     confirmation.
  */
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
+import {
+    TranslocoDirective,
+    TranslocoPipe,
+    TranslocoService,
+} from '@jsverse/transloco';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IndexPage } from '../../../pages.interface';
@@ -45,13 +56,13 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
 } from '@coreui/angular';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 
@@ -61,25 +72,20 @@ import {
     getStatuspagegroupsIndexParams,
     Statuspagegroup,
     StatuspagegroupsIndex,
-    StatuspagegroupsIndexParams
+    StatuspagegroupsIndexParams,
 } from '../statuspagegroups.interface';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-
 
 @Component({
     selector: 'oitc-statuspagegroups-index',
@@ -117,28 +123,36 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
         TranslocoDirective,
         TranslocoPipe,
         XsButtonDirective,
-        RouterLink
+        RouterLink,
     ],
     templateUrl: './statuspagegroups-index.component.html',
     styleUrl: './statuspagegroups-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: StatuspagegroupsService}
+        { provide: DELETE_SERVICE_TOKEN, useClass: StatuspagegroupsService },
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatuspagegroupsIndexComponent implements OnInit, OnDestroy, IndexPage {
+export class StatuspagegroupsIndexComponent
+    implements OnInit, OnDestroy, IndexPage
+{
     public hideFilter: boolean = true;
     public statuspagegroups!: StatuspagegroupsIndex;
-    public params: StatuspagegroupsIndexParams = getStatuspagegroupsIndexParams();
+    public params: StatuspagegroupsIndexParams =
+        getStatuspagegroupsIndexParams();
     public is_public: boolean = false;
     public not_public: boolean = false;
     public selectedItems: DeleteAllItem[] = [];
     private subscriptions: Subscription = new Subscription();
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    private StatuspagegroupsService: StatuspagegroupsService = inject(StatuspagegroupsService);
-    private readonly SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private StatuspagegroupsService: StatuspagegroupsService = inject(
+        StatuspagegroupsService,
+    );
+    private readonly SelectionServiceService: SelectionServiceService = inject(
+        SelectionServiceService,
+    );
+    private readonly TranslocoService: TranslocoService =
+        inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
     public readonly PermissionsService = inject(PermissionsService);
     private readonly modalService = inject(ModalService);
@@ -154,10 +168,14 @@ export class StatuspagegroupsIndexComponent implements OnInit, OnDestroy, IndexP
 
     public load(): void {
         this.SelectionServiceService.deselectAll();
-        this.subscriptions.add(this.StatuspagegroupsService.getStatuspagegroups(this.params).subscribe(data => {
-            this.statuspagegroups = data;
-            this.cdr.markForCheck();
-        }));
+        this.subscriptions.add(
+            this.StatuspagegroupsService.getStatuspagegroups(
+                this.params,
+            ).subscribe((data) => {
+                this.statuspagegroups = data;
+                this.cdr.markForCheck();
+            }),
+        );
     }
 
     public toggleFilter(): void {
@@ -178,7 +196,6 @@ export class StatuspagegroupsIndexComponent implements OnInit, OnDestroy, IndexP
         this.params.page = change.page;
         this.params.scroll = change.scroll;
         this.load();
-
     }
 
     public onSortChange(sort: Sort): void {
@@ -194,23 +211,27 @@ export class StatuspagegroupsIndexComponent implements OnInit, OnDestroy, IndexP
 
         if (statuspagegroup) {
             // User just want to delete a single command
-            items = [{
-                id: statuspagegroup.id,
-                displayName: statuspagegroup.name
-            }];
+            items = [
+                {
+                    id: statuspagegroup.id,
+                    displayName: statuspagegroup.name,
+                },
+            ];
         } else {
             // User clicked on delete selected button
-            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-
-                return {
-                    id: item.id,
-                    displayName: item.name
-                };
-            });
+            items = this.SelectionServiceService.getSelectedItems().map(
+                (item): DeleteAllItem => {
+                    return {
+                        id: item.id,
+                        displayName: item.name,
+                    };
+                },
+            );
         }
 
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message =
+                this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
             return;
         }
@@ -230,5 +251,4 @@ export class StatuspagegroupsIndexComponent implements OnInit, OnDestroy, IndexP
             this.load();
         }
     }
-
 }

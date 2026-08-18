@@ -6,7 +6,7 @@ import {
     forwardRef,
     inject,
     Input,
-    Output
+    Output,
 } from '@angular/core';
 import { DynamicalFormField } from './dynamical-form-fields.interface';
 
@@ -15,18 +15,22 @@ import {
     FormCheckInputDirective,
     FormCheckLabelDirective,
     FormControlDirective,
-    FormLabelDirective
+    FormLabelDirective,
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../layouts/coreui/form-feedback/form-feedback.component';
 
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../required-icon/required-icon.component';
 import { TrueFalseDirective } from '../../directives/true-false.directive';
 import { GenericValidationError } from '../../generic-responses';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+    ControlValueAccessor,
+    FormsModule,
+    NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 import { SelectComponent } from '../../layouts/primeng/select/select/select.component';
 import { MultiSelectComponent } from '../../layouts/primeng/multi-select/multi-select/multi-select.component';
 
@@ -47,7 +51,7 @@ import { MultiSelectComponent } from '../../layouts/primeng/multi-select/multi-s
         NgSelectComponent,
         SelectComponent,
         FormsModule,
-        MultiSelectComponent
+        MultiSelectComponent,
     ],
     templateUrl: './dynamical-form-fields.component.html',
     styleUrl: './dynamical-form-fields.component.css',
@@ -55,17 +59,16 @@ import { MultiSelectComponent } from '../../layouts/primeng/multi-select/multi-s
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => DynamicalFormFieldsComponent),
-            multi: true
-        }
+            multi: true,
+        },
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DynamicalFormFieldsComponent implements ControlValueAccessor {
     @Input() public errors: GenericValidationError | null = null;
     @Input() public formField!: DynamicalFormField;
     @Input() public name: string = '';
     @Input() public identifier: string | null = null;
-
 
     @Input() disabled: boolean = false;
 
@@ -76,10 +79,8 @@ export class DynamicalFormFieldsComponent implements ControlValueAccessor {
     @Input() ngModel: any | undefined;
     @Output() ngModelChange = new EventEmitter();
 
-
     protected readonly Object = Object;
     private cdr = inject(ChangeDetectorRef);
-
 
     //  Updates the component's value.
     writeValue(value: any): void {
