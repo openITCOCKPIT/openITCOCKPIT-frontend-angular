@@ -16,9 +16,13 @@ export class PushnotificationsrelayService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    public getRelaySettings(): Observable<{ relay: RelayPost, systemId: string }> {
+    public getRelaySettings(): Observable<{ relay: RelayPost, systemId: string, IS_CONTAINER: boolean }> {
         const proxyPath = this.proxyPath;
-        return this.http.get<{ relay: RelayPost, systemId: string }>(`${proxyPath}/notificationsrelay/index.json`, {
+        return this.http.get<{
+            relay: RelayPost,
+            systemId: string,
+            IS_CONTAINER: boolean
+        }>(`${proxyPath}/notificationsrelay/index.json`, {
             params: {
                 angular: true
             }
