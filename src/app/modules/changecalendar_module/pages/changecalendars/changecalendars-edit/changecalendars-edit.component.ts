@@ -339,6 +339,9 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.ChangecalendarsService.getEdit(id)
             .subscribe((result: EditChangecalendar) => {
                 this.post = result;
+                if (!this.post.changeCalendar.colour) {
+                    this.post.changeCalendar.colour = '#FF0000';
+                }
                 this.events = result.events;
 
                 this.cdr.markForCheck();
