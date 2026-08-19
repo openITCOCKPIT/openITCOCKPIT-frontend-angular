@@ -181,6 +181,25 @@
     border-color: #CFCFCF !important;
 }
 
+.border-ok, border-up {
+    border-color: oitc.$success !important;
+}
+
+.border-warning {
+  border-color: oitc.$warning !important;
+}
+
+.border-critical, .border-down {
+  border-color: oitc.$danger !important;
+}
+.border-unknown, .border-unreachable {
+  border-color: oitc.$secondary !important;
+}
+
+.border-not-monitored {
+  border-color: rgb(88, 86, 214) !important;
+}
+
 .border-downtime {
     border-color: #337ab7 !important;
 }
