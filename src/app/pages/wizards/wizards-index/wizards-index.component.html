@@ -102,11 +102,11 @@
         </c-card-header>
         <c-card-body>
             @if (result) {
-                <c-row class="wizard-card-group">
+                <c-row class="wizard-card-group g-2">
                     @for (wizard of result.wizards | keyvalue; track wizard) {
                         <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
                                [hidden]="hidden(wizard.value)">
-                            <c-card class="mb-3">
+                            <c-card class="mb-2 h-100">
                                 <c-card-body class="wizard-card-body cursor-pointer"
                                              [routerLink]="['/', 'wizards', 'wizardHostConfiguration', wizard.value.type_id, wizard.value.title, 0, wizard.value.state, wizard.value.selected_os]">
                                     <div class="d-flex align-items-center">
@@ -114,12 +114,13 @@
                                             <img [src]="'./assets/images/wizards/'+wizard.value.image"
                                                  [alt]="wizard.value.title">
                                         </div>
-                                        <div class="pl-10">
-                                            <h5>
+                                        <div class="ps-3">
+                                            <h5 class="mb-1">
                                                 {{ wizard.value.title }}
                                             </h5>
-                                            <br/>
-                                            {{ wizard.value.description }}
+                                            <p class="mb-0 text-muted">
+                                                {{ wizard.value.description }}
+                                            </p>
                                         </div>
                                     </div>
                                 </c-card-body>
@@ -133,19 +134,20 @@
                     @for (wizard of result.possibleWizards | keyvalue; track wizard) {
                         <c-col [xs]="12" [md]="6" [lg]="4" [xl]="3"
                                [hidden]="hidden(wizard.value)">
-                            <c-card class="mb-3">
+                            <c-card class="mb-2 h-100">
                                 <c-card-body class="wizard-card-body bg-placeholder-wizard">
                                     <div class="d-flex align-items-center">
                                         <div class="wizard-logo-image wizard-logo-image-placeholder">
                                             <img [src]="'./assets/images/wizards/'+wizard.value.image"
                                                  [alt]="wizard.value.title">
                                         </div>
-                                        <div class="pl-10">
-                                            <h5>
+                                        <div class="ps-3">
+                                            <h5 class="mb-1">
                                                 {{ wizard.value.title }}
                                             </h5>
-                                            <br/>
-                                            {{ wizard.value.description }}
+                                            <p class="mb-0 text-muted">
+                                                {{ wizard.value.description }}
+                                            </p>
                                         </div>
                                     </div>
                                 </c-card-body>
@@ -171,7 +173,7 @@
 
 
             @if (this.deprecatedWizards.deprecatedWizards || this.deprecatedWizards.possibleDeprecatedWizards) {
-                <c-accordion class="mb-3"
+                <c-accordion class="my-3"
                 >
                     <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
                         <ng-template cTemplateId="accordionHeaderTemplate">
