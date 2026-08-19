@@ -127,11 +127,13 @@
                         </label>
                         <br/>
                         <oitc-changecalendars-calendar-editor
+                            [timeZone]="timezone.user_timezone"
                             [(events)]="events"
                             [colour]="post.changeCalendar.colour"
                             (eventClick)="editEvent($event);"
                             (onCreateClick)="createEvent($event)"
-                            (onEventMove)="eventMove($event)"/>
+                            (onEventMove)="eventMove($event)"
+                            (datesSet)="datesSet($event)"/>
                     </div>
                 </c-card-body>
                 <c-card-footer class="text-end">

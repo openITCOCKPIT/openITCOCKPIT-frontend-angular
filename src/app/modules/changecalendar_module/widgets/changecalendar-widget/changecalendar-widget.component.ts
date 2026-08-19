@@ -73,6 +73,10 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
     private readonly ChangeCalendarWidgetService: ChangecalendarWidgetService = inject(ChangecalendarWidgetService);
     private readonly ModalService: ModalService = inject(ModalService);
     private readonly TimezoneService: TimezoneService = inject(TimezoneService);
+    private start: string = '';
+    private end: string = '';
+    private datesSetCalled: boolean = false;
+    protected resizeTrigger: number = 0;
 
 
     public changeCalendarId: number | null = null;
@@ -104,8 +108,6 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
     private readonly ChangecalendarWidgetModalService: ChangecalendarWidgetModalService = inject(ChangecalendarWidgetModalService);
 
     public ngAfterViewInit(): void {
-        this.getUserTimezone();
-        this.resizeWidget();
     }
 
     private getUserTimezone() {
@@ -115,22 +117,18 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
         }));
     }
 
-    private stripZone(date: Date): string {
+    private stripZone(param: string): string {
+        const matchExpression: RegExp = /^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?)/;
+        const match: RegExpExecArray | null = matchExpression.exec(param.trim());
+        if (!match) {
+            throw new Error(`Not a valid ISO-8601 timestamp: "${param}"`);
+        }
 
-        let ZeroForMonth = (date.getMonth() + 1) < 10 ? '0' : '', ZeroForDay = date.getDate() < 10 ? '0' : '',
-            ZeroForHour = date.getHours() < 10 ? '0' : '', ZeroForMinute = date.getMinutes() < 10 ? '0' : '',
-            ZeroForSecond = date.getSeconds() < 10 ? '0' : '', Year = date.getFullYear(),
-            Month = ZeroForMonth + (date.getMonth() + 1), Day = ZeroForDay + date.getDate(),
-            Hour = ZeroForHour + date.getHours(), Minute = ZeroForMinute + date.getMinutes(),
-            Second = ZeroForSecond + date.getSeconds(), Zone = this.timezone.user_offset / 60 / 60,
-            ZeroForZone = Zone < 10 ? '0' : '', TimeZone = "+" + ZeroForZone + Zone,
-            dS = Year + "-" + Month + "-" + Day + "T" + Hour + ":" + Minute + ":" + Second;
-
-        return dS;
+        return `${match[1]}T${match[2]}`;
     }
 
     public override resizeWidget(event?: KtdResizeEnd) {
-        this.load();
+        this.resizeTrigger++;
 
         this.cdr.markForCheck();
     }
@@ -144,15 +142,26 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
             return event.originId === clickInfo.event._def.extendedProps['originId'];
         }) as unknown as ChangecalendarEvent;
         if (this.event) {
+            let event: CalendarEvent = this.events.find((event: CalendarEvent) => {
+                if (!event.originId) {
+                    return false;
+                }
+                return event.originId === clickInfo.event._def.extendedProps['originId'];
+            }) as CalendarEvent;
+
+            this.event.start = this.stripZone(event.start);
+            this.event.end = this.stripZone(event.end?.toString() || '');
+
             this.ChangecalendarWidgetModalService.openChangecalendarModal(this.event);
         }
     }
 
     public override load() {
         if (this.widget) {
+            this.getUserTimezone();
             let widgetId = this.widget.id;
             this.subscriptions.add(
-                this.ChangeCalendarWidgetService.loadWidgetConfig(widgetId).subscribe((response: ChangecalendarWidgetResponse) => {
+                this.ChangeCalendarWidgetService.loadWidgetConfig(widgetId, this.start, this.end).subscribe((response: ChangecalendarWidgetResponse) => {
                     this.EditableChangecalendar = response;
 
                     // Put data to POSTable object.
@@ -246,5 +255,21 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
             this.show = false;
             this.cdr.markForCheck();
         }
+    }
+
+    /**
+     * I hook to datesSet from FullCalendar. If the displayed range changes, I fetch the events for the new range.
+     * @see https://fullcalendar.io/docs/datesSet
+     * @param event
+     */
+    public datesSet(event: any): void {
+        if (!this.datesSetCalled) {
+            this.datesSetCalled = true;
+            return;
+        }
+        this.start = event.startStr;
+        this.end = event.endStr;
+
+        this.load();
     }
 }
