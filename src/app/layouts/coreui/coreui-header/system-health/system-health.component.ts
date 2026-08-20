@@ -33,6 +33,7 @@ export interface SystemHealth {
     isPushNotificationRunning?: boolean,
     isWebsocketServerRunning?: boolean,
     isNodeJsServerRunning?: boolean,
+    isSatellitesInformationRunning?:boolean,
     previousState?: string,
     update: string,
     cache_readable?: boolean,
@@ -92,6 +93,65 @@ export interface SystemHealth {
                 last_seen: string,
                 satellite_id: number
             },
+            satellite_information:{
+                satellite_id: number,
+                satellite_error_count: number,
+                system_health: {
+                    oitc_version: string,
+                    oitc_is_debugging_mode: boolean,
+                    oitc_webinterface_enabled: boolean,
+                    os_version: string,
+                    os_kernel: string,
+                    os_architecture: string,
+                    cpu_processor: string,
+                    cpu_cores: number,
+                    cpu_load1: number,
+                    cpu_load5: number,
+                    cpu_load15: number,
+                    cpu_state: string,
+                    php_version: string,
+                    isContainer: boolean,
+                    LsbRelease: string,
+                    isDebianBased: boolean,
+                    isRhelBased: boolean,
+                    memory: {
+                        memory: {
+                            total: number,
+                            used: number,
+                            free: number,
+                            buffers: number,
+                            cached: number,
+                            percentage: number,
+                            state: string,
+                        },
+                        swap: {
+                            total: number,
+                            used: number,
+                            free: number,
+                            percentage: number,
+                            state: string,
+                        }
+                    }
+                    disks: {
+                        disk: string,
+                        size: string,
+                        used: string,
+                        avail: string,
+                        use_percentage: number,
+                        mountpoint: string,
+                        state: string,
+                    }[]
+                    monitoring_engine: string,
+                    naemonstats: {
+                        NAGIOSVERSION: string,
+                        NAGIOSPID: number,
+                        NUMHOSTS: number,
+                        NUMSERVICES: number,
+                        PROGRUNTIME: string
+                    }
+                }
+            },
+            cpu_state: string,
             allow_edit: boolean
         }[]
 }

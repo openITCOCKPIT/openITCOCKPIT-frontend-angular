@@ -32,7 +32,7 @@
                             </div>
                         </div>
                     }
-                    @if (systemHealth.state === 'warning' || systemHealth.state === 'critical') {
+                    @if (systemHealth.state === 'warning' || systemHealth.state === 'critical' || !systemHealth.isSatellitesInformationRunning ) {
                         <div class="dropdown-item"
                         >
                             <div class="d-flex align-items-center" [routerLink]="['/', 'administrators', 'debug']">
@@ -210,6 +210,88 @@
                                                 </li>
                                             }
                                         }
+                                        @if (satellite?.satellite_information && satellite.satellite_information.satellite_error_count > 0 ) {
+                                            @let systemHealth = satellite?.satellite_information?.system_health;
+
+                                            @if ( systemHealth?.cpu_state !== 'ok') {
+                                                <li>
+                                                    <span>
+                                                        <div class="pt-2">
+                                                            <h6>
+                                                                <fa-icon [icon]="['fas', 'warning']"
+                                                                         class="down pe-1"></fa-icon>
+                                                                {{ t('Warning') }}
+                                                            </h6>
+
+                                                            <i>{{ t('Satellite error!') }}</i>
+                                                        </div>
+                                                    </span>
+                                                </li>
+                                            }
+                                            @if ( systemHealth?.cpu_state !== 'ok') {
+                                                    <li>
+                                                        <span>
+                                                            <div class="pt-2">
+                                                                <h6>
+                                                                    <fa-icon [icon]="['fas', 'warning']"
+                                                                             class="down pe-1"></fa-icon>
+                                                                    {{ t('Warning') }}
+                                                                </h6>
+                                                                <i>{{ t('CPU load on satellite %s is %s!', [satellite.name, systemHealth?.cpu_state]) }}</i>
+                                                                <i>{{ t('Performance of satellite %s processor is degraded', [satellite.name]) }}</i>
+                                                            </div>
+                                                        </span>
+                                                    </li>
+                                                }
+
+                                            @if ( systemHealth?.memory?.memory?.state !== 'ok') {
+                                                <li>
+                                                    <span>
+                                                        <div class="pt-2">
+                                                            <h6>
+                                                                <fa-icon [icon]="['fas', 'warning']"
+                                                                         class="down pe-1"></fa-icon>
+                                                                {{ t('Warning') }}
+                                                            </h6>
+                                                            <i>{{ t('Performance of satellite %s Memory is degraded!', [satellite.name]) }}</i>
+                                                        </div>
+                                                    </span>
+                                                </li>
+                                            }
+                                            @if ( systemHealth?.memory?.swap?.state !== 'ok') {
+                                                <li>
+                                                    <span>
+                                                        <div class="pt-2">
+                                                            <h6>
+                                                                <fa-icon [icon]="['fas', 'warning']"
+                                                                         class="down pe-1"></fa-icon>
+                                                                {{ t('Warning') }}
+                                                            </h6>
+                                                            <i>{{ t('Performance of satellite %s Swap memory is degraded!', [satellite.name]) }}</i>
+
+                                                        </div>
+                                                    </span>
+                                                </li>
+                                            }
+                                            @for (disk of systemHealth?.disks; track disk) {
+                                                @if ( disk.state !== 'ok') {
+                                                    <li>
+                                                        <span>
+                                                            <div class="pt-2">
+                                                                <h6>
+                                                                    <fa-icon [icon]="['fas', 'warning']"
+                                                                             class="down pe-1"></fa-icon>
+                                                                    {{ t('Warning') }}
+                                                                </h6>
+                                                                <i>{{ t('Swap memory on satellite %s processor is degraded!', [satellite.name]) }}</i>
+                                                            </div>
+                                                        </span>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+
+
                                     }
                                     @if (systemHealth.memory_usage && systemHealth.memory_usage.memory.state !== 'ok') {
                                         <li>
@@ -274,6 +356,10 @@
                                             </span>
                                         </li>
                                     }
+
+
+
+
                                 </ul>
                             </div>
                         </div>

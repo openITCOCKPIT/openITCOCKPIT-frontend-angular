@@ -174,6 +174,7 @@ export interface AllSatellite {
     sync_method: string
     status: number
     satellite_status: SatelliteStatus
+    satellite_information?: SatelliteSystemHealthJson
     container: string
     sync_method_name: string
     allow_edit: boolean
@@ -376,6 +377,7 @@ export interface SatelliteSystemHealthJson {
     cpu_load1: number
     cpu_load5: number
     cpu_load15: number
+    cpu_state?: string
     php_version: string
     isContainer: boolean
     LsbRelease: string
@@ -416,4 +418,10 @@ export interface SatelliteSystemHealthJson {
         NUMSERVICES: number
         PROGRUNTIME: string
     }
+}
+
+export interface SatelliteInformation {
+    satellite_id: number
+    satellite_error_count:number
+    system_health: SatelliteSystemHealthJson
 }
