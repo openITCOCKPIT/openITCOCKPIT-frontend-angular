@@ -1,11 +1,11 @@
-export interface PushConfigurationRoot {
+export interface WebSocketConfigurationRoot {
     websocket: {
-        [key: string]: string
+        "SUDO_SERVER.API_KEY": string
+        "PUSH_NOTIFICATIONS.URL": string
     }
-    user: PushConfigurationUser
-}
-
-export interface PushConfigurationUser {
-    id: number
-    hasPushContact: boolean
+    user: {
+        id: number
+        hasPushContact: boolean
+    }
+    _csrfToken: string
 }
