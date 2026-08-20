@@ -12,6 +12,7 @@ import {
     TooltipDirective
 } from '@coreui/angular';
 import { RouterLink } from '@angular/router';
+import { sprintf } from 'sprintf-js';
 import { SystemHealthService } from './system-health.service';
 import { PermissionsService } from '../../../../permissions/permissions.service';
 import { XsButtonDirective } from '../../xsbutton-directive/xsbutton.directive';
