@@ -50,10 +50,11 @@
                 </c-card-header>
                 <c-card-body>
                     <oitc-changecalendars-event-editor
-                        [event]="event"
-                        (onDeleteClick)="deleteEvent($event);"
-                        (onEventChange)="updateEvent($event)"
-                        (onEventCreate)="addEvent()"
+                            [event]="event"
+                            [errors]="eventErrors"
+                            (onDeleteClick)="deleteEvent($event);"
+                            (onEventChange)="updateEvent($event)"
+                            (onEventCreate)="addEvent()"
                     ></oitc-changecalendars-event-editor>
                     <div class="mb-3">
                         <label cLabel for="post.changeCalendar.container_id">
@@ -61,13 +62,13 @@
                             <oitc-required-icon/>
                         </label>
                         <oitc-select
-                            name="post.changeCalendar.container_id"
-                            id="post.changeCalendar.container_id"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.changeCalendar.container_id"
-                            [options]="containers"
-                            oitcFormError [errors]="errors" errorField="container_id">
+                                name="post.changeCalendar.container_id"
+                                id="post.changeCalendar.container_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="post.changeCalendar.container_id"
+                                [options]="containers"
+                                oitcFormError [errors]="errors" errorField="container_id">
                         </oitc-select>
                         <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                         @if (!post.changeCalendar.container_id) {
@@ -112,12 +113,12 @@
                         </label>
                         <br/>
                         <p-color-picker
-                            required
-                            id="post.changeCalendar.colour"
-                            type="text"
-                            name="post.changeCalendar.colour"
-                            [(ngModel)]="post.changeCalendar.colour"
-                            oitcFormError [errors]="errors" errorField="colour">
+                                required
+                                id="post.changeCalendar.colour"
+                                type="text"
+                                name="post.changeCalendar.colour"
+                                [(ngModel)]="post.changeCalendar.colour"
+                                oitcFormError [errors]="errors" errorField="colour">
                         </p-color-picker>
                         <oitc-form-feedback [errors]="errors" errorField="colour"></oitc-form-feedback>
                     </div>
@@ -127,13 +128,13 @@
                         </label>
                         <br/>
                         <oitc-changecalendars-calendar-editor
-                            [timeZone]="timezone.user_timezone"
-                            [(events)]="events"
-                            [colour]="post.changeCalendar.colour"
-                            (eventClick)="editEvent($event);"
-                            (onCreateClick)="createEvent($event)"
-                            (onEventMove)="eventMove($event)"
-                            (datesSet)="datesSet($event)"/>
+                                [timeZone]="timezone.user_timezone"
+                                [(events)]="events"
+                                [colour]="post.changeCalendar.colour"
+                                (eventClick)="editEvent($event);"
+                                (onCreateClick)="createEvent($event)"
+                                (onEventMove)="eventMove($event)"
+                                (datesSet)="datesSet($event)"/>
                     </div>
                 </c-card-body>
                 <c-card-footer class="text-end">
