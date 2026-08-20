@@ -321,10 +321,10 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
         if (!this.pushNotificationHasPermission) {
             this.PushNotificationsService.checkPermissions();
         }
-        this.pushNotificationConnected = this.PushNotificationsService.isConnected();
+        // this.pushNotificationConnected = this.PushNotificationsService.isConnected();
         this.pushNotificationHasPermission = this.PushNotificationsService.hasPermission();
         if (this.pushNotificationConnected && this.pushNotificationHasPermission) {
-            this.PushNotificationsService.sendTestMessage();
+            //this.PushNotificationsService.sendTestMessage();
         }
     }
 
