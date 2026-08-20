@@ -289,13 +289,6 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
         });
     }
 
-    private getUserTimezone() {
-        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
-            this.timezone = data;
-            this.cdr.markForCheck();
-        }));
-    }
-
     public editEvent(clickInfo: EventClickArg): void {
         // set this.event to the event from this.events where the originId matches clickInfo.event._def.extendedProps.originId
         this.event = this.post.changeCalendar.changecalendar_events.find((event: ChangecalendarEvent) => {
@@ -316,38 +309,31 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.getUserTimezone();
-        this.loadContainers();
-        this.loadEditChangecalendar();
+        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
+            this.timezone = data;
+            this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
+                .subscribe((result: SelectKeyValue[]) => {
+                    this.containers = result;
+                    const id = Number(this.route.snapshot.paramMap.get('id'));
+                    this.subscriptions.add(this.ChangecalendarsService.getEdit(id)
+                        .subscribe((result: EditChangecalendar) => {
+                            this.post = result;
+                            if (!this.post.changeCalendar.colour) {
+                                this.post.changeCalendar.colour = '#FF0000';
+                            }
+                            this.events = result.events;
+
+                            this.cdr.markForCheck();
+                        }));
+                    this.cdr.markForCheck();
+                }));
+            this.cdr.markForCheck();
+        }));
     }
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
-
-
-    public loadContainers = (): void => {
-        this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
-            .subscribe((result: SelectKeyValue[]) => {
-                this.containers = result;
-                this.cdr.markForCheck();
-            }));
-    }
-
-    private loadEditChangecalendar(): void {
-        const id = Number(this.route.snapshot.paramMap.get('id'));
-        this.subscriptions.add(this.ChangecalendarsService.getEdit(id)
-            .subscribe((result: EditChangecalendar) => {
-                this.post = result;
-                if (!this.post.changeCalendar.colour) {
-                    this.post.changeCalendar.colour = '#FF0000';
-                }
-                this.events = result.events;
-
-                this.cdr.markForCheck();
-            }));
-    }
-
 
     public updateChangecalendar(): void {
         this.subscriptions.add(this.ChangecalendarsService.updateChangecalendar(this.post)

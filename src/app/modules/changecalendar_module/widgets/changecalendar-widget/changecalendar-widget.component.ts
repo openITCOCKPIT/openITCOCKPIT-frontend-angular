@@ -159,38 +159,45 @@ export class ChangecalendarWidgetComponent extends BaseWidgetComponent implement
     public override load() {
         if (this.widget) {
             this.getUserTimezone();
-            let widgetId = this.widget.id;
-            this.subscriptions.add(
-                this.ChangeCalendarWidgetService.loadWidgetConfig(widgetId, this.start, this.end).subscribe((response: ChangecalendarWidgetResponse) => {
-                    this.EditableChangecalendar = response;
+            this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
+                this.timezone = data;
+                if (!this.widget) {
+                    return;
+                }
+                let widgetId = this.widget.id;
+                this.subscriptions.add(
+                    this.ChangeCalendarWidgetService.loadWidgetConfig(widgetId, this.start, this.end).subscribe((response: ChangecalendarWidgetResponse) => {
+                        this.EditableChangecalendar = response;
 
-                    // Put data to POSTable object.
-                    this.widgetConfig = {
-                        changecalendar_ids: Object.keys(response.changeCalendars).map((key) => parseInt(key, 10)),
-                        displayType: response.displayType,
-                        Widget: {
-                            id: widgetId
-                        },
-                    } as ChangeCalendarWidgetPost;
+                        // Put data to POSTable object.
+                        this.widgetConfig = {
+                            changecalendar_ids: Object.keys(response.changeCalendars).map((key) => parseInt(key, 10)),
+                            displayType: response.displayType,
+                            Widget: {
+                                id: widgetId
+                            },
+                        } as ChangeCalendarWidgetPost;
 
-                    this.events = [];
+                        this.events = [];
 
-                    Object.keys(response.changeCalendars).forEach((changeCalendarId: string) => {
-                        response?.changeCalendars[changeCalendarId].changecalendar_events.forEach((event) => {
-                            this.events.push({
-                                originId: event.id,
-                                title: event.title,
-                                start: event.start,
-                                description: event.description,
-                                end: event.end,
-                                default_holiday: false,
-                                colour: response?.changeCalendars[changeCalendarId].colour,
+                        Object.keys(response.changeCalendars).forEach((changeCalendarId: string) => {
+                            response?.changeCalendars[changeCalendarId].changecalendar_events.forEach((event) => {
+                                this.events.push({
+                                    originId: event.id,
+                                    title: event.title,
+                                    start: event.start,
+                                    description: event.description,
+                                    end: event.end,
+                                    default_holiday: false,
+                                    colour: response?.changeCalendars[changeCalendarId].colour,
+                                });
                             });
                         });
-                    });
-                    this.cdr.markForCheck();
-                })
-            );
+                        this.cdr.markForCheck();
+                    })
+                );
+                this.cdr.markForCheck();
+            }));
         }
     }
 
