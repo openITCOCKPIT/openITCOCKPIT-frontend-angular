@@ -177,7 +177,7 @@
                 >
                     <c-accordion-item #accordionItem="cAccordionItem" [visible]="false">
                         <ng-template cTemplateId="accordionHeaderTemplate">
-                            <div class="bg-primary-subtle" (click)="accordionItem.toggleItem()"
+                            <div (click)="accordionItem.toggleItem()"
                                  [collapsed]="!accordionItem.visible" cAccordionButton>
                                 <h5>{{ t('Obsolete Wizards') }}</h5>
                             </div>
@@ -200,7 +200,7 @@
                                                             {{ wizard.value.title }}
                                                             <oitc-badge-outline color="warning" class="font-xs">
                                                                 <fa-icon
-                                                                    [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                                                                        [icon]="['fas', 'triangle-exclamation']"></fa-icon>
                                                                 {{ t('Obsolete') }}
                                                             </oitc-badge-outline>
                                                         </h5>
@@ -232,7 +232,7 @@
                                                             <oitc-badge-outline color="warning"
                                                                                 class="ms-1">
                                                                 <fa-icon
-                                                                    [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                                                                        [icon]="['fas', 'triangle-exclamation']"></fa-icon>
                                                                 {{ t('Deprecated') }}
                                                             </oitc-badge-outline>
                                                         </h5>
