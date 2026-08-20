@@ -316,7 +316,7 @@
                                                 </li>
                                             }
 
-                                            @if ( satelliteSystemHealth?.memory?.memory?.state !== 'ok') {
+                                            @if (satelliteSystemHealth?.memory?.memory && satelliteSystemHealth.memory.memory.state !== 'ok') {
                                                 <li class="health-item animated-fade-in">
                                                     <div class="pt-2 pb-2 border-bottom">
                                                         <div class="d-flex align-items-center mb-1">
@@ -331,7 +331,7 @@
 
                                                         <p class="mb-1 d-flex justify-content-between align-items-center ">
                                                             <span class="text-muted">
-                                                                {{ t('High memory usage') }}: <strong class="text-dark font-monospace">Memory</strong>
+                                                                {{ t('High memory usage') }}: <strong class="text-dark font-monospace">Memory: {{ satellite.name }}</strong>
                                                             </span>
                                                             <span class="fw-bold text-secondary ps-2">
                                                                 {{ satelliteSystemHealth?.memory?.memory?.percentage }}%
@@ -361,7 +361,7 @@
 
                                                         <p class="mb-1 d-flex justify-content-between align-items-center ">
                                                             <span class="text-muted">
-                                                                {{ t('High memory usage') }}: <strong class="text-dark font-monospace">Swap</strong>
+                                                                {{ t('High memory usage') }}: <strong class="text-dark font-monospace">Swap: {{ satellite.name }}</strong>
                                                             </span>
                                                             <span class="fw-bold text-secondary ps-2">
                                                                 {{ satelliteSystemHealth?.memory?.swap?.percentage }}%
@@ -376,6 +376,7 @@
                                                     </div>
                                                 </li>
                                             }
+                                            @if (satelliteSystemHealth?.disks) {
                                             @for (disk of satelliteSystemHealth?.disks; track disk) {
                                                 @if ( disk.state !== 'ok') {
                                                     <li class="health-item animated-fade-in">
@@ -412,7 +413,7 @@
                                                 }
                                             }
                                         }
-
+                                        }
                                     }
                                     @if (systemHealth.memory_usage && systemHealth.memory_usage.memory.state !== 'ok') {
                                         <li class="health-item animated-fade-in">
