@@ -30,9 +30,12 @@
                                         <c-col [xs]="12" [md]="12" [lg]="12">
                                             @if (show) {
                                                 <oitc-changecalendars-calendar
+                                                    [timeZone]="timezone.user_timezone"
                                                     [(events)]="events"
                                                     [initialView]="widgetConfig.displayType"
-                                                    (eventClick)="toggleChangecalendarModal($event)"/>
+                                                    (eventClick)="toggleChangecalendarModal($event)"
+                                                    (datesSet)="datesSet($event)"
+                                                    [resize]="resizeTrigger"/>
                                             }
                                         </c-col>
                                     </c-row>
