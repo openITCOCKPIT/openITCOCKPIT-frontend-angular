@@ -19,7 +19,6 @@ import listPlugin from '@fullcalendar/list';
 import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { NgStyle } from '@angular/common';
 import luxonPlugin from '@fullcalendar/luxon3';
 
 @Component({
@@ -28,8 +27,7 @@ import luxonPlugin from '@fullcalendar/luxon3';
         TranslocoDirective,
         FullCalendarModule,
         FaIconComponent,
-        XsButtonDirective,
-        NgStyle
+        XsButtonDirective
     ],
     templateUrl: './changecalendars-calendar-editor.component.html',
     styleUrl: './changecalendars-calendar-editor.component.css',
