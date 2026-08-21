@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ConfigurationFilesService } from '../configuration-files.service';
@@ -21,7 +28,7 @@ import {
     ModalTitleDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -31,29 +38,15 @@ import { ConfigurationFileInformation } from '../configuration-files.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { PaginatorModule } from 'primeng/paginator';
-import {
-    DynamicConfigurationFileComponent
-} from './configuration-files/dynamic-configuration-file/dynamic-configuration-file.component';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
+import { DynamicConfigurationFileComponent } from './configuration-files/dynamic-configuration-file/dynamic-configuration-file.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import {
-    ConfigurationFileDbBackendComponent
-} from './configuration-files/static/configuration-file-db-backend/configuration-file-db-backend.component';
-import {
-    ConfigurationFilePerfdataBackendComponent
-} from './configuration-files/static/configuration-file-perfdata-backend/configuration-file-perfdata-backend.component';
-import {
-    ConfigurationFileNagiosCfgComponent
-} from './configuration-files/static/configuration-file-nagios-cfg/configuration-file-nagios-cfg.component';
-import {
-    ConfigurationFileModGearmanModuleComponent
-} from './configuration-files/static/configuration-file-mod-gearman-module/configuration-file-mod-gearman-module.component';
-import {
-    ConfigurationFileNstaMasterComponent
-} from './configuration-files/static/configuration-file-nsta-master/configuration-file-nsta-master.component';
-import {
-    ConfigurationFileGraphingDockerComponent
-} from './configuration-files/static/configuration-file-graphing-docker/configuration-file-graphing-docker.component';
+import { ConfigurationFileDbBackendComponent } from './configuration-files/static/configuration-file-db-backend/configuration-file-db-backend.component';
+import { ConfigurationFilePerfdataBackendComponent } from './configuration-files/static/configuration-file-perfdata-backend/configuration-file-perfdata-backend.component';
+import { ConfigurationFileNagiosCfgComponent } from './configuration-files/static/configuration-file-nagios-cfg/configuration-file-nagios-cfg.component';
+import { ConfigurationFileModGearmanModuleComponent } from './configuration-files/static/configuration-file-mod-gearman-module/configuration-file-mod-gearman-module.component';
+import { ConfigurationFileNstaMasterComponent } from './configuration-files/static/configuration-file-nsta-master/configuration-file-nsta-master.component';
+import { ConfigurationFileGraphingDockerComponent } from './configuration-files/static/configuration-file-graphing-docker/configuration-file-graphing-docker.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -90,14 +83,13 @@ import { FormsModule } from '@angular/forms';
         ConfigurationFileModGearmanModuleComponent,
         ConfigurationFileNstaMasterComponent,
         ConfigurationFileGraphingDockerComponent,
-        FormsModule
+        FormsModule,
     ],
     templateUrl: './configuration-files-edit.component.html',
     styleUrl: './configuration-files-edit.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfigurationFilesEditComponent implements OnInit, OnDestroy {
-
     public dbKey?: ConfigurationFilesDbKeys;
     public ConfigFile?: ConfigurationFileInformation;
 
@@ -110,7 +102,9 @@ export class ConfigurationFilesEditComponent implements OnInit, OnDestroy {
     public readonly submit$ = this.submit$$.asObservable();
 
     private subscriptions: Subscription = new Subscription();
-    private readonly ConfigurationFilesService = inject(ConfigurationFilesService);
+    private readonly ConfigurationFilesService = inject(
+        ConfigurationFilesService,
+    );
     public readonly PermissionsService = inject(PermissionsService);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly route = inject(ActivatedRoute);
@@ -120,15 +114,17 @@ export class ConfigurationFilesEditComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
+        this.subscriptions.add(
+            this.route.queryParams.subscribe((params) => {
+                // Here, params is an object containing the current query parameters.
+                // You can do something with these parameters here.
+                //console.log(params);
 
-            const dbKey = String(this.route.snapshot.paramMap.get('dbKey'));
-            this.dbKey = dbKey as ConfigurationFilesDbKeys;
-            this.loadConfigurationFile();
-        }));
+                const dbKey = String(this.route.snapshot.paramMap.get('dbKey'));
+                this.dbKey = dbKey as ConfigurationFilesDbKeys;
+                this.loadConfigurationFile();
+            }),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -137,10 +133,14 @@ export class ConfigurationFilesEditComponent implements OnInit, OnDestroy {
 
     public loadConfigurationFile(): void {
         if (this.dbKey) {
-            this.subscriptions.add(this.ConfigurationFilesService.getConfigFileForEdit(this.dbKey).subscribe(data => {
-                this.ConfigFile = data;
-                this.cdr.markForCheck();
-            }));
+            this.subscriptions.add(
+                this.ConfigurationFilesService.getConfigFileForEdit(
+                    this.dbKey,
+                ).subscribe((data) => {
+                    this.ConfigFile = data;
+                    this.cdr.markForCheck();
+                }),
+            );
         }
     }
 
@@ -148,7 +148,7 @@ export class ConfigurationFilesEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
         this.modalService.toggle({
             show: true,
-            id: 'angularConfirmRestoreDefault'
+            id: 'angularConfirmRestoreDefault',
         });
     }
 
@@ -163,19 +163,26 @@ export class ConfigurationFilesEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
         this.modalService.toggle({
             show: false,
-            id: 'angularConfirmRestoreDefault'
+            id: 'angularConfirmRestoreDefault',
         });
     }
 
     public restore() {
         this.isRestoring = true;
         if (this.dbKey && this.ConfigFile) {
-            this.ConfigurationFilesService.restoreDefault(this.dbKey, this.ConfigFile.moduleUrl).subscribe((response) => {
+            this.ConfigurationFilesService.restoreDefault(
+                this.dbKey,
+                this.ConfigFile.moduleUrl,
+            ).subscribe((response) => {
                 this.cdr.markForCheck();
                 this.isRestoring = false;
 
                 if (response.success) {
-                    this.notyService.genericSuccess(this.TranslocoService.translate('Config successfully restored to default'));
+                    this.notyService.genericSuccess(
+                        this.TranslocoService.translate(
+                            'Config successfully restored to default',
+                        ),
+                    );
                     this.hideModal();
                     this.router.navigate(['/', 'ConfigurationFiles', 'index']);
                     return;
@@ -183,7 +190,6 @@ export class ConfigurationFilesEditComponent implements OnInit, OnDestroy {
 
                 this.notyService.genericError();
                 return;
-
             });
         }
     }

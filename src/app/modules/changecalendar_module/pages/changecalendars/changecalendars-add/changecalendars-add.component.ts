@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ChangecalendarsService } from '../changecalendars.service';
@@ -6,7 +13,10 @@ import { ContainersService } from '../../../../../pages/containers/containers.se
 import { HistoryService } from '../../../../../history.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
+import {
+    GenericResponseWrapper,
+    GenericValidationError,
+} from '../../../../../generic-responses';
 import { AddChangeCalendar } from '../changecalendars.interface';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
@@ -33,7 +43,7 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
-import { ColorPicker } from 'primeng/colorpicker';
+import { ColorPicker } from '@openng/optimus-ui/colorpicker';
 
 @Component({
     selector: 'oitc-changecalendars-add',
@@ -61,17 +71,21 @@ import { ColorPicker } from 'primeng/colorpicker';
         TranslocoDirective,
         XsButtonDirective,
         RouterLink,
-        ColorPicker
+        ColorPicker,
     ],
     templateUrl: './changecalendars-add.component.html',
     styleUrl: './changecalendars-add.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangecalendarsAddComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
-    private readonly ChangecalendarsService: ChangecalendarsService = inject(ChangecalendarsService);
-    private readonly ContainersService: ContainersService = inject(ContainersService);
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly ChangecalendarsService: ChangecalendarsService = inject(
+        ChangecalendarsService,
+    );
+    private readonly ContainersService: ContainersService =
+        inject(ContainersService);
+    private readonly TranslocoService: TranslocoService =
+        inject(TranslocoService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private readonly notyService: NotyService = inject(NotyService);
     private readonly cdr = inject(ChangeDetectorRef);
@@ -82,37 +96,51 @@ export class ChangecalendarsAddComponent implements OnInit, OnDestroy {
     protected errors: GenericValidationError = {} as GenericValidationError;
 
     public addChangeCalendar(): void {
-        this.subscriptions.add(this.ChangecalendarsService.addChangeCalendar(this.post)
-            .subscribe((result: GenericResponseWrapper) => {
-                this.cdr.markForCheck();
-                if (result.success) {
+        this.subscriptions.add(
+            this.ChangecalendarsService.addChangeCalendar(this.post).subscribe(
+                (result: GenericResponseWrapper) => {
                     this.cdr.markForCheck();
+                    if (result.success) {
+                        this.cdr.markForCheck();
 
-                    const title: string = this.TranslocoService.translate('Changecalendar');
-                    const msg: string = this.TranslocoService.translate('added successfully');
-                    const url: (string | number)[] = ['changecalendar_module', 'changecalendars', 'edit', result.data.id];
+                        const title: string =
+                            this.TranslocoService.translate('Changecalendar');
+                        const msg: string =
+                            this.TranslocoService.translate(
+                                'added successfully',
+                            );
+                        const url: (string | number)[] = [
+                            'changecalendar_module',
+                            'changecalendars',
+                            'edit',
+                            result.data.id,
+                        ];
 
-                    this.notyService.genericSuccess(msg, title, url);
+                        this.notyService.genericSuccess(msg, title, url);
 
-                    if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/changecalendar_module/changecalendars/index']);
+                        if (!this.createAnother) {
+                            this.HistoryService.navigateWithFallback([
+                                '/changecalendar_module/changecalendars/index',
+                            ]);
+                            return;
+                        }
+                        this.post = this.getDefaultPost();
+                        this.errors = {} as GenericValidationError;
+                        this.ngOnInit();
+                        this.notyService.scrollContentDivToTop();
+
                         return;
                     }
-                    this.post = this.getDefaultPost();
-                    this.errors = {} as GenericValidationError;
-                    this.ngOnInit();
-                    this.notyService.scrollContentDivToTop();
 
-                    return;
-                }
-
-                // Error
-                this.notyService.genericError();
-                const errorResponse: GenericValidationError = result.data as GenericValidationError;
-                if (result) {
-                    this.errors = errorResponse;
-                }
-            })
+                    // Error
+                    this.notyService.genericError();
+                    const errorResponse: GenericValidationError =
+                        result.data as GenericValidationError;
+                    if (result) {
+                        this.errors = errorResponse;
+                    }
+                },
+            ),
         );
     }
 
@@ -126,12 +154,15 @@ export class ChangecalendarsAddComponent implements OnInit, OnDestroy {
     }
 
     public loadContainers = (): void => {
-        this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
-            .subscribe((result: SelectKeyValue[]) => {
+        this.subscriptions.add(
+            this.ContainersService.loadContainersByString(
+                {} as ContainersLoadContainersByStringParams,
+            ).subscribe((result: SelectKeyValue[]) => {
                 this.containers = result;
                 this.cdr.markForCheck();
-            }));
-    }
+            }),
+        );
+    };
 
     private getDefaultPost(): AddChangeCalendar {
         return {
@@ -140,7 +171,7 @@ export class ChangecalendarsAddComponent implements OnInit, OnDestroy {
                 container_id: 0,
                 description: '',
                 name: '',
-            }
+            },
         };
     }
 }

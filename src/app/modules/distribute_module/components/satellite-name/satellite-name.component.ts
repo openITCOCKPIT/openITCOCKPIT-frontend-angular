@@ -1,25 +1,28 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    effect,
+    inject,
+    input,
+    OnDestroy,
+} from '@angular/core';
 
 import { Subscription } from 'rxjs';
 import { SatellitesService } from '../../pages/satellites/satellites.service';
 import { SatelliteEntityCake2 } from '../../pages/satellites/satellites.interface';
-import { SkeletonModule } from 'primeng/skeleton';
+import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'oitc-satellite-name',
-    imports: [
-        SkeletonModule,
-        TranslocoDirective,
-        FaIconComponent
-    ],
+    imports: [SkeletonModule, TranslocoDirective, FaIconComponent],
     templateUrl: './satellite-name.component.html',
     styleUrl: './satellite-name.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SatelliteNameComponent implements OnDestroy {
-
     public satelliteId = input<number>(0);
 
     public satellite?: SatelliteEntityCake2;
@@ -41,12 +44,20 @@ export class SatelliteNameComponent implements OnDestroy {
 
     public load() {
         this.subscriptions.add(
-            this.SatellitesService.getSatelliteById(this.satelliteId()).subscribe((data) => {
-                if (!data.hasOwnProperty('error') && !data.hasOwnProperty('status')) {
+            this.SatellitesService.getSatelliteById(
+                this.satelliteId(),
+            ).subscribe((data) => {
+                if (
+                    !data.hasOwnProperty('error') &&
+                    !data.hasOwnProperty('status')
+                ) {
                     this.satellite = data as SatelliteEntityCake2;
                 }
 
-                if (data.hasOwnProperty('error') && data.hasOwnProperty('status')) {
+                if (
+                    data.hasOwnProperty('error') &&
+                    data.hasOwnProperty('status')
+                ) {
                     if (data.status === 403) {
                         // We have no permission to view this satellite
                         // Probably we can only see this host through host sharing, or it is in the ROOT_CONTAINER
@@ -55,8 +66,7 @@ export class SatelliteNameComponent implements OnDestroy {
                 }
 
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
-
 }

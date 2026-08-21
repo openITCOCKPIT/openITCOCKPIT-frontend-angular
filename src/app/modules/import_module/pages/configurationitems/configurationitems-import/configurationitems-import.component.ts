@@ -5,7 +5,7 @@ import {
     Component,
     DOCUMENT,
     inject,
-    OnDestroy
+    OnDestroy,
 } from '@angular/core';
 import {
     AlertComponent,
@@ -19,7 +19,7 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -28,7 +28,6 @@ import { FormsModule } from '@angular/forms';
 import { AsyncPipe, KeyValuePipe, NgClass } from '@angular/common';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-
 
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -48,7 +47,7 @@ import {
     RelevantObjectChanges,
 } from '../configurationitems.interface';
 import { SystemnameService } from '../../../../../services/systemname.service';
-import { ProgressBarModule } from 'primeng/progressbar';
+import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
 import { ConfigurationItemsExportImport } from '../configurationitems.enum';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 
@@ -78,14 +77,15 @@ import { HttpErrorResponse } from '@angular/common/http';
         CalloutComponent,
         LabelLinkComponent,
         AlertComponent,
-        KeyValuePipe
+        KeyValuePipe,
     ],
     templateUrl: './configurationitems-import.component.html',
     styleUrl: './configurationitems-import.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewInit {
-
+export class ConfigurationitemsImportComponent
+    implements OnDestroy, AfterViewInit
+{
     public maxUploadLimit?: ProfileMaxUploadLimit;
 
     public hasError: boolean = false;
@@ -97,7 +97,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
 
     public fileInformation?: ConfigurationitemsImportFileInformation;
     public uploadSuccessful: boolean = false;
-    public filenameOnServer?: string
+    public filenameOnServer?: string;
     public importSuccessful = false;
 
     // Holds a list of changes that might break the current monitoring
@@ -110,8 +110,11 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
     private dropzoneCreated: boolean = false;
     private readonly document = inject(DOCUMENT);
     private readonly authService = inject(AuthService);
-    private readonly ConfigurationitemsService = inject(ConfigurationitemsService);
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly ConfigurationitemsService = inject(
+        ConfigurationitemsService,
+    );
+    private readonly TranslocoService: TranslocoService =
+        inject(TranslocoService);
     private readonly notyService = inject(NotyService);
     private cdr = inject(ChangeDetectorRef);
 
@@ -124,36 +127,43 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
     }
 
     public loadMaxUploadLimit(): void {
-        this.subscriptions.add(this.ConfigurationitemsService.loadMaxUploadLimit().subscribe(response => {
-            this.maxUploadLimit = response;
+        this.subscriptions.add(
+            this.ConfigurationitemsService.loadMaxUploadLimit().subscribe(
+                (response) => {
+                    this.maxUploadLimit = response;
 
-            this.createDropzone();
-
-        }));
+                    this.createDropzone();
+                },
+            ),
+        );
     }
 
     private createDropzone() {
         let elm = this.document.getElementById('jsonImportDropzone');
         if (elm && !this.dropzoneCreated) {
             const dropzone = new Dropzone(elm, {
-                method: "post",
+                method: 'post',
                 maxFilesize: this.maxUploadLimit?.value, //MB
                 acceptedFiles: '.json', //mimetypes
                 //acceptedFiles: 'image/gif,image/jpeg,image/png', //mimetypes
-                paramName: "file",
+                paramName: 'file',
                 uploadMultiple: false,
                 parallelUploads: 1,
                 clickable: true,
                 maxFiles: 1,
                 addRemoveLinks: true,
                 headers: {
-                    'X-CSRF-TOKEN': this.authService.csrfToken || ''
+                    'X-CSRF-TOKEN': this.authService.csrfToken || '',
                 },
-                url: "/import_module/configurationitems/import.json?angular=true",
+                url: '/import_module/configurationitems/import.json?angular=true',
                 removedfile: (file: Dropzone.DropzoneFile) => {
                     this.removeFile(file);
                 },
-                sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                sending: (
+                    file: Dropzone.DropzoneFile,
+                    xhr: XMLHttpRequest,
+                    formData: FormData,
+                ) => {
                     this.hasRelevantChanges = false;
                     this.relevantChanges = [];
                     this.cdr.markForCheck();
@@ -167,21 +177,29 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                     this.uploadSuccessful = false;
                     let errorMessage: undefined | string = undefined;
                     if (response) {
-                        const serverResponse = JSON.parse(response.response) as ConfigurationitemsImportRoot;
+                        const serverResponse = JSON.parse(
+                            response.response,
+                        ) as ConfigurationitemsImportRoot;
                         if (serverResponse.success) {
                             // Update the preview element to show check mark icon
                             this.updatePreviewElement(file, 'success');
 
-                            this.hasRelevantChanges = Object.keys(serverResponse.relevantChanges).length > 0;
-                            this.relevantChanges = this.formatRelevantChangesForTemplate(serverResponse.relevantChanges);
+                            this.hasRelevantChanges =
+                                Object.keys(serverResponse.relevantChanges)
+                                    .length > 0;
+                            this.relevantChanges =
+                                this.formatRelevantChangesForTemplate(
+                                    serverResponse.relevantChanges,
+                                );
 
                             this.hasError = false;
-                            this.fileInformation = serverResponse.fileInformation;
+                            this.fileInformation =
+                                serverResponse.fileInformation;
                             this.filenameOnServer = serverResponse.filename;
-                            this.uploadSuccessful = true
+                            this.uploadSuccessful = true;
 
                             this.notyService.genericSuccess(
-                                serverResponse.message
+                                serverResponse.message,
                             );
                             return;
                         }
@@ -194,9 +212,12 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                     // Update the preview element to show the error message and the X icon
                     this.updatePreviewElement(file, 'error', errorMessage);
                     this.notyService.genericError(errorMessage);
-
                 },
-                error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
+                error: (
+                    file: Dropzone.DropzoneFile,
+                    error: string | any,
+                    xhr: XMLHttpRequest,
+                ) => {
                     this.cdr.markForCheck();
                     this.importSuccessful = false;
 
@@ -207,7 +228,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                         // Error is an object
                         // "error" contains now the server response
                         // This happens if you upload a wrong file type like ".exe" or ".pdf"
-                        message = "Unknown server error";
+                        message = 'Unknown server error';
                         if (error.hasOwnProperty('error')) {
                             message = error.error;
                         }
@@ -227,7 +248,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                         let response = message as unknown as Error;
                         this.notyService.genericError(response.message);
                     }
-                }
+                },
             });
             this.dropzoneCreated = true;
             this.cdr.markForCheck();
@@ -266,16 +287,19 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
         //    });
         //    this.subscriptions.add(sub);
         //}
-
     }
 
-    private updatePreviewElement(file: Dropzone.DropzoneFile, state: 'success' | 'error', tooltipMessage: string | undefined = undefined) {
+    private updatePreviewElement(
+        file: Dropzone.DropzoneFile,
+        state: 'success' | 'error',
+        tooltipMessage: string | undefined = undefined,
+    ) {
         const previewElement = file.previewElement;
 
         previewElement.classList.remove('dz-processing');
         previewElement.classList.add(`dz-${state}`); // dz-error or dz-success
 
-        const errorMessageElement = previewElement.children.item(3);  // .dz-error-message
+        const errorMessageElement = previewElement.children.item(3); // .dz-error-message
         if (errorMessageElement && tooltipMessage) {
             errorMessageElement.children[0].innerHTML = tooltipMessage; // .dz-error-message span
         }
@@ -291,27 +315,31 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
      * @param relevantChanges
      * @private
      */
-    private formatRelevantChangesForTemplate(relevantChanges: ConfigurationitemsImportRelevantChanges): RelevantChangesAsArray[] {
+    private formatRelevantChangesForTemplate(
+        relevantChanges: ConfigurationitemsImportRelevantChanges,
+    ): RelevantChangesAsArray[] {
         let relevantChangesForTemplateHash: RelevantChangesAsObject = {}; // For grouping by object type
         const relevantChangesForTemplateArray: RelevantChangesAsArray[] = []; // For ngFor in the template
 
         for (let objectTypeKey in relevantChanges) {
             // Terrible language design
-            const objectTypeKeyTs = objectTypeKey as keyof ConfigurationitemsImportRelevantChanges;
+            const objectTypeKeyTs =
+                objectTypeKey as keyof ConfigurationitemsImportRelevantChanges;
             const objects = relevantChanges[objectTypeKeyTs]; // all changed commands or service templates etc
 
-            if (!relevantChangesForTemplateHash.hasOwnProperty(objectTypeKeyTs)) {
+            if (
+                !relevantChangesForTemplateHash.hasOwnProperty(objectTypeKeyTs)
+            ) {
                 relevantChangesForTemplateHash[objectTypeKeyTs] = [];
             }
 
             if (objects) {
                 objects.forEach((object) => {
-
                     const objectChanges: RelevantObjectChanges = {
                         id: object.id,
                         name: object.name,
-                        modelChanges: []
-                    }
+                        modelChanges: [],
+                    };
 
                     for (let modelName in object.changes) {
                         // modelName = "Command" or "Command arguments"
@@ -320,8 +348,8 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                         let modelChange: ModelChange = {
                             modelName: modelName,
                             current: [],
-                            new: []
-                        }
+                            new: [],
+                        };
 
                         for (let key in serverModelChange.current) {
                             // @ts-ignore
@@ -332,15 +360,21 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                                 // see attached configurationitems_import_diff.png
                                 // key = 0
                                 // value = { name: ARG1, value: 100 }
-                                const changes: { key: string, value: any }[] = [];
+                                const changes: { key: string; value: any }[] =
+                                    [];
                                 for (let subKey in value) {
-                                    changes.push({key: subKey, value: value[subKey]});
+                                    changes.push({
+                                        key: subKey,
+                                        value: value[subKey],
+                                    });
                                 }
                                 modelChange.current.push(changes);
                             } else {
                                 // key = "command_line"
                                 // value = "/bin/true"
-                                modelChange.current.push([{key: key, value: value}]);
+                                modelChange.current.push([
+                                    { key: key, value: value },
+                                ]);
                             }
                         }
 
@@ -353,15 +387,21 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                                 // see attached configurationitems_import_diff.png
                                 // key = 0
                                 // value = { name: ARG1, value: 200 }
-                                const changes: { key: string, value: any }[] = [];
+                                const changes: { key: string; value: any }[] =
+                                    [];
                                 for (let subKey in value) {
-                                    changes.push({key: subKey, value: value[subKey]});
+                                    changes.push({
+                                        key: subKey,
+                                        value: value[subKey],
+                                    });
                                 }
                                 modelChange.new.push(changes);
                             } else {
                                 // key = "command_line"
                                 // value = "/bin/false"
-                                modelChange.new.push([{key: key, value: value}]);
+                                modelChange.new.push([
+                                    { key: key, value: value },
+                                ]);
                             }
                         }
 
@@ -369,18 +409,19 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                     }
 
                     if (relevantChangesForTemplateHash[objectTypeKeyTs]) {
-                        relevantChangesForTemplateHash[objectTypeKeyTs].push(objectChanges);
+                        relevantChangesForTemplateHash[objectTypeKeyTs].push(
+                            objectChanges,
+                        );
                     }
                 });
             }
-
         }
 
         for (const objectType in relevantChangesForTemplateHash) {
             relevantChangesForTemplateArray.push({
                 objectType: objectType as ConfigurationItemsExportImport,
                 // @ts-ignore
-                relevantObjects: relevantChangesForTemplateHash[objectType]
+                relevantObjects: relevantChangesForTemplateHash[objectType],
             });
         }
 
@@ -394,7 +435,9 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
         this.cdr.markForCheck();
 
         if (this.filenameOnServer) {
-            const sub = this.ConfigurationitemsService.launchImport(this.filenameOnServer).subscribe({
+            const sub = this.ConfigurationitemsService.launchImport(
+                this.filenameOnServer,
+            ).subscribe({
                 next: (response) => {
                     // Success
                     this.importRunning = false;
@@ -404,16 +447,18 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                 error: (error: HttpErrorResponse) => {
                     this.importRunning = false;
                     this.hasImportError = true;
-                    this.importResponse = error.error as ConfigurationItemsImportResponse;
+                    this.importResponse =
+                        error.error as ConfigurationItemsImportResponse;
 
                     console.log(this.importResponse);
 
                     this.cdr.markForCheck();
-                }
+                },
             });
             this.subscriptions.add(sub);
         }
     }
 
-    protected readonly ConfigurationItemsExportImport = ConfigurationItemsExportImport;
+    protected readonly ConfigurationItemsExportImport =
+        ConfigurationItemsExportImport;
 }

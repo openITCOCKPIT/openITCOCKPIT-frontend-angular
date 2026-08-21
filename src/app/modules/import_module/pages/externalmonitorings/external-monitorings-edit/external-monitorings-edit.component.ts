@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     AlertComponent,
@@ -15,17 +22,15 @@ import {
     FormLabelDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
-import {
-    DynamicalFormFieldsComponent
-} from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
+import { DynamicalFormFieldsComponent } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
 
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
@@ -33,7 +38,10 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
+import {
+    GenericIdResponse,
+    GenericValidationError,
+} from '../../../../../generic-responses';
 import { DynamicalFormFields } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -45,13 +53,12 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
 import {
     ExternalMonitoringConfig,
     ExternalMonitoringConnect,
-    ExternalMonitoringPost
+    ExternalMonitoringPost,
 } from '../external-monitorings.interface';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { SystemnameService } from '../../../../../services/systemname.service';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
-
 
 @Component({
     selector: 'oitc-external-monitorings-edit',
@@ -85,25 +92,28 @@ import { ExternalMonitoringSystems } from '../external-monitoring-systems.enum';
         ColComponent,
         AlertComponent,
         MultiSelectComponent,
-        AlertHeadingDirective
+        AlertHeadingDirective,
     ],
     templateUrl: './external-monitorings-edit.component.html',
     styleUrl: './external-monitorings-edit.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
     private id: number = 0;
     private subscriptions: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
     private readonly ContainersService = inject(ContainersService);
-    private readonly ExternalMonitoringsService = inject(ExternalMonitoringsService);
+    private readonly ExternalMonitoringsService = inject(
+        ExternalMonitoringsService,
+    );
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
     public post!: ExternalMonitoringPost;
 
     public errors: GenericValidationError | null = null;
-    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
+    public readonly PermissionsService: PermissionsService =
+        inject(PermissionsService);
     public readonly SystemnameService = inject(SystemnameService);
     public formFields?: DynamicalFormFields;
 
@@ -115,32 +125,30 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
     protected readonly ExternalMonitoringTypes = [
         {
             key: ExternalMonitoringSystems.FlowChief,
-            value: this.TranslocoService.translate('FlowChief')
+            value: this.TranslocoService.translate('FlowChief'),
         },
         {
             key: ExternalMonitoringSystems.Icinga2,
-            value: this.TranslocoService.translate('Icinga 2')
+            value: this.TranslocoService.translate('Icinga 2'),
         },
         {
             key: ExternalMonitoringSystems.OpManager,
-            value: this.TranslocoService.translate('ManageEngine OpManager')
+            value: this.TranslocoService.translate('ManageEngine OpManager'),
         },
         {
             key: ExternalMonitoringSystems.PRTG,
-            value: this.TranslocoService.translate('Paessler PRTG System')
+            value: this.TranslocoService.translate('Paessler PRTG System'),
         },
         {
             key: ExternalMonitoringSystems.LibreNMS,
-            value: this.TranslocoService.translate('LibreNMS')
-        }
+            value: this.TranslocoService.translate('LibreNMS'),
+        },
     ];
     protected readonly Object = Object;
     public containers: SelectKeyValue[] = [];
     private cdr = inject(ChangeDetectorRef);
 
-
-    constructor(private route: ActivatedRoute) {
-    }
+    constructor(private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));
@@ -148,74 +156,98 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
     }
 
     public loadContainers = (): void => {
-        this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
-            .subscribe((result: SelectKeyValue[]) => {
+        this.subscriptions.add(
+            this.ContainersService.loadContainersByString(
+                {} as ContainersLoadContainersByStringParams,
+            ).subscribe((result: SelectKeyValue[]) => {
                 this.containers = result;
                 this.cdr.markForCheck();
-            }));
-    }
+            }),
+        );
+    };
 
     public loadConfigFieldsBySystemType() {
         if (this.post.system_type) {
-            this.subscriptions.add(this.ExternalMonitoringsService.loadConfig(this.post.system_type)
-                .subscribe((result: ExternalMonitoringConfig) => {
+            this.subscriptions.add(
+                this.ExternalMonitoringsService.loadConfig(
+                    this.post.system_type,
+                ).subscribe((result: ExternalMonitoringConfig) => {
                     this.errors = null;
                     this.formFields = result.config.formFields;
                     this.cdr.markForCheck();
-                })
+                }),
             );
         }
     }
 
     public loadExternalMonitoring() {
-        this.subscriptions.add(this.ExternalMonitoringsService.getEdit(this.id)
-            .subscribe((result) => {
-                //Fire on page load
-                this.post = result;
-                this.cdr.markForCheck();
-                this.loadContainers();
-                this.loadConfigFieldsBySystemType();
-                this.checkConnection();
-            }));
+        this.subscriptions.add(
+            this.ExternalMonitoringsService.getEdit(this.id).subscribe(
+                (result) => {
+                    //Fire on page load
+                    this.post = result;
+                    this.cdr.markForCheck();
+                    this.loadContainers();
+                    this.loadConfigFieldsBySystemType();
+                    this.checkConnection();
+                },
+            ),
+        );
     }
 
     public submit() {
-        this.subscriptions.add(this.ExternalMonitoringsService.edit(this.post)
-            .subscribe((result) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('External system');
-                    const msg = this.TranslocoService.translate('updated successfully');
-                    const url = ['import_module', 'ExternalMonitorings', 'edit', response.id];
+        this.subscriptions.add(
+            this.ExternalMonitoringsService.edit(this.post).subscribe(
+                (result) => {
+                    this.cdr.markForCheck();
+                    if (result.success) {
+                        const response = result.data as GenericIdResponse;
+                        const title =
+                            this.TranslocoService.translate('External system');
+                        const msg = this.TranslocoService.translate(
+                            'updated successfully',
+                        );
+                        const url = [
+                            'import_module',
+                            'ExternalMonitorings',
+                            'edit',
+                            response.id,
+                        ];
 
-                    this.notyService.genericSuccess(msg, title, url);
-                    this.HistoryService.navigateWithFallback(['/import_module/ExternalMonitorings/index']);
-                    this.notyService.scrollContentDivToTop();
-                    return;
-                }
+                        this.notyService.genericSuccess(msg, title, url);
+                        this.HistoryService.navigateWithFallback([
+                            '/import_module/ExternalMonitorings/index',
+                        ]);
+                        this.notyService.scrollContentDivToTop();
+                        return;
+                    }
 
-                // Error
-                const errorResponse = result.data as GenericValidationError;
-                this.notyService.genericError();
-                if (result) {
-                    this.errors = errorResponse;
-                }
-            }));
+                    // Error
+                    const errorResponse = result.data as GenericValidationError;
+                    this.notyService.genericError();
+                    if (result) {
+                        this.errors = errorResponse;
+                    }
+                },
+            ),
+        );
     }
 
     public checkConnection() {
-        this.subscriptions.add(this.ExternalMonitoringsService.testConnection(this.post)
-            .subscribe((result: ExternalMonitoringConnect) => {
-                this.connectStatus = result.status.status;
-                if (result.status.msg) {
-                    this.connectMessage = result.status.msg.message;
-                }
-                if (result.messageTemplates) {
-                    this.messageTemplates = result.messageTemplates;
-                }
-                this.cdr.markForCheck();
-            }));
+        this.subscriptions.add(
+            this.ExternalMonitoringsService.testConnection(this.post).subscribe(
+                (result: ExternalMonitoringConnect) => {
+                    this.connectStatus = result.status.status;
+                    if (result.status.msg) {
+                        this.connectMessage = result.status.msg.message;
+                    }
+                    if (result.messageTemplates) {
+                        this.messageTemplates = result.messageTemplates;
+                    }
+                    this.cdr.markForCheck();
+                },
+            ),
+        );
     }
 
     public ngOnDestroy(): void {

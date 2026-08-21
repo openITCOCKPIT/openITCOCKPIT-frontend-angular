@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+} from '@angular/core';
 import {
     AlertComponent,
     CardBodyComponent,
@@ -8,7 +13,7 @@ import {
     CardTitleDirective,
     FormControlDirective,
     FormLabelDirective,
-    NavComponent
+    NavComponent,
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -16,7 +21,7 @@ import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -58,14 +63,13 @@ import { FormsModule } from '@angular/forms';
         XsButtonDirective,
         RouterLink,
         SelectComponent,
-        FormsModule
+        FormsModule,
     ],
     templateUrl: './services-copy.component.html',
     styleUrl: './services-copy.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServicesCopyComponent {
-
     public host_id: number = 0;
     public services: ServiceCopyPost[] = [];
     public hosts: SelectKeyValue[] = [];
@@ -80,13 +84,14 @@ export class ServicesCopyComponent {
     private readonly HistoryService: HistoryService = inject(HistoryService);
     private cdr = inject(ChangeDetectorRef);
 
-
     private ids: number[] = [];
 
     isServicenameInUse: { [key: number]: boolean } = {};
 
     public ngOnInit() {
-        const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
+        const ids = String(this.route.snapshot.paramMap.get('ids'))
+            .split(',')
+            .map(Number);
         if (!ids) {
             // No ids given
             this.router.navigate(['/', 'services', 'index']);
@@ -110,16 +115,18 @@ export class ServicesCopyComponent {
             angular: true,
             'filter[Hosts.name]': searchString,
             'selected[]': selected,
-            includeDisabled: false
-        }
+            includeDisabled: false,
+        };
 
-        this.subscriptions.add(this.HostsService.loadHostsByString(params, true)
-            .subscribe((result) => {
-                this.hosts = result;
-                this.cdr.markForCheck();
-            })
+        this.subscriptions.add(
+            this.HostsService.loadHostsByString(params, true).subscribe(
+                (result) => {
+                    this.hosts = result;
+                    this.cdr.markForCheck();
+                },
+            ),
         );
-    }
+    };
 
     public onHostChange() {
         if (this.host_id > 0) {
@@ -131,35 +138,49 @@ export class ServicesCopyComponent {
 
     public loadServices() {
         if (this.ids) {
-            this.subscriptions.add(this.ServicesService.getServicesCopy(this.ids, this.host_id).subscribe(response => {
-                this.cdr.markForCheck();
-                this.commands = response.commands;
+            this.subscriptions.add(
+                this.ServicesService.getServicesCopy(
+                    this.ids,
+                    this.host_id,
+                ).subscribe((response) => {
+                    this.cdr.markForCheck();
+                    this.commands = response.commands;
 
-                for (let service of response.services) {
+                    for (let service of response.services) {
+                        let s = <ServiceCopyPost>{
+                            Source: {
+                                id: service.id,
+                                hostname: service.host.name,
+                                _name: service._name,
+                            },
+                            Service: service,
+                            Error: null,
+                        };
 
-                    let s = <ServiceCopyPost>{
-                        Source: {
-                            id: service.id,
-                            hostname: service.host.name,
-                            _name: service._name
-                        },
-                        Service: service,
-                        Error: null
-                    };
+                        delete s.Service.id; // important
 
-                    delete s.Service.id; // important
-
-                    this.services.push(s);
-                }
-            }));
+                        this.services.push(s);
+                    }
+                }),
+            );
         }
     }
 
-    public loadCommandArguments(sourceServiceId: number, commandId: number, index: number) {
-        this.subscriptions.add(this.ServicesService.loadCommandArguments(commandId, sourceServiceId).subscribe(response => {
-            this.services[index].Service.servicecommandargumentvalues = response;
-            this.cdr.markForCheck();
-        }));
+    public loadCommandArguments(
+        sourceServiceId: number,
+        commandId: number,
+        index: number,
+    ) {
+        this.subscriptions.add(
+            this.ServicesService.loadCommandArguments(
+                commandId,
+                sourceServiceId,
+            ).subscribe((response) => {
+                this.services[index].Service.servicecommandargumentvalues =
+                    response;
+                this.cdr.markForCheck();
+            }),
+        );
     }
 
     public copy() {
@@ -167,12 +188,19 @@ export class ServicesCopyComponent {
             return;
         }
 
-        const sub = this.ServicesService.saveServicesCopy(this.services, this.host_id).subscribe({
+        const sub = this.ServicesService.saveServicesCopy(
+            this.services,
+            this.host_id,
+        ).subscribe({
             next: (value: any) => {
                 //console.log(value); // Serve result with the new copied service templates
                 // 200 ok
                 this.notyService.genericSuccess();
-                this.HistoryService.navigateWithFallback(['/', 'services', 'index']);
+                this.HistoryService.navigateWithFallback([
+                    '/',
+                    'services',
+                    'index',
+                ]);
             },
             error: (error: HttpErrorResponse) => {
                 // We run into a validation error.
@@ -184,7 +212,7 @@ export class ServicesCopyComponent {
                 this.cdr.markForCheck();
                 this.notyService.genericError();
                 this.services = error.error.result as ServiceCopyPost[];
-            }
+            },
         });
 
         this.subscriptions.add(sub);

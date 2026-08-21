@@ -6,30 +6,45 @@ import {
     InputSignal,
     OnDestroy,
     OnInit,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { ContextMenuModule } from 'primeng/contextmenu';
+import { ContextMenuModule } from '@openng/optimus-ui/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
 import { interval, Subscription } from 'rxjs';
 import { NgClass, NgStyle } from '@angular/common';
-import { MapItemRoot, MapItemRootParams, Perfdata, PerformanceData } from '../map-item-base/map-item-base.interface';
+import {
+    MapItemRoot,
+    MapItemRootParams,
+    Perfdata,
+    PerformanceData,
+} from '../map-item-base/map-item-base.interface';
 import { AngularDraggableModule } from 'angular2-draggable';
 
 @Component({
     selector: 'oitc-perfdata-text-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgClass, AngularDraggableModule, NgStyle],
+    imports: [
+        CdkDrag,
+        ContextMenuModule,
+        CdkDragHandle,
+        NgClass,
+        AngularDraggableModule,
+        NgStyle,
+    ],
     templateUrl: './perfdata-text-item.component.html',
     styleUrl: './perfdata-text-item.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
-
-    public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
+export class PerfdataTextItemComponent
+    extends MapItemBaseComponent<Mapgadget>
+    implements OnInit, OnDestroy
+{
+    public override item: InputSignal<Mapgadget | undefined> =
+        input<Mapgadget>();
     public refreshInterval = input<number>(0);
 
     private subscriptions: Subscription = new Subscription();
@@ -41,9 +56,9 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
     protected width: number = 0;
     protected height: number = 0;
     private responsePerfdata!: Perfdata;
-    protected color: string = "";
-    protected text: string = "";
-    private perfdataName: string = "";
+    protected color: string = '';
+    protected text: string = '';
+    private perfdataName: string = '';
     private perfdata!: PerformanceData;
     private intervalStartet: boolean = false; // needed to prevent multiple interval subscriptions
 
@@ -65,17 +80,16 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
     }
 
     private load() {
-
         const params: MapItemRootParams = {
-            'angular': true,
-            'disableGlobalLoader': true,
-            'objectId': this.item()!.object_id as number,
-            'mapId': this.item()!.map_id as number,
-            'type': this.item()!.type as string
+            angular: true,
+            disableGlobalLoader: true,
+            objectId: this.item()!.object_id as number,
+            mapId: this.item()!.map_id as number,
+            type: this.item()!.type as string,
         };
 
-        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
-            .subscribe({
+        this.subscriptions.add(
+            this.MapItemBaseService.getMapItem(params).subscribe({
                 next: (result: MapItemRoot) => {
                     this.responsePerfdata = result.data.Perfdata;
                     switch (result.data.color) {
@@ -118,14 +132,18 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
                 error: (err) => {
                     //error handling here
                     this.cdr.markForCheck();
-                }
-            }));
-    };
+                },
+            }),
+        );
+    }
 
     private processPerfdata() {
         if (this.responsePerfdata !== null) {
             const metric = this.item()!.metric;
-            if (this.item()!.metric !== null && this.responsePerfdata.hasOwnProperty(metric)) {
+            if (
+                this.item()!.metric !== null &&
+                this.responsePerfdata.hasOwnProperty(metric)
+            ) {
                 this.perfdataName = metric;
                 this.perfdata = this.responsePerfdata[metric];
             } else {
@@ -163,23 +181,25 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
             }
             this.cdr.markForCheck();
         }
-    };
+    }
 
     private initRefreshTimer() {
         if (this.refreshInterval() > 0 && !this.intervalStartet) {
             this.intervalStartet = true;
-            this.statusUpdateInterval = interval(this.refreshInterval()).subscribe(() => {
+            this.statusUpdateInterval = interval(
+                this.refreshInterval(),
+            ).subscribe(() => {
                 this.load();
             });
         }
-    };
+    }
 
     private stop() {
         if (this.intervalStartet) {
             this.statusUpdateInterval.unsubscribe();
             this.cdr.markForCheck();
         }
-    };
+    }
 
     private onSizeLabelMetricChange() {
         if (this.init) {
@@ -200,5 +220,4 @@ export class PerfdataTextItemComponent extends MapItemBaseComponent<Mapgadget> i
 
         this.load();
     }
-
 }

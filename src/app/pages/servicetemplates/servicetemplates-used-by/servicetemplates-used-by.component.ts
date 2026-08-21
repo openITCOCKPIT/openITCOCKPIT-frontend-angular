@@ -1,8 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
+import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
+import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -19,7 +24,7 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
 } from '@coreui/angular';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -36,7 +41,7 @@ import {
     HostWithServices,
     ServicetemplateEntity,
     ServicetemplatesUsedByParams,
-    ServicetemplatesUsedByService
+    ServicetemplatesUsedByService,
 } from '../../servicetemplates/servicetemplates.interface';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { Subscription } from 'rxjs';
@@ -46,7 +51,7 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { ServicesService } from '../../services/services.service';
 import { DebounceDirective } from '../../../directives/debounce.directive';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { FormsModule } from '@angular/forms';
 
@@ -84,14 +89,14 @@ import { FormsModule } from '@angular/forms';
         PaginatorModule,
         FormLoaderComponent,
         AsyncPipe,
-        FormsModule
+        FormsModule,
     ],
     templateUrl: './servicetemplates-used-by.component.html',
     styleUrl: './servicetemplates-used-by.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService} // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService }, // Inject the ServicesService into the DeleteAllModalComponent
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServicetemplatesUsedByComponent implements OnInit, OnDestroy {
     public hostsWithServices: HostWithServices[] = [];
@@ -99,14 +104,17 @@ export class ServicetemplatesUsedByComponent implements OnInit, OnDestroy {
     public total: number = 0;
     public selectedItems: DeleteAllItem[] = [];
 
-    public params: ServicetemplatesUsedByParams = getDefaultServicetemplatesUsedByParams();
+    public params: ServicetemplatesUsedByParams =
+        getDefaultServicetemplatesUsedByParams();
 
     private servicetemplateId: number = 0;
     private subscriptions: Subscription = new Subscription();
     private ServicetemplatesService = inject(ServicetemplatesService);
     protected PermissionsService = inject(PermissionsService);
     private readonly modalService = inject(ModalService);
-    private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private SelectionServiceService: SelectionServiceService = inject(
+        SelectionServiceService,
+    );
     private cdr = inject(ChangeDetectorRef);
 
     private router = inject(Router);
@@ -124,20 +132,23 @@ export class ServicetemplatesUsedByComponent implements OnInit, OnDestroy {
     public load() {
         this.SelectionServiceService.deselectAll();
 
-        this.subscriptions.add(this.ServicetemplatesService.usedBy(this.servicetemplateId, this.params)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicetemplatesService.usedBy(
+                this.servicetemplateId,
+                this.params,
+            ).subscribe((result) => {
                 this.hostsWithServices = result.hostsWithServices;
                 this.servicetemplate = result.servicetemplate;
-                this.total = result.count
+                this.total = result.count;
                 this.cdr.markForCheck();
-            }));
+            }),
+        );
     }
 
     // Callback when a filter has changed
     public onFilterChange(event: Event) {
         this.load();
     }
-
 
     // Open the Delete All Modal
     public toggleDeleteAllModal(service?: ServicetemplatesUsedByService) {
@@ -148,17 +159,19 @@ export class ServicetemplatesUsedByComponent implements OnInit, OnDestroy {
             items = [
                 {
                     id: Number(service.id),
-                    displayName: service.hostname + '/' + service.servicename
-                }
+                    displayName: service.hostname + '/' + service.servicename,
+                },
             ];
         } else {
             // User clicked on delete selected button
-            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-                return {
-                    id: item.id,
-                    displayName: item.hostname + '/' + item.servicename
-                };
-            });
+            items = this.SelectionServiceService.getSelectedItems().map(
+                (item): DeleteAllItem => {
+                    return {
+                        id: item.id,
+                        displayName: item.hostname + '/' + item.servicename,
+                    };
+                },
+            );
         }
 
         // Pass selection to the modal

@@ -1,27 +1,27 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../../auth/auth.service';
 import { ProfileService } from '../../../../pages/profile/profile.service';
 import initials from 'initials';
-import { Avatar } from 'primeng/avatar';
+import { Avatar } from '@openng/optimus-ui/avatar';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TooltipDirective } from '@coreui/angular';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
     selector: 'oitc-header-avatar',
-    imports: [
-        Avatar,
-        FaIconComponent,
-        TooltipDirective,
-        TranslocoPipe
-    ],
+    imports: [Avatar, FaIconComponent, TooltipDirective, TranslocoPipe],
     templateUrl: './header-avatar.component.html',
     styleUrl: './header-avatar.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderAvatarComponent implements OnDestroy {
-
     public image: string | null = null;
     public nameInitials = ''; // Unknown User
     public hasRootPrivileges: boolean = false;
@@ -32,18 +32,21 @@ export class HeaderAvatarComponent implements OnDestroy {
     private cdr = inject(ChangeDetectorRef);
 
     constructor() {
-        this.subscriptions.add(this.AuthService.authenticated$.subscribe((authenticated) => {
-            if (authenticated) {
-                // User is logged in
+        this.subscriptions.add(
+            this.AuthService.authenticated$.subscribe((authenticated) => {
+                if (authenticated) {
+                    // User is logged in
+                    this.loadProfile();
+                }
+            }),
+        );
+
+        this.subscriptions.add(
+            this.ProfileService.profileImageChanged$.subscribe((value) => {
+                // The user has changed their profile image
                 this.loadProfile();
-            }
-        }));
-
-        this.subscriptions.add(this.ProfileService.profileImageChanged$.subscribe((value) => {
-            // The user has changed their profile image
-            this.loadProfile();
-        }));
-
+            }),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -51,22 +54,28 @@ export class HeaderAvatarComponent implements OnDestroy {
     }
 
     private loadProfile(): void {
-        this.subscriptions.add(this.ProfileService.getProfile().subscribe((profile) => {
-            const firstname = this.capitalizeFirstLetter(profile.user.firstname.trim()).replace(/[^\w\s]/g, '');
-            const lastname = this.capitalizeFirstLetter(profile.user.lastname.trim()).replace(/[^\w\s]/g, '');
-            const fullname = `${firstname} ${lastname}`;
+        this.subscriptions.add(
+            this.ProfileService.getProfile().subscribe((profile) => {
+                const firstname = this.capitalizeFirstLetter(
+                    profile.user.firstname.trim(),
+                ).replace(/[^\w\s]/g, '');
+                const lastname = this.capitalizeFirstLetter(
+                    profile.user.lastname.trim(),
+                ).replace(/[^\w\s]/g, '');
+                const fullname = `${firstname} ${lastname}`;
 
-            this.nameInitials = initials(fullname);
+                this.nameInitials = initials(fullname);
 
-            this.image = null;
-            if (profile.user.image) {
-                this.image = profile.user.image;
-            }
+                this.image = null;
+                if (profile.user.image) {
+                    this.image = profile.user.image;
+                }
 
-            this.hasRootPrivileges = profile.hasRootPrivileges;
+                this.hasRootPrivileges = profile.hasRootPrivileges;
 
-            this.cdr.markForCheck();
-        }));
+                this.cdr.markForCheck();
+            }),
+        );
     }
 
     private capitalizeFirstLetter(str: string) {
@@ -75,6 +84,4 @@ export class HeaderAvatarComponent implements OnDestroy {
         }
         return (str.charAt(0).toUpperCase() + str.slice(1)).substring(0, 3);
     }
-
-
 }

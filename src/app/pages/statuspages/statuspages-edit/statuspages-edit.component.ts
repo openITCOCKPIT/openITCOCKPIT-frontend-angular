@@ -23,8 +23,19 @@
  *     confirmation.
  */
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
+import {
+    TranslocoDirective,
+    TranslocoPipe,
+    TranslocoService,
+} from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -44,7 +55,7 @@ import {
     InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
@@ -54,10 +65,14 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
 import { StatuspagesService } from '../statuspages.service';
 import { Subscription } from 'rxjs';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { SelectKeyValueExtended, SelectValueExtended, StatuspagePostEdit } from '../statuspage.interface';
+import {
+    SelectKeyValueExtended,
+    SelectValueExtended,
+    StatuspagePostEdit,
+} from '../statuspage.interface';
 import { GenericValidationError } from '../../../generic-responses';
 import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { AsyncPipe } from '@angular/common';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
@@ -100,11 +115,11 @@ import { NgSelectComponent } from '@ng-select/ng-select';
         ColComponent,
         ObjectUuidComponent,
         NgSelectComponent,
-        TranslocoPipe
+        TranslocoPipe,
     ],
     templateUrl: './statuspages-edit.component.html',
     styleUrl: './statuspages-edit.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatuspagesEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
@@ -125,8 +140,10 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
 
     public readonly hostname = window.location.hostname;
 
-    constructor(private route: ActivatedRoute, private _router: Router) {
-    }
+    constructor(
+        private route: ActivatedRoute,
+        private _router: Router,
+    ) {}
 
     public ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));
@@ -141,13 +158,12 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
     }
 
     public loadContainers() {
-        this.subscriptions.add(this.StatuspagesService.loadContainers()
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.StatuspagesService.loadContainers().subscribe((result) => {
                 this.containers = result;
                 this.cdr.markForCheck();
                 this.load();
-
-            })
+            }),
         );
     }
 
@@ -155,139 +171,188 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         if (this.post.container_id === null) {
             return;
         }
-        this.subscriptions.add(this.StatuspagesService.loadHostgroups(this.post.container_id, searchString, this.post.selected_hostgroups._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.StatuspagesService.loadHostgroups(
+                this.post.container_id,
+                searchString,
+                this.post.selected_hostgroups._ids,
+            ).subscribe((result) => {
                 let hostgroupObjects: SelectKeyValueExtended[] = [];
                 const selectedHostgroups = this.post.hostgroups;
                 result.map((item: SelectKeyValue) => {
-                    const selectedHostgroup = selectedHostgroups.find(hostgroup => hostgroup.id === item.key);
+                    const selectedHostgroup = selectedHostgroups.find(
+                        (hostgroup) => hostgroup.id === item.key,
+                    );
                     let objectEntry: SelectKeyValueExtended = {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: '', group_tags: null}
+                        _joinData: { display_alias: '', group_tags: null },
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
                     if (selectedHostgroup) {
-                        objectEntry._joinData.display_alias = selectedHostgroup._joinData.display_alias;
-                        objectEntry._joinData.group_tags = (typeof selectedHostgroup._joinData.group_tags === 'string') ? selectedHostgroup._joinData.group_tags.split(',') : [];
-
+                        objectEntry._joinData.display_alias =
+                            selectedHostgroup._joinData.display_alias;
+                        objectEntry._joinData.group_tags =
+                            typeof selectedHostgroup._joinData.group_tags ===
+                            'string'
+                                ? selectedHostgroup._joinData.group_tags.split(
+                                      ',',
+                                  )
+                                : [];
                     }
                     hostgroupObjects.push(objectEntry);
                 });
                 this.hostgroups = hostgroupObjects;
                 this.cdr.markForCheck();
-            })
+            }),
         );
-    }
+    };
 
     public loadHosts = (searchString: string) => {
         if (this.post.container_id === null) {
             return;
         }
-        this.subscriptions.add(this.StatuspagesService.loadHosts(this.post.container_id, searchString, this.post.selected_hosts._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.StatuspagesService.loadHosts(
+                this.post.container_id,
+                searchString,
+                this.post.selected_hosts._ids,
+            ).subscribe((result) => {
                 let hostObjects: SelectKeyValueExtended[] = [];
                 const selectedHosts = this.post.hosts;
                 result.map((item: SelectKeyValue) => {
-                    const selectedHost = selectedHosts.find(host => host.id === item.key);
+                    const selectedHost = selectedHosts.find(
+                        (host) => host.id === item.key,
+                    );
                     let objectEntry: SelectKeyValueExtended = {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: '', group_tags: null}
+                        _joinData: { display_alias: '', group_tags: null },
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
                     if (selectedHost) {
-                        objectEntry._joinData.display_alias = selectedHost._joinData.display_alias;
-                        objectEntry._joinData.group_tags = (typeof selectedHost._joinData.group_tags === 'string') ? selectedHost._joinData.group_tags.split(',') : [];
+                        objectEntry._joinData.display_alias =
+                            selectedHost._joinData.display_alias;
+                        objectEntry._joinData.group_tags =
+                            typeof selectedHost._joinData.group_tags ===
+                            'string'
+                                ? selectedHost._joinData.group_tags.split(',')
+                                : [];
                     }
                     hostObjects.push(objectEntry);
                 });
                 this.hosts = hostObjects;
                 this.cdr.markForCheck();
-            })
+            }),
         );
-    }
+    };
 
     public loadServices = (searchString: string) => {
         if (this.post.container_id === null) {
             return;
         }
-        this.subscriptions.add(this.StatuspagesService.loadServices(this.post.container_id, searchString, this.post.selected_services._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.StatuspagesService.loadServices(
+                this.post.container_id,
+                searchString,
+                this.post.selected_services._ids,
+            ).subscribe((result) => {
                 let serviceObjects: SelectKeyValueExtended[] = [];
                 const selectedServices = this.post.services;
 
                 result.map((item: SelectValueExtended) => {
-                    const selectedService = selectedServices.find(service => service.id === item.key);
+                    const selectedService = selectedServices.find(
+                        (service) => service.id === item.key,
+                    );
                     let objectEntry: SelectKeyValueExtended = {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: '', group_tags: null}
+                        _joinData: { display_alias: '', group_tags: null },
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value.servicename;
                     if (selectedService) {
-                        objectEntry._joinData.display_alias = selectedService._joinData.display_alias;
-                        objectEntry._joinData.group_tags = (typeof selectedService._joinData.group_tags === 'string') ? selectedService._joinData.group_tags.split(',') : [];
+                        objectEntry._joinData.display_alias =
+                            selectedService._joinData.display_alias;
+                        objectEntry._joinData.group_tags =
+                            typeof selectedService._joinData.group_tags ===
+                            'string'
+                                ? selectedService._joinData.group_tags.split(
+                                      ',',
+                                  )
+                                : [];
                     }
                     serviceObjects.push(objectEntry);
                 });
                 this.services = serviceObjects;
                 this.cdr.markForCheck();
-            })
+            }),
         );
-    }
+    };
 
     public loadServicegroups = (searchString: string) => {
         if (this.post.container_id === null) {
             return;
         }
-        this.subscriptions.add(this.StatuspagesService.loadServicegroups(this.post.container_id, searchString, this.post.selected_servicegroups._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.StatuspagesService.loadServicegroups(
+                this.post.container_id,
+                searchString,
+                this.post.selected_servicegroups._ids,
+            ).subscribe((result) => {
                 let servicegroupsObjects: SelectKeyValueExtended[] = [];
                 const selectedServicegroups = this.post.servicegroups;
 
                 result.map((item: SelectKeyValue) => {
-                    const selectedServicegroup = selectedServicegroups.find(servicegroup => servicegroup.id === item.key);
+                    const selectedServicegroup = selectedServicegroups.find(
+                        (servicegroup) => servicegroup.id === item.key,
+                    );
                     let objectEntry: SelectKeyValueExtended = {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: '', group_tags: null}
+                        _joinData: { display_alias: '', group_tags: null },
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
                     objectEntry.value = item.value;
                     if (selectedServicegroup) {
-                        objectEntry._joinData.display_alias = selectedServicegroup._joinData.display_alias
-                        objectEntry._joinData.group_tags = (typeof selectedServicegroup._joinData.group_tags === 'string') ? selectedServicegroup._joinData.group_tags.split(',') : [];
+                        objectEntry._joinData.display_alias =
+                            selectedServicegroup._joinData.display_alias;
+                        objectEntry._joinData.group_tags =
+                            typeof selectedServicegroup._joinData.group_tags ===
+                            'string'
+                                ? selectedServicegroup._joinData.group_tags.split(
+                                      ',',
+                                  )
+                                : [];
                     }
                     servicegroupsObjects.push(objectEntry);
                 });
                 this.servicegroups = servicegroupsObjects;
                 this.cdr.markForCheck();
-            })
+            }),
         );
-    }
+    };
 
     public load() {
-        this.subscriptions.add(this.StatuspagesService.editStatuspage(this.id)
-            .subscribe((result) => {
-                this.post = result;
-                this.onContainerChange();
-
-            })
+        this.subscriptions.add(
+            this.StatuspagesService.editStatuspage(this.id).subscribe(
+                (result) => {
+                    this.post = result;
+                    this.onContainerChange();
+                },
+            ),
         );
     }
-
 
     public onContainerChange = () => {
         this.loadHostgroups('');
@@ -295,10 +360,9 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         this.loadHosts('');
         this.loadServices('');
         this.cdr.markForCheck();
-    }
+    };
 
     private getDefaultPost(): StatuspagePostEdit {
-
         return {
             container_id: null,
             name: '',
@@ -312,16 +376,16 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
             show_acknowledgements: false,
             show_acknowledgement_comments: false,
             selected_hostgroups: {
-                _ids: []
+                _ids: [],
             },
             selected_hosts: {
-                _ids: []
+                _ids: [],
             },
             selected_servicegroups: {
-                _ids: []
+                _ids: [],
             },
             selected_services: {
-                _ids: []
+                _ids: [],
             },
             hostgroups: [],
             hosts: [],
@@ -338,19 +402,24 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
             this.post.public_identifier = null;
         }
 
-        this.subscriptions.add(this.StatuspagesService.updateStatuspage(this.id, this.post)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.StatuspagesService.updateStatuspage(
+                this.id,
+                this.post,
+            ).subscribe((result) => {
                 this.errors = null;
                 if (result.success) {
                     const title = this.TranslocoService.translate('Statuspage');
-                    const msg = this.TranslocoService.translate('updated successfully');
+                    const msg = this.TranslocoService.translate(
+                        'updated successfully',
+                    );
                     const url = ['statuspages', 'edit', this.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
                     this._router.navigate(['statuspages', 'index']);
                     this.notyService.scrollContentDivToTop();
-                    this._router.navigate(['statuspages', 'index'])
+                    this._router.navigate(['statuspages', 'index']);
 
                     return;
                 }
@@ -361,7 +430,8 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.noItemsSelected = false;
                     this.errors = errorResponse;
-                    if (this.errors.hasOwnProperty('selected_hostgroups') ||
+                    if (
+                        this.errors.hasOwnProperty('selected_hostgroups') ||
                         this.errors.hasOwnProperty('selected_servicegroups') ||
                         this.errors.hasOwnProperty('selected_hosts') ||
                         this.errors.hasOwnProperty('selected_services')
@@ -370,17 +440,15 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                     }
                     this.cdr.markForCheck();
                 }
-
-            })
+            }),
         );
-
-
-    }
+    };
 
     private filterForSubmit = () => {
-
         this.post.hostgroups = this.hostgroups.filter((hostgroup) => {
-            if (this.post.selected_hostgroups._ids.indexOf(hostgroup.id) !== -1) {
+            if (
+                this.post.selected_hostgroups._ids.indexOf(hostgroup.id) !== -1
+            ) {
                 return hostgroup;
             } else {
                 return;
@@ -388,7 +456,11 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         });
 
         this.post.servicegroups = this.servicegroups.filter((servicegroup) => {
-            if (this.post.selected_servicegroups._ids.indexOf(servicegroup.id) !== -1) {
+            if (
+                this.post.selected_servicegroups._ids.indexOf(
+                    servicegroup.id,
+                ) !== -1
+            ) {
                 return servicegroup;
             } else {
                 return;
@@ -412,32 +484,36 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
         });
         this.post.hostgroups = this.normalizeGroupTags(this.post.hostgroups);
         this.post.hosts = this.normalizeGroupTags(this.post.hosts);
-        this.post.servicegroups = this.normalizeGroupTags(this.post.servicegroups);
+        this.post.servicegroups = this.normalizeGroupTags(
+            this.post.servicegroups,
+        );
         this.post.services = this.normalizeGroupTags(this.post.services);
-    }
+    };
 
     private cleanUpForSubmit = () => {
         this.post.selected_hostgroups._ids = intersection(
-            this.hostgroups.map(hostgroup => hostgroup.key),
-            this.post.selected_hostgroups._ids
+            this.hostgroups.map((hostgroup) => hostgroup.key),
+            this.post.selected_hostgroups._ids,
         );
         this.post.selected_servicegroups._ids = intersection(
-            this.servicegroups.map(servicegroup => servicegroup.key),
-            this.post.selected_servicegroups._ids
+            this.servicegroups.map((servicegroup) => servicegroup.key),
+            this.post.selected_servicegroups._ids,
         );
         this.post.selected_hosts._ids = intersection(
-            this.hosts.map(host => host.key),
-            this.post.selected_hosts._ids
+            this.hosts.map((host) => host.key),
+            this.post.selected_hosts._ids,
         );
         this.post.selected_services._ids = intersection(
-            this.services.map(service => service.key),
-            this.post.selected_services._ids
+            this.services.map((service) => service.key),
+            this.post.selected_services._ids,
         );
-    }
+    };
 
-    private normalizeGroupTags(items: SelectKeyValueExtended[]): SelectKeyValueExtended[] {
+    private normalizeGroupTags(
+        items: SelectKeyValueExtended[],
+    ): SelectKeyValueExtended[] {
         //ensure that the group tags stored in database as comma separated string or - if no tags - explicit as null
-        return items.map(item => {
+        return items.map((item) => {
             const tags = item._joinData?.group_tags;
             const hasTags = Array.isArray(tags) && tags.length > 0;
 
@@ -445,8 +521,8 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                 ...item,
                 _joinData: {
                     ...item._joinData,
-                    group_tags: hasTags ? tags.join(',') : null
-                }
+                    group_tags: hasTags ? tags.join(',') : null,
+                },
             };
         });
     }
@@ -460,5 +536,4 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
             this.post.public_identifier = filtered;
         }
     }
-
 }

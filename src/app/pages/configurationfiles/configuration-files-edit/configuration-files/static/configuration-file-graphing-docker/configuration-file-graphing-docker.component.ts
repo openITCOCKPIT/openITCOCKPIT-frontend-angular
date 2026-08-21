@@ -6,12 +6,18 @@ import {
     inject,
     input,
     OnDestroy,
-    OnInit
+    OnInit,
 } from '@angular/core';
-import { ConfigurationFilesDbKeys, ConfigurationFilesFieldTypes } from '../../../../configuration-files.enum';
+import {
+    ConfigurationFilesDbKeys,
+    ConfigurationFilesFieldTypes,
+} from '../../../../configuration-files.enum';
 import { Observable, Subscription } from 'rxjs';
 import { GenericValidationError } from '../../../../../../generic-responses';
-import { ConfigurationEditorConfig, ConfigurationEditorField } from '../../../../configuration-files.interface';
+import {
+    ConfigurationEditorConfig,
+    ConfigurationEditorField,
+} from '../../../../configuration-files.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
 import { ConfigurationFilesService } from '../../../../configuration-files.service';
@@ -21,49 +27,54 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
-    FormSelectDirective
+    FormSelectDirective,
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../../../../../../components/required-icon/required-icon.component';
 
 import { TranslocoDirective } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../../../../directives/true-false.directive';
 import { UserTimezonesSelect } from '../../../../../users/users.interface';
 import { UsersService } from '../../../../../users/users.service';
-import { NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import {
+    NgOptionTemplateDirective,
+    NgSelectComponent,
+} from '@ng-select/ng-select';
 import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
-import { TimezoneConfiguration, TimezoneService } from '../../../../../../services/timezone.service';
+import {
+    TimezoneConfiguration,
+    TimezoneService,
+} from '../../../../../../services/timezone.service';
 import { FormsModule } from '@angular/forms';
 
 // This view defines each input manually to keep an order that makes sense for the user.
 // To not have to work against TypeScript, we define all possible fields in the interface.
 export interface GraphingDockerConfig extends ConfigurationEditorConfig {
     [ConfigurationFilesFieldTypes.string]: {
-        carbon_path: string
-        carbon_storage_schema: string
-        timezone: string
-        USE_AUTO_NETWORKING: string
-        docker_compose_subnet: string
-        victoria_metrics_storage_path: string
-    }
+        carbon_path: string;
+        carbon_storage_schema: string;
+        timezone: string;
+        USE_AUTO_NETWORKING: string;
+        docker_compose_subnet: string;
+        victoria_metrics_storage_path: string;
+    };
     [ConfigurationFilesFieldTypes.int]: {
-        number_of_carbon_cache_instances: number
-        number_of_carbon_c_relay_workers: number
-        local_graphite_http_port: number
-        local_graphite_plaintext_port: number
-        victoria_metrics_retention_period: number
-        local_victoria_metrics_http_port: number
-    }
+        number_of_carbon_cache_instances: number;
+        number_of_carbon_c_relay_workers: number;
+        local_graphite_http_port: number;
+        local_graphite_plaintext_port: number;
+        victoria_metrics_retention_period: number;
+        local_victoria_metrics_http_port: number;
+    };
     [ConfigurationFilesFieldTypes.float]: {
-        default_average_x_files_factor: number
-
-    }
+        default_average_x_files_factor: number;
+    };
     [ConfigurationFilesFieldTypes.bool]: {
-        WHISPER_FALLOCATE_CREATE: number
-        enable_docker_userland_proxy: number
-    }
+        WHISPER_FALLOCATE_CREATE: number;
+        enable_docker_userland_proxy: number;
+    };
 }
 
 @Component({
@@ -84,14 +95,15 @@ export interface GraphingDockerConfig extends ConfigurationEditorConfig {
         NgOptionTemplateDirective,
         NgSelectComponent,
         NgOptionHighlightDirective,
-        FormsModule
+        FormsModule,
     ],
     templateUrl: './configuration-file-graphing-docker.component.html',
     styleUrl: './configuration-file-graphing-docker.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfigurationFileGraphingDockerComponent implements OnInit, OnDestroy {
-
+export class ConfigurationFileGraphingDockerComponent
+    implements OnInit, OnDestroy
+{
     public dbKey = input.required<ConfigurationFilesDbKeys>();
     public submit$ = input.required<Observable<void>>();
 
@@ -101,7 +113,13 @@ export class ConfigurationFileGraphingDockerComponent implements OnInit, OnDestr
     public errors: GenericValidationError | null = null;
     public fields: ConfigurationEditorField[] = []; // Not used!
 
-    public fieldInfo: { [key: string]: { field: string, help: string, placeholder: string | number } } = {};
+    public fieldInfo: {
+        [key: string]: {
+            field: string;
+            help: string;
+            placeholder: string | number;
+        };
+    } = {};
 
     /**
      * The server returns the current configuration.
@@ -114,7 +132,9 @@ export class ConfigurationFileGraphingDockerComponent implements OnInit, OnDestr
     public config?: GraphingDockerConfig;
 
     private subscriptions: Subscription = new Subscription();
-    private readonly ConfigurationFilesService = inject(ConfigurationFilesService);
+    private readonly ConfigurationFilesService = inject(
+        ConfigurationFilesService,
+    );
     private readonly UsersService = inject(UsersService);
     private readonly TimezoneService = inject(TimezoneService);
     private readonly route = inject(ActivatedRoute);
@@ -133,9 +153,11 @@ export class ConfigurationFileGraphingDockerComponent implements OnInit, OnDestr
 
         this.loadTimezones();
 
-        this.subscriptions.add(submit$.subscribe(() => {
-            this.submit();
-        }));
+        this.subscriptions.add(
+            submit$.subscribe(() => {
+                this.submit();
+            }),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -143,45 +165,63 @@ export class ConfigurationFileGraphingDockerComponent implements OnInit, OnDestr
     }
 
     public loadTimezones(): void {
-        this.subscriptions.add(this.UsersService.getDateformats().subscribe(data => {
-            this.timezones = data.timezones;
-            this.cdr.markForCheck();
-        }));
+        this.subscriptions.add(
+            this.UsersService.getDateformats().subscribe((data) => {
+                this.timezones = data.timezones;
+                this.cdr.markForCheck();
+            }),
+        );
 
-        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
-            this.serverTimezone = data;
-            this.cdr.markForCheck();
-        }));
+        this.subscriptions.add(
+            this.TimezoneService.getTimezoneConfiguration().subscribe(
+                (data) => {
+                    this.serverTimezone = data;
+                    this.cdr.markForCheck();
+                },
+            ),
+        );
     }
 
     public loadConfigFile(): void {
-        const dbKey = this.dbKey()
+        const dbKey = this.dbKey();
         if (dbKey) {
-            this.subscriptions.add(this.ConfigurationFilesService.getConfigFileForEditor(dbKey, null).subscribe((result) => {
-                this.cdr.markForCheck();
-                this.config = result.config as GraphingDockerConfig;
+            this.subscriptions.add(
+                this.ConfigurationFilesService.getConfigFileForEditor(
+                    dbKey,
+                    null,
+                ).subscribe((result) => {
+                    this.cdr.markForCheck();
+                    this.config = result.config as GraphingDockerConfig;
 
-                result.fields.forEach((field) => {
-                    this.fieldInfo[field.field] = {
-                        field: field.field,
-                        help: field.help,
-                        placeholder: field.placeholder
-                    }
-                });
-            }));
-
+                    result.fields.forEach((field) => {
+                        this.fieldInfo[field.field] = {
+                            field: field.field,
+                            help: field.help,
+                            placeholder: field.placeholder,
+                        };
+                    });
+                }),
+            );
         }
     }
 
     private submit() {
         if (this.config) {
-            this.subscriptions.add(this.ConfigurationFilesService.saveConfigFileFromEditor(this.dbKey(), null, this.config)
-                .subscribe((result) => {
+            this.subscriptions.add(
+                this.ConfigurationFilesService.saveConfigFileFromEditor(
+                    this.dbKey(),
+                    null,
+                    this.config,
+                ).subscribe((result) => {
                     this.cdr.markForCheck();
 
                     if (result.success) {
                         this.notyService.genericSuccess();
-                        this.router.navigate(['/', 'ConfigurationFiles', 'index']);
+                        this.router.navigate([
+                            '/',
+                            'ConfigurationFiles',
+                            'index',
+                        ]);
 
                         return;
                     }
@@ -192,11 +232,11 @@ export class ConfigurationFileGraphingDockerComponent implements OnInit, OnDestr
                     if (result) {
                         this.errors = errorResponse;
                     }
-                }));
+                }),
+            );
         }
-
     }
 
-    protected readonly ConfigurationFilesFieldTypes = ConfigurationFilesFieldTypes;
-
+    protected readonly ConfigurationFilesFieldTypes =
+        ConfigurationFilesFieldTypes;
 }

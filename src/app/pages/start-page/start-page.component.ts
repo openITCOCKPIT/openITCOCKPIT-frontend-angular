@@ -24,8 +24,7 @@
  */
 
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterModule } from "@angular/router";
-
+import { RouterModule } from '@angular/router';
 
 import {
     CardBodyComponent,
@@ -34,17 +33,14 @@ import {
     CardTextDirective,
     CardTitleDirective,
     ColComponent,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
-import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { TranslocoDirective } from '@jsverse/transloco';
 
-import { TranslocoDirective } from "@jsverse/transloco";
-
-
-import { ProgressBarModule } from 'primeng/progressbar';
-
+import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
 
 @Component({
     selector: 'app-start-page',
@@ -59,12 +55,10 @@ import { ProgressBarModule } from 'primeng/progressbar';
         RowComponent,
         ColComponent,
         CardImgDirective,
-        CardTextDirective
+        CardTextDirective,
     ],
     templateUrl: './start-page.component.html',
     styleUrl: './start-page.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StartPageComponent {
-
-}
+export class StartPageComponent {}

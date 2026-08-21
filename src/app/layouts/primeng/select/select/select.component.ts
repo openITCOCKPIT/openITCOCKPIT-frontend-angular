@@ -11,36 +11,41 @@ import {
     OnInit,
     Output,
     TemplateRef,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+    ControlValueAccessor,
+    FormsModule,
+    NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
-import { MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primeng/multiselect';
+import {
+    MultiSelectChangeEvent,
+    MultiSelectFilterEvent,
+} from '@openng/optimus-ui/multiselect';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { TranslocoService } from '@jsverse/transloco';
 import { debounceTime } from 'rxjs/operators';
 
-import { Select } from 'primeng/select';
+import { Select } from '@openng/optimus-ui/select';
 
 @Component({
     selector: 'oitc-select',
-    imports: [
-        FormsModule,
-        HighlightSearchPipe,
-        Select
-    ],
+    imports: [FormsModule, HighlightSearchPipe, Select],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => SelectComponent),
-            multi: true
-        }
+            multi: true,
+        },
     ],
     templateUrl: './select.component.html',
     styleUrl: './select.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class SelectComponent
+    implements ControlValueAccessor, OnInit, OnDestroy
+{
     private init: boolean = false;
 
     @ViewChild('selectOptgroup') selectOptgroup: Select | undefined;
@@ -121,7 +126,14 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
      *
      * @group Props
      */
-    @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = 'body';
+    @Input() appendTo:
+        | HTMLElement
+        | ElementRef
+        | TemplateRef<any>
+        | string
+        | null
+        | undefined
+        | any = 'body';
 
     /**
      * If the selected value (current value of ngModel) does not exist in the options, the value will be reset to 0
@@ -129,11 +141,14 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
      *
      * In some rare cases, you might want to disable this check
      */
-    @Input() disableCheckThatEnsuresSelectedValueExistsInOptions: boolean = false;
+    @Input() disableCheckThatEnsuresSelectedValueExistsInOptions: boolean =
+        false;
 
     @Output() ngModelChange = new EventEmitter();
-    @Output() onChange: EventEmitter<MultiSelectChangeEvent> = new EventEmitter<MultiSelectChangeEvent>();
-    @Output() onFilter: EventEmitter<MultiSelectFilterEvent> = new EventEmitter<MultiSelectFilterEvent>();
+    @Output() onChange: EventEmitter<MultiSelectChangeEvent> =
+        new EventEmitter<MultiSelectChangeEvent>();
+    @Output() onFilter: EventEmitter<MultiSelectFilterEvent> =
+        new EventEmitter<MultiSelectFilterEvent>();
     private readonly TranslocoService = inject(TranslocoService);
 
     public searchText: string = '';
@@ -149,22 +164,28 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
     public ngOnInit(): void {
         if (this.debounce) {
             this.Subscriptions.add(
-                this.onChangeSubject.pipe(
-                    debounceTime(this.debounceTime),
-                    distinctUntilChanged()
-                ).subscribe(value => {
-                    this.onChange.emit(value);
-                }));
+                this.onChangeSubject
+                    .pipe(
+                        debounceTime(this.debounceTime),
+                        distinctUntilChanged(),
+                    )
+                    .subscribe((value) => {
+                        this.onChange.emit(value);
+                    }),
+            );
         }
 
         if (this.searchCallback) {
             this.Subscriptions.add(
-                this.searchCallbackSubject.pipe(
-                    debounceTime(this.debounceTime),
-                    distinctUntilChanged()
-                ).subscribe(value => {
-                    this.searchCallback!(this.searchText);
-                }));
+                this.searchCallbackSubject
+                    .pipe(
+                        debounceTime(this.debounceTime),
+                        distinctUntilChanged(),
+                    )
+                    .subscribe((value) => {
+                        this.searchCallback!(this.searchText);
+                    }),
+            );
         }
 
         this.init = true;
@@ -227,7 +248,11 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
 
         this.cdr.markForCheck();
 
-        if (this.ngModel && this._options && !this.disableCheckThatEnsuresSelectedValueExistsInOptions) {
+        if (
+            this.ngModel &&
+            this._options &&
+            !this.disableCheckThatEnsuresSelectedValueExistsInOptions
+        ) {
             // Check if the selected values are still in the options
             let valueStillInOptions = false;
             let key = this.optionValue || 'key';
@@ -257,10 +282,13 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
             if (this.labelSuffix && !element.value.endsWith(this.labelSuffix)) {
                 element.value += this.labelSuffix;
             }
-            if (this.labelPrefix && !element.value.startsWith(this.labelPrefix)) {
+            if (
+                this.labelPrefix &&
+                !element.value.startsWith(this.labelPrefix)
+            ) {
                 element.value = this.labelPrefix + element.value;
             }
-        })
+        });
     }
 
     /**
@@ -282,7 +310,8 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
         // In the future, event.element is maybe relly undefined ad we have to use event.target (??)
         //   const element = event.target as HTMLElement;
 
-        event.element.parentElement.style.width = event.element.parentElement.style.minWidth;
+        event.element.parentElement.style.width =
+            event.element.parentElement.style.minWidth;
 
         // 🩹
         // Fix for long option labels
@@ -292,15 +321,26 @@ export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy 
         // We try to fix this, when left = 0, we set it to the same position as the select box is.
         if (this.selectOptgroup) {
             // PrimeNG 20
-            if (event.element.parentElement.style.left === '0px' && this.selectOptgroup.appendTo.length !== 0) {
-                const selectBoxPosition = this.selectOptgroup.el.nativeElement.getBoundingClientRect();
-                event.element.parentElement.style.left = selectBoxPosition.x + 'px';
+            if (
+                event.element.parentElement.style.left === '0px' &&
+                this.selectOptgroup.appendTo.length !== 0
+            ) {
+                const selectBoxPosition =
+                    this.selectOptgroup.el.nativeElement.getBoundingClientRect();
+                event.element.parentElement.style.left =
+                    selectBoxPosition.x + 'px';
             }
 
             // PrimeNG 21
-            if ((event.element.parentElement.style.left === '0px' || event.element.parentElement.style.left === '') && this.selectOptgroup.appendTo().length !== 0) {
-                const selectBoxPosition = this.selectOptgroup.el.nativeElement.getBoundingClientRect();
-                event.element.parentElement.style.left = selectBoxPosition.x + 'px';
+            if (
+                (event.element.parentElement.style.left === '0px' ||
+                    event.element.parentElement.style.left === '') &&
+                this.selectOptgroup.appendTo().length !== 0
+            ) {
+                const selectBoxPosition =
+                    this.selectOptgroup.el.nativeElement.getBoundingClientRect();
+                event.element.parentElement.style.left =
+                    selectBoxPosition.x + 'px';
             }
         }
     }
