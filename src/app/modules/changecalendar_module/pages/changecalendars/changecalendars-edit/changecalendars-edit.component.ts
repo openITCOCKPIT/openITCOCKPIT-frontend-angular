@@ -100,6 +100,7 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     protected errors: GenericValidationError = {} as GenericValidationError;
     private startStr: string = '';
     private endStr: string = '';
+    private datesSetCalled: boolean = false;
 
     protected event: ChangecalendarEvent = {
         title: '',
@@ -151,6 +152,10 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
      * @param event
      */
     public datesSet(event: any): void {
+        if (!this.datesSetCalled) {
+            this.datesSetCalled = true;
+            return;
+        }
         this.startStr = event.startStr;
         this.endStr = event.endStr;
         this.loadEvents();
