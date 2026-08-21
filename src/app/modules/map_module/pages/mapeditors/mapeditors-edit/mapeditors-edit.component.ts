@@ -2341,10 +2341,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         }
     };
 
-    private loadHosts(searchString: string, selected: number[]) {
-        if (typeof selected === "undefined") {
-            selected = [];
-        }
+    private loadHosts(searchString: string, selected: number[] = []) {
 
         const params: HostsLoadHostsByStringParams = {
             angular: true,
@@ -2363,10 +2360,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     };
 
-    private loadServices(searchString: string, selected: number[]) {
-        if (typeof selected === "undefined") {
-            selected = [];
-        }
+    private loadServices(searchString: string, selected: number[] = []) {
 
         const params: ServicesByStringParams = {
             'angular': true,
@@ -2402,10 +2396,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     };
 
-    private loadHostgroups(searchString: string, selected: number[]) {
-        if (typeof selected === "undefined") {
-            selected = [];
-        }
+    private loadHostgroups(searchString: string, selected: number[] = []) {
 
         const params: HostgroupsLoadHostgroupsByStringParams = {
             'angular': true,
@@ -2422,10 +2413,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     };
 
-    private loadServicegroups(searchString: string, selected: number[]) {
-        if (typeof selected === "undefined") {
-            selected = [];
-        }
+    private loadServicegroups(searchString: string, selected: number[] = []) {
 
         const params: ServicegroupsLoadServicegroupsByStringParams = {
             'angular': true,
@@ -2442,10 +2430,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     };
 
-    private loadMaps(searchString: string, selected: number[]) {
-        if (typeof selected === "undefined") {
-            selected = [];
-        }
+    private loadMaps(searchString: string, selected: number[] = []) {
 
         const params: MapsByStringParams = {
             'angular': true,
@@ -2463,10 +2448,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     };
 
-    private loadStatuspages(searchString: string, selected: number[]) {
-        if (typeof selected === "undefined") {
-            selected = [];
-        }
+    private loadStatuspages(searchString: string, selected: number[] = []) {
 
         const params: StatuspagesByStringParams = {
             'angular': true,
@@ -2481,10 +2463,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     };
 
-    private loadStatuspagegroups(searchString: string, selected: number[]) {
-        if (typeof selected === "undefined") {
-            selected = [];
-        }
+    private loadStatuspagegroups(searchString: string, selected: number[] = []) {
 
         const params: StatuspagegroupsByStringParams = {
             'angular': true,
