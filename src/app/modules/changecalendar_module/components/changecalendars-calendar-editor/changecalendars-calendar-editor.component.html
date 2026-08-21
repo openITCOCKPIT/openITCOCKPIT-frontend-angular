@@ -14,19 +14,21 @@
             <!-- dayCellContent  Content Injection -->
             <!-- https://fullcalendar.io/docs/day-cell-render-hooks -->
             <ng-template #dayCellContent let-arg>
-                <div class="d-inline-flex w-100">
-                    <div class="fc-daygrid-day-number">
-                        {{ arg.dayNumberText }}
+                @if (arg.dayNumberText) {
+                    <div class="d-inline-flex w-100">
+                        <div class="fc-daygrid-day-number">
+                            {{ arg.dayNumberText }}
+                        </div>
+                        <div>
+                            <button cButton
+                                    (click)="onCreateClick.emit(arg)"
+                                    class="ripple" size="xs"
+                                    color="success">
+                                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                            </button>
+                        </div>
                     </div>
-                    <div>
-                        <button cButton
-                                (click)="onCreateClick.emit(arg)"
-                                class="ripple" size="xs"
-                                color="success">
-                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                        </button>
-                    </div>
-                </div>
+                }
             </ng-template>
         </full-calendar>
     </div>
