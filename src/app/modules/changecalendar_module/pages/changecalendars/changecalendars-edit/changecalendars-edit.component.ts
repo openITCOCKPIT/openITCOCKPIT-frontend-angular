@@ -36,16 +36,12 @@ import { ContainersLoadContainersByStringParams } from '../../../../../pages/con
 import { ChangecalendarEvent, EditChangecalendar, EditChangecalendarRoot } from '../changecalendars.interface';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { CalendarEvent } from '../../../../../pages/calendars/calendars.interface';
-import {
-    ChangecalendarsEventEditorComponent
-} from '../../../components/changecalendars-event-editor/changecalendars-event-editor.component';
+import { ChangecalendarsEventEditorComponent } from '../../../components/changecalendars-event-editor/changecalendars-event-editor.component';
 import { EventChangeArg, EventClickArg } from '@fullcalendar/core';
 import { TimezoneObject } from '../../../../../pages/services/timezone.interface';
 import { TimezoneService } from '../../../../../services/timezone.service';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import {
-    ChangecalendarsCalendarEditorComponent
-} from '../../../components/changecalendars-calendar-editor/changecalendars-calendar-editor.component';
+import { ChangecalendarsCalendarEditorComponent } from '../../../components/changecalendars-calendar-editor/changecalendars-calendar-editor.component';
 import { DateTime } from 'luxon';
 
 @Component({
@@ -213,6 +209,7 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     }
 
     public createEvent(event: any): void {
+        this.eventErrors = {};
         this.event = {
             title: '',
             description: '',
@@ -302,6 +299,7 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
             return event.originId === clickInfo.event._def.extendedProps['originId'];
         }) as CalendarEvent;
 
+        this.eventErrors = {};
         this.event.start = this.stripZone(event.start);
         this.event.end = this.stripZone(event.end?.toString() || '');
 
