@@ -28,7 +28,6 @@ export class ChangecalendarWidgetService {
     }
 
     public saveWidgetConfig(widgetId: string, data: ChangeCalendarWidgetPost): Observable<Object> {
-        console.warn(data);
         return this.http.post<any>(`${this.proxyPath}/changecalendar_module/changecalendars/widget.json`, data)
             .pipe(
                 map(data => {
