@@ -53,19 +53,9 @@
     &.animated-fade-in {
         animation: fadeInSlide 0.3s ease-out forwards;
     }
-
-    &:hover {
-        border-radius: 4px;
-    }
 }
 
-.text-danger {
-    color: #e55353 !important;
-}
 
-.text-warning {
-    color: #f9b115 !important;
-}
 
 ::ng-deep .thin-progress {
     height: 6px !important;
