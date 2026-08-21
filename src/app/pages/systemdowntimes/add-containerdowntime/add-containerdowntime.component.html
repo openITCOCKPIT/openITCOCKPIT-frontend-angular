@@ -127,7 +127,6 @@
                                        name="from_date" placeholder="{{ t('DD.MM.YYYY') }}"
                                        oitcFormError [errors]="errors" errorField="from"
                                        [(ngModel)]="post.from_date">
-                                <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
                                 <span class="input-group-text">
                                     <fa-icon [icon]="['far', 'clock']"></fa-icon>
                                 </span>
@@ -135,8 +134,9 @@
                                        name="from_time" placeholder="{{ t('hh:mm') }}"
                                        oitcFormError [errors]="errors" errorField="from_time"
                                        [(ngModel)]="post.from_time">
-                                <oitc-form-feedback [errors]="errors" errorField="from_time"></oitc-form-feedback>
                             </div>
+                            <oitc-form-feedback [errors]="errors" errorField="from_date"></oitc-form-feedback>
+                            <oitc-form-feedback [errors]="errors" errorField="from_time"></oitc-form-feedback>
                         </div>
                         <div class="mb-3">
                             <label cLabel for="to_date">
@@ -151,7 +151,6 @@
                                        name="to_date" placeholder="{{ t('DD.MM.YYYY') }}"
                                        oitcFormError [errors]="errors" errorField="to"
                                        [(ngModel)]="post.to_date">
-                                <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
                                 <span class="input-group-text">
                                     <fa-icon [icon]="['far', 'clock']"></fa-icon>
                                 </span>
@@ -159,8 +158,9 @@
                                        name="to_time" placeholder="{{ t('hh:mm') }}"
                                        oitcFormError [errors]="errors" errorField="to_time"
                                        [(ngModel)]="post.to_time">
-                                <oitc-form-feedback [errors]="errors" errorField="to_time"></oitc-form-feedback>
                             </div>
+                            <oitc-form-feedback [errors]="errors" errorField="to_date"></oitc-form-feedback>
+                            <oitc-form-feedback [errors]="errors" errorField="to_time"></oitc-form-feedback>
                         </div>
                     </div>
                 }
