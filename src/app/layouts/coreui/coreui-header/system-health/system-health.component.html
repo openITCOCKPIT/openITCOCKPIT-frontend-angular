@@ -17,129 +17,160 @@
                     </div>
                     @if (systemHealth.state === 'ok') {
                         <div class="dropdown-item">
-
-                            <div class="d-flex align-items-center health-item animated-fade-in" [routerLink]="['/', 'administrators', 'debug']">
-                                <div class="pt-2 pb-2 border-bottom">
-                                    <div class="d-flex align-items-center mb-1">
-                                        <fa-icon [icon]="['fas', 'check']"
-                                                 [class]="'fa ok me-2' ">
-                                        </fa-icon>
-                                        <span class="fw-bold" [class]="'ok'">
-                                            {{ t('Alright!') }}
+                            <div class="pt-2 pb-2 border-bottom health-item animated-fade-in">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <div class="d-flex align-items-center ">
+                                        <fa-icon [icon]="['fas', 'check']"  [class]=" 'ok me-2'" />
+                                        <span class="fw-bold txt-overflow-ellipsis ok"  >
+                                            {{t('System')}}
                                         </span>
                                     </div>
-                                    <p class="mb-1 d-flex justify-content-between align-items-center ">
-                                        <span class="text-muted">
-                                            {{ t('No issues detected. System operates normally.') }}
-                                        </span>
-                                    </p>
-                                </div>
 
+                                    <span class="badge rounded-pill status-badge-text"
+                                          [class]="'ok  border border-ok'"
+                                    >
+                                        {{ t('Alright!') }}
+                                    </span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
+                                    <span class="text-muted">
+                                        {{ t('No issues detected. System operates normally.') }}
+                                    </span>
+                                </div>
                             </div>
+
                         </div>
                     }
                     @if (systemHealth.state === 'warning' || systemHealth.state === 'critical'  ) {
-                        <div class="dropdown-item"
+                        <div class="dropdown-item py-0"
                         >
                             <div class="d-flex align-items-center" [routerLink]="['/', 'administrators', 'debug']">
-                                <ul class="pt-8 list-unstyled system-health-item fs-sm w-100 mb-2">
+                                <ul class="pt-8 list-unstyled system-health-item fs-sm w-100 mb-1">
                                     @if (!systemHealth.isNagiosRunning) {
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'warning']"
-                                                             [class]="'text-danger me-2' ">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="'text-danger'">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']"  [class]=" 'text-danger me-2'" />
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{t('System')}}
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="badge rounded-pill status-badge-text"
+                                                          [class]="'text-danger  border border-danger'"
+                                                    >
                                                         {{ t('Critical') }}
                                                     </span>
                                                 </div>
-                                                <p class="mb-1 d-flex justify-content-between align-items-center ">
+                                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
                                                     <span class="text-muted">
                                                         {{ t('Monitoring engine is not running!') }}
                                                     </span>
-                                                </p>
+                                                </div>
                                             </div>
+
                                         </li>
                                     }
                                     @if (!systemHealth.gearman_reachable) {
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'warning']"
-                                                             [class]="'text-danger me-2' ">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="'text-danger'">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']"  [class]=" 'text-danger me-2'" />
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{t('System')}}
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="badge rounded-pill status-badge-text"
+                                                          [class]="'text-danger  border border-danger'"
+                                                    >
                                                         {{ t('Critical') }}
                                                     </span>
                                                 </div>
-                                                <p class="mb-1 d-flex justify-content-between align-items-center ">
+                                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
                                                     <span class="text-muted">
                                                         {{ t('Gearman job server not reachable!') }}
                                                     </span>
-                                                </p>
+                                                </div>
                                             </div>
                                         </li>
                                     }
                                     @if (!systemHealth.gearman_worker_running) {
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'warning']"
-                                                             [class]="'text-danger me-2' ">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="'text-danger'">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']"  [class]=" 'text-danger me-2'" />
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{t('System')}}
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="badge rounded-pill status-badge-text"
+                                                          [class]="'text-danger  border border-danger'"
+                                                    >
                                                         {{ t('Critical') }}
                                                     </span>
                                                 </div>
-                                                <p class="mb-1 d-flex justify-content-between align-items-center ">
+                                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
                                                     <span class="text-muted">
                                                         {{ t('Service gearman_worker is not running!') }}
                                                     </span>
-                                                </p>
+                                                </div>
                                             </div>
+
                                         </li>
                                     }
                                     @if (systemHealth.isNdoInstalled && !systemHealth.isNdoRunning) {
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'warning']"
-                                                             [class]="'text-danger me-2' ">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="'text-danger'">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']"  [class]=" 'text-danger me-2'" />
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{t('System')}}
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="badge rounded-pill status-badge-text"
+                                                          [class]="'text-danger  border border-danger'"
+                                                    >
                                                         {{ t('Critical') }}
                                                     </span>
                                                 </div>
-                                                <p class="mb-1 d-flex justify-content-between align-items-center ">
+                                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
                                                     <span class="text-muted">
                                                         {{ t('Database connector NDOUtils is not running!') }}
                                                     </span>
-                                                </p>
+                                                </div>
                                             </div>
+
                                         </li>
                                     }
                                     @if (systemHealth.isStatusengineInstalled && !systemHealth.isStatusengineRunning) {
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'warning']"
-                                                             [class]="'text-danger me-2' ">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="'text-danger'">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']"  [class]=" 'text-danger me-2'" />
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{t('System')}}
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="badge rounded-pill status-badge-text"
+                                                          [class]="'text-danger  border border-danger'"
+                                                    >
                                                         {{ t('Critical') }}
                                                     </span>
                                                 </div>
-                                                <p class="mb-1 d-flex justify-content-between align-items-center ">
+                                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
                                                     <span class="text-muted">
                                                         {{ t('Database connector Statusengine is not running!') }}
                                                     </span>
-                                                </p>
+                                                </div>
                                             </div>
                                         </li>
                                     }
@@ -147,20 +178,25 @@
 
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'warning']"
-                                                             [class]="'text-warning me-2' ">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="'text-warning'">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']"  [class]=" 'text-warning me-2'" />
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{t('System')}}
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="badge rounded-pill status-badge-text"
+                                                          [class]="'text-warning  border border-warning-subtle'"
+                                                    >
                                                         {{ t('Warning') }}
                                                     </span>
                                                 </div>
-                                                <p class="mb-1 d-flex justify-content-between align-items-center ">
+                                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
                                                     <span class="text-muted">
                                                         {{ t('Performance data processer Statusengine is not running!') }}
                                                     </span>
-                                                </p>
+                                                </div>
                                             </div>
                                         </li>
 
@@ -168,73 +204,95 @@
                                     @if (!systemHealth.isStatusenginePerfdataProcessor && !systemHealth.isNpcdRunning) {
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'warning']"
-                                                             [class]="'text-warning me-2' ">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="'text-warning'">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']"  [class]=" 'text-warning me-2'" />
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{t('System')}}
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="badge rounded-pill status-badge-text"
+                                                          [class]="'text-warning  border border-warning-subtle'"
+                                                    >
                                                         {{ t('Warning') }}
                                                     </span>
                                                 </div>
-                                                <p class="mb-1 d-flex justify-content-between align-items-center ">
+                                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
                                                     <span class="text-muted">
                                                         {{ t('Performance data processer NPCD is not running!') }}
                                                     </span>
-                                                </p>
+                                                </div>
                                             </div>
+
                                         </li>
                                     }
                                     @if (!systemHealth.isOitcCmdRunning) {
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'warning']"
-                                                             [class]="'text-warning me-2' ">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="'text-warning'">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']"  [class]=" 'text-warning me-2'" />
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{t('System')}}
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="badge rounded-pill status-badge-text"
+                                                          [class]="'text-warning  border border-warning-subtle'"
+                                                    >
                                                         {{ t('Warning') }}
                                                     </span>
                                                 </div>
-                                                <p class="mb-1 d-flex justify-content-between align-items-center ">
+                                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
                                                     <span class="text-muted">
                                                         {{ t('Service oitc_cmd is not running!') }}
                                                     </span>
-                                                </p>
+                                                </div>
                                             </div>
                                         </li>
                                     }
                                     @if (!systemHealth.isWebsocketServerRunning) {
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'warning']"
-                                                             [class]="'text-warning me-2' ">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="'text-warning'">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']"  [class]=" 'text-warning me-2'" />
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{t('System')}}
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="badge rounded-pill status-badge-text"
+                                                          [class]="'text-warning  border border-warning-subtle'"
+                                                    >
                                                         {{ t('Warning') }}
                                                     </span>
                                                 </div>
-                                                <p class="mb-1 d-flex justify-content-between align-items-center ">
+
+
+                                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
                                                     <span class="text-muted">
                                                         {{ t('Service openitcockpit-websocket is not running!') }}
                                                     </span>
-                                                </p>
+                                                </div>
                                             </div>
                                         </li>
                                     }
+
                                     @if (!systemHealth.isNodeJsServerRunning) {
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'warning']"
-                                                             [class]="'text-warning me-2' ">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="'text-warning'">
-                                                        {{ t('Warning') }}
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']" class="text-warning me-2"></fa-icon>
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{ t('System') }}
+                                                        </span>
+                                                    </div>
+                                                    <span class="fw-bold badge rounded-pill status-badge-text border"
+                                                          [class]="'text-warning border-warning-subtle'">
+                                                        {{  t('Warning') }}
                                                     </span>
                                                 </div>
                                                 <p class="mb-1 d-flex justify-content-between align-items-center ">
@@ -243,146 +301,192 @@
                                                     </span>
                                                 </p>
                                             </div>
+
+
                                         </li>
                                     }
                                     @if (systemHealth.load?.state !== 'ok') {
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'satellite-dish']"
-                                                             [class]="systemHealth.load?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="systemHealth.load?.state === 'critical' ? 'text-danger' : 'text-warning'">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']"
+                                                                 [class]="systemHealth?.load?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
+                                                        </fa-icon>
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{t('System')}}
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="badge rounded-pill status-badge-text border"
+                                                          [class]="systemHealth.load?.state === 'critical' ? 'text-danger border-danger' : 'text-warning border-warning'">
                                                         {{ systemHealth.load?.state === 'critical' ? t('Critical') : t('Warning') }}
                                                     </span>
                                                 </div>
-                                                <p class="mb-1 d-flex justify-content-between align-items-center ">
-                                                    <span class="text-muted">
-                                                        {{ t('Current CPU load is too high!') }}<br/> <strong class="text-dark font-monospace">{{ systemHealth.load?.load1 }}
+
+                                                <div class="mb-1 d-flex flex-column  ">
+                                                    <span class="text-muted w-full">
+                                                        {{ t('Current CPU load is too high!') }}
+                                                    </span>
+                                                    <strong class="text-dark font-monospace">{{ systemHealth.load?.load1 }}
                                                         , {{ systemHealth.load?.load5 }}, {{
                                                             systemHealth.load?.load15
                                                         }}</strong>
-                                                    </span>
-                                                </p>
+                                                </div>
                                             </div>
                                         </li>
+
                                     }
 
                                     @if (systemHealth.memory_usage && systemHealth.memory_usage.memory.state !== 'ok') {
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'warning']"
-                                                             [class]="systemHealth.memory_usage.memory.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="systemHealth.memory_usage.memory.state === 'critical' ? 'text-danger' : 'text-warning'">
-                                                        {{ systemHealth.memory_usage.memory.state === 'critical' ? t('Critical') : t('Warning') }}
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']"
+                                                                 [class]="systemHealth.memory_usage.memory?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
+                                                        </fa-icon>
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{ t('System') }}
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="fw-bold badge rounded-pill status-badge-text border"
+                                                          [class]="systemHealth.memory_usage.memory?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
+                                                        {{ systemHealth.memory_usage.memory?.state === 'critical' ? t('Critical') : t('Warning') }}
                                                     </span>
+
                                                 </div>
 
-                                                <p class="mb-1 d-flex justify-content-between align-items-center ">
-                                                    <span class="text-muted">
-                                                        {{ t('High memory usage') }}: <strong class="text-dark font-monospace">Memory</strong>
+                                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
+                                                    <span> <span class="text-muted">
+                                                        {{ t('High memory usage') }}:
                                                     </span>
-                                                    <span class="fw-bold text-secondary ps-2">
-                                                        {{ systemHealth.memory_usage.memory.percentage }}%
+                                                        <strong class="border border-secondary-subtle font-monospace">Memory</strong></span>
+                                                    <span class="fw-bold font-monospace text-nowrap" >
+                                                        {{ systemHealth.memory_usage.memory?.percentage }}%
                                                     </span>
-                                                </p>
+                                                </div>
                                                 <div class="custom-progress-wrapper">
-
-                                                    <c-progress [value]="systemHealth.memory_usage.memory.percentage"
-                                                                [color]="systemHealth.memory_usage.memory.state === 'critical' ? 'danger' : 'warning'"
+                                                    <c-progress [value]="systemHealth.memory_usage.memory?.percentage"
+                                                                [color]="systemHealth.memory_usage.memory?.state === 'critical' ? 'danger' : 'warning'"
                                                                 class="thin-progress animated-bar" />
                                                 </div>
+
                                             </div>
                                         </li>
+
                                     }
-                                    @if (systemHealth.memory_usage && systemHealth.memory_usage.swap.state !== 'ok') {
+
+                                    @if (systemHealth.memory_usage && systemHealth.memory_usage.swap.state !== 'ok' ) {
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'warning']"
-                                                             [class]="systemHealth.memory_usage.swap.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="systemHealth.memory_usage.memory.state === 'critical' ? 'text-danger' : 'text-warning'">
-                                                        {{ systemHealth.memory_usage.swap.state === 'critical' ? t('Critical') : t('Warning') }}
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']"
+                                                                 [class]="systemHealth.memory_usage.swap?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
+                                                        </fa-icon>
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{ t('System') }}
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="fw-bold badge rounded-pill status-badge-text border"
+                                                          [class]="systemHealth.memory_usage.swap?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
+                                                        {{ systemHealth.memory_usage.swap?.state === 'critical' ? t('Critical') : t('Warning') }}
                                                     </span>
+
                                                 </div>
 
-                                                <p class="mb-1 d-flex justify-content-between align-items-center ">
-                                                    <span class="text-muted">
-                                                        {{ t('High Swap usage') }}: <strong class="text-dark font-monospace">Swap</strong>
+                                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
+                                                    <span> <span class="text-muted">
+                                                        {{ t('High memory usage') }}:
                                                     </span>
-                                                    <span class="fw-bold text-secondary ps-2">
-                                                        {{ systemHealth.memory_usage.swap.percentage }}%
+                                                        <strong class="border border-secondary-subtle font-monospace">Swap</strong></span>
+                                                    <span class="fw-bold font-monospace text-nowrap" >
+                                                        {{ systemHealth.memory_usage.swap?.percentage }}%
                                                     </span>
-                                                </p>
+                                                </div>
                                                 <div class="custom-progress-wrapper">
-
-                                                    <c-progress [value]="systemHealth.memory_usage.swap.percentage"
-                                                                [color]="systemHealth.memory_usage.swap.state === 'critical' ? 'danger' : 'warning'"
+                                                    <c-progress [value]="systemHealth.memory_usage.swap?.percentage"
+                                                                [color]="systemHealth.memory_usage.swap?.state === 'critical' ? 'danger' : 'warning'"
                                                                 class="thin-progress animated-bar" />
                                                 </div>
+
                                             </div>
                                         </li>
                                     }
 
                                     @for (disk of systemHealth.disk_usage; track disk) {
                                         @if (disk.state !== 'ok') {
-
                                             <li class="health-item animated-fade-in">
                                                 <div class="pt-2 pb-2 border-bottom">
+                                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                                        <div class="d-flex align-items-center ">
+                                                            <fa-icon [icon]="['fas', 'warning']"
+                                                                     [class]="disk?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
+                                                            </fa-icon>
+                                                            <span class="fw-bold txt-overflow-ellipsis">
+                                                                {{ t('System') }}
+                                                            </span>
+                                                        </div>
 
-                                                    <div class="d-flex align-items-center mb-1">
-                                                        <fa-icon [icon]="['fas', 'satellite-dish']"
-                                                                 [class]="disk.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
-                                                        </fa-icon>
-                                                        <span class="fw-bold"
-                                                              [class]="disk.state === 'critical' ? 'text-danger' : 'text-warning'">
-                                                            {{ disk.state === 'critical' ? t('Critical') : t('Warning') }}
+                                                        <span class="fw-bold badge rounded-pill status-badge-text border"
+                                                              [class]="disk?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
+                                                            {{ disk?.state === 'critical' ? t('Critical') : t('Warning') }}
                                                         </span>
                                                     </div>
 
 
-                                                    <p class="mb-1 d-flex justify-content-between align-items-center ">
-                                                        <span class="text-muted">
-                                                            {{ ( 'Low disk space left for mountpoint:' ) }} <br><strong class="text-dark font-monospace">{{ disk?.mountpoint || disk?.disk }}</strong>
-                                                        </span>
-                                                        <span class="fw-bold text-secondary ps-2">
-                                                            {{ disk.use_percentage }}%
-                                                        </span>
-                                                    </p>
 
+                                                    <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="text-muted">
+                                                                {{ ( 'Low disk space left for mountpoint:' ) }}:
+                                                            </span>
+                                                            <strong class="ms-1 border border-secondary-subtle font-monospace txt-overflow-ellipsis">
+                                                                {{ disk?.mountpoint || disk?.disk }}
+                                                            </strong>
+                                                        </div>
+
+                                                        <span class="fw-bold font-monospace text-nowrap" >
+                                                            {{ disk?.use_percentage }}%
+                                                        </span>
+                                                    </div>
                                                     <div class="custom-progress-wrapper">
                                                         <c-progress [value]="disk.use_percentage"
                                                                     [color]="disk.state === 'critical' ? 'danger' : 'warning'"
                                                                     class="thin-progress animated-bar" />
                                                     </div>
+
                                                 </div>
                                             </li>
+
                                         }
                                     }
-                                    @if (systemHealth.isDistributeModuleInstalled && !systemHealth.isNstaRunning) {
 
+
+                                    @if (systemHealth.isDistributeModuleInstalled && !systemHealth.isNstaRunning) {
                                         <li class="health-item animated-fade-in">
                                             <div class="pt-2 pb-2 border-bottom">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <fa-icon [icon]="['fas', 'warning']"
-                                                             [class]="'text-warning me-2' ">
-                                                    </fa-icon>
-                                                    <span class="fw-bold"
-                                                          [class]="'text-warning'">
-                                                        {{ t('Warning') }}
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'warning']" class="text-warning me-2"></fa-icon>
+                                                        <span class="fw-bold txt-overflow-ellipsis"  >
+                                                            {{ t('System') }}
+                                                        </span>
+                                                    </div>
+                                                    <span class="fw-bold badge rounded-pill status-badge-text border"
+                                                          [class]="'text-warning border-warning-subtle'">
+                                                        {{  t('Warning') }}
                                                     </span>
                                                 </div>
-                                                <p class="mb-1 d-flex justify-content-between align-items-center ">
+
+                                                <div class="d-flex justify-content-between align-items-center mb-1 text-lg">
                                                     <span class="text-muted">
                                                         {{ t('Service NSTA is not running!') }}
                                                     </span>
-                                                </p>
+                                                </div>
                                             </div>
                                         </li>
                                     }
@@ -400,30 +504,37 @@
                             </h6>
                         </div>
 
-                        <div class="dropdown-item"
+                        <div class="dropdown-item py-0"
                         >
                             <div class="d-flex align-items-center" [routerLink]="['/', 'distribute_module', 'satellites', 'index']">
-                                <ul class="pt-8 list-unstyled system-health-item fs-sm w-100 mb-2">
+                                <ul class="pt-8 list-unstyled system-health-item fs-sm w-100 mb-0">
                                     @for (satellite of systemHealth.satellites; track satellite) {
                                         @if (satellite.satellite_status) {
                                             @if (satellite.satellite_status.status !==1) {
                                                 <li class="health-item animated-fade-in">
                                                     <div class="pt-2 pb-2 border-bottom">
-                                                        <div class="d-flex align-items-center mb-1">
-                                                            <fa-icon [icon]="['fas', 'satellite-dish']" class="text-danger me-2"></fa-icon>
-                                                            <span class="fw-bold text-danger">
+
+                                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                                            <div class="d-flex align-items-center ">
+                                                                <fa-icon [icon]="['fas', 'satellite-dish']" class="text-danger me-2"></fa-icon>
+                                                                <span class="fw-bold txt-overflow-ellipsis" title="{{ satellite.name }}" >
+                                                                    {{ satellite.name }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="d-flex justify-content-between align-items-center mb-1 text-lg">
+                                                            <span class="text-muted">
                                                                 {{ t('Sync failed') }}
                                                             </span>
                                                         </div>
 
-                                                        <p class="mb-1 d-flex flex-column ">
-                                                            <span class="text-muted">
-                                                                {{ t('Satellite') }}: <strong class="border border-secondary-subtle font-monospace">{{ satellite?.name }}</strong>
+                                                        <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
+                                                            <span> <span class="text-muted">
+                                                                {{ t('last seen') }}:
                                                             </span>
-                                                            <span class="text-muted ">
-                                                                {{ t('last seen') }}: {{ satellite?.satellite_status?.last_seen }}
-                                                            </span>
-                                                        </p>
+                                                                <strong class="border border-secondary-subtle font-monospace"> {{ satellite?.satellite_status?.last_seen }}</strong></span>
+                                                        </div>
                                                     </div>
                                                 </li>
                                             }
@@ -443,9 +554,9 @@
                                                                 </span>
                                                             </div>
 
-                                                            <span class="badge rounded-pill status-badge-text"
-                                                                  [class]="satelliteSystemHealth?.cpu_state === 'critical' ? 'bg-danger text-white border border-danger-subtle' : 'text-dark bg-warning  border border-warning-subtle'"
-                                                            >
+                                                            <span class="badge rounded-pill status-badge-text border"
+                                                                  [class]="satelliteSystemHealth?.cpu_state === 'critical' ?  'text-danger border-danger' : 'text-warning border-warning'">
+
                                                                 {{ satelliteSystemHealth?.cpu_state === 'critical' ? t('Critical') : t('Warning') }}
                                                             </span>
                                                         </div>
@@ -474,11 +585,13 @@
                                                                 </span>
                                                             </div>
 
-                                                            <span class="badge rounded-pill status-badge-text"
-                                                                  [class]="satelliteSystemHealth?.memory?.memory?.state === 'critical' ? 'bg-danger text-white border border-danger-subtle' : 'text-dark bg-warning  border border-warning-subtle'"
-                                                                 >
+
+
+                                                            <span class="fw-bold badge rounded-pill status-badge-text border"
+                                                                  [class]="satelliteSystemHealth?.memory?.memory?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
                                                                 {{ satelliteSystemHealth?.memory?.memory?.state === 'critical' ? t('Critical') : t('Warning') }}
                                                             </span>
+
                                                         </div>
 
                                                         <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
@@ -486,9 +599,7 @@
                                                                {{ t('High memory usage') }}:
                                                            </span>
                                                                <strong class="border border-secondary-subtle font-monospace">Memory</strong></span>
-
-
-                                                            <span class="fw-bold font-monospace text-nowrap" [class]="satelliteSystemHealth?.memory?.memory?.state === 'critical' ? 'text-danger' : 'text-warning'">
+                                                            <span class="fw-bold font-monospace text-nowrap" >
                                                                 {{ satelliteSystemHealth?.memory?.memory?.percentage }}%
                                                             </span>
                                                         </div>
@@ -515,9 +626,8 @@
                                                                 </span>
                                                             </div>
 
-                                                            <span class="badge rounded-pill status-badge-text"
-                                                                  [class]="satelliteSystemHealth?.memory?.swap?.state === 'critical' ? 'bg-danger text-white border border-danger-subtle' : 'text-dark bg-warning  border border-warning-subtle bg-opacity-25'"
-                                                                  >
+                                                            <span class="fw-bold badge rounded-pill status-badge-text border"
+                                                                  [class]="satelliteSystemHealth?.memory?.swap?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
                                                                 {{ satelliteSystemHealth?.memory?.swap?.state === 'critical' ? t('Critical') : t('Warning') }}
                                                             </span>
                                                         </div>
@@ -526,7 +636,7 @@
                                                             <span class="">
                                                                 <span class="text-muted">{{ t('High memory usage') }}:</span> <strong class="ms-1 border border-secondary-subtle font-monospace ">Swap</strong>
                                                             </span>
-                                                            <span class="fw-bold font-monospace text-nowrap" [class]="satelliteSystemHealth?.memory?.swap?.state === 'critical' ? 'text-danger' : 'text-warning'">
+                                                            <span class="fw-bold font-monospace text-nowrap" >
                                                                 {{ satelliteSystemHealth?.memory?.swap?.percentage }}%
                                                             </span>
                                                         </div>
@@ -554,9 +664,8 @@
                                                                         </span>
                                                                     </div>
 
-                                                                    <span class="badge rounded-pill status-badge-text"
-                                                                          [class]="disk?.state === 'critical' ? 'bg-danger text-white border border-danger-subtle' : 'text-dark bg-warning  border border-warning-subtle bg-opacity-25'"
-                                                                          >
+                                                                    <span class="fw-bold badge rounded-pill status-badge-text border"
+                                                                          [class]="disk?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
                                                                         {{ disk?.state === 'critical' ? t('Critical') : t('Warning') }}
                                                                     </span>
                                                                 </div>
@@ -572,7 +681,7 @@
                                                                         </strong>
                                                                     </div>
 
-                                                                    <span class="fw-bold font-monospace text-nowrap" [class]="disk?.state === 'critical' ? 'text-danger' : 'text-warning'">
+                                                                    <span class="fw-bold font-monospace text-nowrap" >
                                                                         {{ disk?.use_percentage }}%
                                                                     </span>
                                                                 </div>
