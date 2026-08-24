@@ -1,12 +1,21 @@
 .color-white {
     color: #fff;
 }
+.txt-overflow-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .list-unstyled {
     padding-left: 0;
     list-style: none;
 }
-
+.status-badge-text{
+    font-size: 0.75rem;
+}
 .system-health-item {
     white-space: normal;
     word-break: break-word;
