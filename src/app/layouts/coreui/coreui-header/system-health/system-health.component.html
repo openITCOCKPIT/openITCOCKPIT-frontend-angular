@@ -418,7 +418,7 @@
 
                                                         <p class="mb-1 d-flex flex-column ">
                                                             <span class="text-muted">
-                                                                {{ t('Satellite') }}: <strong class="text-dark font-monospace">{{ satellite?.name }}</strong>
+                                                                {{ t('Satellite') }}: <strong class="border border-secondary-subtle font-monospace">{{ satellite?.name }}</strong>
                                                             </span>
                                                             <span class="text-muted ">
                                                                 {{ t('last seen') }}: {{ satellite?.satellite_status?.last_seen }}
@@ -444,7 +444,7 @@
                                                         </div>
                                                         <p class="mb-1 d-flex justify-content-between align-items-center ">
                                                             <span class="text-muted">
-                                                                {{ t('High CPU usage') }}: <strong class="text-dark font-monospace">{{ satellite.name }}</strong>
+                                                                {{ t('High CPU usage') }}: <strong class="border border-secondary-subtle font-monospace">{{ satellite.name }}</strong>
                                                             </span>
                                                         </p>
 
@@ -467,7 +467,7 @@
 
                                                         <p class="mb-1 d-flex justify-content-between align-items-center ">
                                                             <span class="text-muted">
-                                                                {{ t('High memory usage') }}: <strong class="text-dark font-monospace">Memory </strong>
+                                                                {{ t('High memory usage') }}: <strong class="border border-secondary-subtle font-monospace">Memory</strong>
                                                             </span>
                                                             <span class="fw-bold text-secondary ps-2">
                                                                 {{ satelliteSystemHealth?.memory?.memory?.percentage }}%
@@ -497,7 +497,7 @@
 
                                                         <p class="mb-1 d-flex justify-content-between align-items-center ">
                                                             <span class="text-muted">
-                                                                {{ t('High memory usage') }}: <strong class="text-dark font-monospace">Swap</strong>
+                                                                {{ t('High memory usage') }}: <strong class="border border-secondary-subtle font-monospace">Swap</strong>
                                                             </span>
                                                             <span class="fw-bold text-secondary ps-2">
                                                                 {{ satelliteSystemHealth?.memory?.swap?.percentage }}%
@@ -531,7 +531,7 @@
 
                                                                 <p class="mb-1 d-flex justify-content-between align-items-center ">
                                                                     <span class="text-muted">
-                                                                        {{ t('Low disk space') }}: <strong class="text-dark font-monospace">{{ disk?.mountpoint || disk?.disk }}</strong>
+                                                                        {{ t('Low disk space') }}: <strong class="border border-secondary-subtle font-monospace">{{ disk?.mountpoint || disk?.disk }}</strong>
                                                                     </span>
                                                                     <span class="fw-bold text-secondary ps-2">
                                                                         {{ disk.use_percentage }}%
