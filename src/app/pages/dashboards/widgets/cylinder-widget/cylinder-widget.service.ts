@@ -4,7 +4,7 @@ import { SelectKeyValueString } from '../../../../layouts/primeng/select.interfa
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { GenericResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
-import { TachometerWidgetConfigRootResponse } from '../tachometer-widget/tachometer-widget.interface';
+import { TachometerWidgetConfigRootResponse } from './cylinder-widget.interface';
 
 @Injectable({
     providedIn: 'root',
