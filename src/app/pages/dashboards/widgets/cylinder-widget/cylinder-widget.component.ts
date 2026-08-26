@@ -351,7 +351,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
         //Cylinder current text label
         if (this.perfdata.min != null && this.perfdata.max != null){
-            let ticksCount = currentVal < 1000 ? currentVal <= 100 ? 4 : currentVal <= 60 ? 3 : 4 : 5;
+            let ticksCount = currentVal <= 60 ? 3 : currentVal <= 100 ? 4 : 5;
             this.renderGradientLabels(cylinderGroup, cylinderWidth + x + 2, y, availableHeight, unit, max, min, ticksCount);
         } else {
             // min base lable - 0 label
