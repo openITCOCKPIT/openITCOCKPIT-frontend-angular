@@ -35,7 +35,7 @@ import { ServiceTypesEnum } from '../../../services/services.enum';
 import {
     HostForMapItem, ServiceForMapItem
 } from '../../../../modules/map_module/components/map-item-base/map-item-base.interface';
-import { TachometerWidgetPerfdata } from '../tachometer-widget/tachometer-widget.interface';
+import { CylinderWidgetPerfdata } from './cylinder-widget.interface';
 import { KtdResizeEnd } from '@katoid/angular-grid-layout';
 
 @Component({
@@ -75,7 +75,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
     private router: Router = inject(Router);
     protected Host!: HostForMapItem;
     protected Service!: ServiceForMapItem;
-    private perfdata?: TachometerWidgetPerfdata;
+    private perfdata?: CylinderWidgetPerfdata;
     private current_state: number = -1;
 
     public host_id: null | number = null;
@@ -95,6 +95,10 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         this.renderCylinder();
     }
 
+    public override load() {
+        // Handled by ngAfterViewInit as we need the template to render the gauge
+    }
+
     public ngAfterViewInit(): void {
         this.calcCylinderSize();
 
@@ -106,9 +110,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
             this.CylinderWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {
                 // is a service selected?
-                console.log('response::',response);
                 this.metric = response.config.metric;
-
 
                 if (!Array.isArray(response.service.Service) && !Array.isArray(response.service.Servicestatus)) {
                     this.service_id = response.service.Service.id;
@@ -116,16 +118,17 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
                     this.isEvcService = response.service.Service.isEVCService;
                     this.label = `${response.service.Service.hostname}/${response.service.Service.servicename}`
 
+                    this.loadServicesByString('');
+                    this.loadMetricsByServiceId();
+
                     if (response.service.Servicestatus.currentState != undefined){
                         this.current_state = response.service.Servicestatus.currentState;
                     }
                 }
 
-
                 this.perfdata = undefined;
 
                 // For legacy Prometheus Services we may have to voerwrite the metric but we do not want to change the
-                // selected value in the selectbox
                 let metricKey = this.metric;
 
                 if (!Array.isArray(response.service.Perfdata)) {
@@ -137,7 +140,6 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
                     if (metricKey && response.service.Perfdata[metricKey]) {
                         this.perfdata = response.service.Perfdata[metricKey];
-                        console.log('perfdata cylinder',this.perfdata);
                     }
                 }
 
@@ -263,68 +265,43 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         const svg = this.cylinderSvg.nativeElement;
         svg.innerHTML = '';
 
-        let currentVal = Number(this.perfdata.current);
+        let currentVal = Number(this.perfdata.current ?? 0);
         let unit = this.perfdata.unit ?? '';
-
-        let label = this.perfdata.metric;
-
-        if (label.length > 20) {
-            label = label.substring(0, 20);
-            label += '...';
-        }
-
-        if (this.showLabel) {
-            if (unit === null || unit === '') {
-                unit = label;
-            } else {
-                unit = label  + unit;
-            }
-            label = this.label;
-            if (label.length > 20) {
-                label = label.substring(0, 20);
-                label += '...';
-            }
-        }
-
-        //let showDecimalDigitsGauge = 0;
-        //if (decimalDigits > 0 || (setup.scale.max - setup.scale.min < 10)) {
-        //    showDecimalDigitsGauge = 1;
-        //}
-
-
-        let min = this.perfdata.min !== null ? this.perfdata.min : 0;
+        let min = this.perfdata.min ?? 0;
         let max = Number(this.perfdata.max);
 
         if (max <= currentVal) {
             max = currentVal;
         }
 
-        let percentage = (max - min) > 0 ? ((currentVal - min) / (max - min)) * 100 : 0;
+        let label = this.label;
+        if (label.length > 30) {
+            label = label.substring(0, 30);
+            label += '...';
+        }
+
+        let percentage = (max - min) > 0 ? ((currentVal - min) / (max - min)) * 99 : 0;
 
         const currentText = `${currentVal} ${unit}`;
         const maxText = `${max} ${unit}`;
 
         const maxTextLength = Math.max(currentText.length, maxText.length);
-        const dynamicMargin = Math.min(Math.max(maxTextLength * 10, 75), 120);
+        const x = Math.min(Math.max(maxTextLength * 10, 75), 120);
+        const cylinderWidth = Math.max(this.width - (x * 2), 40);
 
-        const cylinderWidth = Math.max(this.width - (dynamicMargin * 2), 40);
-
-        const x = dynamicMargin;
         const y = 10;
-        const ellipseBottomCy = this.height - 12;
-        const availableHeight = ellipseBottomCy - y;
+        const ellipseBottomCy = this.height;
+        const availableHeight = ellipseBottomCy - 10;
 
         //ready for the ellipse
         const rx = cylinderWidth / 2;
         const ry = 10;
         //calculate positions for the Cylinder
         const ellipseCx = x + rx;
-        const rectX = x ;
-        const rectY = y;
 
-        const pxValue = (availableHeight * percentage) / 100;
-        const newRectY = this.height - pxValue;
-        const newTopEllipseY = newRectY;
+        let pxValue = (availableHeight * percentage) / 100;
+        let rectY = this.height - pxValue;
+        let topEllipseY = rectY;
 
         const cylinderGroup = this.renderer.createElement('g', 'svg');
         this.renderer.setAttribute(cylinderGroup, 'id', 'cylinder_' + this.widgetID);
@@ -336,102 +313,55 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
         const stateColor = this.getStateColor(this.current_state);
 
-        this.createLinearGradient(defs, `fadeGreen_${this.widgetID}`, [
-            {offset: '0%', color: '#00cc00'},
-            {offset: '20%', color: '#5BFF5B'},
-            {offset: '70%', color: '#006600'}
-        ]);
-        this.createLinearGradient(defs, `fadeDarkGreen_${this.widgetID}`, [
-            {offset: '0%', color: '#00AD00'},
-            {offset: '60%', color: '#006600'},
-            {offset: '70%', color: '#005600'}
-        ]);
-        this.createLinearGradient(defs, `fadeYellow_${this.widgetID}`, [
-            {offset: '0%', color: '#FFCC00'},
-            {offset: '20%', color: '#FFFF5B'},
-            {offset: '70%', color: '#E5BB00'}
-        ]);
-        this.createLinearGradient(defs, `fadeDarkYellow_${this.widgetID}`, [
-            {offset: '0%', color: '#FFAD00'},
-            {offset: '60%', color: '#E5BB00'},
-            {offset: '70%', color: '#E2B100'}
-        ]);
-        this.createLinearGradient(defs, `fadeRed_${this.widgetID}`, [
-            {offset: '0%', color: '#CE0D00'},
-            {offset: '20%', color: '#FF0000'},
-            {offset: '70%', color: '#BF1600'}
-        ]);
-        this.createLinearGradient(defs, `fadeDarkRed_${this.widgetID}`, [
-            {offset: '0%', color: '#c91400'},
-            {offset: '60%', color: '#BF1600'},
-            {offset: '70%', color: '#BF0600'}
-        ]);
-        this.createLinearGradient(defs, `fadeGray_${this.widgetID}`, [
-            {offset: '0%', color: '#AFAFAF'},
-            {offset: '20%', color: '#FFFFFF'},
-            {offset: '70%', color: '#AFAFAF'},
-            {offset: '100%', color: '#A0A0A0'}
-        ], 0, 0, 1);
-        this.createLinearGradient(defs, `fadeDarkGray_${this.widgetID}`, [
-            {offset: '0%', color: '#757575'},
-            {offset: '20%', color: '#939393'},
-            {offset: '100%', color: '#757575'}
-        ]);
-        this.createLinearGradient(defs, `fadeBlue_${this.widgetID}`, [
-            {offset: '0%', color: '#0006D5'},
-            {offset: '20%', color: '#1248D5'},
-            {offset: '70%', color: '#0006D5'}
-        ]);
-        this.createLinearGradient(defs, `fadeDarkBlue_${this.widgetID}`, [
-            {offset: '0%', color: '#000674'},
-            {offset: '20%', color: '#0006B8'},
-            {offset: '100%', color: '#000674'}
-        ]);
-
-
-        //outer Cylinder - top ellipse
-        this.createEllipse(cylinderGroup, ellipseCx, y , rx, ry, `url(#fadeDarkGray_${this.widgetID})`, 0.1, 2, '#CECECE', 0.2 );
-
-        //inner Cylinder (the value)
-        this.createEllipse(cylinderGroup, ellipseCx, ellipseBottomCy - ry, rx, ry, `url(#fadeDark${stateColor}_${this.widgetID})`, 0.8);
-
-        //center rect - value
-        if (Number(this.perfdata.current) > 1) {
-            this.createRect(cylinderGroup, rectX, newRectY - ry, cylinderWidth, pxValue + ry, rx, ry, `url(#fade${stateColor}_${this.widgetID})`, 0.9);
-
-            //top ellipse
-            const innerTopEllipse = this.createEllipse(cylinderGroup, ellipseCx, newTopEllipseY, rx, ry, `url(#fadeDark${stateColor}_${this.widgetID})`, 0.8);
-
-            if (innerTopEllipse) {
-                this.renderer.setAttribute(innerTopEllipse, 'class', 'fluid-top-surface');
-            }
-        }
-
-        //outer Cylinder - center rect
-        this.createRect(cylinderGroup, rectX, rectY - 10, cylinderWidth, this.height, rx, ry, `url(#fadeGray_${this.widgetID})`, 0.5, 2, '#CECECE', 0.3, 'background_' + this.widgetID);
-
-
-        //Cylinder text
-        if (this.perfdata.min != null && this.perfdata.max != null){
-            this.renderGradientLabels(cylinderGroup, cylinderWidth+ x + 2, y, this.height - 10, unit , Number(this.perfdata.max), Number(this.perfdata.min), 4);
-        } else {
-            // min base lable
-            this.createLabelLine(cylinderGroup, cylinderWidth + x + 2, ellipseBottomCy );
-            this.createLabel(cylinderGroup, cylinderWidth + x + 18, ellipseBottomCy, '0', '13px', '#A0A0A0' );
-        }
-
-        if (this.showLabel) {
-            this.createLabel(cylinderGroup, ellipseCx, ellipseBottomCy+21, label, '14px', '#888', 'middle', 'bold' );
-        }
+        this.createCylinderGradients(defs, stateColor);
 
         //current value in cylinder
         let leftLineLength = 8;
         const fontSize = currentText.length > 15 ? '12px' : '14px';
 
-        let postionY: number = currentVal > 0 ? newTopEllipseY : newTopEllipseY - 21;
+        //inner Cylinder (the value)
+        this.createEllipse(cylinderGroup, ellipseCx, ellipseBottomCy - ry, rx, ry, `url(#fadeDark${stateColor}_${this.widgetID})`, 0.8);
 
-        this.createLabelLine(cylinderGroup, x, postionY, 'left', stateColor, leftLineLength);
-        this.createLabel(cylinderGroup, x - leftLineLength - 4, postionY, currentText, fontSize, stateColor, 'end', 'bold');
+        if (currentVal > 1) {
+            if (this.perfdata.min != null && this.perfdata.max != null){
+                rectY -= ry;
+                pxValue += ry;
+            } else {
+                topEllipseY += ry;
+            }
+        } else if (currentVal <= 0) {
+            topEllipseY -= ry;
+        }
+
+        //green-value-in-cylinder
+        this.createRect(cylinderGroup, x, rectY, cylinderWidth, pxValue, rx, ry, `url(#fade${stateColor}_${this.widgetID})`, 0.9);
+        //top ellipse
+        const innerTopEllipse = this.createEllipse(cylinderGroup, ellipseCx, topEllipseY, rx, ry, `url(#fadeDark${stateColor}_${this.widgetID})`, 0.8);
+        if (innerTopEllipse) {
+            this.renderer.setAttribute(innerTopEllipse, 'class', 'fluid-top-surface');
+        }
+
+        //Outer Cylinder - center rect
+        this.createEllipse(cylinderGroup, ellipseCx, y , rx, ry, `url(#fadeDarkGray_${this.widgetID})`, 0.1, 2, '#CECECE', 0.2 );
+        this.createRect(cylinderGroup, x, 0, cylinderWidth, this.height, rx, ry, `url(#fadeGray_${this.widgetID})`, 0.5, 2, '#CECECE', 0.3, 'background_' + this.widgetID);
+        //current Label value in cylinder
+        this.createLabelLine(cylinderGroup, x, topEllipseY, 'left', stateColor, leftLineLength);
+        this.createLabel(cylinderGroup, x - leftLineLength - 4, topEllipseY, currentText, fontSize, stateColor, 'end', 'bold');
+
+
+        //Cylinder current text label
+        if (this.perfdata.min != null && this.perfdata.max != null){
+            let ticksCount = currentVal < 1000 ? currentVal <= 100 ? 4 : currentVal <= 60 ? 3 : 4 : 5;
+            this.renderGradientLabels(cylinderGroup, cylinderWidth + x + 2, y, availableHeight, unit, max, min, ticksCount);
+        } else {
+            // min base lable - 0 label
+            this.createLabelLine(cylinderGroup, cylinderWidth + x + 2, availableHeight );
+            this.createLabel(cylinderGroup, cylinderWidth + x + 18, availableHeight, '0', '13px', '#A0A0A0' );
+        }
+
+        if (this.showLabel) {
+            this.createLabel(cylinderGroup, ellipseCx, ellipseBottomCy+(y - 2), label, '13px', '#888', 'middle');
+        }
     }
 
     private createLinearGradient(defs: any, id: string, stops: {
@@ -507,28 +437,61 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         this.renderer.appendChild(parent, rect);
     }
 
-    private renderGradientLabels(cylinderGroup: any, startX: number, topY: number, bottomY: number, unit :string  = '' , max: number, min:number , ticksCount: number = 4) {
+    private renderGradientLabels(cylinderGroup: any, startX: number, topY: number, bottomY: number, unit :string  = '' , max: number, min:number , ticksCount: number = 3) {
         const totalHeight = bottomY - topY;
 
         for (let i = 0; i <= ticksCount; i++) {
             const ratio = i / ticksCount;
+
             const currentY = bottomY - (ratio * totalHeight);
-            const currentValue = Math.round(ratio * max);
+            const currentValue = Math.round(min + ratio * (max - min));
 
             this.createLabelLine(cylinderGroup, startX , currentY);
 
             let labelText = `${currentValue} ${unit}`;
-            if (i === ticksCount) {
-                labelText = max.toString();
-            }
-            if (i === 0 ) {
-                labelText = min.toString();
-            }
 
             this.createLabel(cylinderGroup, startX + 8 , currentY + 1, labelText, '12px', '#888888');
         }
     }
 
+    private createCylinderGradients(defs: any, stateColor: string): void {
+
+        this.createLinearGradient(defs, `fadeGray_${this.widgetID}`, [
+            {offset: '0%', color: '#AFAFAF'},
+            {offset: '20%', color: '#FFFFFF'},
+            {offset: '70%', color: '#AFAFAF'},
+            {offset: '100%', color: '#A0A0A0'}
+        ], 0, 0, 1);
+
+        this.createLinearGradient(defs, `fadeDarkGray_${this.widgetID}`, [
+            {offset: '0%', color: '#757575'},
+            {offset: '20%', color: '#939393'},
+            {offset: '100%', color: '#757575'}
+        ]);
+
+        const colorMap: Record<string, { main: any[], dark: any[] }> = {
+            Green: {
+                main: [{offset: '0%', color: '#00cc00'}, {offset: '20%', color: '#5BFF5B'}, {offset: '70%', color: '#006600'}],
+                dark: [{offset: '0%', color: '#00AD00'}, {offset: '60%', color: '#006600'}, {offset: '70%', color: '#005600'}]
+            },
+            Yellow: {
+                main: [{offset: '0%', color: '#FFCC00'}, {offset: '20%', color: '#FFFF5B'}, {offset: '70%', color: '#E5BB00'}],
+                dark: [{offset: '0%', color: '#FFAD00'}, {offset: '60%', color: '#E5BB00'}, {offset: '70%', color: '#E2B100'}]
+            },
+            Red: {
+                main: [{offset: '0%', color: '#CE0D00'}, {offset: '20%', color: '#FF0000'}, {offset: '70%', color: '#BF1600'}],
+                dark: [{offset: '0%', color: '#c91400'}, {offset: '60%', color: '#BF1600'}, {offset: '70%', color: '#BF0600'}]
+            },
+            Blue: {
+                main: [{offset: '0%', color: '#0006D5'}, {offset: '20%', color: '#1248D5'}, {offset: '70%', color: '#0006D5'}],
+                dark: [{offset: '0%', color: '#000674'}, {offset: '20%', color: '#0006B8'}, {offset: '100%', color: '#000674'}]
+            }
+        };
+
+        const config = colorMap[stateColor] ?? colorMap['Green'];
+        this.createLinearGradient(defs, `fade${stateColor}_${this.widgetID}`, config.main);
+        this.createLinearGradient(defs, `fadeDark${stateColor}_${this.widgetID}`, config.dark);
+    }
 
     private createLabel (parent: any, x: number = 0, y: number = 0, content:string , fontSize: string = '11px', color: string = '#888888',textAnchor: string = 'start',fontWeight: string = 'normal'): void {
 

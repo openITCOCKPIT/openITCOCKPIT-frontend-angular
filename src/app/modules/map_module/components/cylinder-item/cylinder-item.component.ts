@@ -135,7 +135,7 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
         }
         if (!isNaN(perfdata.max)) {
             value = (parseInt(perfdata.current) / parseInt(perfdata.max)) * 100;
-            //todo fix me
+
             if (value > 90) {
                 value = 90;
             }

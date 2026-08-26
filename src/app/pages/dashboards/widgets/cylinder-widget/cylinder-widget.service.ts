@@ -4,7 +4,7 @@ import { SelectKeyValueString } from '../../../../layouts/primeng/select.interfa
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { GenericResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
-import { TachometerWidgetConfigRootResponse } from './cylinder-widget.interface';
+import { CylinderWidgetConfigRootResponse } from './cylinder-widget.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -41,7 +41,7 @@ export class CylinderWidgetService {
 
     public saveWidgetConfig(widgetId: string, service_id: number, show_label: boolean, metric: string): Observable<GenericResponseWrapper> {
         const proxyPath = this.proxyPath;
-        return this.http.post<any>(`${proxyPath}/dashboards/tachoWidget.json?angular=true`, {
+        return this.http.post<any>(`${proxyPath}/dashboards/cylinderWidget.json?angular=true`, {
             Widget: {
                 id: widgetId,
                 service_id: service_id
@@ -67,11 +67,11 @@ export class CylinderWidgetService {
             );
     }
 
-    public loadWidgetConfig(widgetId: string): Observable<TachometerWidgetConfigRootResponse> {
+    public loadWidgetConfig(widgetId: string): Observable<CylinderWidgetConfigRootResponse> {
         const proxyPath = this.proxyPath;
 
 
-        return this.http.get<TachometerWidgetConfigRootResponse>(`${proxyPath}/dashboards/tachoWidget.json`, {
+        return this.http.get<CylinderWidgetConfigRootResponse>(`${proxyPath}/dashboards/cylinderWidget.json`, {
             params: {
                 angular: true,
                 widgetId: widgetId

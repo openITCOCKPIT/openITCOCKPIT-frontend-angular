@@ -42,12 +42,12 @@
                     <!-- Config area -->
                     @if (widget) {
                         <div class="mb-3">
-                            <label cLabel [for]="'tachometer_service_id_'+widget.id">
+                            <label cLabel [for]="'cylinder_service_id_'+widget.id">
                                 {{ t('Service') }}
                             </label>
                             <oitc-select-optgroup
-                                [attr.id]="'tachometer_service_id_'+widget.id"
-                                [name]="'tachometer_service_id_'+widget.id"
+                                [attr.id]="'cylinder_service_id_'+widget.id"
+                                [name]="'cylinder_service_id_'+widget.id"
                                 optionValue="value"
                                 optionLabel="label"
                                 [options]="services"
@@ -59,12 +59,12 @@
                             </oitc-select-optgroup>
                         </div>
                         <div class="mb-3">
-                            <label cLabel [for]="'tachometer_metric_'+widget.id">
+                            <label cLabel [for]="'cylinder_metric_'+widget.id">
                                 {{ t('Metric') }}
                             </label>
                             <oitc-select
-                                [attr.id]="'tachometer_metric_'+widget.id"
-                                [name]="'tachometer_metric_'+widget.id"
+                                [attr.id]="'cylinder_metric_'+widget.id"
+                                [name]="'cylinder_metric_'+widget.id"
                                 optionValue="key"
                                 optionLabel="value"
                                 [options]="metrics"
