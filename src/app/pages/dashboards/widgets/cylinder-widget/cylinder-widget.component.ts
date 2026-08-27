@@ -142,7 +142,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
                     if (metricKey && response.service.Perfdata[metricKey]) {
                         this.perfdata = response.service.Perfdata[metricKey];
 
-                        console.log('this.perfdata',this.perfdata)
+                        //console.log('this.perfdata.datasource',this.perfdata?.datasource)
                     }
                 }
 
@@ -300,8 +300,11 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
             max = currentVal;
         }
 
-        if (unit == '%' && max == 0 ){
-            max = 100;
+        if (unit == '%'){
+            unit = '';
+            if (max == 0){
+                max = 100;
+            }
         }
 
         let percentage = (max - min) > 0 ? ((currentVal - min) / (max - min)) * 99 : 0;
@@ -314,7 +317,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
         const y = 10;
         const ellipseBottomCy = this.height;
-        const availableHeight = ellipseBottomCy - 10;
+        const availableHeight = ellipseBottomCy - y;
 
         const maxChars = Math.max(Math.floor(this.width / 7.5), 10);
 
@@ -352,28 +355,29 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
         //inner Cylinder (the value)
         this.createEllipse(cylinderGroup, ellipseCx, ellipseBottomCy - ry, rx, ry, `url(#fadeDark${stateColor}_${this.widgetID})`, 0.8);
-        let innerTopEllipseYYY = topEllipseY;
+
         if (currentVal > 0) {
             if (this.perfdata.min != null && this.perfdata.max != null){
                 rectY -= ry;
                 pxValue += ry;
             } else {
+                topEllipseY += ry;
             }
             if (currentVal < 1){
-                innerTopEllipseYYY -= 10;
+                topEllipseY -= 10;
                 rectY -= 5 ;
             }
         } else {
-            innerTopEllipseYYY -=ry;
+            topEllipseY -=ry;
         }
 
         //green-value-in-cylinder
         this.createRect(cylinderGroup, x, rectY, cylinderWidth, pxValue, rx, ry, `url(#fade${stateColor}_${this.widgetID})`, 0.9);
         //top ellipse
-        const innerTopEllipse = this.createEllipse(cylinderGroup, ellipseCx, innerTopEllipseYYY, rx, ry, `url(#fadeDark${stateColor}_${this.widgetID})`, 0.8);
+        const innerTopEllipse = this.createEllipse(cylinderGroup, ellipseCx, topEllipseY, rx, ry, `url(#fadeDark${stateColor}_${this.widgetID})`, 0.8);
         if (innerTopEllipse && percentage > 5) {
             this.renderer.setAttribute(innerTopEllipse, 'class', 'fluid-top-surface');
-        } else if (innerTopEllipse && currentVal < 1){
+        } else if (innerTopEllipse && currentVal < 1) {
             this.renderer.setAttribute(innerTopEllipse, 'class', 'fluid-top-surface-light');
         }
 
@@ -381,13 +385,13 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         this.createEllipse(cylinderGroup, ellipseCx, y , rx, ry, `url(#fadeDarkGray_${this.widgetID})`, 0.1, 2, '#CECECE', 0.2 );
         this.createRect(cylinderGroup, x, 0, cylinderWidth, this.height, rx, ry, `url(#fadeGray_${this.widgetID})`, 0.5, 2, '#CECECE', 0.3, 'background_' + this.widgetID);
         //current Label value in cylinder
-        this.createLabelLine(cylinderGroup, x - 6 , innerTopEllipseYYY, 'left',  '#A0A0A0', leftLineLength);
-        this.createLabel(cylinderGroup, x - leftLineLength - 4, innerTopEllipseYYY, currentText, fontSize,  '#A0A0A0', 'end');
+        //this.createLabelLine(cylinderGroup, x - leftLineLength , topEllipseY, 'left',  '#A0A0A0', leftLineLength);
+        this.createLabel(cylinderGroup, x - leftLineLength, topEllipseY, currentText, fontSize,  '#A0A0A0', 'end');
 
 
         //Cylinder current text label
-        if (this.perfdata.min != null && this.perfdata.max != null){
-            let ticksCount = currentVal <= 60 ? 3 : currentVal <= 100 ? 4 : 5;
+        if (max !== 0) {
+            let ticksCount = currentVal <= 0? 1 : currentVal <= 60 ? 3 : currentVal <= 100 ? 4 : 5;
             this.renderGradientLabels(cylinderGroup, cylinderWidth + x + 2, y, availableHeight, unit, max, min, ticksCount);
         } else {
             // min base lable - 0 label

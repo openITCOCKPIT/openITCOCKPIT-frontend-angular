@@ -89,7 +89,7 @@
                             </c-form-check>
                         </div>
                         <div class="mt-1 text-end">
-                            <button cButton type="button" class="ripple" (click)="saveConfig()">
+                            <button cButton type="button" [disabled]="!service_id || !metric"  class="ripple" (click)="saveConfig()">
                                 {{ t('Save') }}
                             </button>
                         </div>
