@@ -142,7 +142,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
                     if (metricKey && response.service.Perfdata[metricKey]) {
                         this.perfdata = response.service.Perfdata[metricKey];
 
-                        //console.log('this.perfdata',this.perfdata)
+                        console.log('this.perfdata',this.perfdata)
                     }
                 }
 
@@ -283,24 +283,26 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
 
     private renderCylinder(): void {
-
         if (!this.widget || !this.perfdata) {
             return;
         }
+        const setup = this.perfdata.datasource.setup;
 
         const svg = this.cylinderSvg.nativeElement;
         svg.innerHTML = '';
 
-        let currentVal = Number(this.perfdata.current ?? 0);
-        let unit = this.perfdata.unit ?? '';
-        let min = Number(this.perfdata.min ?? 0);
-        let max = Number(this.perfdata.max ?? 0);
+        let currentVal = setup.metric.value ?? 0;
+        let unit = setup.metric.unit ?? '';
+        let min = setup.scale.min ?? 0;
+        let max = setup.scale.max ?? 0;
 
         if (max <= currentVal) {
             max = currentVal;
         }
 
-
+        if (unit == '%' && max == 0 ){
+            max = 100;
+        }
 
         let percentage = (max - min) > 0 ? ((currentVal - min) / (max - min)) * 99 : 0;
         const currentText = `${currentVal} ${unit}`;
@@ -314,7 +316,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         const ellipseBottomCy = this.height;
         const availableHeight = ellipseBottomCy - 10;
 
-        const maxChars = Math.max(Math.floor(cylinderWidth / 7.5), 10);
+        const maxChars = Math.max(Math.floor(this.width / 7.5), 10);
 
         let label = this.label;
         if (label.length > maxChars) {
@@ -335,7 +337,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         const cylinderGroup = this.renderer.createElement('g', 'svg');
         this.renderer.setAttribute(cylinderGroup, 'id', 'cylinder_' + this.widgetID);
         this.renderer.appendChild(svg, cylinderGroup);
-        this.renderer.setAttribute(svg, 'viewBox', `0 0 ${this.width} ${this.height+15}`);
+        this.renderer.setAttribute(svg, 'viewBox', `0 0 ${this.width} ${this.height+25}`);
 
         const defs = this.renderer.createElement('defs', 'svg');
         this.renderer.appendChild(svg, defs);
@@ -347,7 +349,6 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         //current value in cylinder
         let leftLineLength = 6;
         const fontSize = currentText.length > 15 ? '12px' : '14px';
-        let labelEllipseY = topEllipseY;
 
         //inner Cylinder (the value)
         this.createEllipse(cylinderGroup, ellipseCx, ellipseBottomCy - ry, rx, ry, `url(#fadeDark${stateColor}_${this.widgetID})`, 0.8);
@@ -357,17 +358,12 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
                 rectY -= ry;
                 pxValue += ry;
             } else {
-                labelEllipseY += ry;
             }
             if (currentVal < 1){
                 innerTopEllipseYYY -= 10;
                 rectY -= 5 ;
-                labelEllipseY -= 10;
-                console.log('this.max',max)
-                console.log('this.min',min)
             }
         } else {
-            labelEllipseY -= ry;
             innerTopEllipseYYY -=ry;
         }
 
@@ -400,7 +396,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         }
 
         if (this.showLabel) {
-            this.createLabel(cylinderGroup, ellipseCx, ellipseBottomCy+(y ), label, '13px', '#888', 'middle');
+            this.createLabel(cylinderGroup, ellipseCx, ellipseBottomCy+18, label, '13px', '#888', 'middle');
         }
     }
 

@@ -38,8 +38,8 @@ export interface PerformanceWidgetPerfdata {
     unit: null | string
     warning: string | null
     critical: string | null
-    min: string | number | null,
-    max: string | number | null,
+    min: number | null,
+    max: number | null,
     metric: string
     datasource: {
         setup: {
