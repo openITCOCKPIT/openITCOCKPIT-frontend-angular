@@ -373,7 +373,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
             }
         } else {
             topEllipseY -= ry;
-        }
+        } 
 
         topEllipseY = Math.min(Math.max(topEllipseY, y), ellipseBottomCy - ry);
 
