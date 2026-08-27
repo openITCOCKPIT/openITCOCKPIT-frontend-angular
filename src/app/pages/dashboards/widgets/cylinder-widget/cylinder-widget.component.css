@@ -1,3 +1,9 @@
+.cylinder-label {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 ::ng-deep .fluid-top-surface {
     transition: cy 0.4s ease-in-out;
     animation: fluidWave 2s ease-in-out infinite alternate !important;
@@ -5,9 +11,9 @@
     transform-origin: center;
 }
 
-::ng-deep .fluid-top-surface-2 {
+::ng-deep .fluid-top-surface-light {
     transition: cy 0.5s ease-in-out;
-    animation: fluidWave 1s ease-in-out infinite alternate !important;
+    animation: fluidWaveLight 1s ease-in-out infinite alternate !important;
     transform-box: fill-box;
     transform-origin: center;
 }
@@ -23,3 +29,16 @@
         transform: translateY(2.5px) scaleY(0.87);
     }
 }
+
+@keyframes fluidWaveLight {
+    0% {
+        transform: translateY(0px) scaleY(1);
+    }
+    50% {
+        transform: translateY(-1.5px) scaleY(1.02);
+    }
+    100% {
+        transform: translateY(1.5px) scaleY(0.97);
+    }
+}
+
