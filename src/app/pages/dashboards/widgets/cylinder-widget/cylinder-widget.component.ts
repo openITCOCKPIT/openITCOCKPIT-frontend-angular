@@ -280,8 +280,6 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
         this.cdr.markForCheck();
     }
-
-
     private renderCylinder(): void {
         if (!this.widget || !this.perfdata) {
             return;
@@ -320,7 +318,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
         const maxChars = Math.max(Math.floor(this.width / 7.5), 10);
 
-        let label = this.label;
+        let label = this.label ?? '';
         if (label.length > maxChars) {
             label = label.substring(0, maxChars);
             label += '...';
@@ -373,11 +371,15 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
             }
         } else {
             topEllipseY -= ry;
-        } 
+        }
 
         topEllipseY = Math.min(Math.max(topEllipseY, y), ellipseBottomCy - ry);
 
+        this.createRect(cylinderGroup, x, 0, cylinderWidth, this.height, rx, ry, `url(#fadeGray_${this.widgetID})`, 0.5, 2, '#CECECE', 0.3, 'background_' + this.widgetID);
         //green-value-in-cylinder
+
+        //Outer Cylinder - center rect
+        this.createEllipse(cylinderGroup, ellipseCx, y , rx, ry, `url(#fadeDarkGray_${this.widgetID})`, 0.1, 2, '#CECECE', 0.2 );
         this.createRect(cylinderGroup, x, rectY, cylinderWidth, pxValue, rx, ry, `url(#fade${stateColor}_${this.widgetID})`, 0.9);
         //top ellipse
         const innerTopEllipse = this.createEllipse(cylinderGroup, ellipseCx, topEllipseY, rx, ry, `url(#fadeDark${stateColor}_${this.widgetID})`, 0.8);
@@ -389,13 +391,9 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
             }
         }
 
-        //Outer Cylinder - center rect
-        this.createEllipse(cylinderGroup, ellipseCx, y , rx, ry, `url(#fadeDarkGray_${this.widgetID})`, 0.1, 2, '#CECECE', 0.2 );
-        this.createRect(cylinderGroup, x, 0, cylinderWidth, this.height, rx, ry, `url(#fadeGray_${this.widgetID})`, 0.5, 2, '#CECECE', 0.3, 'background_' + this.widgetID);
         //current Label value in cylinder
         this.createLabelLine(cylinderGroup, x - leftLineLength -1 , topEllipseY-1, 'left',  '#A0A0A0', leftLineLength);
         this.createLabel(cylinderGroup, x - leftLineLength - 3, topEllipseY-1, currentText, fontSize,  '#A0A0A0', 'end');
-
 
         //Cylinder current text label
         if (max !== null && max !== 0) {
