@@ -375,11 +375,6 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
         topEllipseY = Math.min(Math.max(topEllipseY, y), ellipseBottomCy - ry);
 
-        this.createRect(cylinderGroup, x, 0, cylinderWidth, this.height, rx, ry, `url(#fadeGray_${this.widgetID})`, 0.5, 2, '#CECECE', 0.3, 'background_' + this.widgetID);
-        //green-value-in-cylinder
-
-        //Outer Cylinder - center rect
-        this.createEllipse(cylinderGroup, ellipseCx, y , rx, ry, `url(#fadeDarkGray_${this.widgetID})`, 0.1, 2, '#CECECE', 0.2 );
         this.createRect(cylinderGroup, x, rectY, cylinderWidth, pxValue, rx, ry, `url(#fade${stateColor}_${this.widgetID})`, 0.9);
         //top ellipse
         const innerTopEllipse = this.createEllipse(cylinderGroup, ellipseCx, topEllipseY, rx, ry, `url(#fadeDark${stateColor}_${this.widgetID})`, 0.8);
@@ -390,6 +385,11 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
                 this.renderer.setAttribute(innerTopEllipse, 'class', 'fluid-top-surface-light');
             }
         }
+        //green-value-in-cylinder
+        this.createRect(cylinderGroup, x, 0, cylinderWidth, this.height, rx, ry, `url(#fadeGray_${this.widgetID})`, 0.5, 2, '#CECECE', 0.3, 'background_' + this.widgetID);
+
+        //Outer Cylinder - center rect
+        this.createEllipse(cylinderGroup, ellipseCx, y , rx, ry, `url(#fadeDarkGray_${this.widgetID})`, 0.1, 2, '#CECECE', 0.2 );
 
         //current Label value in cylinder
         this.createLabelLine(cylinderGroup, x - leftLineLength -1 , topEllipseY-1, 'left',  '#A0A0A0', leftLineLength);
