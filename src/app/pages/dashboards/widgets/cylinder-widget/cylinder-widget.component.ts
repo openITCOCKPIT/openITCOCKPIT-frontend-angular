@@ -32,9 +32,7 @@ import { ServicesService } from '../../../services/services.service';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { ServiceTypesEnum } from '../../../services/services.enum';
 
-import {
-    HostForMapItem, ServiceForMapItem
-} from '../../../../modules/map_module/components/map-item-base/map-item-base.interface';
+
 import { KtdResizeEnd } from '@katoid/angular-grid-layout';
 import {PerformanceWidgetPerfdata} from '../widgets.interface'
 import { AnimationEvent } from '@angular/animations';
@@ -74,8 +72,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
     public metric: string | null = null;
     public metrics: SelectKeyValueString[] = [];
     private router: Router = inject(Router);
-    protected Host!: HostForMapItem;
-    protected Service!: ServiceForMapItem;
+
     private perfdata?: PerformanceWidgetPerfdata;
     private current_state: number = -1;
 
@@ -97,7 +94,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
     }
 
     public override load() {
-        // Handled by ngAfterViewInit as we need the template to render the gauge
+        // Handled by ngAfterViewInit as we need the template to render Cylinder
     }
 
     public ngAfterViewInit(): void {
@@ -129,7 +126,6 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
                 this.perfdata = undefined;
 
-                // For legacy Prometheus Services we may have to voerwrite the metric but we do not want to change the
                 let metricKey = this.metric;
 
                 if (!Array.isArray(response.service.Perfdata)) {
@@ -141,8 +137,6 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
                     if (metricKey && response.service.Perfdata[metricKey]) {
                         this.perfdata = response.service.Perfdata[metricKey];
-
-                        console.log('this.perfdata.datasource',this.perfdata?.datasource)
                     }
                 }
 
@@ -152,7 +146,6 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
                 this.cdr.markForCheck();
 
-                // Data is loaded, render the gauge
                 setTimeout(() => {
                     this.renderCylinder();
                 }, 100);
@@ -259,7 +252,6 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
     public saveConfig() {
         if (this.service_id && this.widget) {
             this.CylinderWidgetService.saveWidgetConfig(this.widget.id, this.service_id, this.showLabel, String(this.metric)).subscribe((response) => {
-                // Update the Markdown content
                 this.ngAfterViewInit();
 
                 // Close config
@@ -270,13 +262,9 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
     private calcCylinderSize() {
         this.height = this.boxContainer?.nativeElement.offsetHeight;
-        this.width = this.boxContainer?.nativeElement.offsetWidth ; // this.boxContainer?.nativeElement.offsetWidth / 2;
+        this.width = this.boxContainer?.nativeElement.offsetWidth ;
 
         this.height = Math.max(this.height - 49,100) ; //Unit: px
-
-        //                                        ^ Show / Hide Config button
-        //                                             ^ Some Padding
-        //                                                 ^ Some random value
 
         this.cdr.markForCheck();
     }
@@ -303,9 +291,9 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         }
 
         let percentage : number = (max - min) > 0 ? ((currentVal - min) / (max - min)) * 99 : 0;
-        percentage = +Number(percentage).toFixed(2);
+        percentage = +Number(percentage);
 
-        const currentText = `${currentVal} ${unit}`;
+        const currentText = `${Number.isInteger(currentVal) ? currentVal : currentVal.toFixed(2)} ${unit}`;
         const maxText = `${max} ${unit}`;
 
         const maxTextLength = Math.max(currentText.length, maxText.length);
@@ -385,15 +373,15 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
                 this.renderer.setAttribute(innerTopEllipse, 'class', 'fluid-top-surface-light');
             }
         }
-        //green-value-in-cylinder
+        //current value inner cylinder
         this.createRect(cylinderGroup, x, 0, cylinderWidth, this.height, rx, ry, `url(#fadeGray_${this.widgetID})`, 0.5, 2, '#CECECE', 0.3, 'background_' + this.widgetID);
 
         //Outer Cylinder - center rect
         this.createEllipse(cylinderGroup, ellipseCx, y , rx, ry, `url(#fadeDarkGray_${this.widgetID})`, 0.1, 2, '#CECECE', 0.2 );
 
         //current Label value in cylinder
-        this.createLabelLine(cylinderGroup, x - leftLineLength -1 , topEllipseY-1, 'left',  '#A0A0A0', leftLineLength);
-        this.createLabel(cylinderGroup, x - leftLineLength - 3, topEllipseY-1, currentText, fontSize,  '#A0A0A0', 'end');
+        this.createLabelLine(cylinderGroup, x - leftLineLength -1 , topEllipseY-1, 'left', undefined, leftLineLength);
+        this.createLabel(cylinderGroup, x - leftLineLength - 3, topEllipseY-1, currentText, fontSize, undefined, 'end');
 
         //Cylinder current text label
         if (max !== null && max !== 0) {
@@ -402,11 +390,11 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         } else {
             // min base lable - 0 label
             this.createLabelLine(cylinderGroup, cylinderWidth + x + 2, availableHeight );
-            this.createLabel(cylinderGroup, cylinderWidth + x + 18, availableHeight, '0', '13px', '#A0A0A0' );
+            this.createLabel(cylinderGroup, cylinderWidth + x + 18, availableHeight, '0', '13px', undefined );
         }
 
         if (this.showLabel) {
-            this.createLabel(cylinderGroup, ellipseCx, ellipseBottomCy+18, label, '13px', '#888', 'middle');
+            this.createLabel(cylinderGroup, ellipseCx, ellipseBottomCy+18, label, '13px', undefined, 'middle','normal',this.label);
         }
     }
 
@@ -493,13 +481,13 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
             const currentY = bottomY - (ratio * totalHeight);
             const rawValue = numericMin + ratio * (numericMax - numericMin);
 
-            const currentValue = Math.round(Number(rawValue.toFixed(2)));
+            const currentValue = Math.round(Number(rawValue));
 
             this.createLabelLine(cylinderGroup, startX, currentY);
 
             const labelText = `${currentValue} ${unit}`;
 
-            this.createLabel(cylinderGroup, startX + 8, currentY + 1, labelText, '12px', '#888888');
+            this.createLabel(cylinderGroup, startX + 8, currentY + 1, labelText, '12px');
         }
     }
 
@@ -542,7 +530,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         this.createLinearGradient(defs, `fadeDark${stateColor}_${this.widgetID}`, config.dark);
     }
 
-    private createLabel (parent: any, x: number = 0, y: number = 0, content:string , fontSize: string = '11px', color: string = '#888888',textAnchor: string = 'start',fontWeight: string = 'normal'): void {
+    private createLabel (parent: any, x: number = 0, y: number = 0, content:string , fontSize: string = '11px', color: string = '#888888',textAnchor: string = 'start',fontWeight: string = 'normal',tooltip?:string): void {
 
         const textElement = this.renderer.createElement('text', 'svg');
         this.renderer.setAttribute(textElement, 'x', x.toString());
@@ -552,7 +540,12 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         this.renderer.setAttribute(textElement, 'font-weight', fontWeight);
         this.renderer.setAttribute(textElement, 'dominant-baseline', 'middle');
         this.renderer.setAttribute(textElement, 'text-anchor', textAnchor);
-
+        if (tooltip) {
+            const titleElement = this.renderer.createElement('title', 'svg');
+            const titleText = this.renderer.createText(tooltip);
+            this.renderer.appendChild(titleElement, titleText);
+            this.renderer.appendChild(textElement, titleElement);
+        }
         const textNode = this.renderer.createText(content);
         this.renderer.appendChild(textElement, textNode);
         this.renderer.appendChild(parent, textElement);
