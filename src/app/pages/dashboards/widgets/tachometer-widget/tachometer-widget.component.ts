@@ -31,7 +31,7 @@ import { TachometerWidgetService } from './tachometer-widget.service';
 import { ServicesService } from '../../../services/services.service';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 import { RadialGauge } from 'canvas-gauges';
-import { TachometerWidgetPerfdata } from './tachometer-widget.interface';
+import {PerformanceWidgetPerfdata} from '../widgets.interface'
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { ServiceTypesEnum } from '../../../services/services.enum';
 
@@ -69,7 +69,7 @@ export class TachometerWidgetComponent extends BaseWidgetComponent implements Af
     public isEvcService: boolean = false;
     public showLabel: boolean = false;
 
-    private perfdata?: TachometerWidgetPerfdata;
+    private perfdata?: PerformanceWidgetPerfdata;
 
     public label: string = '';
 
@@ -87,8 +87,8 @@ export class TachometerWidgetComponent extends BaseWidgetComponent implements Af
 
     public ngAfterViewInit(): void {
         this.calcTachometerHeight();
-
         if (this.widget) {
+
             this.service_id = null;
             this.metric = '';
             this.TachometerWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {
@@ -274,7 +274,7 @@ export class TachometerWidgetComponent extends BaseWidgetComponent implements Af
     }
 
 
-    private getThresholdAreas(perfdata: TachometerWidgetPerfdata) {
+    private getThresholdAreas(perfdata:PerformanceWidgetPerfdata) {
         const setup = perfdata.datasource.setup;
 
         let thresholdAreas: any[] = [];
