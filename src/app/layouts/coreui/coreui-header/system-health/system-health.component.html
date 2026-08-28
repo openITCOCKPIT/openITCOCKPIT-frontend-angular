@@ -311,7 +311,7 @@
                                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                                     <div class="d-flex align-items-center ">
                                                         <fa-icon [icon]="['fas', 'warning']"
-                                                                 [class]="systemHealth?.load?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
+                                                                 [class]="systemHealth.load?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
                                                         </fa-icon>
                                                         <span class="fw-bold txt-overflow-ellipsis"  >
                                                             {{t('System')}}
@@ -344,7 +344,7 @@
                                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                                     <div class="d-flex align-items-center ">
                                                         <fa-icon [icon]="['fas', 'warning']"
-                                                                 [class]="systemHealth.memory_usage.memory?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
+                                                                 [class]="systemHealth.memory_usage.memory.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
                                                         </fa-icon>
                                                         <span class="fw-bold txt-overflow-ellipsis"  >
                                                             {{ t('System') }}
@@ -352,8 +352,8 @@
                                                     </div>
 
                                                     <span class="fw-bold badge rounded-pill status-badge-text border"
-                                                          [class]="systemHealth.memory_usage.memory?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
-                                                        {{ systemHealth.memory_usage.memory?.state === 'critical' ? t('Critical') : t('Warning') }}
+                                                          [class]="systemHealth.memory_usage.memory.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
+                                                        {{ systemHealth.memory_usage.memory.state === 'critical' ? t('Critical') : t('Warning') }}
                                                     </span>
 
                                                 </div>
@@ -364,12 +364,12 @@
                                                     </span>
                                                         <strong class="border border-secondary-subtle font-monospace">Memory</strong></span>
                                                     <span class="fw-bold font-monospace text-nowrap" >
-                                                        {{ systemHealth.memory_usage.memory?.percentage }}%
+                                                        {{ systemHealth.memory_usage.memory.percentage }}%
                                                     </span>
                                                 </div>
                                                 <div class="custom-progress-wrapper">
-                                                    <c-progress [value]="systemHealth.memory_usage.memory?.percentage"
-                                                                [color]="systemHealth.memory_usage.memory?.state === 'critical' ? 'danger' : 'warning'"
+                                                    <c-progress [value]="systemHealth.memory_usage.memory.percentage"
+                                                                [color]="systemHealth.memory_usage.memory.state === 'critical' ? 'danger' : 'warning'"
                                                                 class="thin-progress animated-bar" />
                                                 </div>
 
@@ -384,7 +384,7 @@
                                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                                     <div class="d-flex align-items-center ">
                                                         <fa-icon [icon]="['fas', 'warning']"
-                                                                 [class]="systemHealth.memory_usage.swap?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
+                                                                 [class]="systemHealth.memory_usage.swap.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
                                                         </fa-icon>
                                                         <span class="fw-bold txt-overflow-ellipsis"  >
                                                             {{ t('System') }}
@@ -392,8 +392,8 @@
                                                     </div>
 
                                                     <span class="fw-bold badge rounded-pill status-badge-text border"
-                                                          [class]="systemHealth.memory_usage.swap?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
-                                                        {{ systemHealth.memory_usage.swap?.state === 'critical' ? t('Critical') : t('Warning') }}
+                                                          [class]="systemHealth.memory_usage.swap.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
+                                                        {{ systemHealth.memory_usage.swap.state === 'critical' ? t('Critical') : t('Warning') }}
                                                     </span>
 
                                                 </div>
@@ -404,12 +404,12 @@
                                                     </span>
                                                         <strong class="border border-secondary-subtle font-monospace">Swap</strong></span>
                                                     <span class="fw-bold font-monospace text-nowrap" >
-                                                        {{ systemHealth.memory_usage.swap?.percentage }}%
+                                                        {{ systemHealth.memory_usage.swap.percentage }}%
                                                     </span>
                                                 </div>
                                                 <div class="custom-progress-wrapper">
-                                                    <c-progress [value]="systemHealth.memory_usage.swap?.percentage"
-                                                                [color]="systemHealth.memory_usage.swap?.state === 'critical' ? 'danger' : 'warning'"
+                                                    <c-progress [value]="systemHealth.memory_usage.swap.percentage"
+                                                                [color]="systemHealth.memory_usage.swap.state === 'critical' ? 'danger' : 'warning'"
                                                                 class="thin-progress animated-bar" />
                                                 </div>
 
