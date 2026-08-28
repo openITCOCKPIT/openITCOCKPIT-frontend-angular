@@ -18,6 +18,7 @@ export enum WidgetTypes {
     HostStatusOverviewWidget = 16,
     HostsStatusExtendedWidget = 25,               // hosts-status-list-extended-widget
     TacticalOverviewHostsWidget = 21,
+    HostOperationsSummaryWidgetWidget = 42,
     HostStatusOverviewExtendedWidget = 14,
     ServicesStatusWidget = 10,                    // services-status-list-widget
     TachometerWidget = 12,

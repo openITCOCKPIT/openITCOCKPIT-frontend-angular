@@ -1,0 +1,413 @@
+<ng-container *transloco="let t">
+    @if (widget) {
+        <div class="d-flex h-100 flex-column">
+            <div>
+                @if (!isReadonly()) {
+                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                            (click)="flipped.set(!flipped())">
+                        @if (flipped()) {
+                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                        } @else {
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        }
+                    </button>
+                }
+            </div>
+            <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+                 class="box-container">
+                <div class="box-x">
+                    @if (animationStateShowContent) {
+                        <div>
+                            <c-row>
+                                <c-col [xs]="12" [lg]="4">
+                                    <div class="card h-100 border-0 border-start border-4 border-primary shadow-sm">
+                                        <div class="card-body d-flex flex-column justify-content-between p-4">
+                                            <div>
+                                                <div class="fs-2 fw-semibold text-primary lh-1 mb-1">{{ totalHosts }}</div>
+                                                <div class="text-uppercase text-muted small fw-bold tracking-wide">Hosts
+                                                    Gesamt
+                                                </div>
+                                            </div>
+                                            <div class="mt-3 pt-2 border-top border-light-subtle small text-secondary">
+                                                Infrastruktur aktiv
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12" [lg]="4">
+                                    <div class="card h-100 border-0 border-start border-4 border-danger shadow-sm bg-opacity-10">
+                                        <div class="card-body d-flex flex-column justify-content-between  p-4">
+                                            <div>
+                                                <div class="fs-2 fw-semibold text-danger lh-1 mb-1">{{ unhandledErrors }}</div>
+                                                <div class="text-uppercase text-muted small fw-bold tracking-wide">
+                                                    Unbehandelte Fehler
+                                                </div>
+                                            </div>
+                                            <div class="mt-3 pt-2 border-top border-danger-subtle small text-danger-emphasis">
+                                                Aktion erforderlich
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12" [lg]="4">
+                                    <div class="card h-100 border-0 border-start border-4 border-success shadow-sm">
+                                        <div class="card-body d-flex flex-column justify-content-between  p-4">
+                                            <div>
+                                                <div class="fs-2 fw-semibold text-success lh-1 mb-1">{{ alwaysUpHosts }}</div>
+                                                <div class="text-uppercase text-muted small fw-bold tracking-wide">100%
+                                                    Uptime (Hosts)
+                                                </div>
+                                            </div>
+                                            <div class="mt-3 pt-2 border-top border-success-subtle small text-success">
+                                                Systeme laufen stabil
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c-col>
+                            </c-row>
+                            @if (hoststatusSummary) {
+                                <c-row class="py-3">
+                                    <c-col class="w-100" [xs]="12" [sm]="12" [md]="12" [lg]="4" style="border:2px solid magenta;">
+                                        <oitc-host-summary-echart style="border:1px solid orange;"
+                                                [chartData]="hoststatusSummary">
+                                        </oitc-host-summary-echart>
+                                    </c-col>
+                                </c-row>
+                            }
+                            <!-- Diagramm Grid -->
+                            <div class="dashboard-grid">
+                                <div class="card">
+                                    <h3>Aktueller Host-Status</h3>
+
+                                    <div #pieChartContainer class="chart-container"></div>
+                                </div>
+
+                                <div class="card">
+                                    <h3>Fehler-Bearbeitungsstatus</h3>
+                                    <div #barChartContainer class="chart-container"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card full-width">
+                            <h3>System-Tags Übersicht (Heatmap)</h3>
+                            <div #heatmapContainer class="chart-container-heatmap"></div>
+                        </div>
+                    }
+                </div>
+                <div class="box-x">
+                    @if (animationStateShowConfig && config) {
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    </span>
+                                    <input [(ngModel)]="config['Host']['name']"
+                                           [placeholder]="'Filter by host name' | transloco"
+                                           cFormControl
+                                           [id]="'Hosts.name-'+widget.id"
+                                           [name]="'Hosts.name-'+widget.id"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                    <span cInputGroupText>
+                                        <label>
+                                            {{ t('Enable RegEx') }}
+                                            <input type="checkbox"
+                                                   cFormCheckInput
+                                                   [id]="'filter.Host.name_regex-'+widget.id"
+                                                   [name]="'filter.Host.name_regex-'+widget.id"
+                                                   [(ngModel)]="config['Host']['name_regex']"
+                                            />
+                                            <oitc-regex-helper-tooltip/>
+                                        </label>
+                                    </span>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input [(ngModel)]="config['Host']['address']"
+                                           [placeholder]="'Filter by IP address' | transloco"
+                                           cFormControl
+                                           [id]="'Hosts.address-'+widget.id"
+                                           [name]="'Hosts.address-'+widget.id"
+                                           type="text"
+                                    />
+                                    <span cInputGroupText>
+                                        <label>
+                                            {{ t('Enable RegEx') }}
+                                            <input type="checkbox"
+                                                   cFormCheckInput
+                                                   [id]="'Hosts.address_regex-'+widget.id"
+                                                   [name]="'Hosts.address_regex-'+widget.id"
+                                                   [(ngModel)]="config['Host']['address_regex']"
+                                            />
+                                            <oitc-regex-helper-tooltip/>
+                                        </label>
+                                    </span>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <div class="icon-stack">
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']"
+                                                     class="text-success cornered cornered-lr"></fa-icon>
+                                        </div>
+                                    </span>
+                                    <ng-select
+                                            [id]="'HostKeywordsInput-'+widget.id"
+                                            [name]="'HostKeywordsInput-'+widget.id"
+                                            [items]="[]"
+                                            [(ngModel)]="keywords"
+                                            [addTag]="true"
+                                            [multiple]="true"
+                                            [selectOnTab]="true"
+                                            [placeholder]="'Filter by tags'|transloco"
+                                            [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <div class="icon-stack">
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']"
+                                                     class="text-danger cornered cornered-lr"></fa-icon>
+                                        </div>
+                                    </span>
+                                    <ng-select
+                                            [id]="'HostNotKeywordsInput-'+widget.id"
+                                            [name]="'HostNotKeywordsInput-'+widget.id"
+                                            [items]="[]"
+                                            [(ngModel)]="notKeywords"
+                                            [addTag]="true"
+                                            [multiple]="true"
+                                            [selectOnTab]="true"
+                                            [placeholder]="'Filter by excluded tags'|transloco"
+                                            [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row>
+                            <c-col [xs]="12" [lg]="12">
+                                <fieldset class="mt-2">
+                                    <legend class="fs-5">
+                                        {{ t('Containers') }}
+                                    </legend>
+                                    <c-input-group>
+                                        <oitc-multi-select
+                                                [id]="'Containers-'+widget.id"
+                                                [name]="'Containers-'+widget.id"
+                                                optionValue="key"
+                                                optionLabel="value"
+                                                [options]="containers"
+                                                [(ngModel)]="config['Container']['_ids']"
+                                                [searchCallback]="loadContainers"
+                                                [appendTo]="'body'"
+                                                class="flex-1">
+                                        </oitc-multi-select>
+                                    </c-input-group>
+                                </fieldset>
+                            </c-col>
+                            <c-col>
+                                <fieldset class="mt-2">
+                                    <legend class="fs-5">
+                                        {{ t('Host groups') }}
+                                    </legend>
+                                    <c-input-group>
+                                        <oitc-multi-select
+                                                [id]="'Hostgroups-'+widget.id"
+                                                [name]="'Hostgroups-'+widget.id"
+                                                optionValue="key"
+                                                optionLabel="value"
+                                                [options]="hostgroups"
+                                                [(ngModel)]="config['Hostgroup']['_ids']"
+                                                [searchCallback]="loadHostgroups"
+                                                [appendTo]="'body'"
+                                                class="flex-1">
+                                        </oitc-multi-select>
+                                    </c-input-group>
+                                    <c-row class="my-1">
+                                        <c-col [xs]="12" [lg]="12">
+                                            <c-input-group>
+                                                <span cInputGroupText class="pe-0 ps-2">
+                                                    <fa-stack>
+                                                        <fa-icon [icon]="['fas', 'server']"
+                                                                 stackItemSize="1x" pull="right"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'tags']" class="text-success"
+                                                                 stackItemSize="1x"
+                                                                 transform="shrink-5 right-10 down-7"></fa-icon>
+                                                    </fa-stack>
+                                                </span>
+                                                <ng-select
+                                                        [id]="'HostgroupKeywordsInput-'+widget.id"
+                                                        [name]="'HostgroupKeywordsInput-'+widget.id"
+                                                        [items]="[]"
+                                                        [(ngModel)]="hostgroupKeywords"
+                                                        [addTag]="true"
+                                                        [multiple]="true"
+                                                        [selectOnTab]="true"
+                                                        [placeholder]="'Filter by host group tags'|transloco"
+                                                        [isOpen]="false">
+                                                </ng-select>
+                                            </c-input-group>
+                                        </c-col>
+                                    </c-row>
+                                    <c-row>
+                                        <c-col [xs]="12" [lg]="12">
+                                            <c-input-group>
+                                                <span cInputGroupText class="pe-0 ps-2">
+                                                    <fa-stack>
+                                                        <fa-icon [icon]="['fas', 'server']"
+                                                                 stackItemSize="1x" pull="right"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'tags']" class="text-danger"
+                                                                 stackItemSize="1x"
+                                                                 transform="shrink-5 right-10 down-7"></fa-icon>
+                                                    </fa-stack>
+                                                </span>
+                                                <ng-select
+                                                        [id]="'HostgroupNotKeywordsInput-'+widget.id"
+                                                        [name]="'HostgroupNotKeywordsInput-'+widget.id"
+                                                        [items]="[]"
+                                                        [(ngModel)]="hostgroupNotKeywords"
+                                                        [addTag]="true"
+                                                        [multiple]="true"
+                                                        [selectOnTab]="true"
+                                                        [placeholder]="'Filter by excluded host group tags'|transloco"
+                                                        [isOpen]="false">
+                                                </ng-select>
+                                            </c-input-group>
+                                        </c-col>
+                                    </c-row>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" [lg]="12">
+                                <fieldset>
+                                    <legend class="fs-5">
+                                        {{ t('Priority') }}
+                                    </legend>
+                                    <c-form-check>
+                                        <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'Hosts.Priority_1-'+widget.id"
+                                                [attr.id]="'Hosts.Priority_1-'+widget.id"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                oitcDebounce
+                                                [(ngModel)]="priorityFilter['1']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_1'+widget.id"
+                                               class="ms-1 mt-1 ok-soft">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'Hosts.Priority_2-'+widget.id"
+                                                [attr.id]="'Hosts.Priority_2-'+widget.id"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                oitcDebounce
+                                                [(ngModel)]="priorityFilter['2']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_2-'+widget.id" class="ms-1 mt-1 ok">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'Hosts.Priority_3-'+widget.id"
+                                                [attr.id]="'Hosts.Priority_3-'+widget.id"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                oitcDebounce
+                                                [(ngModel)]="priorityFilter['3']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_3-'+widget.id"
+                                               class="ms-1 mt-1 warning">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'Hosts.Priority_4-'+widget.id"
+                                                [attr.id]="'Hosts.Priority_4-'+widget.id"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                oitcDebounce
+                                                [(ngModel)]="priorityFilter['4']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_4-'+widget.id"
+                                               class="ms-1 mt-1 critical-soft">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'Hosts.Priority_5-'+widget.id"
+                                                [attr.id]="'Hosts.Priority_5-'+widget.id"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                oitcDebounce
+                                                [(ngModel)]="priorityFilter['5']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_5-'+widget.id"
+                                               class="ms-1 mt-1 critical">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+                        <c-row class="my-2">
+                            <c-col class="text-end">
+                                <button cButton class="ripple" color="primary" (click)="submit()">
+                                    {{ t('Save') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</ng-container>
