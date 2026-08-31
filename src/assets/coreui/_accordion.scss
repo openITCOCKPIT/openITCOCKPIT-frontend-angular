@@ -1,0 +1,24 @@
+@use "sass:color";
+@use "../../assets/coreui/variables" as oitc;
+
+
+.accordion-header .accordion-button.collapsed {
+  border: 1px solid rgba(oitc.$primary, 0.3);
+  border-radius: var(--cui-border-radius);
+  box-shadow: rgba(oitc.$primary, 0.3) 5px 0 10px 0;
+  background-color: rgba(var(--cui-primary-rgb), 0.2);
+  color: var(--cui-accordion-active-color);
+}
+
+.dark-theme .accordion-header .accordion-button.collapsed {
+  color: var(--cui-white);
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: rgba(var(--cui-primary-rgb), 0.1);
+}
+
+.dark-theme .accordion-button:not(.collapsed) {
+  background-color: rgba(var(--cui-primary-rgb), 0.1);
+  color: var(--cui-white);
+}

@@ -3,26 +3,19 @@
 @use "@coreui/coreui/scss/coreui" as cui;
 
 .wizard-bg-inactive {
-    background: color.adjust(oitc.$light-bg-subtle, $lightness: -5%, $space: hsl)
+  background: color.adjust(oitc.$light-bg-subtle, $lightness: -5%, $space: hsl)
 }
 
 body.dark-theme .wizard-bg-inactive {
-    background: var(--cui-light-bg-subtle)
+  background: var(--cui-light-bg-subtle)
 }
 
 .wizard-active {
-    background: oitc.$primary !important;
-    color: oitc.$white;
+  background: oitc.$primary !important;
+  color: oitc.$white;
 }
 
 .wizard-success {
-    background: oitc.$success !important;
-    color: oitc.$white;
-}
-
-
-.wizard-accordion.accordion-button:not(.collapsed) {
-    background-color: var(--cui-info-bg-subtle);
-    border-color: var(--cui-info-border-subtle);
-    color: unset;
+  background: oitc.$success !important;
+  color: oitc.$white;
 }

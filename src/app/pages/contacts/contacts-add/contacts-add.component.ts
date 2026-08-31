@@ -37,7 +37,6 @@ import { ContactsService } from '../contacts.service';
 import {
     ContactPost,
     LoadCommandsRoot,
-    LoadContainersRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
 } from '../contacts.interface';
@@ -50,6 +49,7 @@ import { LabelLinkComponent } from "../../../layouts/coreui/label-link/label-lin
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { HistoryService } from '../../../history.service';
 import { PushNotificationsService } from '../../../services/push-notifications.service';
+import { LoadContainersRoot } from '../../containers/containers.interface';
 
 @Component({
     selector: 'oitc-contacts-add',
@@ -321,10 +321,10 @@ export class ContactsAddComponent implements OnInit, OnDestroy {
         if (!this.pushNotificationHasPermission) {
             this.PushNotificationsService.checkPermissions();
         }
-        this.pushNotificationConnected = this.PushNotificationsService.isConnected();
+        // this.pushNotificationConnected = this.PushNotificationsService.isConnected();
         this.pushNotificationHasPermission = this.PushNotificationsService.hasPermission();
         if (this.pushNotificationConnected && this.pushNotificationHasPermission) {
-            this.PushNotificationsService.sendTestMessage();
+            //this.PushNotificationsService.sendTestMessage();
         }
     }
 

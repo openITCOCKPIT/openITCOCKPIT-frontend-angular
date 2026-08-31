@@ -24,6 +24,7 @@ export enum HostBrowserTabs {
     SLA = 'SLA',
     IsarFlow = 'IsarFlow',
     SoftwareInventory = 'SoftwareInventory',
+    DependencyTree = 'DependencyTree',
     Proxmox = 'Proxmox'
 }
 

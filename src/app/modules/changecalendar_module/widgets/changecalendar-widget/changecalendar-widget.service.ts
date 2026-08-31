@@ -12,11 +12,13 @@ export class ChangecalendarWidgetService {
     private readonly http: HttpClient = inject(HttpClient);
     private readonly proxyPath: string = inject(PROXY_PATH);
 
-    public loadWidgetConfig(widgetId: string): Observable<ChangecalendarWidgetResponse> {
+    public loadWidgetConfig(widgetId: string, start: string, end: string): Observable<ChangecalendarWidgetResponse> {
         return this.http.get<ChangecalendarWidgetResponse>(`${this.proxyPath}/changecalendar_module/changecalendars/widget.json`, {
             params: {
                 angular: true,
-                widgetId: widgetId
+                widgetId: widgetId,
+                start: start,
+                end: end
             }
         }).pipe(
             map(data => {
@@ -26,7 +28,6 @@ export class ChangecalendarWidgetService {
     }
 
     public saveWidgetConfig(widgetId: string, data: ChangeCalendarWidgetPost): Observable<Object> {
-        console.warn(data);
         return this.http.post<any>(`${this.proxyPath}/changecalendar_module/changecalendars/widget.json`, data)
             .pipe(
                 map(data => {

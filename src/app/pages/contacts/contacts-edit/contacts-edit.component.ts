@@ -29,13 +29,7 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {
-    Contact,
-    LoadCommandsRoot,
-    LoadContainersRoot,
-    LoadTimeperiodsPost,
-    LoadTimeperiodsRoot,
-} from '../contacts.interface';
+import { Contact, LoadCommandsRoot, LoadTimeperiodsPost, LoadTimeperiodsRoot, } from '../contacts.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../generic-responses';
 import { LoadUsersByContainerIdRoot } from '../../users/users.interface';
 import { Subscription } from 'rxjs';
@@ -53,6 +47,8 @@ import { HistoryService } from '../../../history.service';
 import { PushNotificationsService } from '../../../services/push-notifications.service';
 import _ from 'lodash';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { WebsocketMessageType, WebSocketsService } from '../../../services/web-sockets.service';
+import { LoadContainersRoot } from '../../containers/containers.interface';
 
 @Component({
     selector: 'oitc-contacts-edit',
@@ -100,6 +96,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private ContactService: ContactsService = inject(ContactsService);
     private PushNotificationsService: PushNotificationsService = inject(PushNotificationsService);
+    private WebSocketsService: WebSocketsService = inject(WebSocketsService);
     protected users: SelectKeyValue[] = [];
     private readonly TranslocoService = inject(TranslocoService);
     private readonly notyService = inject(NotyService);
@@ -130,9 +127,29 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
     public PermissionsService = inject(PermissionsService);
     private init: boolean = true;
 
+    public websocketConnectionError: boolean = false;
+
     public ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));
+        this.WebSocketsService.acquire();
+        this.WebSocketsService.connect();
         this.loadContact();
+
+        // In case the WebSocket connection has any errors, we want to show an info on this page.
+        this.subscriptions.add(
+            this.WebSocketsService.connectionError$.subscribe(isError => {
+                this.websocketConnectionError = isError;
+                this.cdr.markForCheck();
+            })
+        );
+
+        this.subscriptions.add(
+            this.WebSocketsService.isConnected$.subscribe(isConnected => {
+                this.pushNotificationConnected = isConnected;
+                this.cdr.markForCheck();
+            })
+        );
+
     }
 
     public loadContact() {
@@ -155,6 +172,7 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
+        this.WebSocketsService.release();
     }
 
     public updateContact(): void {
@@ -380,10 +398,16 @@ export class ContactsEditComponent implements OnInit, OnDestroy {
         if (!this.pushNotificationHasPermission) {
             this.PushNotificationsService.checkPermissions();
         }
-        this.pushNotificationConnected = this.PushNotificationsService.isConnected();
         this.pushNotificationHasPermission = this.PushNotificationsService.hasPermission();
         if (this.pushNotificationConnected && this.pushNotificationHasPermission) {
-            this.PushNotificationsService.sendTestMessage();
+            this.WebSocketsService.send({
+                type: WebsocketMessageType.TestPushNotification,
+                message: 'This is a test message',
+                payload: {
+                    title: 'Test',
+                    icon: '/img/push_notifications/wh/ServicePushIconUNKNOWN.png'
+                }
+            });
         }
     }
 

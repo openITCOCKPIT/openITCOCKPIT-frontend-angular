@@ -137,12 +137,12 @@
                             <div class="mb-3">
                                 <c-form-check>
                                     <input
-                                        cFormCheckInput
-                                        name="enabled"
-                                        id="enabled"
-                                        type="checkbox"
-                                        oitcFormError [errors]="errors" errorField="enabled"
-                                        [(ngModel)]="post.enabled"/>
+                                            cFormCheckInput
+                                            name="enabled"
+                                            id="enabled"
+                                            type="checkbox"
+                                            oitcFormError [errors]="errors" errorField="enabled"
+                                            [(ngModel)]="post.enabled"/>
                                     <label cFormCheckLabel for="enabled">
                                         {{ t('Enable') }}
                                     </label>
@@ -154,6 +154,22 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <c-alert color="warning">
+                                <fa-icon [icon]="['fas', 'warning']" class="fa-lg"></fa-icon>
+                                @if (IS_CONTAINER) {
+                                    {{ t('To apply the changes, you have to restart the container stack, after you clicked on save.') }}
+                                    <code>docker compose down && docker compose up -d</code>
+                                } @else {
+                                    {{ t('To apply the changes, you have to execute the following command, after you clicked on save.') }}
+                                    <code>openitcockpit-update</code>
+                                }.
+                            </c-alert>
+                        </div>
+                    </div>
+
                 </c-card-body>
                 <c-card-footer class="text-end">
                     <button cButton class="ripple" color="primary" type="submit">

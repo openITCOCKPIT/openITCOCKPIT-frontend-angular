@@ -67,7 +67,8 @@
                                             </span>
                                             <br/>
                                             <small class="m-0 l-h-n">
-                                                New alerts </small>
+                                                {{ t('New alerts') }}
+                                            </small>
                                         </h6>
                                     </div>
                                     <fa-icon [icon]="['fas', 'fire-flame-curved']"
@@ -97,16 +98,20 @@
                                     <div class="col-12 text-end">
                                         <i class="fa-solid fa-fire-flame-curved flame"></i>
                                         <em class="padding-right-10">
-                                            New </em>
+                                            {{ t('New') }}
+                                        </em>
                                         <i class="fa-solid fa-person-digging text-secondary"></i>
                                         <em class="padding-right-10">
-                                            In progress </em>
+                                            {{ t('In progress') }}
+                                        </em>
                                         <i class="fa-solid fa-clipboard-check text-success"></i>
                                         <em class="padding-right-10">
-                                            Done </em>
+                                            {{ t('Done') }}
+                                        </em>
                                         <i class="fa-solid fa-folder-closed text-primary"></i>
                                         <em class="padding-right-10">
-                                            Manually closed </em>
+                                            {{ t('Manually closed') }}
+                                        </em>
                                     </div>
                                 </div>
                             </c-col>
@@ -488,7 +493,7 @@
                            [matSortActive]="params.sort" [matSortDirection]="params.direction">
                         <thead>
                         <tr>
-                            <th class="text-center col-1" scope="col" style="width: 5px;">
+                            <th class="text-center col-1 width-15" scope="col">
                                 <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
                             </th>
                             <th scope="col" mat-sort-header="Customalerts.state">

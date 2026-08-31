@@ -1,3 +1,7 @@
 .host-parents-children-tree-container {
     height: 75vh;
 }
+
+.host-dependency-tree-container {
+    height: 100vh;
+}
