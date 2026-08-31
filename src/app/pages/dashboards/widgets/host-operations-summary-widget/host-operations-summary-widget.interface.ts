@@ -1,4 +1,4 @@
-import { SummaryStateHosts } from '../../../hosts/summary_state.interface';
+import { SummaryStateHostsExtended } from '../../../hosts/summary_state.interface';
 
 export interface HostOperationsSummaryConfig {
     Host: {
@@ -24,6 +24,6 @@ export interface HostOperationsSummaryConfig {
 
 export interface HostOperationsSummaryResponse {
     config: HostOperationsSummaryConfig
-    hoststatusSummary: SummaryStateHosts
+    hoststatusSummary: SummaryStateHostsExtended
     _csrfToken: string
 }

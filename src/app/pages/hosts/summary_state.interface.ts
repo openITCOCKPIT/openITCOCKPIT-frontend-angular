@@ -12,6 +12,7 @@ export interface StatusSummaryState {
     services: SummaryStateServices
 }
 
+
 export interface SummaryStatesHosts {
     "0": number
     "1": number
@@ -35,6 +36,31 @@ export interface SummaryStateHosts {
     not_handled: SummaryStatesHosts
     passive: SummaryStatesHosts
     total: number
+}
+
+/**
+ * Status summary of all hosts that share the same tag.
+ * The API already provides the cumulated state of the tag.
+ */
+export interface SummaryStateHostsTag extends SummaryStateHosts {
+    not_handled: SummaryUnhandledHosts
+    cumulative_state: number
+    hostIds: number[]
+}
+
+export interface SummaryStateHostsExtended extends SummaryStateHosts {
+    totalHostIds: number[]
+    lastTimeAlwaysUp: {
+        count: number
+        ids: number[]
+    }
+    lastTimeAlwaysDown: {
+        count: number
+        ids: number[]
+    }
+    tagsOverview: {
+        [key: string]: SummaryStateHostsTag
+    }
 }
 
 export interface ServiceSummaryStatesServices {

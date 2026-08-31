@@ -129,63 +129,112 @@ export class HostSummaryEchartComponent implements OnDestroy, AfterViewInit {
         this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['hosts', 'index']).subscribe(hasPermission => {
             if (hasPermission) {
                 this.echartsInstance.on('click', (params: any) => {
-                    if (params.componentType === 'series') {
-                        if (params && params.name) {
-                            switch (params.name) {
-                                case 'up':
-                                    console.log(this.chartData().state.hostIds[0]);
-                                    if (this.chartData().state.hostIds[0].length > 0) {
-                                        this.router.navigate([
-                                                'hosts/index'
-                                            ],
-                                            {queryParams: {id: this.chartData().state.hostIds[0]}});
-                                    }
+                    if (params?.componentType !== 'series') {
+                        return;
+                    }
 
-                                    break;
-                            }
-                            console.log(params.name);
-                        }
-                        this.echartsInstance.getZr().setCursorStyle('pointer');
+                    const status = params.seriesName || params.name;
+                    if (status) {
+                        this.navigateByStatus(status);
+                    }
+                });
+
+                // Legend click events expose the legend item name directly.
+                this.echartsInstance.on('legendselectchanged', (params: any) => {
+                    const status = params?.name;
+                    if (status) {
+                        this.navigateByStatus(status);
                     }
                 });
             }
         }));
 
-        this.echartsInstance.on('mouseout', () => {
+        // Show pointer cursor for clickable chart segments and legend items.
+        this.echartsInstance.on('mousemove', (params: any) => {
+            const clickable = params?.componentType === 'series' || params?.componentType === 'legend';
+            this.echartsInstance.getZr().setCursorStyle(clickable ? 'pointer' : 'default');
+        });
+
+        this.echartsInstance.on('globalout', () => {
             this.echartsInstance.getZr().setCursorStyle('default');
         });
         this.cdr.markForCheck();
     }
 
+    private navigateByStatus(status: string): void {
+        const ids = this.getHostIdsForStatus(status);
+        if (ids.length === 0) {
+            return;
+        }
+
+        this.router.navigate(['hosts/index'], {queryParams: {id: ids}});
+    }
+
+    private getHostIdsForStatus(status: string): number[] {
+        const data = this.chartData();
+        switch (status) {
+            case 'up':
+                return this.collectHostIds(data.state.hostIds, [0]);
+            case 'down':
+                return this.collectHostIds(data.state.hostIds, [1]);
+            case 'unreachable':
+                return this.collectHostIds(data.state.hostIds, [2]);
+            case 'in_downtime':
+                return this.collectHostIds(data.in_downtime.hostIds, [0, 1, 2]);
+            case 'acknowledged':
+                return this.collectHostIds(data.acknowledged.hostIds, [0, 1, 2]);
+            case 'unhandled':
+                return this.collectHostIds(data.not_handled.hostIds, [1, 2]);
+            default:
+                return [];
+        }
+    }
+
+    private collectHostIds(hostIds: number[][], buckets: number[]): number[] {
+        const uniqueIds = new Set<number>();
+        for (const bucket of buckets) {
+            for (const id of hostIds?.[bucket] ?? []) {
+                uniqueIds.add(id);
+            }
+        }
+
+        return Array.from(uniqueIds);
+    }
+
     private renderRadialChart() {
+        // Status colors of the application (see assets/coreui/variables.scss):
+        // $success #00C851, $danger #CC0000, $secondary #6b7785.
+        // The same palette is used by the tag heatmap (oitc-host-heatmap-echart).
+        const alpha = 1;
+
         const gradientUp = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: '#32e075'},
-            {offset: 1, color: '#00C851'}
+            {offset: 0, color: `rgba(0,200,81,${alpha})`},
+            {offset: 1, color: `rgba(0,163,66,${alpha})`}
         ]);
 
         const gradientDown = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: '#ff3333'},
-            {offset: 1, color: '#CC0000'}
+            {offset: 0, color: `rgba(204,0,0,${alpha})`},
+            {offset: 1, color: `rgba(163,0,0,${alpha})`}
         ]);
 
         const gradientUnreachable = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: '#919da9'},
-            {offset: 1, color: '#6b7785'}
+            {offset: 0, color: `rgba(107,119,133,${alpha})`},
+            {offset: 1, color: `rgba(86,97,112,${alpha})`}
         ]);
 
         const gradientInDowntime = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: '#7bb2b1'},
-            {offset: 1, color: '#568A89'}
+            {offset: 0, color: `rgba(51,122,183,${alpha})`},
+            {offset: 1, color: `rgba(41,98,147,${alpha})`}
         ]);
 
         const gradientAcknowledged = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: '#ca7eff'},
-            {offset: 1, color: '#A128FF'}
+            {offset: 0, color: `rgba(119,77,255,${alpha})`},
+            {offset: 1, color: `rgba(95,58,214,${alpha})`}
         ]);
 
         const gradientUnhandled = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: '#B31217'},
-            {offset: 1, color: '#7A0000'}
+            {offset: 0, color: `rgba(163,0,0,${alpha})`},
+            {offset: 1, color: `rgba(122,0,0,${alpha})`}
         ]);
 
         const unhandledStripeColor = 'rgba(255,255,255,0.32)';
@@ -242,15 +291,23 @@ export class HostSummaryEchartComponent implements OnDestroy, AfterViewInit {
         // instead of growing underneath the legend.
         const base = Math.min(width, height);
         const outerRadiusPercent = 0.84; // largest value used in polarLayouts
-        const fitDiameter = Math.min(available, height) * 0.92; // small padding for axis labels
+
+        // Reserve space for long axis labels (e.g. 5+ digits) so labels stay visible.
+        const chartTotal = Math.max(1, this.chartData().total || 10);
+        const axisDigits = Math.floor(Math.log10(chartTotal)) + 1;
+        const axisLabelWidthPx = Math.ceil(axisDigits * axisFontSize * 0.62) + 10;
+
+        const drawableWidth = Math.max(available - (axisLabelWidthPx * 2), 60);
+        const drawableHeight = Math.max(height - (axisLabelWidthPx * 2), 60);
+        const fitDiameter = Math.min(drawableWidth, drawableHeight) * 0.92;
         const radiusScale = Math.min(1, Math.max(0.35, fitDiameter / (base * outerRadiusPercent)));
 
         // Center the rings so they sit flush against the outer edge of the container:
         // legend on the right -> rings hug the left border and vice versa.
         // Actual outer radius of the largest ring in pixels
         const ringRadius = (base / 2) * outerRadiusPercent * radiusScale;
-        // Padding for the angle axis labels drawn outside of the rings
-        const edgePadding = ringRadius + axisFontSize + 10;
+        // Padding for the angle axis labels drawn outside the rings
+        const edgePadding = ringRadius + axisLabelWidthPx + 6;
         // Gap between the outer ring and the legend
         const legendGap = 12;
 
@@ -267,14 +324,16 @@ export class HostSummaryEchartComponent implements OnDestroy, AfterViewInit {
         const legendOffset = legendOnRight
             ? Math.round(centerXpx + edgePadding + legendGap)
             : Math.round((width - centerXpx) + edgePadding + legendGap);
-        // ---------------------------------------------------------------------------
 
         this.chartOption = {
             backgroundColor: 'transparent',
             tooltip: {
                 trigger: 'item',
-                axisPointer: {type: 'cross'},
-                formatter: '{b}: {c} Hosts ({d}%)',
+                axisPointer: {
+                    type: 'none',
+                    show: false
+                },
+                formatter: '{c} ' + this.TranslocoService.translate('Hosts'),
                 appendToBody: true,
                 confine: true,
                 backgroundColor: backgroundColor,
@@ -308,7 +367,7 @@ export class HostSummaryEchartComponent implements OnDestroy, AfterViewInit {
 
                             return Math.round(value).toString();
                         },
-                        margin: 6,
+                        margin: 4,
                         textStyle: {
                             color: textColor,
                             fontSize: axisFontSize
@@ -337,6 +396,7 @@ export class HostSummaryEchartComponent implements OnDestroy, AfterViewInit {
             legend: {
                 show: legendVisible,
                 orient: 'vertical',
+                selectedMode: true,
                 left: legendOnRight ? legendOffset : 'auto',
                 right: legendOnRight ? 'auto' : legendOffset,
                 top: 'center',
