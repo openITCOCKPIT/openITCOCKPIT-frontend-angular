@@ -135,7 +135,7 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
         }
         if (!isNaN(perfdata.max)) {
             value = (parseInt(perfdata.current) / parseInt(perfdata.max)) * 100;
-            //todo fix me
+
             if (value > 90) {
                 value = 90;
             }
@@ -160,7 +160,6 @@ export class CylinderItemComponent extends MapItemBaseComponent<Mapgadget> imple
         const cylinderGroup = this.renderer.createElement('g', 'svg');
         this.renderer.setAttribute(cylinderGroup, 'id', 'cylinder_' + this.item()!.id);
         this.renderer.appendChild(svg, cylinderGroup);
-
         if (this.item()!.show_label) {
             const rotateX = parseInt((this.height - 10 - (this.width / 8)).toString(), 10); //10 is svg padding 16 is font size;
             const textElement = this.renderer.createElement('text', 'svg');

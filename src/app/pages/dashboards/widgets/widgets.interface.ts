@@ -1,3 +1,5 @@
+import { ScaleTypes } from '../../../components/popover-graph/scale-types';
+
 export interface WelcomeWidgetResponse {
     isCommunityEdition: boolean
     hasSubscription: boolean
@@ -23,4 +25,42 @@ export interface TodayWidgetResponse {
         end_timestamp: number
     }
     _csrfToken: string
+}
+
+
+
+export interface PerformanceWidgetDatasources {
+    [key: string]: PerformanceWidgetPerfdata
+}
+
+export interface PerformanceWidgetPerfdata {
+    current: string
+    unit: null | string
+    warning: string | null
+    critical: string | null
+    min: number | null,
+    max: number | null,
+    metric: string
+    datasource: {
+        setup: {
+            metric: {
+                value: number,
+                unit: string,
+                name: ScaleTypes
+            },
+            scale: {
+                min: number | null,
+                max: number | null,
+                type: string,
+            }
+            warn: {
+                low: null | number,
+                high: null | number,
+            }
+            crit: {
+                low: null | number,
+                high: null | number,
+            }
+        }
+    }
 }
