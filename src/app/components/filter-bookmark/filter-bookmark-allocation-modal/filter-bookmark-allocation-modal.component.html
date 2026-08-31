@@ -2,10 +2,10 @@
     <c-modal #bookmarkAllocateModal fullscreen="md" id="bookmarkAllocateModal" size="lg">
         <c-modal-header class="bg-primary text-white">
             <h5 cModalTitle>
-                <fa-icon [icon]="['fas', 'table']"></fa-icon>
+                <fa-icon [icon]="['fas', 'square-share-nodes']"></fa-icon>
                 {{ t('Allocate Bookmark Filter') }}
             </h5>
-            <button (click)="hideModal()"  cButtonClose></button>
+            <button (click)="hideModal()" cButtonClose></button>
         </c-modal-header>
         <c-modal-body>
             @if (bookmark && filterBookmarkAllocation) {
