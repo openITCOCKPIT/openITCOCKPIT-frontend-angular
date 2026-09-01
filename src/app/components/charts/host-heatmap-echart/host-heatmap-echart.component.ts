@@ -503,7 +503,12 @@ export class HostHeatmapEchartComponent implements OnDestroy, AfterViewInit {
                 },
                 extraCssText: 'min-width: 200px; white-space: normal; word-break: break-all;'
             },
-            grid: {left: 8, right: 8, top: HostHeatmapEchartComponent.LEGEND_HEIGHT, bottom: 8, containLabel: false},
+            grid: {
+                left: 8,
+                right: 8,
+                top: HostHeatmapEchartComponent.LEGEND_HEIGHT,
+                bottom: 8
+            },
             xAxis: {type: 'category', data: xData, show: false},
             yAxis: {type: 'category', data: yData, show: false},
             visualMap: {

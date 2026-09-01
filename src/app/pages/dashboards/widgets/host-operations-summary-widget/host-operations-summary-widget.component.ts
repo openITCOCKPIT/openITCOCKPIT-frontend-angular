@@ -41,6 +41,7 @@ import { SummaryStateHostsExtended } from '../../../hosts/summary_state.interfac
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
 import { HostHeatmapEchartComponent } from '../../../../components/charts/host-heatmap-echart/host-heatmap-echart.component';
+import { HostStatusScatterEchartComponent } from '../../../../components/charts/host-status-scatter-echart/host-status-scatter-echart.component';
 
 echarts.use([
     TooltipComponent,
@@ -79,7 +80,8 @@ echarts.use([
         HostSummaryEchartComponent,
         PermissionDirective,
         RouterLink,
-        HostHeatmapEchartComponent
+        HostHeatmapEchartComponent,
+        HostStatusScatterEchartComponent
     ],
     templateUrl: "./host-operations-summary-widget.component.html",
     styleUrl: "./host-operations-summary-widget.component.css",

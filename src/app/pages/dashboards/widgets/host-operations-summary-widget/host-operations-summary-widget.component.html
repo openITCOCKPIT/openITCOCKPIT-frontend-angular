@@ -20,11 +20,11 @@
                         <div>
                             @if (hoststatusSummary) {
                                 <c-row class="py-1">
-                                    <c-col [xs]="12" [sm]="12" [md]="12" [lg]="3">
+                                    <c-col [xs]="12" [sm]="12" [md]="12" [lg]="3" style="border:1px solid cyan;">
                                         <oitc-host-summary-echart [chartData]="hoststatusSummary">
                                         </oitc-host-summary-echart>
                                     </c-col>
-                                    <c-col [xs]="12" [lg]="3">
+                                    <c-col [xs]="12" [lg]="6" style="border:1px solid magenta;">
                                         <div class="card h-100 border-0 border-start border-4 border-primary shadow-sm">
                                             <div class="card-body d-flex flex-column justify-content-between p-4">
                                                 <div>
@@ -41,48 +41,61 @@
                                                     <div class="text-uppercase text-muted small fw-bold tracking-wide">
                                                         {{ t('Total hosts') }}
                                                     </div>
-                                                </div>
-                                                <div class="mt-3 pt-2 border-top border-light-subtle small text-secondary">
-                                                    Infrastruktur aktiv
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </c-col>
-                                    <c-col [xs]="12" [lg]="3">
-                                        <div class="card h-100 border-0 border-start border-4 border-danger shadow-sm bg-opacity-10">
-                                            <div class="card-body d-flex flex-column justify-content-between  p-4">
-                                                <div>
-                                                    <div class="fs-2 fw-semibold text-danger lh-1 mb-1">
-                                                        {{ hoststatusSummary.not_handled[1] + hoststatusSummary.not_handled[2] }}
-                                                    </div>
-                                                    <div class="text-uppercase text-muted small fw-bold tracking-wide">
-                                                        Unbehandelte Fehler
-                                                    </div>
-                                                </div>
-                                                <div class="mt-3 pt-2 border-top border-danger-subtle small text-danger-emphasis">
-                                                    Aktion erforderlich
+                                                    <oitc-host-status-scatter-echart
+                                                            [chartData]="hoststatusSummary">
+
+                                                    </oitc-host-status-scatter-echart>
                                                 </div>
                                             </div>
                                         </div>
                                     </c-col>
-                                    <c-col [xs]="12" [lg]="3">
-                                        <div class="card h-100 border-0 border-start border-4 border-success shadow-sm">
-                                            <div class="card-body d-flex flex-column justify-content-between  p-4">
-                                                <div>
-                                                    <div class="fs-2 fw-semibold text-success lh-1 mb-1">
-                                                        {{ hoststatusSummary.lastTimeAlwaysUp.count }}
+                                    <c-col [xs]="12" [lg]="3" style="border:1px solid orangered;">
+                                        <c-row>
+                                            <c-col [xs]="12" [lg]="12">
+                                                <div class="d-flex flex-column gap-3 h-100">
+                                                    <div class="demo-box flex-fill d-flex align-items-left justify-content-left"
+                                                         style="border: 3px solid #dc3545;">
+                                                        <div class="card h-100 border-0 border-start border-4 border-danger shadow-sm bg-opacity-10">
+                                                            <div class="card-body d-flex flex-column justify-content-between  p-4">
+                                                                <div>
+                                                                    <div class="fs-2 fw-semibold text-danger lh-1 mb-1">
+                                                                        {{ hoststatusSummary.not_handled[1] + hoststatusSummary.not_handled[2] }}
+                                                                    </div>
+                                                                    <div class="text-uppercase text-muted small fw-bold tracking-wide">
+                                                                        Unbehandelte Fehler
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mt-3 pt-2 border-top border-danger-subtle small text-danger-emphasis">
+                                                                    Aktion erforderlich
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="text-uppercase text-muted small fw-bold tracking-wide">
-                                                        100%
-                                                        Uptime (Hosts)
+                                                    <div class="demo-box flex-fill d-flex align-items-left justify-content-left"
+                                                         style="border: 3px solid #fd7e14;">
+                                                        <div class="card h-100 border-0 border-start border-4 border-success shadow-sm">
+                                                            <div class="card-body d-flex flex-column justify-content-between  p-4">
+                                                                <div>
+                                                                    <div class="fs-2 fw-semibold text-success lh-1 mb-1">
+                                                                        {{ hoststatusSummary.lastTimeAlwaysUp.count }}
+                                                                    </div>
+                                                                    <div class="text-uppercase text-muted small fw-bold tracking-wide">
+                                                                        100%
+                                                                        Uptime (Hosts)
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mt-3 pt-2 border-top border-success-subtle small text-success">
+                                                                    Systeme laufen stabil
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="mt-3 pt-2 border-top border-success-subtle small text-success">
-                                                    Systeme laufen stabil
-                                                </div>
-                                            </div>
-                                        </div>
+                                            </c-col>
+                                        </c-row>
+
                                     </c-col>
+
                                 </c-row>
 
                                 @if (hoststatusSummary.tagsOverview !== undefined) {
