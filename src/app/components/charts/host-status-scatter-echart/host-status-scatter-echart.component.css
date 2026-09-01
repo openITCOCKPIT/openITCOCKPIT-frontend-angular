@@ -1,0 +1,15 @@
+:host {
+    display: block;
+    width: 100%;
+    /* Allow the component to shrink inside flex/grid parents instead of
+       forcing a horizontal scrollbar when the window gets smaller. */
+    min-width: 0;
+    overflow: hidden;
+}
+
+.heatmap-chart {
+    width: 100%;
+    min-width: 0;
+    min-height: 160px;
+    overflow: hidden;
+}
