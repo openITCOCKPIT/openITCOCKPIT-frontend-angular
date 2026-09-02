@@ -556,7 +556,6 @@
         </div>
 
 
-
         <div class="btn-group btn-group-xs mx-1" aria-label="Display of Satellites health notifications" role="group">
             <c-dropdown class="dropdown ">
                 <button cButton type="button" size="xs" color="default" cDropdownToggle class="px-10 ml-2 "
@@ -611,20 +610,19 @@
                                                             </span>
                                                         </div>
 
-                                                        <div class=" mb-1 text-lg">
-                                                            <span class="text-muted">{{ t('last seen') }}: </span>
+                                                        @if (satellite.satellite_status.last_seen) {
+                                                            <div class=" mb-1 text-lg">
+                                                                <span class="text-muted">{{ t('last seen') }}: </span>
 
-                                                            @if (satellite.satellite_status.last_seen && satellite.satellite_status.last_export) {
                                                                 <strong>{{ satellite.satellite_status.last_seen }}</strong>
-                                                            } @else {
-                                                                <span class="text-muted text-xs">{{ t('Never / Not Connected') }}</span>
-                                                            }
-                                                        </div>
+
+                                                            </div>
+                                                        }
                                                     </div>
                                                 </li>
                                             }
                                         }
-                                        @if (satellite?.satellite_information && systemHealth.satellites_state ) {
+                                        @if (satellite?.satellite_information && systemHealth.satellites_state) {
                                             @let satelliteSystemHealth = satellite.satellite_information.system_health;
                                             @if (satelliteSystemHealth?.cpu_state && satelliteSystemHealth.cpu_state !== 'ok') {
                                                 <li class="health-item animated-fade-in">
@@ -888,7 +886,6 @@
             </button>
         </div>
     </div>
-
 
 
 </ng-container>
