@@ -18,7 +18,8 @@ import * as echarts from 'echarts/core';
 import { BarChart, LineChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
-import { SummaryStateHosts } from '../../../pages/hosts/summary_state.interface';
+import { StatusEventDetails, StatusEvents } from '../../../pages/hosts/summary_state.interface';
+import _ from 'lodash';
 
 echarts.use([LineChart, BarChart, LegendComponent, TitleComponent, TooltipComponent, GridComponent, TooltipComponent]);
 
@@ -50,7 +51,7 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
     private readonly currentTheme = signal<'light' | 'dark'>('light');
     public minChartHeight = input<number | undefined>(40); // in vh
 
-    public chartData = input.required<SummaryStateHosts>();
+    public statusEvents = input.required<StatusEvents>();
 
     public echartsInstance: any;
 
@@ -77,7 +78,7 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
     ngAfterViewInit() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
             this.theme = theme;
-            if (this.chartData()) {
+            if (this.statusEvents()) {
                 this.renderScatterChart();
             }
         }));
@@ -140,56 +141,85 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
     }
 
     private renderScatterChart() {
+/*
         const serverData = {
-            "UP": [
+            "up": [
                 ["2026-08-31T10:15:00Z", 15],
                 ["2026-08-31T14:42:00Z", 42],
                 ["2026-09-01T09:05:00Z", 5]
             ],
-            "DOWN": [
+            "down": [
                 ["2026-08-31T11:05:00Z", 5],
                 ["2026-08-31T17:23:00Z", 23],
                 ["2026-09-01T02:58:00Z", 58]
             ],
-            "UNREACHABLE": [
+            "unreachable": [
                 ["2026-08-31T12:00:00Z", 0],
                 ["2026-08-31T22:30:00Z", 30],
                 ["2026-09-01T08:12:00Z", 12]
             ]
         };
 
+
+ */
+
+
+        //<(string | number)[][]>
+        const transformdata = _.mapValues(this.statusEvents(), (events: StatusEventDetails[]) =>
+            _.map(events, item => [item.userDateTime, item.stateEventMinutes])
+        );
+
+        console.log(transformdata['up']);
+
+        const alpha = 1;
+
+        const gradientUp = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {offset: 0, color: `rgba(0,200,81,${alpha})`},
+            {offset: 1, color: `rgba(0,163,66,${alpha})`}
+        ]);
+
+        const gradientDown = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {offset: 0, color: `rgba(204,0,0,${alpha})`},
+            {offset: 1, color: `rgba(163,0,0,${alpha})`}
+        ]);
+
+        const gradientUnreachable = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {offset: 0, color: `rgba(107,119,133,${alpha})`},
+            {offset: 1, color: `rgba(86,97,112,${alpha})`}
+        ]);
+
+        let contrastColor = getComputedStyle(document.documentElement).getPropertyValue('--cui-medium-emphasis').trim();
+        let backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--cui-body-bg').trim();
+
+
         this.chartOption = {
             title: {text: 'Ereignisse der letzten 24 Stunden'},
             backgroundColor: 'transparent',
             grid: {
-                top: 60,     // Platz für die Legende oben
-                bottom: 10,  // Platz für die Stundenbeschriftung unten
-                left: 10,    // Platz für die Minutenbeschriftung links
-                right: 10,   // Kleiner Puffer nach rechts
+                top: 60,
+                bottom: 0,
+                left: 5,
+                right: 5,
             },
             tooltip: {
                 trigger: 'none',
+                backgroundColor: backgroundColor,
                 padding: [10, 20, 10, 20],
-                backgroundColor: 'rgba(0,0,0,0.7)',
                 transitionDuration: 0,
                 extraCssText: 'width: 300px; white-space: normal',
                 textStyle: {
-                    color: '#fff',
-                    fontSize: 12
+                    fontSize: 12,
+                    color: contrastColor
                 },
-                // Wir nutzen 'any' für den schnellen TypeScript-Fix aus dem letzten Schritt
                 formatter: function (params: any): string {
-                    // Falls params.data aus irgendeinem Grund nicht existiert, nutzen wir params.value als Fallback
                     const rawData = params.data || params.value;
 
                     if (!rawData || !rawData[0]) {
                         return `<b>Typ: ${params.seriesName}</b><br/>Keine Daten verfügbar`;
                     }
 
-                    // rawData[0] ist Ihr Zeitstempel (z.B. "2026-08-31T11:05:00")
                     const datumRaw = new Date(rawData[0]);
 
-                    // Formatiert die Uhrzeit sauber als HH:mm (z.B. 11:05)
                     const uhrzeit = datumRaw.toLocaleTimeString('de-DE', {
                         hour: '2-digit',
                         minute: '2-digit'
@@ -200,14 +230,13 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                         month: '2-digit'
                     });
 
-                    // rawData[1] ist die Minute der Stunde (z.B. 5)
                     return `<b>Typ: ${params.seriesName}</b><br/>
             Datum: ${datum}<br/>
             Uhrzeit: ${uhrzeit} Uhr<br/>
             Minute der Stunde: ${rawData[1]}`;
                 }
             },
-            legend: {data: ['UP', 'DOWN', 'UNREACHABLE'], top: 0},
+            legend: {data: ['up', 'down', 'unreachable'], top: 0},
             axisPointer: {
                 show: true,
                 snap: true,
@@ -237,13 +266,11 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
             },
             xAxis: {
                 type: 'time',
-                min: '2026-08-31T10:00:00',
-                max: '2026-09-01T10:00:00',
+                min: new Date().setHours(new Date().getHours() - 24),
+                max: new Date(),
                 splitLine: {show: true},
                 axisLabel: {
-                    // Erzwingt die Anzeige der Stunde und Minute (z.B. "14:00")
                     formatter: '{HH}:{mm}',
-                    // Sorgt dafür, dass die Labels nicht überlappen
                     hideOverlap: true
                 }
             },
@@ -251,34 +278,34 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                 type: 'value',
                 min: 0,
                 max: 60,
-                interval: 10, // Zeigt Markierungen bei 0, 10, 20... 60
+                interval: 10,
                 name: 'Minute',
                 axisLabel: {
-                    // Zeigt an der Seite nur die Zahl oder optional mit Suffix an
-                    formatter: '{value}' // Für "10", "20" etc. Nutzen Sie '{value}m' für "10m"
+
+                    formatter: '{value}'
                 }
             },
             series: [
                 {
-                    name: 'UP',
+                    name: 'up',
                     type: 'scatter',
                     symbolSize: 10,
-                    itemStyle: {color: '#91cc75'},
-                    data: serverData.UP
+                    itemStyle: {color: gradientUp},
+                    data: transformdata['up']
                 },
                 {
-                    name: 'DOWN',
+                    name: 'down',
                     type: 'scatter',
                     symbolSize: 10,
-                    itemStyle: {color: '#ee6666'},
-                    data: serverData.DOWN
+                    itemStyle: {color: gradientDown},
+                    data: transformdata['down']
                 },
                 {
-                    name: 'UNREACHABLE',
+                    name: 'unreachable',
                     type: 'scatter',
                     symbolSize: 10,
-                    itemStyle: {color: '#fac858'},
-                    data: serverData.UNREACHABLE
+                    itemStyle: {color: gradientUnreachable},
+                    data: transformdata['unreachable']
                 }
             ]
         };

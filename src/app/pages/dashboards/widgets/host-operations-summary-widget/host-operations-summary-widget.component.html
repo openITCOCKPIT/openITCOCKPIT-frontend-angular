@@ -42,7 +42,7 @@
                                                         {{ t('Total hosts') }}
                                                     </div>
                                                     <oitc-host-status-scatter-echart
-                                                            [chartData]="hoststatusSummary">
+                                                            [statusEvents]="hoststatusSummary.statusEvents">
 
                                                     </oitc-host-status-scatter-echart>
                                                 </div>
@@ -99,17 +99,22 @@
                                 </c-row>
 
                                 @if (hoststatusSummary.tagsOverview !== undefined) {
-                                    <fieldset>
-                                        <legend class="small fieldset-legend-border-bottom">
-                                            <h5>
-                                                <fa-icon [icon]="['fas', 'tags']"></fa-icon>
-                                                {{ t('Tags overview') }}
-                                            </h5>
-                                        </legend>
-                                        <oitc-host-heatmap-echart
-                                                [chartData]="hoststatusSummary.tagsOverview"></oitc-host-heatmap-echart>
-                                        <div #heatmapContainer class="chart-container-heatmap"></div>
-                                    </fieldset>
+                                    <c-row class="mt-2">
+                                        <c-col>
+                                            <fieldset>
+                                                <legend class="small fieldset-legend-border-bottom">
+                                                    <h5>
+                                                        <fa-icon [icon]="['fas', 'tags']"></fa-icon>
+                                                        {{ t('Tags overview') }}
+                                                    </h5>
+                                                </legend>
+                                                <oitc-host-heatmap-echart
+                                                        [chartData]="hoststatusSummary.tagsOverview"></oitc-host-heatmap-echart>
+                                                <div #heatmapContainer class="chart-container-heatmap"></div>
+                                            </fieldset>
+                                        </c-col>
+                                    </c-row>
+
                                 }
                             }
                         </div>

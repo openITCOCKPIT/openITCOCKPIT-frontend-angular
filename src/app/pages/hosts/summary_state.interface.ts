@@ -1,3 +1,5 @@
+import { GenericIdAndName } from '../../generic.interfaces';
+
 export interface SummaryState {
     state: number[]
     acknowledged: number[]
@@ -61,6 +63,19 @@ export interface SummaryStateHostsExtended extends SummaryStateHosts {
     tagsOverview: {
         [key: string]: SummaryStateHostsTag
     }
+    statusEvents: StatusEvents
+}
+
+export type StatusEvents = {
+    [key in 'up' | 'down' | 'unreachable']: StatusEventDetails[];
+};
+export interface StatusEventDetails {
+    hostId: number
+    type: string
+    timestamp: number
+    userDateTime: string
+    stateEventMinutes: number
+    host: GenericIdAndName
 }
 
 export interface ServiceSummaryStatesServices {
