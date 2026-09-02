@@ -64,7 +64,6 @@ export interface AdministratorsDebugBackgroundProcesses {
     isPushNotificationRunning: boolean
     isNodeJsServerRunning: boolean
     isWebsocketServerRunning: boolean
-    isSatellitesInformationRunning?:boolean
 }
 
 export interface AdministratorsDebugCurrentCpuLoad {

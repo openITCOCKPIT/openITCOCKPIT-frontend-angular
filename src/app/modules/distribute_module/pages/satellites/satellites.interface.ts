@@ -422,6 +422,5 @@ export interface SatelliteSystemHealthJson {
 
 export interface SatelliteInformation {
     satellite_id: number
-    satellite_error_count: number
     system_health: SatelliteSystemHealthJson
 }
