@@ -504,6 +504,8 @@
                                         </li>
                                     }
 
+
+
                                 </ul>
                             </div>
                         </div>
@@ -516,18 +518,28 @@
                         <div class="dropdown-item no-padding">
                             <ul class="list-unstyled system-health-item notification-message fs-sm w-100">
                                 @if (!systemHealth.isNagiosRunning) {
-                                    <li>
-                                        <span>
-                                            <div class="pt-1 pb-1 border-bottom">
-                                                <p class="mb-2">
+                                    <li class="health-item animated-fade-in">
+                                        <div class="pt-2 pb-2 border-bottom">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <div class="d-flex align-items-center ">
                                                     <fa-icon [icon]="['fas', 'question-circle']"
-                                                             class="text-primary pe-1"></fa-icon>
-                                                    <strong>{{ t('Unknown') }}</strong>
-                                                    <br/>
-                                                    <i>{{ t('Could not detect system health status.') }}</i>
-                                                </p>
+                                                             [class]="'text-primary me-2'">
+                                                    </fa-icon>
+                                                    <span class="fw-bold txt-overflow-ellipsis">
+                                                        {{ t('System') }}
+                                                    </span>
+                                                </div>
+                                                <span class="fw-bold badge rounded-pill status-badge-text border"
+                                                      [class]="'text-primary border-primary-subtle'">
+                                                    {{ t('Unknown') }}
+                                                </span>
                                             </div>
-                                        </span>
+                                            <div class="d-flex justify-content-between align-items-center mb-1 text-lg">
+                                                <span class="text-muted">
+                                                    {{ t('Could not detect system health status.') }}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </li>
                                 }
                             </ul>
@@ -555,336 +567,328 @@
             </button>
         </div>
 
+        @if ( PermissionsService.hasModuleObservable('DistributeModule') | async ) {
+            <div class="btn-group btn-group-xs mx-1" aria-label="Display of Satellites health notifications"
+                 role="group">
+                <c-dropdown class="dropdown ">
+                    <button cButton type="button" size="xs" color="default" cDropdownToggle class="px-10 ml-2 "
+                            [caret]="false"
+                            cTooltip="{{t('Satellites Health')}}"
+                            data-placement="bottom" rel="tooltip" aria-expanded="false">
+                        <fa-icon [icon]="['fas', 'satellite-dish']" class="{{classSat}}"></fa-icon>
+                    </button>
+                    <div cDropdownMenu [style.min-width.px]="300" class="mt-2 py-0">
+                        <div
+                                class="{{bgClassSat}} d-flex justify-content-center align-items-center pt-0">
+                            <h4 class="m-1 text-center color-white">
+                                {{ t('Satellites Health') }}
+                            </h4>
+                        </div>
 
-        <div class="btn-group btn-group-xs mx-1" aria-label="Display of Satellites health notifications" role="group">
-            <c-dropdown class="dropdown ">
-                <button cButton type="button" size="xs" color="default" cDropdownToggle class="px-10 ml-2 "
-                        [caret]="false"
-                        cTooltip="{{t('Satellites System health')}}"
-                        data-placement="bottom" rel="tooltip" aria-expanded="false">
-                    <fa-icon [icon]="['fas', 'satellite-dish']" class="{{classSat}}"></fa-icon>
-                </button>
-                <div cDropdownMenu [style.min-width.px]="300" class="mt-2 py-0">
-                    <div
-                            class="{{bgClassSat}} d-flex justify-content-center align-items-center pt-0">
-                        <h4 class="m-1 text-center color-white">
-                            {{ t('Satellites Health') }}
-                        </h4>
-                    </div>
+                        @if (systemHealth.satellites_state === 'warning' || systemHealth.satellites_state === 'critical') {
 
-                    @if (systemHealth.satellites_state === 'warning' || systemHealth.satellites_state === 'critical') {
-
-                        <div class="dropdown-item py-0"
-                        >
-                            <div class="d-flex align-items-center"
-                                 [routerLink]="['/', 'distribute_module', 'satellites', 'index']">
-                                <ul class="pt-8 list-unstyled system-health-item fs-sm w-100 mb-0">
-                                    @for (satellite of systemHealth.satellites; track satellite) {
-                                        @if (satellite.satellite_status) {
-                                            @if (satellite.satellite_status.status !== 1) {
-                                                <li class="health-item animated-fade-in">
-                                                    <div class="pt-2 pb-2 border-bottom">
-                                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                                            <div class="d-flex align-items-center ">
-                                                                <fa-icon [icon]="['fas', 'satellite-dish']"
-                                                                         [class]="satellite.satellite_status.status === 2 ? 'text-warning me-2' : 'text-danger me-2'">
-                                                                </fa-icon>
-                                                                <span class="fw-bold txt-overflow-ellipsis"
-                                                                      title="{{ satellite.name }}">
-                                                                    {{ satellite.name }}
+                            <div class="dropdown-item py-0"
+                            >
+                                <div class="d-flex align-items-center"
+                                     [routerLink]="['/', 'distribute_module', 'satellites', 'index']">
+                                    <ul class="pt-8 list-unstyled system-health-item fs-sm w-100 mb-0">
+                                        @for (satellite of systemHealth.satellites; track satellite) {
+                                            @if (satellite.satellite_status) {
+                                                @if (satellite.satellite_status.status !== 1) {
+                                                    <li class="health-item animated-fade-in">
+                                                        <div class="pt-2 pb-2 border-bottom">
+                                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                                <div class="d-flex align-items-center ">
+                                                                    <fa-icon [icon]="['fas', 'satellite-dish']"
+                                                                             [class]="satellite.satellite_status.status === 2 ? 'text-warning me-2' : 'text-danger me-2'">
+                                                                    </fa-icon>
+                                                                    <span class="fw-bold txt-overflow-ellipsis"
+                                                                          title="{{ satellite.name }}">
+                                                                        {{ satellite.name }}
 
 
+                                                                    </span>
+
+                                                                </div>
+
+                                                                <span class="badge rounded-pill status-badge-text border"
+                                                                      [class]="satellite.satellite_status.status === 2 ?  'text-warning border-warning' : 'text-danger border-danger'">
+                                                                    {{ satellite.satellite_status.status === 2 ? t('Warning') : t('Critical') }}
+                                                                </span>
+                                                            </div>
+
+                                                            <div class="d-flex justify-content-between align-items-center mb-1 text-lg">
+                                                                <span class="text-muted">
+                                                                    {{ t('Sync failed') }}
+                                                                </span>
+                                                            </div>
+
+                                                            @if (satellite.satellite_status.last_seen) {
+                                                                <div class=" mb-1 text-lg">
+                                                                    <span class="text-muted">{{ t('last seen') }}
+                                                                        : </span>
+
+                                                                    <strong>{{ satellite.satellite_status.last_seen }}</strong>
+
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </li>
+                                                }
+                                            }
+                                            @if (satellite?.satellite_information && systemHealth.satellites_state) {
+                                                @let satelliteSystemHealth = satellite.satellite_information.system_health;
+                                                @if (satelliteSystemHealth?.cpu_state && satelliteSystemHealth.cpu_state !== 'ok') {
+                                                    <li class="health-item animated-fade-in">
+                                                        <div class="pt-2 pb-2 border-bottom">
+                                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                                <div class="d-flex align-items-center ">
+                                                                    <fa-icon [icon]="['fas', 'satellite-dish']"
+                                                                             [class]="satelliteSystemHealth?.cpu_state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
+                                                                    </fa-icon>
+                                                                    <span class="fw-bold txt-overflow-ellipsis"
+                                                                          title="{{ satellite.name }}">
+                                                                        {{ satellite.name }}
+                                                                    </span>
+                                                                </div>
+
+                                                                <span class="badge rounded-pill status-badge-text border"
+                                                                      [class]="satelliteSystemHealth?.cpu_state === 'critical' ?  'text-danger border-danger' : 'text-warning border-warning'">
+
+                                                                    {{ satelliteSystemHealth?.cpu_state === 'critical' ? t('Critical') : t('Warning') }}
+                                                                </span>
+                                                            </div>
+
+
+                                                            <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
+                                                                <span class="text-muted">
+                                                                    {{ t('High CPU usage') }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+
+                                                }
+
+                                                @if (satelliteSystemHealth?.memory?.memory && satelliteSystemHealth.memory.memory.state !== 'ok') {
+                                                    <li class="health-item animated-fade-in">
+                                                        <div class="pt-2 pb-2 border-bottom">
+                                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                                <div class="d-flex align-items-center ">
+                                                                    <fa-icon [icon]="['fas', 'satellite-dish']"
+                                                                             [class]="satelliteSystemHealth?.memory?.memory?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
+                                                                    </fa-icon>
+                                                                    <span class="fw-bold txt-overflow-ellipsis"
+                                                                          title="{{ satellite.name }}">
+                                                                        {{ satellite.name }}
+                                                                    </span>
+                                                                </div>
+
+
+                                                                <span class="fw-bold badge rounded-pill status-badge-text border"
+                                                                      [class]="satelliteSystemHealth?.memory?.memory?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
+                                                                    {{ satelliteSystemHealth?.memory?.memory?.state === 'critical' ? t('Critical') : t('Warning') }}
                                                                 </span>
 
                                                             </div>
 
-                                                            <span class="badge rounded-pill status-badge-text border"
-                                                                  [class]="satellite.satellite_status.status === 2 ?  'text-warning border-warning' : 'text-danger border-danger'">
-                                                                {{ satellite.satellite_status.status === 2 ? t('Warning') : t('Critical') }}
-                                                            </span>
-                                                        </div>
-
-                                                        <div class="d-flex justify-content-between align-items-center mb-1 text-lg">
-                                                            <span class="text-muted">
-                                                                {{ t('Sync failed') }}
-                                                            </span>
-                                                        </div>
-
-                                                        @if (satellite.satellite_status.last_seen) {
-                                                            <div class=" mb-1 text-lg">
-                                                                <span class="text-muted">{{ t('last seen') }}: </span>
-
-                                                                <strong>{{ satellite.satellite_status.last_seen }}</strong>
-
+                                                            <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
+                                                                <span> <span class="text-muted">
+                                                                    {{ t('High memory usage') }}:
+                                                                </span>
+                                                                    <strong class="border border-secondary-subtle font-monospace">Memory</strong></span>
+                                                                <span class="fw-bold font-monospace text-nowrap">
+                                                                    {{ satelliteSystemHealth?.memory?.memory?.percentage }}
+                                                                    %
+                                                                </span>
                                                             </div>
+                                                            <div class="custom-progress-wrapper">
+                                                                <c-progress
+                                                                        [value]="satelliteSystemHealth?.memory?.memory?.percentage"
+                                                                        [color]="satelliteSystemHealth?.memory?.memory?.state === 'critical' ? 'danger' : 'warning'"
+                                                                        class="thin-progress animated-bar"/>
+                                                            </div>
+
+                                                        </div>
+                                                    </li>
+
+                                                }
+                                                @if (satelliteSystemHealth?.memory?.swap && satelliteSystemHealth?.memory?.swap?.state !== 'ok') {
+                                                    <li class="health-item animated-fade-in">
+                                                        <div class="pt-2 pb-2 border-bottom">
+                                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                                <div class="d-flex align-items-center ">
+                                                                    <fa-icon [icon]="['fas', 'satellite-dish']"
+                                                                             [class]="satelliteSystemHealth?.memory?.swap?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
+                                                                    </fa-icon>
+                                                                    <span class="fw-bold txt-overflow-ellipsis"
+                                                                          title="{{ satellite.name }}">
+                                                                        {{ satellite.name }}
+                                                                    </span>
+                                                                </div>
+
+                                                                <span class="fw-bold badge rounded-pill status-badge-text border"
+                                                                      [class]="satelliteSystemHealth?.memory?.swap?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
+                                                                    {{ satelliteSystemHealth?.memory?.swap?.state === 'critical' ? t('Critical') : t('Warning') }}
+                                                                </span>
+                                                            </div>
+
+                                                            <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
+                                                                <span class="">
+                                                                    <span class="text-muted">{{ t('High memory usage') }}
+                                                                        :</span> <strong
+                                                                        class="ms-1 border border-secondary-subtle font-monospace ">Swap</strong>
+                                                                </span>
+                                                                <span class="fw-bold font-monospace text-nowrap">
+                                                                    {{ satelliteSystemHealth?.memory?.swap?.percentage }}
+                                                                    %
+                                                                </span>
+                                                            </div>
+                                                            <div class="custom-progress-wrapper">
+                                                                <c-progress
+                                                                        [value]="satelliteSystemHealth?.memory?.swap?.percentage"
+                                                                        [color]="satelliteSystemHealth?.memory?.swap?.state === 'critical' ? 'danger' : 'warning'"
+                                                                        class="thin-progress animated-bar"/>
+                                                            </div>
+
+                                                        </div>
+                                                    </li>
+                                                }
+                                                @if (satelliteSystemHealth?.disks) {
+                                                    @for (disk of satelliteSystemHealth?.disks; track disk) {
+                                                        @if (disk.state !== 'ok') {
+                                                            <li class="health-item animated-fade-in">
+                                                                <div class="pt-2 pb-2 border-bottom">
+                                                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                                                        <div class="d-flex align-items-center ">
+                                                                            <fa-icon [icon]="['fas', 'satellite-dish']"
+                                                                                     [class]="disk?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
+                                                                            </fa-icon>
+                                                                            <span class="fw-bold txt-overflow-ellipsis"
+                                                                                  title="{{ satellite.name }}">
+                                                                                {{ satellite.name }}
+                                                                            </span>
+                                                                        </div>
+
+                                                                        <span class="fw-bold badge rounded-pill status-badge-text border"
+                                                                              [class]="disk?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
+                                                                            {{ disk?.state === 'critical' ? t('Critical') : t('Warning') }}
+                                                                        </span>
+                                                                    </div>
+
+
+                                                                    <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
+                                                                        <div class="d-flex align-items-center">
+                                                                            <span class="text-muted">
+                                                                                {{ t('Low disk space') }}:
+                                                                            </span>
+                                                                            <strong class="ms-1 border border-secondary-subtle font-monospace txt-overflow-ellipsis">
+                                                                                {{ disk?.mountpoint || disk?.disk }}
+                                                                            </strong>
+                                                                        </div>
+
+                                                                        <span class="fw-bold font-monospace text-nowrap">
+                                                                            {{ disk?.use_percentage }}%
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="custom-progress-wrapper">
+                                                                        <c-progress [value]="disk.use_percentage"
+                                                                                    [color]="disk?.state === 'critical' ? 'danger' : 'warning'"
+                                                                                    class="thin-progress animated-bar"/>
+                                                                    </div>
+
+                                                                </div>
+                                                            </li>
+
                                                         }
-                                                    </div>
-                                                </li>
-                                            }
-                                        }
-                                        @if (satellite?.satellite_information && systemHealth.satellites_state) {
-                                            @let satelliteSystemHealth = satellite.satellite_information.system_health;
-                                            @if (satelliteSystemHealth?.cpu_state && satelliteSystemHealth.cpu_state !== 'ok') {
-                                                <li class="health-item animated-fade-in">
-                                                    <div class="pt-2 pb-2 border-bottom">
-                                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                                            <div class="d-flex align-items-center ">
-                                                                <fa-icon [icon]="['fas', 'satellite-dish']"
-                                                                         [class]="satelliteSystemHealth?.cpu_state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
-                                                                </fa-icon>
-                                                                <span class="fw-bold txt-overflow-ellipsis"
-                                                                      title="{{ satellite.name }}">
-                                                                    {{ satellite.name }}
-                                                                </span>
-                                                            </div>
-
-                                                            <span class="badge rounded-pill status-badge-text border"
-                                                                  [class]="satelliteSystemHealth?.cpu_state === 'critical' ?  'text-danger border-danger' : 'text-warning border-warning'">
-
-                                                                {{ satelliteSystemHealth?.cpu_state === 'critical' ? t('Critical') : t('Warning') }}
-                                                            </span>
-                                                        </div>
-
-
-                                                        <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
-                                                            <span class="text-muted">
-                                                                {{ t('High CPU usage') }}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-
-                                            }
-
-                                            @if (satelliteSystemHealth?.memory?.memory && satelliteSystemHealth.memory.memory.state !== 'ok') {
-                                                <li class="health-item animated-fade-in">
-                                                    <div class="pt-2 pb-2 border-bottom">
-                                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                                            <div class="d-flex align-items-center ">
-                                                                <fa-icon [icon]="['fas', 'satellite-dish']"
-                                                                         [class]="satelliteSystemHealth?.memory?.memory?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
-                                                                </fa-icon>
-                                                                <span class="fw-bold txt-overflow-ellipsis"
-                                                                      title="{{ satellite.name }}">
-                                                                    {{ satellite.name }}
-                                                                </span>
-                                                            </div>
-
-
-                                                            <span class="fw-bold badge rounded-pill status-badge-text border"
-                                                                  [class]="satelliteSystemHealth?.memory?.memory?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
-                                                                {{ satelliteSystemHealth?.memory?.memory?.state === 'critical' ? t('Critical') : t('Warning') }}
-                                                            </span>
-
-                                                        </div>
-
-                                                        <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
-                                                            <span> <span class="text-muted">
-                                                                {{ t('High memory usage') }}:
-                                                            </span>
-                                                                <strong class="border border-secondary-subtle font-monospace">Memory</strong></span>
-                                                            <span class="fw-bold font-monospace text-nowrap">
-                                                                {{ satelliteSystemHealth?.memory?.memory?.percentage }}%
-                                                            </span>
-                                                        </div>
-                                                        <div class="custom-progress-wrapper">
-                                                            <c-progress
-                                                                    [value]="satelliteSystemHealth?.memory?.memory?.percentage"
-                                                                    [color]="satelliteSystemHealth?.memory?.memory?.state === 'critical' ? 'danger' : 'warning'"
-                                                                    class="thin-progress animated-bar"/>
-                                                        </div>
-
-                                                    </div>
-                                                </li>
-
-                                            }
-                                            @if (satelliteSystemHealth?.memory?.swap && satelliteSystemHealth?.memory?.swap?.state !== 'ok') {
-                                                <li class="health-item animated-fade-in">
-                                                    <div class="pt-2 pb-2 border-bottom">
-                                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                                            <div class="d-flex align-items-center ">
-                                                                <fa-icon [icon]="['fas', 'satellite-dish']"
-                                                                         [class]="satelliteSystemHealth?.memory?.swap?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
-                                                                </fa-icon>
-                                                                <span class="fw-bold txt-overflow-ellipsis"
-                                                                      title="{{ satellite.name }}">
-                                                                    {{ satellite.name }}
-                                                                </span>
-                                                            </div>
-
-                                                            <span class="fw-bold badge rounded-pill status-badge-text border"
-                                                                  [class]="satelliteSystemHealth?.memory?.swap?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
-                                                                {{ satelliteSystemHealth?.memory?.swap?.state === 'critical' ? t('Critical') : t('Warning') }}
-                                                            </span>
-                                                        </div>
-
-                                                        <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
-                                                            <span class="">
-                                                                <span class="text-muted">{{ t('High memory usage') }}
-                                                                    :</span> <strong
-                                                                    class="ms-1 border border-secondary-subtle font-monospace ">Swap</strong>
-                                                            </span>
-                                                            <span class="fw-bold font-monospace text-nowrap">
-                                                                {{ satelliteSystemHealth?.memory?.swap?.percentage }}%
-                                                            </span>
-                                                        </div>
-                                                        <div class="custom-progress-wrapper">
-                                                            <c-progress
-                                                                    [value]="satelliteSystemHealth?.memory?.swap?.percentage"
-                                                                    [color]="satelliteSystemHealth?.memory?.swap?.state === 'critical' ? 'danger' : 'warning'"
-                                                                    class="thin-progress animated-bar"/>
-                                                        </div>
-
-                                                    </div>
-                                                </li>
-                                            }
-                                            @if (satelliteSystemHealth?.disks) {
-                                                @for (disk of satelliteSystemHealth?.disks; track disk) {
-                                                    @if (disk.state !== 'ok') {
-                                                        <li class="health-item animated-fade-in">
-                                                            <div class="pt-2 pb-2 border-bottom">
-                                                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                                                    <div class="d-flex align-items-center ">
-                                                                        <fa-icon [icon]="['fas', 'satellite-dish']"
-                                                                                 [class]="disk?.state === 'critical' ? 'text-danger me-2' : 'text-warning me-2'">
-                                                                        </fa-icon>
-                                                                        <span class="fw-bold txt-overflow-ellipsis"
-                                                                              title="{{ satellite.name }}">
-                                                                            {{ satellite.name }}
-                                                                        </span>
-                                                                    </div>
-
-                                                                    <span class="fw-bold badge rounded-pill status-badge-text border"
-                                                                          [class]="disk?.state === 'critical' ? 'text-danger border-danger-subtle' : 'text-warning border-warning-subtle'">
-                                                                        {{ disk?.state === 'critical' ? t('Critical') : t('Warning') }}
-                                                                    </span>
-                                                                </div>
-
-
-                                                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
-                                                                    <div class="d-flex align-items-center">
-                                                                        <span class="text-muted">
-                                                                            {{ t('Low disk space') }}:
-                                                                        </span>
-                                                                        <strong class="ms-1 border border-secondary-subtle font-monospace txt-overflow-ellipsis">
-                                                                            {{ disk?.mountpoint || disk?.disk }}
-                                                                        </strong>
-                                                                    </div>
-
-                                                                    <span class="fw-bold font-monospace text-nowrap">
-                                                                        {{ disk?.use_percentage }}%
-                                                                    </span>
-                                                                </div>
-                                                                <div class="custom-progress-wrapper">
-                                                                    <c-progress [value]="disk.use_percentage"
-                                                                                [color]="disk?.state === 'critical' ? 'danger' : 'warning'"
-                                                                                class="thin-progress animated-bar"/>
-                                                                </div>
-
-                                                            </div>
-                                                        </li>
-
                                                     }
                                                 }
                                             }
                                         }
-                                    }
-                                </ul>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                    } @else if (systemHealth.satellites_state === 'ok') {
-                        <div class="dropdown-item">
-                            <div class="pt-2 pb-2 border-bottom health-item animated-fade-in">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <div class="d-flex align-items-center ">
-                                        <fa-icon [icon]="['fas', 'check']" [class]=" 'ok me-2'"/>
-                                        <span class="fw-bold txt-overflow-ellipsis ok">
-                                            {{ t('Satellites Health') }}
+                        } @else if (systemHealth.satellites_state === 'ok') {
+                            <div class="dropdown-item">
+                                <div class="pt-2 pb-2 border-bottom health-item animated-fade-in">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div class="d-flex align-items-center ">
+                                            <fa-icon [icon]="['fas', 'check']" [class]=" 'ok me-2'"/>
+                                            <span class="fw-bold txt-overflow-ellipsis ok">
+                                                {{ t('Satellites Health') }}
+                                            </span>
+                                        </div>
+
+                                        <span class="badge rounded-pill status-badge-text"
+                                              [class]="'ok  border border-ok'"
+                                        >
+                                            {{ t('Alright!') }}
                                         </span>
                                     </div>
-
-                                    <span class="badge rounded-pill status-badge-text"
-                                          [class]="'ok  border border-ok'"
-                                    >
-                                        {{ t('Alright!') }}
-                                    </span>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
-                                    <span class="text-muted">
-                                        {{ t('No issues detected. Satellites Health operates normally.') }}
-                                    </span>
+                                    <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
+                                        <span class="text-muted">
+                                            {{ t('No issues detected. Satellites Health operates normally.') }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    }
+                        }
 
-                    <!-- end ngIf: systemHealth.state == 'warning' || systemHealth.state == 'critical' -->
-                    <!-- ngIf: systemHealth.state === 'unknown' -->
-                    @if (systemHealth.state === 'unknown') {
-                        <div class="dropdown-item no-padding">
-                            <ul class="list-unstyled system-health-item notification-message fs-sm w-100">
-                                @if (!systemHealth.isNagiosRunning) {
-                                    <li class="health-item animated-fade-in">
-                                        <div class="pt-2 pb-2 border-bottom">
-                                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                                <div class="d-flex align-items-center ">
-                                                    <fa-icon [icon]="['fas', 'question-circle']"
-                                                             [class]="'text-primary me-2'">
-                                                    </fa-icon>
-                                                    <span class="fw-bold txt-overflow-ellipsis">
+                        <!-- end ngIf: systemHealth.satellites_state == 'warning' || systemHealth.satellites_state == 'critical' -->
+                        <!-- ngIf: systemHealth.satellites_state === 'unknown' -->
+                        @if (systemHealth.satellites_state === 'unknown') {
+                            <div class="dropdown-item no-padding">
+                                <ul class="list-unstyled system-health-item notification-message fs-sm w-100">
+                                    @if (!systemHealth.isNagiosRunning) {
+                                        <li class="health-item animated-fade-in">
+                                            <div class="pt-2 pb-2 border-bottom">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center ">
+                                                        <fa-icon [icon]="['fas', 'question-circle']"
+                                                                 [class]="'text-primary me-2'">
+                                                        </fa-icon>
+                                                        <span class="fw-bold txt-overflow-ellipsis">
+                                                            {{ t('Satellites') }}
+                                                        </span>
+                                                    </div>
+                                                    <span class="fw-bold badge rounded-pill status-badge-text border"
+                                                          [class]="'text-primary border-primary-subtle'">
                                                         {{ t('Unknown') }}
                                                     </span>
                                                 </div>
-
-
+                                                <div class="d-flex justify-content-between align-items-center mb-1 text-lg">
+                                                    <span class="text-muted">
+                                                        {{ t('Could not detect satellites health status.') }}
+                                                    </span>
+                                                </div>
                                             </div>
-                                            <div class="d-flex justify-content-between align-items-center mb-1 text-lg">
-                                                <span class="text-muted">
-                                                    {{ t('Could not detect system health status.') }}
-                                                </span>
-                                            </div>
-
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <span>
-                                            <div class="pt-1 pb-1 border-bottom">
-                                                <p class="mb-2">
-                                                    <fa-icon [icon]="['fas', 'question-circle']"
-                                                             class="text-primary pe-1"></fa-icon>
-                                                    <strong>{{ t('Unknown') }}</strong>
-                                                    <br/>
-                                                    <i>{{ t('Could not detect system health status.') }}</i>
-                                                </p>
-                                            </div>
-                                        </span>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    }
-                    @if (PermissionsService.hasPermissionObservable(['systemHealthUsers', 'index'])|async) {
-                        <div class="p-2 d-flex justify-content-between">
-                            <a [routerLink]="['/', 'systemHealthUsers', 'index']" class="btn btn-primary btn-xs"
-                               title="{{t('System health notification list')}}">
-                                <fa-icon [icon]="['fas', 'user']" class="px-3"></fa-icon>
-                            </a>
-                            <div class="italic text-info text-right">
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                        @if (PermissionsService.hasPermissionObservable(['systemHealthUsers', 'index'])|async) {
+                            <div class="p-2 d-flex justify-content-between">
+                                <a [routerLink]="['/', 'systemHealthUsers', 'index']" class="btn btn-primary btn-xs"
+                                   title="{{t('System health notification list')}}">
+                                    <fa-icon [icon]="['fas', 'user']" class="px-3"></fa-icon>
+                                </a>
+                                <div class="italic text-info text-right">
+                                    {{ t('Last update') }}: {{ systemHealth.update }}
+                                </div>
+                            </div>
+                        } @else {
+                            <div class="p-2 italic text-info text-right">
                                 {{ t('Last update') }}: {{ systemHealth.update }}
                             </div>
-                        </div>
-                    } @else {
-                        <div class="p-2 italic text-info text-right">
-                            {{ t('Last update') }}: {{ systemHealth.update }}
-                        </div>
-                    }
-                </div>
-            </c-dropdown>
-            <button cButton class="btn btn-xs {{btnClassSat}} px-3"
-            >{{ systemHealth.errorCountSatellites }}
-            </button>
-        </div>
+                        }
+                    </div>
+                </c-dropdown>
+                <button cButton class="btn btn-xs {{btnClassSat}} px-3"
+                >{{ systemHealth.errorCountSatellites }}
+                </button>
+            </div>
+        }
     </div>
 
 
