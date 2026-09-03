@@ -567,7 +567,7 @@
             </button>
         </div>
 
-        @if ( PermissionsService.hasModuleObservable('DistributeModule') | async ) {
+        @if ( (PermissionsService.hasModuleObservable('DistributeModule') | async) && (systemHealth.satellites ?? []).length > 0 ) {
             <div class="btn-group btn-group-xs mx-1" aria-label="Display of Satellites health notifications"
                  role="group">
                 <c-dropdown class="dropdown ">
