@@ -570,7 +570,7 @@
         @if ( (PermissionsService.hasModuleObservable('DistributeModule') | async) && (systemHealth.satellites ?? []).length > 0 ) {
             <div class="btn-group btn-group-xs mx-1" aria-label="Display of Satellites health notifications"
                  role="group">
-                <c-dropdown class="dropdown ">
+                <c-dropdown class="dropdown">
                     <button cButton type="button" size="xs" color="default" cDropdownToggle class="px-10 ml-2 "
                             [caret]="false"
                             cTooltip="{{t('Satellites Health')}}"
