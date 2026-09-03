@@ -297,21 +297,24 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                     type: 'scatter',
                     itemStyle: {color: gradientUp},
                     data: transformdata['up'],
-                    symbolSize: getDynamicSymbolSize
+                    symbolSize: getDynamicSymbolSize,
+                    z: 1
                 },
                 {
                     name: 'down',
                     type: 'scatter',
                     itemStyle: {color: gradientDown},
                     data: transformdata['down'],
-                    symbolSize: getDynamicSymbolSize
+                    symbolSize: getDynamicSymbolSize,
+                    z: 3
                 },
                 {
                     name: 'unreachable',
                     type: 'scatter',
                     itemStyle: {color: gradientUnreachable},
                     data: transformdata['unreachable'],
-                    symbolSize: getDynamicSymbolSize
+                    symbolSize: getDynamicSymbolSize,
+                    z: 2
                 }
             ]
         };
