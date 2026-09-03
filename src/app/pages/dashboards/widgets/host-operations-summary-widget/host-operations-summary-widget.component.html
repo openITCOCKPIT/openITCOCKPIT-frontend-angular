@@ -41,10 +41,11 @@
                                                     <div class="text-uppercase text-muted small fw-bold tracking-wide">
                                                         {{ t('Total hosts') }}
                                                     </div>
-                                                    <oitc-host-status-scatter-echart
-                                                            [statusEvents]="hoststatusSummary.statusEvents">
-
-                                                    </oitc-host-status-scatter-echart>
+                                                    <div class="mt-3 pt-2 border-top border-primary-subtle small text-danger-emphasis">
+                                                        <oitc-host-status-scatter-echart
+                                                                [statusBuckets]="hoststatusSummary.buckets">
+                                                        </oitc-host-status-scatter-echart>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -55,7 +56,7 @@
                                                 <div class="d-flex flex-column gap-3 h-100">
                                                     <div class="demo-box flex-fill d-flex align-items-left justify-content-left"
                                                          style="border: 3px solid #dc3545;">
-                                                        <div class="card h-100 border-0 border-start border-4 border-danger shadow-sm bg-opacity-10">
+                                                        <div class="card h-100 w-100 border-0 border-start border-4 border-danger shadow-sm bg-opacity-10">
                                                             <div class="card-body d-flex flex-column justify-content-between  p-4">
                                                                 <div>
                                                                     <div class="fs-2 fw-semibold text-danger lh-1 mb-1">
@@ -73,7 +74,7 @@
                                                     </div>
                                                     <div class="demo-box flex-fill d-flex align-items-left justify-content-left"
                                                          style="border: 3px solid #fd7e14;">
-                                                        <div class="card h-100 border-0 border-start border-4 border-success shadow-sm">
+                                                        <div class="card h-100 w-100 border-0 border-start border-4 border-success shadow-sm">
                                                             <div class="card-body d-flex flex-column justify-content-between  p-4">
                                                                 <div>
                                                                     <div class="fs-2 fw-semibold text-success lh-1 mb-1">

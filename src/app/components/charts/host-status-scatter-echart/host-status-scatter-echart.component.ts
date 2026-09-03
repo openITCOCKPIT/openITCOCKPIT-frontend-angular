@@ -18,8 +18,8 @@ import * as echarts from 'echarts/core';
 import { BarChart, LineChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
-import { StatusEventDetails, StatusEvents } from '../../../pages/hosts/summary_state.interface';
-import _ from 'lodash';
+import { StatusBuckets } from '../../../pages/hosts/summary_state.interface';
+import { TranslocoService } from '@jsverse/transloco';
 
 echarts.use([LineChart, BarChart, LegendComponent, TitleComponent, TooltipComponent, GridComponent, TooltipComponent]);
 
@@ -51,11 +51,12 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
     private readonly currentTheme = signal<'light' | 'dark'>('light');
     public minChartHeight = input<number | undefined>(40); // in vh
 
-    public statusEvents = input.required<StatusEvents>();
+    public statusBuckets = input.required<StatusBuckets>();
 
     public echartsInstance: any;
 
     private readonly LayoutService = inject(LayoutService);
+    private readonly TranslocoService = inject(TranslocoService);
 
     public constructor() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
@@ -78,7 +79,7 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
     ngAfterViewInit() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
             this.theme = theme;
-            if (this.statusEvents()) {
+            if (this.statusBuckets()) {
                 this.renderScatterChart();
             }
         }));
@@ -141,49 +142,48 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
     }
 
     private renderScatterChart() {
-/*
-        const serverData = {
-            "up": [
-                ["2026-08-31T10:15:00Z", 15],
-                ["2026-08-31T14:42:00Z", 42],
-                ["2026-09-01T09:05:00Z", 5]
-            ],
-            "down": [
-                ["2026-08-31T11:05:00Z", 5],
-                ["2026-08-31T17:23:00Z", 23],
-                ["2026-09-01T02:58:00Z", 58]
-            ],
-            "unreachable": [
-                ["2026-08-31T12:00:00Z", 0],
-                ["2026-08-31T22:30:00Z", 30],
-                ["2026-09-01T08:12:00Z", 12]
-            ]
+        const transformdata: Record<'up' | 'down' | 'unreachable', [string, number, number][]> = {
+            up: this.statusBuckets().up.map(item => [item[0], item[1], item[2]]),
+            down: this.statusBuckets().down.map(item => [item[0], item[1], item[2]]),
+            unreachable: this.statusBuckets().unreachable.map(item => [item[0], item[1], item[2]])
         };
 
 
- */
+        const allSizes = [
+            ...this.statusBuckets().up.map(item => item[2]),
+            ...this.statusBuckets().down.map(item => item[2]),
+            ...this.statusBuckets().unreachable.map(item => item[2])
+        ];
 
+        const minSizeVal = allSizes.length > 0 ? Math.min(...allSizes) : 0;
+        const maxSizeVal = allSizes.length > 0 ? Math.max(...allSizes) : 1;
 
-        //<(string | number)[][]>
-        const transformdata = _.mapValues(this.statusEvents(), (events: StatusEventDetails[]) =>
-            _.map(events, item => [item.userDateTime, item.stateEventMinutes])
-        );
+        const getDynamicSymbolSize = (data: [string, number, number, number]) => {
+            const sizeValue = data[2];
+            const minPixelSize = 8;
+            const maxPixelSize = 45;
 
-        console.log(transformdata['up']);
+            if (maxSizeVal === minSizeVal) return (minPixelSize + maxPixelSize) / 2;
+
+            const percent = (Math.sqrt(sizeValue) - Math.sqrt(minSizeVal)) /
+                (Math.sqrt(maxSizeVal) - Math.sqrt(minSizeVal));
+
+            return minPixelSize + percent * (maxPixelSize - minPixelSize);
+        };
 
         const alpha = 1;
 
-        const gradientUp = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        const gradientUp = new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
             {offset: 0, color: `rgba(0,200,81,${alpha})`},
             {offset: 1, color: `rgba(0,163,66,${alpha})`}
         ]);
 
-        const gradientDown = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        const gradientDown = new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
             {offset: 0, color: `rgba(204,0,0,${alpha})`},
             {offset: 1, color: `rgba(163,0,0,${alpha})`}
         ]);
 
-        const gradientUnreachable = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        const gradientUnreachable = new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
             {offset: 0, color: `rgba(107,119,133,${alpha})`},
             {offset: 1, color: `rgba(86,97,112,${alpha})`}
         ]);
@@ -193,13 +193,17 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
 
 
         this.chartOption = {
-            title: {text: 'Ereignisse der letzten 24 Stunden'},
+            title: {
+                text: this.TranslocoService.translate('24-Hour Status Events'),
+                left: 0,
+                top: '3%'
+            },
             backgroundColor: 'transparent',
             grid: {
-                top: 60,
-                bottom: 0,
-                left: 5,
-                right: 5,
+                top: 80,
+                bottom: 50,
+                left: 20,
+                right: 20,
             },
             tooltip: {
                 trigger: 'none',
@@ -236,7 +240,11 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
             Minute der Stunde: ${rawData[1]}`;
                 }
             },
-            legend: {data: ['up', 'down', 'unreachable'], top: 0},
+            legend: {
+                right: '0%',
+                top: '3%',
+                data: ['up', 'down', 'unreachable'],
+            },
             axisPointer: {
                 show: true,
                 snap: true,
@@ -276,12 +284,10 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
             },
             yAxis: {
                 type: 'value',
-                min: 0,
-                max: 60,
-                interval: 10,
-                name: 'Minute',
+                min: this.statusBuckets().min,
+                max: this.statusBuckets().max,
+                name: this.TranslocoService.translate('Minute'),
                 axisLabel: {
-
                     formatter: '{value}'
                 }
             },
@@ -289,23 +295,23 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                 {
                     name: 'up',
                     type: 'scatter',
-                    symbolSize: 10,
                     itemStyle: {color: gradientUp},
-                    data: transformdata['up']
+                    data: transformdata['up'],
+                    symbolSize: getDynamicSymbolSize
                 },
                 {
                     name: 'down',
                     type: 'scatter',
-                    symbolSize: 10,
                     itemStyle: {color: gradientDown},
-                    data: transformdata['down']
+                    data: transformdata['down'],
+                    symbolSize: getDynamicSymbolSize
                 },
                 {
                     name: 'unreachable',
                     type: 'scatter',
-                    symbolSize: 10,
                     itemStyle: {color: gradientUnreachable},
-                    data: transformdata['unreachable']
+                    data: transformdata['unreachable'],
+                    symbolSize: getDynamicSymbolSize
                 }
             ]
         };

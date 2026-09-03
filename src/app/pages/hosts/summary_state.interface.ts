@@ -1,4 +1,5 @@
 import { GenericIdAndName } from '../../generic.interfaces';
+import { HoststatusObject } from './hosts.interface';
 
 export interface SummaryState {
     state: number[]
@@ -64,11 +65,20 @@ export interface SummaryStateHostsExtended extends SummaryStateHosts {
         [key: string]: SummaryStateHostsTag
     }
     statusEvents: StatusEvents
+    buckets: StatusBuckets
 }
 
 export type StatusEvents = {
     [key in 'up' | 'down' | 'unreachable']: StatusEventDetails[];
 };
+
+
+type BucketKeys = 'up' | 'down' | 'unreachable';
+export type StatusBuckets = Record<BucketKeys, StatusBucketDetails[]> & {
+    min: number
+    max: number
+};
+
 export interface StatusEventDetails {
     hostId: number
     type: string
@@ -77,6 +87,20 @@ export interface StatusEventDetails {
     stateEventMinutes: number
     host: GenericIdAndName
 }
+
+export interface StatusBucketDetails {
+    0: string
+    1: number
+    2: number
+    statusDetails: HostDetails[]
+}
+
+export interface HostDetails {
+    id: number
+    name: string
+    Hoststatus: HoststatusObject
+}
+
 
 export interface ServiceSummaryStatesServices {
     "0": number
