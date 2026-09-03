@@ -1,12 +1,21 @@
 .color-white {
     color: #fff;
 }
+.txt-overflow-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .list-unstyled {
     padding-left: 0;
     list-style: none;
 }
-
+.status-badge-text{
+    font-size: 0.75rem;
+}
 .system-health-item {
     white-space: normal;
     word-break: break-word;
@@ -18,4 +27,74 @@
 
 .text-right {
     text-align: right;
+}
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.health-item-dev {
+    list-style: none;
+    transition: background-color 0.2s ease-in-out;
+
+    &.animated-fade-in {
+        animation: fadeInSlide 0.3s ease-out forwards;
+    }
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.025);
+        border-radius: 4px;
+    }
+}
+
+.health-item {
+    list-style: none;
+    transition: background-color 0.2s ease-in-out;
+    padding: 0 0px;
+
+    &.animated-fade-in {
+        animation: fadeInSlide 0.3s ease-out forwards;
+    }
+}
+
+
+
+::ng-deep .thin-progress {
+    height: 6px !important;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #e9ecef;
+
+    .progress-bar {
+        border-radius: 4px;
+        transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+}
+
+
+.animated-bar {
+    animation: barPulse 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes barPulse {
+    0% {
+        opacity: 0.85;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.font-monospace {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    background-color: rgba(0, 0, 0, 0.04);
+    padding: 1px 4px;
+    border-radius: 3px;
 }

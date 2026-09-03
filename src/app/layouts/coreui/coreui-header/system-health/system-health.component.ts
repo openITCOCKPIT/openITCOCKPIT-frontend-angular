@@ -16,85 +16,8 @@ import { SystemHealthService } from './system-health.service';
 import { PermissionsService } from '../../../../permissions/permissions.service';
 import { XsButtonDirective } from '../../xsbutton-directive/xsbutton.directive';
 
+import { SystemHealth } from './system-health.interface';
 
-export interface SystemHealth {
-    isNagiosRunning?: boolean,
-    isNdoRunning?: boolean,
-    isStatusengineRunning?: boolean,
-    isNpcdRunning?: boolean,
-    isOitcCmdRunning?: boolean,
-    isSudoServerRunning?: boolean,
-    isNstaRunning?: boolean,
-    isGearmanWorkerRunning?: boolean,
-    isNdoInstalled?: boolean,
-    isStatusengineInstalled?: boolean,
-    isStatusenginePerfdataProcessor?: boolean,
-    isDistributeModuleInstalled?: boolean,
-    isPushNotificationRunning?: boolean,
-    isWebsocketServerRunning?: boolean,
-    isNodeJsServerRunning?: boolean,
-    previousState?: string,
-    update: string,
-    cache_readable?: boolean,
-    gearman_reachable?: boolean,
-    gearman_worker_running?: boolean,
-    state: string,
-    errorCount: number
-    load?: {
-        load1: number,
-        load5: number,
-        load15: number,
-        cores: number,
-        state: string
-    },
-    disk_usage?:
-        {
-            disk: string,
-            size: string,
-            used: string,
-            avail: string,
-            use_percentage: number,
-            mountpoint: string,
-            state: string
-        }[],
-    memory_usage?: {
-        memory: {
-            total: number,
-            used: number,
-            free: number,
-            buffers: number,
-            cached: number,
-            percentage: number,
-            state: string
-        },
-        swap: {
-            total: number,
-            used: number,
-            free: number,
-            percentage: number,
-            state: string
-        }
-    },
-    satellites?:
-        {
-            id: number,
-            name: string,
-            description: string | null,
-            address: string,
-            container_id: number,
-            timezone: string,
-            sync_method: string,
-            status: number,
-            satellite_status: {
-                status: number,
-                last_error: string,
-                last_export: string,
-                last_seen: string,
-                satellite_id: number
-            },
-            allow_edit: boolean
-        }[]
-}
 
 @Component({
     selector: 'oitc-system-health',
@@ -131,6 +54,9 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
     protected class: string = '';
     protected bgClass: string = '';
     protected btnClass: string = '';
+    protected classSat?: string = '';
+    protected bgClassSat?: string = '';
+    protected btnClassSat?: string = '';
 
     public ngOnInit() {
         timer(0, 60000).pipe(takeUntil(this.destroy$)).subscribe({
@@ -146,8 +72,8 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    protected getHealthClass() {
-        switch (this.systemHealth.state) {
+    protected getHealthClass(state:string) {
+        switch (state) {
             case 'ok':
                 return 'up';
 
@@ -162,8 +88,8 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
         }
     }
 
-    protected getHealthBgClass() {
-        switch (this.systemHealth.state) {
+    protected getHealthBgClass(state:string) {
+        switch (state) {
             case 'ok':
                 return 'bg-up';
 
@@ -178,8 +104,8 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
         }
     }
 
-    protected getHealthBtnClass() {
-        switch (this.systemHealth.state) {
+    protected getHealthBtnClass(state:string) {
+        switch (state) {
             case 'ok':
                 return 'btn-success';
 
@@ -201,9 +127,16 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
             } else {
                 this.systemHealth = this.systemHealthDefault;
             }
-            this.class = this.getHealthClass();
-            this.bgClass = this.getHealthBgClass();
-            this.btnClass = this.getHealthBtnClass();
+            this.class = this.getHealthClass(this.systemHealth.state);
+            this.bgClass = this.getHealthBgClass(this.systemHealth.state);
+            this.btnClass = this.getHealthBtnClass(this.systemHealth.state);
+
+            if (this.systemHealth.satellites_state){
+                this.classSat = this.getHealthClass(this.systemHealth.satellites_state);
+                this.bgClassSat = this.getHealthBgClass(this.systemHealth.satellites_state);
+                this.btnClassSat = this.getHealthBtnClass(this.systemHealth.satellites_state);
+            }
+
             this.cdr.markForCheck();
         }));
     }
