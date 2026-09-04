@@ -55,7 +55,7 @@ export type ConfigurationEditorConfig = {
 export interface ConfigurationEditorField {
     type: ConfigurationFilesFieldTypes
     field: string // e.g. "username"
-    value: string | number // e.g. "naemon"
+    value: string | number | string[] // e.g. "naemon"
     placeholder: string | number // e.g. "naemon"
     help: string // e.g. "The username of the Monitoring Engine"
 }
