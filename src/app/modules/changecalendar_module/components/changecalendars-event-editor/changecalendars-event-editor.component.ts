@@ -81,7 +81,7 @@ export class ChangecalendarsEventEditorComponent implements OnInit, OnChanges {
     @Output() onEventCreate = new EventEmitter<ChangecalendarEvent>();
 
     protected html: string = '';
-    protected errors?: GenericValidationError;
+    protected _errors?: GenericValidationError;
 
     @Input()
     public set event(event: ChangecalendarEvent) {
@@ -90,6 +90,11 @@ export class ChangecalendarsEventEditorComponent implements OnInit, OnChanges {
 
     public get event(): ChangecalendarEvent {
         return this._event;
+    }
+
+    @Input()
+    public set errors(errors: GenericValidationError) {
+        this._errors = errors;
     }
 
     protected onChangeOfBbCode(event: any): void {

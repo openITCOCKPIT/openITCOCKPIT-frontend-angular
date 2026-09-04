@@ -1,11 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    OnDestroy,
-    OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { HistoryService } from '../../../../../history.service';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
@@ -37,26 +30,23 @@ import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import {
-    GenericResponseWrapper,
-    GenericValidationError,
-} from '../../../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError, } from '../../../../../generic-responses';
 import { ChangecalendarsService } from '../changecalendars.service';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
-import {
-    ChangecalendarEvent,
-    ChangecalendarEventMove,
-    EditChangecalendar,
-    EditChangecalendarRoot,
-} from '../changecalendars.interface';
+import { ChangecalendarEvent, EditChangecalendar, EditChangecalendarRoot } from '../changecalendars.interface';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { CalendarEvent } from '../../../../../pages/calendars/calendars.interface';
-import { ChangecalendarsEventEditorComponent } from '../../../components/changecalendars-event-editor/changecalendars-event-editor.component';
-import { EventClickArg } from '@fullcalendar/core';
+import {
+    ChangecalendarsEventEditorComponent
+} from '../../../components/changecalendars-event-editor/changecalendars-event-editor.component';
+import { EventChangeArg, EventClickArg } from '@fullcalendar/core';
 import { TimezoneObject } from '../../../../../pages/services/timezone.interface';
 import { TimezoneService } from '../../../../../services/timezone.service';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { ChangecalendarsCalendarEditorComponent } from '../../../components/changecalendars-calendar-editor/changecalendars-calendar-editor.component';
+import {
+    ChangecalendarsCalendarEditorComponent
+} from '../../../components/changecalendars-calendar-editor/changecalendars-calendar-editor.component';
+import { DateTime } from 'luxon';
 
 @Component({
     selector: 'oitc-changecalendars-edit',
@@ -117,6 +107,9 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
     protected eventErrors: GenericValidationError =
         {} as GenericValidationError;
     protected errors: GenericValidationError = {} as GenericValidationError;
+    private startStr: string = '';
+    private endStr: string = '';
+    private datesSetCalled: boolean = false;
 
     protected event: ChangecalendarEvent = {
         title: '',
@@ -126,35 +119,14 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
         changecalendar_id: 0,
     } as ChangecalendarEvent;
 
-    private stripZone(date: Date): string {
-        let ZeroForMonth = date.getMonth() + 1 < 10 ? '0' : '',
-            ZeroForDay = date.getDate() < 10 ? '0' : '',
-            ZeroForHour = date.getHours() < 10 ? '0' : '',
-            ZeroForMinute = date.getMinutes() < 10 ? '0' : '',
-            ZeroForSecond = date.getSeconds() < 10 ? '0' : '',
-            Year = date.getFullYear(),
-            Month = ZeroForMonth + (date.getMonth() + 1),
-            Day = ZeroForDay + date.getDate(),
-            Hour = ZeroForHour + date.getHours(),
-            Minute = ZeroForMinute + date.getMinutes(),
-            Second = ZeroForSecond + date.getSeconds(),
-            Zone = this.timezone.user_offset / 60 / 60,
-            ZeroForZone = Zone < 10 ? '0' : '',
-            TimeZone = '+' + ZeroForZone + Zone,
-            dS =
-                Year +
-                '-' +
-                Month +
-                '-' +
-                Day +
-                'T' +
-                Hour +
-                ':' +
-                Minute +
-                ':' +
-                Second;
+    private stripZone(param: string): string {
+        const matchExpression: RegExp = /^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?)/;
+        const match: RegExpExecArray | null = matchExpression.exec(param.trim());
+        if (!match) {
+            throw new Error(`Not a valid ISO-8601 timestamp: "${param}"`);
+        }
 
-        return dS;
+        return `${match[1]}T${match[2]}`;
     }
 
     protected updateEvent(event: ChangecalendarEvent) {
@@ -188,17 +160,49 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
         );
     }
 
-    public eventMove(event: ChangecalendarEventMove): void {
-        // Fill this event with the same event from this.events where the originId matches event.id
-        this.event = this.post.changeCalendar.changecalendar_events.find(
-            (eventItem: ChangecalendarEvent) => {
-                return eventItem.id === event.id;
-            },
-        ) as ChangecalendarEvent;
+    /**
+     * I hook to datesSet from FullCalendar. If the displayed range changes, I fetch the events for the new range.
+     * @see https://fullcalendar.io/docs/datesSet
+     * @param event
+     */
+    public datesSet(event: any): void {
+        if (!this.datesSetCalled) {
+            this.datesSetCalled = true;
+            return;
+        }
+        this.startStr = event.startStr;
+        this.endStr = event.endStr;
+        this.loadEvents();
+    }
 
-        // Then update start and end.
-        this.event.start = formatDate(event.start, 'yyyy-MM-ddTHH:mm', 'en-US');
-        this.event.end = formatDate(event.end, 'yyyy-MM-ddTHH:mm', 'en-US');
+    /**
+     * I load the Events for the given Range.
+     */
+    private loadEvents(): void {
+        this.subscriptions.add(this.ChangecalendarsService.loadEvents(this.post.changeCalendar.id, this.startStr, this.endStr)
+            .subscribe((result: EditChangecalendar) => {
+                this.events = result.events;
+                this.post.changeCalendar.changecalendar_events = result.changeCalendar.changecalendar_events;
+                this.cdr.markForCheck();
+            }));
+    }
+
+    public eventMove(info: EventChangeArg): void {
+        // Fill this event with the same event from this.events where the originId matches event.id
+        this.event = this.post.changeCalendar.changecalendar_events.find((eventItem: ChangecalendarEvent) => {
+            return eventItem.id === info.event.extendedProps['originId'];
+        }) as ChangecalendarEvent;
+
+
+        this.event.start = DateTime
+            .fromJSDate(info.event.start!)
+            .setZone(this.timezone.user_timezone)
+            .toFormat("yyyy-MM-dd'T'HH:mm");
+
+        this.event.end = DateTime
+            .fromJSDate(info.event.end!)
+            .setZone(this.timezone.user_timezone)
+            .toFormat("yyyy-MM-dd'T'HH:mm");
 
         this.subscriptions.add(
             this.ChangecalendarsService.updateEvent(this.event).subscribe(
@@ -213,22 +217,22 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
 
                         this.notyService.genericSuccess(msg, title);
 
+                        this.ngOnInit();
+
                         return;
                     }
                     // Error
                     this.notyService.genericError();
-                    const errorResponse: GenericValidationError =
-                        result.data as GenericValidationError;
+                    const errorResponse: GenericValidationError = result.data as GenericValidationError;
                     if (result) {
                         this.eventErrors = errorResponse;
                     }
-                },
-            ),
+                })
         );
     }
 
     public createEvent(event: any): void {
-        console.log(event);
+        this.eventErrors = {};
         this.event = {
             title: '',
             description: '',
@@ -259,19 +263,16 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
                         this.notyService.genericSuccess(msg, title);
 
                         this.hideModal();
-
-                        this.ngOnInit();
+                        this.loadEvents();
                         return;
                     }
                     // Error
                     this.notyService.genericError();
-                    const errorResponse: GenericValidationError =
-                        result.data as GenericValidationError;
+                    const errorResponse: GenericValidationError = result.data as GenericValidationError;
                     if (result) {
                         this.eventErrors = errorResponse;
                     }
-                },
-            ),
+                })
         );
     }
 
@@ -291,7 +292,11 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
             eventItem,
         ).subscribe(() => {
             this.hideModal();
-            this.ngOnInit();
+            const title: string = this.TranslocoService.translate('Changecalendar Event');
+            const msg: string = this.TranslocoService.translate('deleted successfully');
+
+            this.notyService.genericSuccess(msg, title);
+            this.loadEvents();
         });
     }
 
@@ -330,16 +335,41 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
             },
         ) as ChangecalendarEvent;
 
-        this.event.start = this.stripZone(new Date(this.event.start));
-        this.event.end = this.stripZone(new Date(this.event.end));
+        let event: CalendarEvent = this.events.find((event: CalendarEvent) => {
+            if (!event.originId) {
+                return false;
+            }
+            return event.originId === clickInfo.event._def.extendedProps['originId'];
+        }) as CalendarEvent;
+
+        this.eventErrors = {};
+        this.event.start = this.stripZone(event.start);
+        this.event.end = this.stripZone(event.end?.toString() || '');
 
         this.showModal();
     }
 
     public ngOnInit() {
-        this.getUserTimezone();
-        this.loadContainers();
-        this.loadEditChangecalendar();
+        this.subscriptions.add(this.TimezoneService.getTimezoneConfiguration().subscribe(data => {
+            this.timezone = data;
+            this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
+                .subscribe((result: SelectKeyValue[]) => {
+                    this.containers = result;
+                    const id = Number(this.route.snapshot.paramMap.get('id'));
+                    this.subscriptions.add(this.ChangecalendarsService.getEdit(id)
+                        .subscribe((result: EditChangecalendar) => {
+                            this.post = result;
+                            if (!this.post.changeCalendar.colour) {
+                                this.post.changeCalendar.colour = '#FF0000';
+                            }
+                            this.events = result.events;
+
+                            this.cdr.markForCheck();
+                        }));
+                    this.cdr.markForCheck();
+                }));
+            this.cdr.markForCheck();
+        }));
     }
 
     public ngOnDestroy() {
@@ -370,7 +400,7 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
             ),
         );
     }
-
+    
     public updateChangecalendar(): void {
         this.subscriptions.add(
             this.ChangecalendarsService.updateChangecalendar(

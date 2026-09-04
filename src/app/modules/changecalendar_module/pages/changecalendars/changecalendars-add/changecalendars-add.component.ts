@@ -167,7 +167,7 @@ export class ChangecalendarsAddComponent implements OnInit, OnDestroy {
     private getDefaultPost(): AddChangeCalendar {
         return {
             Changecalendar: {
-                colour: '',
+                colour: '#FF0000',
                 container_id: 0,
                 description: '',
                 name: '',

@@ -10,7 +10,7 @@
             <li class="breadcrumb-item">
                 <a *oitcPermission="['FilterbookmarksAllocations', 'index']"
                    [routerLink]="['/', 'FilterbookmarkAllocations', 'index']">
-                    <fa-icon [icon]="['fas', 'table']"></fa-icon>
+                    <fa-icon [icon]="['fas', 'square-share-nodes']"></fa-icon>
                     {{ t('Bookmark allocation') }}
                 </a>
             </li>
@@ -48,16 +48,16 @@
                             {{ t('Container') }}
                         </label>
                         <oitc-select
-                            name="container"
-                            id="container"
-                            optionValue="key"
-                            optionLabel="value"
-                            [options]="containers"
-                            [(ngModel)]="this.post.container_id"
-                            [debounce]="true"
-                            (onChange)="onContainerChange()"
-                            oitcFormError [errors]="errors" errorField="container_id"
-                            [disabled]="true">
+                                name="container"
+                                id="container"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="containers"
+                                [(ngModel)]="this.post.container_id"
+                                [debounce]="true"
+                                (onChange)="onContainerChange()"
+                                oitcFormError [errors]="errors" errorField="container_id"
+                                [disabled]="true">
                         </oitc-select>
                         @if (!this.post.container_id) {
                             <div class="text-warning-glow pt-1">
@@ -71,14 +71,14 @@
                             {{ t('Bookmark to allocate') }}
                         </label>
                         <oitc-select
-                            name="BookmarkSelect"
-                            id="BookmarkSelect"
-                            optionValue="key"
-                            optionLabel="value"
-                            [options]="filter_bookmarks"
-                            [(ngModel)]="post.filter_bookmark_id"
-                            (onChange)="onBookmarkChange()"
-                            [disabled]="true"
+                                name="BookmarkSelect"
+                                id="BookmarkSelect"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="filter_bookmarks"
+                                [(ngModel)]="post.filter_bookmark_id"
+                                (onChange)="onBookmarkChange()"
+                                [disabled]="true"
                         >
                         </oitc-select>
                         <oitc-form-feedback [errors]="errors"
@@ -90,13 +90,13 @@
                             <oitc-required-icon></oitc-required-icon>
                         </label>
                         <oitc-multi-select
-                            name="UsersSelect"
-                            id="UsersSelect"
-                            optionValue="key"
-                            optionLabel="value"
-                            [appendTo]="''"
-                            [(ngModel)]="post.users._ids"
-                            [options]="users">
+                                name="UsersSelect"
+                                id="UsersSelect"
+                                optionValue="key"
+                                optionLabel="value"
+                                [appendTo]="''"
+                                [(ngModel)]="post.users._ids"
+                                [options]="users">
                         </oitc-multi-select>
                         <oitc-form-feedback [errors]="errors" errorField="users"></oitc-form-feedback>
                     </div>
@@ -106,13 +106,13 @@
                             <oitc-required-icon></oitc-required-icon>
                         </label>
                         <oitc-multi-select
-                            name="UserrolesSelect"
-                            id="UserrolesSelect"
-                            optionValue="key"
-                            optionLabel="value"
-                            [appendTo]="''"
-                            [(ngModel)]="post.usergroups._ids"
-                            [options]="usergroups">
+                                name="UserrolesSelect"
+                                id="UserrolesSelect"
+                                optionValue="key"
+                                optionLabel="value"
+                                [appendTo]="''"
+                                [(ngModel)]="post.usergroups._ids"
+                                [options]="usergroups">
                         </oitc-multi-select>
                         <oitc-form-feedback [errors]="errors" errorField="usergroups"></oitc-form-feedback>
                     </div>

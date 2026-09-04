@@ -17,14 +17,12 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
-import { NgStyle } from '@angular/common';
 
 @Component({
     selector: 'oitc-changecalendars-calendar',
     imports: [
         TranslocoDirective,
-        FullCalendarModule,
-        NgStyle
+        FullCalendarModule
     ],
     templateUrl: './changecalendars-calendar.component.html',
     styleUrl: './changecalendars-calendar.component.css',
@@ -70,6 +68,20 @@ export class ChangecalendarsCalendarComponent {
         return this._initialView;
     }
 
+    @Input()
+    public set resize(value: number) {
+        if (!this.fullCalendar) {
+            return;
+        }
+        this.fullCalendar.getApi().updateSize();
+    }
+
+    @Input()
+    public set timeZone(timeZone: string) {
+        this.calendarOptions.update(options => ({...options, timeZone: timeZone}));
+    }
+
+    @Output() datesSet = new EventEmitter<any>();
     @Output() eventsChange = new EventEmitter<CalendarEvent[]>();
     @Output() eventClick = new EventEmitter<EventClickArg>();
     @Output() onCreateClick = new EventEmitter<any>();
@@ -87,6 +99,13 @@ export class ChangecalendarsCalendarComponent {
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
         },
         initialView: this._initialView,
+        displayEventTime: true,
+        displayEventEnd: true,
+        eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        },
         //initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
         events: this.events,
         weekends: true,
@@ -128,9 +147,14 @@ export class ChangecalendarsCalendarComponent {
         this.cdr.detectChanges(); // workaround for pressionChangedAfterItHasBeenCheckedError
     }
 
+    /**
+     * When you browse the calendar, FullCalendar emits the datesSet callback.
+     * This is used to make the editor fetch the events for the new date range.
+     * @param dateInfo
+     */
     public handleDatesSet(dateInfo: { startStr: string, endStr: string, start: Date, end: Date, view: any }) {
         this.calendarOptions.update(options => ({...options, events: this.events}));
-        this.eventsChange.emit(this.events);
+        this.datesSet.emit(dateInfo);
     }
 
 }

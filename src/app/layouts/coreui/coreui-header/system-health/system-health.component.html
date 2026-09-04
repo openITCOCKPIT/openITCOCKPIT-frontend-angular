@@ -10,7 +10,7 @@
                 </button>
                 <div cDropdownMenu [style.min-width.px]="300" class="mt-2 py-0">
                     <div
-                        class="{{bgClass}} d-flex justify-content-center align-items-center pt-0">
+                            class="{{bgClass}} d-flex justify-content-center align-items-center pt-0">
                         <h4 class="m-0 text-center color-white">
                             {{ t('System Health') }}
                         </h4>
@@ -135,20 +135,6 @@
                                             </span>
                                         </li>
                                     }
-                                    @if (!systemHealth.isSudoServerRunning) {
-                                        <li>
-                                            <span>
-                                                <div class="pt-2">
-                                                    <h6>
-                                                        <fa-icon [icon]="['fas', 'warning']"
-                                                                 class="down pe-1"></fa-icon>
-                                                        {{ t('Warning') }}
-                                                    </h6>
-                                                    <i>{{ t('Service sudo_server is not running!') }}</i>
-                                                </div>
-                                            </span>
-                                        </li>
-                                    }
                                     @if (!systemHealth.isOitcCmdRunning) {
                                         <li>
                                             <span>
@@ -163,7 +149,7 @@
                                             </span>
                                         </li>
                                     }
-                                    @if (!systemHealth.isPushNotificationRunning) {
+                                    @if (!systemHealth.isWebsocketServerRunning) {
                                         <li>
                                             <span>
                                                 <div class="pt-2">
@@ -172,7 +158,7 @@
                                                                  class="down pe-1"></fa-icon>
                                                         {{ t('Warning') }}
                                                     </h6>
-                                                    <i>{{ t('Service push_notification is not running!') }}</i>
+                                                    <i>{{ t('Service openitcockpit-websocket is not running!') }}</i>
                                                 </div>
                                             </span>
                                         </li>

@@ -96,6 +96,7 @@ import {
 import {
     EventcorrelationsSummaryWidgetComponent
 } from '../../../../modules/eventcorrelation_module/widgets/eventcorrelations-summary-widget/eventcorrelations-summary-widget.component';
+import { CylinderWidgetComponent } from '../cylinder-widget/cylinder-widget.component';
 
 
 @Component({
@@ -147,7 +148,8 @@ import {
         DelayedPassiveHostsWidgetComponent,
         DelayedPassiveServicesWidgetComponent,
         ResourcegroupsCronjobStatusWidgetComponent,
-        EventcorrelationsSummaryWidgetComponent
+        EventcorrelationsSummaryWidgetComponent,
+        CylinderWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl:

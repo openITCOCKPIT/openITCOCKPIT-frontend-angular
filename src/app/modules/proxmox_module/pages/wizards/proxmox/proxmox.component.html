@@ -75,7 +75,7 @@
                 <c-accordion class="mb-3">
                     <c-accordion-item #item0="cAccordionItem" [visible]="false">
                         <ng-template cTemplateId="accordionHeaderTemplate">
-                            <button class="wizard-accordion bg-info-subtle" (click)="item0.toggleItem()"
+                            <button class="wizard-accordion" (click)="item0.toggleItem()"
                                     [collapsed]="!item0.visible"
                                     cAccordionButton>
                                 <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
@@ -181,6 +181,33 @@
                            oitcFormError [errors]="errors" errorField="pveApiTokenSecret"
                            [(ngModel)]="post.pveApiTokenSecret">
                     <oitc-form-feedback [errors]="errors" errorField="pveApiTokenSecret"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.pveNodeName">
+                        {{ t('Node Name') }}
+                    </label>
+                    <input cFormControl
+                           id="post.pveNodeName"
+                           type="text"
+                           name="post.pveNodeName"
+                           oitcFormError [errors]="errors" errorField="pveNodeName"
+                           [(ngModel)]="post.pveNodeName">
+                    <oitc-form-feedback [errors]="errors" errorField="pveNodeName"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.pvePort">
+                        {{ t('Proxmox Port') }}
+                        <oitc-required-icon/>
+                    </label>
+                    <input cFormControl
+                           id="post.pvePort"
+                           type="number"
+                           name="post.pvePort"
+                           oitcFormError [errors]="errors" errorField="pvePort"
+                           [(ngModel)]="post.pvePort">
+                    <oitc-form-feedback [errors]="errors" errorField="pvePort"></oitc-form-feedback>
                 </div>
 
             </fieldset>

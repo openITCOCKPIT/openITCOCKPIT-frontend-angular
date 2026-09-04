@@ -21,8 +21,8 @@
                            type="text"
                            name="event.title"
                            [(ngModel)]="event.title"
-                           oitcFormError [errors]="errors" errorField="title">
-                    <oitc-form-feedback [errors]="errors" errorField="title"></oitc-form-feedback>
+                           oitcFormError [errors]="_errors" errorField="title">
+                    <oitc-form-feedback [errors]="_errors" errorField="title"></oitc-form-feedback>
                 </c-col>
             </c-row>
             <c-row class="mb-2">
@@ -41,8 +41,10 @@
                                id="event.start"
                                cFormControl
                                type="datetime-local"
+                               oitcFormError [errors]="_errors" errorField="start"
                         />
                     </c-input-group>
+                    <oitc-form-feedback [errors]="_errors" errorField="start"></oitc-form-feedback>
                 </c-col>
                 <c-col md="6">
                     <label cLabel for="event.end">
@@ -59,8 +61,10 @@
                                id="event.end"
                                cFormControl
                                type="datetime-local"
+                               oitcFormError [errors]="_errors" errorField="end"
                         />
                     </c-input-group>
+                    <oitc-form-feedback [errors]="_errors" errorField="end"></oitc-form-feedback>
                 </c-col>
             </c-row>
             <c-row class="mb-2">
@@ -72,7 +76,9 @@
                         <c-card-body>
                             <oitc-bb-code-editor [(bbcode)]="event.description"
                                                  (bbcodeChange)="onChangeOfBbCode($event)"
-                                                 id="event.description"/>
+                                                 id="event.description"
+                                                 oitcFormError [errors]="_errors" errorField="description"/>
+                            <oitc-form-feedback [errors]="_errors" errorField="description"></oitc-form-feedback>
                         </c-card-body>
                     </c-card>
                 </c-col>

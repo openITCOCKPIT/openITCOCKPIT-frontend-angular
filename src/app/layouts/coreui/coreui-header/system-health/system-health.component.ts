@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, timer, Subject } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { AsyncPipe, NgStyle } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-    DropdownComponent, DropdownMenuDirective,
-    DropdownToggleDirective, ProgressComponent,
+    DropdownComponent,
+    DropdownMenuDirective,
+    DropdownToggleDirective,
+    ProgressComponent,
     TooltipDirective
 } from '@coreui/angular';
 import { RouterLink } from '@angular/router';
@@ -29,6 +31,7 @@ export interface SystemHealth {
     isStatusenginePerfdataProcessor?: boolean,
     isDistributeModuleInstalled?: boolean,
     isPushNotificationRunning?: boolean,
+    isWebsocketServerRunning?: boolean,
     isNodeJsServerRunning?: boolean,
     previousState?: string,
     update: string,

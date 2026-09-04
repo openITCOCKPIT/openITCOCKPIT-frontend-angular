@@ -73,8 +73,8 @@
 
             @if (response && !response.serverInformation.isContainer) {
                 <oitc-eol-alerts
-                    [codename]="response.serverInformation.LsbRelease"
-                    [phpversion]="response.serverInformation.php_version"></oitc-eol-alerts>
+                        [codename]="response.serverInformation.LsbRelease"
+                        [phpversion]="response.serverInformation.php_version"></oitc-eol-alerts>
             }
 
             <c-row>
@@ -175,7 +175,7 @@
 
                                 @if (response.processInformation.gearmanReachable && response.processInformation.isGearmanWorkerRunning) {
                                     <table
-                                        bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                            bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
                                         <thead>
                                         <tr>
                                             <th>{{ t('Process') }}</th>
@@ -346,15 +346,15 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>{{ t('Push notification service') }}</td>
+                                            <td>{{ t('WebSocket service') }}</td>
                                             <td>
-                                                @if (response.processInformation.backgroundProcesses.isPushNotificationRunning) {
+                                                @if (response.processInformation.backgroundProcesses.isWebsocketServerRunning) {
                                                     <oitc-badge-outline color="success"
                                                     >
                                                         {{ t('Running') }}
                                                     </oitc-badge-outline>
                                                 }
-                                                @if (!response.processInformation.backgroundProcesses.isPushNotificationRunning) {
+                                                @if (!response.processInformation.backgroundProcesses.isWebsocketServerRunning) {
                                                     <oitc-badge-outline color="danger"
                                                     >
                                                         {{ t('Stopped') }}
@@ -488,12 +488,12 @@
                                 <c-nav-item class="px-1">
                                     <c-form-check>
                                         <input
-                                            cFormCheckInput
-                                            class="checkbox-lg checkbox-primary"
-                                            name="keepHistory"
-                                            id="keepHistory"
-                                            type="checkbox"
-                                            [(ngModel)]="keepHistory"/>
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                name="keepHistory"
+                                                id="keepHistory"
+                                                type="checkbox"
+                                                [(ngModel)]="keepHistory"/>
 
                                         <label cFormCheckLabel class="ms-1 mt-1"
                                                for="keepHistory">{{ t('Keep history') }}</label>
@@ -559,7 +559,7 @@
                                         <c-row>
                                             <c-col [xs]="12" [lg]="3">
                                                 <div
-                                                    class="border-start border-start-4 border-start-secondary px-3 mb-3">
+                                                        class="border-start border-start-4 border-start-secondary px-3 mb-3">
                                                     <div class="small text-body-secondary text-truncate">
                                                         {{ t('Total:') }}
                                                     </div>
@@ -605,8 +605,8 @@
                                                 <c-progress-stacked>
                                                     <!-- Used -->
                                                     <c-progress
-                                                        color="success"
-                                                        [value]="(response.memory.memory.used / response.memory.memory.total) * 100">
+                                                            color="success"
+                                                            [value]="(response.memory.memory.used / response.memory.memory.total) * 100">
                                                         @if (response.memory.memory.used > 50) {
                                                             {{ response.memory.memory.used  | localNumber }}MB
                                                         }
@@ -614,8 +614,8 @@
 
                                                     <!-- Cached -->
                                                     <c-progress
-                                                        color="warning"
-                                                        [value]="(response.memory.memory.cached / response.memory.memory.total) * 100">
+                                                            color="warning"
+                                                            [value]="(response.memory.memory.cached / response.memory.memory.total) * 100">
                                                         @if (response.memory.memory.cached > 10) {
                                                             <span class="text-dark">
                                                                 {{ response.memory.memory.cached  | localNumber }}MB
@@ -625,9 +625,9 @@
 
                                                     <!-- Buffers -->
                                                     <c-progress
-                                                        color="info"
-                                                        [animated]="true"
-                                                        [value]="(response.memory.memory.buffers / response.memory.memory.total) * 100">
+                                                            color="info"
+                                                            [animated]="true"
+                                                            [value]="(response.memory.memory.buffers / response.memory.memory.total) * 100">
                                                         @if (response.memory.memory.buffers > 10) {
                                                             {{ response.memory.memory.buffers  | localNumber }}MB
                                                         }
@@ -651,7 +651,7 @@
                                         <c-row>
                                             <c-col [xs]="12" [lg]="3">
                                                 <div
-                                                    class="border-start border-start-4 border-start-secondary px-3 mb-3">
+                                                        class="border-start border-start-4 border-start-secondary px-3 mb-3">
                                                     <div class="small text-body-secondary text-truncate">
                                                         {{ t('Total:') }}
                                                     </div>
@@ -675,8 +675,8 @@
                                             <c-col [xs]="12">
                                                 <!-- Used -->
                                                 <c-progress
-                                                    color="danger"
-                                                    [value]="(response.memory.swap.used / response.memory.swap.total) * 100">
+                                                        color="danger"
+                                                        [value]="(response.memory.swap.used / response.memory.swap.total) * 100">
                                                     @if (response.memory.swap.used > 50) {
                                                         {{ response.memory.swap.used  |localNumber }}MB
                                                     }
@@ -702,7 +702,7 @@
                                             <c-row>
                                                 <c-col [xs]="12" [lg]="3">
                                                     <div
-                                                        class="border-start border-start-4 border-start-secondary px-3 mb-3">
+                                                            class="border-start border-start-4 border-start-secondary px-3 mb-3">
                                                         <div class="small text-body-secondary text-truncate">
                                                             {{ t('Size') }}:
                                                         </div>
@@ -713,7 +713,7 @@
                                                 </c-col>
                                                 <c-col [xs]="12" [lg]="3">
                                                     <div
-                                                        class="border-start border-start-4 border-start-primary px-3 mb-3">
+                                                            class="border-start border-start-4 border-start-primary px-3 mb-3">
                                                         <div class="small text-body-secondary text-truncate">
                                                             {{ t('Used:') }}
                                                         </div>
@@ -724,7 +724,7 @@
                                                 </c-col>
                                                 <c-col [xs]="12" [lg]="3">
                                                     <div
-                                                        class="border-start border-start-4 border-start-success px-3 mb-3">
+                                                            class="border-start border-start-4 border-start-success px-3 mb-3">
                                                         <div class="small text-body-secondary text-truncate">
                                                             {{ t('Available') }}:
                                                         </div>
@@ -738,8 +738,8 @@
                                                 <c-col [xs]="12">
                                                     <!-- Used -->
                                                     <c-progress
-                                                        color="primary"
-                                                        [value]="disk.use_percentage">
+                                                            color="primary"
+                                                            [value]="disk.use_percentage">
                                                         @if (disk.use_percentage > 5) {
                                                             {{ disk.use_percentage  | localNumber }}%
                                                         }
@@ -782,7 +782,7 @@
                             }
                             @if (response) {
                                 <table
-                                    bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                                        bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
                                     <thead>
                                     <tr>
                                         <th>{{ t('Queue name') }}</th>
@@ -794,7 +794,7 @@
                                     <tbody>
                                         @for (queue of gearmanStatus; track $index) {
                                             <tr
-                                                [ngClass]="{
+                                                    [ngClass]="{
                                             'table-warning': queue.worker === 0,
                                             'table-danger': queue.jobs > 500,
                                             'table-primary': queue.jobs > 5 && queue.jobs < 50,
@@ -805,20 +805,20 @@
                                                     <div class="d-flex flex-row">
                                                         {{ queue.jobs }}
                                                         <oitc-sparkline-stats
-                                                            class="ps-1"
-                                                            [lastUpdate]="lastUpdate"
-                                                            [value]="queue.jobs"
-                                                            [maxValues]="25"></oitc-sparkline-stats>
+                                                                class="ps-1"
+                                                                [lastUpdate]="lastUpdate"
+                                                                [value]="queue.jobs"
+                                                                [maxValues]="25"></oitc-sparkline-stats>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex flex-row">
                                                         {{ queue.running }}
                                                         <oitc-sparkline-stats
-                                                            class="ps-1"
-                                                            [lastUpdate]="lastUpdate"
-                                                            [value]="queue.running"
-                                                            [maxValues]="15"></oitc-sparkline-stats>
+                                                                class="ps-1"
+                                                                [lastUpdate]="lastUpdate"
+                                                                [value]="queue.running"
+                                                                [maxValues]="15"></oitc-sparkline-stats>
                                                     </div>
                                                 </td>
                                                 <td>

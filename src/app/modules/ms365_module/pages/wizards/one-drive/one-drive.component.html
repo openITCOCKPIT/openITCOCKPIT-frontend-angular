@@ -81,7 +81,7 @@
                 <c-accordion class="mb-3">
                     <c-accordion-item #item0="cAccordionItem" [visible]="false">
                         <ng-template cTemplateId="accordionHeaderTemplate">
-                            <button class="wizard-accordion bg-info-subtle" (click)="item0.toggleItem()"
+                            <button class="wizard-accordion" (click)="item0.toggleItem()"
                                     [collapsed]="!item0.visible" cAccordionButton>
                                 <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
                                 {{ t('How to set up') }}
@@ -132,7 +132,7 @@
                 <c-accordion class="mb-3">
                     <c-accordion-item #item1="cAccordionItem" [visible]="false">
                         <ng-template cTemplateId="accordionHeaderTemplate">
-                            <button class="wizard-accordion bg-info-subtle" (click)="item1.toggleItem()"
+                            <button class="wizard-accordion" (click)="item1.toggleItem()"
                                     [collapsed]="!item1.visible" cAccordionButton>
                                 <i class="fas fa-life-ring width-2 alert-icon mr-5"></i>
                                 {{ t('Display Cleartext values') }}

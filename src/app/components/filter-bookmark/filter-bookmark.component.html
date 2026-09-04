@@ -75,8 +75,8 @@
                             @if (( PermissionsService.hasPermissionObservable(['FilterBookmarksAllocations', 'add'])|async ) && ( PermissionsService.hasPermissionObservable(['FilterBookmarksAllocations', 'edit'])|async )) {
                                 @if (selectedBookmark?.ownership) {
                                     <button cButton class="ripple " color="primary" size="xs"
-                                            title="{{t('allocate Filter')}}" (click)="allocateBookmark()">
-                                        <fa-icon [icon]="['fas', 'bookmark']"></fa-icon>
+                                            title="{{t('Allocate Filter')}}" (click)="allocateBookmark()">
+                                        <fa-icon [icon]="['fas', 'square-share-nodes']"></fa-icon>
                                     </button>
                                 }
                             }

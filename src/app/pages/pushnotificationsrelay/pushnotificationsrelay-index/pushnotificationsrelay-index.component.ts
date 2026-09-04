@@ -82,6 +82,9 @@ export class PushnotificationsrelayIndexComponent {
     // The openITCOCKPIT System ID of this system
     public systemId: string = '';
 
+    // If openITCOCKPIT is running in a contianer or not
+    public IS_CONTAINER: boolean = false;
+
     public hasPushrelayConnectionError: boolean | null = null;
     public pushrelayErrors = {
         status: '',
@@ -101,6 +104,7 @@ export class PushnotificationsrelayIndexComponent {
             this.PushnotificationsrelayService.getRelaySettings().subscribe(data => {
                 this.post = data.relay;
                 this.systemId = data.systemId;
+                this.IS_CONTAINER = data.IS_CONTAINER;
                 this.isLoading = false;
                 this.cdr.markForCheck();
             })

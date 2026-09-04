@@ -16,7 +16,7 @@
             <li class="breadcrumb-item">
                 <a *oitcPermission="['FilterbookmarksAllocations', 'index']"
                    [routerLink]="['/', 'FilterbookmarkAllocations', 'index']">
-                    <fa-icon [icon]="['fas', 'table']"></fa-icon>
+                    <fa-icon [icon]="['fas', 'square-share-nodes']"></fa-icon>
                     {{ t('Filter Bookmark Allocation') }}
                 </a>
             </li>
@@ -125,9 +125,9 @@
                                 <tr>
                                     <td class="text-center">
                                         <oitc-item-select
-                                            *oitcPermission="['FilterBookmarksAllocations', 'delete']"
-                                            [disabled]="!bookmarkAllocation.allowEdit"
-                                            [item]="bookmarkAllocation"></oitc-item-select>
+                                                *oitcPermission="['FilterBookmarksAllocations', 'delete']"
+                                                [disabled]="!bookmarkAllocation.allowEdit"
+                                                [item]="bookmarkAllocation"></oitc-item-select>
                                     </td>
                                     <td>
                                         @if (bookmarkAllocation.filter_bookmark) {
@@ -180,16 +180,16 @@
                                                              [allowEdit]="bookmarkAllocation.allowEdit">
                                             @if (bookmarkAllocation.allowEdit) {
                                                 <oitc-actions-button-element
-                                                    [permission]="'FilterBookmarksAllocations.edit'"
-                                                    [url]="'/FilterbookmarkAllocations/edit/' + bookmarkAllocation.id">
+                                                        [permission]="'FilterBookmarksAllocations.edit'"
+                                                        [url]="'/FilterbookmarkAllocations/edit/' + bookmarkAllocation.id">
                                                     <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                                                     {{ t('Edit') }}
                                                 </oitc-actions-button-element>
 
                                                 <li cDropdownDivider></li>
                                                 <oitc-actions-button-element
-                                                    (click)="toggleDeleteAllModal(bookmarkAllocation)"
-                                                    [permission]="'FilterBookmarksAllocations.delete'">
+                                                        (click)="toggleDeleteAllModal(bookmarkAllocation)"
+                                                        [permission]="'FilterBookmarksAllocations.delete'">
                                                     <span class="text-danger">
                                                         <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                                         {{ t('Delete') }}
@@ -215,7 +215,7 @@
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                [itemsCount]="FilterbookmarkAllocations.all_filterbookmark_allocations.length"></oitc-select-all>
+                                    [itemsCount]="FilterbookmarkAllocations.all_filterbookmark_allocations.length"></oitc-select-all>
                         </c-col>
                         <c-col>
                             <div class="btn-group d-flex flex-row" role="group">
@@ -232,13 +232,13 @@
                 </c-container>
             }
             <c-container
-                [fluid]="true">
+                    [fluid]="true">
                 <c-row>
                     <c-col>
                         @if (FilterbookmarkAllocations) {
                             <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                [paginateOrScroll]="FilterbookmarkAllocations"></oitc-paginate-or-scroll>
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="FilterbookmarkAllocations"></oitc-paginate-or-scroll>
                         }
                     </c-col>
                 </c-row>
