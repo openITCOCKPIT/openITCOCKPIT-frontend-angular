@@ -10,3 +10,10 @@
 .box-sizing-border {
     box-sizing: border-box;
 }
+
+.host-scatter-echart {
+    width: 100%;
+    /* Takes the height of the container, but never collapses below min-height. */
+    height: 100%;
+    min-height: 220px;
+}

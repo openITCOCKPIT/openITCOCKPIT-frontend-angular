@@ -52,7 +52,6 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
     private readonly containerWidth = signal<number>(0);
     private readonly containerHeight = signal<number>(0);
     private readonly currentTheme = signal<'light' | 'dark'>('light');
-    public minChartHeight = input<number | undefined>(40); // in vh
 
     public statusBuckets = input.required<StatusBuckets>();
 
@@ -247,12 +246,15 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
             title: {
                 text: this.TranslocoService.translate('24-Hour Status Events'),
                 left: 0,
-                top: '3%'
+                top: '1%',
+                textStyle: {
+                    fontSize: 14
+                }
             },
             backgroundColor: 'transparent',
             grid: {
-                top: 80,
-                bottom: 50,
+                top: 60,
+                bottom: 10,
                 left: 20,
                 right: 20,
             },
@@ -340,7 +342,7 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
             },
             legend: {
                 right: '0%',
-                top: '3%',
+                top: '1%',
                 data: ['up', 'down', 'unreachable'],
             },
             axisPointer: {
