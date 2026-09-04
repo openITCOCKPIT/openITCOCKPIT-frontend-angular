@@ -7,9 +7,6 @@
     overflow: hidden;
 }
 
-.heatmap-chart {
-    width: 100%;
-    min-width: 0;
-    min-height: 160px;
-    overflow: hidden;
+.box-sizing-border {
+    box-sizing: border-box;
 }

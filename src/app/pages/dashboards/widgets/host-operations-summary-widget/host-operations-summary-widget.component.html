@@ -20,17 +20,18 @@
                         <div>
                             @if (hoststatusSummary) {
                                 <c-row class="py-1">
-                                    <c-col [xs]="12" [sm]="12" [md]="12" [lg]="3" style="border:1px solid cyan;">
+                                    <c-col [xs]="12" [sm]="12" [md]="12" [lg]="3">
                                         <oitc-host-summary-echart [chartData]="hoststatusSummary">
                                         </oitc-host-summary-echart>
                                     </c-col>
-                                    <c-col [xs]="12" [lg]="6" style="border:1px solid magenta;">
+                                    <c-col [xs]="12" [lg]="6">
                                         <div class="card h-100 border-0 border-start border-4 border-primary shadow-sm">
                                             <div class="card-body d-flex flex-column justify-content-between p-4">
                                                 <div>
                                                     <div class="fs-2 fw-semibold text-primary lh-1 mb-1">
                                                         <span *oitcPermission="['hosts', 'index']">
-                                                            <a [routerLink]="['/', 'hosts', 'index', hoststatusSummary.totalHostIds]">
+                                                            <a [routerLink]="['/', 'hosts', 'index']"
+                                                               [queryParams]="{'id': hoststatusSummary.totalHostIds}">
                                                                 {{ hoststatusSummary.total }}
                                                             </a>
                                                         </span>
@@ -50,40 +51,53 @@
                                             </div>
                                         </div>
                                     </c-col>
-                                    <c-col [xs]="12" [lg]="3" style="border:1px solid orangered;">
-                                        <c-row>
+                                    <c-col [xs]="12" [lg]="3">
+                                        <c-row class="h-100">
                                             <c-col [xs]="12" [lg]="12">
-                                                <div class="d-flex flex-column gap-3 h-100">
-                                                    <div class="demo-box flex-fill d-flex align-items-left justify-content-left"
-                                                         style="border: 3px solid #dc3545;">
-                                                        <div class="card h-100 w-100 border-0 border-start border-4 border-danger shadow-sm bg-opacity-10">
+                                                <div class="d-flex flex-column h-100 gap-3">
+                                                    <div class="flex-fill h-50 d-flex">
+                                                        <div class="card h-100 w-100 border-0 border-start border-4 border-danger shadow-sm">
                                                             <div class="card-body d-flex flex-column justify-content-between  p-4">
-                                                                <div>
-                                                                    <div class="fs-2 fw-semibold text-danger lh-1 mb-1">
-                                                                        {{ hoststatusSummary.not_handled[1] + hoststatusSummary.not_handled[2] }}
-                                                                    </div>
-                                                                    <div class="text-uppercase text-muted small fw-bold tracking-wide">
-                                                                        Unbehandelte Fehler
-                                                                    </div>
+                                                                <div class="fs-2 fw-semibold text-danger lh-1 mb-1">
+                                                                    <span *oitcPermission="['hosts', 'index']">
+                                                                        <a [routerLink]="['/', 'hosts', 'index']"
+                                                                           [queryParams]="{'id': hoststatusSummary.lastTimeAlwaysDown.ids}"
+                                                                           class="text-danger">
+                                                                            {{ hoststatusSummary.lastTimeAlwaysDown.count }}
+                                                                        </a>
+                                                                    </span>
+                                                                    <span *oitcPermission="['hosts', 'index']; negate: true"
+                                                                          class="text-danger">
+                                                                        {{ hoststatusSummary.lastTimeAlwaysDown.count }}
+                                                                    </span>
                                                                 </div>
-                                                                <div class="mt-3 pt-2 border-top border-danger-subtle small text-danger-emphasis">
+                                                                <div class="text-uppercase text-muted small fw-bold tracking-wide">
+                                                                    {{ t('Complete Outages (Last 24h)') }}
+                                                                </div>
+                                                                <div class="mt-3 pt-2 border-top border-danger-subtle small text-danger">
                                                                     Aktion erforderlich
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="demo-box flex-fill d-flex align-items-left justify-content-left"
-                                                         style="border: 3px solid #fd7e14;">
+                                                    <div class="flex-fill h-50 d-flex">
                                                         <div class="card h-100 w-100 border-0 border-start border-4 border-success shadow-sm">
                                                             <div class="card-body d-flex flex-column justify-content-between  p-4">
-                                                                <div>
-                                                                    <div class="fs-2 fw-semibold text-success lh-1 mb-1">
+                                                                <div class="fs-2 fw-semibold text-success lh-1 mb-1">
+                                                                    <span *oitcPermission="['hosts', 'index']">
+                                                                        <a [routerLink]="['/', 'hosts', 'index']"
+                                                                           [queryParams]="{'id': hoststatusSummary.lastTimeAlwaysUp.ids}"
+                                                                           class="text-success">
+                                                                            {{ hoststatusSummary.lastTimeAlwaysUp.count }}
+                                                                        </a>
+                                                                    </span>
+                                                                    <span *oitcPermission="['hosts', 'index']; negate: true"
+                                                                          class="text-success">
                                                                         {{ hoststatusSummary.lastTimeAlwaysUp.count }}
-                                                                    </div>
-                                                                    <div class="text-uppercase text-muted small fw-bold tracking-wide">
-                                                                        100%
-                                                                        Uptime (Hosts)
-                                                                    </div>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="text-uppercase text-muted small fw-bold tracking-wide">
+                                                                    {{ t('Stable Hosts (Last 24h)') }}
                                                                 </div>
                                                                 <div class="mt-3 pt-2 border-top border-success-subtle small text-success">
                                                                     Systeme laufen stabil

@@ -92,7 +92,15 @@ export interface StatusBucketDetails {
     0: string
     1: number
     2: number
-    statusDetails: HostDetails[]
+    statusDetails: HostStatusDetails[]
+}
+
+export interface HostStatusDetails {
+    id: number
+    hostUuid: string
+    name: string
+    hostpriority: number
+    current_state: number
 }
 
 export interface HostDetails {

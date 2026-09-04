@@ -18,8 +18,10 @@ import * as echarts from 'echarts/core';
 import { BarChart, LineChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
-import { StatusBuckets } from '../../../pages/hosts/summary_state.interface';
+import { HostStatusDetails, StatusBuckets } from '../../../pages/hosts/summary_state.interface';
 import { TranslocoService } from '@jsverse/transloco';
+import { PermissionsService } from '../../../permissions/permissions.service';
+import { Router } from '@angular/router';
 
 echarts.use([LineChart, BarChart, LegendComponent, TitleComponent, TooltipComponent, GridComponent, TooltipComponent]);
 
@@ -39,6 +41,7 @@ echarts.use([LineChart, BarChart, LegendComponent, TitleComponent, TooltipCompon
 export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewInit {
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
+    private router = inject(Router);
     private readonly elementRef = inject(ElementRef);
     private readonly ngZone = inject(NgZone);
     public theme: string = '';
@@ -57,6 +60,7 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
 
     private readonly LayoutService = inject(LayoutService);
     private readonly TranslocoService = inject(TranslocoService);
+    private readonly PermissionsService = inject(PermissionsService);
 
     public constructor() {
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
@@ -72,6 +76,9 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
     }
 
     public ngOnDestroy(): void {
+        if (this.echartsInstance) {
+            this.echartsInstance.dispose();
+        }
         this.subscriptions.unsubscribe();
         this.resizeObserver?.disconnect();
     }
@@ -122,9 +129,43 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
 
     onChartInit(ec: any) {
         this.echartsInstance = ec;
+        this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['hosts', 'index']).subscribe(hasPermission => {
+            if (hasPermission) {
+                this.echartsInstance.on('click', (params: any) => {
+                    if (params?.componentType !== 'series' || !params.data) {
+                        return;
+                    }
+
+                    const detailsArray = params.data.statusDetails;
+
+                    // Only map and navigate if status details are actually available
+                    if (Array.isArray(detailsArray) && detailsArray.length > 0) {
+                        const hostIds = detailsArray.map((detail: HostStatusDetails) => detail.id || detail);
+
+                        // Fix for the innerHTML Error:
+                        // Completely disable the tooltip component in ECharts before triggering the route change!
+                        // This ensures ECharts stops tracking mouse events and destroying DOM elements asynchronously,
+                        // preventing the "can't access property innerHTML, el is null" exception.
+                        this.echartsInstance.setOption({
+                            tooltip: {
+                                show: false
+                            }
+                        });
+
+                        this.router.navigate(['hosts/index'], {
+                            queryParams: {id: hostIds}
+                        });
+
+                    } else {
+                        this.echartsInstance.dispatchAction({type: 'hideTip'});
+                    }
+                });
+            }
+        }));
         this.containerWidth.set(Math.round(this.measureAvailableWidth()));
         this.cdr.markForCheck();
     }
+
 
     /**
      * Returns the currently available width of the chart in pixels.
@@ -142,12 +183,23 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
     }
 
     private renderScatterChart() {
-        const transformdata: Record<'up' | 'down' | 'unreachable', [string, number, number][]> = {
-            up: this.statusBuckets().up.map(item => [item[0], item[1], item[2]]),
-            down: this.statusBuckets().down.map(item => [item[0], item[1], item[2]]),
-            unreachable: this.statusBuckets().unreachable.map(item => [item[0], item[1], item[2]])
+        const transformdata: Record<'up' | 'down' | 'unreachable', {
+            value: [string, number, number],
+            statusDetails: any[]
+        }[]> = {
+            up: this.statusBuckets().up.map(item => ({
+                value: [item[0], item[1], item[2]],
+                statusDetails: item.statusDetails
+            })),
+            down: this.statusBuckets().down.map(item => ({
+                value: [item[0], item[1], item[2]],
+                statusDetails: item.statusDetails
+            })),
+            unreachable: this.statusBuckets().unreachable.map(item => ({
+                value: [item[0], item[1], item[2]],
+                statusDetails: item.statusDetails
+            }))
         };
-
 
         const allSizes = [
             ...this.statusBuckets().up.map(item => item[2]),
@@ -171,21 +223,20 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
             return minPixelSize + percent * (maxPixelSize - minPixelSize);
         };
 
-        const alpha = 1;
 
         const gradientUp = new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
-            {offset: 0, color: `rgba(0,200,81,${alpha})`},
-            {offset: 1, color: `rgba(0,163,66,${alpha})`}
+            {offset: 0, color: '#00C851'},
+            {offset: 1, color: '#00C8517F'}
         ]);
 
         const gradientDown = new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
-            {offset: 0, color: `rgba(204,0,0,${alpha})`},
-            {offset: 1, color: `rgba(163,0,0,${alpha})`}
+            {offset: 0, color: '#CC0000'},
+            {offset: 1, color: '#CC00007F'}
         ]);
 
         const gradientUnreachable = new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
-            {offset: 0, color: `rgba(107,119,133,${alpha})`},
-            {offset: 1, color: `rgba(86,97,112,${alpha})`}
+            {offset: 0, color: '#6b7785'},
+            {offset: 1, color: '#6b77857F'}
         ]);
 
         let contrastColor = getComputedStyle(document.documentElement).getPropertyValue('--cui-medium-emphasis').trim();
@@ -206,38 +257,85 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                 right: 20,
             },
             tooltip: {
-                trigger: 'none',
+                trigger: 'item',
+                axisPointer: {
+                    type: 'none'
+                },
+                showDelay: 200,
+                //triggerOn: 'click',
                 backgroundColor: backgroundColor,
                 padding: [10, 20, 10, 20],
                 transitionDuration: 0,
-                extraCssText: 'width: 300px; white-space: normal',
+                extraCssText: 'width: 280px;white-space: normal;padding:0;',
                 textStyle: {
                     fontSize: 12,
                     color: contrastColor
                 },
-                formatter: function (params: any): string {
-                    const rawData = params.data || params.value;
+                appendToBody: true,
+                confine: true,
+                formatter: (params: any) => {
+                    const dataArray = params.data;
 
-                    if (!rawData || !rawData[0]) {
-                        return `<b>Typ: ${params.seriesName}</b><br/>Keine Daten verfügbar`;
+                    if (!dataArray) return '';
+
+                    const dateObj = new Date(dataArray.value[0]);
+                    const hoursStr = dateObj.getHours().toString().padStart(2, '0');
+                    const eventMinutesStr = dataArray.value[1].toString().padStart(2, '0');
+
+                    const count = dataArray.value[2];
+
+                    const details = dataArray.statusDetails || [];
+
+                    let detailsHtml = '';
+                    if (details.length > 0) {
+                        detailsHtml = `<div class="col col-12 mt-2 pt-2 border-top bold">`
+                            + this.TranslocoService.translate('Affected Hosts')
+                            + `<sub class="text-secondary ps-1">`
+                            + this.TranslocoService.translate('limit 10')
+                            + `</sub>`
+                            + `</div>`;
+
+                        details
+                            .sort((a: HostStatusDetails, b: HostStatusDetails) => b.hostpriority - a.hostpriority)
+                            .slice(0, 10)
+                            .forEach((detail: HostStatusDetails) => {
+                                let stateIcon = '🔵';
+                                switch (detail.current_state) {
+                                    case 0:
+                                        stateIcon = '🟢';
+                                        break;
+                                    case 1:
+                                        stateIcon = '🔴';
+                                        break;
+                                    case 2:
+                                        stateIcon = '⚪';
+                                        break;
+                                }
+
+                                let priorityColors: Record<number, string> = {
+                                    1: 'ok-soft',
+                                    2: 'ok',
+                                    3: 'warning',
+                                    4: 'critical-soft',
+                                    5: 'critical'
+                                };
+
+                                detailsHtml += `<div class="col col-1 small text-center">${stateIcon}</div>`
+                                    + `<div class="col col-9 text-muted small text-truncate">${detail.name}</div>`
+                                    + `<div class="col col-2 small text-end">`
+                                    + `<i class="fa-solid fa-fire ${priorityColors[detail.hostpriority] ?? ''}"></i>`
+                                    + `</div>`;
+                            });
                     }
 
-                    const datumRaw = new Date(rawData[0]);
-
-                    const uhrzeit = datumRaw.toLocaleTimeString('de-DE', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-
-                    const datum = datumRaw.toLocaleDateString('de-DE', {
-                        day: '2-digit',
-                        month: '2-digit'
-                    });
-
-                    return `<b>Typ: ${params.seriesName}</b><br/>
-            Datum: ${datum}<br/>
-            Uhrzeit: ${uhrzeit} Uhr<br/>
-            Minute der Stunde: ${rawData[1]}`;
+                    return `<div class="row row p-2 g-0 w-100 box-sizing-border">`
+                        + `<div class="col col-12 mb-2 text-end bold ${params.seriesName}">${params.seriesName.toUpperCase()}</div>`
+                        + `<div class="col col-8 bold">` + this.TranslocoService.translate('Time') + `:</div>`
+                        + `<div class="col col-4 text-end">${hoursStr}:${eventMinutesStr}</div>`
+                        + `<div class="col col-8 bold">` + this.TranslocoService.translate('Number of events') + `:</div>`
+                        + `<div class="col col-4 text-end">${count}</div>`
+                        + detailsHtml
+                        + `</div>`;
                 }
             },
             legend: {
@@ -287,8 +385,16 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                 min: this.statusBuckets().min,
                 max: this.statusBuckets().max,
                 name: this.TranslocoService.translate('Minute'),
+                interval: 10,
+                minInterval: 1,
+                axisPointer: {
+                    show: true,
+                    label: {
+                        formatter: (params: any) => Math.round(params.value).toString()
+                    }
+                },
                 axisLabel: {
-                    formatter: '{value}'
+                    formatter: (value: number) => Math.round(value).toString()
                 }
             },
             series: [
