@@ -22,8 +22,9 @@ import { HostStatusDetails, StatusBuckets } from '../../../pages/hosts/summary_s
 import { TranslocoService } from '@jsverse/transloco';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { Router } from '@angular/router';
+import { CanvasRenderer } from 'echarts/renderers';
 
-echarts.use([LineChart, BarChart, LegendComponent, TitleComponent, TooltipComponent, GridComponent, TooltipComponent]);
+echarts.use([LineChart, BarChart, LegendComponent, TitleComponent, TooltipComponent, GridComponent, CanvasRenderer]);
 
 
 @Component({

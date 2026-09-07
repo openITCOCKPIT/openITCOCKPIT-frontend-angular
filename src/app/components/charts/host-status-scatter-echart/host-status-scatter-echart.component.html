@@ -1,4 +1,5 @@
 <div echarts
      [options]="chartOption"
      [theme]="theme"
+     [initOpts]="{ renderer: 'svg' }"
      (chartInit)="onChartInit($event)" class="host-scatter-echart"></div>

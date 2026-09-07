@@ -64,6 +64,14 @@ export interface SummaryStateHostsExtended extends SummaryStateHosts {
     tagsOverview: {
         [key: string]: SummaryStateHostsTag
     }
+    failed: {
+        count: number
+        ids: number[]
+    }
+    recovered: {
+        count: number
+        ids: number[]
+    }
     statusEvents: StatusEvents
     buckets: StatusBuckets
 }
