@@ -23,6 +23,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { Router } from '@angular/router';
 import { CanvasRenderer } from 'echarts/renderers';
+import { DateTime } from 'luxon';
 
 echarts.use([LineChart, BarChart, LegendComponent, TitleComponent, TooltipComponent, GridComponent, CanvasRenderer]);
 
@@ -55,6 +56,9 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
     private readonly currentTheme = signal<'light' | 'dark'>('light');
 
     public statusBuckets = input.required<StatusBuckets>();
+    public fromTimestamp = input.required<number>();
+    public toTimestamp = input.required<number>();
+    public timezone = input.required<string>();
 
     public echartsInstance: any;
 
@@ -188,19 +192,19 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
             statusDetails: any[]
         }[]> = {
             up: this.statusBuckets().up.map(item => ({
-                value: [item[0], item[1], item[2]],
+                value: [DateTime.fromISO(item[0], {zone: this.timezone()}).toISO({includeOffset: true}) ?? item[0], item[1], item[2]],
                 statusDetails: item.statusDetails
             })),
             down: this.statusBuckets().down.map(item => ({
-                value: [item[0], item[1], item[2]],
+                value: [DateTime.fromISO(item[0], {zone: this.timezone()}).toISO({includeOffset: true}) ?? item[0], item[1], item[2]],
                 statusDetails: item.statusDetails
             })),
             unreachable: this.statusBuckets().unreachable.map(item => ({
-                value: [item[0], item[1], item[2]],
+                value: [DateTime.fromISO(item[0], {zone: this.timezone()}).toISO({includeOffset: true}) ?? item[0], item[1], item[2]],
                 statusDetails: item.statusDetails
             }))
         };
-
+        console.log(transformdata);
         const allSizes = [
             ...this.statusBuckets().up.map(item => item[2]),
             ...this.statusBuckets().down.map(item => item[2]),
@@ -281,9 +285,10 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
 
                     if (!dataArray) return '';
 
-                    const dateObj = new Date(dataArray.value[0]);
-                    const hoursStr = dateObj.getHours().toString().padStart(2, '0');
-                    const eventMinutesStr = dataArray.value[1].toString().padStart(2, '0');
+                    const dateObj = DateTime.fromISO(dataArray.value[0]).setZone(this.timezone());
+
+                    const hoursStr = dateObj.toFormat('HH');
+                    const eventMinutesStr = dateObj.toFormat('mm');
 
                     const count = dataArray.value[2];
 
@@ -375,12 +380,25 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
             },
             xAxis: {
                 type: 'time',
-                min: new Date().setHours(new Date().getHours() - 24),
-                max: new Date(),
+                min: new Date(this.fromTimestamp() * 1000).toISOString(),
+                max: new Date(this.toTimestamp() * 1000).toISOString(),
                 splitLine: {show: true},
                 axisLabel: {
-                    formatter: '{HH}:{mm}',
-                    hideOverlap: true
+                    hideOverlap: true,
+                    formatter: (value) => {
+                        const dateTime = DateTime.fromMillis(value).setZone(this.timezone());
+                        return dateTime.toFormat('HH:mm');
+                    }
+                },
+                axisPointer: {
+                    show: true,
+                    label: {
+                        formatter: (params) => {
+                            const timestamp = Number(params.value);
+                            const dateTime = DateTime.fromMillis(timestamp).setZone(this.timezone());
+                            return dateTime.toFormat('dd.MM.yyyy HH:mm:ss');
+                        }
+                    }
                 }
             },
             yAxis: {

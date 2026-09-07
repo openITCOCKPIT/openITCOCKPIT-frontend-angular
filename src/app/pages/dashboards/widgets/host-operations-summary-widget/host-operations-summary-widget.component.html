@@ -106,6 +106,9 @@
                                                     </c-row>
                                                     <div class="mt-3 pt-2 border-top border-primary-subtle small text-danger-emphasis">
                                                         <oitc-host-status-scatter-echart
+                                                                [fromTimestamp]="hoststatusSummary.from"
+                                                                [toTimestamp]="hoststatusSummary.to"
+                                                                [timezone]="hoststatusSummary.userTimezone"
                                                                 [statusBuckets]="hoststatusSummary.buckets">
                                                         </oitc-host-status-scatter-echart>
                                                     </div>

@@ -74,6 +74,9 @@ export interface SummaryStateHostsExtended extends SummaryStateHosts {
     }
     statusEvents: StatusEvents
     buckets: StatusBuckets
+    from: number
+    to: number
+    userTimezone: string
 }
 
 export type StatusEvents = {
