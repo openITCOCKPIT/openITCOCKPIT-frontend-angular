@@ -204,7 +204,6 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                 statusDetails: item.statusDetails
             }))
         };
-        console.log(transformdata);
         const allSizes = [
             ...this.statusBuckets().up.map(item => item[2]),
             ...this.statusBuckets().down.map(item => item[2]),
