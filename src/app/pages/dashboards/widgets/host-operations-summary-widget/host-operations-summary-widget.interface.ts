@@ -19,7 +19,8 @@ export interface HostOperationsSummaryConfig {
         keywords: string
         not_keywords: string
     }
-    hostpriority: string[],
+    hostpriority: string[]
+    refresh_key?: number
 }
 
 export interface HostOperationsSummaryResponse {

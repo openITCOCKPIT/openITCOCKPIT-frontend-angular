@@ -42,6 +42,7 @@ import { PermissionDirective } from '../../../../permissions/permission.directiv
 import { RouterLink } from '@angular/router';
 import { HostHeatmapEchartComponent } from '../../../../components/charts/host-heatmap-echart/host-heatmap-echart.component';
 import { HostStatusScatterEchartComponent } from '../../../../components/charts/host-status-scatter-echart/host-status-scatter-echart.component';
+import { IntervalPickerComponent } from '../../../../components/interval-picker/interval-picker.component';
 
 echarts.use([
     TooltipComponent,
@@ -81,20 +82,23 @@ echarts.use([
         PermissionDirective,
         RouterLink,
         HostHeatmapEchartComponent,
-        HostStatusScatterEchartComponent
+        HostStatusScatterEchartComponent,
+        IntervalPickerComponent
     ],
     templateUrl: "./host-operations-summary-widget.component.html",
     styleUrl: "./host-operations-summary-widget.component.css",
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HostOperationsSummaryWidgetComponent extends BaseWidgetComponent {
-    private subscription: Subscription = new Subscription();
     private readonly LayoutService = inject(LayoutService);
 
     protected flipped = signal<boolean>(false);
     public readonly ContainersService: ContainersService = inject(ContainersService);
     public readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
     public config!: HostOperationsSummaryConfig;
+    protected selectedAutoRefresh: SelectKeyValue = {key: 0, value: 'Disabled'};
+    private refreshInterval: any = null;
+
     public hoststatusSummary!: SummaryStateHostsExtended;
 
     protected hostgroups: SelectKeyValue[] = [];
@@ -170,6 +174,12 @@ export class HostOperationsSummaryWidgetComponent extends BaseWidgetComponent {
                         }
                     );
 
+                    this.selectedAutoRefresh.key = this.config.refresh_key ?? 0;
+                    //trigger refresh for allocated widgets
+                    if (this.selectedAutoRefresh.key > 0) {
+                        this.startRefreshInterval(this.selectedAutoRefresh.key);
+                    }
+
                     this.cdr.markForCheck();
                 }));
         }
@@ -243,6 +253,42 @@ export class HostOperationsSummaryWidgetComponent extends BaseWidgetComponent {
                     this.notyService.genericError();
                 }
             }));
+    }
+
+    public onRefreshChange = (value?: SelectKeyValue): void => {
+        if (value) {
+            this.selectedAutoRefresh = value;
+            if (this.config) {
+                this.config.refresh_key = this.selectedAutoRefresh.key;
+                this.submit();
+            }
+
+        }
+        this.stopRefreshInterval();
+        if (this.selectedAutoRefresh.key > 0) {
+            this.startRefreshInterval(this.selectedAutoRefresh.key);
+        }
+
+    }
+
+    private startRefreshInterval(interval: number) {
+        this.stopRefreshInterval();
+        this.refreshInterval = setInterval(() => {
+            this.refresh();
+        }, interval * 1000);
+    }
+
+    protected refresh(): void {
+            this.load();
+            this.cdr.markForCheck();
+
+    }
+
+    private stopRefreshInterval() {
+        if (this.refreshInterval) {
+            clearInterval(this.refreshInterval);
+        }
+        this.refreshInterval = null;
     }
 
     protected readonly JSON = JSON;

@@ -1,18 +1,32 @@
 <ng-container *transloco="let t">
     @if (widget) {
         <div class="d-flex h-100 flex-column">
-            <div>
+            <c-row>
+
                 @if (!isReadonly()) {
-                    <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
-                            (click)="flipped.set(!flipped())">
-                        @if (flipped()) {
-                            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
-                        } @else {
-                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
-                        }
-                    </button>
+                    <c-col [xs]="12" [md]="1">
+                        <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                                (click)="flipped.set(!flipped())">
+                            @if (flipped()) {
+                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                            }
+                        </button>
+                    </c-col>
+                    <c-col [xs]="12" [md]="11">
+                        <c-row>
+                            @if (widget && config && !flipped()) {
+                                <c-col [xs]="12" class="text-end">
+                                    <oitc-interval-picker (change)="onRefreshChange($event)"
+                                                          [useLocalStorage]="false"
+                                                          [initialInterval]="config.refresh_key"></oitc-interval-picker>
+                                </c-col>
+                            }
+                        </c-row>
+                    </c-col>
                 }
-            </div>
+            </c-row>
             <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
                  class="box-container">
                 <div class="box-x">
