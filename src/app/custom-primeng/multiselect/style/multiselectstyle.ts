@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { BaseStyle } from '@openng/optimus-ui/base';
 
-const theme = ({ dt }) => `
+const theme = ({dt}) => `
 .p-multiselect {
     display: inline-flex;
     cursor: pointer;
@@ -11,8 +11,8 @@ const theme = ({ dt }) => `
     background: ${dt('multiselect.background')};
     border: 1px solid ${dt('multiselect.border.color')};
     transition: background ${dt('multiselect.transition.duration')}, color ${dt('multiselect.transition.duration')}, border-color ${dt('multiselect.transition.duration')}, outline-color ${dt('multiselect.transition.duration')}, box-shadow ${dt(
-        'multiselect.transition.duration',
-    )};
+    'multiselect.transition.duration',
+)};
     border-radius: ${dt('multiselect.border.radius')};
     outline-color: transparent;
     box-shadow: ${dt('multiselect.shadow')};
@@ -157,8 +157,8 @@ p-multiselect.ng-invalid.ng-dirty .p-multiselect-label.p-placeholder {
     color: ${dt('multiselect.option.color')};
     background: transparent;
     transition: background ${dt('multiselect.transition.duration')}, color ${dt('multiselect.transition.duration')}, border-color ${dt('multiselect.transition.duration')}, box-shadow ${dt('multiselect.transition.duration')}, outline-color ${dt(
-        'multiselect.transition.duration',
-    )};
+    'multiselect.transition.duration',
+)};
     border-radius: ${dt('multiselect.option.border.radius')}
 }
 
@@ -239,13 +239,13 @@ p-multiselect.ng-invalid.ng-dirty .p-multiselect-label.p-placeholder {
 }`;
 
 const inlineStyles = {
-    root: ({ props }) => ({
+    root: ({props}) => ({
         position: props.appendTo === 'self' ? 'relative' : undefined,
     }),
 };
 
 const classes = {
-    root: ({ instance }) => ({
+    root: ({instance}) => ({
         'p-multiselect p-component p-inputwrapper': true,
         'p-multiselect-display-chip': instance.display === 'chip',
         'p-disabled': instance.disabled,
@@ -262,7 +262,7 @@ const classes = {
         'p-multiselect-lg p-inputfield-lg': instance.size === 'large',
     }),
     labelContainer: 'p-multiselect-label-container',
-    label: ({ instance }) => ({
+    label: ({instance}) => ({
         'p-multiselect-label': true,
         'p-placeholder': instance.label() === instance.placeholder(),
         'p-multiselect-label-empty':
@@ -283,7 +283,7 @@ const classes = {
     listContainer: 'p-multiselect-list-container',
     list: 'p-multiselect-list',
     optionGroup: 'p-multiselect-option-group',
-    option: ({ instance, option, index, getItemOptions }) => ({
+    option: ({instance, option, index, getItemOptions}) => ({
         'p-multiselect-option': true,
         'p-multiselect-option-selected':
             instance.isSelected(option) && instance.highlightOnSelect,
@@ -390,4 +390,5 @@ export enum MultiSelectClasses {
     emptyMessage = 'p-multiselect-empty-message',
 }
 
-export interface MultiSelectStyle extends BaseStyle {}
+export interface MultiSelectStyle extends BaseStyle {
+}

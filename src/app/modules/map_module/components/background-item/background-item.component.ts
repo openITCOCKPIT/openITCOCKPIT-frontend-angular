@@ -34,12 +34,11 @@ import { AngularDraggableModule } from 'angular2-draggable';
 })
 export class BackgroundItemComponent
     extends MapItemBaseComponent<Mapbackgrounditem>
-    implements OnInit, OnDestroy, AfterViewInit
-{
+    implements OnInit, OnDestroy, AfterViewInit {
     public override item: InputSignal<Mapbackgrounditem | undefined> =
         input<Mapbackgrounditem>();
     public aspectRatioEnabled: InputSignal<boolean> = input<boolean>(false);
-    @ViewChild('backgroundImage', { static: false })
+    @ViewChild('backgroundImage', {static: false})
     backgroundImageRef!: ElementRef<HTMLImageElement>;
 
     private subscriptions: Subscription = new Subscription();
@@ -55,7 +54,7 @@ export class BackgroundItemComponent
     protected invalidBackgroundMessage: string =
         this.TranslocoService.translate(
             '{0} Map background image is not available!!!',
-            { 0: '⚠' },
+            {0: '⚠'},
         );
 
     constructor(parent: MapCanvasComponent) {

@@ -47,14 +47,14 @@
                     </label>
                     <c-input-group>
                         <oitc-multi-select
-                                name="Satellites"
-                                id="Satellites"
-                                optionValue="id"
-                                optionLabel="name"
-                                [options]="satellites"
-                                [(ngModel)]="post.object_id"
-                                class="flex-1"
-                                oitcFormError [errors]="errors" errorField="object_id">
+                            name="Satellites"
+                            id="Satellites"
+                            optionValue="id"
+                            optionLabel="name"
+                            [options]="satellites"
+                            [(ngModel)]="post.object_id"
+                            class="flex-1"
+                            oitcFormError [errors]="errors" errorField="object_id">
                         </oitc-multi-select>
                     </c-input-group>
                     <oitc-form-feedback [errors]="errors"
@@ -98,18 +98,18 @@
                 <div class="mb-3">
                     <c-form-check>
                         <input
-                                cFormCheckInput
-                                id="is_recurring"
-                                type="checkbox"
-                                [(ngModel)]="post.is_recurring"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                name="is_recurring"
+                            cFormCheckInput
+                            id="is_recurring"
+                            type="checkbox"
+                            [(ngModel)]="post.is_recurring"
+                            trueFalseValue
+                            [falseValue]="0"
+                            [trueValue]="1"
+                            name="is_recurring"
                         />
                         <label
-                                cFormCheckLabel
-                                for="is_recurring">{{ t('Recurring downtime') }}</label>
+                            cFormCheckLabel
+                            for="is_recurring">{{ t('Recurring downtime') }}</label>
                     </c-form-check>
                 </div>
                 @if (post.is_recurring == 0) {
@@ -188,10 +188,10 @@
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
                             <oitc-duration-input
-                                    id="duration"
-                                    name="duration"
-                                    [selectedInterval]="post.duration"
-                                    (selectedIntervalChange)="post.duration = $event"
+                                id="duration"
+                                name="duration"
+                                [selectedInterval]="post.duration"
+                                (selectedIntervalChange)="post.duration = $event"
                             ></oitc-duration-input>
                             <oitc-form-feedback [errors]="errors"
                                                 errorField="duration"></oitc-form-feedback>
@@ -202,14 +202,14 @@
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
                             <oitc-multi-select
-                                    name="weekdays"
-                                    id="weekdays"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.weekdays"
-                                    [options]="weekdaysForSelect"
-                                    [debounce]="true"
-                                    oitcFormError [errors]="errors" errorField="weekdays">
+                                name="weekdays"
+                                id="weekdays"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="post.weekdays"
+                                [options]="weekdaysForSelect"
+                                [debounce]="true"
+                                oitcFormError [errors]="errors" errorField="weekdays">
                             </oitc-multi-select>
                             <oitc-form-feedback [errors]="errors" errorField="weekdays"></oitc-form-feedback>
                         </div>

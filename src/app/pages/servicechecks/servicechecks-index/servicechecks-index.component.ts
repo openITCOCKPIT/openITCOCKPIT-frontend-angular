@@ -33,7 +33,9 @@ import { FormsModule } from '@angular/forms';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { formatDate, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -44,7 +46,9 @@ import {
     ServiceBrowserMenuConfig,
     ServicesBrowserMenuComponent,
 } from '../../services/services-browser-menu/services-browser-menu.component';
-import { ServicestatusSimpleIconComponent } from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
+import {
+    ServicestatusSimpleIconComponent
+} from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
     getServiceStateForApi,
@@ -107,8 +111,7 @@ import { LocalNumberPipe } from '../../../pipes/local-number.pipe';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServicechecksIndexComponent
-    implements OnInit, OnDestroy, IndexPage
-{
+    implements OnInit, OnDestroy, IndexPage {
     private serviceId: number = 0;
     private ServicechecksService = inject(ServicechecksService);
     public readonly route = inject(ActivatedRoute);
@@ -245,5 +248,6 @@ export class ServicechecksIndexComponent
         }
     }
 
-    public onMassActionComplete(success: boolean) {}
+    public onMassActionComplete(success: boolean) {
+    }
 }

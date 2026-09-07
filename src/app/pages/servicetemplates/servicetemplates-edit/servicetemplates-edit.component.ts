@@ -23,7 +23,9 @@ import {
     NavItemComponent,
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { CheckAttemptsInputComponent } from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
+import {
+    CheckAttemptsInputComponent
+} from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
@@ -149,7 +151,8 @@ export class ServicetemplatesEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(private route: ActivatedRoute) {
+    }
 
     public ngOnInit(): void {
         const id = Number(this.route.snapshot.paramMap.get('id'));

@@ -59,7 +59,9 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import { MultiSelectOptgroupComponent } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import {
+    MultiSelectOptgroupComponent
+} from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
@@ -134,7 +136,8 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private cdr: ChangeDetectorRef,
-    ) {}
+    ) {
+    }
 
     public ngOnInit(): void {
         const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -192,7 +195,8 @@ export class ServiceescalationsEditComponent implements OnInit, OnDestroy {
         );
     }
 
-    public ngOnDestroy(): void {}
+    public ngOnDestroy(): void {
+    }
 
     public loadContainers() {
         this.subscriptions.add(

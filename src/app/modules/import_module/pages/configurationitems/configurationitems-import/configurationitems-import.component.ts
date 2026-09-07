@@ -84,8 +84,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfigurationitemsImportComponent
-    implements OnDestroy, AfterViewInit
-{
+    implements OnDestroy, AfterViewInit {
     public maxUploadLimit?: ProfileMaxUploadLimit;
 
     public hasError: boolean = false;
@@ -373,7 +372,7 @@ export class ConfigurationitemsImportComponent
                                 // key = "command_line"
                                 // value = "/bin/true"
                                 modelChange.current.push([
-                                    { key: key, value: value },
+                                    {key: key, value: value},
                                 ]);
                             }
                         }
@@ -400,7 +399,7 @@ export class ConfigurationitemsImportComponent
                                 // key = "command_line"
                                 // value = "/bin/false"
                                 modelChange.new.push([
-                                    { key: key, value: value },
+                                    {key: key, value: value},
                                 ]);
                             }
                         }

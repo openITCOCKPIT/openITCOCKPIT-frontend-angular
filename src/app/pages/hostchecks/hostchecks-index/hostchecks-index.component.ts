@@ -38,7 +38,9 @@ import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-ico
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { formatDate, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -243,7 +245,8 @@ export class HostchecksIndexComponent implements OnInit, OnDestroy, IndexPage {
         }
     }
 
-    public onMassActionComplete(success: boolean) {}
+    public onMassActionComplete(success: boolean) {
+    }
 
     protected readonly String = String;
 }

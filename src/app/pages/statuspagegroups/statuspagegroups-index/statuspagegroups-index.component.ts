@@ -75,13 +75,17 @@ import {
     StatuspagegroupsIndexParams,
 } from '../statuspagegroups.interface';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -128,13 +132,12 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
     templateUrl: './statuspagegroups-index.component.html',
     styleUrl: './statuspagegroups-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: StatuspagegroupsService },
+        {provide: DELETE_SERVICE_TOKEN, useClass: StatuspagegroupsService},
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatuspagegroupsIndexComponent
-    implements OnInit, OnDestroy, IndexPage
-{
+    implements OnInit, OnDestroy, IndexPage {
     public hideFilter: boolean = true;
     public statuspagegroups!: StatuspagegroupsIndex;
     public params: StatuspagegroupsIndexParams =

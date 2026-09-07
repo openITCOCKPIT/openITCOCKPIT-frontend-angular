@@ -28,7 +28,6 @@ export interface TodayWidgetResponse {
 }
 
 
-
 export interface PerformanceWidgetDatasources {
     [key: string]: PerformanceWidgetPerfdata
 }

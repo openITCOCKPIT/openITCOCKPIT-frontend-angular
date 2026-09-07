@@ -125,7 +125,7 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected errors: GenericValidationError | null = null;
-    protected acos: AcoRoot = { acos: {} } as AcoRoot;
+    protected acos: AcoRoot = {acos: {}} as AcoRoot;
     protected createAnother: boolean = false;
     protected ldapGroups: SelectKeyValue[] = [];
     protected controllerFilter: string = '';
@@ -259,10 +259,10 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
                 if (isModule) {
                     for (let pluginController in this.acos.acos[aco].children[
                         controller
-                    ].children) {
+                        ].children) {
                         for (let action in this.acos.acos[aco].children[
                             controller
-                        ].children[pluginController].children) {
+                            ].children[pluginController].children) {
                             let actionName =
                                 this.acos.acos[aco].children[controller]
                                     .children[pluginController].children[action]
@@ -286,11 +286,11 @@ export class UsergroupsAddComponent implements OnInit, OnDestroy {
                     let acoId =
                         this.acos.acos[aco].children[controller].children[
                             action
-                        ].id;
+                            ].id;
                     let actionName =
                         this.acos.acos[aco].children[controller].children[
                             action
-                        ].alias;
+                            ].alias;
                     if (actionName === actionToTick || actionToTick === 'all') {
                         this.post.Acos[acoId] = tick ? 1 : 0;
                     }
@@ -310,8 +310,7 @@ const keepOrder = (a: any, b: any) => a;
 })
 export class DefaultOrderKeyValuePipe
     extends KeyValuePipe
-    implements PipeTransform
-{
+    implements PipeTransform {
     override transform(value: any, ...args: any[]): any {
         return super.transform(value, keepOrder);
     }

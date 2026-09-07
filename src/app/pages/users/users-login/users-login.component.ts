@@ -874,7 +874,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     type: "character"
                 },
                 size: {
-                    value: { min: 4, max: 14 },
+                    value: {min: 4, max: 14},
                     random: {
                         enable: true,
                         minimumValue: 4

@@ -47,8 +47,7 @@ import { AngularDraggableModule } from 'angular2-draggable';
 })
 export class TachoItemComponent
     extends MapItemBaseComponent<Mapgadget>
-    implements OnInit, OnDestroy
-{
+    implements OnInit, OnDestroy {
     public override item: InputSignal<Mapgadget | undefined> =
         input<Mapgadget>();
     public refreshInterval = input<number>(0);
@@ -403,7 +402,7 @@ export class TachoItemComponent
                 this.setup =
                     this.responsePerfdata[
                         this.item()!.metric
-                    ].datasource!.setup;
+                        ].datasource!.setup;
             } else {
                 //Use first metric.
                 for (let metricName in this.responsePerfdata) {

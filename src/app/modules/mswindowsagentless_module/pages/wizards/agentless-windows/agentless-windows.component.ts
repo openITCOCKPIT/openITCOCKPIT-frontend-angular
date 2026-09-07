@@ -26,7 +26,9 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { WizardsDynamicfieldsComponent } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
+import {
+    WizardsDynamicfieldsComponent
+} from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 
@@ -76,8 +78,8 @@ export class AgentlessWindowsComponent extends WizardsAbstractComponent {
     } as AgentlessWindowsWizardPost;
 
     protected agentlessWindowsAuthTypes: SelectKeyValueString[] = [
-        { key: 'basic', value: 'basic' },
-        { key: 'credssp', value: 'credssp' },
+        {key: 'basic', value: 'basic'},
+        {key: 'credssp', value: 'credssp'},
     ];
 
     protected override wizardLoad(result: AgentlessWindowsWizardGet): void {

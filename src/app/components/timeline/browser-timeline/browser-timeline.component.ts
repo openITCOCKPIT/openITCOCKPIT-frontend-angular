@@ -40,8 +40,7 @@ import { GenericUnixtimerange } from '../../../generic.interfaces';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BrowserTimelineComponent
-    implements OnInit, OnDestroy, AfterViewInit
-{
+    implements OnInit, OnDestroy, AfterViewInit {
     @Input() type: 'Host' | 'Service' = 'Host';
     @Input() objectId: number = 0;
     @Input() public timerange$?: Observable<GenericUnixtimerange>;
@@ -54,7 +53,7 @@ export class BrowserTimelineComponent
     private visTimelineEnd: number = -1;
 
     // The timerange of the currently visible data
-    private timerange: GenericUnixtimerange = { start: -1, end: -1 };
+    private timerange: GenericUnixtimerange = {start: -1, end: -1};
 
     public data?: BrowserTimelineApiResult;
 
@@ -457,7 +456,7 @@ export class BrowserTimelineComponent
                                         item.group == HOSTSTATEHISTORY &&
                                         (item.className === 'bg-down' ||
                                             item.className ===
-                                                'bg-down-soft') &&
+                                            'bg-down-soft') &&
                                         this.CheckIfItemInRange(
                                             visTimelineStartAsTimestamp,
                                             visTimelineEndAsTimestamp,
@@ -479,7 +478,7 @@ export class BrowserTimelineComponent
                                         item.group == SERVICESTATEHISTORY &&
                                         (item.className === 'bg-critical' ||
                                             item.className ===
-                                                'bg-critical-soft') &&
+                                            'bg-critical-soft') &&
                                         this.CheckIfItemInRange(
                                             visTimelineStartAsTimestamp,
                                             visTimelineEndAsTimestamp,
@@ -492,7 +491,7 @@ export class BrowserTimelineComponent
 
                         this.failureDurationInPercent = this.calculateFailures(
                             visTimelineEndAsTimestamp -
-                                visTimelineStartAsTimestamp, //visible time range
+                            visTimelineStartAsTimestamp, //visible time range
                             criticalItems,
                             visTimelineStartAsTimestamp,
                             visTimelineEndAsTimestamp,

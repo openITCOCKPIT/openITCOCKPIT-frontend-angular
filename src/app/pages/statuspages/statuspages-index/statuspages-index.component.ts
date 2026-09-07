@@ -78,10 +78,14 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { DebounceDirective } from '../../../directives/debounce.directive';
@@ -140,7 +144,7 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
     templateUrl: './statuspages-index.component.html',
     styleUrl: './statuspages-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: StatuspagesService },
+        {provide: DELETE_SERVICE_TOKEN, useClass: StatuspagesService},
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -196,7 +200,8 @@ export class StatuspagesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.hideFilter = !this.hideFilter;
     }
 
-    public resetFilter(): void {}
+    public resetFilter(): void {
+    }
 
     public onFilterChange(event: Event): void {
         this.params.page = 1;

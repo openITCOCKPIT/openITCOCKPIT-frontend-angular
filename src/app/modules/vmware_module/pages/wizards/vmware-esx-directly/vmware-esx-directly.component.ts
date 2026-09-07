@@ -23,7 +23,9 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { WizardsDynamicfieldsComponent } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
+import {
+    WizardsDynamicfieldsComponent
+} from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';

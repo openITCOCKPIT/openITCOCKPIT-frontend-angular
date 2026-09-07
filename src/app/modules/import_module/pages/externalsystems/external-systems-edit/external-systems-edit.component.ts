@@ -39,7 +39,9 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { MultiSelectOptgroupComponent } from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import {
+    MultiSelectOptgroupComponent
+} from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -72,7 +74,9 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { HistoryService } from '../../../../../history.service';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { RegexHelperTooltipComponent } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import {
+    RegexHelperTooltipComponent
+} from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { ExternalSystems } from '../external-systems.enum';
 import { MultiSelectChangeEvent } from '@openng/optimus-ui/multiselect';
 
@@ -187,7 +191,8 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
     public connectMessage: string = '';
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(private route: ActivatedRoute) {
+    }
 
     public ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));

@@ -48,7 +48,9 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { formatDate } from '@angular/common';
 
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 
 import { ServerLinkComponent } from '../server-link/server-link.component';
 
@@ -168,7 +170,7 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public getEntryTypes() {
         let entryTypes = _.map(this.entryTypes, (value, key) => {
-            return { key: parseInt(key), value: value };
+            return {key: parseInt(key), value: value};
         });
         return entryTypes;
     }
@@ -256,5 +258,6 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     protected readonly String = String;
 
-    public onMassActionComplete(success: boolean): void {}
+    public onMassActionComplete(success: boolean): void {
+    }
 }

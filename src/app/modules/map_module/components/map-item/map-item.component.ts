@@ -41,8 +41,7 @@ import {
 })
 export class MapItemComponent
     extends MapItemBaseComponent<Mapitem>
-    implements OnInit, OnDestroy
-{
+    implements OnInit, OnDestroy {
     public override item: InputSignal<Mapitem | undefined> = input<Mapitem>();
     public refreshInterval = input<number>();
 
@@ -147,7 +146,7 @@ export class MapItemComponent
         this.subscriptions.add(
             this.MapItemBaseService.getMapItem(params).subscribe(
                 (result: MapItemRoot) => {
-                    this.updateCallback({ data: result });
+                    this.updateCallback({data: result});
                 },
             ),
         );

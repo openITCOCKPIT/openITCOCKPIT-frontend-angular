@@ -91,8 +91,7 @@ import { FormsModule } from '@angular/forms';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateContainerModalComponent
-    implements OnInit, OnChanges, OnDestroy
-{
+    implements OnInit, OnChanges, OnDestroy {
     //@Input() public parentContainerId: number = 0;
     public parentContainerId = input<number>(0);
 

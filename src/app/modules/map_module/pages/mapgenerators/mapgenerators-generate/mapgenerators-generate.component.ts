@@ -95,12 +95,12 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public errors:
         | {
-              field: string;
-              errors: {
-                  errorKey: string;
-                  errorMessage: string;
-              }[];
-          }[]
+        field: string;
+        errors: {
+            errorKey: string;
+            errorMessage: string;
+        }[];
+    }[]
         | null = null;
 
     private cdr = inject(ChangeDetectorRef);
@@ -117,7 +117,8 @@ export class MapgeneratorsGenerateComponent implements OnInit, OnDestroy {
     protected mapgenerator: Mapgenerator = {} as Mapgenerator;
     protected mapCount: number = 0;
 
-    constructor() {}
+    constructor() {
+    }
 
     ngOnInit(): void {
         this.mapgeneratorId = Number(this.route.snapshot.paramMap.get('id'));

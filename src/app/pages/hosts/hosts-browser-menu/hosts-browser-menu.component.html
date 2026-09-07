@@ -32,9 +32,9 @@
                 @if (data) {
                     @if (config().showBackButton && ( this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async )) {
                         <a cButton color="primary"
-                                type="button"
-                                class="me-2 ripple"
-                                [routerLink]="['/', 'hosts', 'browser', data.hostId]">
+                           type="button"
+                           class="me-2 ripple"
+                           [routerLink]="['/', 'hosts', 'browser', data.hostId]">
                             <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon>
                             {{ t('Back to overview') }}
                         </a>
@@ -50,9 +50,9 @@
                     }
                     @if (this.PermissionsService.hasPermissionObservable(['documentations', 'view'])|async) {
                         <a cButton color="default" class="position-relative me-2"
-                                type="button"
-                                [routerLink]="'/documentations/view/' + data.hostUuid +'/host'"
-                                [cTooltip]="'Object documentation'|transloco" cTooltipPlacement="bottom">
+                           type="button"
+                           [routerLink]="'/documentations/view/' + data.hostUuid +'/host'"
+                           [cTooltip]="'Object documentation'|transloco" cTooltipPlacement="bottom">
                             <fa-icon [icon]="['fas', 'book']"></fa-icon>
                             @if (data.docuExists) {
                                 <c-badge color="success" position="top-start" shape="rounded-pill">
@@ -63,37 +63,37 @@
                     }
                     @if (this.PermissionsService.hasPermissionObservable(['notifications', 'hostNotification'])|async) {
                         <a cButton color="default"
-                                type="button"
-                                class="ripple me-2"
-                                [routerLink]="['/', 'notifications', 'hostNotification', data.hostId]"
-                                [cTooltip]="'Notifications'|transloco" cTooltipPlacement="bottom">
+                           type="button"
+                           class="ripple me-2"
+                           [routerLink]="['/', 'notifications', 'hostNotification', data.hostId]"
+                           [cTooltip]="'Notifications'|transloco" cTooltipPlacement="bottom">
                             <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                         </a>
                     }
                     @if (this.PermissionsService.hasPermissionObservable(['hostchecks', 'index'])|async) {
                         <a cButton color="default"
-                                type="button"
-                                class="ripple me-2"
-                                [routerLink]="['/', 'hostchecks', 'index', data.hostId]"
-                                [cTooltip]="'Check history'|transloco" cTooltipPlacement="bottom">
+                           type="button"
+                           class="ripple me-2"
+                           [routerLink]="['/', 'hostchecks', 'index', data.hostId]"
+                           [cTooltip]="'Check history'|transloco" cTooltipPlacement="bottom">
                             <fa-icon [icon]="['fas', 'check-square']"></fa-icon>
                         </a>
                     }
                     @if (this.PermissionsService.hasPermissionObservable(['statehistories', 'host'])|async) {
                         <a cButton color="default"
-                                type="button"
-                                class="ripple me-2"
-                                [routerLink]="['/', 'statehistories', 'host', data.hostId]"
-                                [cTooltip]="'State history'|transloco" cTooltipPlacement="bottom">
+                           type="button"
+                           class="ripple me-2"
+                           [routerLink]="['/', 'statehistories', 'host', data.hostId]"
+                           [cTooltip]="'State history'|transloco" cTooltipPlacement="bottom">
                             <fa-icon [icon]="['fas', 'history']"></fa-icon>
                         </a>
                     }
                     @if (this.PermissionsService.hasPermissionObservable(['acknowledgements', 'host'])|async) {
                         <a cButton color="default"
-                                type="button"
-                                class="ripple me-2"
-                                [routerLink]="['/', 'acknowledgements', 'host', data.hostId]"
-                                [cTooltip]="'Acknowledgement history'|transloco" cTooltipPlacement="bottom">
+                           type="button"
+                           class="ripple me-2"
+                           [routerLink]="['/', 'acknowledgements', 'host', data.hostId]"
+                           [cTooltip]="'Acknowledgement history'|transloco" cTooltipPlacement="bottom">
                             <fa-icon [icon]="['fas', 'user']"></fa-icon>
                         </a>
                     }
@@ -108,19 +108,19 @@
                     }
                     @if (( this.PermissionsService.hasPermissionObservable(['hosts', 'edit']) |async ) && data.allowEdit) {
                         <a cButton color="default"
-                                type="button"
-                                class="ripple me-2"
-                                [routerLink]="['/', 'hosts', 'edit', data.hostId]"
-                                [cTooltip]="'Edit host'|transloco" cTooltipPlacement="bottom">
+                           type="button"
+                           class="ripple me-2"
+                           [routerLink]="['/', 'hosts', 'edit', data.hostId]"
+                           [cTooltip]="'Edit host'|transloco" cTooltipPlacement="bottom">
                             <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                         </a>
                     }
                     @if (data.hostType === HostTypesEnum.EVK_HOST && ( this.PermissionsService.hasPermissionObservable(['EventcorrelationModule', 'eventcorrelations', 'view']) |async )) {
                         <a cButton color="default"
-                                type="button"
-                                class="ripple me-2"
-                                [routerLink]="['/','eventcorrelation_module','eventcorrelations','view', + data.hostId]"
-                                [cTooltip]="'Show event correlation'|transloco" cTooltipPlacement="bottom">
+                           type="button"
+                           class="ripple me-2"
+                           [routerLink]="['/','eventcorrelation_module','eventcorrelations','view', + data.hostId]"
+                           [cTooltip]="'Show event correlation'|transloco" cTooltipPlacement="bottom">
                             <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
                         </a>
                     }

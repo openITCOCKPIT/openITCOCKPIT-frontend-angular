@@ -52,8 +52,7 @@ import _ from 'lodash';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MultiSelectOptgroupComponent
-    implements ControlValueAccessor, OnInit, OnDestroy
-{
+    implements ControlValueAccessor, OnInit, OnDestroy {
     @ViewChild('multiSelectOptgroup') multiSelectOptgroup:
         | MultiSelect
         | undefined;
@@ -66,7 +65,7 @@ export class MultiSelectOptgroupComponent
      * Array of the options for the select box
      * @group Props
      */
-    //@Input() options: any[] | undefined;
+        //@Input() options: any[] | undefined;
     private _options: any[] | undefined;
     @Input()
     set options(options) {

@@ -1,6 +1,7 @@
 import { HostObject } from '../../../hosts/hosts.interface';
 import { ServiceObject, ServicestatusObject } from '../../../services/services.interface';
 import { PerformanceWidgetDatasources } from '../widgets.interface';
+
 export interface TachometerWidgetServiceObject extends ServiceObject {
     isGenericService: boolean
     isEVCService: boolean

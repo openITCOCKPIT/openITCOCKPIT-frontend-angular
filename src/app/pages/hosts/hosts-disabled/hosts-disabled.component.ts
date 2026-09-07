@@ -8,7 +8,9 @@ import {
 } from '@angular/core';
 
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
 import {
     CardBodyComponent,
     CardComponent,
@@ -43,11 +45,17 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { AsyncPipe } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { QueryHandlerCheckerComponent } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
-import { RegexHelperTooltipComponent } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import {
+    QueryHandlerCheckerComponent
+} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+import {
+    RegexHelperTooltipComponent
+} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -132,8 +140,8 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
     templateUrl: './hosts-disabled.component.html',
     styleUrl: './hosts-disabled.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService }, // Inject the ServicesService into the DeleteAllModalComponent
-        { provide: ENABLE_SERVICE_TOKEN, useClass: HostsService },
+        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService}, // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: ENABLE_SERVICE_TOKEN, useClass: HostsService},
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

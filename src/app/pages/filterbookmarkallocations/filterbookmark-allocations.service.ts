@@ -11,6 +11,7 @@ import {
     FilterbookmarkAllocationPost,
     FilterbookmarkAllocationGet
 } from './filterbookmark-allocations.interface';
+
 @Injectable({
     providedIn: 'root'
 })

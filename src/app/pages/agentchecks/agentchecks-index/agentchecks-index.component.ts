@@ -52,12 +52,16 @@ import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ContainerTypesEnum } from '../../changelogs/object-types.enum';
@@ -108,7 +112,7 @@ import { ServicetemplateTypesEnum } from '../../servicetemplates/servicetemplate
     templateUrl: './agentchecks-index.component.html',
     styleUrl: './agentchecks-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: AgentchecksService }, // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: AgentchecksService}, // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -41,8 +41,7 @@ import { AngularDraggableModule } from 'angular2-draggable';
 })
 export class PerfdataTextItemComponent
     extends MapItemBaseComponent<Mapgadget>
-    implements OnInit, OnDestroy
-{
+    implements OnInit, OnDestroy {
     public override item: InputSignal<Mapgadget | undefined> =
         input<Mapgadget>();
     public refreshInterval = input<number>(0);

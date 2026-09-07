@@ -39,14 +39,28 @@ import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loade
 
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
-import { DynamicConfigurationFileComponent } from './configuration-files/dynamic-configuration-file/dynamic-configuration-file.component';
+import {
+    DynamicConfigurationFileComponent
+} from './configuration-files/dynamic-configuration-file/dynamic-configuration-file.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ConfigurationFileDbBackendComponent } from './configuration-files/static/configuration-file-db-backend/configuration-file-db-backend.component';
-import { ConfigurationFilePerfdataBackendComponent } from './configuration-files/static/configuration-file-perfdata-backend/configuration-file-perfdata-backend.component';
-import { ConfigurationFileNagiosCfgComponent } from './configuration-files/static/configuration-file-nagios-cfg/configuration-file-nagios-cfg.component';
-import { ConfigurationFileModGearmanModuleComponent } from './configuration-files/static/configuration-file-mod-gearman-module/configuration-file-mod-gearman-module.component';
-import { ConfigurationFileNstaMasterComponent } from './configuration-files/static/configuration-file-nsta-master/configuration-file-nsta-master.component';
-import { ConfigurationFileGraphingDockerComponent } from './configuration-files/static/configuration-file-graphing-docker/configuration-file-graphing-docker.component';
+import {
+    ConfigurationFileDbBackendComponent
+} from './configuration-files/static/configuration-file-db-backend/configuration-file-db-backend.component';
+import {
+    ConfigurationFilePerfdataBackendComponent
+} from './configuration-files/static/configuration-file-perfdata-backend/configuration-file-perfdata-backend.component';
+import {
+    ConfigurationFileNagiosCfgComponent
+} from './configuration-files/static/configuration-file-nagios-cfg/configuration-file-nagios-cfg.component';
+import {
+    ConfigurationFileModGearmanModuleComponent
+} from './configuration-files/static/configuration-file-mod-gearman-module/configuration-file-mod-gearman-module.component';
+import {
+    ConfigurationFileNstaMasterComponent
+} from './configuration-files/static/configuration-file-nsta-master/configuration-file-nsta-master.component';
+import {
+    ConfigurationFileGraphingDockerComponent
+} from './configuration-files/static/configuration-file-graphing-docker/configuration-file-graphing-docker.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({

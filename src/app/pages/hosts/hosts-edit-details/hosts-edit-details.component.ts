@@ -45,7 +45,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
-import { CheckAttemptsInputComponent } from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
+import {
+    CheckAttemptsInputComponent
+} from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
 import { HistoryService } from '../../../history.service';
 
 @Component({

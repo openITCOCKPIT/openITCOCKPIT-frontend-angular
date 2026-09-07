@@ -94,7 +94,9 @@ import { HostsService } from '../../../../../pages/hosts/hosts.service';
 import { HostsLoadHostsByStringParams } from '../../../../../pages/hosts/hosts.interface';
 import { HostgroupsService } from '../../../../../pages/hostgroups/hostgroups.service';
 import { HostgroupsLoadHostgroupsByStringParams } from '../../../../../pages/hostgroups/hostgroups.interface';
-import { ServicegroupsLoadServicegroupsByStringParams } from '../../../../../pages/servicegroups/servicegroups.interface';
+import {
+    ServicegroupsLoadServicegroupsByStringParams
+} from '../../../../../pages/servicegroups/servicegroups.interface';
 import { ServicegroupsService } from '../../../../../pages/servicegroups/servicegroups.service';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';

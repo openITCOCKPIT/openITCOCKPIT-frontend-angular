@@ -50,10 +50,14 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 
 import { NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import { PaginateOrScrollComponent } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
-import { ActionsButtonElementComponent } from '../../../../../components/actions-button-element/actions-button-element.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../../../components/actions-button-element/actions-button-element.component';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
@@ -105,7 +109,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
     templateUrl: './snmptt-list-index.component.html',
     styleUrl: './snmptt-list-index.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: SnmpttService }, // Inject the CommandsService into the DeleteAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: SnmpttService}, // Inject the CommandsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -140,7 +140,8 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
 
     public readonly hostname = window.location.hostname;
 
-    constructor(private _router: Router) {}
+    constructor(private _router: Router) {
+    }
 
     public ngOnInit(): void {
         //Fire on page load
@@ -178,7 +179,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: { display_alias: '', group_tags: '' },
+                        _joinData: {display_alias: '', group_tags: ''},
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
@@ -209,7 +210,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: { display_alias: '', group_tags: '' },
+                        _joinData: {display_alias: '', group_tags: ''},
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
@@ -242,7 +243,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: { display_alias: '', group_tags: '' },
+                        _joinData: {display_alias: '', group_tags: ''},
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
@@ -274,7 +275,7 @@ export class StatuspagesAddComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: { display_alias: '', group_tags: '' },
+                        _joinData: {display_alias: '', group_tags: ''},
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;

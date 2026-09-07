@@ -137,7 +137,7 @@ export interface SelectKeyValueExtended {
     id: number,
     _joinData: {
         display_alias: '',
-        group_tags?: string | string[]| null
+        group_tags?: string | string[] | null
     }
 }
 

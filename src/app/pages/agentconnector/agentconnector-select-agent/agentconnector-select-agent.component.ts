@@ -11,7 +11,9 @@ import {
     AgentModes,
 } from '../agentconnector.interface';
 import { AgentconnectorWizardStepsEnum } from '../agentconnector.enums';
-import { AgentconnectorWizardProgressbarComponent } from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
+import {
+    AgentconnectorWizardProgressbarComponent
+} from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
 import {
     CardBodyComponent,
     CardComponent,
@@ -167,7 +169,7 @@ export class AgentconnectorSelectAgentComponent implements OnInit, OnDestroy {
                 if (result.success) {
                     this.router.navigate(
                         ['/agentconnector/create_services', this.hostId],
-                        { queryParams: { testConnection: false } },
+                        {queryParams: {testConnection: false}},
                     );
                     return;
                 }

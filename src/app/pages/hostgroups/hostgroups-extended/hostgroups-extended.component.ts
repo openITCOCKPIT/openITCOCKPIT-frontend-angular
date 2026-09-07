@@ -64,9 +64,13 @@ import {
 } from '../hostgroups.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
 
-import { ServiceResetChecktimeModalComponent } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
+import {
+    ServiceResetChecktimeModalComponent
+} from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
 import {
     HostAcknowledgeItem,
     HostDisableNotificationsItem,
@@ -76,33 +80,49 @@ import {
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
-import { HostsMaintenanceModalComponent } from '../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
-import { HostsDisableNotificationsModalComponent } from '../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component';
-import { HostsEnableNotificationsModalComponent } from '../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component';
+import {
+    HostsMaintenanceModalComponent
+} from '../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
+import {
+    HostsDisableNotificationsModalComponent
+} from '../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component';
+import {
+    HostsEnableNotificationsModalComponent
+} from '../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 import { HostObject } from '../../hosts/hosts.interface';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
-import { ServiceCumulatedStatusIconComponent } from '../../../components/services/service-cumulated-status-icon/service-cumulated-status-icon.component';
-import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
+import {
+    ServiceCumulatedStatusIconComponent
+} from '../../../components/services/service-cumulated-status-icon/service-cumulated-status-icon.component';
+import {
+    ServicestatusIconComponent
+} from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
 import {
     TimezoneConfiguration as TimezoneObject,
     TimezoneService,
 } from '../../../services/timezone.service';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
 import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
-import { HostAcknowledgeModalComponent } from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
+import {
+    HostAcknowledgeModalComponent
+} from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { HostgroupExtendedTabs } from '../hostgroups.enum';
-import { SlaHostgroupHostsStatusOverviewComponent } from '../../../modules/sla_module/components/sla-hostgroup-hosts-status-overview/sla-hostgroup-hosts-status-overview.component';
+import {
+    SlaHostgroupHostsStatusOverviewComponent
+} from '../../../modules/sla_module/components/sla-hostgroup-hosts-status-overview/sla-hostgroup-hosts-status-overview.component';
 import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
 import { HostsService } from '../../hosts/hosts.service';
@@ -176,9 +196,9 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
     templateUrl: './hostgroups-extended.component.html',
     styleUrl: './hostgroups-extended.component.css',
     providers: [
-        { provide: DISABLE_SERVICE_TOKEN, useClass: HostsService },
-        { provide: ENABLE_SERVICE_TOKEN, useClass: HostsService },
-        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService },
+        {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
+        {provide: ENABLE_SERVICE_TOKEN, useClass: HostsService},
+        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService},
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -498,7 +518,7 @@ export class HostgroupsExtendedComponent implements OnInit, OnDestroy {
             (host): HostDisableNotificationsItem => {
                 return {
                     command:
-                        ExternalCommandsEnum.submitDisableHostNotifications,
+                    ExternalCommandsEnum.submitDisableHostNotifications,
                     hostUuid: host.Host.uuid,
                     type: 'hostOnly',
                 };

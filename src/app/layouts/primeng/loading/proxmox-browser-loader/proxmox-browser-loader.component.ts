@@ -9,4 +9,5 @@ import { Skeleton } from '@openng/optimus-ui/skeleton';
     styleUrl: './proxmox-browser-loader.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProxmoxBrowserLoaderComponent {}
+export class ProxmoxBrowserLoaderComponent {
+}

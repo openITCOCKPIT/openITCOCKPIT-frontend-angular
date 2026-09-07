@@ -61,4 +61,5 @@ import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
     styleUrl: './start-page.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StartPageComponent {}
+export class StartPageComponent {
+}

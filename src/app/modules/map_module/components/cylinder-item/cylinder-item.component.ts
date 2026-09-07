@@ -45,9 +45,8 @@ import { AngularDraggableModule } from 'angular2-draggable';
 })
 export class CylinderItemComponent
     extends MapItemBaseComponent<Mapgadget>
-    implements OnInit, OnDestroy
-{
-    @ViewChild('cylinderSvg', { static: false })
+    implements OnInit, OnDestroy {
+    @ViewChild('cylinderSvg', {static: false})
     cylinderSvg!: ElementRef<SVGElement>;
 
     public override item: InputSignal<Mapgadget | undefined> =
@@ -217,62 +216,62 @@ export class CylinderItemComponent
         const stateColor = this.getStateColor(this.current_state);
 
         this.createLinearGradient(defs, `fadeGreen_${this.item()!.id}`, [
-            { offset: '0%', color: '#00cc00' },
-            { offset: '20%', color: '#5BFF5B' },
-            { offset: '70%', color: '#006600' },
+            {offset: '0%', color: '#00cc00'},
+            {offset: '20%', color: '#5BFF5B'},
+            {offset: '70%', color: '#006600'},
         ]);
         this.createLinearGradient(defs, `fadeDarkGreen_${this.item()!.id}`, [
-            { offset: '0%', color: '#00AD00' },
-            { offset: '60%', color: '#006600' },
-            { offset: '70%', color: '#005600' },
+            {offset: '0%', color: '#00AD00'},
+            {offset: '60%', color: '#006600'},
+            {offset: '70%', color: '#005600'},
         ]);
         this.createLinearGradient(defs, `fadeYellow_${this.item()!.id}`, [
-            { offset: '0%', color: '#FFCC00' },
-            { offset: '20%', color: '#FFFF5B' },
-            { offset: '70%', color: '#E5BB00' },
+            {offset: '0%', color: '#FFCC00'},
+            {offset: '20%', color: '#FFFF5B'},
+            {offset: '70%', color: '#E5BB00'},
         ]);
         this.createLinearGradient(defs, `fadeDarkYellow_${this.item()!.id}`, [
-            { offset: '0%', color: '#FFAD00' },
-            { offset: '60%', color: '#E5BB00' },
-            { offset: '70%', color: '#E2B100' },
+            {offset: '0%', color: '#FFAD00'},
+            {offset: '60%', color: '#E5BB00'},
+            {offset: '70%', color: '#E2B100'},
         ]);
         this.createLinearGradient(defs, `fadeRed_${this.item()!.id}`, [
-            { offset: '0%', color: '#CE0D00' },
-            { offset: '20%', color: '#FF0000' },
-            { offset: '70%', color: '#BF1600' },
+            {offset: '0%', color: '#CE0D00'},
+            {offset: '20%', color: '#FF0000'},
+            {offset: '70%', color: '#BF1600'},
         ]);
         this.createLinearGradient(defs, `fadeDarkRed_${this.item()!.id}`, [
-            { offset: '0%', color: '#c91400' },
-            { offset: '60%', color: '#BF1600' },
-            { offset: '70%', color: '#BF0600' },
+            {offset: '0%', color: '#c91400'},
+            {offset: '60%', color: '#BF1600'},
+            {offset: '70%', color: '#BF0600'},
         ]);
         this.createLinearGradient(
             defs,
             `fadeGray_${this.item()!.id}`,
             [
-                { offset: '0%', color: '#AFAFAF' },
-                { offset: '20%', color: '#FFFFFF' },
-                { offset: '70%', color: '#AFAFAF' },
-                { offset: '100%', color: '#A0A0A0' },
+                {offset: '0%', color: '#AFAFAF'},
+                {offset: '20%', color: '#FFFFFF'},
+                {offset: '70%', color: '#AFAFAF'},
+                {offset: '100%', color: '#A0A0A0'},
             ],
             0,
             0,
             1,
         );
         this.createLinearGradient(defs, `fadeDarkGray_${this.item()!.id}`, [
-            { offset: '0%', color: '#757575' },
-            { offset: '20%', color: '#939393' },
-            { offset: '100%', color: '#757575' },
+            {offset: '0%', color: '#757575'},
+            {offset: '20%', color: '#939393'},
+            {offset: '100%', color: '#757575'},
         ]);
         this.createLinearGradient(defs, `fadeBlue_${this.item()!.id}`, [
-            { offset: '0%', color: '#0006D5' },
-            { offset: '20%', color: '#1248D5' },
-            { offset: '70%', color: '#0006D5' },
+            {offset: '0%', color: '#0006D5'},
+            {offset: '20%', color: '#1248D5'},
+            {offset: '70%', color: '#0006D5'},
         ]);
         this.createLinearGradient(defs, `fadeDarkBlue_${this.item()!.id}`, [
-            { offset: '0%', color: '#000674' },
-            { offset: '20%', color: '#0006B8' },
-            { offset: '100%', color: '#000674' },
+            {offset: '0%', color: '#000674'},
+            {offset: '20%', color: '#0006B8'},
+            {offset: '100%', color: '#000674'},
         ]);
 
         //outer Cylinder

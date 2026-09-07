@@ -45,8 +45,7 @@ import { AngularDraggableModule } from 'angular2-draggable';
 })
 export class MapSummaryItemComponent
     extends MapItemBaseComponent<Mapsummaryitem>
-    implements OnInit, OnDestroy
-{
+    implements OnInit, OnDestroy {
     public override item: InputSignal<Mapsummaryitem | undefined> =
         input<Mapsummaryitem>();
     public refreshInterval = input<number>(0);

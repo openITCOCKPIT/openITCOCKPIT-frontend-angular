@@ -74,7 +74,7 @@ export class MapSummaryToasterComponent implements OnDestroy {
     constructor(private sanitizer: DomSanitizer) {
         this.subscriptions.add(
             this.MapSummaryToasterService.itemObservable$.subscribe(
-                ({ item, summary }) => {
+                ({item, summary}) => {
                     this.cdr.markForCheck();
 
                     if (item) {

@@ -102,8 +102,7 @@ export interface GraphingDockerConfig extends ConfigurationEditorConfig {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfigurationFileGraphingDockerComponent
-    implements OnInit, OnDestroy
-{
+    implements OnInit, OnDestroy {
     public dbKey = input.required<ConfigurationFilesDbKeys>();
     public submit$ = input.required<Observable<void>>();
 

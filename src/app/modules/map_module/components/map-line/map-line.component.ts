@@ -31,8 +31,7 @@ import {
 })
 export class MapLineComponent
     extends MapItemBaseComponent<Mapline>
-    implements OnInit, OnDestroy
-{
+    implements OnInit, OnDestroy {
     public override item: InputSignal<Mapline | undefined> = input<Mapline>();
     public refreshInterval = input<number>(0);
 

@@ -60,8 +60,7 @@ import { FormsModule } from '@angular/forms';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfigurationFileModGearmanModuleComponent
-    implements OnInit, OnDestroy
-{
+    implements OnInit, OnDestroy {
     public dbKey = input.required<ConfigurationFilesDbKeys>();
     public submit$ = input.required<Observable<void>>();
 

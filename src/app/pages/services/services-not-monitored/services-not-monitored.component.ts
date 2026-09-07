@@ -8,7 +8,9 @@ import {
 } from '@angular/core';
 
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
 import {
     CardBodyComponent,
     CardComponent,
@@ -44,11 +46,15 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 
-import { RegexHelperTooltipComponent } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import {
+    RegexHelperTooltipComponent
+} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -75,7 +81,9 @@ import {
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
 
-import { QueryHandlerCheckerComponent } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+import {
+    QueryHandlerCheckerComponent
+} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { FormsModule } from '@angular/forms';
@@ -132,8 +140,8 @@ import { FormsModule } from '@angular/forms';
     templateUrl: './services-not-monitored.component.html',
     styleUrl: './services-not-monitored.component.css',
     providers: [
-        { provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService }, // Inject the ServicesService into the DisableAllModalComponent
-        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService }, // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService}, // Inject the ServicesService into the DisableAllModalComponent
+        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService}, // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

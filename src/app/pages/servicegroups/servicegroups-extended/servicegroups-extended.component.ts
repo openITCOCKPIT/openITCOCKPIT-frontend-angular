@@ -56,9 +56,15 @@ import {
 } from '../servicegroups.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
-import { ServiceMaintenanceModalComponent } from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
-import { ServiceResetChecktimeModalComponent } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../components/actions-button-element/actions-button-element.component';
+import {
+    ServiceMaintenanceModalComponent
+} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
+import {
+    ServiceResetChecktimeModalComponent
+} from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
 import {
     ExternalCommandsService,
     ServiceAcknowledgeItem,
@@ -79,16 +85,22 @@ import {
     TimezoneService,
 } from '../../../services/timezone.service';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { ExternalCommandsEnum } from '../../../enums/external-commands.enum';
 import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
-import { ServiceAcknowledgeModalComponent } from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
+import {
+    ServiceAcknowledgeModalComponent
+} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
 
-import { ServicestatusSimpleIconComponent } from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
+import {
+    ServicestatusSimpleIconComponent
+} from '../../services/servicestatus-simple-icon/servicestatus-simple-icon.component';
 import { DisableItem } from '../../../layouts/coreui/disable-modal/disable.interface';
 import { DISABLE_SERVICE_TOKEN } from '../../../tokens/disable-injection.token';
 import { ServicesService } from '../../services/services.service';
@@ -151,8 +163,8 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
     templateUrl: './servicegroups-extended.component.html',
     styleUrl: './servicegroups-extended.component.css',
     providers: [
-        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService },
-        { provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService },
+        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService},
+        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService},
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -520,7 +532,7 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
                 (service): ServiceNotifcationItem => {
                     return {
                         command:
-                            ExternalCommandsEnum.submitDisableServiceNotifications,
+                        ExternalCommandsEnum.submitDisableServiceNotifications,
                         hostUuid: service.Host.uuid,
                         serviceUuid: service.Service.uuid,
                     };
@@ -561,7 +573,7 @@ export class ServicegroupsExtendedComponent implements OnInit, OnDestroy {
                 (service): ServiceNotifcationItem => {
                     return {
                         command:
-                            ExternalCommandsEnum.submitEnableServiceNotifications,
+                        ExternalCommandsEnum.submitEnableServiceNotifications,
                         hostUuid: service.Host.uuid,
                         serviceUuid: service.Service.uuid,
                     };

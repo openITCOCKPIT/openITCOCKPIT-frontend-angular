@@ -28,7 +28,9 @@ import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AgentconnectorWizardProgressbarComponent } from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
+import {
+    AgentconnectorWizardProgressbarComponent
+} from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
 import { AgentconnectorWizardStepsEnum } from '../agentconnector.enums';
 
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';

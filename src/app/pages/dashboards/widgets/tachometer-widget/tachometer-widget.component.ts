@@ -31,7 +31,7 @@ import { TachometerWidgetService } from './tachometer-widget.service';
 import { ServicesService } from '../../../services/services.service';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 import { RadialGauge } from 'canvas-gauges';
-import {PerformanceWidgetPerfdata} from '../widgets.interface'
+import { PerformanceWidgetPerfdata } from '../widgets.interface'
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { ServiceTypesEnum } from '../../../services/services.enum';
 
@@ -274,7 +274,7 @@ export class TachometerWidgetComponent extends BaseWidgetComponent implements Af
     }
 
 
-    private getThresholdAreas(perfdata:PerformanceWidgetPerfdata) {
+    private getThresholdAreas(perfdata: PerformanceWidgetPerfdata) {
         const setup = perfdata.datasource.setup;
 
         let thresholdAreas: any[] = [];

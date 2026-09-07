@@ -43,7 +43,9 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { WizardsDynamicfieldsComponent } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
+import {
+    WizardsDynamicfieldsComponent
+} from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
 
@@ -143,7 +145,7 @@ export class VmwareSnapshotsComponent extends WizardsAbstractComponent {
                 host_id: this.post.host_id,
                 name: this.serviceName,
                 servicecommandargumentvalues:
-                    servicetemplatecommandargumentvalues,
+                servicetemplatecommandargumentvalues,
                 servicetemplate_id: this.snapshotServicetemplate.id,
             });
             this.serviceName = '';
