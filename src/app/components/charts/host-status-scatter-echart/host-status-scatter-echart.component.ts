@@ -382,6 +382,7 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                 min: new Date(this.fromTimestamp() * 1000).toISOString(),
                 max: new Date(this.toTimestamp() * 1000).toISOString(),
                 splitLine: {show: true},
+                offset:15,
                 axisLabel: {
                     hideOverlap: true,
                     formatter: (value) => {
@@ -407,6 +408,7 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                 name: this.TranslocoService.translate('Minute'),
                 interval: 10,
                 minInterval: 1,
+                offset:15,
                 axisPointer: {
                     show: true,
                     label: {

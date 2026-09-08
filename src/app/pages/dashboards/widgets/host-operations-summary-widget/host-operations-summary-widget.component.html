@@ -164,26 +164,26 @@
                                                                                     <a [routerLink]="['/', 'hosts', 'index']"
                                                                                        [queryParams]="{'id': hoststatusSummary.state.hostIds['1']}"
                                                                                        class="text-danger">
-                                                                                        {{ hoststatusSummary.state['1'] }}
+                                                                                        {{ hoststatusSummary.state['1'] + hoststatusSummary.state['2'] }}
                                                                                     </a>
                                                                                 </span>
                                                                                 <span *oitcPermission="['hosts', 'index']; negate: true"
                                                                                       class="text-danger">
-                                                                                    {{ hoststatusSummary.state['1'] }}
+                                                                                    {{ hoststatusSummary.state['1'] + hoststatusSummary.state['2'] }}
                                                                                 </span>
-                                                                                @if (hoststatusSummary.not_handled['1'] > 0) {
+                                                                                @if (hoststatusSummary.not_handled['1'] > 0 || hoststatusSummary.not_handled['2'] > 0) {
                                                                                     <span class="ps-2">
                                                                                         [{{ t('Not handled') }}:
                                                                                         <span *oitcPermission="['hosts', 'index']">
                                                                                             <a [routerLink]="['/', 'hosts', 'index']"
                                                                                                [queryParams]="{'id': hoststatusSummary.not_handled.hostIds['1']}"
                                                                                                class="text-danger">
-                                                                                                {{ hoststatusSummary.not_handled['1'] }}
+                                                                                                {{ hoststatusSummary.not_handled['1'] + hoststatusSummary.not_handled['2'] }}
                                                                                             </a>
                                                                                         </span>
                                                                                         <span *oitcPermission="['hosts', 'index']; negate: true"
                                                                                               class="text-danger">
-                                                                                            {{ hoststatusSummary.not_handled['1'] }}
+                                                                                            {{ hoststatusSummary.not_handled['1'] + hoststatusSummary.not_handled['2'] }}
                                                                                         </span>
                                                                                         ]
                                                                                     </span>
