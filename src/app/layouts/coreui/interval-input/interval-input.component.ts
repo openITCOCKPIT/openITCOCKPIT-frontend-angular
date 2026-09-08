@@ -5,7 +5,7 @@ import {
     EventEmitter,
     inject,
     Input,
-    Output
+    Output,
 } from '@angular/core';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
@@ -13,13 +13,13 @@ import {
     ColComponent,
     FormControlDirective,
     InputGroupComponent,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 import { IntervalInput } from './interval-input.interface';
 import { XsButtonDirective } from '../xsbutton-directive/xsbutton.directive';
 import { NgClass } from '@angular/common';
 
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { HumanTimeComponent } from './human-time/human-time.component';
 import { FormsModule } from '@angular/forms';
 
@@ -36,11 +36,11 @@ import { FormsModule } from '@angular/forms';
         PaginatorModule,
         HumanTimeComponent,
         InputGroupComponent,
-        FormsModule
+        FormsModule,
     ],
     templateUrl: './interval-input.component.html',
     styleUrl: './interval-input.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IntervalInputComponent {
     private readonly TranslocoService = inject(TranslocoService);
@@ -61,62 +61,62 @@ export class IntervalInputComponent {
             {
                 interval: 30,
                 short: this.TranslocoService.translate('30s'),
-                long: this.TranslocoService.translate('30 seconds')
+                long: this.TranslocoService.translate('30 seconds'),
             },
             {
                 interval: 60,
                 short: this.TranslocoService.translate('1m'),
-                long: this.TranslocoService.translate('1 minute')
+                long: this.TranslocoService.translate('1 minute'),
             },
             {
-                interval: (2 * 60),
+                interval: 2 * 60,
                 short: this.TranslocoService.translate('2m'),
-                long: this.TranslocoService.translate('2 minutes')
+                long: this.TranslocoService.translate('2 minutes'),
             },
             {
-                interval: (5 * 60),
+                interval: 5 * 60,
                 short: this.TranslocoService.translate('5m'),
-                long: this.TranslocoService.translate('5 minutes')
+                long: this.TranslocoService.translate('5 minutes'),
             },
             {
-                interval: (10 * 60),
+                interval: 10 * 60,
                 short: this.TranslocoService.translate('10m'),
-                long: this.TranslocoService.translate('10 minutes')
+                long: this.TranslocoService.translate('10 minutes'),
             },
             {
-                interval: (15 * 60),
+                interval: 15 * 60,
                 short: this.TranslocoService.translate('15m'),
-                long: this.TranslocoService.translate('15 minutes')
+                long: this.TranslocoService.translate('15 minutes'),
             },
             {
-                interval: (30 * 60),
+                interval: 30 * 60,
                 short: this.TranslocoService.translate('30m'),
-                long: this.TranslocoService.translate('30 minutes')
+                long: this.TranslocoService.translate('30 minutes'),
             },
             {
-                interval: (45 * 60),
+                interval: 45 * 60,
                 short: this.TranslocoService.translate('45m'),
-                long: this.TranslocoService.translate('45 minutes')
+                long: this.TranslocoService.translate('45 minutes'),
             },
             {
                 interval: 3600,
                 short: this.TranslocoService.translate('1h'),
-                long: this.TranslocoService.translate('1 hour')
+                long: this.TranslocoService.translate('1 hour'),
             },
             {
-                interval: (1800 + 3600),
+                interval: 1800 + 3600,
                 short: this.TranslocoService.translate('1.5h'),
-                long: this.TranslocoService.translate('1.5 hours')
+                long: this.TranslocoService.translate('1.5 hours'),
             },
             {
-                interval: (2 * 3600),
+                interval: 2 * 3600,
                 short: this.TranslocoService.translate('2h'),
-                long: this.TranslocoService.translate('2 hours')
+                long: this.TranslocoService.translate('2 hours'),
             },
             {
-                interval: (4 * 3600),
+                interval: 4 * 3600,
                 short: this.TranslocoService.translate('4h'),
-                long: this.TranslocoService.translate('4 hours')
+                long: this.TranslocoService.translate('4 hours'),
             },
         ];
         //this.cdr.markForCheck();
@@ -130,5 +130,4 @@ export class IntervalInputComponent {
         this.selectedInterval = interval;
         this.selectedIntervalChange.emit(interval);
     }
-
 }

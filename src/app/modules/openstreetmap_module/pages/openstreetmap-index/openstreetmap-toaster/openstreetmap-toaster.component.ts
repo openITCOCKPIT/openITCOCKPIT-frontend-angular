@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    ViewChild,
+} from '@angular/core';
 
 import { AsyncPipe } from '@angular/common';
 import {
@@ -9,12 +15,12 @@ import {
     ToastBodyComponent,
     ToastComponent,
     ToasterComponent,
-    ToastHeaderComponent
+    ToastHeaderComponent,
 } from '@coreui/angular';
 import { Subscription } from 'rxjs';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { SkeletonModule } from 'primeng/skeleton';
+import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { OpenstreetmapAcls } from '../../openstreetmap.interface';
 import { OpenstreetmapToasterService } from './openstreetmap-toaster.service';
@@ -39,11 +45,11 @@ import { RouterLink } from '@angular/router';
         LabelLinkComponent,
         XsButtonDirective,
         AsyncPipe,
-        RouterLink
+        RouterLink,
     ],
     templateUrl: './openstreetmap-toaster.component.html',
     styleUrl: './openstreetmap-toaster.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenstreetmapToasterComponent {
     public toastVisible: boolean = false;
@@ -54,31 +60,41 @@ export class OpenstreetmapToasterComponent {
     public summary?: any;
     //public acls?: any;
 
-    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
+    public readonly PermissionsService: PermissionsService =
+        inject(PermissionsService);
 
     private cdr = inject(ChangeDetectorRef);
-    private readonly OpenstreetmapToasterService: OpenstreetmapToasterService = inject(OpenstreetmapToasterService);
+    private readonly OpenstreetmapToasterService: OpenstreetmapToasterService =
+        inject(OpenstreetmapToasterService);
     private subscriptions: Subscription = new Subscription();
 
     constructor() {
-        this.subscriptions.add(this.OpenstreetmapToasterService.containerIds$.subscribe((containerIds: number[]) => {
-            this.summary = undefined;
-            this.cdr.markForCheck();
-
-            if (containerIds.length > 0) {
-                this.subscriptions.add(this.OpenstreetmapToasterService.loadOpenstreetMapSumaryState(containerIds).subscribe((data: any) => {
-                    this.summary = Object.values(data.summary);
-                    this.toastVisible = true;
-
-                    // Reset the toast timer when the service id changes.
-                    // (user hovers over a different service)
-                    this.toast.clearTimer();
-                    this.toast.setTimer();
-
+        this.subscriptions.add(
+            this.OpenstreetmapToasterService.containerIds$.subscribe(
+                (containerIds: number[]) => {
+                    this.summary = undefined;
                     this.cdr.markForCheck();
-                }));
-            }
-        }));
+
+                    if (containerIds.length > 0) {
+                        this.subscriptions.add(
+                            this.OpenstreetmapToasterService.loadOpenstreetMapSumaryState(
+                                containerIds,
+                            ).subscribe((data: any) => {
+                                this.summary = Object.values(data.summary);
+                                this.toastVisible = true;
+
+                                // Reset the toast timer when the service id changes.
+                                // (user hovers over a different service)
+                                this.toast.clearTimer();
+                                this.toast.setTimer();
+
+                                this.cdr.markForCheck();
+                            }),
+                        );
+                    }
+                },
+            ),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -97,5 +113,4 @@ export class OpenstreetmapToasterComponent {
     }
 
     protected readonly String = String;
-
 }

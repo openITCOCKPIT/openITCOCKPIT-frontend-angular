@@ -1,7 +1,15 @@
-import { ChangeDetectionStrategy, Component, effect, input, InputSignal, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    effect,
+    input,
+    InputSignal,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { ContextMenuModule } from 'primeng/contextmenu';
+import { ContextMenuModule } from '@openng/optimus-ui/contextmenu';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { Mapgadget } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';
@@ -12,21 +20,32 @@ import {
     HostForMapItem,
     MapItemRoot,
     MapItemRootParams,
-    ServiceForMapItem
+    ServiceForMapItem,
 } from '../map-item-base/map-item-base.interface';
 import { AngularDraggableModule } from 'angular2-draggable';
 
 @Component({
     selector: 'oitc-service-output-item',
     standalone: true,
-    imports: [CdkDrag, ContextMenuModule, CdkDragHandle, NgStyle, NgClass, TrustAsHtmlPipe, AngularDraggableModule],
+    imports: [
+        CdkDrag,
+        ContextMenuModule,
+        CdkDragHandle,
+        NgStyle,
+        NgClass,
+        TrustAsHtmlPipe,
+        AngularDraggableModule,
+    ],
     templateUrl: './service-output-item.component.html',
     styleUrl: './service-output-item.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> implements OnInit, OnDestroy {
-
-    public override item: InputSignal<Mapgadget | undefined> = input<Mapgadget>();
+export class ServiceOutputItemComponent
+    extends MapItemBaseComponent<Mapgadget>
+    implements OnInit, OnDestroy
+{
+    public override item: InputSignal<Mapgadget | undefined> =
+        input<Mapgadget>();
     public refreshInterval = input<number>(0);
 
     private subscriptions: Subscription = new Subscription();
@@ -37,14 +56,14 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
     protected init: boolean = true;
     protected width: number = 60;
     protected height: number = 150;
-    protected color: string = "";
+    protected color: string = '';
     private current_state: number = 0;
     private is_flapping: boolean = false;
     private intervalStartet: boolean = false; // needed to prevent multiple interval subscriptions
     private Host!: HostForMapItem;
     protected Service!: ServiceForMapItem;
     protected allowView: boolean = false;
-    protected output: string = "";
+    protected output: string = '';
     private longOutputHtml: string | null = null;
 
     constructor(parent: MapCanvasComponent) {
@@ -61,10 +80,8 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
     }
 
     public ngOnInit(): void {
-
         this.item()!.size_x = parseInt(this.item()!.size_x.toString(), 10);
         this.item()!.size_y = parseInt(this.item()!.size_y.toString(), 10);
-
 
         if (this.item()!.size_x > 0) {
             this.width = this.item()!.size_x;
@@ -77,64 +94,67 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
     }
 
     private load() {
-
         const params: MapItemRootParams = {
-            'angular': true,
-            'disableGlobalLoader': true,
-            'objectId': this.item()!.object_id as number,
-            'mapId': this.item()!.map_id as number,
-            'type': this.item()!.type as string,
-            'includeServiceOutput': true
+            angular: true,
+            disableGlobalLoader: true,
+            objectId: this.item()!.object_id as number,
+            mapId: this.item()!.map_id as number,
+            type: this.item()!.type as string,
+            includeServiceOutput: true,
         };
 
-        this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
-            .subscribe((result: MapItemRoot) => {
-                this.current_state = result.data.Servicestatus.currentState;
-                this.is_flapping = result.data.Servicestatus.isFlapping;
+        this.subscriptions.add(
+            this.MapItemBaseService.getMapItem(params).subscribe(
+                (result: MapItemRoot) => {
+                    this.current_state = result.data.Servicestatus.currentState;
+                    this.is_flapping = result.data.Servicestatus.isFlapping;
 
-                this.Host = result.data.Host;
-                this.Service = result.data.Service;
-                this.allowView = result.allowView!;
-                this.color = result.data.color!;
+                    this.Host = result.data.Host;
+                    this.Service = result.data.Service;
+                    this.allowView = result.allowView!;
+                    this.color = result.data.color!;
 
-                this.output = result.data.Servicestatus.output;
-                this.longOutputHtml = result.data.Servicestatus.longOutputHtml!;
+                    this.output = result.data.Servicestatus.output;
+                    this.longOutputHtml =
+                        result.data.Servicestatus.longOutputHtml!;
 
-                this.renderOutput();
+                    this.renderOutput();
 
-                this.initRefreshTimer();
+                    this.initRefreshTimer();
 
-                this.init = false;
-                this.cdr.markForCheck();
-            }));
-    };
+                    this.init = false;
+                    this.cdr.markForCheck();
+                },
+            ),
+        );
+    }
 
     private renderOutput() {
-
         if (this.item()!.output_type !== 'service_output') {
             if (this.longOutputHtml !== null) {
                 this.output = this.longOutputHtml;
                 this.cdr.markForCheck();
             }
         }
-
-    };
+    }
 
     private initRefreshTimer() {
         if (this.refreshInterval() > 0 && !this.intervalStartet) {
             this.intervalStartet = true;
-            this.statusUpdateInterval = interval(this.refreshInterval()).subscribe(() => {
+            this.statusUpdateInterval = interval(
+                this.refreshInterval(),
+            ).subscribe(() => {
                 this.load();
             });
         }
-    };
+    }
 
     private stop() {
         if (this.intervalStartet) {
             this.statusUpdateInterval.unsubscribe();
             this.cdr.markForCheck();
         }
-    };
+    }
 
     private onSizeXShowLabelOutputTypeChange() {
         if (this.init) {
@@ -155,5 +175,4 @@ export class ServiceOutputItemComponent extends MapItemBaseComponent<Mapgadget> 
 
         this.load();
     }
-
 }

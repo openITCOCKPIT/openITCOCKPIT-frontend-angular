@@ -1,8 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { VmwareEsxWizardGet, VmwareEsxWizardPost } from './vmware-esx-wizard.interface';
+import {
+    VmwareEsxWizardGet,
+    VmwareEsxWizardPost,
+} from './vmware-esx-wizard.interface';
 import { VmwareEsxWizardService } from './vmware-esx-wizard.service';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { FormsModule } from '@angular/forms';
 import {
     AccordionButtonDirective,
@@ -15,7 +18,7 @@ import {
     CardTitleDirective,
     FormControlDirective,
     FormLabelDirective,
-    TemplateIdDirective
+    TemplateIdDirective,
 } from '@coreui/angular';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -24,9 +27,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import {
-    WizardsDynamicfieldsComponent
-} from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
+import { WizardsDynamicfieldsComponent } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 
 @Component({
     selector: 'oitc-vmware-esx',
@@ -52,24 +53,26 @@ import {
         AccordionButtonDirective,
         AccordionComponent,
         AccordionItemComponent,
-        TemplateIdDirective
+        TemplateIdDirective,
     ],
     templateUrl: './vmware-esx.component.html',
     styleUrl: './vmware-esx.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VmwareEsxComponent extends WizardsAbstractComponent {
-    protected override WizardService: VmwareEsxWizardService = inject(VmwareEsxWizardService);
+    protected override WizardService: VmwareEsxWizardService = inject(
+        VmwareEsxWizardService,
+    );
 
     protected override post: VmwareEsxWizardPost = {
-// Default fields from the base wizard
+        // Default fields from the base wizard
         host_id: 0,
         services: [],
-// Fields for the wizard
+        // Fields for the wizard
         vmwareuser: '',
         vmwarepass: '',
         vcenter: '',
-        typeId: 'vmware-esx'
+        typeId: 'vmware-esx',
     } as VmwareEsxWizardPost;
 
     protected override wizardLoad(result: VmwareEsxWizardGet): void {

@@ -1,17 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ColComponent, RowComponent } from '@coreui/angular';
-import { Skeleton } from 'primeng/skeleton';
+import { Skeleton } from '@openng/optimus-ui/skeleton';
 
 @Component({
     selector: 'oitc-proxmox-browser-loader',
-    imports: [
-        ColComponent,
-        RowComponent,
-        Skeleton
-    ],
+    imports: [ColComponent, RowComponent, Skeleton],
     templateUrl: './proxmox-browser-loader.component.html',
     styleUrl: './proxmox-browser-loader.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProxmoxBrowserLoaderComponent {
-}
+export class ProxmoxBrowserLoaderComponent {}

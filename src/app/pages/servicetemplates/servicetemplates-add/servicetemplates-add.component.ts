@@ -1,11 +1,21 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import {
     ServicetemplateContainerResult,
     ServicetemplatePost,
     ServicetemplateTypeResult,
 } from '../../servicetemplates/servicetemplates.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import {
+    GenericIdResponse,
+    GenericValidationError,
+} from '../../../generic-responses';
 import { ServicetemplateTypesEnum } from '../../servicetemplates/servicetemplate-types.enum';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -13,7 +23,11 @@ import { Subscription } from 'rxjs';
 import { ObjectTypesEnum } from '../../changelogs/object-types.enum';
 import { ServicetemplatesService } from '../servicetemplates.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import {
+    TranslocoDirective,
+    TranslocoPipe,
+    TranslocoService,
+} from '@jsverse/transloco';
 import {
     AlertComponent,
     CardBodyComponent,
@@ -28,12 +42,10 @@ import {
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import {
-    CheckAttemptsInputComponent
-} from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
+import { CheckAttemptsInputComponent } from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -45,7 +57,7 @@ import { MacrosComponent } from '../../../components/macros/macros.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
@@ -54,7 +66,6 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HostOrServiceType } from '../../hosts/hosts.interface';
 import { HistoryService } from '../../../history.service';
-
 
 @Component({
     selector: 'oitc-servicetemplates-add',
@@ -96,11 +107,11 @@ import { HistoryService } from '../../../history.service';
         RouterLink,
         NgClass,
         TranslocoPipe,
-        AsyncPipe
+        AsyncPipe,
     ],
     templateUrl: './servicetemplates-add.component.html',
     styleUrl: './servicetemplates-add.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
     public servicetemplateTypes: ServicetemplateTypeResult[] = [];
@@ -133,15 +144,16 @@ export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {
-    }
+    constructor(private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
-        this.route.queryParams.subscribe(params => {
+        this.route.queryParams.subscribe((params) => {
             let servicetemplatetype_id = params['servicetemplatetype_id'];
-            let servicetemplateTypeId = params['servicetemplateTypeId'] || servicetemplatetype_id;
+            let servicetemplateTypeId =
+                params['servicetemplateTypeId'] || servicetemplatetype_id;
             if (servicetemplateTypeId === undefined) {
-                servicetemplateTypeId = ServicetemplateTypesEnum.GENERIC_SERVICE
+                servicetemplateTypeId =
+                    ServicetemplateTypesEnum.GENERIC_SERVICE;
             }
             this.servicetemplateTypeId = Number(servicetemplateTypeId);
 
@@ -153,7 +165,6 @@ export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
             this.post = this.getDefaultPost(this.servicetemplateTypeId);
             this.cdr.markForCheck();
         });
-
     }
 
     public ngOnDestroy(): void {
@@ -206,54 +217,60 @@ export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
             freshness_checks_enabled: 0,
             servicetemplatetype_id: servicetemplateTypeId,
             contacts: {
-                _ids: []
+                _ids: [],
             },
             contactgroups: {
-                _ids: []
+                _ids: [],
             },
             servicegroups: {
-                _ids: []
+                _ids: [],
             },
             customvariables: [],
             servicetemplatecommandargumentvalues: [],
             servicetemplateeventcommandargumentvalues: [],
-            sla_relevant: 1
+            sla_relevant: 1,
         };
     }
 
     public loadContainers() {
-        this.subscriptions.add(this.ServicetemplatesService.loadContainers()
-            .subscribe((result) => {
-                this.containers = result;
-                this.cdr.markForCheck();
-            })
+        this.subscriptions.add(
+            this.ServicetemplatesService.loadContainers().subscribe(
+                (result) => {
+                    this.containers = result;
+                    this.cdr.markForCheck();
+                },
+            ),
         );
     }
 
     public loadCommands() {
-        this.subscriptions.add(this.ServicetemplatesService.loadCommands()
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicetemplatesService.loadCommands().subscribe((result) => {
                 this.commands = result.commands;
                 this.eventhandlerCommands = result.eventhandlerCommands;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
     public loadServicetemplateTypes() {
-        this.subscriptions.add(this.ServicetemplatesService.loadServicetemplateTypes()
-            .subscribe((result) => {
-                this.servicetemplateTypes = result;
-                this.setDetailsForType();
-                this.cdr.markForCheck();
-            })
+        this.subscriptions.add(
+            this.ServicetemplatesService.loadServicetemplateTypes().subscribe(
+                (result) => {
+                    this.servicetemplateTypes = result;
+                    this.setDetailsForType();
+                    this.cdr.markForCheck();
+                },
+            ),
         );
     }
 
     private setDetailsForType() {
-        this.typeDetails = this.servicetemplateTypes.find(type => type.key === this.post.servicetemplatetype_id)?.value;
+        this.typeDetails = this.servicetemplateTypes.find(
+            (type) => type.key === this.post.servicetemplatetype_id,
+        )?.value;
         this.cdr.markForCheck();
-    };
+    }
 
     private loadElements() {
         const containerId = this.post.container_id;
@@ -262,17 +279,18 @@ export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.ServicetemplatesService.loadElements(containerId)
-            .subscribe((result) => {
-                this.timeperiods = result.timeperiods;
-                this.checkperiods = result.checkperiods;
-                this.contacts = result.contacts;
-                this.contactgroups = result.contactgroups;
-                this.servicegroups = result.servicegroups;
-                this.cdr.markForCheck();
-            })
+        this.subscriptions.add(
+            this.ServicetemplatesService.loadElements(containerId).subscribe(
+                (result) => {
+                    this.timeperiods = result.timeperiods;
+                    this.checkperiods = result.checkperiods;
+                    this.contacts = result.contacts;
+                    this.contactgroups = result.contactgroups;
+                    this.servicegroups = result.servicegroups;
+                    this.cdr.markForCheck();
+                },
+            ),
         );
-
     }
 
     private loadCommandArguments() {
@@ -282,13 +300,14 @@ export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.ServicetemplatesService.loadCommandArguments(commandId)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicetemplatesService.loadCommandArguments(
+                commandId,
+            ).subscribe((result) => {
                 this.post.servicetemplatecommandargumentvalues = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
-
     }
 
     private loadEventHandlerCommandArguments() {
@@ -302,14 +321,14 @@ export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.ServicetemplatesService.loadEventHandlerCommandArguments(eventHandlerCommandId)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicetemplatesService.loadEventHandlerCommandArguments(
+                eventHandlerCommandId,
+            ).subscribe((result) => {
                 this.post.servicetemplateeventcommandargumentvalues = result;
                 this.cdr.markForCheck();
-
-            })
+            }),
         );
-
     }
 
     public onContainerChange() {
@@ -334,38 +353,40 @@ export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
     public addMacro() {
         this.post.customvariables.push({
             name: '',
-            objecttype_id: ObjectTypesEnum["SERVICETEMPLATE"],
+            objecttype_id: ObjectTypesEnum['SERVICETEMPLATE'],
             password: 0,
             value: '',
         });
         this.cdr.markForCheck();
-
     }
 
     protected deleteMacro = (index: number) => {
         this.post.customvariables.splice(index, 1);
         this.cdr.markForCheck();
-
-    }
+    };
 
     public submit() {
         this.post.tags = this.tagsForSelect.join(',');
 
-
-        this.subscriptions.add(this.ServicetemplatesService.add(this.post)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicetemplatesService.add(this.post).subscribe((result) => {
                 this.cdr.markForCheck();
 
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('Service template');
-                    const msg = this.TranslocoService.translate('created successfully');
+                    const title =
+                        this.TranslocoService.translate('Service template');
+                    const msg = this.TranslocoService.translate(
+                        'created successfully',
+                    );
                     const url = ['servicetemplates', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
 
                     if (!this.createAnother) {
-                        this.HistoryService.navigateWithFallback(['/servicetemplates/index']);
+                        this.HistoryService.navigateWithFallback([
+                            '/servicetemplates/index',
+                        ]);
                         return;
                     }
                     this.post = this.getDefaultPost(this.servicetemplateTypeId);
@@ -384,12 +405,15 @@ export class ServicetemplatesAddComponent implements OnInit, OnDestroy {
 
                     this.hasMacroErrors = false;
                     if (this.errors.hasOwnProperty('customvariables')) {
-                        if (typeof (this.errors['customvariables']['custom']) === "string") {
+                        if (
+                            typeof this.errors['customvariables']['custom'] ===
+                            'string'
+                        ) {
                             this.hasMacroErrors = true;
                         }
                     }
                 }
-            }))
-
+            }),
+        );
     }
 }

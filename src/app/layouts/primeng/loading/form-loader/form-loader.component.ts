@@ -1,16 +1,20 @@
-import { ChangeDetectionStrategy, Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { SkeletonModule } from 'primeng/skeleton';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    inject,
+    Input,
+    OnChanges,
+    SimpleChanges,
+} from '@angular/core';
+import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 import { TitleService } from '../../../../services/title.service';
-
 
 @Component({
     selector: 'oitc-form-loader',
-    imports: [
-        SkeletonModule
-    ],
+    imports: [SkeletonModule],
     templateUrl: './form-loader.component.html',
     styleUrl: './form-loader.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 // This loader mimics the optic of a generic form that is loading data

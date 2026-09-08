@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -12,7 +19,7 @@ import {
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -21,16 +28,25 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
 
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { InstantreportPost } from '../instantreports.interface';
-import { InstantreportEvaluationTypes, InstantreportObjectTypes } from '../instantreports.enums';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
-import { SelectItemOptionGroup, SelectKeyValue } from '../../../layouts/primeng/select.interface';
+import {
+    InstantreportEvaluationTypes,
+    InstantreportObjectTypes,
+} from '../instantreports.enums';
+import {
+    GenericIdResponse,
+    GenericValidationError,
+} from '../../../generic-responses';
+import {
+    SelectItemOptionGroup,
+    SelectKeyValue,
+} from '../../../layouts/primeng/select.interface';
 import { RouterLink } from '@angular/router';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
@@ -44,9 +60,7 @@ import { ServicegroupsService } from '../../servicegroups/servicegroups.service'
 import { UsersService } from '../../users/users.service';
 import { Subscription } from 'rxjs';
 import { ServicesLoadServicesByStringParams } from '../../services/services.interface';
-import {
-    MultiSelectOptgroupComponent
-} from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { MultiSelectOptgroupComponent } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { HistoryService } from '../../../history.service';
 
@@ -81,14 +95,13 @@ import { HistoryService } from '../../../history.service';
         TrueFalseDirective,
         MultiSelectComponent,
         MultiSelectOptgroupComponent,
-        CardFooterComponent
+        CardFooterComponent,
     ],
     templateUrl: './instantreports-add.component.html',
     styleUrl: './instantreports-add.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InstantreportsAddComponent implements OnInit, OnDestroy {
-
     public post: InstantreportPost = this.getDefaultPost();
     public errors: GenericValidationError | null = null;
     public containers: SelectKeyValue[] = [];
@@ -100,13 +113,19 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
     public users: SelectKeyValue[] = [];
 
     private readonly subscriptions: Subscription = new Subscription();
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService);
-    private readonly InstantreportsService: InstantreportsService = inject(InstantreportsService);
-    private readonly TimeperiodsService: TimeperiodsService = inject(TimeperiodsService);
+    private readonly TranslocoService: TranslocoService =
+        inject(TranslocoService);
+    private readonly InstantreportsService: InstantreportsService = inject(
+        InstantreportsService,
+    );
+    private readonly TimeperiodsService: TimeperiodsService =
+        inject(TimeperiodsService);
     private readonly HostsService: HostsService = inject(HostsService);
-    private readonly HostgroupsService: HostgroupsService = inject(HostgroupsService);
+    private readonly HostgroupsService: HostgroupsService =
+        inject(HostgroupsService);
     private readonly ServicesService: ServicesService = inject(ServicesService);
-    private readonly ServicegroupsService: ServicegroupsService = inject(ServicegroupsService);
+    private readonly ServicegroupsService: ServicegroupsService =
+        inject(ServicegroupsService);
     private readonly UsersService: UsersService = inject(UsersService);
     private readonly notyService = inject(NotyService);
     private readonly HistoryService: HistoryService = inject(HistoryService);
@@ -114,50 +133,50 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
     protected readonly ObjectTypesSelect: SelectKeyValue[] = [
         {
             key: InstantreportObjectTypes.Hosts,
-            value: this.TranslocoService.translate('Hosts')
+            value: this.TranslocoService.translate('Hosts'),
         },
         {
             key: InstantreportObjectTypes.Hostgroups,
-            value: this.TranslocoService.translate('Host groups')
+            value: this.TranslocoService.translate('Host groups'),
         },
         {
             key: InstantreportObjectTypes.Services,
-            value: this.TranslocoService.translate('Services')
+            value: this.TranslocoService.translate('Services'),
         },
         {
             key: InstantreportObjectTypes.Servicegroups,
-            value: this.TranslocoService.translate('Service groups')
-        }
+            value: this.TranslocoService.translate('Service groups'),
+        },
     ];
 
     protected readonly ReflectionStateSelect: SelectKeyValue[] = [
         {
             key: InstantreportObjectTypes.Hosts,
-            value: this.TranslocoService.translate('only hard state')
+            value: this.TranslocoService.translate('only hard state'),
         },
         {
             key: InstantreportObjectTypes.Hostgroups,
-            value: this.TranslocoService.translate('soft and hard state')
-        }
+            value: this.TranslocoService.translate('soft and hard state'),
+        },
     ];
 
     protected readonly SendIntervalSelect: SelectKeyValue[] = [
         {
             key: 1,
-            value: this.TranslocoService.translate('DAY')
+            value: this.TranslocoService.translate('DAY'),
         },
         {
             key: 2,
-            value: this.TranslocoService.translate('WEEK')
+            value: this.TranslocoService.translate('WEEK'),
         },
         {
             key: 3,
-            value: this.TranslocoService.translate('MONTH')
+            value: this.TranslocoService.translate('MONTH'),
         },
         {
             key: 4,
-            value: this.TranslocoService.translate('YEAR')
-        }
+            value: this.TranslocoService.translate('YEAR'),
+        },
     ];
 
     private cdr = inject(ChangeDetectorRef);
@@ -176,93 +195,116 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
             name: '',
             type: InstantreportObjectTypes.Hosts, // 1 - host groups, 2 - hosts, 3 - service groups, 4 - services
             timeperiod_id: 0,
-            reflection: 2,// 1 - soft and hard states, 2 - only hard states
+            reflection: 2, // 1 - soft and hard states, 2 - only hard states
             summary: 0,
             downtimes: 0,
             send_email: 0,
             send_interval: 1, // 0 - NEVER
             evaluation: InstantreportEvaluationTypes.HostAndServices,
             hostgroups: {
-                _ids: []
+                _ids: [],
             },
             hosts: {
-                _ids: []
+                _ids: [],
             },
             servicegroups: {
-                _ids: []
+                _ids: [],
             },
             services: {
-                _ids: []
+                _ids: [],
             },
             users: {
-                _ids: []
+                _ids: [],
             },
-        }
+        };
     }
 
     private loadContainers() {
-        this.subscriptions.add(this.InstantreportsService.loadContainers().subscribe((result) => {
-            this.containers = result;
-            this.cdr.markForCheck();
-        }));
+        this.subscriptions.add(
+            this.InstantreportsService.loadContainers().subscribe((result) => {
+                this.containers = result;
+                this.cdr.markForCheck();
+            }),
+        );
     }
 
     private loadTimeperiods() {
-        this.subscriptions.add(this.TimeperiodsService.loadTimeperiodsByContainerId(this.post.container_id).subscribe((result) => {
-            this.timeperiods = result;
-            this.cdr.markForCheck();
-        }));
+        this.subscriptions.add(
+            this.TimeperiodsService.loadTimeperiodsByContainerId(
+                this.post.container_id,
+            ).subscribe((result) => {
+                this.timeperiods = result;
+                this.cdr.markForCheck();
+            }),
+        );
     }
 
     private loadUsers() {
-        this.subscriptions.add(this.UsersService.loadUsersByContainerId(this.post.container_id, this.post.users._ids).subscribe((result) => {
-            this.users = result;
-            this.cdr.markForCheck();
-        }));
+        this.subscriptions.add(
+            this.UsersService.loadUsersByContainerId(
+                this.post.container_id,
+                this.post.users._ids,
+            ).subscribe((result) => {
+                this.users = result;
+                this.cdr.markForCheck();
+            }),
+        );
     }
 
     public loadHosts = (searchString: string) => {
-        this.subscriptions.add(this.HostsService.loadHostsByContainerId(this.post.container_id, searchString, this.post.hosts._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostsService.loadHostsByContainerId(
+                this.post.container_id,
+                searchString,
+                this.post.hosts._ids,
+            ).subscribe((result) => {
                 this.hosts = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
-    }
+    };
 
     public loadServices = (searchString: string) => {
         const params: ServicesLoadServicesByStringParams = {
-            'angular': true,
+            angular: true,
             'filter[servicename]': searchString,
             'selected[]': this.post.services._ids,
-            'includeDisabled': true,
-            'containerId': this.post.container_id,
-            'resolveContainerIds': true
-        }
+            includeDisabled: true,
+            containerId: this.post.container_id,
+            resolveContainerIds: true,
+        };
 
-        this.subscriptions.add(this.ServicesService.loadServicesByString(params)
-            .subscribe((result) => {
-                this.services = result;
-                this.cdr.markForCheck();
-            })
+        this.subscriptions.add(
+            this.ServicesService.loadServicesByString(params).subscribe(
+                (result) => {
+                    this.services = result;
+                    this.cdr.markForCheck();
+                },
+            ),
         );
-    }
+    };
 
     public loadHostgroups() {
-        this.subscriptions.add(this.HostgroupsService.loadHostgroupsByContainerId(this.post.container_id, this.post.hostgroups._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostgroupsService.loadHostgroupsByContainerId(
+                this.post.container_id,
+                this.post.hostgroups._ids,
+            ).subscribe((result) => {
                 this.hostgroups = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
     public loadServicegroups() {
-        this.subscriptions.add(this.ServicegroupsService.loadServicegroupsByContainerId(this.post.container_id, this.post.servicegroups._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ServicegroupsService.loadServicegroupsByContainerId(
+                this.post.container_id,
+                this.post.servicegroups._ids,
+            ).subscribe((result) => {
                 this.servicegroups = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
@@ -312,23 +354,27 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
     }
 
     public submit() {
-
         if (this.post.send_email === 0) {
             this.post.send_interval = 0; // Never
             this.post.users._ids = [];
         }
 
-        this.subscriptions.add(this.InstantreportsService.add(this.post)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.InstantreportsService.add(this.post).subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('Instant report');
-                    const msg = this.TranslocoService.translate('created successfully');
+                    const title =
+                        this.TranslocoService.translate('Instant report');
+                    const msg = this.TranslocoService.translate(
+                        'created successfully',
+                    );
                     const url = ['instantreports', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
-                    this.HistoryService.navigateWithFallback(['/instantreports/index']);
+                    this.HistoryService.navigateWithFallback([
+                        '/instantreports/index',
+                    ]);
                     return;
                 }
 
@@ -338,9 +384,11 @@ export class InstantreportsAddComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
-            }));
+            }),
+        );
     }
 
-    protected readonly InstantreportEvaluationTypes = InstantreportEvaluationTypes;
+    protected readonly InstantreportEvaluationTypes =
+        InstantreportEvaluationTypes;
     protected readonly InstantreportObjectTypes = InstantreportObjectTypes;
 }

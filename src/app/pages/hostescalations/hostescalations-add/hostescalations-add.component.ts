@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
@@ -20,15 +27,24 @@ import {
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { HostescalationContainerResult, HostescalationPost } from '../hostescalations.interface';
+import {
+    HostescalationContainerResult,
+    HostescalationPost,
+} from '../hostescalations.interface';
 import { HostescalationsService } from '../hostescalations.service';
-import { SelectKeyValue, SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
+import {
+    SelectKeyValue,
+    SelectKeyValueWithDisabled,
+} from '../../../layouts/primeng/select.interface';
+import {
+    GenericIdResponse,
+    GenericValidationError,
+} from '../../../generic-responses';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { Subscription } from 'rxjs';
 import { PermissionsService } from '../../../permissions/permissions.service';
@@ -75,11 +91,11 @@ import { HistoryService } from '../../../history.service';
         LabelLinkComponent,
         FormCheckInputDirective,
         TrueFalseDirective,
-        CardFooterComponent
+        CardFooterComponent,
     ],
     templateUrl: './hostescalations-add.component.html',
     styleUrl: './hostescalations-add.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HostescalationsAddComponent implements OnInit, OnDestroy {
     public containers: HostescalationContainerResult | undefined;
@@ -100,16 +116,13 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     private router: Router = inject(Router);
     private readonly HistoryService: HistoryService = inject(HistoryService);
 
-
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {
-    }
-
+    constructor(private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
-        this.route.queryParams.subscribe(params => {
+        this.route.queryParams.subscribe((params) => {
             //Fire on page load
             this.loadContainers();
             this.post = this.getDefaultPost();
@@ -117,8 +130,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnDestroy(): void {
-    }
+    public ngOnDestroy(): void {}
 
     private getDefaultPost(): HostescalationPost {
         return {
@@ -131,32 +143,32 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
             escalate_on_down: 0,
             escalate_on_unreachable: 0,
             contacts: {
-                _ids: []
+                _ids: [],
             },
             contactgroups: {
-                _ids: []
+                _ids: [],
             },
             hosts: {
-                _ids: []
+                _ids: [],
             },
             hosts_excluded: {
-                _ids: []
+                _ids: [],
             },
             hostgroups: {
-                _ids: []
+                _ids: [],
             },
             hostgroups_excluded: {
-                _ids: []
-            }
+                _ids: [],
+            },
         };
     }
 
     public loadContainers() {
-        this.subscriptions.add(this.HostescalationsService.loadContainers()
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostescalationsService.loadContainers().subscribe((result) => {
                 this.containers = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
@@ -167,30 +179,35 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.HostescalationsService.loadElements(containerId)
-            .subscribe((result) => {
-                this.cdr.markForCheck();
-                this.hosts = result.hosts;
-                this.hosts = this.hosts.map(obj => ({
-                    ...obj,
-                    disabled: this.post.hosts_excluded._ids.includes(obj.key)
-                }));
+        this.subscriptions.add(
+            this.HostescalationsService.loadElements(containerId).subscribe(
+                (result) => {
+                    this.cdr.markForCheck();
+                    this.hosts = result.hosts;
+                    this.hosts = this.hosts.map((obj) => ({
+                        ...obj,
+                        disabled: this.post.hosts_excluded._ids.includes(
+                            obj.key,
+                        ),
+                    }));
 
-                this.processChosenExcludedHosts();
+                    this.processChosenExcludedHosts();
 
+                    this.hostgroups = result.hostgroups;
+                    this.hostgroups = this.hostgroups.map((obj) => ({
+                        ...obj,
+                        disabled: this.post.hostgroups_excluded._ids.includes(
+                            obj.key,
+                        ),
+                    }));
 
-                this.hostgroups = result.hostgroups;
-                this.hostgroups = this.hostgroups.map(obj => ({
-                    ...obj,
-                    disabled: this.post.hostgroups_excluded._ids.includes(obj.key)
-                }));
+                    this.processChosenExcludedHostgroups();
 
-                this.processChosenExcludedHostgroups();
-
-                this.timeperiods = result.timeperiods;
-                this.contacts = result.contacts;
-                this.contactgroups = result.contactgroups;
-            })
+                    this.timeperiods = result.timeperiods;
+                    this.contacts = result.contacts;
+                    this.contactgroups = result.contactgroups;
+                },
+            ),
         );
     }
 
@@ -199,17 +216,21 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         if (!containerId) {
             return;
         }
-        this.subscriptions.add(this.HostescalationsService.loadHosts(containerId, searchString, this.post.hosts._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostescalationsService.loadHosts(
+                containerId,
+                searchString,
+                this.post.hosts._ids,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.hosts = result.hosts;
-                this.hosts = this.hosts.map(obj => ({
+                this.hosts = this.hosts.map((obj) => ({
                     ...obj,
-                    disabled: this.post.hosts_excluded._ids.includes(obj.key)
+                    disabled: this.post.hosts_excluded._ids.includes(obj.key),
                 }));
-            })
+            }),
         );
-    }
+    };
 
     public loadExcludedHosts = (searchString: string) => {
         const containerId = this.post.container_id;
@@ -220,18 +241,24 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
             this.post.hosts_excluded._ids = [];
             return;
         }
-        this.subscriptions.add(this.HostescalationsService.loadExcludedHosts(containerId, searchString, this.post.hosts_excluded._ids, this.post.hostgroups._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostescalationsService.loadExcludedHosts(
+                containerId,
+                searchString,
+                this.post.hosts_excluded._ids,
+                this.post.hostgroups._ids,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.hosts_excluded = result.excludedHosts;
-                this.hosts_excluded = this.hosts_excluded.map(obj => {
+                this.hosts_excluded = this.hosts_excluded.map((obj) => {
                     return {
                         ...obj,
-                        disabled: this.post.hosts._ids.includes(obj.key)
-                    }
+                        disabled: this.post.hosts._ids.includes(obj.key),
+                    };
                 });
-            }));
-    }
+            }),
+        );
+    };
 
     public loadExcludedHostgroups(searchString: string) {
         const containerId = this.post.container_id;
@@ -243,17 +270,27 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
             this.post.hostgroups_excluded._ids = [];
             return;
         }
-        this.subscriptions.add(this.HostescalationsService.loadExcludedHostgroups(containerId, searchString, this.post.hosts._ids, this.post.hostgroups_excluded._ids)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostescalationsService.loadExcludedHostgroups(
+                containerId,
+                searchString,
+                this.post.hosts._ids,
+                this.post.hostgroups_excluded._ids,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.hostgroups_excluded = result.excludedHostgroups;
-                this.hostgroups_excluded = this.hostgroups_excluded.map(obj => {
-                    return {
-                        ...obj,
-                        disabled: this.post.hostgroups._ids.includes(obj.key)
-                    }
-                });
-            }));
+                this.hostgroups_excluded = this.hostgroups_excluded.map(
+                    (obj) => {
+                        return {
+                            ...obj,
+                            disabled: this.post.hostgroups._ids.includes(
+                                obj.key,
+                            ),
+                        };
+                    },
+                );
+            }),
+        );
     }
 
     public onContainerChange() {
@@ -266,7 +303,9 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.hosts) {
-            this.hosts[key].disabled = this.post.hosts_excluded._ids.includes(this.hosts[key].key);
+            this.hosts[key].disabled = this.post.hosts_excluded._ids.includes(
+                this.hosts[key].key,
+            );
         }
     }
 
@@ -277,7 +316,9 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         }
 
         for (let key in this.hosts_excluded) {
-            this.hosts_excluded[key].disabled = this.post.hosts._ids.includes(this.hosts_excluded[key].key);
+            this.hosts_excluded[key].disabled = this.post.hosts._ids.includes(
+                this.hosts_excluded[key].key,
+            );
         }
     }
 
@@ -287,7 +328,10 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.hostgroups) {
-            this.hostgroups[key].disabled = this.post.hostgroups_excluded._ids.includes(this.hostgroups[key].key);
+            this.hostgroups[key].disabled =
+                this.post.hostgroups_excluded._ids.includes(
+                    this.hostgroups[key].key,
+                );
         }
     }
 
@@ -297,20 +341,25 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
             return;
         }
         for (let key in this.hostgroups_excluded) {
-            this.hostgroups_excluded[key].disabled = this.post.hostgroups._ids.includes(this.hostgroups_excluded[key].key);
+            this.hostgroups_excluded[key].disabled =
+                this.post.hostgroups._ids.includes(
+                    this.hostgroups_excluded[key].key,
+                );
         }
     }
 
-
     public submit() {
-        this.subscriptions.add(this.HostescalationsService.add(this.post)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostescalationsService.add(this.post).subscribe((result) => {
                 this.cdr.markForCheck();
 
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('Host escalation');
-                    const msg = this.TranslocoService.translate('created successfully');
+                    const title =
+                        this.TranslocoService.translate('Host escalation');
+                    const msg = this.TranslocoService.translate(
+                        'created successfully',
+                    );
                     const url = ['hostescalations', 'edit', response.id];
 
                     this.notyService.genericSuccess(msg, title, url);
@@ -319,7 +368,9 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
                     this.ngOnInit();
                     this.notyService.scrollContentDivToTop();
 
-                    this.HistoryService.navigateWithFallback(['/hostescalations/index']);
+                    this.HistoryService.navigateWithFallback([
+                        '/hostescalations/index',
+                    ]);
                     return;
                 }
 
@@ -329,7 +380,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
-            })
+            }),
         );
     }
 }

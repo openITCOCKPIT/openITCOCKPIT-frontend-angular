@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
@@ -27,21 +34,19 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
 } from '@coreui/angular';
 import {
     getDefaultImportedHostgroupsIndexParams,
     Importedhostgroup,
     ImportedHostgroupIndex,
     ImportedhostgroupsIndexParams,
-    ImportedhostgroupsIndexRoot
+    ImportedhostgroupsIndexRoot,
 } from '../importedhostgroups.interface';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { ImportedhostgroupsService } from '../importedhostgroups.service';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
@@ -51,10 +56,8 @@ import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/it
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginateOrScrollComponent } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -119,27 +122,32 @@ import { ExternalSystemsService } from '../../externalsystems/external-systems.s
         DropdownToggleDirective,
         DropdownMenuDirective,
         DropdownItemDirective,
-        ImportITopDataComponent
+        ImportITopDataComponent,
     ],
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostgroupsService} // Inject the ImportedhostgroupsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostgroupsService }, // Inject the ImportedhostgroupsService into the DeleteAllModalComponent
     ],
     templateUrl: './imported-hostgroups-index.component.html',
     styleUrl: './imported-hostgroups-index.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    public params: ImportedhostgroupsIndexParams = getDefaultImportedHostgroupsIndexParams()
+    public params: ImportedhostgroupsIndexParams =
+        getDefaultImportedHostgroupsIndexParams();
 
     public importedhostgroups: Importedhostgroup[] = [];
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
     private readonly modalService = inject(ModalService);
     private subscriptions: Subscription = new Subscription();
-    private readonly ImportedhostgroupsService = inject(ImportedhostgroupsService);
-    private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private readonly ImportedhostgroupsService = inject(
+        ImportedhostgroupsService,
+    );
+    private SelectionServiceService: SelectionServiceService = inject(
+        SelectionServiceService,
+    );
     public showSynchronizingSpinner: boolean = false;
     public showSpinner: boolean = false;
     public externalSystems: ExternalSystemEntity[] = [];
@@ -148,16 +156,17 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
     private cdr = inject(ChangeDetectorRef);
 
-    constructor() {
-    }
+    constructor() {}
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
-            this.load();
-        }));
+        this.subscriptions.add(
+            this.route.queryParams.subscribe((params) => {
+                // Here, params is an object containing the current query parameters.
+                // You can do something with these parameters here.
+                //console.log(params);
+                this.load();
+            }),
+        );
     }
 
     public ngOnDestroy() {
@@ -168,8 +177,16 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
         this.SelectionServiceService.deselectAll();
         let imported = null;
 
-        const importedFilter = this.params['filter[ImportedHostgroups.imported]'] ? 1 : 0;
-        const notImportedFilter = this.params['filter[ImportedHostgroups.not_imported]'] ? 1 : 0;
+        const importedFilter = this.params[
+            'filter[ImportedHostgroups.imported]'
+        ]
+            ? 1
+            : 0;
+        const notImportedFilter = this.params[
+            'filter[ImportedHostgroups.not_imported]'
+        ]
+            ? 1
+            : 0;
 
         if (importedFilter ^ notImportedFilter) {
             imported = importedFilter === 1;
@@ -178,13 +195,15 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
             this.params['filter[imported]'] = imported;
         }
 
-        this.subscriptions.add(this.ImportedhostgroupsService.getIndex(this.params)
-            .subscribe((result) => {
-                this.allImportedGroups = result;
-                this.importedhostgroups = result.importedhostgroups;
-                this.externalSystems = result.externalSystems;
-                this.cdr.markForCheck();
-            })
+        this.subscriptions.add(
+            this.ImportedhostgroupsService.getIndex(this.params).subscribe(
+                (result) => {
+                    this.allImportedGroups = result;
+                    this.importedhostgroups = result.importedhostgroups;
+                    this.externalSystems = result.externalSystems;
+                    this.cdr.markForCheck();
+                },
+            ),
         );
     }
 
@@ -222,18 +241,22 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
 
         if (importedhostgroup) {
             // User just want to delete a single calendar
-            items = [{
-                id: importedhostgroup.id,
-                displayName: importedhostgroup.name
-            }];
+            items = [
+                {
+                    id: importedhostgroup.id,
+                    displayName: importedhostgroup.name,
+                },
+            ];
         } else {
             // User clicked on delete selected button
-            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-                return {
-                    id: item.id,
-                    displayName: item.name
-                };
-            });
+            items = this.SelectionServiceService.getSelectedItems().map(
+                (item): DeleteAllItem => {
+                    return {
+                        id: item.id,
+                        displayName: item.name,
+                    };
+                },
+            );
         }
 
         // Pass selection to the modal
@@ -256,27 +279,30 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
 
     public synchronizeWithMonitoring() {
         this.showSynchronizingSpinner = true;
-        this.subscriptions.add(this.ImportedhostgroupsService.synchronizeWithMonitoring()
-            .subscribe((result) => {
-                this.cdr.markForCheck();
-                if (result.success) {
-                    this.notyService.genericSuccess(result.message);
+        this.subscriptions.add(
+            this.ImportedhostgroupsService.synchronizeWithMonitoring().subscribe(
+                (result) => {
+                    this.cdr.markForCheck();
+                    if (result.success) {
+                        this.notyService.genericSuccess(result.message);
+                        this.showSynchronizingSpinner = false;
+                        return;
+                    }
+                    // Error
+                    this.notyService.genericError(result.message);
                     this.showSynchronizingSpinner = false;
-                    return;
-                }
-                // Error
-                this.notyService.genericError(result.message);
-                this.showSynchronizingSpinner = false;
-            })
+                },
+            ),
         );
     }
 
     public loadExternalSystem(externalSystem: ExternalSystemEntity) {
-        this.ExternalSystemsService.openImportedHostGroupDataModal(externalSystem);
+        this.ExternalSystemsService.openImportedHostGroupDataModal(
+            externalSystem,
+        );
     }
 
     public onImportIsCompleted($event: boolean) {
         this.load();
-
     }
 }

@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import {
     CardBodyComponent,
     CardComponent,
@@ -14,30 +21,34 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import {
+    TranslocoDirective,
+    TranslocoPipe,
+    TranslocoService,
+} from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LogentriesService } from '../logentries.service';
 
-import { getDefaultLogentriesParams, LogentriesRoot, LogentryIndexParams } from '../logentries.interface';
+import {
+    getDefaultLogentriesParams,
+    LogentriesRoot,
+    LogentryIndexParams,
+} from '../logentries.interface';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { formatDate } from '@angular/common';
 
-
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-
+import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 
 import { ServerLinkComponent } from '../server-link/server-link.component';
 
@@ -82,14 +93,14 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
         ServerLinkComponent,
         MultiSelectComponent,
         CardFooterComponent,
-        TableLoaderComponent
+        TableLoaderComponent,
     ],
     templateUrl: './logentries-index.component.html',
     styleUrl: './logentries-index.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
-    private LogentriesService = inject(LogentriesService)
+    private LogentriesService = inject(LogentriesService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     public params: LogentryIndexParams = getDefaultLogentriesParams();
@@ -100,10 +111,17 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
     private subscriptions: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
 
-
     private readonly HostsService = inject(HostsService);
-    public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
-    public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+    public from = formatDate(
+        this.params['filter[from]'],
+        'yyyy-MM-ddTHH:mm',
+        'en-US',
+    );
+    public to = formatDate(
+        this.params['filter[to]'],
+        'yyyy-MM-ddTHH:mm',
+        'en-US',
+    );
     public entryTypesForSelect: any[] = [];
 
     private cdr = inject(ChangeDetectorRef);
@@ -129,16 +147,18 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
         131072: this.TranslocoService.translate('Passive check'),
         262144: this.TranslocoService.translate('Message'),
         524288: this.TranslocoService.translate('Host notification'),
-        1048576: this.TranslocoService.translate('Service notification')
+        1048576: this.TranslocoService.translate('Service notification'),
     };
 
     public ngOnInit(): void {
         this.entryTypesForSelect = this.getEntryTypes();
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            this.loadLogentries();
-        }));
+        this.subscriptions.add(
+            this.route.queryParams.subscribe((params) => {
+                // Here, params is an object containing the current query parameters.
+                // You can do something with these parameters here.
+                this.loadLogentries();
+            }),
+        );
         this.loadHosts('');
     }
 
@@ -147,23 +167,28 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public getEntryTypes() {
-        let entryTypes = _.map(
-            this.entryTypes,
-            (value, key) => {
-                return {key: parseInt(key), value: value}
-            }
-        );
+        let entryTypes = _.map(this.entryTypes, (value, key) => {
+            return { key: parseInt(key), value: value };
+        });
         return entryTypes;
     }
 
     public loadLogentries() {
-        this.params['filter[from]'] = formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US');
-        this.params['filter[to]'] = formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US');
-        this.subscriptions.add(this.LogentriesService.getIndex(this.params)
-            .subscribe((result) => {
+        this.params['filter[from]'] = formatDate(
+            new Date(this.from),
+            'dd.MM.y HH:mm',
+            'en-US',
+        );
+        this.params['filter[to]'] = formatDate(
+            new Date(this.to),
+            'dd.MM.y HH:mm',
+            'en-US',
+        );
+        this.subscriptions.add(
+            this.LogentriesService.getIndex(this.params).subscribe((result) => {
                 this.logentries = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
@@ -174,8 +199,16 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public resetFilter() {
         this.params = getDefaultLogentriesParams();
-        this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
-        this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
+        this.from = formatDate(
+            this.params['filter[from]'],
+            'yyyy-MM-ddTHH:mm',
+            'en-US',
+        );
+        this.to = formatDate(
+            this.params['filter[to]'],
+            'yyyy-MM-ddTHH:mm',
+            'en-US',
+        );
         this.loadLogentries();
     }
 
@@ -185,7 +218,6 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.params.scroll = change.scroll;
         this.loadLogentries();
     }
-
 
     // Callback when a filter has changed
     public onFilterChange(event: Event | null) {
@@ -212,19 +244,17 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
             angular: true,
             'filter[Hosts.name]': searchString,
             'selected[]': selected,
-            includeDisabled: false
-        }
+            includeDisabled: false,
+        };
 
-        this.subscriptions.add(this.HostsService.loadHostsByString(params)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostsService.loadHostsByString(params).subscribe((result) => {
                 this.hosts = result;
-            })
+            }),
         );
-    }
+    };
 
     protected readonly String = String;
 
-    public onMassActionComplete(success: boolean): void {
-    }
-
+    public onMassActionComplete(success: boolean): void {}
 }

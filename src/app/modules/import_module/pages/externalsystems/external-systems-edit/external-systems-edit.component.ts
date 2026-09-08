@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -23,7 +30,7 @@ import {
     InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent
+    RowComponent,
 } from '@coreui/angular';
 import { AsyncPipe } from '@angular/common';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
@@ -32,10 +39,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import {
-    MultiSelectOptgroupComponent
-} from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { MultiSelectOptgroupComponent } from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
@@ -46,11 +51,17 @@ import {
     ExternalSystemConnect,
     ExternalSystemGet,
     ExternalSystemPost,
-    IdoitObjectTypeResult
+    IdoitObjectTypeResult,
 } from '../external-systems.interface';
 import { Subscription } from 'rxjs';
-import { SelectItemOptionGroup, SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import { GenericIdResponse, GenericValidationError } from '../../../../../generic-responses';
+import {
+    SelectItemOptionGroup,
+    SelectKeyValue,
+} from '../../../../../layouts/primeng/select.interface';
+import {
+    GenericIdResponse,
+    GenericValidationError,
+} from '../../../../../generic-responses';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
@@ -61,11 +72,9 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { HistoryService } from '../../../../../history.service';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import {
-    RegexHelperTooltipComponent
-} from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { RegexHelperTooltipComponent } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { ExternalSystems } from '../external-systems.enum';
-import { MultiSelectChangeEvent } from 'primeng/multiselect';
+import { MultiSelectChangeEvent } from '@openng/optimus-ui/multiselect';
 
 @Component({
     selector: 'oitc-external-systems-edit',
@@ -111,11 +120,11 @@ import { MultiSelectChangeEvent } from 'primeng/multiselect';
         XsButtonDirective,
         RouterLink,
         FormLoaderComponent,
-        RegexHelperTooltipComponent
+        RegexHelperTooltipComponent,
     ],
     templateUrl: './external-systems-edit.component.html',
     styleUrl: './external-systems-edit.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
     private id: number = 0;
@@ -132,41 +141,41 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
     public objectTypes: IdoitObjectTypeResult[] = [];
 
     public errors: GenericValidationError | null = null;
-    public readonly PermissionsService: PermissionsService = inject(PermissionsService);
+    public readonly PermissionsService: PermissionsService =
+        inject(PermissionsService);
     public readonly SystemnameService = inject(SystemnameService);
-
 
     protected readonly ExternalSystemTypes = [
         {
             key: ExternalSystems.Idoit,
             value: this.TranslocoService.translate('i-doit System'),
-            placeholder: 'i-doit.system/src/jsonrpc.php'
+            placeholder: 'i-doit.system/src/jsonrpc.php',
         },
         {
             key: ExternalSystems.Itop,
             value: this.TranslocoService.translate('iTop System'),
-            placeholder: 'itop/webservices/rest.php?version=1.3'
+            placeholder: 'itop/webservices/rest.php?version=1.3',
         },
         {
             key: ExternalSystems.Proxmox,
             value: this.TranslocoService.translate('Proxmox VE'),
-            placeholder: 'proxmox.example.com:8006'
-        }
+            placeholder: 'proxmox.example.com:8006',
+        },
     ];
 
     protected readonly InterfaceTypes = [
         {
             key: 'custom',
-            value: this.TranslocoService.translate('Custom')
+            value: this.TranslocoService.translate('Custom'),
         },
         {
             key: 'PhysicalInterface',
-            value: this.TranslocoService.translate('PhysicalInterface')
+            value: this.TranslocoService.translate('PhysicalInterface'),
         },
         {
             key: 'LogicalInterface',
-            value: this.TranslocoService.translate('LogicalInterface')
-        }
+            value: this.TranslocoService.translate('LogicalInterface'),
+        },
     ];
 
     // By default, we select the Idoit URL placeholder
@@ -178,8 +187,7 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
     public connectMessage: string = '';
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {
-    }
+    constructor(private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));
@@ -187,54 +195,66 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
     }
 
     public loadContainers = (): void => {
-        this.subscriptions.add(this.ContainersService.loadContainersByString({} as ContainersLoadContainersByStringParams)
-            .subscribe((result: SelectKeyValue[]) => {
+        this.subscriptions.add(
+            this.ContainersService.loadContainersByString(
+                {} as ContainersLoadContainersByStringParams,
+            ).subscribe((result: SelectKeyValue[]) => {
                 this.containers = result;
                 this.cdr.markForCheck();
-            }));
-    }
+            }),
+        );
+    };
 
     public loadExternalSystem() {
-        this.subscriptions.add(this.ExternalSystemsService.getEdit(this.id)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ExternalSystemsService.getEdit(this.id).subscribe((result) => {
                 //Fire on page load
                 this.post = result.externalSystem;
                 this.loadContainers();
                 this.checkConnection();
                 this.loadHostgroupContainers();
 
-                const foundSystem = this.ExternalSystemTypes.find(item => item.key === result.externalSystem.system_type);
+                const foundSystem = this.ExternalSystemTypes.find(
+                    (item) => item.key === result.externalSystem.system_type,
+                );
                 if (foundSystem) {
                     this.url_placeholder = foundSystem.placeholder;
                 }
-                
+
                 this.cdr.markForCheck();
-            }));
+            }),
+        );
     }
 
     public checkConnection() {
-        this.subscriptions.add(this.ExternalSystemsService.testConnection(this.post)
-            .subscribe((result: ExternalSystemConnect) => {
-                this.connectStatus = result.status.status;
-                if (!this.connectStatus && result.status.msg) {
-                    this.connectMessage = result.status.msg.message;
-                }
-                if (this.connectStatus) {
-                    this.objectTypes = result.status.result;
-                    this.objectTypesForOptionGroup = this.ExternalSystemsService.parseElementsForOptionGroup(this.objectTypes);
-                }
-                this.cdr.markForCheck();
-            }));
+        this.subscriptions.add(
+            this.ExternalSystemsService.testConnection(this.post).subscribe(
+                (result: ExternalSystemConnect) => {
+                    this.connectStatus = result.status.status;
+                    if (!this.connectStatus && result.status.msg) {
+                        this.connectMessage = result.status.msg.message;
+                    }
+                    if (this.connectStatus) {
+                        this.objectTypes = result.status.result;
+                        this.objectTypesForOptionGroup =
+                            this.ExternalSystemsService.parseElementsForOptionGroup(
+                                this.objectTypes,
+                            );
+                    }
+                    this.cdr.markForCheck();
+                },
+            ),
+        );
     }
 
     public addCustomMapping() {
         this.post.custom_data.custom_mappings.push({
-            'classname': '',
-            'interface_type': 'custom',
-            'hostname': '',
-            'address': '',
-            'description': '',
-            'software': ''
+            classname: '',
+            interface_type: 'custom',
+            hostname: '',
+            address: '',
+            description: '',
+            software: '',
         });
     }
 
@@ -244,10 +264,10 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
 
     public addCustomHostgroupMapping() {
         this.post.custom_data.hostgroup_mappings.push({
-            'classname': '',
-            'name_regex': '',
-            'ci_regex': '',
-            'container_id': 0
+            classname: '',
+            name_regex: '',
+            ci_regex: '',
+            container_id: 0,
         });
     }
 
@@ -257,28 +277,40 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
 
     public loadHostgroupContainers() {
         if (this.post.container_id) {
-            this.subscriptions.add(this.ExternalSystemsService.loadHostgroupContainers(this.post.container_id)
-                .subscribe((result: SelectKeyValue[]) => {
+            this.subscriptions.add(
+                this.ExternalSystemsService.loadHostgroupContainers(
+                    this.post.container_id,
+                ).subscribe((result: SelectKeyValue[]) => {
                     this.hostgroup_containers = result;
                     this.cdr.markForCheck();
-                }));
+                }),
+            );
         }
     }
 
     public submit() {
-        this.subscriptions.add(this.ExternalSystemsService.edit(this.post)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.ExternalSystemsService.edit(this.post).subscribe((result) => {
                 this.cdr.markForCheck();
                 if (result.success) {
                     const response = result.data as GenericIdResponse;
-                    const title = this.TranslocoService.translate('External system');
-                    const msg = this.TranslocoService.translate('updated successfully');
-                    const url = ['import_module', 'ExternalSystems', 'edit', response.id];
+                    const title =
+                        this.TranslocoService.translate('External system');
+                    const msg = this.TranslocoService.translate(
+                        'updated successfully',
+                    );
+                    const url = [
+                        'import_module',
+                        'ExternalSystems',
+                        'edit',
+                        response.id,
+                    ];
 
                     this.notyService.genericSuccess(msg, title, url);
 
-
-                    this.HistoryService.navigateWithFallback(['/import_module/ExternalSystems/index']);
+                    this.HistoryService.navigateWithFallback([
+                        '/import_module/ExternalSystems/index',
+                    ]);
                     this.notyService.scrollContentDivToTop();
                     return;
                 }
@@ -289,8 +321,8 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.errors = errorResponse;
                 }
-            }));
-
+            }),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -299,11 +331,13 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
 
     public onExternalSystemTypeChange(selectedSystem: MultiSelectChangeEvent) {
         // Find placeholder by key
-        const foundSystem = this.ExternalSystemTypes.find(item => item.key === selectedSystem.value);
+        const foundSystem = this.ExternalSystemTypes.find(
+            (item) => item.key === selectedSystem.value,
+        );
         if (foundSystem) {
             this.url_placeholder = foundSystem.placeholder;
         }
-        this.cdr.markForCheck()
+        this.cdr.markForCheck();
     }
 
     protected readonly ExternalSystems = ExternalSystems;

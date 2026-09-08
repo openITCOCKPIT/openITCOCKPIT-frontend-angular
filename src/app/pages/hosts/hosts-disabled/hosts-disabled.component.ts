@@ -1,9 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
 import {
     CardBodyComponent,
     CardComponent,
@@ -23,7 +28,7 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
 } from '@coreui/angular';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
@@ -32,34 +37,35 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 
-
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { AsyncPipe } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import {
-    QueryHandlerCheckerComponent
-} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
-import {
-    RegexHelperTooltipComponent
-} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { QueryHandlerCheckerComponent } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+import { RegexHelperTooltipComponent } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-
+import {
+    TranslocoDirective,
+    TranslocoPipe,
+    TranslocoService,
+} from '@jsverse/transloco';
 
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HoststatusSimpleIconComponent } from '../hoststatus-simple-icon/hoststatus-simple-icon.component';
-import { getDefaultHostsDisabledParams, HostObject, HostsDisabledParams, HostsDisabledRoot } from '../hosts.interface';
+import {
+    getDefaultHostsDisabledParams,
+    HostObject,
+    HostsDisabledParams,
+    HostsDisabledRoot,
+} from '../hosts.interface';
 import { SelectKeyValue } from '../../../layouts/primeng/select.interface';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -121,15 +127,15 @@ import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enabl
         RouterLink,
         HoststatusSimpleIconComponent,
         EnableModalComponent,
-        AsyncPipe
+        AsyncPipe,
     ],
     templateUrl: './hosts-disabled.component.html',
     styleUrl: './hosts-disabled.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService}, // Inject the ServicesService into the DeleteAllModalComponent
-        {provide: ENABLE_SERVICE_TOKEN, useClass: HostsService},
+        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService }, // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: ENABLE_SERVICE_TOKEN, useClass: HostsService },
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HostsDisabledComponent implements OnInit, OnDestroy {
     // Filter vars
@@ -147,21 +153,23 @@ export class HostsDisabledComponent implements OnInit, OnDestroy {
     public readonly PermissionsService = inject(PermissionsService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private readonly TranslocoService: TranslocoService =
+        inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
-    private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
+    private SelectionServiceService: SelectionServiceService = inject(
+        SelectionServiceService,
+    );
     private readonly modalService = inject(ModalService);
     private cdr = inject(ChangeDetectorRef);
-
 
     public ngOnInit() {
         this.loadHosts();
 
-        this.subscriptions.add(this.HostsService.getSatellites()
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostsService.getSatellites().subscribe((result) => {
                 this.cdr.markForCheck();
                 this.satellites = result;
-            })
+            }),
         );
     }
 
@@ -172,12 +180,14 @@ export class HostsDisabledComponent implements OnInit, OnDestroy {
     public loadHosts() {
         this.SelectionServiceService.deselectAll();
 
-        this.subscriptions.add(this.HostsService.getHostsDisabled(this.params)
-            .subscribe((result) => {
-                this.cdr.markForCheck();
+        this.subscriptions.add(
+            this.HostsService.getHostsDisabled(this.params).subscribe(
+                (result) => {
+                    this.cdr.markForCheck();
 
-                this.hosts = result;
-            })
+                    this.hosts = result;
+                },
+            ),
         );
     }
 
@@ -220,23 +230,27 @@ export class HostsDisabledComponent implements OnInit, OnDestroy {
 
         if (host) {
             // User just want to delete a single command
-            items = [{
-                id: Number(host.id),
-                displayName: String(host.hostname)
-            }];
+            items = [
+                {
+                    id: Number(host.id),
+                    displayName: String(host.hostname),
+                },
+            ];
         } else {
             // User clicked on delete selected button
-            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-                return {
-                    id: item.Host.id,
-                    displayName: item.Host.hostname
-                };
-            });
+            items = this.SelectionServiceService.getSelectedItems().map(
+                (item): DeleteAllItem => {
+                    return {
+                        id: item.Host.id,
+                        displayName: item.Host.hostname,
+                    };
+                },
+            );
         }
 
-
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message =
+                this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
             return;
         }
@@ -262,20 +276,25 @@ export class HostsDisabledComponent implements OnInit, OnDestroy {
 
         if (host) {
             // User just want to delete a single command
-            items = [{
-                id: Number(host.id),
-                displayName: String(host.name),
-            }];
+            items = [
+                {
+                    id: Number(host.id),
+                    displayName: String(host.name),
+                },
+            ];
         } else {
-            items = this.SelectionServiceService.getSelectedItems().map((item): DisableItem => {
-                return {
-                    id: item.Host.id,
-                    displayName: item.Host.name
-                };
-            });
+            items = this.SelectionServiceService.getSelectedItems().map(
+                (item): DisableItem => {
+                    return {
+                        id: item.Host.id,
+                        displayName: item.Host.name,
+                    };
+                },
+            );
         }
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message =
+                this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
             return;
         }
@@ -286,5 +305,4 @@ export class HostsDisabledComponent implements OnInit, OnDestroy {
             id: 'enableModal',
         });
     }
-
 }

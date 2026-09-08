@@ -5,12 +5,12 @@ import {
     inject,
     Input,
     OnDestroy,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { PrometheusQueryService } from '../../pages/PrometheusQuery/prometheus-query.service';
 import {
     PrometheusPerformanceDataParams,
-    PrometheusPerformanceDataRoot
+    PrometheusPerformanceDataRoot,
 } from '../../pages/PrometheusQuery/prometheus-query.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -23,8 +23,8 @@ import { TimezoneObject } from '../../../../pages/services/timezone.interface';
 import { debounce } from '../../../../components/debounce.decorator';
 import { PopoverConfigBuilder } from '../../../../components/popover-graph/popover-config-builder';
 import { PopoverGraphService } from '../../../../components/popover-graph/popover-graph.service';
-import { Popover } from 'primeng/popover';
-import { PrimeTemplate } from 'primeng/api';
+import { Popover } from '@openng/optimus-ui/popover';
+import { PrimeTemplate } from '@openng/optimus-ui/api';
 
 const uPlot: any = (_uPlot as any)?.default;
 
@@ -37,11 +37,11 @@ const uPlot: any = (_uPlot as any)?.default;
         FaIconComponent,
         TranslocoDirective,
         Popover,
-        PrimeTemplate
+        PrimeTemplate,
     ],
     templateUrl: './prometheus-popover-graph.component.html',
     styleUrl: './prometheus-popover-graph.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PrometheusPopoverGraphComponent implements OnDestroy {
     private visible: boolean = false;
@@ -63,8 +63,7 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
 
     private cdr = inject(ChangeDetectorRef);
 
-    public constructor(private window: Window) {
-    }
+    public constructor(private window: Window) {}
 
     get service() {
         return this._serviceUuid;
@@ -87,7 +86,7 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
     public _timezone!: TimezoneObject;
 
     public get timezone() {
-        return this._timezone
+        return this._timezone;
     }
 
     @Input()
@@ -107,7 +106,9 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
         }
     }
 
-    private readonly PrometheusQueryService: PrometheusQueryService = inject(PrometheusQueryService);
+    private readonly PrometheusQueryService: PrometheusQueryService = inject(
+        PrometheusQueryService,
+    );
     private perfParams: PrometheusPerformanceDataParams = {
         angular: true,
         end: 0,
@@ -115,7 +116,7 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
         jsTimestamp: 0,
         metric: 'process_cpu_seconds_total',
         promql: '',
-        start: 0
+        start: 0,
     } as PrometheusPerformanceDataParams;
 
     protected _metric: string = '';
@@ -145,8 +146,10 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
         let compareTimestamp: number = new Date().getTime();
         let diffFromStartToNow: number = compareTimestamp - this.startTimestamp;
 
-        let graphEnd = Math.floor((serverTime.getTime() + diffFromStartToNow) / 1000);
-        let graphStart = graphEnd - (3600 * 4);
+        let graphEnd = Math.floor(
+            (serverTime.getTime() + diffFromStartToNow) / 1000,
+        );
+        let graphStart = graphEnd - 3600 * 4;
         this.perfParams.host_uuid = this._hostUuid;
         this.perfParams.start = graphStart;
         this.perfParams.end = graphEnd;
@@ -166,28 +169,31 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
 
     private loadPerfData() {
         this.isLoading = true;
-        this.subscriptions.add(this.PrometheusQueryService.getPerfdata(this.perfParams)
-            .subscribe((perfdata: PrometheusPerformanceDataRoot) => {
-                this.cdr.markForCheck();
-                if (perfdata.performance_data && perfdata.performance_data.length > 4) {
-                    this.perfData = perfdata.performance_data.slice(0, 4);
-                } else {
-                    this.perfData = perfdata.performance_data ?? [];
-                }
-
-                setTimeout(() => {
-                    this.renderGraphs();
-                    this.isLoading = false;
+        this.subscriptions.add(
+            this.PrometheusQueryService.getPerfdata(this.perfParams).subscribe(
+                (perfdata: PrometheusPerformanceDataRoot) => {
                     this.cdr.markForCheck();
-                    // Check position after everything has rendered
+                    if (
+                        perfdata.performance_data &&
+                        perfdata.performance_data.length > 4
+                    ) {
+                        this.perfData = perfdata.performance_data.slice(0, 4);
+                    } else {
+                        this.perfData = perfdata.performance_data ?? [];
+                    }
+
                     setTimeout(() => {
-                        this.graphOverlayPanel.align();
+                        this.renderGraphs();
+                        this.isLoading = false;
                         this.cdr.markForCheck();
+                        // Check position after everything has rendered
+                        setTimeout(() => {
+                            this.graphOverlayPanel.align();
+                            this.cdr.markForCheck();
+                        }, 150);
                     }, 150);
-
-
-                }, 150);
-            })
+                },
+            ),
         );
     }
 
@@ -212,7 +218,11 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
                 title += '...';
             }
 
-            let elm = <HTMLElement>document.getElementById('serviceGraphUPlot-' + this.service + '-' + i);
+            let elm = <HTMLElement>(
+                document.getElementById(
+                    'serviceGraphUPlot-' + this.service + '-' + i,
+                )
+            );
             if (!elm) {
                 console.log('Could not find element for graph');
                 return;
@@ -224,11 +234,10 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
             const colors = GraphDefaults.getColorByIndex(i);
 
             // Setup graph defaults
-            GraphDefaults.title = "";
+            GraphDefaults.title = '';
             GraphDefaults.lineWidth = 2;
 
             GraphDefaults.timezone = this.timezone.user_timezone;
-
 
             // X-Axis min / max
             GraphDefaults.start = this.perfParams.start;
@@ -239,7 +248,7 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
             GraphDefaults.fillColor = colors.fill;
             GraphDefaults.YAxisLabelLength = 100;
 
-            GraphDefaults.height = this.chartHeight;// - 25;  // 27px for label
+            GraphDefaults.height = this.chartHeight; // - 25;  // 27px for label
             GraphDefaults.width = elm.offsetWidth;
             //GraphDefaults.label = this.perfData[i].datasource.name;
             GraphDefaults.label = '';
@@ -253,12 +262,19 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
             options.unit = this.perfData[i].datasource.unit;
             options.legend.show = false;
 
-
             this.cdr.markForCheck();
 
-            if (document.getElementById('serviceGraphUPlot-' + this._serviceUuid + '-' + i)) {
+            if (
+                document.getElementById(
+                    'serviceGraphUPlot-' + this._serviceUuid + '-' + i,
+                )
+            ) {
                 try {
-                    let elm = <HTMLElement>document.getElementById('serviceGraphUPlot-' + this.service + '-' + i);
+                    let elm = <HTMLElement>(
+                        document.getElementById(
+                            'serviceGraphUPlot-' + this.service + '-' + i,
+                        )
+                    );
 
                     elm.innerHTML = '';
                     let plot = new uPlot(options, data, elm);
@@ -268,7 +284,6 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
             }
         }
     }
-
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();
@@ -288,5 +303,4 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
             this.visible = false;
         }
     }
-
 }

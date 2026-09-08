@@ -1,8 +1,16 @@
-import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    inject,
+    ViewChild,
+} from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { VmwareSnapshotsWizardGet, VmwareSnapshotsWizardPost } from './vmware-snapshots-wizard.interface';
+import {
+    VmwareSnapshotsWizardGet,
+    VmwareSnapshotsWizardPost,
+} from './vmware-snapshots-wizard.interface';
 import { VmwareSnapshotsWizardService } from './vmware-snapshots-wizard.service';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { FormsModule } from '@angular/forms';
 import {
     AccordionButtonDirective,
@@ -26,7 +34,7 @@ import {
     ModalTitleDirective,
     ModalToggleDirective,
     RowComponent,
-    TemplateIdDirective
+    TemplateIdDirective,
 } from '@coreui/angular';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -35,9 +43,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import {
-    WizardsDynamicfieldsComponent
-} from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
+import { WizardsDynamicfieldsComponent } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.interface';
 
@@ -76,30 +82,34 @@ import { ServicetemplateForWizard } from '../../../../../pages/wizards/wizards.i
         ModalHeaderComponent,
         ModalTitleDirective,
         RowComponent,
-        ModalToggleDirective
+        ModalToggleDirective,
     ],
     templateUrl: './vmware-snapshots.component.html',
     styleUrl: './vmware-snapshots.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VmwareSnapshotsComponent extends WizardsAbstractComponent {
-    @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
-    protected override WizardService: VmwareSnapshotsWizardService = inject(VmwareSnapshotsWizardService);
+    @ViewChild(WizardsDynamicfieldsComponent)
+    childComponentLocal!: WizardsDynamicfieldsComponent;
+    protected override WizardService: VmwareSnapshotsWizardService = inject(
+        VmwareSnapshotsWizardService,
+    );
 
     private readonly modalService = inject(ModalService);
 
     protected override post: VmwareSnapshotsWizardPost = {
-// Default fields from the base wizard
+        // Default fields from the base wizard
         host_id: 0,
         services: [],
-// Fields for the wizard
+        // Fields for the wizard
         vmwareuser: '',
         vmwarepass: '',
         vcenter: '',
-        typeId: 'vmware-snapshots'
+        typeId: 'vmware-snapshots',
     } as VmwareSnapshotsWizardPost;
 
-    protected snapshotServicetemplate: ServicetemplateForWizard = {} as ServicetemplateForWizard;
+    protected snapshotServicetemplate: ServicetemplateForWizard =
+        {} as ServicetemplateForWizard;
 
     static readonly SNAPSHOT_REGEX = '.*';
 
@@ -116,19 +126,26 @@ export class VmwareSnapshotsComponent extends WizardsAbstractComponent {
     }
 
     protected addNewSnapshotServiceToList(): void {
-
         if (this.serviceName) {
-            let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.snapshotServicetemplate.servicetemplatecommandargumentvalues));
+            let servicetemplatecommandargumentvalues = JSON.parse(
+                JSON.stringify(
+                    this.snapshotServicetemplate
+                        .servicetemplatecommandargumentvalues,
+                ),
+            );
             servicetemplatecommandargumentvalues[3].value = this.serviceRegex;
-            this.post.services.push(
-                {
-                    createService: !this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, this.serviceName),
-                    description: '',
-                    host_id: this.post.host_id,
-                    name: this.serviceName,
-                    servicecommandargumentvalues: servicetemplatecommandargumentvalues,
-                    servicetemplate_id: this.snapshotServicetemplate.id
-                });
+            this.post.services.push({
+                createService: !this.isServiceAlreadyPresent(
+                    this.WizardGet.servicesNamesForExistCheck,
+                    this.serviceName,
+                ),
+                description: '',
+                host_id: this.post.host_id,
+                name: this.serviceName,
+                servicecommandargumentvalues:
+                    servicetemplatecommandargumentvalues,
+                servicetemplate_id: this.snapshotServicetemplate.id,
+            });
             this.serviceName = '';
             this.serviceRegex = VmwareSnapshotsComponent.SNAPSHOT_REGEX;
             this.childComponentLocal.cdr.markForCheck();
@@ -142,14 +159,14 @@ export class VmwareSnapshotsComponent extends WizardsAbstractComponent {
 
         this.notyService.genericError();
         this.errors['serviceName'] = {
-            '_empty': this.TranslocoService.translate('This field cannot be left empty')
+            _empty: this.TranslocoService.translate(
+                'This field cannot be left empty',
+            ),
         };
         this.cdr.markForCheck();
-
     }
 
     public openAddSnapshotServiceModal() {
-
         if (this.errors['serviceName']) {
             delete this.errors['serviceName'];
         }
@@ -158,17 +175,20 @@ export class VmwareSnapshotsComponent extends WizardsAbstractComponent {
             show: true,
             id: 'addSnapshotServiceModal',
         });
-    };
+    }
 
     // callback when service name input has changed
 
     public onServiceNameChange(newServiceValue: string) {
-
         this.serviceAlreadyExists = false;
-        if (newServiceValue !== "" && this.isServiceAlreadyPresent(this.WizardGet.servicesNamesForExistCheck, newServiceValue)) {
+        if (
+            newServiceValue !== '' &&
+            this.isServiceAlreadyPresent(
+                this.WizardGet.servicesNamesForExistCheck,
+                newServiceValue,
+            )
+        ) {
             this.serviceAlreadyExists = true;
         }
-
     }
-
 }

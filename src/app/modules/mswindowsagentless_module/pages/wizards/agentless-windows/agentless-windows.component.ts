@@ -1,8 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
-import { AgentlessWindowsWizardGet, AgentlessWindowsWizardPost } from './agentless-windows-wizard.interface';
+import {
+    AgentlessWindowsWizardGet,
+    AgentlessWindowsWizardPost,
+} from './agentless-windows-wizard.interface';
 import { AgentlessWindowsWizardService } from './agentless-windows-wizard.service';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { FormsModule } from '@angular/forms';
 import {
     AccordionButtonDirective,
@@ -14,7 +17,7 @@ import {
     CardTitleDirective,
     FormControlDirective,
     FormLabelDirective,
-    TemplateIdDirective
+    TemplateIdDirective,
 } from '@coreui/angular';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -23,9 +26,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import {
-    WizardsDynamicfieldsComponent
-} from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
+import { WizardsDynamicfieldsComponent } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 
@@ -53,28 +54,30 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
         AccordionComponent,
         AccordionItemComponent,
         TemplateIdDirective,
-        SelectComponent
+        SelectComponent,
     ],
     templateUrl: './agentless-windows.component.html',
     styleUrl: './agentless-windows.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AgentlessWindowsComponent extends WizardsAbstractComponent {
-    protected override WizardService: AgentlessWindowsWizardService = inject(AgentlessWindowsWizardService);
+    protected override WizardService: AgentlessWindowsWizardService = inject(
+        AgentlessWindowsWizardService,
+    );
 
     protected override post: AgentlessWindowsWizardPost = {
-// Default fields from the base wizard
+        // Default fields from the base wizard
         host_id: 0,
         services: [],
-// Fields for the wizard
+        // Fields for the wizard
         winrmuser: '',
         winrmpass: '',
         winrmauthtype: '',
     } as AgentlessWindowsWizardPost;
 
     protected agentlessWindowsAuthTypes: SelectKeyValueString[] = [
-        {key: 'basic', value: 'basic'},
-        {key: 'credssp', value: 'credssp'}
+        { key: 'basic', value: 'basic' },
+        { key: 'credssp', value: 'credssp' },
     ];
 
     protected override wizardLoad(result: AgentlessWindowsWizardGet): void {

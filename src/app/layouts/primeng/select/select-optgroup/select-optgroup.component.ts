@@ -11,37 +11,41 @@ import {
     OnInit,
     Output,
     TemplateRef,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
-import { PrimeTemplate } from 'primeng/api';
+import { PrimeTemplate } from '@openng/optimus-ui/api';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
-import { MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primeng/multiselect';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+    MultiSelectChangeEvent,
+    MultiSelectFilterEvent,
+} from '@openng/optimus-ui/multiselect';
+import {
+    ControlValueAccessor,
+    FormsModule,
+    NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 import { TranslocoService } from '@jsverse/transloco';
 import { debounceTime } from 'rxjs/operators';
-import { Select } from 'primeng/select';
+import { Select } from '@openng/optimus-ui/select';
 
 @Component({
     selector: 'oitc-select-optgroup',
-    imports: [
-        HighlightSearchPipe,
-        PrimeTemplate,
-        FormsModule,
-        Select
-    ],
+    imports: [HighlightSearchPipe, PrimeTemplate, FormsModule, Select],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => SelectOptgroupComponent),
-            multi: true
-        }
+            multi: true,
+        },
     ],
     templateUrl: './select-optgroup.component.html',
     styleUrl: './select-optgroup.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectOptgroupComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class SelectOptgroupComponent
+    implements ControlValueAccessor, OnInit, OnDestroy
+{
     private init: boolean = false;
 
     @ViewChild('selectOptgroup') selectOptgroup: Select | undefined;
@@ -123,7 +127,14 @@ export class SelectOptgroupComponent implements ControlValueAccessor, OnInit, On
      *
      * @group Props
      */
-    @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = 'body';
+    @Input() appendTo:
+        | HTMLElement
+        | ElementRef
+        | TemplateRef<any>
+        | string
+        | null
+        | undefined
+        | any = 'body';
 
     /**
      * If the selected value (current value of ngModel) does not exist in the options, the value will be reset to 0
@@ -131,11 +142,14 @@ export class SelectOptgroupComponent implements ControlValueAccessor, OnInit, On
      *
      * In some rare cases, you might want to disable this check
      */
-    @Input() disableCheckThatEnsuresSelectedValueExistsInOptions: boolean = false;
+    @Input() disableCheckThatEnsuresSelectedValueExistsInOptions: boolean =
+        false;
 
     @Output() ngModelChange = new EventEmitter();
-    @Output() onChange: EventEmitter<MultiSelectChangeEvent> = new EventEmitter<MultiSelectChangeEvent>();
-    @Output() onFilter: EventEmitter<MultiSelectFilterEvent> = new EventEmitter<MultiSelectFilterEvent>();
+    @Output() onChange: EventEmitter<MultiSelectChangeEvent> =
+        new EventEmitter<MultiSelectChangeEvent>();
+    @Output() onFilter: EventEmitter<MultiSelectFilterEvent> =
+        new EventEmitter<MultiSelectFilterEvent>();
     private readonly TranslocoService = inject(TranslocoService);
 
     public searchText: string = '';
@@ -151,22 +165,28 @@ export class SelectOptgroupComponent implements ControlValueAccessor, OnInit, On
     public ngOnInit(): void {
         if (this.debounce) {
             this.Subscriptions.add(
-                this.onChangeSubject.pipe(
-                    debounceTime(this.debounceTime),
-                    distinctUntilChanged()
-                ).subscribe(value => {
-                    this.onChange.emit(value);
-                }));
+                this.onChangeSubject
+                    .pipe(
+                        debounceTime(this.debounceTime),
+                        distinctUntilChanged(),
+                    )
+                    .subscribe((value) => {
+                        this.onChange.emit(value);
+                    }),
+            );
         }
 
         if (this.searchCallback) {
             this.Subscriptions.add(
-                this.searchCallbackSubject.pipe(
-                    debounceTime(this.debounceTime),
-                    distinctUntilChanged()
-                ).subscribe(value => {
-                    this.searchCallback!(this.searchText);
-                }));
+                this.searchCallbackSubject
+                    .pipe(
+                        debounceTime(this.debounceTime),
+                        distinctUntilChanged(),
+                    )
+                    .subscribe((value) => {
+                        this.searchCallback!(this.searchText);
+                    }),
+            );
         }
 
         this.init = true;
@@ -229,7 +249,11 @@ export class SelectOptgroupComponent implements ControlValueAccessor, OnInit, On
 
         this.cdr.markForCheck();
 
-        if (this.ngModel && this._options && !this.disableCheckThatEnsuresSelectedValueExistsInOptions) {
+        if (
+            this.ngModel &&
+            this._options &&
+            !this.disableCheckThatEnsuresSelectedValueExistsInOptions
+        ) {
             // Check if the selected values are still in the options
             let valueStillInOptions = false;
             let key = this.optionValue || 'key';
@@ -259,10 +283,13 @@ export class SelectOptgroupComponent implements ControlValueAccessor, OnInit, On
             if (this.labelSuffix && !element.value.endsWith(this.labelSuffix)) {
                 element.value += this.labelSuffix;
             }
-            if (this.labelPrefix && !element.value.startsWith(this.labelPrefix)) {
+            if (
+                this.labelPrefix &&
+                !element.value.startsWith(this.labelPrefix)
+            ) {
                 element.value = this.labelPrefix + element.value;
             }
-        })
+        });
     }
 
     /**

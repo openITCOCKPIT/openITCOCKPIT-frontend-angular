@@ -6,12 +6,18 @@ import {
     inject,
     input,
     OnDestroy,
-    OnInit
+    OnInit,
 } from '@angular/core';
-import { ConfigurationFilesDbKeys, ConfigurationFilesFieldTypes } from '../../../../configuration-files.enum';
+import {
+    ConfigurationFilesDbKeys,
+    ConfigurationFilesFieldTypes,
+} from '../../../../configuration-files.enum';
 import { Observable, Subscription } from 'rxjs';
 import { GenericValidationError } from '../../../../../../generic-responses';
-import { ConfigurationEditorConfig, ConfigurationEditorField } from '../../../../configuration-files.interface';
+import {
+    ConfigurationEditorConfig,
+    ConfigurationEditorField,
+} from '../../../../configuration-files.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotyService } from '../../../../../../layouts/coreui/noty.service';
 import {
@@ -20,11 +26,11 @@ import {
     FormCheckLabelDirective,
     FormControlDirective,
     FormLabelDirective,
-    FormSelectDirective
+    FormSelectDirective,
 } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../../../../../../components/required-icon/required-icon.component';
 
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -47,14 +53,13 @@ import { FormsModule } from '@angular/forms';
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
-        FormsModule
+        FormsModule,
     ],
     templateUrl: './configuration-file-nagios-cfg.component.html',
     styleUrl: './configuration-file-nagios-cfg.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfigurationFileNagiosCfgComponent implements OnInit, OnDestroy {
-
     public dbKey = input.required<ConfigurationFilesDbKeys>();
     public submit$ = input.required<Observable<void>>();
 
@@ -73,7 +78,9 @@ export class ConfigurationFileNagiosCfgComponent implements OnInit, OnDestroy {
     public config?: ConfigurationEditorConfig;
 
     private subscriptions: Subscription = new Subscription();
-    private readonly ConfigurationFilesService = inject(ConfigurationFilesService);
+    private readonly ConfigurationFilesService = inject(
+        ConfigurationFilesService,
+    );
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
     private readonly notyService = inject(NotyService);
@@ -92,9 +99,11 @@ export class ConfigurationFileNagiosCfgComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         const submit$ = this.submit$();
 
-        this.subscriptions.add(submit$.subscribe(() => {
-            this.submit();
-        }));
+        this.subscriptions.add(
+            submit$.subscribe(() => {
+                this.submit();
+            }),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -102,20 +111,23 @@ export class ConfigurationFileNagiosCfgComponent implements OnInit, OnDestroy {
     }
 
     public loadConfigFile(): void {
-        const dbKey = this.dbKey()
+        const dbKey = this.dbKey();
         if (dbKey) {
-            this.subscriptions.add(this.ConfigurationFilesService.getConfigFileForEditor(dbKey, null).subscribe((result) => {
-                this.cdr.markForCheck();
-                this.config = result.config;
-                this.fields = result.fields;
-            }));
-
+            this.subscriptions.add(
+                this.ConfigurationFilesService.getConfigFileForEditor(
+                    dbKey,
+                    null,
+                ).subscribe((result) => {
+                    this.cdr.markForCheck();
+                    this.config = result.config;
+                    this.fields = result.fields;
+                }),
+            );
         }
     }
 
     private submit() {
         if (this.config && this.fields) {
-
             // Copy the values from the fields array back into the config object.
             for (const field of this.fields) {
                 const fieldName = field.field;
@@ -128,13 +140,21 @@ export class ConfigurationFileNagiosCfgComponent implements OnInit, OnDestroy {
                 }
             }
 
-            this.subscriptions.add(this.ConfigurationFilesService.saveConfigFileFromEditor(this.dbKey(), null, this.config)
-                .subscribe((result) => {
+            this.subscriptions.add(
+                this.ConfigurationFilesService.saveConfigFileFromEditor(
+                    this.dbKey(),
+                    null,
+                    this.config,
+                ).subscribe((result) => {
                     this.cdr.markForCheck();
 
                     if (result.success) {
                         this.notyService.genericSuccess();
-                        this.router.navigate(['/', 'ConfigurationFiles', 'index']);
+                        this.router.navigate([
+                            '/',
+                            'ConfigurationFiles',
+                            'index',
+                        ]);
 
                         return;
                     }
@@ -145,11 +165,11 @@ export class ConfigurationFileNagiosCfgComponent implements OnInit, OnDestroy {
                     if (result) {
                         this.errors = errorResponse;
                     }
-                }));
+                }),
+            );
         }
-
     }
 
-    protected readonly ConfigurationFilesFieldTypes = ConfigurationFilesFieldTypes;
-
+    protected readonly ConfigurationFilesFieldTypes =
+        ConfigurationFilesFieldTypes;
 }

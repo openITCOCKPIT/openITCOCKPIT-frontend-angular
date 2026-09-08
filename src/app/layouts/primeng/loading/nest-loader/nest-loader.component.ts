@@ -1,15 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { SkeletonModule } from 'primeng/skeleton';
+import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 
 @Component({
     selector: 'oitc-nest-loader',
-    imports: [
-        SkeletonModule
-    ],
+    imports: [SkeletonModule],
     templateUrl: './nest-loader.component.html',
     styleUrl: './nest-loader.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NestLoaderComponent {
-
-}
+export class NestLoaderComponent {}

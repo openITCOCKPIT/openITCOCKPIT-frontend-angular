@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ConfigurationFilesService } from '../configuration-files.service';
@@ -16,13 +23,13 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
 } from '@coreui/angular';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { AsyncPipe } from '@angular/common';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { ProgressBarModule } from 'primeng/progressbar';
+import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
 import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({
@@ -46,32 +53,35 @@ import { PermissionsService } from '../../../permissions/permissions.service';
         ProgressBarModule,
         RowComponent,
         ColComponent,
-        AsyncPipe
+        AsyncPipe,
     ],
     templateUrl: './configuration-files-index.component.html',
     styleUrl: './configuration-files-index.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfigurationFilesIndexComponent implements OnInit, OnDestroy {
-
     public configFileCategories?: ConfigurationFilesIndexRoot;
     public IS_CONTAINER: boolean = false;
 
     private subscriptions: Subscription = new Subscription();
-    private readonly ConfigurationFilesService = inject(ConfigurationFilesService);
+    private readonly ConfigurationFilesService = inject(
+        ConfigurationFilesService,
+    );
     public readonly PermissionsService = inject(PermissionsService);
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            //console.log(params);
+        this.subscriptions.add(
+            this.route.queryParams.subscribe((params) => {
+                // Here, params is an object containing the current query parameters.
+                // You can do something with these parameters here.
+                //console.log(params);
 
-            this.loadConfigurationFiles();
-        }));
+                this.loadConfigurationFiles();
+            }),
+        );
     }
 
     public ngOnDestroy(): void {
@@ -84,8 +94,7 @@ export class ConfigurationFilesIndexComponent implements OnInit, OnDestroy {
                 this.configFileCategories = result;
                 this.IS_CONTAINER = result.IS_CONTAINER;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
-
 }

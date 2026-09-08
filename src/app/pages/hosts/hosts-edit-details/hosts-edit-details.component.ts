@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -13,16 +20,15 @@ import {
     FormDirective,
     FormLabelDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-
 
 import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { AsyncPipe, NgClass } from '@angular/common';
 
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
@@ -39,9 +45,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
-import {
-    CheckAttemptsInputComponent
-} from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
+import { CheckAttemptsInputComponent } from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
 import { HistoryService } from '../../../history.service';
 
 @Component({
@@ -77,14 +81,13 @@ import { HistoryService } from '../../../history.service';
         PriorityComponent,
         IntervalInputComponent,
         CheckAttemptsInputComponent,
-        AsyncPipe
+        AsyncPipe,
     ],
     templateUrl: './hosts-edit-details.component.html',
     styleUrl: './hosts-edit-details.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HostsEditDetailsComponent implements OnInit, OnDestroy {
-
     public hostIds: number[] = [];
     public contacts: SelectKeyValue[] = [];
     public contactgroups: SelectKeyValue[] = [];
@@ -96,7 +99,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
     public post: HostEditDetailsPost = {
         Host: {
             hosts_to_containers_sharing: {
-                _ids: []
+                _ids: [],
             },
             description: null,
             host_url: null,
@@ -110,11 +113,11 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
             priority: 0,
             satellite_id: null,
             contacts: {
-                _ids: []
+                _ids: [],
             },
             contactgroups: {
-                _ids: []
-            }
+                _ids: [],
+            },
         },
         keepSharedContainers: false,
         keepContacts: false,
@@ -131,7 +134,7 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
         editContactgroups: false,
         editHostUrl: false,
         editNotes: false,
-        editSatellites: false
+        editSatellites: false,
     };
 
     public readonly PermissionsService = inject(PermissionsService);
@@ -146,23 +149,27 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.isLoading = true;
-        const ids = String(this.route.snapshot.paramMap.get('ids')).split(',').map(Number);
+        const ids = String(this.route.snapshot.paramMap.get('ids'))
+            .split(',')
+            .map(Number);
         if (!ids) {
             // No ids given
             this.router.navigate(['/', 'hosts', 'index']);
         }
 
         if (ids) {
-            this.subscriptions.add(this.HostsService.getEditDetails(ids).subscribe(response => {
-                this.cdr.markForCheck();
-                this.hostIds = ids;
-                this.contacts = response.contacts;
-                this.contactgroups = response.contactgroups;
-                this.sharingContainers = response.sharingContainers;
-                this.satellites = response.satellites;
+            this.subscriptions.add(
+                this.HostsService.getEditDetails(ids).subscribe((response) => {
+                    this.cdr.markForCheck();
+                    this.hostIds = ids;
+                    this.contacts = response.contacts;
+                    this.contactgroups = response.contactgroups;
+                    this.sharingContainers = response.sharingContainers;
+                    this.satellites = response.satellites;
 
-                this.isLoading = false;
-            }));
+                    this.isLoading = false;
+                }),
+            );
         }
     }
 
@@ -229,7 +236,8 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
     }
 
     public toggleEditMaxNumberOfCheckAttempts() {
-        this.post.editMaxNumberOfCheckAttempts = !this.post.editMaxNumberOfCheckAttempts;
+        this.post.editMaxNumberOfCheckAttempts =
+            !this.post.editMaxNumberOfCheckAttempts;
 
         if (!this.post.editMaxNumberOfCheckAttempts) {
             this.post.Host.max_check_attempts = null;
@@ -238,7 +246,8 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
     }
 
     public toggleEditNotificationInterval() {
-        this.post.editNotificationInterval = !this.post.editNotificationInterval;
+        this.post.editNotificationInterval =
+            !this.post.editNotificationInterval;
 
         if (!this.post.editNotificationInterval) {
             this.post.Host.notification_interval = null;
@@ -298,13 +307,17 @@ export class HostsEditDetailsComponent implements OnInit, OnDestroy {
             this.post.Host.tags = this.tagsForSelect.join(',');
         }
 
-        this.subscriptions.add(this.HostsService.saveEditDetails(this.post, this.hostIds)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.HostsService.saveEditDetails(
+                this.post,
+                this.hostIds,
+            ).subscribe((result) => {
                 this.cdr.markForCheck();
                 this.notyService.genericSuccess();
                 this.notyService.scrollContentDivToTop();
                 this.HistoryService.navigateWithFallback(['/hosts/index']);
-            }));
+            }),
+        );
     }
 
     protected readonly Number = Number;

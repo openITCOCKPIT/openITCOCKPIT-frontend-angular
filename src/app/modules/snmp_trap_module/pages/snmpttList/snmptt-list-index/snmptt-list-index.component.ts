@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
     CardBodyComponent,
@@ -16,37 +23,37 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import {
+    TranslocoDirective,
+    TranslocoPipe,
+    TranslocoService,
+} from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { SnmpttService } from '../../../snmptt.service';
 import {
     getDefaultSnmpttEntryIndexParams,
     SnmpttEntry,
     SnmpttEntryIndexParams,
-    SnmpttEntryIndexRoot
+    SnmpttEntryIndexRoot,
 } from '../../../snmptt.interface';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 
 import { NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { DeleteAllItem } from '../../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
@@ -56,19 +63,54 @@ import { IndexPage } from '../../../../../pages.interface';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 
-
 @Component({
     selector: 'oitc-snmptt-list-index',
-    imports: [RouterModule, CardComponent, FaIconComponent, PermissionDirective, TranslocoDirective, CardHeaderComponent, CardTitleDirective, NavComponent, NavItemComponent, XsButtonDirective, CardBodyComponent, ColComponent, ContainerComponent, DebounceDirective, FormControlDirective, FormDirective, FormsModule, InputGroupComponent, InputGroupTextDirective, PaginatorModule, RowComponent, TranslocoPipe, MatSort, MatSortHeader, NoRecordsComponent, PaginateOrScrollComponent, TableDirective, ItemSelectComponent, ActionsButtonComponent, ActionsButtonElementComponent, SelectAllComponent, DeleteAllModalComponent, NgClass, CardFooterComponent, TableLoaderComponent],
+    imports: [
+        RouterModule,
+        CardComponent,
+        FaIconComponent,
+        PermissionDirective,
+        TranslocoDirective,
+        CardHeaderComponent,
+        CardTitleDirective,
+        NavComponent,
+        NavItemComponent,
+        XsButtonDirective,
+        CardBodyComponent,
+        ColComponent,
+        ContainerComponent,
+        DebounceDirective,
+        FormControlDirective,
+        FormDirective,
+        FormsModule,
+        InputGroupComponent,
+        InputGroupTextDirective,
+        PaginatorModule,
+        RowComponent,
+        TranslocoPipe,
+        MatSort,
+        MatSortHeader,
+        NoRecordsComponent,
+        PaginateOrScrollComponent,
+        TableDirective,
+        ItemSelectComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent,
+        SelectAllComponent,
+        DeleteAllModalComponent,
+        NgClass,
+        CardFooterComponent,
+        TableLoaderComponent,
+    ],
     templateUrl: './snmptt-list-index.component.html',
     styleUrl: './snmptt-list-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: SnmpttService} // Inject the CommandsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: SnmpttService }, // Inject the CommandsService into the DeleteAllModalComponent
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SnmpttListIndexComponent implements OnInit, OnDestroy, IndexPage {
-    private SnmpttService = inject(SnmpttService)
+    private SnmpttService = inject(SnmpttService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     public params: SnmpttEntryIndexParams = getDefaultSnmpttEntryIndexParams();
@@ -78,18 +120,22 @@ export class SnmpttListIndexComponent implements OnInit, OnDestroy, IndexPage {
     public selectedItems: DeleteAllItem[] = [];
     private subscriptions: Subscription = new Subscription();
     private readonly modalService = inject(ModalService);
-    private SelectionServiceService: SelectionServiceService = inject(SelectionServiceService);
-    private readonly TranslocoService: TranslocoService = inject(TranslocoService)
+    private SelectionServiceService: SelectionServiceService = inject(
+        SelectionServiceService,
+    );
+    private readonly TranslocoService: TranslocoService =
+        inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
     private cdr = inject(ChangeDetectorRef);
 
-
     public ngOnInit(): void {
-        this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            // Here, params is an object containing the current query parameters.
-            // You can do something with these parameters here.
-            this.loadSnmpttEntries();
-        }));
+        this.subscriptions.add(
+            this.route.queryParams.subscribe((params) => {
+                // Here, params is an object containing the current query parameters.
+                // You can do something with these parameters here.
+                this.loadSnmpttEntries();
+            }),
+        );
     }
 
     public ngOnDestroy() {
@@ -97,11 +143,11 @@ export class SnmpttListIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public loadSnmpttEntries() {
-        this.subscriptions.add(this.SnmpttService.getIndex(this.params)
-            .subscribe((result) => {
+        this.subscriptions.add(
+            this.SnmpttService.getIndex(this.params).subscribe((result) => {
                 this.snmptt_entries = result;
                 this.cdr.markForCheck();
-            })
+            }),
         );
     }
 
@@ -116,7 +162,6 @@ export class SnmpttListIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.params.scroll = change.scroll;
         this.loadSnmpttEntries();
     }
-
 
     // Callback when a filter has changed
     public onFilterChange(event: Event) {
@@ -144,22 +189,27 @@ export class SnmpttListIndexComponent implements OnInit, OnDestroy, IndexPage {
         if (snmpttEntry) {
             // User just want to delete a single command
 
-            items = [{
-                id: snmpttEntry.Snmptt.id,
-                displayName: snmpttEntry.Snmptt.eventname
-            }];
+            items = [
+                {
+                    id: snmpttEntry.Snmptt.id,
+                    displayName: snmpttEntry.Snmptt.eventname,
+                },
+            ];
         } else {
             // User clicked on delete selected button
-            items = this.SelectionServiceService.getSelectedItems().map((item): DeleteAllItem => {
-                return {
-                    id: item.Snmptt.id,
-                    displayName: item.Snmptt.eventname
-                };
-            });
+            items = this.SelectionServiceService.getSelectedItems().map(
+                (item): DeleteAllItem => {
+                    return {
+                        id: item.Snmptt.id,
+                        displayName: item.Snmptt.eventname,
+                    };
+                },
+            );
         }
 
         if (items.length === 0) {
-            const message = this.TranslocoService.translate('No items selected!');
+            const message =
+                this.TranslocoService.translate('No items selected!');
             this.notyService.genericError(message);
             return;
         }

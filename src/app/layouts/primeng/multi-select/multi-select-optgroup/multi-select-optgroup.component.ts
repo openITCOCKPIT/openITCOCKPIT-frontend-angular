@@ -11,18 +11,25 @@ import {
     OnInit,
     Output,
     TemplateRef,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
-import { MultiSelect, MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primeng/multiselect';
-import { SharedModule } from 'primeng/api';
+import {
+    MultiSelect,
+    MultiSelectChangeEvent,
+    MultiSelectFilterEvent,
+} from '@openng/optimus-ui/multiselect';
+import { SharedModule } from '@openng/optimus-ui/api';
 import { TranslocoService } from '@jsverse/transloco';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+    ControlValueAccessor,
+    FormsModule,
+    NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { CheckboxModule } from 'primeng/checkbox';
+import { CheckboxModule } from '@openng/optimus-ui/checkbox';
 import _ from 'lodash';
-
 
 @Component({
     selector: 'oitc-multi-select-optgroup',
@@ -31,22 +38,25 @@ import _ from 'lodash';
         SharedModule,
         FormsModule,
         CheckboxModule,
-        MultiSelect
+        MultiSelect,
     ],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => MultiSelectOptgroupComponent),
-            multi: true
-        }
+            multi: true,
+        },
     ],
     templateUrl: './multi-select-optgroup.component.html',
     styleUrl: './multi-select-optgroup.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnInit, OnDestroy {
-    @ViewChild('multiSelectOptgroup') multiSelectOptgroup: MultiSelect | undefined;
-
+export class MultiSelectOptgroupComponent
+    implements ControlValueAccessor, OnInit, OnDestroy
+{
+    @ViewChild('multiSelectOptgroup') multiSelectOptgroup:
+        | MultiSelect
+        | undefined;
 
     private init: boolean = false;
     @Input() id: string | undefined;
@@ -56,11 +66,10 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
      * Array of the options for the select box
      * @group Props
      */
-        //@Input() options: any[] | undefined;
+    //@Input() options: any[] | undefined;
     private _options: any[] | undefined;
     @Input()
     set options(options) {
-
         // Fix for the issue that the options are not updated when search
         // Probably some JavaScript objects reference issue
         this._options = [];
@@ -75,7 +84,6 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
     get options() {
         return this._options;
     }
-
 
     /**
      * ngModel for the form
@@ -138,7 +146,14 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
      *
      * @group Props
      */
-    @Input() appendTo: HTMLElement | ElementRef | TemplateRef<any> | string | null | undefined | any = 'body';
+    @Input() appendTo:
+        | HTMLElement
+        | ElementRef
+        | TemplateRef<any>
+        | string
+        | null
+        | undefined
+        | any = 'body';
 
     /**
      * If the selected value (current value of ngModel) does not exist in the options, the value will be reset to 0
@@ -146,11 +161,14 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
      *
      * In some rare cases, you might want to disable this check
      */
-    @Input() disableCheckThatEnsuresSelectedValueExistsInOptions: boolean = false;
+    @Input() disableCheckThatEnsuresSelectedValueExistsInOptions: boolean =
+        false;
 
     @Output() ngModelChange = new EventEmitter();
-    @Output() onChange: EventEmitter<MultiSelectChangeEvent> = new EventEmitter<MultiSelectChangeEvent>();
-    @Output() onFilter: EventEmitter<MultiSelectFilterEvent> = new EventEmitter<MultiSelectFilterEvent>();
+    @Output() onChange: EventEmitter<MultiSelectChangeEvent> =
+        new EventEmitter<MultiSelectChangeEvent>();
+    @Output() onFilter: EventEmitter<MultiSelectFilterEvent> =
+        new EventEmitter<MultiSelectFilterEvent>();
     private readonly TranslocoService = inject(TranslocoService);
 
     public searchText: string = '';
@@ -163,29 +181,36 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
         }
 
         if (this.filterPlaceHolder == undefined) {
-            this.filterPlaceHolder = this.TranslocoService.translate('Type to search');
+            this.filterPlaceHolder =
+                this.TranslocoService.translate('Type to search');
         }
     }
 
     public ngOnInit(): void {
         if (this.debounce) {
             this.Subscriptions.add(
-                this.onChangeSubject.pipe(
-                    debounceTime(this.debounceTime),
-                    distinctUntilChanged()
-                ).subscribe(value => {
-                    this.onChange.emit(value);
-                }));
+                this.onChangeSubject
+                    .pipe(
+                        debounceTime(this.debounceTime),
+                        distinctUntilChanged(),
+                    )
+                    .subscribe((value) => {
+                        this.onChange.emit(value);
+                    }),
+            );
         }
 
         if (this.searchCallback) {
             this.Subscriptions.add(
-                this.searchCallbackSubject.pipe(
-                    debounceTime(this.debounceTime),
-                    distinctUntilChanged()
-                ).subscribe(value => {
-                    this.searchCallback!(this.searchText);
-                }));
+                this.searchCallbackSubject
+                    .pipe(
+                        debounceTime(this.debounceTime),
+                        distinctUntilChanged(),
+                    )
+                    .subscribe((value) => {
+                        this.searchCallback!(this.searchText);
+                    }),
+            );
         }
         this.init = true;
     }
@@ -263,18 +288,19 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
 
         this.cdr.markForCheck();
 
-        if (this.ngModel && this._options && !this.disableCheckThatEnsuresSelectedValueExistsInOptions) {
+        if (
+            this.ngModel &&
+            this._options &&
+            !this.disableCheckThatEnsuresSelectedValueExistsInOptions
+        ) {
             let optionGroupValues: (string | number)[] = [];
 
-            this._options.map(obj => {
-                obj.items.map((option: { value: number; }) => {
+            this._options.map((obj) => {
+                obj.items.map((option: { value: number }) => {
                     optionGroupValues.push(option.value);
-                })
+                });
             });
-            this.ngModel = _.intersection(
-                optionGroupValues,
-                this.ngModel
-            );
+            this.ngModel = _.intersection(optionGroupValues, this.ngModel);
 
             setTimeout(() => {
                 // Fix Expression has changed after it was checked 🧻
@@ -302,7 +328,8 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
         // In the future, event.element is maybe relly undefined ad we have to use event.target (??)
         //   const element = event.target as HTMLElement;
 
-        event.element.parentElement.style.width = event.element.parentElement.style.minWidth;
+        event.element.parentElement.style.width =
+            event.element.parentElement.style.minWidth;
 
         // 🩹
         // Fix for long option labels
@@ -312,15 +339,26 @@ export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnIni
         // We try to fix this, when left = 0, we set it to the same position as the select box is.
         if (this.multiSelectOptgroup) {
             // PrimeNG 20
-            if (event.element.parentElement.style.left === '0px' && this.multiSelectOptgroup.appendTo.length !== 0) {
-                const selectBoxPosition = this.multiSelectOptgroup.el.nativeElement.getBoundingClientRect();
-                event.element.parentElement.style.left = selectBoxPosition.x + 'px';
+            if (
+                event.element.parentElement.style.left === '0px' &&
+                this.multiSelectOptgroup.appendTo.length !== 0
+            ) {
+                const selectBoxPosition =
+                    this.multiSelectOptgroup.el.nativeElement.getBoundingClientRect();
+                event.element.parentElement.style.left =
+                    selectBoxPosition.x + 'px';
             }
 
             // PrimeNG 21
-            if ((event.element.parentElement.style.left === '0px' || event.element.parentElement.style.left === '') && this.multiSelectOptgroup.appendTo().length !== 0) {
-                const selectBoxPosition = this.multiSelectOptgroup.el.nativeElement.getBoundingClientRect();
-                event.element.parentElement.style.left = selectBoxPosition.x + 'px';
+            if (
+                (event.element.parentElement.style.left === '0px' ||
+                    event.element.parentElement.style.left === '') &&
+                this.multiSelectOptgroup.appendTo().length !== 0
+            ) {
+                const selectBoxPosition =
+                    this.multiSelectOptgroup.el.nativeElement.getBoundingClientRect();
+                event.element.parentElement.style.left =
+                    selectBoxPosition.x + 'px';
             }
         }
     }
