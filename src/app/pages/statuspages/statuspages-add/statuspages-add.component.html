@@ -43,14 +43,14 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-select
-                        name="container"
-                        id="container"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.container_id"
-                        [options]="containers"
-                        (onChange)="onContainerChange()"
-                        oitcFormError [errors]="errors" errorField="container_id">
+                            name="container"
+                            id="container"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.container_id"
+                            [options]="containers"
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
                     @if (!post.container_id) {
                         <div class="text-warning-glow pt-1">
@@ -269,13 +269,13 @@
                         {{ t('Host groups') }}
                     </label>
                     <oitc-multi-select
-                        name="post.hostgroups._ids"
-                        id="post.hostgroups._ids"
-                        [(ngModel)]="post.selected_hostgroups._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [searchCallback]="loadHostgroups"
-                        [options]="hostgroups">
+                            name="post.hostgroups._ids"
+                            id="post.hostgroups._ids"
+                            [(ngModel)]="post.selected_hostgroups._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadHostgroups"
+                            [options]="hostgroups">
                     </oitc-multi-select>
 
                     @if (post.selected_hostgroups._ids.length > 0) {
@@ -309,25 +309,25 @@
                                                     <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                                 </span>
                                                 <input
-                                                    cFormControl
-                                                    [attr.id]="'hostgroup_alias'+$index"
-                                                    [name]="'hostgroup_alias'+$index"
-                                                    [(ngModel)]="hostgroups[$index]._joinData.display_alias"
-                                                    placeholder="Set alias for hosthostgroup"
+                                                        cFormControl
+                                                        [attr.id]="'hostgroup_alias'+$index"
+                                                        [name]="'hostgroup_alias'+$index"
+                                                        [(ngModel)]="hostgroups[$index]._joinData.display_alias"
+                                                        placeholder="Set alias for hosthostgroup"
                                                 />
                                             </c-input-group>
                                         </c-col>
                                         <c-col lg="4" md="4" xs="6">
                                             <ng-select
-                                                [attr.id]="'hostgroup_tags'+$index"
-                                                [name]="'hostgroup_tags'+$index"
-                                                [items]="[]"
-                                                [(ngModel)]="hostgroups[$index]._joinData.group_tags"
-                                                [addTag]="true"
-                                                [multiple]="true"
-                                                [selectOnTab]="true"
-                                                [placeholder]="'Add tags' | transloco"
-                                                [isOpen]="false">
+                                                    [attr.id]="'hostgroup_tags'+$index"
+                                                    [name]="'hostgroup_tags'+$index"
+                                                    [items]="[]"
+                                                    [(ngModel)]="hostgroups[$index]._joinData.group_tags"
+                                                    [addTag]="true"
+                                                    [multiple]="true"
+                                                    [selectOnTab]="true"
+                                                    [placeholder]="'Add tags' | transloco"
+                                                    [isOpen]="false">
                                             </ng-select>
                                         </c-col>
                                     </c-row>
@@ -342,13 +342,13 @@
                         {{ t('Service groups') }}
                     </label>
                     <oitc-multi-select
-                        name="post.servicegroups._ids"
-                        id="post.servicegroups._ids"
-                        [(ngModel)]="post.selected_servicegroups._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [searchCallback]="loadServicegroups"
-                        [options]="servicegroups">
+                            name="post.servicegroups._ids"
+                            id="post.servicegroups._ids"
+                            [(ngModel)]="post.selected_servicegroups._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadServicegroups"
+                            [options]="servicegroups">
                     </oitc-multi-select>
                     @if (post.selected_servicegroups._ids.length > 0) {
                         <c-row class="pt-2 pb-2">
@@ -380,24 +380,24 @@
                                                 <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                             </span>
                                             <input
-                                                cFormControl
-                                                [attr.id]="'servicegroup_alias'+$index"
-                                                [name]="'servicegroup_alias'+$index"
-                                                [(ngModel)]="servicegroups[$index]._joinData.display_alias"
-                                                placeholder="Set alias for servicegroup">
+                                                    cFormControl
+                                                    [attr.id]="'servicegroup_alias'+$index"
+                                                    [name]="'servicegroup_alias'+$index"
+                                                    [(ngModel)]="servicegroups[$index]._joinData.display_alias"
+                                                    placeholder="Set alias for servicegroup">
                                         </c-input-group>
                                     </c-col>
                                     <c-col lg="4" md="8" xs="6">
                                         <ng-select
-                                            [attr.id]="'servicegroup_tags'+$index"
-                                            [name]="'servicegroup_tags'+$index"
-                                            [items]="[]"
-                                            [(ngModel)]="servicegroups[$index]._joinData.group_tags"
-                                            [addTag]="true"
-                                            [multiple]="true"
-                                            [selectOnTab]="true"
-                                            [placeholder]="'Add tags' | transloco"
-                                            [isOpen]="false">
+                                                [attr.id]="'servicegroup_tags'+$index"
+                                                [name]="'servicegroup_tags'+$index"
+                                                [items]="[]"
+                                                [(ngModel)]="servicegroups[$index]._joinData.group_tags"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="'Add tags' | transloco"
+                                                [isOpen]="false">
                                         </ng-select>
                                     </c-col>
                                 </c-row>
@@ -411,13 +411,13 @@
                         {{ t('Hosts') }}
                     </label>
                     <oitc-multi-select
-                        name="post.hosts._ids"
-                        id="post.hosts._ids"
-                        [(ngModel)]="post.selected_hosts._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [searchCallback]="loadHosts"
-                        [options]="hosts">
+                            name="post.hosts._ids"
+                            id="post.hosts._ids"
+                            [(ngModel)]="post.selected_hosts._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadHosts"
+                            [options]="hosts">
                     </oitc-multi-select>
                 </div>
                 @if (post.selected_hosts._ids.length > 0) {
@@ -450,24 +450,24 @@
                                             <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                         </span>
                                         <input
-                                            cFormControl
-                                            [attr.id]="'host_alias'+$index"
-                                            [name]="'host_alias'+$index"
-                                            [(ngModel)]="hosts[$index]._joinData.display_alias"
-                                            placeholder="Set alias for host">
+                                                cFormControl
+                                                [attr.id]="'host_alias'+$index"
+                                                [name]="'host_alias'+$index"
+                                                [(ngModel)]="hosts[$index]._joinData.display_alias"
+                                                placeholder="Set alias for host">
                                     </c-input-group>
                                 </c-col>
                                 <c-col lg="4" md="8" xs="6">
                                     <ng-select
-                                        [attr.id]="'host_tags'+$index"
-                                        [name]="'host_tags'+$index"
-                                        [items]="[]"
-                                        [(ngModel)]="hosts[$index]._joinData.group_tags"
-                                        [addTag]="true"
-                                        [multiple]="true"
-                                        [selectOnTab]="true"
-                                        [placeholder]="'Add tags' | transloco"
-                                        [isOpen]="false">
+                                            [attr.id]="'host_tags'+$index"
+                                            [name]="'host_tags'+$index"
+                                            [items]="[]"
+                                            [(ngModel)]="hosts[$index]._joinData.group_tags"
+                                            [addTag]="true"
+                                            [multiple]="true"
+                                            [selectOnTab]="true"
+                                            [placeholder]="'Add tags' | transloco"
+                                            [isOpen]="false">
                                     </ng-select>
                                 </c-col>
                             </c-row>
@@ -481,13 +481,13 @@
                         {{ t('Services') }}
                     </label>
                     <oitc-multi-select
-                        name="post.services._ids"
-                        id="post.services._ids"
-                        [(ngModel)]="post.selected_services._ids"
-                        optionValue="key"
-                        optionLabel="value"
-                        [searchCallback]="loadServices"
-                        [options]="services">
+                            name="post.services._ids"
+                            id="post.services._ids"
+                            [(ngModel)]="post.selected_services._ids"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadServices"
+                            [options]="services">
                     </oitc-multi-select>
 
                     @if (post.selected_services._ids.length > 0) {
@@ -520,25 +520,25 @@
                                                 <fa-icon [icon]="['fas', 'tag']" class="text-primary"></fa-icon>
                                             </span>
                                             <input
-                                                cFormControl
-                                                [attr.id]="'service_alias'+$index"
-                                                [name]="'service_alias'+$index"
-                                                [(ngModel)]="services[$index]._joinData.display_alias"
-                                                placeholder="Set alias for service">
+                                                    cFormControl
+                                                    [attr.id]="'service_alias'+$index"
+                                                    [name]="'service_alias'+$index"
+                                                    [(ngModel)]="services[$index]._joinData.display_alias"
+                                                    placeholder="Set alias for service">
                                         </c-input-group>
                                     </c-col>
                                     <c-col lg="4" md="8" xs="6">
                                         <ng-select
-                                            [attr.id]="'service_tags'+$index"
-                                            [name]="'service_tags'+$index"
-                                            [items]="[]"
-                                            [(ngModel)]="services[$index]._joinData.group_tags"
-                                            [addTag]="true"
-                                            [multiple]="true"
-                                            [selectOnTab]="true"
-                                            [placeholder]="'Add tags' | transloco"
-                                            [isOpen]="false"
-                                            oitcFormError [errors]="errors" errorField="tags">
+                                                [attr.id]="'service_tags'+$index"
+                                                [name]="'service_tags'+$index"
+                                                [items]="[]"
+                                                [(ngModel)]="services[$index]._joinData.group_tags"
+                                                [addTag]="true"
+                                                [multiple]="true"
+                                                [selectOnTab]="true"
+                                                [placeholder]="'Add tags' | transloco"
+                                                [isOpen]="false"
+                                                oitcFormError [errors]="errors" errorField="tags">
                                         </ng-select>
                                     </c-col>
                                 </c-row>

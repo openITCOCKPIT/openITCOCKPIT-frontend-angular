@@ -43,7 +43,8 @@ import { AngularDraggableModule } from 'angular2-draggable';
 })
 export class TrafficlightItemComponent
     extends MapItemBaseComponent<Mapgadget>
-    implements OnInit, OnDestroy {
+    implements OnInit, OnDestroy
+{
     public override item: InputSignal<Mapgadget | undefined> =
         input<Mapgadget>();
     public refreshInterval = input<number>(0);
@@ -234,7 +235,7 @@ export class TrafficlightItemComponent
                     'linearGradient',
                     this.svgNamespace,
                 );
-                this.setAttrs(grad, {id: id, x1: x1, y1: y1, x2: x2, y2: y2});
+                this.setAttrs(grad, { id: id, x1: x1, y1: y1, x2: x2, y2: y2 });
                 stops.forEach((s) => {
                     const stop = this.renderer.createElement(
                         'stop',
@@ -313,9 +314,9 @@ export class TrafficlightItemComponent
             const tlBg = createLinearGradient(
                 'tlBg_' + this.item()!.id,
                 [
-                    {offset: '0.02', color: '#323232'},
-                    {offset: '0.03', color: '#333333'},
-                    {offset: '0.3', color: '#323232'},
+                    { offset: '0.02', color: '#323232' },
+                    { offset: '0.03', color: '#333333' },
+                    { offset: '0.3', color: '#323232' },
                 ],
                 0,
                 0,
@@ -327,10 +328,10 @@ export class TrafficlightItemComponent
             const protectorGradient = createLinearGradient(
                 'protectorGradient_' + this.item()!.id,
                 [
-                    {offset: '0', color: '#555555'},
-                    {offset: '0.03', color: '#444444'},
-                    {offset: '0.07', color: '#333333'},
-                    {offset: '0.12', color: '#222222'},
+                    { offset: '0', color: '#555555' },
+                    { offset: '0.03', color: '#444444' },
+                    { offset: '0.07', color: '#333333' },
+                    { offset: '0.12', color: '#222222' },
                 ],
                 0,
                 0,
@@ -342,8 +343,8 @@ export class TrafficlightItemComponent
             const redLight = createRadialGradient(
                 'redLight_' + this.item()!.id,
                 [
-                    {offset: '0%', color: 'brown'},
-                    {offset: '25%', color: 'transparent'},
+                    { offset: '0%', color: 'brown' },
+                    { offset: '25%', color: 'transparent' },
                 ],
                 1,
                 1,
@@ -356,8 +357,8 @@ export class TrafficlightItemComponent
             const yellowLight = createRadialGradient(
                 'yellowLight_' + this.item()!.id,
                 [
-                    {offset: '0%', color: 'orange'},
-                    {offset: '25%', color: 'transparent'},
+                    { offset: '0%', color: 'orange' },
+                    { offset: '25%', color: 'transparent' },
                 ],
                 1,
                 1,
@@ -370,8 +371,8 @@ export class TrafficlightItemComponent
             const greenLight = createRadialGradient(
                 'greenLight_' + this.item()!.id,
                 [
-                    {offset: '0%', color: 'lime'},
-                    {offset: '25%', color: 'transparent'},
+                    { offset: '0%', color: 'lime' },
+                    { offset: '25%', color: 'transparent' },
                 ],
                 1,
                 1,

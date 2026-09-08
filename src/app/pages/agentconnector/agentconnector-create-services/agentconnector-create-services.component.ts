@@ -21,9 +21,7 @@ import {
     AgentconnectorWizardStepsEnum,
     AgentHttpClientErrors,
 } from '../agentconnector.enums';
-import {
-    AgentconnectorWizardProgressbarComponent
-} from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
+import { AgentconnectorWizardProgressbarComponent } from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
 import {
     CardBodyComponent,
     CardComponent,
@@ -84,7 +82,8 @@ import { HttpErrorResponse } from '@angular/common/http';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AgentconnectorCreateServicesComponent
-    implements OnInit, OnDestroy {
+    implements OnInit, OnDestroy
+{
     // Wizard step 5
 
     public isLoading: boolean = true;

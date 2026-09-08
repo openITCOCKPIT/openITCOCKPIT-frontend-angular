@@ -20,9 +20,7 @@ import {
     TranslocoPipe,
     TranslocoService,
 } from '@jsverse/transloco';
-import {
-    QueryHandlerCheckerComponent
-} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+import { QueryHandlerCheckerComponent } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import {
     CardBodyComponent,
     CardComponent,
@@ -59,9 +57,7 @@ import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-sel
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
@@ -69,9 +65,7 @@ import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-moda
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 
 @Component({
     selector: 'oitc-automaps-index',
@@ -119,7 +113,7 @@ import {
     templateUrl: './automaps-index.component.html',
     styleUrl: './automaps-index.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: AutomapsService}, // Inject the AutomapsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: AutomapsService }, // Inject the AutomapsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

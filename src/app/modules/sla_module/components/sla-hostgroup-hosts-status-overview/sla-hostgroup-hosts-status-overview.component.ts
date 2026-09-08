@@ -104,8 +104,8 @@ export class SlaHostgroupHostsStatusOverviewComponent implements OnDestroy {
     public params: SlaHostgroupHostsStatusOverviewParams =
         getDefaultSlaHostgroupHostsStatusOverviewParams();
     protected containers: SelectKeyValue[] = [];
-    public hostsNotAvailable: HostsNotAvailable = {count: 0, ids: []};
-    public hostsNotInSla: HostsNotInSla = {count: 0, ids: []};
+    public hostsNotAvailable: HostsNotAvailable = { count: 0, ids: [] };
+    public hostsNotInSla: HostsNotInSla = { count: 0, ids: [] };
     public slaStatusOverview: SlaStatusOverview[] = [];
     public heatmapData: HeatmapData = {
         rows: 0,

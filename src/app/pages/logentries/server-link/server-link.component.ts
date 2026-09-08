@@ -32,13 +32,13 @@ export class ServerLinkComponent implements AfterViewInit {
         // and this code searches for all a elements with rel="ng" and adds a click event to navigate to the href
         // @ts-ignore
         // https://stackoverflow.com/a/76615277/11885414
-        /* this.ref.nativeElement.querySelectorAll<HTMLAnchorElement>('a[rel="ng"]').forEach((link: any) => {
-             link.addEventListener('click', (evt: any) => {
-                 console.log(link.attributes.getNamedItem('href')?.value);
-                 evt.preventDefault();
-                 void this.router.navigateByUrl(link.attributes.getNamedItem('href')?.value);
-             });
-         }); */
+       /* this.ref.nativeElement.querySelectorAll<HTMLAnchorElement>('a[rel="ng"]').forEach((link: any) => {
+            link.addEventListener('click', (evt: any) => {
+                console.log(link.attributes.getNamedItem('href')?.value);
+                evt.preventDefault();
+                void this.router.navigateByUrl(link.attributes.getNamedItem('href')?.value);
+            });
+        }); */
 
         this.ref.nativeElement.querySelectorAll<HTMLAnchorElement>('a[rel="ng"]').forEach((link: HTMLAnchorElement) => {
             const appPath = link.getAttribute('href'); // e.g. "/services/index?id=106"

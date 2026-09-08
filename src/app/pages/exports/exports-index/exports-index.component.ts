@@ -8,9 +8,7 @@ import {
 } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import {
-    QueryHandlerCheckerComponent
-} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+import { QueryHandlerCheckerComponent } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { RouterLink } from '@angular/router';
 import {
@@ -42,9 +40,7 @@ import {
     ExportValidationResult,
     resetExportValidation,
 } from '../exports.interface';
-import {
-    SatelliteEntityWithSatelliteStatus
-} from '../../../modules/distribute_module/pages/satellites/satellites.interface';
+import { SatelliteEntityWithSatelliteStatus } from '../../../modules/distribute_module/pages/satellites/satellites.interface';
 import { GenericResponseWrapper } from '../../../generic-responses';
 
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';

@@ -81,12 +81,13 @@ echarts.use([
     ],
     templateUrl: './graph-item.component.html',
     styleUrl: './graph-item.component.css',
-    providers: [provideEchartsCore({echarts})],
+    providers: [provideEchartsCore({ echarts })],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GraphItemComponent
     extends MapItemBaseComponent<Mapgadget>
-    implements OnInit, OnDestroy {
+    implements OnInit, OnDestroy
+{
     public override item: InputSignal<Mapgadget | undefined> =
         input<Mapgadget>();
     public refreshInterval = input<number>(0);

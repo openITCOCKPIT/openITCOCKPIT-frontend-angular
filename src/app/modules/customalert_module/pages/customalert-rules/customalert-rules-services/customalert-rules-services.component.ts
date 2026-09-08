@@ -33,9 +33,7 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 
 import { Subscription } from 'rxjs';
 import { CustomalertRulesService } from '../customalert-rules.service';
@@ -85,7 +83,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomalertRulesServicesComponent
-    implements OnInit, OnDestroy, IndexPage {
+    implements OnInit, OnDestroy, IndexPage
+{
     private readonly subscriptions: Subscription = new Subscription();
     private readonly CustomAlertRulesService: CustomalertRulesService = inject(
         CustomalertRulesService,

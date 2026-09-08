@@ -9,9 +9,7 @@ import {
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
 import {
     CardBodyComponent,
     CardComponent,
@@ -50,14 +48,10 @@ import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-sel
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import {
-    QueryHandlerCheckerComponent
-} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+import { QueryHandlerCheckerComponent } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
 
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { ServicestatusSimpleIconComponent } from '../servicestatus-simple-icon/servicestatus-simple-icon.component';
@@ -87,12 +81,8 @@ import {
     ServicesNotMonitoredRoot,
 } from '../services.interface';
 import { PermissionsService } from '../../../permissions/permissions.service';
-import {
-    ServicestatusIconComponent
-} from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
-import {
-    AcknowledgementIconComponent
-} from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
+import { ServicestatusIconComponent } from '../../../components/services/servicestatus-icon/servicestatus-icon.component';
+import { AcknowledgementIconComponent } from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
 import { DowntimeIconComponent } from '../../downtimes/downtime-icon/downtime-icon.component';
 import { PopoverGraphComponent } from '../../../components/popover-graph/popover-graph.component';
 import {
@@ -115,18 +105,12 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 
 import { AcknowledgementTypes } from '../../acknowledgements/acknowledgement-types.enum';
 
-import {
-    ServiceAcknowledgeModalComponent
-} from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
-import {
-    ServiceMaintenanceModalComponent
-} from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
+import { ServiceAcknowledgeModalComponent } from '../../../components/services/service-acknowledge-modal/service-acknowledge-modal.component';
+import { ServiceMaintenanceModalComponent } from '../../../components/services/service-maintenance-modal/service-maintenance-modal.component';
 import { EnableItem } from '../../../layouts/coreui/enable-modal/enable.interface';
 import { ENABLE_SERVICE_TOKEN } from '../../../tokens/enable-injection.token';
 import { EnableModalComponent } from '../../../layouts/coreui/enable-modal/enable-modal.component';
-import {
-    ServiceAddToServicegroupModalComponent
-} from '../../../components/services/service-add-to-servicegroup-modal/service-add-to-servicegroup-modal.component';
+import { ServiceAddToServicegroupModalComponent } from '../../../components/services/service-add-to-servicegroup-modal/service-add-to-servicegroup-modal.component';
 
 @Component({
     selector: 'oitc-services-service-list',
@@ -189,9 +173,9 @@ import {
     templateUrl: './services-service-list.component.html',
     styleUrl: './services-service-list.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService},
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService},
-        {provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService},
+        { provide: DISABLE_SERVICE_TOKEN, useClass: ServicesService },
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService },
+        { provide: ENABLE_SERVICE_TOKEN, useClass: ServicesService },
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -235,8 +219,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
     private readonly ExternalCommandsService = inject(ExternalCommandsService);
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {
-    }
+    constructor(private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
         this.route.queryParams.subscribe((params) => {
@@ -485,7 +468,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
             (item): ServiceNotifcationItem => {
                 return {
                     command:
-                    ExternalCommandsEnum.submitDisableServiceNotifications,
+                        ExternalCommandsEnum.submitDisableServiceNotifications,
                     hostUuid: item.Host.uuid,
                     serviceUuid: item.Service.uuid,
                 };
@@ -524,7 +507,7 @@ export class ServicesServiceListComponent implements OnInit, OnDestroy {
             (item): ServiceNotifcationItem => {
                 return {
                     command:
-                    ExternalCommandsEnum.submitEnableServiceNotifications,
+                        ExternalCommandsEnum.submitEnableServiceNotifications,
                     hostUuid: item.Host.uuid,
                     serviceUuid: item.Service.uuid,
                 };

@@ -50,9 +50,7 @@ import { formatDate } from '@angular/common';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { IndexPage } from '../../../pages.interface';
@@ -102,7 +100,8 @@ import { NotificationReasonTypeComponent } from '../notification-reason-type/not
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationsIndexComponent
-    implements OnInit, OnDestroy, IndexPage {
+    implements OnInit, OnDestroy, IndexPage
+{
     private NotificationsService = inject(NotificationsService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
@@ -138,8 +137,7 @@ export class NotificationsIndexComponent
         );
     }
 
-    public ngOnDestroy(): void {
-    }
+    public ngOnDestroy(): void {}
 
     public loadNotifications() {
         this.params['filter[NotificationHosts.state][]'] =
@@ -212,6 +210,5 @@ export class NotificationsIndexComponent
         }
     }
 
-    public onMassActionComplete(success: boolean): void {
-    }
+    public onMassActionComplete(success: boolean): void {}
 }

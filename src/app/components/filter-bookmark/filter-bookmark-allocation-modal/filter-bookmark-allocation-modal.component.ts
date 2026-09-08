@@ -7,7 +7,7 @@ import { PermissionsService } from '../../../permissions/permissions.service';
 import { FilterBookmarkAllocateModalService } from './filter-bookmark-allocate-modal.service';
 import {
     ButtonCloseDirective,
-    FormControlDirective, FormLabelDirective, ModalBodyComponent, ModalComponent,
+     FormControlDirective, FormLabelDirective, ModalBodyComponent, ModalComponent,
     ModalFooterComponent, ModalHeaderComponent, ModalTitleDirective, ModalToggleDirective, ModalService
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -19,7 +19,7 @@ import { RequiredIconComponent } from '../../required-icon/required-icon.compone
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericValidationError } from '../../../generic-responses';
-import { BookmarksObject, allocatedFilterbookmark } from '../bookmarks.interface';
+import { BookmarksObject ,allocatedFilterbookmark } from '../bookmarks.interface';
 import { ContainersLoadContainersByStringParams } from '../../../pages/containers/containers.interface';
 import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -88,11 +88,11 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
 
             const bm = changes['bookmark'].currentValue;
             this.selectedBookmark = bm;
-            if (!bm.ownership) {
+            if(!bm.ownership) {
                 return;
             }
 
-            if (this.selectedBookmark?.filter_bookmark_allocation && this.selectedBookmark.filter_bookmark_allocation.id) {
+            if(this.selectedBookmark?.filter_bookmark_allocation && this.selectedBookmark.filter_bookmark_allocation.id) {
                 this.mode = 'edit';
 
                 this.filterBookmarkAllocation = {
@@ -113,11 +113,11 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
             }
 
 
-            if (!this.selectedBookmark.filter_bookmark_allocation) {
+            if(!this.selectedBookmark.filter_bookmark_allocation ) {
                 this.mode = 'add';
                 this.filterBookmarkAllocation = {
                     container_id: 0,
-                    filter_bookmark_id: this.selectedBookmark.id,
+                    filter_bookmark_id:this.selectedBookmark.id,
                     name: this.selectedBookmark.name,
                     users: {
                         _ids: []
@@ -187,7 +187,7 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
 
             if (response.success) {
                 const data = response.data.allocation as allocatedFilterbookmark;
-                if (this.filterBookmarkAllocation && data) {
+                if(this.filterBookmarkAllocation && data) {
                     this.filterBookmarkAllocation.id = data.id;
                 }
 
@@ -215,7 +215,6 @@ export class FilterBookmarkAllocationModalComponent implements OnChanges, OnDest
             }
         }));
     }
-
     protected deleteAllocation() {
         if (!this.filterBookmarkAllocation) {
             return;

@@ -25,16 +25,12 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 import { TranslocoDirective } from '@jsverse/transloco';
 import { SkeletonModule } from '@openng/optimus-ui/skeleton';
-import {
-    ToasterLoaderComponent
-} from '../../../../../../../layouts/primeng/loading/toaster-loader/toaster-loader.component';
+import { ToasterLoaderComponent } from '../../../../../../../layouts/primeng/loading/toaster-loader/toaster-loader.component';
 import { EvcServicestatusToast } from '../../../eventcorrelations.interface';
 import { LabelLinkComponent } from '../../../../../../../layouts/coreui/label-link/label-link.component';
 
 import { HoststatusIconComponent } from '../../../../../../../pages/hosts/hoststatus-icon/hoststatus-icon.component';
-import {
-    ServicestatusIconComponent
-} from '../../../../../../../components/services/servicestatus-icon/servicestatus-icon.component';
+import { ServicestatusIconComponent } from '../../../../../../../components/services/servicestatus-icon/servicestatus-icon.component';
 import { TrustAsHtmlPipe } from '../../../../../../../pipes/trust-as-html.pipe';
 
 @Component({

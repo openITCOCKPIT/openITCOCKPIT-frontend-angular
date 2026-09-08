@@ -45,9 +45,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AsyncPipe, DecimalPipe, formatDate } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -103,7 +101,8 @@ import { SlaAvailabilityStatusLogIndexParams } from '../../slas/slas.interface';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SlaAvailabilityStatusHostsLogIndexComponent
-    implements OnInit, OnDestroy, IndexPage {
+    implements OnInit, OnDestroy, IndexPage
+{
     private readonly SlaAvailabilityStatusHostsLogService: SlaAvailabilityStatusHostsLogService =
         inject(SlaAvailabilityStatusHostsLogService);
     private readonly TranslocoService = inject(TranslocoService);

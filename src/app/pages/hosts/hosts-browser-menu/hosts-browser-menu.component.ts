@@ -36,9 +36,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { RouterLink } from '@angular/router';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { HoststatusIconComponent } from '../hoststatus-icon/hoststatus-icon.component';
-import {
-    BrowserMenuLoaderComponent
-} from '../../../layouts/primeng/loading/browser-menu-loader/browser-menu-loader.component';
+import { BrowserMenuLoaderComponent } from '../../../layouts/primeng/loading/browser-menu-loader/browser-menu-loader.component';
 import { HostTypesEnum } from '../hosts.enum';
 
 export interface HostBrowserMenuConfig {

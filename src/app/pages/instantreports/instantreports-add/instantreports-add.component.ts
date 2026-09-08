@@ -60,9 +60,7 @@ import { ServicegroupsService } from '../../servicegroups/servicegroups.service'
 import { UsersService } from '../../users/users.service';
 import { Subscription } from 'rxjs';
 import { ServicesLoadServicesByStringParams } from '../../services/services.interface';
-import {
-    MultiSelectOptgroupComponent
-} from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { MultiSelectOptgroupComponent } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { HistoryService } from '../../../history.service';
 

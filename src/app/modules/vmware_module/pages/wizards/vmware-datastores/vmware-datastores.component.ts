@@ -251,9 +251,9 @@ export class VmwareDatastoresComponent extends WizardsAbstractComponent {
                             host_id: this.post.host_id,
                             name: name,
                             servicecommandargumentvalues:
-                            servicetemplatecommandargumentvalues,
+                                servicetemplatecommandargumentvalues,
                             servicetemplate_id:
-                            this.datastoreServicetemplate.id,
+                                this.datastoreServicetemplate.id,
                         });
                     }
                     this.endDiscovery();

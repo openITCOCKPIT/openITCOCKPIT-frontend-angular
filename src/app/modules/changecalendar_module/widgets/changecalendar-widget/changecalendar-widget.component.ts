@@ -28,9 +28,7 @@ import {
     EditChangecalendarRoot,
     getDefaultChangeCalendarsIndexParams
 } from '../../pages/changecalendars/changecalendars.interface';
-import {
-    ChangecalendarsCalendarComponent
-} from '../../components/changecalendars-calendar/changecalendars-calendar.component';
+import { ChangecalendarsCalendarComponent } from '../../components/changecalendars-calendar/changecalendars-calendar.component';
 import { CalendarEvent } from '../../../../pages/calendars/calendars.interface';
 import { ChangecalendarsService } from '../../pages/changecalendars/changecalendars.service';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../layouts/primeng/select.interface';

@@ -8,5 +8,4 @@ import { SkeletonModule } from '@openng/optimus-ui/skeleton';
     styleUrl: './nest-loader.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NestLoaderComponent {
-}
+export class NestLoaderComponent {}

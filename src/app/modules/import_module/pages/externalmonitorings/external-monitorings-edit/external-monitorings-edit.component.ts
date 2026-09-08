@@ -24,9 +24,7 @@ import {
     NavItemComponent,
     RowComponent,
 } from '@coreui/angular';
-import {
-    DynamicalFormFieldsComponent
-} from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
+import { DynamicalFormFieldsComponent } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -150,8 +148,7 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
     public containers: SelectKeyValue[] = [];
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {
-    }
+    constructor(private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));

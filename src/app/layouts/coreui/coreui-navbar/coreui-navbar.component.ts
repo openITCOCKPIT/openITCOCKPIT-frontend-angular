@@ -53,13 +53,12 @@ export class CoreuiNavbarComponent implements OnInit, OnDestroy {
         private sidebarService: SidebarService,
         private navigationService: NavigationService,
         private breakpointObserver: BreakpointObserver,
-    ) {
-    }
+    ) {}
 
     //@Input() navItems?: INavData[] = [];
     @Input() dropdownMode: 'path' | 'none' | 'close' = 'path';
-    @Input({transform: booleanAttribute}) groupItems?: boolean;
-    @Input({transform: booleanAttribute}) compact?: boolean;
+    @Input({ transform: booleanAttribute }) groupItems?: boolean;
+    @Input({ transform: booleanAttribute }) compact?: boolean;
     private cdr = inject(ChangeDetectorRef);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly mobileBreakpoint = 767.98; // do not move this line or it is undefined

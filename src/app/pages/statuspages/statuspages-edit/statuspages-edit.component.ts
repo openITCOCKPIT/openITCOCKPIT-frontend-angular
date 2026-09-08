@@ -143,8 +143,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private _router: Router,
-    ) {
-    }
+    ) {}
 
     public ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));
@@ -188,7 +187,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: '', group_tags: null},
+                        _joinData: { display_alias: '', group_tags: null },
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
@@ -200,8 +199,8 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                             typeof selectedHostgroup._joinData.group_tags ===
                             'string'
                                 ? selectedHostgroup._joinData.group_tags.split(
-                                    ',',
-                                )
+                                      ',',
+                                  )
                                 : [];
                     }
                     hostgroupObjects.push(objectEntry);
@@ -232,7 +231,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: '', group_tags: null},
+                        _joinData: { display_alias: '', group_tags: null },
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
@@ -275,7 +274,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: '', group_tags: null},
+                        _joinData: { display_alias: '', group_tags: null },
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
@@ -287,8 +286,8 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                             typeof selectedService._joinData.group_tags ===
                             'string'
                                 ? selectedService._joinData.group_tags.split(
-                                    ',',
-                                )
+                                      ',',
+                                  )
                                 : [];
                     }
                     serviceObjects.push(objectEntry);
@@ -320,7 +319,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                         key: 0,
                         value: '',
                         id: 0,
-                        _joinData: {display_alias: '', group_tags: null},
+                        _joinData: { display_alias: '', group_tags: null },
                     };
                     objectEntry.key = item.key;
                     objectEntry.id = item.key;
@@ -332,8 +331,8 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
                             typeof selectedServicegroup._joinData.group_tags ===
                             'string'
                                 ? selectedServicegroup._joinData.group_tags.split(
-                                    ',',
-                                )
+                                      ',',
+                                  )
                                 : [];
                     }
                     servicegroupsObjects.push(objectEntry);

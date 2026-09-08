@@ -23,9 +23,7 @@ import {
     NavItemComponent,
 } from '@coreui/angular';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import {
-    CheckAttemptsInputComponent
-} from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
+import { CheckAttemptsInputComponent } from '../../../layouts/coreui/check-attempts-input/check-attempts-input.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -177,8 +175,7 @@ export class ServicesAddComponent {
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {
-    }
+    constructor(private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
         this.route.queryParams.subscribe((params) => {
@@ -504,7 +501,7 @@ export class ServicesAddComponent {
 
                 (this.post as any)[field] = (this.servicetemplate as any)[
                     field
-                    ];
+                ];
             }
         }
 
@@ -536,14 +533,14 @@ export class ServicesAddComponent {
             .servicetemplatecommandargumentvalues) {
             this.post.servicecommandargumentvalues.push({
                 commandargument_id:
-                this.servicetemplate.servicetemplatecommandargumentvalues[
-                    index
+                    this.servicetemplate.servicetemplatecommandargumentvalues[
+                        index
                     ].commandargument_id,
                 value: this.servicetemplate
                     .servicetemplatecommandargumentvalues[index].value,
                 commandargument:
-                this.servicetemplate.servicetemplatecommandargumentvalues[
-                    index
+                    this.servicetemplate.servicetemplatecommandargumentvalues[
+                        index
                     ].commandargument,
             });
         }
@@ -553,15 +550,15 @@ export class ServicesAddComponent {
             .servicetemplateeventcommandargumentvalues) {
             this.post.servicecommandargumentvalues.push({
                 commandargument_id:
-                this.servicetemplate
-                    .servicetemplateeventcommandargumentvalues[index]
-                    .commandargument_id,
+                    this.servicetemplate
+                        .servicetemplateeventcommandargumentvalues[index]
+                        .commandargument_id,
                 value: this.servicetemplate
                     .servicetemplateeventcommandargumentvalues[index].value,
                 commandargument:
-                this.servicetemplate
-                    .servicetemplateeventcommandargumentvalues[index]
-                    .commandargument,
+                    this.servicetemplate
+                        .servicetemplateeventcommandargumentvalues[index]
+                        .commandargument,
             });
         }
 

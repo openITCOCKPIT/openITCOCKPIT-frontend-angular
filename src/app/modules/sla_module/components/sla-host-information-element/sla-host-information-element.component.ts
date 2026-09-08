@@ -63,7 +63,8 @@ import { TableLoaderComponent } from '../../../../layouts/primeng/loading/table-
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SlaHostInformationElementComponent
-    implements OnDestroy, OnChanges {
+    implements OnDestroy, OnChanges
+{
     @Input() public hostId: number = 0;
 
     private subscriptions: Subscription = new Subscription();
@@ -82,13 +83,13 @@ export class SlaHostInformationElementComponent
     public isLoading: boolean = true;
 
     protected weekdayNames: { id: number; name: string }[] = [
-        {id: 1, name: this.TranslocoService.translate('Monday')},
-        {id: 2, name: this.TranslocoService.translate('Tuesday')},
-        {id: 3, name: this.TranslocoService.translate('Wednesday')},
-        {id: 4, name: this.TranslocoService.translate('Thursday')},
-        {id: 5, name: this.TranslocoService.translate('Friday')},
-        {id: 6, name: this.TranslocoService.translate('Saturday')},
-        {id: 7, name: this.TranslocoService.translate('Sunday')},
+        { id: 1, name: this.TranslocoService.translate('Monday') },
+        { id: 2, name: this.TranslocoService.translate('Tuesday') },
+        { id: 3, name: this.TranslocoService.translate('Wednesday') },
+        { id: 4, name: this.TranslocoService.translate('Thursday') },
+        { id: 5, name: this.TranslocoService.translate('Friday') },
+        { id: 6, name: this.TranslocoService.translate('Saturday') },
+        { id: 7, name: this.TranslocoService.translate('Sunday') },
     ];
 
     public ngOnDestroy() {

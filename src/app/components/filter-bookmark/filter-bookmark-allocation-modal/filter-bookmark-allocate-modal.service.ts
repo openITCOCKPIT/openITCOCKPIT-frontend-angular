@@ -20,6 +20,7 @@ export class FilterBookmarkAllocateModalService {
     }
 
 
+
     public loadElementsByContainerId(containerId: number, plugin: string, controller: string, action: string): Observable<BookmarkAllocateContainerResponse> {
         const proxyPath = this.proxyPath;
         return this.http.get<any>(`${proxyPath}/FilterBookmarksAllocations/loadElementsByContainerId/${containerId}.json`, {

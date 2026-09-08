@@ -16,9 +16,7 @@ import {
     AgentconnectorWebserverTypes,
     AgentconnectorWizardStepsEnum,
 } from '../agentconnector.enums';
-import {
-    AgentconnectorWizardProgressbarComponent
-} from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
+import { AgentconnectorWizardProgressbarComponent } from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
 import {
     CardBodyComponent,
     CardComponent,
@@ -314,7 +312,7 @@ export class AgentconnectorConfigComponent implements OnInit, OnDestroy {
 
     public onBackButtonClick() {
         this.router.navigate(['/agentconnector/wizard'], {
-            queryParams: {hostId: this.hostId},
+            queryParams: { hostId: this.hostId },
         });
     }
 

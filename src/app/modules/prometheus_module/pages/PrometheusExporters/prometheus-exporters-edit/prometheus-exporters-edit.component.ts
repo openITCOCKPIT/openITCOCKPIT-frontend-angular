@@ -105,15 +105,15 @@ export class PrometheusExportersEditComponent implements OnInit, OnDestroy {
     protected containers: SelectKeyValue[] = [];
     protected errors: GenericValidationError = {} as GenericValidationError;
     protected intervals: SelectKeyValueString[] = [
-        {key: '15s', value: '15 seconds'},
-        {key: '30s', value: '30 seconds'},
-        {key: '1m', value: '1 minute'},
-        {key: '90s', value: '1 minute 30 seconds'},
-        {key: '2m', value: '2 minutes'},
-        {key: '5m', value: '5 minutes'},
-        {key: '10m', value: '10 minutes'},
-        {key: '30m', value: '30 minutes'},
-        {key: '1h', value: '1 hour'},
+        { key: '15s', value: '15 seconds' },
+        { key: '30s', value: '30 seconds' },
+        { key: '1m', value: '1 minute' },
+        { key: '90s', value: '1 minute 30 seconds' },
+        { key: '2m', value: '2 minutes' },
+        { key: '5m', value: '5 minutes' },
+        { key: '10m', value: '10 minutes' },
+        { key: '30m', value: '30 minutes' },
+        { key: '1h', value: '1 hour' },
     ];
 
     public ngOnInit() {

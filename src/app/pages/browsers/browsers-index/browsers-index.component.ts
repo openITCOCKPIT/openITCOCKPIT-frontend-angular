@@ -75,13 +75,9 @@ import {
     TranslocoService,
 } from '@jsverse/transloco';
 import { HostBrowserTabs } from '../../hosts/hosts.enum';
-import {
-    AcknowledgementIconComponent
-} from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
+import { AcknowledgementIconComponent } from '../../acknowledgements/acknowledgement-icon/acknowledgement-icon.component';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
@@ -93,42 +89,24 @@ import {
     FaStackItemSizeDirective,
 } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import {
-    HostAcknowledgeModalComponent
-} from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
-import {
-    HostsAddToHostgroupComponent
-} from '../../../components/hosts/hosts-add-to-hostgroup/hosts-add-to-hostgroup.component';
-import {
-    HostsDisableNotificationsModalComponent
-} from '../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component';
-import {
-    HostsEnableNotificationsModalComponent
-} from '../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component';
-import {
-    HostsMaintenanceModalComponent
-} from '../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
+import { HostAcknowledgeModalComponent } from '../../../components/hosts/host-acknowledge-modal/host-acknowledge-modal.component';
+import { HostsAddToHostgroupComponent } from '../../../components/hosts/hosts-add-to-hostgroup/hosts-add-to-hostgroup.component';
+import { HostsDisableNotificationsModalComponent } from '../../../components/hosts/hosts-disable-notifications-modal/hosts-disable-notifications-modal.component';
+import { HostsEnableNotificationsModalComponent } from '../../../components/hosts/hosts-enable-notifications-modal/hosts-enable-notifications-modal.component';
+import { HostsMaintenanceModalComponent } from '../../../components/hosts/hosts-maintenance-modal/hosts-maintenance-modal.component';
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
-import {
-    QueryHandlerCheckerComponent
-} from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
-import {
-    RegexHelperTooltipComponent
-} from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { QueryHandlerCheckerComponent } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
+import { RegexHelperTooltipComponent } from '../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
-import {
-    ServiceResetChecktimeModalComponent
-} from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
+import { ServiceResetChecktimeModalComponent } from '../../../components/services/service-reset-checktime-modal/service-reset-checktime-modal.component';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
@@ -141,12 +119,8 @@ import {
 import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { HostPieChartComponent } from '../../../components/charts/host-pie-chart/host-pie-chart.component';
 import { ServicePieChartComponent } from '../../../components/charts/service-pie-chart/service-pie-chart.component';
-import {
-    ColumnsConfigExportModalComponent
-} from '../../../layouts/coreui/columns-config-export-modal/columns-config-export-modal.component';
-import {
-    ColumnsConfigImportModalComponent
-} from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
+import { ColumnsConfigExportModalComponent } from '../../../layouts/coreui/columns-config-export-modal/columns-config-export-modal.component';
+import { ColumnsConfigImportModalComponent } from '../../../layouts/coreui/columns-config-import-modal/columns-config-import-modal.component';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { IndexPage } from '../../../pages.interface';
 import { TitleService } from '../../../services/title.service';
@@ -228,8 +202,8 @@ import { TitleService } from '../../../services/title.service';
     templateUrl: './browsers-index.component.html',
     styleUrl: './browsers-index.component.css',
     providers: [
-        {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
-        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService}, // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DISABLE_SERVICE_TOKEN, useClass: HostsService },
+        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService }, // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -363,11 +337,11 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
                         // Update the title.
                         let newTitle: string =
                             this.containers.breadcrumbs[
-                            this.containers.breadcrumbs.length - 1
-                                ].value;
+                                this.containers.breadcrumbs.length - 1
+                            ].value;
                         this.TitleService.setTitle(
                             `${newTitle} | ` +
-                            this.TranslocoService.translate('Browser'),
+                                this.TranslocoService.translate('Browser'),
                         );
                     },
                 ),
@@ -672,7 +646,7 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
             'filter[Hosts.keywords][]': this.filter['Hosts.keywords'],
             'filter[Hosts.not_keywords][]': this.filter['Hosts.not_keywords'],
             'filter[Hoststatus.problem_has_been_acknowledged]':
-            hasBeenAcknowledged,
+                hasBeenAcknowledged,
             'filter[Hoststatus.scheduled_downtime_depth]': inDowntime,
             'filter[Hoststatus.is_hardstate]': state_type,
             'filter[Hosts.address]': this.filter['Hosts.address'],

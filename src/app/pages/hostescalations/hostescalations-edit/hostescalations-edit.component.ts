@@ -125,8 +125,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {
-    }
+    constructor(private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
         const id = Number(this.route.snapshot.paramMap.get('id'));

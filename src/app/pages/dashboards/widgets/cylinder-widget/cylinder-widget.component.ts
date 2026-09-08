@@ -34,7 +34,7 @@ import { ServiceTypesEnum } from '../../../services/services.enum';
 
 
 import { KtdResizeEnd } from '@katoid/angular-grid-layout';
-import { PerformanceWidgetPerfdata } from '../widgets.interface'
+import {PerformanceWidgetPerfdata} from '../widgets.interface'
 import { AnimationEvent } from '@angular/animations';
 
 @Component({
@@ -80,13 +80,13 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
     public isEvcService: boolean = false;
     public label: string = '';
 
-    public width = 0;
+    public width= 0;
     public height = 0;
 
     public showLabel: boolean = false;
     private readonly renderer: Renderer2 = inject(Renderer2);
 
-    public widgetID: number = 0;
+    public widgetID : number = 0;
 
     public override resizeWidget(event?: KtdResizeEnd) {
         this.calcCylinderSize();
@@ -119,7 +119,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
                     this.loadServicesByString('');
                     this.loadMetricsByServiceId();
 
-                    if (response.service.Servicestatus.currentState != undefined) {
+                    if (response.service.Servicestatus.currentState != undefined){
                         this.current_state = response.service.Servicestatus.currentState;
                     }
                 }
@@ -262,13 +262,12 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
     private calcCylinderSize() {
         this.height = this.boxContainer?.nativeElement.offsetHeight;
-        this.width = this.boxContainer?.nativeElement.offsetWidth;
+        this.width = this.boxContainer?.nativeElement.offsetWidth ;
 
-        this.height = Math.max(this.height - 49, 100); //Unit: px
+        this.height = Math.max(this.height - 49,100) ; //Unit: px
 
         this.cdr.markForCheck();
     }
-
     private renderCylinder(): void {
         if (!this.widget || !this.perfdata) {
             return;
@@ -278,7 +277,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         const svg = this.cylinderSvg.nativeElement;
         svg.innerHTML = '';
 
-        let currentVal = setup.metric.value ?? 0;
+        let currentVal  = setup.metric.value ?? 0;
         let unit = setup.metric.unit ?? '%';
         let min = setup.scale.min ?? 0;
         let max = setup.scale.max ?? currentVal
@@ -287,11 +286,11 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
             max = currentVal;
         }
 
-        if (unit == '%' && max == 0) {
+        if ( unit == '%' && max == 0){
             max = 100;
         }
 
-        let percentage: number = (max - min) > 0 ? ((currentVal - min) / (max - min)) * 99 : 0;
+        let percentage : number = (max - min) > 0 ? ((currentVal - min) / (max - min)) * 99 : 0;
         percentage = +Number(percentage);
 
         const currentText = `${Number.isInteger(currentVal) ? currentVal : currentVal.toFixed(2)} ${unit}`;
@@ -325,7 +324,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         const cylinderGroup = this.renderer.createElement('g', 'svg');
         this.renderer.setAttribute(cylinderGroup, 'id', 'cylinder_' + this.widgetID);
         this.renderer.appendChild(svg, cylinderGroup);
-        this.renderer.setAttribute(svg, 'viewBox', `0 0 ${this.width} ${this.height + 25}`);
+        this.renderer.setAttribute(svg, 'viewBox', `0 0 ${this.width} ${this.height+25}`);
 
         const defs = this.renderer.createElement('defs', 'svg');
         this.renderer.appendChild(svg, defs);
@@ -345,7 +344,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
             if (max > 0) {
                 rectY -= ry;
                 pxValue += ry;
-                if (percentage == 0) {
+                if (percentage == 0){
                     topEllipseY -= 10;
                     pxValue -= ry;
                 }
@@ -378,11 +377,11 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         this.createRect(cylinderGroup, x, 0, cylinderWidth, this.height, rx, ry, `url(#fadeGray_${this.widgetID})`, 0.5, 2, '#CECECE', 0.3, 'background_' + this.widgetID);
 
         //Outer Cylinder - center rect
-        this.createEllipse(cylinderGroup, ellipseCx, y, rx, ry, `url(#fadeDarkGray_${this.widgetID})`, 0.1, 2, '#CECECE', 0.2);
+        this.createEllipse(cylinderGroup, ellipseCx, y , rx, ry, `url(#fadeDarkGray_${this.widgetID})`, 0.1, 2, '#CECECE', 0.2 );
 
         //current Label value in cylinder
-        this.createLabelLine(cylinderGroup, x - leftLineLength - 1, topEllipseY - 1, 'left', undefined, leftLineLength);
-        this.createLabel(cylinderGroup, x - leftLineLength - 3, topEllipseY - 1, currentText, fontSize, undefined, 'end');
+        this.createLabelLine(cylinderGroup, x - leftLineLength -1 , topEllipseY-1, 'left', undefined, leftLineLength);
+        this.createLabel(cylinderGroup, x - leftLineLength - 3, topEllipseY-1, currentText, fontSize, undefined, 'end');
 
         //Cylinder current text label
         if (max !== null && max !== 0) {
@@ -390,18 +389,17 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
             this.renderGradientLabels(cylinderGroup, cylinderWidth + x + 2, y, availableHeight, unit, max, min, ticksCount);
         } else {
             // min base lable - 0 label
-            this.createLabelLine(cylinderGroup, cylinderWidth + x + 2, availableHeight);
-            this.createLabel(cylinderGroup, cylinderWidth + x + 18, availableHeight, '0', '13px', undefined);
+            this.createLabelLine(cylinderGroup, cylinderWidth + x + 2, availableHeight );
+            this.createLabel(cylinderGroup, cylinderWidth + x + 18, availableHeight, '0', '13px', undefined );
         }
 
         if (this.showLabel) {
-            this.createLabel(cylinderGroup, ellipseCx, ellipseBottomCy + 18, label, '13px', undefined, 'middle', 'normal', this.label);
+            this.createLabel(cylinderGroup, ellipseCx, ellipseBottomCy+18, label, '13px', undefined, 'middle','normal',this.label);
         }
     }
 
     private createLinearGradient(defs: any, id: string, stops: {
-        offset: string, color: string
-    }[], x1?: number, y1?: number, x2?: number): void {
+        offset: string, color: string }[], x1?: number, y1?: number, x2?: number): void {
         const linearGradient = this.renderer.createElement('linearGradient', 'svg');
         this.renderer.setAttribute(linearGradient, 'id', id);
         if (x1 !== undefined) {
@@ -473,7 +471,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         this.renderer.appendChild(parent, rect);
     }
 
-    private renderGradientLabels(cylinderGroup: any, startX: number, topY: number, bottomY: number, unit: string = '', max: number, min: number, ticksCount: number = 3) {
+    private renderGradientLabels(cylinderGroup: any, startX: number, topY: number, bottomY: number, unit :string  = '' , max: number, min:number , ticksCount: number = 3) {
         const totalHeight = bottomY - topY;
         const numericMin = Number(min);
         const numericMax = Number(max);
@@ -510,44 +508,20 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
         const colorMap: Record<string, { main: any[], dark: any[] }> = {
             Green: {
-                main: [{offset: '0%', color: '#00cc00'}, {offset: '20%', color: '#5BFF5B'}, {
-                    offset: '70%',
-                    color: '#006600'
-                }],
-                dark: [{offset: '0%', color: '#00AD00'}, {offset: '60%', color: '#006600'}, {
-                    offset: '70%',
-                    color: '#005600'
-                }]
+                main: [{offset: '0%', color: '#00cc00'}, {offset: '20%', color: '#5BFF5B'}, {offset: '70%', color: '#006600'}],
+                dark: [{offset: '0%', color: '#00AD00'}, {offset: '60%', color: '#006600'}, {offset: '70%', color: '#005600'}]
             },
             Yellow: {
-                main: [{offset: '0%', color: '#FFCC00'}, {offset: '20%', color: '#FFFF5B'}, {
-                    offset: '70%',
-                    color: '#E5BB00'
-                }],
-                dark: [{offset: '0%', color: '#FFAD00'}, {offset: '60%', color: '#E5BB00'}, {
-                    offset: '70%',
-                    color: '#E2B100'
-                }]
+                main: [{offset: '0%', color: '#FFCC00'}, {offset: '20%', color: '#FFFF5B'}, {offset: '70%', color: '#E5BB00'}],
+                dark: [{offset: '0%', color: '#FFAD00'}, {offset: '60%', color: '#E5BB00'}, {offset: '70%', color: '#E2B100'}]
             },
             Red: {
-                main: [{offset: '0%', color: '#CE0D00'}, {offset: '20%', color: '#FF0000'}, {
-                    offset: '70%',
-                    color: '#BF1600'
-                }],
-                dark: [{offset: '0%', color: '#c91400'}, {offset: '60%', color: '#BF1600'}, {
-                    offset: '70%',
-                    color: '#BF0600'
-                }]
+                main: [{offset: '0%', color: '#CE0D00'}, {offset: '20%', color: '#FF0000'}, {offset: '70%', color: '#BF1600'}],
+                dark: [{offset: '0%', color: '#c91400'}, {offset: '60%', color: '#BF1600'}, {offset: '70%', color: '#BF0600'}]
             },
             Blue: {
-                main: [{offset: '0%', color: '#0006D5'}, {offset: '20%', color: '#1248D5'}, {
-                    offset: '70%',
-                    color: '#0006D5'
-                }],
-                dark: [{offset: '0%', color: '#000674'}, {offset: '20%', color: '#0006B8'}, {
-                    offset: '100%',
-                    color: '#000674'
-                }]
+                main: [{offset: '0%', color: '#0006D5'}, {offset: '20%', color: '#1248D5'}, {offset: '70%', color: '#0006D5'}],
+                dark: [{offset: '0%', color: '#000674'}, {offset: '20%', color: '#0006B8'}, {offset: '100%', color: '#000674'}]
             }
         };
 
@@ -556,7 +530,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         this.createLinearGradient(defs, `fadeDark${stateColor}_${this.widgetID}`, config.dark);
     }
 
-    private createLabel(parent: any, x: number = 0, y: number = 0, content: string, fontSize: string = '11px', color: string = '#888888', textAnchor: string = 'start', fontWeight: string = 'normal', tooltip?: string): void {
+    private createLabel (parent: any, x: number = 0, y: number = 0, content:string , fontSize: string = '11px', color: string = '#888888',textAnchor: string = 'start',fontWeight: string = 'normal',tooltip?:string): void {
 
         const textElement = this.renderer.createElement('text', 'svg');
         this.renderer.setAttribute(textElement, 'x', x.toString());
@@ -578,15 +552,15 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
     }
 
-    private createLabelLine(parent: any, x: number, y: number, postion: string = 'left', color: string = '#666666', length: number = 6): void {
+    private createLabelLine (parent: any, x: number, y: number,postion:string='left',color:string='#666666',length:number = 6): void {
 
         const line = this.renderer.createElement('line', 'svg');
         this.renderer.setAttribute(line, 'x1', (x).toString());
         this.renderer.setAttribute(line, 'y1', y.toString());
-        if (postion == 'right') {
-            this.renderer.setAttribute(line, 'x2', (x - length).toString());
+        if (postion=='right'){
+            this.renderer.setAttribute(line, 'x2', (x-length).toString());
         } else {
-            this.renderer.setAttribute(line, 'x2', (x + length).toString());
+            this.renderer.setAttribute(line, 'x2', (x+length).toString());
 
         }
         this.renderer.setAttribute(line, 'y2', y.toString());

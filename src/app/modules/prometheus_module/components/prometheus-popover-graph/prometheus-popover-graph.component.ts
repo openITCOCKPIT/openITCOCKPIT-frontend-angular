@@ -63,8 +63,7 @@ export class PrometheusPopoverGraphComponent implements OnDestroy {
 
     private cdr = inject(ChangeDetectorRef);
 
-    public constructor(private window: Window) {
-    }
+    public constructor(private window: Window) {}
 
     get service() {
         return this._serviceUuid;

@@ -46,9 +46,7 @@ import {
 import { SelectionServiceService } from '../../../../../layouts/coreui/select-all/selection-service.service';
 import { ImportedhostgroupsService } from '../importedhostgroups.service';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { CoreuiComponent } from '../../../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
@@ -58,9 +56,7 @@ import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/it
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
@@ -129,7 +125,7 @@ import { ExternalSystemsService } from '../../externalsystems/external-systems.s
         ImportITopDataComponent,
     ],
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostgroupsService}, // Inject the ImportedhostgroupsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostgroupsService }, // Inject the ImportedhostgroupsService into the DeleteAllModalComponent
     ],
     templateUrl: './imported-hostgroups-index.component.html',
     styleUrl: './imported-hostgroups-index.component.css',
@@ -160,8 +156,7 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
     private cdr = inject(ChangeDetectorRef);
 
-    constructor() {
-    }
+    constructor() {}
 
     public ngOnInit(): void {
         this.subscriptions.add(
@@ -184,12 +179,12 @@ export class ImportedHostgroupsIndexComponent implements OnInit, OnDestroy {
 
         const importedFilter = this.params[
             'filter[ImportedHostgroups.imported]'
-            ]
+        ]
             ? 1
             : 0;
         const notImportedFilter = this.params[
             'filter[ImportedHostgroups.not_imported]'
-            ]
+        ]
             ? 1
             : 0;
 

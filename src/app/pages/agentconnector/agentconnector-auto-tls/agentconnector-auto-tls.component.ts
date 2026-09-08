@@ -11,9 +11,7 @@ import {
     AgentconnectorWizardStepsEnum,
     AgentHttpClientErrors,
 } from '../agentconnector.enums';
-import {
-    AgentconnectorWizardProgressbarComponent
-} from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
+import { AgentconnectorWizardProgressbarComponent } from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
 
 import {
     CardBodyComponent,
@@ -186,9 +184,9 @@ export class AgentconnectorAutoTlsComponent implements OnInit, OnDestroy {
 
                     if (
                         response.task.status ===
-                        AgentconnectorSatelliteTaskStatus.SatelliteTaskFinishedSuccessfully ||
+                            AgentconnectorSatelliteTaskStatus.SatelliteTaskFinishedSuccessfully ||
                         response.task.status ===
-                        AgentconnectorSatelliteTaskStatus.SatelliteTaskFinishedError
+                            AgentconnectorSatelliteTaskStatus.SatelliteTaskFinishedError
                     ) {
                         // We got a result from the Satellite Server
                         this.cancelSatRequest();
@@ -260,7 +258,7 @@ export class AgentconnectorAutoTlsComponent implements OnInit, OnDestroy {
 
     public onNextButtonClick() {
         this.router.navigate(['/agentconnector/create_services', this.hostId], {
-            queryParams: {testConnection: false},
+            queryParams: { testConnection: false },
         });
     }
 

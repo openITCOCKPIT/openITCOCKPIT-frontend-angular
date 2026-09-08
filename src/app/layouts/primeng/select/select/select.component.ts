@@ -44,7 +44,8 @@ import { Select } from '@openng/optimus-ui/select';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectComponent
-    implements ControlValueAccessor, OnInit, OnDestroy {
+    implements ControlValueAccessor, OnInit, OnDestroy
+{
     private init: boolean = false;
 
     @ViewChild('selectOptgroup') selectOptgroup: Select | undefined;

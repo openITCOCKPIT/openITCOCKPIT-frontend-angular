@@ -80,8 +80,7 @@ export class AcknowledgementIconComponent implements OnInit, OnDestroy {
         }
     }
 
-    public ngOnInit(): void {
-    }
+    public ngOnInit(): void {}
 
     public ngOnDestroy() {
         this.subscriptions.unsubscribe();

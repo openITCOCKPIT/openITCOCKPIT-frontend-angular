@@ -52,7 +52,8 @@ import _ from 'lodash';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MultiSelectComponent
-    implements ControlValueAccessor, OnInit, OnDestroy {
+    implements ControlValueAccessor, OnInit, OnDestroy
+{
     @ViewChild('multiSelectOptgroup') multiSelectOptgroup:
         | MultiSelect
         | undefined;

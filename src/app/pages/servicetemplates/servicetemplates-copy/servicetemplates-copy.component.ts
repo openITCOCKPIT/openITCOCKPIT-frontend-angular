@@ -143,7 +143,7 @@ export class ServicetemplatesCopyComponent implements OnInit, OnDestroy {
             ).subscribe((response) => {
                 this.servicetemplates[
                     index
-                    ].Servicetemplate.servicetemplatecommandargumentvalues =
+                ].Servicetemplate.servicetemplatecommandargumentvalues =
                     response;
                 this.cdr.markForCheck();
             }),

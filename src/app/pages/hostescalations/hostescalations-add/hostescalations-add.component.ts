@@ -119,8 +119,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {
-    }
+    constructor(private route: ActivatedRoute) {}
 
     public ngOnInit(): void {
         this.route.queryParams.subscribe((params) => {
@@ -131,8 +130,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnDestroy(): void {
-    }
+    public ngOnDestroy(): void {}
 
     private getDefaultPost(): HostescalationPost {
         return {

@@ -11,5 +11,4 @@ import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 })
 
 // This loader mimics the optic of the /hosts/browser and /services/browser pages
-export class BrowserLoaderComponent {
-}
+export class BrowserLoaderComponent {}

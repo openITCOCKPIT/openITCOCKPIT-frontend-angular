@@ -269,14 +269,14 @@ export class ScansIndexComponent implements OnInit, OnDestroy {
                                             processResponse.MkProcesses &&
                                             processResponse.MkProcesses[
                                                 typescriptKey
-                                                ]
+                                            ]
                                         ) {
                                             for (const md5hash in processResponse
                                                 .MkProcesses[typescriptKey]) {
                                                 const item =
                                                     processResponse.MkProcesses[
                                                         typescriptKey
-                                                        ][md5hash];
+                                                    ][md5hash];
 
                                                 switch (typescriptKey) {
                                                     case 'ps':
@@ -443,7 +443,7 @@ export class ScansIndexComponent implements OnInit, OnDestroy {
                         ) {
                             for (const md5hash in result.MkProcesses[
                                 typescriptKey
-                                ]) {
+                            ]) {
                                 const item =
                                     result.MkProcesses[typescriptKey][md5hash];
 
@@ -497,7 +497,7 @@ export class ScansIndexComponent implements OnInit, OnDestroy {
                 systemd_units_services: this.systemdSelectedHashes, // dot (.) in post name is a bad idea
             },
             overwriteServicetemplateArguments:
-            this.overwriteServicetemplateArguments,
+                this.overwriteServicetemplateArguments,
         };
 
         this.subscriptions.add(

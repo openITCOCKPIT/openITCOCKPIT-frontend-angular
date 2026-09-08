@@ -70,7 +70,7 @@
                                                 <c-col lg="8" [hidden]="!summaryState.Hoststatus.isInMonitoring"
                                                        class="text-center text-white text-capitalize bg-{{(summaryState.Hoststatus.isHardstate)?summaryState.Hoststatus.humanState:summaryState.Hoststatus.humanState+'-soft'}}">
                                                     <span
-                                                        class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
+                                                            class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
                                                     <fa-icon [icon]="['fas', 'user']"
                                                              [hidden]="!summaryState.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
                                                     <fa-icon [icon]="['fas', 'power-off']"
@@ -148,9 +148,9 @@
                                                         </c-col>
                                                         <c-col lg="11">
                                                             <div
-                                                                class="btn-group btn-group-xs btn-group-justified w-100"
-                                                                role="group" *oitcPermission="['services', 'index']"
-                                                                [hidden]="summaryState.ServiceSummary.total === 0">
+                                                                    class="btn-group btn-group-xs btn-group-justified w-100"
+                                                                    role="group" *oitcPermission="['services', 'index']"
+                                                                    [hidden]="summaryState.ServiceSummary.total === 0">
                                                                 <a class="btn btn-success"
                                                                    [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}"
                                                                    [routerLink]="['/', 'services', 'index']"
@@ -177,10 +177,10 @@
                                                                 </a>
                                                             </div>
                                                             <div
-                                                                class="btn-group btn-group-xs btn-group-justified w-100"
-                                                                role="group"
-                                                                *oitcPermission="['services', 'index']; negate: true"
-                                                                [hidden]="summaryState.ServiceSummary.total === 0">
+                                                                    class="btn-group btn-group-xs btn-group-justified w-100"
+                                                                    role="group"
+                                                                    *oitcPermission="['services', 'index']; negate: true"
+                                                                    [hidden]="summaryState.ServiceSummary.total === 0">
                                                                 <a class="btn btn-success"
                                                                    [ngClass]="{'opacity-25': !summaryState.ServiceSummary.state[0]}">
                                                                     {{ summaryState.ServiceSummary.state[0] }}
@@ -295,7 +295,7 @@
                                                 <c-col lg="8" [hidden]="!summaryState.Hoststatus.isInMonitoring"
                                                        class="text-center text-white text-capitalize bg-{{(summaryState.Hoststatus.isHardstate)?summaryState.Hoststatus.humanState:summaryState.Hoststatus.humanState+'-soft'}}">
                                                     <span
-                                                        class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
+                                                            class="padding-5">{{ summaryState.Hoststatus.humanState }}</span>
                                                     <fa-icon [icon]="['fas', 'user']"
                                                              [hidden]="!summaryState.Hoststatus.problemHasBeenAcknowledged"></fa-icon>
                                                     <fa-icon [icon]="['fas', 'power-off']"
@@ -337,7 +337,7 @@
                                                 <c-col lg="8" [hidden]="!summaryState.Servicestatus.isInMonitoring"
                                                        class="text-center text-white text-capitalize bg-{{(summaryState.Servicestatus.isHardstate)?summaryState.Servicestatus.humanState:summaryState.Servicestatus.humanState+'-soft'}}">
                                                     <span
-                                                        class="padding-5">{{ summaryState.Servicestatus.humanState }}</span>
+                                                            class="padding-5">{{ summaryState.Servicestatus.humanState }}</span>
                                                     <fa-icon [icon]="['fas', 'user']"
                                                              [hidden]="!summaryState.Servicestatus.problemHasBeenAcknowledged"></fa-icon>
                                                     <fa-icon [icon]="['fas', 'power-off']"
@@ -450,7 +450,7 @@
                                                 </c-col>
                                                 <c-col lg="8" class="p-0">
                                                     <div
-                                                        class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                            class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
                                                         {{ summaryState.CumulatedHumanState }}
                                                     </div>
                                                 </c-col>
@@ -693,7 +693,7 @@
                                                 <c-col lg="8" class="p-0"
                                                        [hidden]="summaryState.ServiceSummary.total === 0">
                                                     <div
-                                                        class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                            class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
                                                         {{ summaryState.CumulatedHumanState }}
                                                     </div>
                                                 </c-col>
@@ -844,7 +844,7 @@
                                                         </a>
                                                     </span>
                                                     <span
-                                                        *oitcPermission="['mapmodule', 'mapeditors', 'view']; negate: true">
+                                                            *oitcPermission="['mapmodule', 'mapeditors', 'view']; negate: true">
                                                         {{ summaryState.Map.name }}
                                                     </span>
                                                 </c-col>
@@ -864,7 +864,7 @@
                                                 <c-col lg="8" class="p-0"
                                                        [hidden]="summaryState.HostSummary.total === 0 && summaryState.ServiceSummary.total === 0">
                                                     <div
-                                                        class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                            class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
                                                         {{ summaryState.CumulatedHumanState }}
                                                     </div>
                                                 </c-col>
@@ -1024,7 +1024,7 @@
                                                                     </a>
                                                                 </span>
                                                                 <span
-                                                                    *oitcPermission="['hosts', 'browser']; negate: true">
+                                                                        *oitcPermission="['hosts', 'browser']; negate: true">
                                                                     {{ notOkHost.Host.hostname }}
                                                                 </span>
                                                             </c-col>
@@ -1072,7 +1072,7 @@
                                                                     </a>
                                                                 </span>
                                                                 <span
-                                                                    *oitcPermission="['services', 'browser']; negate: true">
+                                                                        *oitcPermission="['services', 'browser']; negate: true">
                                                                     {{ notOkService.Service.servicename }}
                                                                 </span>
                                                             </c-col>
@@ -1141,7 +1141,7 @@
                                                             </a>
                                                         </span>
                                                         <span
-                                                            *oitcPermission="['statuspages', 'view']; negate: true">
+                                                                *oitcPermission="['statuspages', 'view']; negate: true">
                                                             {{ summaryState.Statuspage.name }}
                                                         </span>
                                                     } @else if (iconType == 'statuspagegroup') {
@@ -1151,7 +1151,7 @@
                                                             </a>
                                                         </span>
                                                         <span
-                                                            *oitcPermission="['statuspagegroups', 'view']; negate: true">
+                                                                *oitcPermission="['statuspagegroups', 'view']; negate: true">
                                                             {{ summaryState.Statuspagegroup.name }}
                                                         </span>
                                                     }
@@ -1181,7 +1181,7 @@
                                                 <c-col lg="8" class="p-0"
                                                        [hidden]="summaryState.HostSummary.total === 0 && summaryState.ServiceSummary.total === 0">
                                                     <div
-                                                        class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
+                                                            class="text-center text-white text-capitalize bg-{{ summaryState.CumulatedHumanState}}">
                                                         {{ summaryState.CumulatedHumanState }}
                                                     </div>
                                                 </c-col>
@@ -1341,7 +1341,7 @@
                                                                     </a>
                                                                 </span>
                                                                 <span
-                                                                    *oitcPermission="['hosts', 'browser']; negate: true">
+                                                                        *oitcPermission="['hosts', 'browser']; negate: true">
                                                                     {{ notOkHost.Host.hostname }}
                                                                 </span>
                                                             </c-col>
@@ -1389,7 +1389,7 @@
                                                                     </a>
                                                                 </span>
                                                                 <span
-                                                                    *oitcPermission="['services', 'browser']; negate: true">
+                                                                        *oitcPermission="['services', 'browser']; negate: true">
                                                                     {{ notOkService.Service.servicename }}
                                                                 </span>
                                                             </c-col>

@@ -9,5 +9,4 @@ import { TableDirective } from '@coreui/angular';
     styleUrl: './toaster-loader.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ToasterLoaderComponent {
-}
+export class ToasterLoaderComponent {}

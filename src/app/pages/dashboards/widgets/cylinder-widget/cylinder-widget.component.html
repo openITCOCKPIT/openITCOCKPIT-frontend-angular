@@ -29,7 +29,7 @@
                     @if (service_id && widget) {
                         <div class="d-flex justify-content-center"
                              (click)="naviagteToBrowser()" [ngClass]="{'cursor-pointer': isLink}">
-                            <svg #cylinderSvg [attr.width]="width" [attr.height]="height"></svg>
+                            <svg #cylinderSvg [attr.width]="width"  [attr.height]="height"></svg>
 
                         </div>
                     }
@@ -89,8 +89,7 @@
                             </c-form-check>
                         </div>
                         <div class="mt-1 text-end">
-                            <button cButton type="button" [disabled]="!service_id || !metric" class="ripple"
-                                    (click)="saveConfig()">
+                            <button cButton type="button" [disabled]="!service_id || !metric"  class="ripple" (click)="saveConfig()">
                                 {{ t('Save') }}
                             </button>
                         </div>

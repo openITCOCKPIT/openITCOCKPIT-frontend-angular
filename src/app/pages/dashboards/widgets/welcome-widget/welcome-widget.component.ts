@@ -52,9 +52,7 @@ export class WelcomeWidgetComponent extends BaseWidgetComponent {
         });
     }
 
-    public override resizeWidget(event: KtdResizeEnd) {
-    }
+    public override resizeWidget(event: KtdResizeEnd) {}
 
-    public override layoutUpdate(event: KtdGridLayout) {
-    }
+    public override layoutUpdate(event: KtdGridLayout) {}
 }

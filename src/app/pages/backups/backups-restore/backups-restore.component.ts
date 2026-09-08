@@ -41,9 +41,7 @@ import { BackupsService } from '../backups.service';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
-import {
-    ReloadInterfaceModalComponent
-} from '../../../layouts/coreui/reload-interface-modal/reload-interface-modal.component';
+import { ReloadInterfaceModalComponent } from '../../../layouts/coreui/reload-interface-modal/reload-interface-modal.component';
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';
 
 @Component({
@@ -77,7 +75,7 @@ import { SelectComponent } from '../../../layouts/primeng/select/select/select.c
     templateUrl: './backups-restore.component.html',
     styleUrl: './backups-restore.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: BackupsService}, // Inject the BackupsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: BackupsService }, // Inject the BackupsService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

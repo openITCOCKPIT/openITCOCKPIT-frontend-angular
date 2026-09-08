@@ -164,15 +164,15 @@ export class MultiSelectItem extends BaseComponent {
 
     @Input() option: any;
 
-    @Input({transform: booleanAttribute}) selected: boolean | undefined;
+    @Input({ transform: booleanAttribute }) selected: boolean | undefined;
 
     @Input() label: string | undefined;
 
-    @Input({transform: booleanAttribute}) disabled: boolean | undefined;
+    @Input({ transform: booleanAttribute }) disabled: boolean | undefined;
 
-    @Input({transform: numberAttribute}) itemSize: number | undefined;
+    @Input({ transform: numberAttribute }) itemSize: number | undefined;
 
-    @Input({transform: booleanAttribute}) focused: boolean | undefined;
+    @Input({ transform: booleanAttribute }) focused: boolean | undefined;
 
     @Input() ariaPosInset: string | undefined;
 
@@ -186,7 +186,7 @@ export class MultiSelectItem extends BaseComponent {
 
     @Input() itemCheckboxIconTemplate: TemplateRef<any> | undefined;
 
-    @Input({transform: booleanAttribute}) highlightOnSelect:
+    @Input({ transform: booleanAttribute }) highlightOnSelect:
         | boolean
         | undefined;
 
@@ -282,9 +282,8 @@ export class MultiSelectItem extends BaseComponent {
                     *ngIf="!selectedItemsTemplate && !_selectedItemsTemplate"
                 >
                     <ng-container *ngIf="display === 'comma'">{{
-                            label() || 'empty'
-                        }}
-                    </ng-container>
+                        label() || 'empty'
+                    }}</ng-container>
                     <ng-container *ngIf="display === 'chip'">
                         <div
                             #token
@@ -348,7 +347,7 @@ export class MultiSelectItem extends BaseComponent {
                         </div>
                         <ng-container
                             *ngIf="!modelValue() || modelValue().length === 0"
-                        >{{ placeholder() || defaultLabel || 'empty' }}
+                            >{{ placeholder() || defaultLabel || 'empty' }}
                         </ng-container>
                     </ng-container>
                 </ng-container>
@@ -368,7 +367,7 @@ export class MultiSelectItem extends BaseComponent {
                     ></ng-container>
                     <ng-container
                         *ngIf="!modelValue() || modelValue().length === 0"
-                    >{{ placeholder() || defaultLabel || 'empty' }}
+                        >{{ placeholder() || defaultLabel || 'empty' }}
                     </ng-container>
                 </ng-container>
             </div>
@@ -698,10 +697,10 @@ export class MultiSelectItem extends BaseComponent {
                                             role="option"
                                         >
                                             <span *ngIf="!groupTemplate">{{
-                                                    getOptionGroupLabel(
-                                                        option.optionGroup
-                                                    )
-                                                }}</span>
+                                                getOptionGroupLabel(
+                                                    option.optionGroup
+                                                )
+                                            }}</span>
                                             <ng-container
                                                 *ngTemplateOutlet="
                                                     $any(groupTemplate);
@@ -796,10 +795,12 @@ export class MultiSelectItem extends BaseComponent {
                                     }"
                                     role="option"
                                 >
-                                    @if (!emptyFilterTemplate &&
-                                    !_emptyFilterTemplate &&
-                                    !emptyTemplate &&
-                                    !_emptyTemplate) {
+                                    @if (
+                                        !emptyFilterTemplate &&
+                                        !_emptyFilterTemplate &&
+                                        !emptyTemplate &&
+                                        !_emptyTemplate
+                                    ) {
                                         {{ emptyFilterMessageLabel }}
                                     } @else {
                                         <ng-container
@@ -875,11 +876,13 @@ export class MultiSelectItem extends BaseComponent {
 })
 export class MultiSelect
     extends BaseComponent
-    implements OnInit,
+    implements
+        OnInit,
         AfterViewInit,
         AfterContentInit,
         AfterViewChecked,
-        ControlValueAccessor {
+        ControlValueAccessor
+{
     /**
      * Unique identifier of the component
      * @group Props
@@ -919,27 +922,27 @@ export class MultiSelect
      * When present, it specifies that the element should be disabled.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) disabled: boolean | undefined;
+    @Input({ transform: booleanAttribute }) disabled: boolean | undefined;
     /**
      * Spans 100% width of the container when enabled.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) fluid: boolean | undefined;
+    @Input({ transform: booleanAttribute }) fluid: boolean | undefined;
     /**
      * When present, it specifies that the component cannot be edited.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) readonly: boolean | undefined;
+    @Input({ transform: booleanAttribute }) readonly: boolean | undefined;
     /**
      * Whether to display options as grouped when nested options are provided.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) group: boolean | undefined;
+    @Input({ transform: booleanAttribute }) group: boolean | undefined;
     /**
      * When specified, displays an input field to filter the items on keyup.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) filter: boolean = true;
+    @Input({ transform: booleanAttribute }) filter: boolean = true;
     /**
      * Defines placeholder of the filter input.
      * @group Props
@@ -954,12 +957,12 @@ export class MultiSelect
      * Specifies the visibility of the options panel.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) overlayVisible: boolean | undefined;
+    @Input({ transform: booleanAttribute }) overlayVisible: boolean | undefined;
     /**
      * Index of the element in tabbing order.
      * @group Props
      */
-    @Input({transform: numberAttribute}) tabindex: number | undefined = 0;
+    @Input({ transform: numberAttribute }) tabindex: number | undefined = 0;
     /**
      * Specifies the input variant of the component.
      * @group Props
@@ -1023,7 +1026,7 @@ export class MultiSelect
      * Decides how many selected item labels to show at most.
      * @group Props
      */
-    @Input({transform: numberAttribute}) selectionLimit: number | undefined;
+    @Input({ transform: numberAttribute }) selectionLimit: number | undefined;
     /**
      * Label to display after exceeding max selected labels e.g. ({0} items selected), defaults "ellipsis" keyword to indicate a text-overflow.
      * @group Props
@@ -1033,7 +1036,7 @@ export class MultiSelect
      * Whether to show the checkbox at header to toggle all items at once.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) showToggleAll: boolean = true;
+    @Input({ transform: booleanAttribute }) showToggleAll: boolean = true;
     /**
      * Text to display when filtering does not return any results.
      * @group Props
@@ -1048,7 +1051,7 @@ export class MultiSelect
      * Clears the filter value when hiding the dropdown.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) resetFilterOnHide: boolean = false;
+    @Input({ transform: booleanAttribute }) resetFilterOnHide: boolean = false;
     /**
      * Icon class of the dropdown icon.
      * @group Props
@@ -1088,7 +1091,7 @@ export class MultiSelect
      * Whether to show the header.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) showHeader: boolean = true;
+    @Input({ transform: booleanAttribute }) showHeader: boolean = true;
     /**
      * When filtering is enabled, filterBy decides which field or fields (comma separated) to search against.
      * @group Props
@@ -1103,23 +1106,23 @@ export class MultiSelect
      * Defines if data is loaded and interacted with in lazy manner.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) lazy: boolean = false;
+    @Input({ transform: booleanAttribute }) lazy: boolean = false;
     /**
      * Whether the data should be loaded on demand during scroll.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) virtualScroll: boolean | undefined;
+    @Input({ transform: booleanAttribute }) virtualScroll: boolean | undefined;
     /**
      * Whether the multiselect is in loading state.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) loading: boolean | undefined =
+    @Input({ transform: booleanAttribute }) loading: boolean | undefined =
         false;
     /**
      * Height of an item in the list for VirtualScrolling.
      * @group Props
      */
-    @Input({transform: numberAttribute}) virtualScrollItemSize:
+    @Input({ transform: numberAttribute }) virtualScrollItemSize:
         | number
         | undefined;
     /**
@@ -1181,7 +1184,7 @@ export class MultiSelect
      * Applies focus to the filter element when the overlay is shown.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) autofocusFilter: boolean = false;
+    @Input({ transform: booleanAttribute }) autofocusFilter: boolean = false;
     /**
      * Defines how the selected items are displayed.
      * @group Props
@@ -1201,12 +1204,12 @@ export class MultiSelect
      * When enabled, a clear icon is displayed to clear the value.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) showClear: boolean = false;
+    @Input({ transform: booleanAttribute }) showClear: boolean = false;
     /**
      * When present, it specifies that the component should automatically get focus on load.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) autofocus: boolean | undefined;
+    @Input({ transform: booleanAttribute }) autofocus: boolean | undefined;
 
     /**
      * @deprecated since v14.2.0, use overlayOptions property instead.
@@ -1359,13 +1362,13 @@ export class MultiSelect
      * This can be usefule when a user filters the options and want to append all results to the current selection.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) appendPreviouslySelected: boolean =
+    @Input({ transform: booleanAttribute }) appendPreviouslySelected: boolean =
         true;
     /**
      * Indicates whether to focus on options when hovering over them, defaults to optionLabel.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) focusOnHover: boolean = true;
+    @Input({ transform: booleanAttribute }) focusOnHover: boolean = true;
     /**
      * Fields used when filtering the options, defaults to optionLabel.
      * @group Props
@@ -1375,17 +1378,17 @@ export class MultiSelect
      * Determines if the option will be selected on focus.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) selectOnFocus: boolean = false;
+    @Input({ transform: booleanAttribute }) selectOnFocus: boolean = false;
     /**
      * Whether to focus on the first visible or selected element when the overlay panel is shown.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) autoOptionFocus: boolean = false;
+    @Input({ transform: booleanAttribute }) autoOptionFocus: boolean = false;
     /**
      * Whether the selected option will be add highlight class.
      * @group Props
      */
-    @Input({transform: booleanAttribute}) highlightOnSelect: boolean = true;
+    @Input({ transform: booleanAttribute }) highlightOnSelect: boolean = true;
     /**
      * Callback to invoke when value changes.
      * @param {MultiSelectChangeEvent} event - Custom change event.
@@ -1513,11 +1516,9 @@ export class MultiSelect
 
     public _filteredOptions: any[] | undefined | null;
 
-    public onModelChange: Function = () => {
-    };
+    public onModelChange: Function = () => {};
 
-    public onModelTouched: Function = () => {
-    };
+    public onModelTouched: Function = () => {};
 
     public valuesAsString: string | undefined;
 
@@ -1525,72 +1526,72 @@ export class MultiSelect
 
     public filtered: boolean | undefined;
 
-    @ContentChild('item', {descendants: false}) itemTemplate:
+    @ContentChild('item', { descendants: false }) itemTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('group', {descendants: false}) groupTemplate:
+    @ContentChild('group', { descendants: false }) groupTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('loader', {descendants: false}) loaderTemplate:
+    @ContentChild('loader', { descendants: false }) loaderTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('header', {descendants: false}) headerTemplate:
+    @ContentChild('header', { descendants: false }) headerTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('filter', {descendants: false}) filterTemplate:
+    @ContentChild('filter', { descendants: false }) filterTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('footer', {descendants: false}) footerTemplate:
+    @ContentChild('footer', { descendants: false }) footerTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('emptyfilter', {descendants: false}) emptyFilterTemplate:
+    @ContentChild('emptyfilter', { descendants: false }) emptyFilterTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('empty', {descendants: false}) emptyTemplate:
+    @ContentChild('empty', { descendants: false }) emptyTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('selecteditems', {descendants: false})
+    @ContentChild('selecteditems', { descendants: false })
     selectedItemsTemplate: TemplateRef<any> | undefined;
 
-    @ContentChild('checkicon', {descendants: false}) checkIconTemplate:
+    @ContentChild('checkicon', { descendants: false }) checkIconTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('loadingicon', {descendants: false}) loadingIconTemplate:
+    @ContentChild('loadingicon', { descendants: false }) loadingIconTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('filtericon', {descendants: false}) filterIconTemplate:
+    @ContentChild('filtericon', { descendants: false }) filterIconTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('removetokenicon', {descendants: false})
+    @ContentChild('removetokenicon', { descendants: false })
     removeTokenIconTemplate: TemplateRef<any> | undefined;
 
-    @ContentChild('chipicon', {descendants: false}) chipIconTemplate:
+    @ContentChild('chipicon', { descendants: false }) chipIconTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('clearicon', {descendants: false}) clearIconTemplate:
+    @ContentChild('clearicon', { descendants: false }) clearIconTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('dropdownicon', {descendants: false}) dropdownIconTemplate:
+    @ContentChild('dropdownicon', { descendants: false }) dropdownIconTemplate:
         | TemplateRef<any>
         | undefined;
 
-    @ContentChild('itemcheckboxicon', {descendants: false})
+    @ContentChild('itemcheckboxicon', { descendants: false })
     itemCheckboxIconTemplate: TemplateRef<any> | undefined;
 
-    @ContentChild('headercheckboxicon', {descendants: false})
+    @ContentChild('headercheckboxicon', { descendants: false })
     headerCheckboxIconTemplate: TemplateRef<any> | undefined;
 
     @ContentChildren(PrimeTemplate) templates: Nullable<
@@ -1770,11 +1771,11 @@ export class MultiSelect
     }
 
     get rootClass() {
-        return this._componentStyle.classes.root({instance: this});
+        return this._componentStyle.classes.root({ instance: this });
     }
 
     get labelClass() {
-        return this._componentStyle.classes.label({instance: this});
+        return this._componentStyle.classes.label({ instance: this });
     }
 
     get emptyMessageLabel(): string {
@@ -1812,8 +1813,8 @@ export class MultiSelect
     get toggleAllAriaLabel() {
         return this.config.translation.aria
             ? this.config.translation.aria[
-                this.allSelected() ? 'selectAll' : 'unselectAll'
-                ]
+                  this.allSelected() ? 'selectAll' : 'unselectAll'
+              ]
             : undefined;
     }
 
@@ -1918,8 +1919,8 @@ export class MultiSelect
 
     chipSelectedItems = computed(() => {
         return isNotEmpty(this.maxSelectedLabels) &&
-        this.modelValue() &&
-        this.modelValue().length > this.maxSelectedLabels
+            this.modelValue() &&
+            this.modelValue().length > this.maxSelectedLabels
             ? this.modelValue().slice(0, this.maxSelectedLabels)
             : this.modelValue();
     });
@@ -1995,12 +1996,12 @@ export class MultiSelect
 
     flatOptions(options) {
         return (options || []).reduce((result, option, index) => {
-            result.push({optionGroup: option, group: true, index});
+            result.push({ optionGroup: option, group: true, index });
 
             const optionGroupChildren = this.getOptionGroupChildren(option);
 
             optionGroupChildren &&
-            optionGroupChildren.forEach((o) => result.push(o));
+                optionGroupChildren.forEach((o) => result.push(o));
 
             return result;
         }, []);
@@ -2016,7 +2017,7 @@ export class MultiSelect
             const value = this.getOptionValue(
                 this.visibleOptions()[this.focusedOptionIndex()],
             );
-            this.onOptionSelect({originalEvent: null, option: [value]});
+            this.onOptionSelect({ originalEvent: null, option: [value] });
         }
     }
 
@@ -2037,7 +2038,7 @@ export class MultiSelect
     }
 
     onOptionSelect(event, isFocus = false, index = -1) {
-        const {originalEvent, option} = event;
+        const { originalEvent, option } = event;
         if (this.disabled || this.isOptionDisabled(option)) {
             return;
         }
@@ -2073,14 +2074,14 @@ export class MultiSelect
     findSelectedOptionIndex() {
         return this.hasSelectedOption()
             ? this.visibleOptions().findIndex((option) =>
-                this.isValidSelectedOption(option),
-            )
+                  this.isValidSelectedOption(option),
+              )
             : -1;
     }
 
     onOptionSelectRange(event, start = -1, end = -1) {
         start === -1 &&
-        (start = this.findNearestSelectedOptionIndex(end, true));
+            (start = this.findNearestSelectedOptionIndex(end, true));
         end === -1 && (end = this.findNearestSelectedOptionIndex(start));
 
         if (start !== -1 && end !== -1) {
@@ -2125,9 +2126,9 @@ export class MultiSelect
         const matchedOptionIndex =
             this.hasSelectedOption() && index > 0
                 ? findLastIndex(
-                    this.visibleOptions().slice(0, index),
-                    (option) => this.isValidSelectedOption(option),
-                )
+                      this.visibleOptions().slice(0, index),
+                      (option) => this.isValidSelectedOption(option),
+                  )
                 : -1;
 
         return matchedOptionIndex > -1 ? matchedOptionIndex : -1;
@@ -2148,8 +2149,8 @@ export class MultiSelect
     findFirstSelectedOptionIndex() {
         return this.hasSelectedOption()
             ? this.visibleOptions().findIndex((option) =>
-                this.isValidSelectedOption(option),
-            )
+                  this.isValidSelectedOption(option),
+              )
             : -1;
     }
 
@@ -2157,8 +2158,8 @@ export class MultiSelect
         const matchedOptionIndex =
             this.hasSelectedOption() && index < this.visibleOptions().length - 1
                 ? this.visibleOptions()
-                    .slice(index + 1)
-                    .findIndex((option) => this.isValidSelectedOption(option))
+                      .slice(index + 1)
+                      .findIndex((option) => this.isValidSelectedOption(option))
                 : -1;
 
         return matchedOptionIndex > -1 ? matchedOptionIndex + index + 1 : -1;
@@ -2198,8 +2199,8 @@ export class MultiSelect
         return this.optionDisabled
             ? resolveFieldData(option, this.optionDisabled)
             : option && option.disabled !== undefined
-                ? option.disabled
-                : false;
+              ? option.disabled
+              : false;
     }
 
     isSelected(option) {
@@ -2238,9 +2239,9 @@ export class MultiSelect
         return (
             (this.optionGroupLabel
                 ? index -
-                this.visibleOptions()
-                    .slice(0, index)
-                    .filter((option) => this.isOptionGroup(option)).length
+                  this.visibleOptions()
+                      .slice(0, index)
+                      .filter((option) => this.isOptionGroup(option)).length
                 : index) + 1
         );
     }
@@ -2283,24 +2284,24 @@ export class MultiSelect
         return this.optionLabel
             ? resolveFieldData(option, this.optionLabel)
             : option && option.label != undefined
-                ? option.label
-                : option;
+              ? option.label
+              : option;
     }
 
     getOptionValue(option: any) {
         return this.optionValue
             ? resolveFieldData(option, this.optionValue)
             : !this.optionLabel && option && option.value !== undefined
-                ? option.value
-                : option;
+              ? option.value
+              : option;
     }
 
     getOptionGroupLabel(optionGroup: any) {
         return this.optionGroupLabel
             ? resolveFieldData(optionGroup, this.optionGroupLabel)
             : optionGroup && optionGroup.label != undefined
-                ? optionGroup.label
-                : optionGroup;
+              ? optionGroup.label
+              : optionGroup;
     }
 
     getOptionGroupChildren(optionGroup: any) {
@@ -2481,7 +2482,7 @@ export class MultiSelect
     }
 
     onHomeKey(event, pressedInInputText = false) {
-        const {currentTarget} = event;
+        const { currentTarget } = event;
 
         if (pressedInInputText) {
             const len = currentTarget.value.length;
@@ -2509,7 +2510,7 @@ export class MultiSelect
     }
 
     onEndKey(event, pressedInInputText = false) {
-        const {currentTarget} = event;
+        const { currentTarget } = event;
 
         if (pressedInInputText) {
             const len = currentTarget.value.length;
@@ -2557,7 +2558,7 @@ export class MultiSelect
                         originalEvent: event,
                         option: this.visibleOptions()[
                             this.focusedOptionIndex()
-                            ],
+                        ],
                     });
                 }
             }
@@ -2586,7 +2587,7 @@ export class MultiSelect
                     event.shiftKey
                         ? this.lastHiddenFocusableElementOnOverlay.nativeElement
                         : this.firstHiddenFocusableElementOnOverlay
-                            .nativeElement,
+                              .nativeElement,
                 );
 
                 event.preventDefault();
@@ -2596,7 +2597,7 @@ export class MultiSelect
                         originalEvent: event,
                         option: this.visibleOptions()[
                             this.focusedOptionIndex()
-                            ],
+                        ],
                     });
                 }
 
@@ -2637,7 +2638,7 @@ export class MultiSelect
 
             this.overlayVisible ? this.hide(true) : this.show(true);
         }
-        this.focusInputViewChild?.nativeElement.focus({preventScroll: true});
+        this.focusInputViewChild?.nativeElement.focus({ preventScroll: true });
         this.onClick.emit(event);
         this.cd.detectChanges();
     }
@@ -2646,9 +2647,9 @@ export class MultiSelect
         const focusableEl =
             event.relatedTarget === this.focusInputViewChild?.nativeElement
                 ? getFirstFocusableElement(
-                    this.overlayViewChild?.overlayViewChild?.nativeElement,
-                    ':not([data-p-hidden-focusable="true"])',
-                )
+                      this.overlayViewChild?.overlayViewChild?.nativeElement,
+                      ':not([data-p-hidden-focusable="true"])',
+                  )
                 : this.focusInputViewChild?.nativeElement;
 
         focus(focusableEl);
@@ -2660,16 +2661,16 @@ export class MultiSelect
             this.focusedOptionIndex() !== -1
                 ? this.focusedOptionIndex()
                 : this.overlayVisible && this.autoOptionFocus
-                    ? this.findFirstFocusedOptionIndex()
-                    : -1;
+                  ? this.findFirstFocusedOptionIndex()
+                  : -1;
         this.focusedOptionIndex.set(focusedOptionIndex);
         this.overlayVisible && this.scrollInView(this.focusedOptionIndex());
-        this.onFocus.emit({originalEvent: event});
+        this.onFocus.emit({ originalEvent: event });
     }
 
     onInputBlur(event: Event) {
         this.focused = false;
-        this.onBlur.emit({originalEvent: event});
+        this.onBlur.emit({ originalEvent: event });
 
         if (!this.preventModelTouched) {
             this.onModelTouched();
@@ -2696,9 +2697,9 @@ export class MultiSelect
         const focusableEl =
             event.relatedTarget === this.focusInputViewChild?.nativeElement
                 ? getLastFocusableElement(
-                    this.overlayViewChild?.overlayViewChild?.nativeElement,
-                    ':not([data-p-hidden-focusable="true"])',
-                )
+                      this.overlayViewChild?.overlayViewChild?.nativeElement,
+                      ':not([data-p-hidden-focusable="true"])',
+                  )
                 : this.focusInputViewChild?.nativeElement;
 
         focus(focusableEl);
@@ -2760,8 +2761,8 @@ export class MultiSelect
                         (this.optionDisabled
                             ? resolveFieldData(option, this.optionDisabled)
                             : option && option.disabled !== undefined
-                                ? option.disabled
-                                : false),
+                              ? option.disabled
+                              : false),
                 );
 
             let selectedOptions: any[] = [];
@@ -2776,14 +2777,14 @@ export class MultiSelect
 
             const visibleOptions = this.allSelected()
                 ? this.visibleOptions().filter(
-                    (option) =>
-                        !this.isValidOption(option) &&
-                        this.isSelected(option),
-                )
+                      (option) =>
+                          !this.isValidOption(option) &&
+                          this.isSelected(option),
+                  )
                 : this.visibleOptions().filter(
-                    (option) =>
-                        this.isSelected(option) || this.isValidOption(option),
-                );
+                      (option) =>
+                          this.isSelected(option) || this.isValidOption(option),
+                  );
 
             const optionValues = [
                 ...selectedDisabledOptions,
@@ -2811,7 +2812,7 @@ export class MultiSelect
             this.cd.markForCheck();
         }
 
-        this.onChange.emit({originalEvent: event, value: this.value});
+        this.onChange.emit({ originalEvent: event, value: this.value });
         DomHandler.focus(
             this.headerCheckboxViewChild?.inputViewChild?.nativeElement,
         );
@@ -2841,16 +2842,16 @@ export class MultiSelect
             );
             if (element) {
                 element.scrollIntoView &&
-                element.scrollIntoView({
-                    block: 'nearest',
-                    inline: 'nearest',
-                });
+                    element.scrollIntoView({
+                        block: 'nearest',
+                        inline: 'nearest',
+                    });
             } else if (!this.virtualScrollerDisabled) {
                 setTimeout(() => {
                     this.virtualScroll &&
-                    this.scroller?.scrollToIndex(
-                        index !== -1 ? index : this.focusedOptionIndex(),
-                    );
+                        this.scroller?.scrollToIndex(
+                            index !== -1 ? index : this.focusedOptionIndex(),
+                        );
                 }, 0);
             }
         }
@@ -2885,12 +2886,12 @@ export class MultiSelect
         return this.selectAll !== null
             ? this.selectAll
             : isNotEmpty(this.visibleOptions()) &&
-            this.visibleOptions().every(
-                (option) =>
-                    this.isOptionGroup(option) ||
-                    this.isOptionDisabled(option) ||
-                    this.isSelected(option),
-            );
+                  this.visibleOptions().every(
+                      (option) =>
+                          this.isOptionGroup(option) ||
+                          this.isOptionDisabled(option) ||
+                          this.isSelected(option),
+                  );
     }
 
     partialSelected() {
@@ -2912,8 +2913,8 @@ export class MultiSelect
             this.focusedOptionIndex() !== -1
                 ? this.focusedOptionIndex()
                 : this.autoOptionFocus
-                    ? this.findFirstFocusedOptionIndex()
-                    : this.findSelectedOptionIndex();
+                  ? this.findFirstFocusedOptionIndex()
+                  : this.findSelectedOptionIndex();
         this.focusedOptionIndex.set(focusedOptionIndex);
 
         if (isFocus) {
@@ -2953,7 +2954,7 @@ export class MultiSelect
                 )
             );
             this.virtualScroll &&
-            this.scroller?.setContentEl(this.itemsViewChild?.nativeElement);
+                this.scroller?.setContentEl(this.itemsViewChild?.nativeElement);
 
             if (this.options && this.options.length) {
                 if (this.virtualScroll) {
@@ -3048,8 +3049,8 @@ export class MultiSelect
 
         if (nextItem)
             return hasClass(nextItem.children[0], 'p-disabled') ||
-            isHidden(nextItem.children[0]) ||
-            hasClass(nextItem, 'p-multiselect-item-group')
+                isHidden(nextItem.children[0]) ||
+                hasClass(nextItem, 'p-multiselect-item-group')
                 ? this.findNextItem(nextItem)
                 : nextItem.children[0];
         else return null;
@@ -3060,8 +3061,8 @@ export class MultiSelect
 
         if (prevItem)
             return hasClass(prevItem.children[0], 'p-disabled') ||
-            isHidden(prevItem.children[0]) ||
-            hasClass(prevItem, 'p-multiselect-item-group')
+                isHidden(prevItem.children[0]) ||
+                hasClass(prevItem, 'p-multiselect-item-group')
                 ? this.findPrevItem(prevItem)
                 : prevItem.children[0];
         else return null;
@@ -3071,8 +3072,8 @@ export class MultiSelect
         const matchedOptionIndex =
             index < this.visibleOptions().length - 1
                 ? this.visibleOptions()
-                    .slice(index + 1)
-                    .findIndex((option) => this.isValidOption(option))
+                      .slice(index + 1)
+                      .findIndex((option) => this.isValidOption(option))
                 : -1;
         return matchedOptionIndex > -1 ? matchedOptionIndex + index + 1 : index;
     }
@@ -3081,9 +3082,9 @@ export class MultiSelect
         const matchedOptionIndex =
             index > 0
                 ? findLastIndex(
-                    this.visibleOptions().slice(0, index),
-                    (option) => this.isValidOption(option),
-                )
+                      this.visibleOptions().slice(0, index),
+                      (option) => this.isValidOption(option),
+                  )
                 : -1;
 
         return matchedOptionIndex > -1 ? matchedOptionIndex : index;
@@ -3092,8 +3093,8 @@ export class MultiSelect
     findLastSelectedOptionIndex() {
         return this.hasSelectedOption()
             ? findLastIndex(this.visibleOptions(), (option) =>
-                this.isValidSelectedOption(option),
-            )
+                  this.isValidSelectedOption(option),
+              )
             : -1;
     }
 
@@ -3122,8 +3123,8 @@ export class MultiSelect
             optionIndex =
                 optionIndex === -1
                     ? this.visibleOptions()
-                        .slice(0, this.focusedOptionIndex())
-                        .findIndex((option) => this.isOptionMatched(option))
+                          .slice(0, this.focusedOptionIndex())
+                          .findIndex((option) => this.isOptionMatched(option))
                     : optionIndex + this.focusedOptionIndex();
         } else {
             optionIndex = this.visibleOptions().findIndex((option) =>
@@ -3210,5 +3211,4 @@ export class MultiSelect
     imports: [MultiSelect, SharedModule],
     exports: [MultiSelect, SharedModule],
 })
-export class MultiSelectModule {
-}
+export class MultiSelectModule {}

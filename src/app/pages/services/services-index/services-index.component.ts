@@ -831,7 +831,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
         }
         if (filterstring && filterstring.length > 0) {
             //cnditions to apply old bookmarks
-            const defaultFilter: ServiceIndexFilter = getDefaultServicesIndexFilter();
+            const defaultFilter:ServiceIndexFilter = getDefaultServicesIndexFilter();
             const bookmark = JSON.parse(filterstring);
             defaultFilter.Servicestatus.current_state = bookmark.Servicestatus.current_state || {
                 ok: false,
@@ -848,7 +848,7 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             defaultFilter.Servicestatus.notifications_enabled = bookmark.Servicestatus?.notifications_enabled || false;
             defaultFilter.Servicestatus.notifications_not_enabled = bookmark.Servicestatus?.notifications_not_enabled || false;
             defaultFilter.Servicestatus.output = bookmark.Servicestatus?.output || '';
-            defaultFilter.Servicestatus.state_type = bookmark.Servicestatus?.state_type || {soft: false, hard: false};
+            defaultFilter.Servicestatus.state_type = bookmark.Servicestatus?.state_type || { soft: false, hard: false};
             defaultFilter.Services.id = defaultFilter.Services?.id || [];
             defaultFilter.Services.name = bookmark.Services?.name || '';
             defaultFilter.Services.name_regex = bookmark.Services?.name_regex || false;
@@ -857,12 +857,12 @@ export class ServicesIndexComponent implements OnInit, OnDestroy, IndexPage {
             defaultFilter.Services.keywords = bookmark.Services?.keywords || [];
             defaultFilter.Services.not_keywords = bookmark.Services?.not_keywords || [];
             defaultFilter.Services.priority = bookmark.Services?.priority || {
-                1: false,
-                2: false,
-                3: false,
-                4: false,
-                5: false
-            };
+                                                                                1: false,
+                                                                                2: false,
+                                                                                3: false,
+                                                                                4: false,
+                                                                                5: false
+                                                                            };
             defaultFilter.Services.service_type = bookmark.Services?.service_type || [];
             defaultFilter.Hosts.id = bookmark.Hosts?.id || [];
             defaultFilter.Hosts.name = bookmark.Hosts?.name || '';

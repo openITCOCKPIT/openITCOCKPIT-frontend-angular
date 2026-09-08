@@ -40,9 +40,7 @@ import {
     TableDirective,
 } from '@coreui/angular';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 
 import {
@@ -54,9 +52,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AsyncPipe, KeyValuePipe, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -67,12 +63,8 @@ import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-selec
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
-import {
-    SlaAvailabilityOverviewPieEchartComponent
-} from '../../../components/charts/sla-availability-overview-pie-echart/sla-availability-overview-pie-echart.component';
-import {
-    SlaHostsOverviewBarEchartComponent
-} from '../../../components/charts/sla-hosts-overview-bar-echart/sla-hosts-overview-bar-echart.component';
+import { SlaAvailabilityOverviewPieEchartComponent } from '../../../components/charts/sla-availability-overview-pie-echart/sla-availability-overview-pie-echart.component';
+import { SlaHostsOverviewBarEchartComponent } from '../../../components/charts/sla-hosts-overview-bar-echart/sla-hosts-overview-bar-echart.component';
 import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 
@@ -153,13 +145,13 @@ export class SlasViewDetailsComponent implements OnInit, OnDestroy {
     private cdr = inject(ChangeDetectorRef);
 
     protected weekdayNames: { id: number; name: string }[] = [
-        {id: 1, name: this.TranslocoService.translate('Monday')},
-        {id: 2, name: this.TranslocoService.translate('Tuesday')},
-        {id: 3, name: this.TranslocoService.translate('Wednesday')},
-        {id: 4, name: this.TranslocoService.translate('Thursday')},
-        {id: 5, name: this.TranslocoService.translate('Friday')},
-        {id: 6, name: this.TranslocoService.translate('Saturday')},
-        {id: 7, name: this.TranslocoService.translate('Sunday')},
+        { id: 1, name: this.TranslocoService.translate('Monday') },
+        { id: 2, name: this.TranslocoService.translate('Tuesday') },
+        { id: 3, name: this.TranslocoService.translate('Wednesday') },
+        { id: 4, name: this.TranslocoService.translate('Thursday') },
+        { id: 5, name: this.TranslocoService.translate('Friday') },
+        { id: 6, name: this.TranslocoService.translate('Saturday') },
+        { id: 7, name: this.TranslocoService.translate('Sunday') },
     ];
 
     public ngOnInit() {

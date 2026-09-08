@@ -51,7 +51,7 @@ export interface ResourceMap {
 export interface ResourcegroupsSummaryMap {
     name: string
     itemStyle: {
-        color: string
+        color:string
     }
     children: ResourcegroupMapChildren[]
 }
@@ -63,7 +63,7 @@ export interface ResourcegroupMapChildren {
     value: number
     state: number
     itemStyle: {
-        color: string
+        color:string
     }
     type: string
 }

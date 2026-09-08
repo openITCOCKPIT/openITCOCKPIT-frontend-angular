@@ -7,9 +7,7 @@ import {
     OnInit,
 } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../components/actions-button-element/actions-button-element.component';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
     CardBodyComponent,
@@ -96,7 +94,7 @@ import { FormsModule } from '@angular/forms';
     templateUrl: './servicetemplates-used-by.component.html',
     styleUrl: './servicetemplates-used-by.component.css',
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ServicesService}, // Inject the ServicesService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ServicesService }, // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

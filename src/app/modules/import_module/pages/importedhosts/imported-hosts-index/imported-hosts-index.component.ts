@@ -56,18 +56,14 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ExternalSystemsService } from '../../externalsystems/external-systems.service';
 import { Importer } from '../../importers/importers.interface';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ItemSelectComponent } from '../../../../../layouts/coreui/select-all/item-select/item-select.component';
 import { KeyValuePipe, NgClass } from '@angular/common';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -137,7 +133,7 @@ import { cibProxmox } from '@coreui/icons';
         IconDirective,
     ],
     providers: [
-        {provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostsService}, // Inject the ImportedhostsService into the DeleteAllModalComponent
+        { provide: DELETE_SERVICE_TOKEN, useClass: ImportedhostsService }, // Inject the ImportedhostsService into the DeleteAllModalComponent
     ],
     templateUrl: './imported-hosts-index.component.html',
     styleUrl: './imported-hosts-index.component.css',
@@ -181,10 +177,9 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
     public marked_hosts_with_changes = 0;
     public marked_for_re_enable = 0;
 
-    public coreuiIcons = {cibProxmox};
+    public coreuiIcons = { cibProxmox };
 
-    constructor() {
-    }
+    constructor() {}
 
     public ngOnInit(): void {
         this.subscriptions.add(

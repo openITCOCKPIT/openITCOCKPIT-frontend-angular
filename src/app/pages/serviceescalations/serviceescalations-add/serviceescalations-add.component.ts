@@ -58,9 +58,7 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import {
-    MultiSelectOptgroupComponent
-} from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { MultiSelectOptgroupComponent } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { HistoryService } from '../../../history.service';
 
 @Component({
@@ -130,8 +128,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private cdr: ChangeDetectorRef,
-    ) {
-    }
+    ) {}
 
     public ngOnInit(): void {
         this.route.queryParams.subscribe((params) => {
@@ -142,8 +139,7 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnDestroy(): void {
-    }
+    public ngOnDestroy(): void {}
 
     private getDefaultPost(): ServiceescalationPost {
         return {
